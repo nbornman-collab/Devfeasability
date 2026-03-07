@@ -3,7 +3,14 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN || '';
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve mapbox token
+app.get('/api/config', (req, res) => {
+  res.json({ mapboxToken: MAPBOX_TOKEN });
+});
 
 // Proxy geocoder
 app.get('/api/geocode', async (req, res) => {
@@ -23,7 +30,17 @@ app.get('/api/pluto', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Reverse geocode (lat/lng to address via NYC geocoder)
+// Proxy lot geometry from MapPLUTO
+app.get('/api/lot-geom', async (req, res) => {
+  try {
+    const bbl = req.query.bbl;
+    const url = `https://data.cityofnewyork.us/resource/evjd-dqpz.geojson?$where=bbl='${bbl}'&$limit=1`;
+    const r = await fetch(url);
+    res.json(await r.json());
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Reverse geocode
 app.get('/api/reverse', async (req, res) => {
   try {
     const url = `https://geosearch.planninglabs.nyc/v2/reverse?point.lat=${req.query.lat}&point.lon=${req.query.lng}`;
@@ -32,4 +49,4 @@ app.get('/api/reverse', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`DevFeasibility v2 running on port ${PORT}`));
