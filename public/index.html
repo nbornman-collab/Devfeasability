@@ -301,11 +301,12 @@ async function selectResult(feature){
 
 async function loadLotGeometry(bbl, plutoData){
   // Remove old layers
-  ['lot-fill','lot-line','envelope-3d'].forEach(id=>{
+  ['lot-fill','lot-line','current-3d','potential-3d'].forEach(id=>{
     if(map.getLayer(id))map.removeLayer(id);
   });
   if(map.getSource('lot'))map.removeSource('lot');
-  if(map.getSource('envelope'))map.removeSource('envelope');
+  if(map.getSource('current-bldg'))map.removeSource('current-bldg');
+  if(map.getSource('potential-bldg'))map.removeSource('potential-bldg');
 
   try{
     const r = await fetch(`/api/lot-geom?bbl=${bbl}`);
@@ -313,31 +314,55 @@ async function loadLotGeometry(bbl, plutoData){
     if(gj.features && gj.features.length){
       const lotFeature = gj.features[0];
       map.addSource('lot',{type:'geojson',data:lotFeature});
-      map.addLayer({id:'lot-fill',type:'fill',source:'lot',paint:{'fill-color':'#6366f1','fill-opacity':.15}});
+      map.addLayer({id:'lot-fill',type:'fill',source:'lot',paint:{'fill-color':'#6366f1','fill-opacity':.12}});
       map.addLayer({id:'lot-line',type:'line',source:'lot',paint:{'line-color':'#818cf8','line-width':2,'line-dasharray':[2,1]}});
 
-      // Buildable envelope
       const lotArea = parseFloat(plutoData.lotarea) || 1;
       const maxFar = parseFloat(plutoData.maxallwfar) || parseFloat(plutoData.residfar) || 1;
+      const builtFar = parseFloat(plutoData.builtfar) || 0;
+      const numFloors = parseFloat(plutoData.numfloors) || 1;
       const maxBuildable = lotArea * maxFar;
-      const lotCoverage = 0.65; // typical lot coverage
+      const lotCoverage = 0.65;
       const footprint = lotArea * lotCoverage;
-      const floors = Math.ceil(maxBuildable / footprint);
-      const height = floors * 3.05; // meters (10ft per floor)
 
-      const envelopeData = JSON.parse(JSON.stringify(lotFeature));
-      envelopeData.properties = {height: height, base: 0};
-      map.addSource('envelope',{type:'geojson',data:envelopeData});
+      // Current building height (from actual floors)
+      const currentHeight = numFloors * 3.05; // meters
+
+      // Max envelope height
+      const maxFloors = Math.ceil(maxBuildable / footprint);
+      const maxHeight = maxFloors * 3.05;
+
+      // Current building: solid amber/warm color
+      const currentData = JSON.parse(JSON.stringify(lotFeature));
+      currentData.properties = {};
+      map.addSource('current-bldg',{type:'geojson',data:currentData});
       map.addLayer({
-        id:'envelope-3d',type:'fill-extrusion',source:'envelope',
+        id:'current-3d',type:'fill-extrusion',source:'current-bldg',
         paint:{
-          'fill-extrusion-color':'#6366f1',
-          'fill-extrusion-height':height,
+          'fill-extrusion-color':'#f59e0b',
+          'fill-extrusion-height':currentHeight,
           'fill-extrusion-base':0,
-          'fill-extrusion-opacity':.25,
+          'fill-extrusion-opacity':.55,
           'fill-extrusion-vertical-gradient':true,
         }
       });
+
+      // Additional potential: translucent indigo stacked on top
+      if(maxHeight > currentHeight){
+        const potentialData = JSON.parse(JSON.stringify(lotFeature));
+        potentialData.properties = {};
+        map.addSource('potential-bldg',{type:'geojson',data:potentialData});
+        map.addLayer({
+          id:'potential-3d',type:'fill-extrusion',source:'potential-bldg',
+          paint:{
+            'fill-extrusion-color':'#6366f1',
+            'fill-extrusion-height':maxHeight,
+            'fill-extrusion-base':currentHeight,
+            'fill-extrusion-opacity':.3,
+            'fill-extrusion-vertical-gradient':true,
+          }
+        });
+      }
     }
   }catch(e){console.warn('No lot geometry:',e)}
 }
