@@ -30,11 +30,11 @@ app.get('/api/pluto', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Proxy lot geometry from MapPLUTO
+// Proxy lot geometry from MapPLUTO ArcGIS
 app.get('/api/lot-geom', async (req, res) => {
   try {
     const bbl = req.query.bbl;
-    const url = `https://data.cityofnewyork.us/resource/evjd-dqpz.geojson?$where=bbl='${bbl}'&$limit=1`;
+    const url = `https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/MAPPLUTO/FeatureServer/0/query?where=BBL='${bbl}'&outFields=*&f=geojson&resultRecordCount=1`;
     const r = await fetch(url);
     res.json(await r.json());
   } catch (e) { res.status(500).json({ error: e.message }); }

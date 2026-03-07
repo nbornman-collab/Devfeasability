@@ -201,10 +201,10 @@ async function init(){
         id:'3d-buildings',type:'fill-extrusion',source:'composite','source-layer':'building',
         minzoom:14,
         paint:{
-          'fill-extrusion-color':['interpolate',['linear'],['get','height'],'#1a1d2e',50,'#252840',200,'#2e3255'],
+          'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#2a2f4a',30,'#353b60',100,'#404875',200,'#4a5290'],
           'fill-extrusion-height':['get','height'],
           'fill-extrusion-base':['get','min_height'],
-          'fill-extrusion-opacity':.7,
+          'fill-extrusion-opacity':.85,
           'fill-extrusion-vertical-gradient':true,
         }
       });
