@@ -155,6 +155,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   <span>DevFeasibility</span> v2
 </div>
 
+<script src="zoning-engine.js"></script>
 <script>
 let map, marker, currentData = null;
 
@@ -328,9 +329,15 @@ async function loadLotGeometry(bbl, plutoData){
       // Current building height (from actual floors)
       const currentHeight = numFloors * 3.05; // meters
 
-      // Max envelope height
-      const maxFloors = Math.ceil(maxBuildable / footprint);
-      const maxHeight = maxFloors * 3.05;
+      // Max envelope height (capped by zoning)
+      const zoneDist = plutoData.zonedist1 || '';
+      const zr = getZoningRules(zoneDist);
+      let maxFloors = Math.ceil(maxBuildable / footprint);
+      let maxHeight = maxFloors * 3.05;
+      if (zr.height.maxFeet) {
+        const maxMeters = zr.height.maxFeet * 0.3048;
+        if (maxHeight > maxMeters) maxHeight = maxMeters;
+      }
 
       // Current building: solid amber/warm color
       const currentData = JSON.parse(JSON.stringify(lotFeature));
@@ -398,6 +405,18 @@ function renderPanel(d, address){
   const zonePrefix = zoneDist.charAt(0);
   const zi = ZONE_INFO[zonePrefix] || ZONE_INFO['R'];
 
+  // Get zoning rules from engine
+  const zr = getZoningRules(zoneDist);
+
+  // Cap potential height at zoning height limit
+  let effectiveMaxHeight = potentialHeight;
+  let heightCapped = false;
+  if (zr.height.maxFeet && potentialHeight > zr.height.maxFeet) {
+    effectiveMaxHeight = zr.height.maxFeet;
+    heightCapped = true;
+  }
+  const effectiveFloors = Math.floor(effectiveMaxHeight / 10);
+
   document.getElementById('p-address').textContent = address;
   document.getElementById('p-subtitle').textContent = `BBL ${bbl} · ${rates.name}`;
 
@@ -407,7 +426,30 @@ function renderPanel(d, address){
   if(utilPct>85) barColor = 'var(--red)';
 
   const isUnderbuilt = utilPct < 50;
-  const narrative = generateNarrative(d, rates, zi, utilPct, maxBuildable, remainingSF, unitCount850, potentialFloors);
+  const narrative = generateNarrative(d, rates, zi, utilPct, maxBuildable, remainingSF, unitCount850, potentialFloors, zr);
+
+  // Build zoning constraints HTML
+  let zcHtml = '';
+  zcHtml += `<div class="stat"><div class="stat-label">Height Limit</div><div class="stat-value">${zr.height.maxFeet ? zr.height.maxFeet + ' ft' : 'No fixed limit'}</div>${zr.contextual ? '<div class="stat-sub">Contextual district</div>' : ''}</div>`;
+  zcHtml += `<div class="stat"><div class="stat-label">Rear Yard</div><div class="stat-value">${zr.setbacks.rearYard} ft</div>${zr.setbacks.rearYardPct ? '<div class="stat-sub">or ' + zr.setbacks.rearYardPct + '% lot depth</div>' : ''}</div>`;
+  if (zr.setbacks.sideYardMin > 0) {
+    zcHtml += `<div class="stat"><div class="stat-label">Side Yards</div><div class="stat-value">${zr.setbacks.sideYardMin} ft min</div></div>`;
+  } else {
+    zcHtml += `<div class="stat"><div class="stat-label">Side Yards</div><div class="stat-value">Not req'd</div></div>`;
+  }
+  zcHtml += `<div class="stat"><div class="stat-label">Parking</div><div class="stat-value">${zr.parking.spotsPerUnit}/unit</div>${zr.parking.transitZoneReduction ? '<div class="stat-sub">Transit zone: 50% reduction</div>' : ''}</div>`;
+  if (zr.height.baseHeightMin && zr.height.baseHeightMax) {
+    zcHtml += `<div class="stat"><div class="stat-label">Base Height</div><div class="stat-value">${zr.height.baseHeightMin}–${zr.height.baseHeightMax} ft</div><div class="stat-sub">Then setback required</div></div>`;
+  }
+  if (zr.qualityHousing.available) {
+    zcHtml += `<div class="stat"><div class="stat-label">Quality Housing</div><div class="stat-value">${zr.qualityHousing.required ? 'Required' : 'Available'}</div></div>`;
+  }
+
+  // Notes
+  let notesHtml = '';
+  if (zr.notes.length) {
+    notesHtml = '<div style="margin-top:12px">' + zr.notes.map(n => `<div style="font-size:12px;color:var(--text3);padding:3px 0">⚠ ${n}</div>`).join('') + '</div>';
+  }
 
   document.getElementById('panel-body').innerHTML = `
     <!-- Summary -->
@@ -420,7 +462,7 @@ function renderPanel(d, address){
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Zoning</div>
       <div class="stat-grid">
-        <div class="stat"><div class="stat-label">District</div><div class="stat-value indigo">${zoneDist}</div><div class="stat-sub">${zi.type}</div></div>
+        <div class="stat"><div class="stat-label">District</div><div class="stat-value indigo">${zoneDist}</div><div class="stat-sub">${zi.type}${zr.contextual ? ' · Contextual' : ''}${zr.heightFactor ? ' · Height Factor' : ''}</div></div>
         <div class="stat"><div class="stat-label">Max FAR</div><div class="stat-value">${maxFar.toFixed(2)}</div><div class="stat-sub">Built: ${builtFar.toFixed(2)}</div></div>
         <div class="stat"><div class="stat-label">Res. FAR</div><div class="stat-value">${resFar.toFixed(2)}</div></div>
         <div class="stat"><div class="stat-label">Comm. FAR</div><div class="stat-value">${comFar.toFixed(2)}</div></div>
@@ -429,6 +471,13 @@ function renderPanel(d, address){
         <div class="util-bar-label"><span style="color:var(--text3)">FAR Utilization</span><span style="font-family:var(--mono);font-weight:600;color:${barColor}">${utilPct.toFixed(0)}%</span></div>
         <div class="util-bar"><div class="util-bar-fill" style="width:${utilPct}%;background:${barColor}"></div></div>
       </div>
+    </div>
+
+    <!-- Zoning Constraints -->
+    <div class="section">
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Zoning Constraints</div>
+      <div class="stat-grid">${zcHtml}</div>
+      ${notesHtml}
     </div>
 
     <!-- Current Building -->
@@ -450,7 +499,7 @@ function renderPanel(d, address){
       <div class="stat-grid">
         <div class="stat full"><div class="stat-label">Max Buildable (Lot × FAR)</div><div class="stat-value indigo">${fmt(lotArea)} × ${maxFar.toFixed(2)} = ${fmt(maxBuildable)} sf</div></div>
         <div class="stat"><div class="stat-label">Remaining Capacity</div><div class="stat-value green">${fmt(remainingSF)} sf</div></div>
-        <div class="stat"><div class="stat-label">Max Envelope Height</div><div class="stat-value">${potentialHeight} ft</div><div class="stat-sub">${potentialFloors} floors</div></div>
+        <div class="stat"><div class="stat-label">Max Height</div><div class="stat-value">${effectiveMaxHeight} ft</div><div class="stat-sub">${effectiveFloors} floors${heightCapped ? ' (zoning cap)' : ''}</div></div>
         <div class="stat"><div class="stat-label">Est. Units (850sf avg)</div><div class="stat-value">${unitCount850}</div></div>
         <div class="stat"><div class="stat-label">Est. Studios (650sf)</div><div class="stat-value">${unitCount650}</div></div>
       </div>
@@ -470,7 +519,7 @@ function renderPanel(d, address){
   `;
 }
 
-function generateNarrative(d, rates, zi, utilPct, maxBuildable, remainingSF, unitCount850, potentialFloors){
+function generateNarrative(d, rates, zi, utilPct, maxBuildable, remainingSF, unitCount850, potentialFloors, zr){
   const lotArea = parseFloat(d.lotarea)||0;
   const bldgArea = parseFloat(d.bldgarea)||0;
   const zoneDist = d.zonedist1||'Unknown';
@@ -483,7 +532,10 @@ function generateNarrative(d, rates, zi, utilPct, maxBuildable, remainingSF, uni
   if(utilPct < 50){
     html += `<div class="opportunity">🏗️ <strong>Significant opportunity.</strong> This site is using only <span class="highlight">${utilPct.toFixed(0)}%</span> of its zoning capacity. `;
     html += `Approximately <strong>${fmt(remainingSF)} sqft</strong> of additional development is possible — enough for roughly <strong>${unitCount850} residential units</strong> `;
-    html += `in a building up to <strong>${potentialFloors} floors</strong>.</div>`;
+    html += `in a building up to <strong>${potentialFloors} floors</strong>.`;
+    if (zr && zr.height.maxFeet) html += ` Note: zoning caps height at <strong>${zr.height.maxFeet} ft</strong>.`;
+    if (zr && zr.contextual) html += ` This is a <strong>contextual district</strong> with street wall and setback requirements.`;
+    html += `</div>`;
   } else if(utilPct < 80){
     html += `<p style="margin-top:8px">The site is at <span class="highlight">${utilPct.toFixed(0)}% FAR utilization</span>. There is moderate remaining capacity of <strong>${fmt(remainingSF)} sqft</strong>, `;
     html += `potentially accommodating <strong>${unitCount850} additional units</strong>.</p>`;
