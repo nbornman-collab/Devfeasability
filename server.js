@@ -49,4 +49,8 @@ app.get('/api/reverse', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.listen(PORT, () => console.log(`DevFeasibility v2 running on port ${PORT}`));
+app.get('/api/version', (req, res) => {
+  res.json({ version: '3.0.0', built: '2026-03-08T07:40:00Z', engine: 'zoning-rules-v1' });
+});
+
+app.listen(PORT, () => console.log(`DevFeasibility v3 running on port ${PORT}`));
