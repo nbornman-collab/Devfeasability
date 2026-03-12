@@ -628,16 +628,36 @@ function getAnchorPixel(div){
 function positionLabel(div){
   const anchor = getAnchorPixel(div);
   const side = div.dataset.side;
-  const labelOffset = side === 'left' ? -140 : 140; // wider horizontal offset
+  const mapEl = document.getElementById('map');
+  const mapW = mapEl.offsetWidth;
+  const mapH = mapEl.offsetHeight;
+  const labelW = div.offsetWidth || 120;
+  const labelH = div.offsetHeight || 26;
+  const pad = 8; // viewport padding
+
+  // Adaptive offset — smaller on mobile
+  const baseOffset = mapW < 500 ? 60 : 120;
+  const labelOffset = side === 'left' ? -baseOffset : baseOffset;
   const ox = parseFloat(div.dataset.offsetX) || 0;
   const oy = parseFloat(div.dataset.offsetY) || 0;
   
-  const labelX = anchor.x + labelOffset + ox;
-  const labelY = anchor.y + oy; // aligned with anchor height
-  const labelH = div.offsetHeight || 26;
-  
+  let labelX = anchor.x + labelOffset + ox;
+  let labelY = anchor.y + oy;
+
+  // Viewport clamping — keep label fully on screen
+  if(side === 'left'){
+    // Label extends left from labelX by labelW
+    if(labelX - labelW < pad) labelX = pad + labelW;
+  } else {
+    // Label extends right from labelX by labelW
+    if(labelX + labelW > mapW - pad) labelX = mapW - pad - labelW;
+  }
+  // Vertical clamp
+  if(labelY - labelH/2 < pad) labelY = pad + labelH/2;
+  if(labelY + labelH/2 > mapH - pad) labelY = mapH - pad - labelH/2;
+
   div.style.left = labelX + 'px';
-  div.style.top = (labelY - labelH/2) + 'px'; // vertically centred on anchor
+  div.style.top = (labelY - labelH/2) + 'px';
   div.style.transform = side === 'left' ? 'translate(-100%,0)' : 'translate(0,0)';
   
   // Leader line from label edge to anchor dot
