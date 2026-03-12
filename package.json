@@ -1,7 +1,7 @@
 {
   "name": "nyc-dev-feasibility",
-  "version": "3.0.0",
-  "description": "NYC Real Estate Development Feasibility Tool",
+  "version": "4.0.0",
+  "description": "London Development Feasibility Tool",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

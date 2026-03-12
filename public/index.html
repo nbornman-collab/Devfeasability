@@ -3,53 +3,54 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DevFeasibility — NYC Development Analysis</title>
+<title>DevFeasibility — London Development Analysis</title>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0f1117;--surface:#161923;--surface2:#1e2130;--border:#2a2d3e;
-  --text:#e8eaf0;--text2:#9a9db5;--text3:#6b6e85;
-  --indigo:#6366f1;--indigo2:#818cf8;--indigo-glow:rgba(99,102,241,.15);
-  --green:#34d399;--amber:#fbbf24;--red:#f87171;
+  --bg:#0a0c13;--surface:#12141f;--surface2:#1a1d2e;--border:#2a2d42;
+  --text:#eef0f6;--text2:#a0a4be;--text3:#6b6f8a;
+  --accent:#7c6aef;--accent2:#9d8fff;--accent-glow:rgba(124,106,239,.18);
+  --green:#2dd4a0;--green-glow:rgba(45,212,160,.12);
+  --amber:#f5b731;--red:#ef6461;
   --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
 }
 html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text);overflow:hidden}
 #map{position:absolute;top:0;left:0;right:0;bottom:0}
 
 /* Search bar */
-.search-wrap{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10;width:min(480px,calc(100vw - 32px))}
+.search-wrap{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10;width:min(520px,calc(100vw - 32px))}
 .search-wrap input{
-  width:100%;padding:14px 20px 14px 44px;border:1px solid var(--border);border-radius:12px;
-  background:rgba(22,25,35,.92);backdrop-filter:blur(20px);color:var(--text);font:400 15px var(--sans);
+  width:100%;padding:14px 20px 14px 44px;border:1px solid var(--border);border-radius:14px;
+  background:rgba(18,20,31,.94);backdrop-filter:blur(24px);color:var(--text);font:400 15px var(--sans);
   outline:none;transition:border-color .2s,box-shadow .2s;
 }
-.search-wrap input:focus{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-glow)}
+.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
 .search-wrap input::placeholder{color:var(--text3)}
 .search-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
 .search-results{
-  position:absolute;top:calc(100% + 4px);left:0;right:0;background:rgba(22,25,35,.96);
-  backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:12px;overflow:hidden;
-  max-height:240px;overflow-y:auto;display:none;
+  position:absolute;top:calc(100% + 4px);left:0;right:0;background:rgba(18,20,31,.97);
+  backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  max-height:260px;overflow-y:auto;display:none;
 }
 .search-results.show{display:block}
-.search-results div{padding:12px 20px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--border);transition:background .15s}
+.search-results div{padding:12px 20px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--border);transition:background .15s;color:var(--text2)}
 .search-results div:last-child{border-bottom:none}
-.search-results div:hover{background:var(--indigo-glow)}
+.search-results div:hover{background:var(--accent-glow);color:var(--text)}
 
 /* Panel */
 .panel{
-  position:fixed;top:0;right:0;width:420px;height:100%;background:rgba(15,17,23,.95);
-  backdrop-filter:blur(24px);border-left:1px solid var(--border);z-index:5;
+  position:fixed;top:0;right:0;width:440px;height:100%;background:rgba(10,12,19,.96);
+  backdrop-filter:blur(28px);border-left:1px solid var(--border);z-index:5;
   transform:translateX(0);transition:transform .35s cubic-bezier(.4,0,.2,1);
   overflow-y:auto;overflow-x:hidden;
 }
 .panel.collapsed{transform:translateX(100%)}
 .panel-toggle{
-  position:fixed;right:420px;top:50%;transform:translateY(-50%);z-index:6;
-  width:28px;height:56px;background:rgba(22,25,35,.92);border:1px solid var(--border);
+  position:fixed;right:440px;top:50%;transform:translateY(-50%);z-index:6;
+  width:28px;height:56px;background:rgba(18,20,31,.94);border:1px solid var(--border);
   border-right:none;border-radius:8px 0 0 8px;cursor:pointer;display:flex;align-items:center;
   justify-content:center;color:var(--text2);transition:right .35s cubic-bezier(.4,0,.2,1),background .2s;
 }
@@ -60,60 +61,93 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 /* Panel content */
 .panel-header{padding:24px 24px 16px;border-bottom:1px solid var(--border)}
-.panel-header h1{font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--indigo2);margin-bottom:4px}
-.panel-header .address{font-size:20px;font-weight:700;line-height:1.3}
-.panel-header .subtitle{font-size:13px;color:var(--text2);margin-top:4px}
+.panel-header h1{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);margin-bottom:6px}
+.panel-header .address{font-size:21px;font-weight:700;line-height:1.3;color:var(--text)}
+.panel-header .subtitle{font-size:13px;color:var(--text2);margin-top:6px}
 
 .section{padding:20px 24px;border-bottom:1px solid var(--border)}
-.section-title{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.section-title svg{width:14px;height:14px;opacity:.6}
+.section-title{
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text2);margin-bottom:16px;display:flex;align-items:center;gap:8px
+}
+.section-title svg{width:14px;height:14px;opacity:.7}
 
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.stat{background:var(--surface2);border-radius:10px;padding:14px}
-.stat-label{font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
-.stat-value{font:600 18px var(--mono);color:var(--text)}
-.stat-value.indigo{color:var(--indigo2)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--surface2);border:1px solid rgba(42,45,66,.5);border-radius:10px;padding:14px 16px}
+.stat-label{font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.stat-value{font:600 17px var(--mono);color:var(--text)}
+.stat-value.accent{color:var(--accent2)}
 .stat-value.green{color:var(--green)}
-.stat-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.stat-value.amber{color:var(--amber)}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
 .stat.full{grid-column:1/-1}
+.stat.highlight{border-color:var(--accent);background:var(--accent-glow)}
+.stat.highlight-green{border-color:var(--green);background:var(--green-glow)}
 
 /* Utilization bar */
-.util-bar-wrap{margin-top:12px}
-.util-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
-.util-bar{height:8px;background:var(--surface);border-radius:4px;overflow:hidden;position:relative}
-.util-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.util-bar-wrap{margin-top:14px}
+.util-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;font-weight:500}
+.util-bar{height:10px;background:var(--surface);border-radius:5px;overflow:hidden;position:relative}
+.util-bar-fill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.4,0,.2,1)}
 
 /* Narrative */
-.narrative{font-size:14px;line-height:1.7;color:var(--text2)}
+.narrative{font-size:14px;line-height:1.75;color:var(--text2)}
 .narrative strong{color:var(--text);font-weight:600}
-.narrative .highlight{color:var(--indigo2);font-weight:600}
+.narrative .highlight{color:var(--accent2);font-weight:600}
 .narrative .opportunity{
-  margin-top:12px;padding:12px 16px;background:var(--indigo-glow);border-left:3px solid var(--indigo);
-  border-radius:0 8px 8px 0;font-size:13px;line-height:1.6;
+  margin-top:14px;padding:14px 18px;background:var(--accent-glow);border-left:3px solid var(--accent);
+  border-radius:0 10px 10px 0;font-size:13px;line-height:1.7;color:var(--text2);
 }
+.narrative .opportunity strong{color:var(--text)}
 
 /* Financial table */
-.fin-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(42,45,62,.5);font-size:13px}
+.fin-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(42,45,66,.4);font-size:13px;align-items:center}
 .fin-row:last-child{border-bottom:none}
 .fin-row .label{color:var(--text2)}
-.fin-row .value{font:500 13px var(--mono);color:var(--text)}
-.fin-row.total{border-top:2px solid var(--border);margin-top:4px;padding-top:12px}
-.fin-row.total .label,.fin-row.total .value{font-weight:700;color:var(--text)}
+.fin-row .value{font:600 13px var(--mono);color:var(--text)}
+.fin-row.total{border-top:2px solid var(--border);margin-top:6px;padding-top:14px}
+.fin-row.total .label{font-weight:700;color:var(--text)}
+.fin-row.total .value{font-weight:700;color:var(--green);font-size:15px}
+
+/* PDR Tag */
+.pdr-tag{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;margin:3px 4px 3px 0;letter-spacing:.3px}
+.pdr-tag.available{background:var(--green-glow);color:var(--green);border:1px solid rgba(45,212,160,.25)}
+.pdr-tag.restricted{background:rgba(239,100,97,.1);color:var(--red);border:1px solid rgba(239,100,97,.2)}
+
+/* Notes */
+.note-item{font-size:12px;color:var(--text3);padding:4px 0;line-height:1.5}
+.note-item::before{content:'⚠ ';opacity:.6}
 
 /* Loading */
 .loading-overlay{
   position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:100;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:opacity .5s;
+  transition:opacity .6s;
 }
 .loading-overlay.hide{opacity:0;pointer-events:none}
-.loader{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--indigo);border-radius:50%;animation:spin .8s linear infinite}
+.loader{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-overlay p{margin-top:16px;color:var(--text2);font-size:14px}
 
 /* Branding */
 .brand{position:fixed;bottom:16px;left:16px;z-index:4;font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px}
 .brand span{font-weight:700;color:var(--text2)}
+
+/* 3D Labels */
+.map-label{
+  position:absolute;pointer-events:none;z-index:3;
+  font:600 12px var(--mono);color:var(--text);
+  background:rgba(10,12,19,.85);backdrop-filter:blur(8px);
+  padding:5px 10px;border-radius:6px;border:1px solid var(--border);
+  white-space:nowrap;transform:translate(-50%,-100%);
+  transition:opacity .3s;
+}
+.map-label.height-label{border-color:var(--accent);color:var(--accent2)}
+.map-label.capacity-label{border-color:var(--green);color:var(--green)}
+.map-label .label-line{
+  position:absolute;bottom:-20px;left:50%;width:1px;height:20px;
+  background:var(--border);
+}
 
 /* Responsive */
 @media(max-width:768px){
@@ -132,9 +166,12 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 <div id="map"></div>
 
+<!-- 3D Map Labels Container -->
+<div id="map-labels"></div>
+
 <div class="search-wrap">
   <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-  <input id="search" type="text" placeholder="Search NYC address…" autocomplete="off">
+  <input id="search" type="text" placeholder="Search London address…" autocomplete="off">
   <div class="search-results" id="results"></div>
 </div>
 
@@ -144,7 +181,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
     <div class="address" id="p-address">—</div>
     <div class="subtitle" id="p-subtitle"></div>
   </div>
-  <div id="panel-body"><div class="section"><p class="narrative" style="color:var(--text3)">Search an address to begin analysis</p></div></div>
+  <div id="panel-body"><div class="section"><p class="narrative" style="color:var(--text3)">Search a London address to begin analysis</p></div></div>
 </div>
 <button class="panel-toggle" id="toggle" title="Toggle panel">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
@@ -152,26 +189,12 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 <div class="brand">
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-  <span>DevFeasibility</span> v2
+  <span>DevFeasibility</span> v4 London
 </div>
 
-<script src="zoning-engine.js"></script>
+<script src="london-planning-engine.js"></script>
 <script>
-let map, marker, currentData = null;
-
-const BOROUGH_RATES = {
-  1: {name:'Manhattan',rentSqft:75,saleSqft:1400,costLow:280,costHigh:380},
-  2: {name:'Bronx',rentSqft:40,saleSqft:500,costLow:180,costHigh:280},
-  3: {name:'Brooklyn',rentSqft:60,saleSqft:950,costLow:220,costHigh:330},
-  4: {name:'Queens',rentSqft:50,saleSqft:700,costLow:200,costHigh:300},
-  5: {name:'Staten Island',rentSqft:38,saleSqft:450,costLow:180,costHigh:260},
-};
-
-const ZONE_INFO = {
-  'R': {type:'Residential',desc:'residential development',color:'#818cf8'},
-  'C': {type:'Commercial',desc:'commercial or mixed-use development',color:'#34d399'},
-  'M': {type:'Manufacturing',desc:'manufacturing, industrial, or commercial development',color:'#fbbf24'},
-};
+let map, marker, currentLabels = [];
 
 async function init(){
   const cfg = await(await fetch('/api/config')).json();
@@ -179,30 +202,29 @@ async function init(){
   map = new mapboxgl.Map({
     container:'map',
     style:'mapbox://styles/mapbox/dark-v11',
-    center:[-73.965,40.686],
-    zoom:15.5,
+    center:[-0.08, 51.512],
+    zoom:14.5,
     pitch:50,
-    bearing:-17,
+    bearing:-15,
     antialias:true
   });
   map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
   map.on('style.load',()=>{
-    // Brighten streets
+    // Brighten roads
     try{
       map.setPaintProperty('road-street','line-color','#8a8ea8');
       map.setPaintProperty('road-secondary-tertiary','line-color','#8a8ea8');
       map.setPaintProperty('road-primary','line-color','#a0a4c0');
     }catch(e){}
     // Brighten labels
-    const labelLayers=['road-label','road-number-shield','road-exit-shield'];
-    labelLayers.forEach(l=>{try{map.setPaintProperty(l,'text-color','#d0d4e8')}catch(e){}});
+    ['road-label','road-number-shield'].forEach(l=>{try{map.setPaintProperty(l,'text-color','#d0d4e8')}catch(e){}});
     // 3D buildings
     if(!map.getLayer('3d-buildings')){
       map.addLayer({
         id:'3d-buildings',type:'fill-extrusion',source:'composite','source-layer':'building',
         minzoom:14,
         paint:{
-          'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#2a2f4a',30,'#353b60',100,'#404875',200,'#4a5290'],
+          'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#1e2240',30,'#282e55',80,'#353d6a',150,'#424c80'],
           'fill-extrusion-height':['get','height'],
           'fill-extrusion-base':['get','min_height'],
           'fill-extrusion-opacity':.85,
@@ -210,286 +232,349 @@ async function init(){
         }
       });
     }
-    // Building outlines via separate layer
     if(!map.getLayer('building-outlines')){
       map.addLayer({
         id:'building-outlines',type:'line',source:'composite','source-layer':'building',
         minzoom:14,
-        paint:{'line-color':'rgba(130,140,180,0.25)','line-width':0.5}
+        paint:{'line-color':'rgba(130,140,180,0.2)','line-width':0.5}
       });
     }
     document.getElementById('loader').classList.add('hide');
-    // Pre-load demo
-    searchAddress('880 Lafayette Avenue, Brooklyn, NY');
+    // Demo: Southwark site
+    searchAddress('Great Suffolk Street, London SE1');
   });
+
+  // Update labels on camera move
+  map.on('move', updateLabelPositions);
 }
 
+// --- ADDRESS SEARCH ---
 function searchAddress(text){
   document.getElementById('search').value = text;
   fetch(`/api/geocode?text=${encodeURIComponent(text)}`)
     .then(r=>r.json()).then(d=>{
-      if(d.features&&d.features.length>0) selectResult(d.features[0]);
+      if(d.features && d.features.length > 0) selectResult(d.features[0]);
     });
 }
 
 let debounceTimer;
 document.getElementById('search').addEventListener('input',e=>{
   clearTimeout(debounceTimer);
-  const q=e.target.value.trim();
-  if(q.length<3){document.getElementById('results').classList.remove('show');return}
-  debounceTimer=setTimeout(()=>{
+  const q = e.target.value.trim();
+  if(q.length < 3){document.getElementById('results').classList.remove('show');return}
+  debounceTimer = setTimeout(()=>{
     fetch(`/api/geocode?text=${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>{
-      const el=document.getElementById('results');
-      el.innerHTML='';
-      if(d.features&&d.features.length){
+      const el = document.getElementById('results');
+      el.innerHTML = '';
+      if(d.features && d.features.length){
         d.features.slice(0,5).forEach(f=>{
-          const div=document.createElement('div');
-          div.textContent=f.properties.label;
-          div.onclick=()=>{selectResult(f);el.classList.remove('show');document.getElementById('search').value=f.properties.label};
+          const div = document.createElement('div');
+          div.textContent = f.place_name;
+          div.onclick = ()=>{selectResult(f);el.classList.remove('show');document.getElementById('search').value=f.place_name};
           el.appendChild(div);
         });
         el.classList.add('show');
       } else el.classList.remove('show');
     });
-  },250);
+  },300);
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))document.getElementById('results').classList.remove('show')});
 
+// --- SELECT RESULT ---
 async function selectResult(feature){
-  const [lng,lat]=feature.geometry.coordinates;
-  const props=feature.properties;
-  map.flyTo({center:[lng,lat],zoom:16.5,pitch:55,bearing:-17,duration:2000});
-  if(marker)marker.remove();
-  const el=document.createElement('div');
-  el.style.cssText='width:16px;height:16px;background:var(--indigo);border:3px solid white;border-radius:50%;box-shadow:0 0 12px rgba(99,102,241,.6)';
-  marker=new mapboxgl.Marker({element:el}).setLngLat([lng,lat]).addTo(map);
+  const [lng,lat] = feature.center || feature.geometry.coordinates;
+  map.flyTo({center:[lng,lat],zoom:16.5,pitch:55,bearing:-15,duration:2000});
 
-  // Get BBL from props
-  const pad = props.pad_bbl || props.addendum?.pad?.bbl;
-  const borough = props.borough_gid?.split(':')?.[1] || props.region_a;
-  let bbl = pad;
-  if(!bbl && props.locality === 'Brooklyn') bbl = null; // will need PLUTO lookup another way
+  if(marker) marker.remove();
+  const el = document.createElement('div');
+  el.style.cssText = 'width:16px;height:16px;background:var(--accent);border:3px solid white;border-radius:50%;box-shadow:0 0 16px rgba(124,106,239,.6)';
+  marker = new mapboxgl.Marker({element:el}).setLngLat([lng,lat]).addTo(map);
 
-  // Try fetching PLUTO by address components
-  let plutoData = null;
-  if(bbl){
-    const pr = await fetch(`/api/pluto?bbl=${bbl}`);
-    const pd = await pr.json();
-    if(pd.length) plutoData = pd[0];
-  }
-  if(!plutoData){
-    // Try finding via geocoded BBL in addendum
-    const addBbl = props.addendum?.pad?.bbl;
-    if(addBbl){
-      const pr = await fetch(`/api/pluto?bbl=${addBbl}`);
-      const pd = await pr.json();
-      if(pd.length) plutoData = pd[0];
+  // Get borough
+  const boroughRes = await fetch(`/api/borough?lat=${lat}&lng=${lng}`);
+  const boroughData = await boroughRes.json();
+
+  // Get building data from Overpass
+  let buildingData = null;
+  try {
+    const bldgRes = await fetch(`/api/building?lat=${lat}&lng=${lng}&radius=25`);
+    const osmData = await bldgRes.json();
+    if(osmData.elements && osmData.elements.length > 0){
+      const building = osmData.elements.find(e => e.type === 'way' && e.tags);
+      if(building){
+        buildingData = {
+          name: building.tags.name || '',
+          levels: parseInt(building.tags['building:levels']) || null,
+          height: parseFloat(building.tags.height) || null,
+          use: building.tags['building'] || '',
+          architect: building.tags.architect || '',
+          startDate: building.tags.start_date || '',
+          nodes: osmData.elements.filter(e => e.type === 'node' && e.lat),
+          wayNodes: building.nodes || []
+        };
+      }
     }
+  } catch(e){ console.warn('No OSM building data:', e); }
+
+  // Get planning context
+  const address = feature.place_name || feature.text || '';
+  const postcode = extractPostcode(address);
+  
+  // Estimate plot area from building footprint nodes
+  let plotArea = 0;
+  if(buildingData && buildingData.nodes.length > 0 && buildingData.wayNodes.length > 0){
+    const coords = buildingData.wayNodes.map(nid => buildingData.nodes.find(n => n.id === nid)).filter(Boolean);
+    if(coords.length >= 3) plotArea = calcPolygonArea(coords);
   }
 
-  if(plutoData){
-    currentData = plutoData;
-    renderPanel(plutoData, props.label || props.name);
-    loadLotGeometry(plutoData.bbl, plutoData);
-  } else {
-    document.getElementById('p-address').textContent = props.label || props.name;
-    document.getElementById('p-subtitle').textContent = '';
-    document.getElementById('panel-body').innerHTML = '<div class="section"><p class="narrative">No PLUTO data found for this address.</p></div>';
-  }
-  // open panel
+  const floors = buildingData?.levels || 2;
+  const heightM = buildingData?.height || floors * 3.2;
+  const estimatedFloorArea = plotArea * floors * 0.85; // 85% efficiency
+
+  const planning = getPlanningContext(boroughData.borough, {
+    lat, lng,
+    plotArea: plotArea,
+    floorArea: estimatedFloorArea,
+    floors: floors,
+    currentUse: guessUseClass(buildingData?.use || ''),
+  });
+
+  renderPanel(planning, address, boroughData, buildingData, { plotArea, floors, heightM, estimatedFloorArea, lat, lng, postcode });
+  renderSite3D(lat, lng, buildingData, planning, { plotArea, floors, heightM });
   document.getElementById('panel').classList.remove('collapsed');
 }
 
-async function loadLotGeometry(bbl, plutoData){
+// --- 3D SITE RENDERING ---
+function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   // Remove old layers
-  ['lot-fill','lot-line','current-3d','potential-3d'].forEach(id=>{
-    if(map.getLayer(id))map.removeLayer(id);
+  ['site-fill','site-line','current-3d','potential-3d','setback-line'].forEach(id=>{
+    if(map.getLayer(id)) map.removeLayer(id);
   });
-  if(map.getSource('lot'))map.removeSource('lot');
-  if(map.getSource('current-bldg'))map.removeSource('current-bldg');
-  if(map.getSource('potential-bldg'))map.removeSource('potential-bldg');
+  ['site','current-bldg','potential-bldg','setbacks'].forEach(id=>{
+    if(map.getSource(id)) map.removeSource(id);
+  });
+  clearLabels();
 
-  try{
-    const r = await fetch(`/api/lot-geom?bbl=${bbl}`);
-    const gj = await r.json();
-    if(gj.features && gj.features.length){
-      const lotFeature = gj.features[0];
-      map.addSource('lot',{type:'geojson',data:lotFeature});
-      map.addLayer({id:'lot-fill',type:'fill',source:'lot',paint:{'fill-color':'#6366f1','fill-opacity':.12}});
-      map.addLayer({id:'lot-line',type:'line',source:'lot',paint:{'line-color':'#818cf8','line-width':2,'line-dasharray':[2,1]}});
+  if(!buildingData || !buildingData.wayNodes || buildingData.wayNodes.length < 3) return;
 
-      const lotArea = parseFloat(plutoData.lotarea) || 1;
-      const maxFar = parseFloat(plutoData.maxallwfar) || parseFloat(plutoData.residfar) || 1;
-      const builtFar = parseFloat(plutoData.builtfar) || 0;
-      const numFloors = parseFloat(plutoData.numfloors) || 1;
-      const maxBuildable = lotArea * maxFar;
-      const lotCoverage = 0.65;
-      const footprint = lotArea * lotCoverage;
+  const coords = buildingData.wayNodes
+    .map(nid => buildingData.nodes.find(n => n.id === nid))
+    .filter(Boolean)
+    .map(n => [n.lon, n.lat]);
+  if(coords.length < 3) return;
 
-      // Current building height (from actual floors)
-      const currentHeight = numFloors * 3.05; // meters
+  // Close the ring
+  if(coords[0][0] !== coords[coords.length-1][0] || coords[0][1] !== coords[coords.length-1][1]){
+    coords.push([...coords[0]]);
+  }
 
-      // Max envelope height (capped by zoning)
-      const zoneDist = plutoData.zonedist1 || '';
-      const zr = getZoningRules(zoneDist);
-      let maxFloors = Math.ceil(maxBuildable / footprint);
-      let maxHeight = maxFloors * 3.05;
-      if (zr.height.maxFeet) {
-        const maxMeters = zr.height.maxFeet * 0.3048;
-        if (maxHeight > maxMeters) maxHeight = maxMeters;
-      }
+  const siteGeoJSON = {
+    type:'Feature',
+    geometry:{type:'Polygon',coordinates:[coords]},
+    properties:{}
+  };
 
-      // Current building: solid amber/warm color
-      const currentData = JSON.parse(JSON.stringify(lotFeature));
-      currentData.properties = {};
-      map.addSource('current-bldg',{type:'geojson',data:currentData});
-      map.addLayer({
-        id:'current-3d',type:'fill-extrusion',source:'current-bldg',
-        paint:{
-          'fill-extrusion-color':'#f59e0b',
-          'fill-extrusion-height':currentHeight,
-          'fill-extrusion-base':0,
-          'fill-extrusion-opacity':.55,
-          'fill-extrusion-vertical-gradient':true,
-        }
-      });
+  // Site boundary
+  map.addSource('site',{type:'geojson',data:siteGeoJSON});
+  map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#7c6aef','fill-opacity':.1}});
+  map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#9d8fff','line-width':2.5,'line-dasharray':[3,1.5]}});
 
-      // Additional potential: translucent indigo stacked on top
-      if(maxHeight > currentHeight){
-        const potentialData = JSON.parse(JSON.stringify(lotFeature));
-        potentialData.properties = {};
-        map.addSource('potential-bldg',{type:'geojson',data:potentialData});
-        map.addLayer({
-          id:'potential-3d',type:'fill-extrusion',source:'potential-bldg',
-          paint:{
-            'fill-extrusion-color':'#6366f1',
-            'fill-extrusion-height':maxHeight,
-            'fill-extrusion-base':currentHeight,
-            'fill-extrusion-opacity':.3,
-            'fill-extrusion-vertical-gradient':true,
-          }
-        });
-      }
+  const currentHeight = siteInfo.heightM || 6.4;
+  const typicalH = planning.typicalHeight || {low:10,high:30};
+  const potentialHeightM = typicalH.high || 30;
+
+  // Current building — amber
+  map.addSource('current-bldg',{type:'geojson',data:siteGeoJSON});
+  map.addLayer({
+    id:'current-3d',type:'fill-extrusion',source:'current-bldg',
+    paint:{
+      'fill-extrusion-color':'#f5b731',
+      'fill-extrusion-height':currentHeight,
+      'fill-extrusion-base':0,
+      'fill-extrusion-opacity':.55,
+      'fill-extrusion-vertical-gradient':true,
     }
-  }catch(e){console.warn('No lot geometry:',e)}
+  });
+
+  // Potential envelope — accent/purple
+  if(potentialHeightM > currentHeight){
+    map.addSource('potential-bldg',{type:'geojson',data:siteGeoJSON});
+    map.addLayer({
+      id:'potential-3d',type:'fill-extrusion',source:'potential-bldg',
+      paint:{
+        'fill-extrusion-color':'#7c6aef',
+        'fill-extrusion-height':potentialHeightM,
+        'fill-extrusion-base':currentHeight,
+        'fill-extrusion-opacity':.25,
+        'fill-extrusion-vertical-gradient':true,
+      }
+    });
+  }
+
+  // Centroid for labels
+  const centroid = getCentroid(coords);
+
+  // Height label
+  addLabel(centroid, potentialHeightM + 3, `${Math.round(potentialHeightM)}m max`, 'height-label');
+  
+  // Current height label
+  addLabel(centroid, currentHeight / 2, `${Math.round(currentHeight)}m existing`, '');
+
+  // Capacity label
+  if(planning.plotRatio && planning.plotRatio.remainingCapacity > 0){
+    const cap = planning.plotRatio.remainingCapacity;
+    addLabel(
+      [centroid[0] + 0.0002, centroid[1]],
+      potentialHeightM * 0.6,
+      `+${fmt(Math.round(cap * 10.764))} sqft potential`,
+      'capacity-label'
+    );
+  }
 }
 
-function renderPanel(d, address){
-  const lotArea = parseFloat(d.lotarea)||0;
-  const bldgArea = parseFloat(d.bldgarea)||0;
-  const resFar = parseFloat(d.residfar)||0;
-  const comFar = parseFloat(d.commfar)||0;
-  const maxFar = parseFloat(d.maxallwfar)||Math.max(resFar,comFar)||0;
-  const builtFar = parseFloat(d.builtfar)||0;
-  const numFloors = parseFloat(d.numfloors)||0;
-  const yearBuilt = d.yearbuilt||'—';
-  const zoneDist = d.zonedist1||'—';
-  const landUse = d.landuse||'';
-  const bbl = d.bbl||'';
-  const boroCode = parseInt(bbl.charAt(0))||3;
-  const rates = BOROUGH_RATES[boroCode]||BOROUGH_RATES[3];
-  const maxBuildable = lotArea * maxFar;
-  const remainingSF = Math.max(0, maxBuildable - bldgArea);
-  const utilPct = maxBuildable > 0 ? Math.min(100, (bldgArea/maxBuildable)*100) : 0;
-  const lotCoverage = 0.65;
-  const potentialFloors = maxBuildable > 0 ? Math.ceil(maxBuildable / (lotArea * lotCoverage)) : 0;
-  const potentialHeight = potentialFloors * 10;
-  const unitCount850 = Math.floor(maxBuildable / 850);
-  const unitCount650 = Math.floor(maxBuildable / 650);
-  const existingUnits = parseInt(d.unitsres)||0;
-  const costLow = remainingSF * rates.costLow;
-  const costHigh = remainingSF * rates.costHigh;
-  const revRentAnnual = remainingSF * rates.rentSqft;
-  const revSale = remainingSF * rates.saleSqft;
+// --- 3D LABEL SYSTEM ---
+function addLabel(lngLat, heightM, text, className){
+  const div = document.createElement('div');
+  div.className = 'map-label ' + className;
+  div.textContent = text;
+  div.dataset.lng = lngLat[0];
+  div.dataset.lat = lngLat[1];
+  div.dataset.heightM = heightM;
+  document.getElementById('map-labels').appendChild(div);
+  currentLabels.push(div);
+  positionLabel(div);
+}
 
-  const zonePrefix = zoneDist.charAt(0);
-  const zi = ZONE_INFO[zonePrefix] || ZONE_INFO['R'];
+function positionLabel(div){
+  const lng = parseFloat(div.dataset.lng);
+  const lat = parseFloat(div.dataset.lat);
+  const heightM = parseFloat(div.dataset.heightM);
+  // Project the 3D point to screen coordinates
+  const point = map.project(new mapboxgl.LngLat(lng, lat));
+  // Offset Y based on height and pitch
+  const pitch = map.getPitch() * Math.PI / 180;
+  const zoom = map.getZoom();
+  const metersPerPixel = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom);
+  const heightPixels = heightM / metersPerPixel * Math.cos(pitch);
+  div.style.left = point.x + 'px';
+  div.style.top = (point.y - heightPixels) + 'px';
+}
 
-  // Get zoning rules from engine
-  const zr = getZoningRules(zoneDist);
+function updateLabelPositions(){
+  currentLabels.forEach(div => positionLabel(div));
+}
 
-  // Cap potential height at zoning height limit
-  let effectiveMaxHeight = potentialHeight;
-  let heightCapped = false;
-  if (zr.height.maxFeet && potentialHeight > zr.height.maxFeet) {
-    effectiveMaxHeight = zr.height.maxFeet;
-    heightCapped = true;
-  }
-  const effectiveFloors = Math.floor(effectiveMaxHeight / 10);
+function clearLabels(){
+  currentLabels.forEach(div => div.remove());
+  currentLabels = [];
+}
 
-  document.getElementById('p-address').textContent = address;
-  document.getElementById('p-subtitle').textContent = `BBL ${bbl} · ${rates.name}`;
+// --- PANEL RENDERING ---
+function renderPanel(planning, address, boroughData, buildingData, siteInfo){
+  const borough = planning.borough || boroughData.borough || 'Unknown';
+  const fin = planning.financials || LONDON_FINANCIALS[2];
+  const plotArea = siteInfo.plotArea || 0;
+  const plotAreaSqft = plotArea * 10.764;
+  const floors = siteInfo.floors || 2;
+  const heightM = siteInfo.heightM || 6.4;
+  const existingFloorArea = siteInfo.estimatedFloorArea || 0;
+  const existingFloorAreaSqft = existingFloorArea * 10.764;
 
-  // Utilization bar color
+  const pr = planning.plotRatio || {};
+  const potentialFloorArea = pr.potentialFloorArea || 0;
+  const potentialFloorAreaSqft = potentialFloorArea * 10.764;
+  const remainingCapacity = pr.remainingCapacity || 0;
+  const remainingCapacitySqft = remainingCapacity * 10.764;
+  const utilPct = potentialFloorArea > 0 ? Math.min(100, (existingFloorArea / potentialFloorArea) * 100) : 0;
+
+  // Estimate units
+  const avgUnitSqm = 75; // ~800 sqft
+  const potentialUnits = Math.floor(remainingCapacity / avgUnitSqm);
+  const typicalH = planning.typicalHeight || {low:10,high:30};
+  const potentialFloors = Math.floor(typicalH.high / 3.2);
+
+  // Financials
+  const constructionCostLow = remainingCapacitySqft * fin.costLow;
+  const constructionCostHigh = remainingCapacitySqft * fin.costHigh;
+  const landCost = plotAreaSqft * fin.landSqft;
+  const saleRevenue = remainingCapacitySqft * fin.saleSqft;
+  const annualRent = remainingCapacitySqft * fin.rentSqft;
+
   let barColor = 'var(--green)';
-  if(utilPct>60) barColor = 'var(--amber)';
-  if(utilPct>85) barColor = 'var(--red)';
+  if(utilPct > 55) barColor = 'var(--amber)';
+  if(utilPct > 80) barColor = 'var(--red)';
 
-  const isUnderbuilt = utilPct < 50;
-  const narrative = generateNarrative(d, rates, zi, utilPct, maxBuildable, remainingSF, unitCount850, potentialFloors, zr);
+  document.getElementById('p-address').textContent = address.split(',')[0];
+  document.getElementById('p-subtitle').textContent = `${borough} · Zone ${planning.zone || '?'}${siteInfo.postcode ? ' · ' + siteInfo.postcode : ''}`;
 
-  // Build zoning constraints HTML
-  let zcHtml = '';
-  zcHtml += `<div class="stat"><div class="stat-label">Height Limit</div><div class="stat-value">${zr.height.maxFeet ? zr.height.maxFeet + ' ft' : 'No fixed limit'}</div>${zr.contextual ? '<div class="stat-sub">Contextual district</div>' : ''}</div>`;
-  zcHtml += `<div class="stat"><div class="stat-label">Rear Yard</div><div class="stat-value">${zr.setbacks.rearYard} ft</div>${zr.setbacks.rearYardPct ? '<div class="stat-sub">or ' + zr.setbacks.rearYardPct + '% lot depth</div>' : ''}</div>`;
-  if (zr.setbacks.sideYardMin > 0) {
-    zcHtml += `<div class="stat"><div class="stat-label">Side Yards</div><div class="stat-value">${zr.setbacks.sideYardMin} ft min</div></div>`;
+  // Narrative
+  const narrative = generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remainingCapacitySqft, potentialUnits, potentialFloors);
+
+  // Use class info
+  const uc = planning.useClassInfo || {};
+
+  // PDR routes
+  let pdrHtml = '';
+  if(planning.applicablePDR && planning.applicablePDR.length > 0){
+    pdrHtml = planning.applicablePDR.map(p =>
+      `<div style="margin-bottom:8px"><span class="pdr-tag available">${p.name}</span><div style="font-size:11px;color:var(--text3);margin-top:3px">${p.notes}${p.maxFloorspace ? ` · Max ${p.maxFloorspace}sqm` : ''}</div></div>`
+    ).join('');
   } else {
-    zcHtml += `<div class="stat"><div class="stat-label">Side Yards</div><div class="stat-value">Not req'd</div></div>`;
+    pdrHtml = '<div style="font-size:12px;color:var(--text3)">No PDR routes from current use class</div>';
   }
-  zcHtml += `<div class="stat"><div class="stat-label">Parking</div><div class="stat-value">${zr.parking.spotsPerUnit}/unit</div>${zr.parking.transitZoneReduction ? '<div class="stat-sub">Transit zone: 50% reduction</div>' : ''}</div>`;
-  if (zr.height.baseHeightMin && zr.height.baseHeightMax) {
-    zcHtml += `<div class="stat"><div class="stat-label">Base Height</div><div class="stat-value">${zr.height.baseHeightMin}–${zr.height.baseHeightMax} ft</div><div class="stat-sub">Then setback required</div></div>`;
-  }
-  if (zr.qualityHousing.available) {
-    zcHtml += `<div class="stat"><div class="stat-label">Quality Housing</div><div class="stat-value">${zr.qualityHousing.required ? 'Required' : 'Available'}</div></div>`;
-  }
+
+  // Height policy
+  const heightPolicyHtml = planning.heightPolicy ? `<div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px">${planning.heightPolicy}</div>` : '';
 
   // Notes
   let notesHtml = '';
-  if (zr.notes.length) {
-    notesHtml = '<div style="margin-top:12px">' + zr.notes.map(n => `<div style="font-size:12px;color:var(--text3);padding:3px 0">⚠ ${n}</div>`).join('') + '</div>';
+  if(planning.notes && planning.notes.length){
+    notesHtml = planning.notes.map(n => `<div class="note-item">${n}</div>`).join('');
   }
 
   document.getElementById('panel-body').innerHTML = `
-    <!-- Summary -->
+    <!-- Narrative -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Site Opportunity</div>
       <div class="narrative">${narrative}</div>
     </div>
 
-    <!-- Zoning -->
+    <!-- Planning Context -->
     <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Zoning</div>
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Planning Context</div>
+      ${heightPolicyHtml}
       <div class="stat-grid">
-        <div class="stat"><div class="stat-label">District</div><div class="stat-value indigo">${zoneDist}</div><div class="stat-sub">${zi.type}${zr.contextual ? ' · Contextual' : ''}${zr.heightFactor ? ' · Height Factor' : ''}</div></div>
-        <div class="stat"><div class="stat-label">Max FAR</div><div class="stat-value">${maxFar.toFixed(2)}</div><div class="stat-sub">Built: ${builtFar.toFixed(2)}</div></div>
-        <div class="stat"><div class="stat-label">Res. FAR</div><div class="stat-value">${resFar.toFixed(2)}</div></div>
-        <div class="stat"><div class="stat-label">Comm. FAR</div><div class="stat-value">${comFar.toFixed(2)}</div></div>
+        <div class="stat"><div class="stat-label">Borough</div><div class="stat-value accent" style="font-size:14px">${borough.replace('London Borough of ','').replace('City of ','')}</div></div>
+        <div class="stat"><div class="stat-label">Use Class</div><div class="stat-value">${planning.currentUse || 'E'}</div><div class="stat-sub">${uc.name || ''}</div></div>
+        <div class="stat"><div class="stat-label">Plot Ratio</div><div class="stat-value">${pr.existing ? pr.existing.toFixed(1) : '—'}</div><div class="stat-sub">Potential: ${pr.potential ? pr.potential.toFixed(1) : '—'}</div></div>
+        <div class="stat"><div class="stat-label">Density Guide</div><div class="stat-value" style="font-size:14px">${planning.density ? planning.density.min + '–' + planning.density.max : '—'}</div><div class="stat-sub">units/ha (${planning.setting || ''})</div></div>
+        ${planning.conservationAreas ? '<div class="stat"><div class="stat-label">Conservation</div><div class="stat-value amber" style="font-size:14px">Check Required</div><div class="stat-sub">Borough has conservation areas</div></div>' : ''}
+        ${planning.lvmfViews ? '<div class="stat"><div class="stat-label">LVMF Views</div><div class="stat-value amber" style="font-size:14px">May Apply</div><div class="stat-sub">Protected vista check needed</div></div>' : ''}
+        ${planning.cilRate ? `<div class="stat"><div class="stat-label">CIL Rate</div><div class="stat-value">£${planning.cilRate}/sqm</div></div>` : ''}
+        ${planning.tallBuildingThreshold ? `<div class="stat"><div class="stat-label">Tall Building</div><div class="stat-value">${planning.tallBuildingThreshold}m+</div><div class="stat-sub">Requires assessment</div></div>` : ''}
       </div>
       <div class="util-bar-wrap">
-        <div class="util-bar-label"><span style="color:var(--text3)">FAR Utilization</span><span style="font-family:var(--mono);font-weight:600;color:${barColor}">${utilPct.toFixed(0)}%</span></div>
-        <div class="util-bar"><div class="util-bar-fill" style="width:${utilPct}%;background:${barColor}"></div></div>
+        <div class="util-bar-label"><span style="color:var(--text3)">Plot Ratio Utilisation</span><span style="font-family:var(--mono);font-weight:600;color:${barColor}">${utilPct.toFixed(0)}%</span></div>
+        <div class="util-bar"><div class="util-bar-fill" style="width:${Math.min(utilPct,100)}%;background:${barColor}"></div></div>
       </div>
     </div>
 
-    <!-- Zoning Constraints -->
+    <!-- PDR Routes -->
     <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Zoning Constraints</div>
-      <div class="stat-grid">${zcHtml}</div>
-      ${notesHtml}
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Permitted Development</div>
+      ${pdrHtml}
     </div>
 
     <!-- Current Building -->
     <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"/><path d="M9 9v.01M9 13v.01M9 17v.01"/></svg>Current Building</div>
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"/></svg>Existing Building</div>
       <div class="stat-grid">
-        <div class="stat"><div class="stat-label">Building Area</div><div class="stat-value">${fmt(bldgArea)} sf</div></div>
-        <div class="stat"><div class="stat-label">Lot Area</div><div class="stat-value">${fmt(lotArea)} sf</div></div>
-        <div class="stat"><div class="stat-label">Floors</div><div class="stat-value">${numFloors}</div></div>
-        <div class="stat"><div class="stat-label">Year Built</div><div class="stat-value">${yearBuilt}</div></div>
-        <div class="stat"><div class="stat-label">Existing Units</div><div class="stat-value">${existingUnits}</div></div>
-        <div class="stat"><div class="stat-label">Land Use</div><div class="stat-value" style="font-size:13px">${getLandUse(landUse)}</div></div>
+        <div class="stat highlight"><div class="stat-label">Plot Area</div><div class="stat-value">${fmt(Math.round(plotAreaSqft))} sqft</div><div class="stat-sub">${fmt(Math.round(plotArea))} sqm</div></div>
+        <div class="stat highlight"><div class="stat-label">Est. Floor Area</div><div class="stat-value">${fmt(Math.round(existingFloorAreaSqft))} sqft</div><div class="stat-sub">${fmt(Math.round(existingFloorArea))} sqm</div></div>
+        <div class="stat"><div class="stat-label">Floors</div><div class="stat-value">${floors}</div></div>
+        <div class="stat"><div class="stat-label">Height</div><div class="stat-value">${Math.round(heightM)}m</div><div class="stat-sub">${Math.round(heightM * 3.281)}ft</div></div>
+        ${buildingData?.startDate ? `<div class="stat"><div class="stat-label">Year Built</div><div class="stat-value">${buildingData.startDate}</div></div>` : ''}
+        ${buildingData?.use ? `<div class="stat"><div class="stat-label">Building Type</div><div class="stat-value" style="font-size:13px;text-transform:capitalize">${buildingData.use.replace(/_/g,' ')}</div></div>` : ''}
       </div>
     </div>
 
@@ -497,65 +582,112 @@ function renderPanel(d, address){
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>Development Potential</div>
       <div class="stat-grid">
-        <div class="stat full"><div class="stat-label">Max Buildable (Lot × FAR)</div><div class="stat-value indigo">${fmt(lotArea)} × ${maxFar.toFixed(2)} = ${fmt(maxBuildable)} sf</div></div>
-        <div class="stat"><div class="stat-label">Remaining Capacity</div><div class="stat-value green">${fmt(remainingSF)} sf</div></div>
-        <div class="stat"><div class="stat-label">Max Height</div><div class="stat-value">${effectiveMaxHeight} ft</div><div class="stat-sub">${effectiveFloors} floors${heightCapped ? ' (zoning cap)' : ''}</div></div>
-        <div class="stat"><div class="stat-label">Est. Units (850sf avg)</div><div class="stat-value">${unitCount850}</div></div>
-        <div class="stat"><div class="stat-label">Est. Studios (650sf)</div><div class="stat-value">${unitCount650}</div></div>
+        <div class="stat full highlight-green"><div class="stat-label">Remaining Capacity</div><div class="stat-value green">${fmt(Math.round(remainingCapacitySqft))} sqft</div><div class="stat-sub">${fmt(Math.round(remainingCapacity))} sqm additional</div></div>
+        <div class="stat"><div class="stat-label">Potential Height</div><div class="stat-value">${typicalH.high}m</div><div class="stat-sub">~${potentialFloors} floors</div></div>
+        <div class="stat"><div class="stat-label">Est. Units</div><div class="stat-value">${potentialUnits}</div><div class="stat-sub">at 75sqm avg</div></div>
       </div>
     </div>
 
     <!-- Financials -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financial Estimates</div>
-      <div class="fin-row"><span class="label">Construction Cost (low)</span><span class="value">$${fmt(costLow)}</span></div>
-      <div class="fin-row"><span class="label">Construction Cost (high)</span><span class="value">$${fmt(costHigh)}</span></div>
-      <div class="fin-row"><span class="label">Cost/sqft range</span><span class="value">$${rates.costLow}–$${rates.costHigh}</span></div>
-      <div class="fin-row"><span class="label">Annual Rental Revenue</span><span class="value">$${fmt(revRentAnnual)}/yr</span></div>
-      <div class="fin-row"><span class="label">Avg rent/sqft</span><span class="value">$${rates.rentSqft}/sf/yr</span></div>
-      <div class="fin-row total"><span class="label">Sale Revenue Potential</span><span class="value">$${fmt(revSale)}</span></div>
-      <div class="fin-row"><span class="label">Avg sale price</span><span class="value">$${rates.saleSqft}/sf</span></div>
+      <div class="fin-row"><span class="label">Est. Land Value</span><span class="value">£${fmt(Math.round(landCost))}</span></div>
+      <div class="fin-row"><span class="label">Construction (low)</span><span class="value">£${fmt(Math.round(constructionCostLow))}</span></div>
+      <div class="fin-row"><span class="label">Construction (high)</span><span class="value">£${fmt(Math.round(constructionCostHigh))}</span></div>
+      <div class="fin-row"><span class="label">Cost/sqft</span><span class="value">£${fin.costLow}–£${fin.costHigh}</span></div>
+      ${planning.cilRate && remainingCapacity > 0 ? `<div class="fin-row"><span class="label">CIL Estimate</span><span class="value">£${fmt(Math.round(planning.cilRate * remainingCapacity))}</span></div>` : ''}
+      <div class="fin-row"><span class="label">Annual Rental Revenue</span><span class="value">£${fmt(Math.round(annualRent))}/yr</span></div>
+      <div class="fin-row total"><span class="label">Sale Revenue Potential</span><span class="value">£${fmt(Math.round(saleRevenue))}</span></div>
     </div>
+
+    <!-- Notes -->
+    ${notesHtml ? `<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>Planning Notes</div>${notesHtml}</div>` : ''}
   `;
 }
 
-function generateNarrative(d, rates, zi, utilPct, maxBuildable, remainingSF, unitCount850, potentialFloors, zr){
-  const lotArea = parseFloat(d.lotarea)||0;
-  const bldgArea = parseFloat(d.bldgarea)||0;
-  const zoneDist = d.zonedist1||'Unknown';
-  const yearBuilt = d.yearbuilt||'unknown';
-  const maxFar = parseFloat(d.maxallwfar)||parseFloat(d.residfar)||0;
+// --- NARRATIVE ---
+function generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remainingCapacitySqft, potentialUnits, potentialFloors){
+  const plotAreaSqft = (siteInfo.plotArea || 0) * 10.764;
+  const borough = planning.borough?.replace('London Borough of ','').replace('City of ','') || 'this borough';
+  const floors = siteInfo.floors || 2;
+  const heightM = siteInfo.heightM || 6.4;
+  const existingAreaSqft = (siteInfo.estimatedFloorArea || 0) * 10.764;
 
-  let html = `<p>This <strong>${fmt(lotArea)} sqft</strong> lot in <strong>${rates.name}</strong> is zoned <strong>${zoneDist}</strong>, permitting ${zi.desc}. `;
-  html += `The current structure, built in <strong>${yearBuilt}</strong>, contains <strong>${fmt(bldgArea)} sqft</strong> across <strong>${parseFloat(d.numfloors)||0} floors</strong>.</p>`;
+  let html = `<p>A <strong>${fmt(Math.round(plotAreaSqft))} sqft</strong> site in <strong>${borough}</strong>`;
+  if(buildingData?.use) html += ` currently occupied by a <strong>${buildingData.use.replace(/_/g,' ')}</strong> structure`;
+  html += `. The existing building is approximately <strong>${floors} floors</strong> (${Math.round(heightM)}m) with an estimated <strong>${fmt(Math.round(existingAreaSqft))} sqft</strong> of floor area.</p>`;
 
-  if(utilPct < 50){
-    html += `<div class="opportunity">🏗️ <strong>Significant opportunity.</strong> This site is using only <span class="highlight">${utilPct.toFixed(0)}%</span> of its zoning capacity. `;
-    html += `Approximately <strong>${fmt(remainingSF)} sqft</strong> of additional development is possible — enough for roughly <strong>${unitCount850} residential units</strong> `;
-    html += `in a building up to <strong>${potentialFloors} floors</strong>.`;
-    if (zr && zr.height.maxFeet) html += ` Note: zoning caps height at <strong>${zr.height.maxFeet} ft</strong>.`;
-    if (zr && zr.contextual) html += ` This is a <strong>contextual district</strong> with street wall and setback requirements.`;
+  if(utilPct < 45){
+    html += `<div class="opportunity">🏗️ <strong>Significant opportunity.</strong> This site is utilising only <span class="highlight">${utilPct.toFixed(0)}%</span> of its estimated plot ratio capacity. `;
+    html += `Approximately <strong>${fmt(Math.round(remainingCapacitySqft))} sqft</strong> of additional development may be possible — enough for roughly <strong>${potentialUnits} residential units</strong> `;
+    html += `up to <strong>${potentialFloors} floors</strong>.`;
+    if(planning.conservationAreas) html += ` <strong>Conservation area check required</strong> — may constrain.`;
+    if(planning.lvmfViews) html += ` LVMF strategic views may apply.`;
     html += `</div>`;
-  } else if(utilPct < 80){
-    html += `<p style="margin-top:8px">The site is at <span class="highlight">${utilPct.toFixed(0)}% FAR utilization</span>. There is moderate remaining capacity of <strong>${fmt(remainingSF)} sqft</strong>, `;
-    html += `potentially accommodating <strong>${unitCount850} additional units</strong>.</p>`;
+  } else if(utilPct < 75){
+    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}% plot ratio utilisation</span>, there is moderate remaining capacity of <strong>${fmt(Math.round(remainingCapacitySqft))} sqft</strong>, `;
+    html += `potentially accommodating <strong>${potentialUnits} additional units</strong>.</p>`;
   } else {
-    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}% utilization</span>, this site is near its zoning capacity. `;
-    html += `Only <strong>${fmt(remainingSF)} sqft</strong> of additional development potential remains.</p>`;
+    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}%</span> utilisation, this site is near its estimated capacity. `;
+    html += `Limited additional development potential of <strong>${fmt(Math.round(remainingCapacitySqft))} sqft</strong> remains.</p>`;
   }
+
+  // PDR note
+  if(planning.applicablePDR && planning.applicablePDR.length > 0){
+    html += `<p style="margin-top:8px;font-size:13px;color:var(--text3)">Permitted development routes may apply — see PDR section below.</p>`;
+  }
+
   return html;
 }
 
-function fmt(n){return Math.round(n).toLocaleString('en-US')}
-function getLandUse(code){
-  const uses={'01':'1-2 Family','02':'Multi-Family Walk-up','03':'Multi-Family Elevator','04':'Mixed Res/Comm',
-    '05':'Commercial/Office','06':'Industrial/Mfg','07':'Transportation/Utility','08':'Public Facility',
-    '09':'Open Space','10':'Parking','11':'Vacant Land'};
-  return uses[code]||code||'—';
+// --- UTILITIES ---
+function fmt(n){return Math.round(n).toLocaleString('en-GB')}
+
+function extractPostcode(address){
+  const match = address.match(/[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}/i);
+  return match ? match[0].toUpperCase() : '';
+}
+
+function guessUseClass(osmType){
+  const map = {
+    'residential': 'C3', 'apartments': 'C3', 'house': 'C3', 'detached': 'C3', 'terrace': 'C3',
+    'commercial': 'E', 'retail': 'E', 'office': 'E', 'shop': 'E',
+    'industrial': 'B2', 'warehouse': 'B8',
+    'hotel': 'C1', 'church': 'F1', 'school': 'F1',
+    'yes': 'E', '': 'E'
+  };
+  return map[osmType.toLowerCase()] || 'E';
+}
+
+function calcPolygonArea(nodes){
+  // Haversine-based polygon area from lat/lng nodes
+  const R = 6371000; // Earth radius in meters
+  let area = 0;
+  const n = nodes.length;
+  for(let i = 0; i < n; i++){
+    const j = (i + 1) % n;
+    const lat1 = nodes[i].lat * Math.PI / 180;
+    const lat2 = nodes[j].lat * Math.PI / 180;
+    const lng1 = nodes[i].lon * Math.PI / 180;
+    const lng2 = nodes[j].lon * Math.PI / 180;
+    area += (lng2 - lng1) * (2 + Math.sin(lat1) + Math.sin(lat2));
+  }
+  area = Math.abs(area * R * R / 2);
+  return area;
+}
+
+function getCentroid(coords){
+  let sumLng = 0, sumLat = 0;
+  const n = coords.length - 1; // Exclude closing point
+  for(let i = 0; i < n; i++){
+    sumLng += coords[i][0];
+    sumLat += coords[i][1];
+  }
+  return [sumLng/n, sumLat/n];
 }
 
 // Panel toggle
-document.getElementById('toggle').onclick=()=>document.getElementById('panel').classList.toggle('collapsed');
+document.getElementById('toggle').onclick = () => document.getElementById('panel').classList.toggle('collapsed');
 
 init();
 </script>
