@@ -173,16 +173,30 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   font:600 12px var(--mono);color:var(--text);
   background:rgba(10,12,19,.85);backdrop-filter:blur(8px);
   padding:5px 10px;border-radius:6px;border:1px solid var(--border);
-  white-space:nowrap;transform:translate(-50%,-100%);
-  transition:opacity .3s;
+  white-space:nowrap;transform:translate(-50%,0);
+  transition:opacity .3s, top .15s ease-out, left .15s ease-out;
 }
 .map-label.height-label{border-color:var(--accent);color:var(--accent2)}
 .map-label.capacity-label{border-color:var(--green);color:var(--green)}
 .map-label.pd-label{border-color:var(--green);color:var(--green);font-size:11px}
-.map-label .label-line{
-  position:absolute;bottom:-20px;left:50%;width:1px;height:20px;
+.map-label.existing-label{border-color:var(--text3);color:var(--text3)}
+.map-label .leader{
+  position:absolute;pointer-events:none;
+  stroke-width:1;stroke:var(--border);fill:none;
+  overflow:visible;
+}
+.map-label.height-label .leader{stroke:var(--accent)}
+.map-label.capacity-label .leader{stroke:var(--green)}
+.map-label.pd-label .leader{stroke:var(--green)}
+.map-label.existing-label .leader{stroke:var(--text3)}
+.map-label .leader-dot{
+  position:absolute;width:4px;height:4px;border-radius:50%;
   background:var(--border);
 }
+.map-label.height-label .leader-dot{background:var(--accent)}
+.map-label.capacity-label .leader-dot{background:var(--green)}
+.map-label.pd-label .leader-dot{background:var(--green)}
+.map-label.existing-label .leader-dot{background:var(--text3)}
 
 /* Responsive */
 @media(max-width:768px){
@@ -494,13 +508,16 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
 
   const centroid = getCentroid(coords);
 
-  // Labels
-  addLabel(centroid, potentialHeightM + 3, `${Math.round(potentialHeightM)}m potential`, 'height-label');
-  addLabel(centroid, currentHeight + 1, `${Math.round(currentHeight)}m existing · ${siteInfo.floors}F`, '');
+  // Labels — anchored to massing box tops with leader lines
+  // Height label sits at top of the potential massing box
+  addLabel(centroid, potentialHeightM, `${Math.round(potentialHeightM)}m potential · ${Math.round(potentialHeightM / (siteInfo.ftf || 3.0))}F`, 'height-label', 'right');
+
+  // Existing label sits at existing building height
+  addLabel(centroid, currentHeight, `${Math.round(currentHeight)}m existing · ${siteInfo.floors}F`, 'existing-label', 'left');
 
   if(planning.pdMassingPotential){
     const pdH = currentHeight + planning.pdMassingPotential.additionalHeightM;
-    addLabel([centroid[0] - 0.00015, centroid[1]], pdH + 1, `PD: +${planning.pdMassingPotential.additionalFloors}F`, 'pd-label');
+    addLabel(centroid, pdH, `PD: +${planning.pdMassingPotential.additionalFloors}F (${Math.round(pdH)}m)`, 'pd-label', 'left');
   }
 
   if(planning.plotRatio && planning.plotRatio.remainingCapacity > 0){
@@ -509,37 +526,135 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
     const capLabel = isResi
       ? `+${fmt(Math.round(cap))}sqm (${fmt(Math.round(cap * 10.764))}sqft)`
       : `+${fmt(Math.round(cap))}sqm GFA`;
-    addLabel([centroid[0] + 0.00018, centroid[1]], potentialHeightM * 0.5, capLabel, 'capacity-label');
+    addLabel(centroid, potentialHeightM * 0.5, capLabel, 'capacity-label', 'right');
   }
+
+  // Resolve collisions after all labels placed
+  resolveCollisions();
 }
 
-// --- LABELS ---
-function addLabel(lngLat, heightM, text, className){
+// --- LABELS WITH LEADERS ---
+function addLabel(lngLat, heightM, text, className, side){
   const div = document.createElement('div');
   div.className = 'map-label ' + className;
   div.textContent = text;
   div.dataset.lng = lngLat[0];
   div.dataset.lat = lngLat[1];
   div.dataset.heightM = heightM;
+  div.dataset.anchorHeightM = heightM; // where the leader line points to
+  div.dataset.side = side || 'right';  // which side to offset label to
+  div.dataset.offsetX = 0;
+  div.dataset.offsetY = 0;
+  // Leader SVG
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.classList.add('leader');
+  svg.style.cssText = 'position:absolute;overflow:visible;width:1px;height:1px;left:0;top:0;z-index:-1';
+  const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1','0'); line.setAttribute('y1','0');
+  line.setAttribute('x2','0'); line.setAttribute('y2','0');
+  svg.appendChild(line);
+  div.appendChild(svg);
+  // Anchor dot
+  const dot = document.createElement('div');
+  dot.classList.add('leader-dot');
+  div.appendChild(dot);
   document.getElementById('map-labels').appendChild(div);
   currentLabels.push(div);
-  positionLabel(div);
 }
 
-function positionLabel(div){
+function getAnchorPixel(div){
   const lng = parseFloat(div.dataset.lng);
   const lat = parseFloat(div.dataset.lat);
-  const heightM = parseFloat(div.dataset.heightM);
+  const heightM = parseFloat(div.dataset.anchorHeightM);
   const point = map.project(new mapboxgl.LngLat(lng, lat));
   const pitch = map.getPitch() * Math.PI / 180;
   const zoom = map.getZoom();
   const metersPerPixel = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom);
   const heightPixels = heightM / metersPerPixel * Math.cos(pitch);
-  div.style.left = point.x + 'px';
-  div.style.top = (point.y - heightPixels) + 'px';
+  return { x: point.x, y: point.y - heightPixels };
 }
 
-function updateLabelPositions(){ currentLabels.forEach(positionLabel); }
+function positionLabel(div){
+  const anchor = getAnchorPixel(div);
+  const side = div.dataset.side;
+  const labelOffset = side === 'left' ? -100 : 100; // px horizontal offset
+  const ox = parseFloat(div.dataset.offsetX) || 0;
+  const oy = parseFloat(div.dataset.offsetY) || 0;
+  
+  const labelX = anchor.x + labelOffset + ox;
+  const labelY = anchor.y - 10 + oy; // slight up from anchor
+  
+  div.style.left = labelX + 'px';
+  div.style.top = labelY + 'px';
+  div.style.transform = side === 'left' ? 'translate(-100%,0)' : 'translate(0,0)';
+  
+  // Update leader line from label edge to anchor point
+  const svg = div.querySelector('.leader');
+  const line = svg?.querySelector('line');
+  if(line){
+    // Leader goes from label edge to anchor
+    const leaderStartX = side === 'left' ? 0 : 0;
+    const leaderStartY = 12; // middle of label
+    const leaderEndX = anchor.x - labelX + (side === 'left' ? div.offsetWidth : 0);
+    const leaderEndY = anchor.y - labelY;
+    line.setAttribute('x1', leaderStartX);
+    line.setAttribute('y1', leaderStartY);
+    line.setAttribute('x2', leaderEndX);
+    line.setAttribute('y2', leaderEndY);
+  }
+  // Position dot at anchor point relative to label
+  const dot = div.querySelector('.leader-dot');
+  if(dot){
+    const dotX = anchor.x - labelX - 2 + (side === 'left' ? div.offsetWidth : 0);
+    const dotY = anchor.y - labelY - 2;
+    dot.style.left = dotX + 'px';
+    dot.style.top = dotY + 'px';
+  }
+}
+
+function resolveCollisions(){
+  if(currentLabels.length < 2) return;
+  // Position all first
+  currentLabels.forEach(positionLabel);
+  // Get bounding boxes and resolve overlaps
+  const minGap = 8;
+  for(let pass = 0; pass < 5; pass++){
+    let moved = false;
+    for(let i = 0; i < currentLabels.length; i++){
+      const a = currentLabels[i];
+      const aRect = a.getBoundingClientRect();
+      for(let j = i + 1; j < currentLabels.length; j++){
+        const b = currentLabels[j];
+        const bRect = b.getBoundingClientRect();
+        // Check overlap
+        if(aRect.left < bRect.right + minGap && aRect.right + minGap > bRect.left &&
+           aRect.top < bRect.bottom + minGap && aRect.bottom + minGap > bRect.top){
+          // Push apart vertically
+          const overlapY = Math.min(aRect.bottom + minGap - bRect.top, bRect.bottom + minGap - aRect.top);
+          const shift = Math.ceil(overlapY / 2) + 4;
+          // Move higher one up, lower one down
+          if(aRect.top < bRect.top){
+            a.dataset.offsetY = (parseFloat(a.dataset.offsetY)||0) - shift;
+            b.dataset.offsetY = (parseFloat(b.dataset.offsetY)||0) + shift;
+          } else {
+            a.dataset.offsetY = (parseFloat(a.dataset.offsetY)||0) + shift;
+            b.dataset.offsetY = (parseFloat(b.dataset.offsetY)||0) - shift;
+          }
+          positionLabel(a);
+          positionLabel(b);
+          moved = true;
+        }
+      }
+    }
+    if(!moved) break;
+  }
+}
+
+function updateLabelPositions(){ 
+  currentLabels.forEach(d => { d.dataset.offsetX = 0; d.dataset.offsetY = 0; });
+  currentLabels.forEach(positionLabel);
+  resolveCollisions();
+}
 function clearLabels(){ currentLabels.forEach(div => div.remove()); currentLabels = []; }
 
 // --- POWER BARS ---
