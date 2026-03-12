@@ -10,11 +10,11 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0a0c13;--surface:#12141f;--surface2:#1a1d2e;--border:#2a2d42;
-  --text:#eef0f6;--text2:#a0a4be;--text3:#6b6f8a;
-  --accent:#7c6aef;--accent2:#9d8fff;--accent-glow:rgba(124,106,239,.18);
-  --green:#2dd4a0;--green-glow:rgba(45,212,160,.12);
-  --amber:#f5b731;--red:#ef6461;
+  --bg:#f5f6f8;--surface:#ffffff;--surface2:#f0f1f4;--border:#e0e2e8;
+  --text:#1a1d2e;--text2:#4a4e6a;--text3:#8b8fa8;
+  --accent:#4f46e5;--accent2:#6366f1;--accent-glow:rgba(79,70,229,.08);
+  --green:#059669;--green-glow:rgba(5,150,105,.08);
+  --amber:#d97706;--red:#dc2626;
   --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
 }
 html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text);overflow:hidden}
@@ -24,16 +24,16 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .search-wrap{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10;width:min(520px,calc(100vw - 32px))}
 .search-wrap input{
   width:100%;padding:14px 20px 14px 44px;border:1px solid var(--border);border-radius:14px;
-  background:rgba(18,20,31,.94);backdrop-filter:blur(24px);color:var(--text);font:400 15px var(--sans);
-  outline:none;transition:border-color .2s,box-shadow .2s;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(24px);color:var(--text);font:400 15px var(--sans);
+  outline:none;transition:border-color .2s,box-shadow .2s;box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
-.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow),0 2px 12px rgba(0,0,0,.08)}
 .search-wrap input::placeholder{color:var(--text3)}
 .search-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
 .search-results{
-  position:absolute;top:calc(100% + 4px);left:0;right:0;background:rgba(18,20,31,.97);
+  position:absolute;top:calc(100% + 4px);left:0;right:0;background:rgba(255,255,255,.98);
   backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:14px;overflow:hidden;
-  max-height:260px;overflow-y:auto;display:none;
+  max-height:260px;overflow-y:auto;display:none;box-shadow:0 4px 20px rgba(0,0,0,.1);
 }
 .search-results.show{display:block}
 .search-results div{padding:12px 20px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--border);transition:background .15s;color:var(--text2)}
@@ -42,17 +42,18 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 /* Panel */
 .panel{
-  position:fixed;top:0;right:0;width:440px;height:100%;background:rgba(10,12,19,.96);
+  position:fixed;top:0;right:0;width:440px;height:100%;background:rgba(255,255,255,.97);
   backdrop-filter:blur(28px);border-left:1px solid var(--border);z-index:5;
   transform:translateX(0);transition:transform .35s cubic-bezier(.4,0,.2,1);
-  overflow-y:auto;overflow-x:hidden;
+  overflow-y:auto;overflow-x:hidden;box-shadow:-4px 0 24px rgba(0,0,0,.06);
 }
 .panel.collapsed{transform:translateX(100%)}
 .panel-toggle{
   position:fixed;right:440px;top:50%;transform:translateY(-50%);z-index:6;
-  width:28px;height:56px;background:rgba(18,20,31,.94);border:1px solid var(--border);
+  width:28px;height:56px;background:rgba(255,255,255,.95);border:1px solid var(--border);
   border-right:none;border-radius:8px 0 0 8px;cursor:pointer;display:flex;align-items:center;
   justify-content:center;color:var(--text2);transition:right .35s cubic-bezier(.4,0,.2,1),background .2s;
+  box-shadow:-2px 0 8px rgba(0,0,0,.06);
 }
 .panel.collapsed~.panel-toggle{right:0}
 .panel-toggle:hover{background:var(--surface2);color:var(--text)}
@@ -73,7 +74,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .section-title svg{width:14px;height:14px;opacity:.7}
 
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{background:var(--surface2);border:1px solid rgba(42,45,66,.5);border-radius:10px;padding:14px 16px}
+.stat{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
 .stat-label{font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
 .stat-value{font:600 17px var(--mono);color:var(--text)}
 .stat-value.accent{color:var(--accent2)}
@@ -97,10 +98,10 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .power-bar-values{font:600 13px var(--mono);color:var(--text)}
 .power-bar-values .current{color:var(--text3)}
 .power-bar-values .potential{color:var(--green)}
-.power-bar{height:14px;background:var(--surface);border-radius:7px;overflow:hidden;position:relative;display:flex}
-.power-bar .existing{height:100%;background:#8a8ea0;border-radius:7px 0 0 7px;transition:width .8s cubic-bezier(.4,0,.2,1)}
-.power-bar .added{height:100%;background:var(--accent);opacity:.6;transition:width .8s cubic-bezier(.4,0,.2,1)}
-.power-bar .pd-added{height:100%;background:var(--green);opacity:.5;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.power-bar{height:14px;background:#e8e9ee;border-radius:7px;overflow:hidden;position:relative;display:flex}
+.power-bar .existing{height:100%;background:#9ca0b4;border-radius:7px 0 0 7px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.power-bar .added{height:100%;background:var(--accent);opacity:.7;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.power-bar .pd-added{height:100%;background:var(--green);opacity:.6;transition:width .8s cubic-bezier(.4,0,.2,1)}
 .power-bar-legend{display:flex;gap:14px;margin-top:6px;font-size:10px;color:var(--text3)}
 .power-bar-legend span::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
 .power-bar-legend .leg-existing::before{background:#8a8ea0}
@@ -114,28 +115,28 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .insight.caution{border-left-color:var(--amber)}
 .insight strong{color:var(--text);font-weight:600}
 .insight .insight-tag{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:3px;margin-right:6px}
-.insight.critical .insight-tag{background:rgba(239,100,97,.15);color:var(--red)}
-.insight.opportunity .insight-tag{background:rgba(45,212,160,.12);color:var(--green)}
-.insight.caution .insight-tag{background:rgba(245,183,49,.12);color:var(--amber)}
+.insight.critical .insight-tag{background:rgba(220,38,38,.1);color:var(--red)}
+.insight.opportunity .insight-tag{background:rgba(5,150,105,.1);color:var(--green)}
+.insight.caution .insight-tag{background:rgba(217,119,6,.1);color:var(--amber)}
 
 /* Prominent constraint flags */
 .constraint-flag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;margin:3px 4px 3px 0}
-.constraint-flag.red{background:rgba(239,100,97,.12);color:var(--red);border:1px solid rgba(239,100,97,.2)}
-.constraint-flag.amber{background:rgba(245,183,49,.1);color:var(--amber);border:1px solid rgba(245,183,49,.2)}
-.constraint-flag.green{background:rgba(45,212,160,.1);color:var(--green);border:1px solid rgba(45,212,160,.2)}
+.constraint-flag.red{background:rgba(220,38,38,.08);color:var(--red);border:1px solid rgba(220,38,38,.2)}
+.constraint-flag.amber{background:rgba(217,119,6,.08);color:var(--amber);border:1px solid rgba(217,119,6,.2)}
+.constraint-flag.green{background:rgba(5,150,105,.08);color:var(--green);border:1px solid rgba(5,150,105,.2)}
 
 /* Narrative */
 .narrative{font-size:14px;line-height:1.75;color:var(--text2)}
 .narrative strong{color:var(--text);font-weight:600}
 .narrative .highlight{color:var(--accent2);font-weight:600}
 .narrative .opportunity{
-  margin-top:14px;padding:14px 18px;background:var(--accent-glow);border-left:3px solid var(--accent);
+  margin-top:14px;padding:14px 18px;background:rgba(79,70,229,.05);border-left:3px solid var(--accent);
   border-radius:0 10px 10px 0;font-size:13px;line-height:1.7;color:var(--text2);
 }
 .narrative .opportunity strong{color:var(--text)}
 
 /* Financial table */
-.fin-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(42,45,66,.4);font-size:13px;align-items:center}
+.fin-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:center}
 .fin-row:last-child{border-bottom:none}
 .fin-row .label{color:var(--text2)}
 .fin-row .value{font:600 13px var(--mono);color:var(--text)}
@@ -145,8 +146,8 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 /* PDR Tag */
 .pdr-tag{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;margin:3px 4px 3px 0;letter-spacing:.3px}
-.pdr-tag.available{background:var(--green-glow);color:var(--green);border:1px solid rgba(45,212,160,.25)}
-.pdr-tag.restricted{background:rgba(239,100,97,.1);color:var(--red);border:1px solid rgba(239,100,97,.2)}
+.pdr-tag.available{background:rgba(5,150,105,.08);color:var(--green);border:1px solid rgba(5,150,105,.2)}
+.pdr-tag.restricted{background:rgba(220,38,38,.08);color:var(--red);border:1px solid rgba(220,38,38,.2)}
 
 /* Notes */
 .note-item{font-size:12px;color:var(--text3);padding:4px 0;line-height:1.5}
@@ -154,7 +155,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 /* Loading */
 .loading-overlay{
-  position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);z-index:100;
+  position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:100;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   transition:opacity .6s;
 }
@@ -171,14 +172,15 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .map-label{
   position:absolute;pointer-events:none;z-index:3;
   font:600 12px var(--mono);color:var(--text);
-  background:rgba(10,12,19,.85);backdrop-filter:blur(8px);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
   padding:5px 10px;border-radius:6px;border:1px solid var(--border);
   white-space:nowrap;transform:translate(-50%,0);
   transition:opacity .3s, top .15s ease-out, left .15s ease-out;
+  box-shadow:0 1px 6px rgba(0,0,0,.1);
 }
-.map-label.height-label{border-color:var(--green);color:var(--green)}
-.map-label.pd-label{border-color:#5aebc2;color:#5aebc2;font-size:11px}
-.map-label.existing-label{border-color:#ef8b6e;color:#ef8b6e}
+.map-label.height-label{border-color:var(--green);color:var(--green);font-weight:700}
+.map-label.pd-label{border-color:#059669;color:#059669;font-size:11px}
+.map-label.existing-label{border-color:#c0392b;color:#c0392b}
 .map-label .leader{
   position:absolute;pointer-events:none;
   stroke-width:1;stroke:var(--border);fill:none;
@@ -188,10 +190,10 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 /* Responsive */
 @media(max-width:768px){
-  .panel{width:100%;border-left:none;border-top:1px solid var(--border);height:55%;top:auto;bottom:0;border-radius:20px 20px 0 0}
+  .panel{width:100%;border-left:none;border-top:1px solid var(--border);height:55%;top:auto;bottom:0;border-radius:20px 20px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
   .panel.collapsed{transform:translateY(100%)}
   .panel-toggle{right:auto;left:50%;transform:translateX(-50%);top:auto;bottom:55%;width:56px;height:28px;
-    border-radius:8px 8px 0 0;border:1px solid var(--border);border-bottom:none}
+    border-radius:8px 8px 0 0;border:1px solid var(--border);border-bottom:none;box-shadow:0 -2px 8px rgba(0,0,0,.06)}
   .panel.collapsed~.panel-toggle{bottom:0}
   .panel-toggle svg{transform:rotate(90deg)}
   .panel.collapsed~.panel-toggle svg{transform:rotate(-90deg)}
@@ -206,13 +208,13 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 <!-- 3D Map Labels Container -->
 <div id="map-labels"></div>
 <div id="map-legend" style="position:absolute;bottom:30px;left:12px;z-index:4;font:500 10px var(--mono);
-  background:rgba(10,12,19,.85);backdrop-filter:blur(8px);padding:8px 12px;border-radius:8px;
-  border:1px solid var(--border);color:var(--text3);line-height:1.8;display:none">
-  <div><span style="display:inline-block;width:18px;height:0;border-top:1.5px solid #9d8fff;vertical-align:middle;margin-right:6px"></span>Building footprint</div>
-  <div><span style="display:inline-block;width:18px;height:0;border-top:1.2px dashed #e8c44a;vertical-align:middle;margin-right:6px"></span>Property line (est.)</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#ef8b6e;opacity:.88;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Existing</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#2dd4a0;opacity:.35;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Potential</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#5aebc2;opacity:.4;vertical-align:middle;margin-right:6px;border-radius:2px"></span>PD (no planning)</div>
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);padding:8px 12px;border-radius:8px;
+  border:1px solid var(--border);color:var(--text2);line-height:1.8;display:none;box-shadow:0 1px 6px rgba(0,0,0,.08)">
+  <div><span style="display:inline-block;width:18px;height:0;border-top:1.5px solid #6366f1;vertical-align:middle;margin-right:6px"></span>Building footprint</div>
+  <div><span style="display:inline-block;width:18px;height:0;border-top:1.2px dashed #b45309;vertical-align:middle;margin-right:6px"></span>Property line (est.)</div>
+  <div><span style="display:inline-block;width:10px;height:10px;background:#c0392b;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Existing</div>
+  <div><span style="display:inline-block;width:10px;height:10px;background:#059669;opacity:.5;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Potential</div>
+  <div><span style="display:inline-block;width:10px;height:10px;background:#10b981;opacity:.5;vertical-align:middle;margin-right:6px;border-radius:2px"></span>PD (no planning)</div>
 </div>
 
 <div class="search-wrap">
@@ -247,7 +249,7 @@ async function init(){
   mapboxgl.accessToken = cfg.mapboxToken;
   map = new mapboxgl.Map({
     container:'map',
-    style:'mapbox://styles/mapbox/dark-v11',
+    style:'mapbox://styles/mapbox/light-v11',
     center:[-0.08, 51.512],
     zoom:14.5,
     pitch:50,
@@ -256,22 +258,16 @@ async function init(){
   });
   map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
   map.on('style.load',()=>{
-    try{
-      map.setPaintProperty('road-street','line-color','#8a8ea8');
-      map.setPaintProperty('road-secondary-tertiary','line-color','#8a8ea8');
-      map.setPaintProperty('road-primary','line-color','#a0a4c0');
-    }catch(e){}
-    ['road-label','road-number-shield'].forEach(l=>{try{map.setPaintProperty(l,'text-color','#d0d4e8')}catch(e){}});
-    // Context buildings — heavily ghosted so site building pops
+    // Context buildings — soft grey, subservient to site massing
     if(!map.getLayer('3d-buildings')){
       map.addLayer({
         id:'3d-buildings',type:'fill-extrusion',source:'composite','source-layer':'building',
         minzoom:14,
         paint:{
-          'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#141628',30,'#181c34',80,'#1e2240',150,'#242850'],
+          'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',30,'#c8cad2',80,'#bbbec8',150,'#b0b3be'],
           'fill-extrusion-height':['get','height'],
           'fill-extrusion-base':['get','min_height'],
-          'fill-extrusion-opacity':.35,
+          'fill-extrusion-opacity':.45,
           'fill-extrusion-vertical-gradient':true,
         }
       });
@@ -280,7 +276,7 @@ async function init(){
       map.addLayer({
         id:'building-outlines',type:'line',source:'composite','source-layer':'building',
         minzoom:14,
-        paint:{'line-color':'rgba(80,86,130,0.1)','line-width':0.3}
+        paint:{'line-color':'rgba(160,165,185,0.2)','line-width':0.5}
       });
     }
     document.getElementById('loader').classList.add('hide');
@@ -328,7 +324,7 @@ async function selectResult(feature){
 
   if(marker) marker.remove();
   const el = document.createElement('div');
-  el.style.cssText = 'width:16px;height:16px;background:#7c6aef;border:3px solid white;border-radius:50%;box-shadow:0 0 16px rgba(124,106,239,.6)';
+  el.style.cssText = 'width:16px;height:16px;background:#4f46e5;border:3px solid white;border-radius:50%;box-shadow:0 0 12px rgba(79,70,229,.4)';
   marker = new mapboxgl.Marker({element:el}).setLngLat([lng,lat]).addTo(map);
 
   const address = feature.place_name || feature.text || '';
@@ -440,12 +436,14 @@ async function selectResult(feature){
 function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   // Clean up all layers including dynamic floor lines
   const layersToRemove = ['site-line','prop-line','current-3d','current-edge','potential-3d','potential-edge','pd-3d','pd-edge'];
+  for(let f = 1; f <= 30; f++) layersToRemove.push('floor-line-'+f);
   layersToRemove.forEach(id=>{ if(map.getLayer(id)) map.removeLayer(id); });
   const sourcesToRemove = ['site','prop-boundary','current-bldg','potential-bldg','pd-bldg'];
+  for(let f = 1; f <= 30; f++) sourcesToRemove.push('floor-line-'+f);
   sourcesToRemove.forEach(id=>{ if(map.getSource(id)) map.removeSource(id); });
   // Reset context building opacity
   if(map.getLayer('3d-buildings')){
-    map.setPaintProperty('3d-buildings','fill-extrusion-opacity',0.35);
+    map.setPaintProperty('3d-buildings','fill-extrusion-opacity',0.45);
   }
   clearLabels();
 
@@ -466,11 +464,11 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
 
   // Property boundary — dashed line only, no fill
   map.addSource('prop-boundary',{type:'geojson',data:propGeoJSON});
-  map.addLayer({id:'prop-line',type:'line',source:'prop-boundary',paint:{'line-color':'#e8c44a','line-width':1.2,'line-dasharray':[5,3],'line-opacity':0.6}});
+  map.addLayer({id:'prop-line',type:'line',source:'prop-boundary',paint:{'line-color':'#b45309','line-width':1.2,'line-dasharray':[5,3],'line-opacity':0.6}});
 
   // Building footprint — solid line only, no fill (avoids z-fighting)
   map.addSource('site',{type:'geojson',data:siteGeoJSON});
-  map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#9d8fff','line-width':1.5,'line-opacity':0.9}});
+  map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-opacity':0.8}});
 
   const currentHeight = siteInfo.heightM || 6.4;
   const ftf = siteInfo.ftf || 3.2;
@@ -481,42 +479,62 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   const existingCoords = bufferPolygon(coords, -0.000005); // ~0.5m inset
   const existingGeoJSON = { type:'Feature', geometry:{type:'Polygon',coordinates:[existingCoords]}, properties:{} };
 
-  // Current building — bright coral, high visibility, separate geometry from potential
+  // Current building — solid terracotta red on light map
   map.addSource('current-bldg',{type:'geojson',data:existingGeoJSON});
   map.addLayer({
     id:'current-3d',type:'fill-extrusion',source:'current-bldg',
     paint:{
-      'fill-extrusion-color':'#ef8b6e',
+      'fill-extrusion-color':'#c0392b',
       'fill-extrusion-height':currentHeight,
       'fill-extrusion-base':0,
-      'fill-extrusion-opacity':.9,
+      'fill-extrusion-opacity':.85,
       'fill-extrusion-vertical-gradient':false,
     }
   });
-  // Strong edge on existing
+  // Strong dark edge on existing
   map.addLayer({
     id:'current-edge',type:'line',source:'site',
-    paint:{'line-color':'#ef8b6e','line-width':2.5,'line-opacity':0.9}
+    paint:{'line-color':'#922b21','line-width':2,'line-opacity':0.9}
   });
 
-  // Potential additional envelope — green, uses original (outer) polygon
+  // Potential additional envelope — rich green, translucent with floor lines
   if(potentialHeightM > currentHeight){
     map.addSource('potential-bldg',{type:'geojson',data:siteGeoJSON});
     map.addLayer({
       id:'potential-3d',type:'fill-extrusion',source:'potential-bldg',
       paint:{
-        'fill-extrusion-color':'#2dd4a0',
+        'fill-extrusion-color':'#059669',
         'fill-extrusion-height':potentialHeightM,
         'fill-extrusion-base':currentHeight,
-        'fill-extrusion-opacity':.3,
+        'fill-extrusion-opacity':.32,
         'fill-extrusion-vertical-gradient':false,
       }
     });
     // Strong edge on potential
     map.addLayer({
       id:'potential-edge',type:'line',source:'potential-bldg',
-      paint:{'line-color':'#2dd4a0','line-width':2,'line-opacity':0.8}
+      paint:{'line-color':'#047857','line-width':2,'line-opacity':0.8}
     });
+
+    // Floor lines in the green zone — thin slabs showing each new floor
+    const ftfVal = siteInfo.ftf || 3.0;
+    const newFloors = Math.floor((potentialHeightM - currentHeight) / ftfVal);
+    for(let f = 1; f <= newFloors; f++){
+      const floorH = currentHeight + (f * ftfVal);
+      const slabId = 'floor-line-' + f;
+      const slabCoords = bufferPolygon(coords, 0.000003); // slightly outside to show
+      const slabGeo = { type:'Feature', geometry:{type:'Polygon',coordinates:[slabCoords]}, properties:{} };
+      map.addSource(slabId, {type:'geojson', data:slabGeo});
+      map.addLayer({
+        id: slabId, type:'fill-extrusion', source: slabId,
+        paint:{
+          'fill-extrusion-color':'#047857',
+          'fill-extrusion-height': floorH + 0.12,
+          'fill-extrusion-base': floorH - 0.12,
+          'fill-extrusion-opacity': 0.5,
+        }
+      });
+    }
   }
 
   // PD upward extension massing
@@ -527,32 +545,29 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
       map.addLayer({
         id:'pd-3d',type:'fill-extrusion',source:'pd-bldg',
         paint:{
-          'fill-extrusion-color':'#5aebc2',
+          'fill-extrusion-color':'#10b981',
           'fill-extrusion-height':pdTop,
           'fill-extrusion-base':currentHeight,
-          'fill-extrusion-opacity':.38,
+          'fill-extrusion-opacity':.4,
           'fill-extrusion-vertical-gradient':false,
         }
       });
       map.addLayer({
         id:'pd-edge',type:'line',source:'pd-bldg',
-        paint:{'line-color':'#5aebc2','line-width':2,'line-opacity':0.6}
+        paint:{'line-color':'#059669','line-width':1.5,'line-opacity':0.7}
       });
     }
   }
 
   const centroid = getCentroid(coords);
 
-  // Hide context buildings that overlap the site (within ~40m)
-  // Create a masking volume that renders on top of context buildings
+  // Fade context buildings when zoomed into site
   if(map.getLayer('3d-buildings')){
-    // Use Mapbox filter to exclude buildings near the site
-    // Since we can't filter by distance, we lower context opacity near site
     map.setPaintProperty('3d-buildings','fill-extrusion-opacity',
       ['interpolate',['linear'],['zoom'],
-        14, 0.35,
-        16, 0.2,  // more transparent when zoomed in to site
-        18, 0.12
+        14, 0.4,
+        16, 0.25,
+        18, 0.15
       ]
     );
   }
