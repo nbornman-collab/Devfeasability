@@ -464,7 +464,7 @@ function getBuildingTypeFromOSM(osmType) {
   return 'commercial';
 }
 
-// ========== ARCHITECT INSIGHTS ==========
+// ========== ARCHITECT INSIGHTS (Site-Specific) ==========
 function getArchitectInsights(planning, siteInfo, extra) {
   const insights = [];
   const heightM = siteInfo.heightM || 6;
@@ -473,157 +473,235 @@ function getArchitectInsights(planning, siteInfo, extra) {
   const floors = siteInfo.floors || 2;
   const remainingCap = planning.plotRatio?.remainingCapacity || 0;
   const plotArea = siteInfo.plotArea || 0;
+  const ftf = siteInfo.ftf || 3.0;
+  const units = planning.unitEstimate?.total || 0;
+  const footprint = plotArea * 0.7; // estimated building footprint (70% plot coverage)
 
-  // CRITICAL: Second staircase (18m+ residential)
+  // Derived site geometry
+  const siteWidth = plotArea > 0 ? Math.sqrt(plotArea * 0.6) : 0; // estimate shorter dimension
+  const siteDepth = plotArea > 0 ? plotArea / siteWidth : 0;
+  const potentialFloors = Math.floor(potentialH / ftf);
+  const newFloors = Math.max(0, potentialFloors - floors);
+  const heightIncrease = Math.max(0, potentialH - heightM);
+
+  // SECOND STAIRCASE — specific impact
   if (isResi && potentialH >= 18) {
-    insights.push({
-      level: 'critical',
-      tag: 'Fire Safety',
-      text: `At ${potentialH}m, a <strong>second staircase</strong> is required for residential (18m+ threshold). This typically consumes 8-12sqm per floor of lettable area and fundamentally affects core design. Budget for ~10% GIA loss vs single-stair schemes. Post-Grenfell cladding restrictions also apply above 18m.`
-    });
+    const coreAreaPerFloor = 22; // sqm — typical dual core
+    const singleCoreArea = 12; // sqm
+    const extraCoreLoss = (coreAreaPerFloor - singleCoreArea) * potentialFloors;
+    const unitsLost = Math.round(extraCoreLoss / 70); // at 70sqm avg
+    const costImpact = Math.round(extraCoreLoss * 3500); // £3,500/sqm core construction
+    const capHeight = Math.floor(17.9 / ftf) * ftf; // max height below 18m
+    const capFloors = Math.floor(17.9 / ftf);
+
+    if (potentialH < 25) {
+      // Close to threshold — consider staying below
+      insights.push({
+        level: 'critical',
+        tag: 'Fire Strategy',
+        text: `Potential height of ${potentialH}m <strong>just triggers the 18m dual staircase threshold</strong>. On this ~${Math.round(footprint)}sqm footprint, a second core costs ~${coreAreaPerFloor}sqm/floor vs ${singleCoreArea}sqm single — that's <strong>${Math.round(extraCoreLoss)}sqm total NIA lost</strong> (~${unitsLost} fewer units, ~£${fmt(costImpact)} extra core cost). <strong>Consider capping at ${capHeight.toFixed(1)}m (${capFloors} floors)</strong> to stay single-stair. Run the numbers both ways — the extra floor may not pay for itself.`
+      });
+    } else {
+      insights.push({
+        level: 'critical',
+        tag: 'Fire Strategy',
+        text: `At ${potentialH}m, dual staircase is required. On ~${Math.round(footprint)}sqm footprint: <strong>~${Math.round(extraCoreLoss)}sqm NIA lost to second core</strong> over ${potentialFloors} floors (~${unitsLost} units, ~£${fmt(costImpact)} additional construction). Non-combustible materials mandatory above 18m. Factor sprinklers + enhanced fire strategy. Cladding restrictions apply — no combustible materials in external wall.`
+      });
+    }
   }
 
-  // CRITICAL: Conservation area
+  // CONSERVATION AREA — specific implications
   if (extra.inConservationArea) {
+    const existingHeight = Math.round(heightM);
     insights.push({
       level: 'critical',
       tag: 'Heritage',
-      text: `Site is within <strong>${extra.conservationName || 'a conservation area'}</strong>. Demolition requires conservation area consent. New development must preserve or enhance character — expect <strong>design scrutiny on materials, proportions, roofline, and fenestration</strong>. Permitted development rights are significantly restricted. Pre-application advice strongly recommended.`
+      text: `Within <strong>${extra.conservationName || 'conservation area'}</strong>. At ${existingHeight}m existing, any proposal above prevailing roofline will face strong resistance. Expect: <strong>materials palette to match local character</strong> (likely stock brick, slate/zinc roof), <strong>fenestration proportions</strong> that reference the surrounding typology, and <strong>roofline articulation</strong> (no flat-topped boxes). Demolition requires Conservation Area Consent — budget 3-4 months extra for heritage officer negotiation. Realistic uplift here is likely <strong>contextual infill to ${Math.round(existingHeight + 3)}-${Math.round(existingHeight + 6)}m</strong> rather than full plot ratio potential.`
     });
   }
 
-  // CRITICAL: Flood zone
+  // FLOOD ZONE — specific design response
   if (extra.floodZone >= 3) {
+    const lostGF = Math.round(footprint * 0.85);
     insights.push({
       level: 'critical',
       tag: 'Flood Risk',
-      text: `<strong>Flood Zone 3</strong> — high probability. Sequential Test required (must prove no suitable sites in lower-risk zones). If residential, Exception Test also required. Finished floor levels must be above flood level + freeboard. Ground floor may need to be commercial/parking. Significant impact on unit yield and viability.`
+      text: `<strong>Flood Zone 3</strong>. Ground floor residential is effectively ruled out — finished floor levels must be above design flood level + 600mm freeboard. On this site that means <strong>~${lostGF}sqm of ground floor can't be habitable</strong>. Options: commercial/parking at ground (reduces resi yield by ~${Math.round(lostGF * 10.764)}sqft), or pilotis/undercroft design. Sequential + Exception Tests required — adds 2-3 months and ~£15-25K in flood risk consultancy.`
     });
   } else if (extra.floodZone === 2) {
     insights.push({
       level: 'caution',
       tag: 'Flood Risk',
-      text: `<strong>Flood Zone 2</strong> — medium probability. Sequential Test may apply. Flood Risk Assessment required with planning application. Ground floor design needs consideration.`
+      text: `<strong>Flood Zone 2</strong>. Residential is permissible but FRA required. Ground floor sleeping accommodation will face scrutiny. Consider raising ground floor FFL by 300-450mm with level access ramp. Adds ~£8-12K in FRA costs and may need resilient construction detailing at ground level.`
     });
   }
 
-  // CAUTION: Listed buildings
+  // LISTED BUILDINGS — specific setting analysis
   if (extra.nearbyListed && extra.nearbyListed.length > 0) {
     const count = extra.nearbyListed.length;
+    const names = extra.nearbyListed.slice(0, 2).map(l => l.name).filter(n => n !== 'Unnamed');
+    const namesStr = names.length > 0 ? ` (inc. ${names.join(', ')})` : '';
+    const heightDelta = Math.round(potentialH - heightM);
     insights.push({
       level: 'caution',
-      tag: 'Heritage',
-      text: `<strong>${count} listed building${count > 1 ? 's' : ''}</strong> within 150m. Any development must demonstrate it does not harm their <strong>setting</strong>. Height, massing, materials, and sight lines from/to listed buildings will be assessed. A Heritage Statement will be required with any application.`
+      tag: 'Heritage Setting',
+      text: `<strong>${count} listed building${count > 1 ? 's' : ''}</strong> within 150m${namesStr}. A ${heightDelta > 0 ? heightDelta + 'm height increase' : 'new development'} on this site will be assessed for <strong>impact on their setting</strong>. ${potentialH > 20 ? `At ${potentialH}m, you'll likely appear in views from/to these assets — a Heritage, Townscape & Visual Impact Assessment (~£20-40K) will be required.` : `At ${potentialH}m, setting impact is likely manageable with sensitive material choices and roofline articulation.`} Design strategy: <strong>step down towards listed buildings</strong>, use recessive top storey (set back, lighter material), and maintain datum lines from adjacent heritage elevations.`
     });
   }
 
-  // CAUTION: LVMF
+  // LVMF — specific
   if (planning.lvmfExposure === 'high' || planning.lvmfExposure === 'very high') {
     insights.push({
       level: 'caution',
       tag: 'Protected Views',
-      text: `<strong>LVMF exposure: ${planning.lvmfExposure}</strong>. Development may fall within protected vista corridors. Height is likely capped by view geometry. A Townscape Visual Impact Assessment (TVIA) will be required. 3D modelling of the proposal within the view corridor is essential at pre-app stage.`
+      text: `<strong>LVMF exposure: ${planning.lvmfExposure}</strong>. At ${potentialH}m on this site, the proposal ${potentialH > 30 ? 'will almost certainly' : 'may'} intersect protected vista geometry. TVIA required (~£25-50K). <strong>Height may be hard-capped by the viewing corridor</strong> — get a 3D verified view study done before design progresses past RIBA Stage 1. ${planning.lvmfExposure === 'very high' ? 'Multiple strategic views likely affected — this is a significant constraint that could reduce height by 30-50%.' : 'Check specific corridor geometry before committing to massing.'}`
     });
   }
 
-  // OPPORTUNITY: Dual aspect
-  if (isResi && plotArea > 200) {
-    const width = Math.sqrt(plotArea);
-    if (width > 14) {
+  // DUAL ASPECT — calculated from actual site dimensions
+  if (isResi && plotArea > 100) {
+    const corridorWidth = 1.8; // m
+    const unitDepthEachSide = (siteWidth - corridorWidth) / 2;
+    if (siteWidth >= 16) {
       insights.push({
         level: 'opportunity',
-        tag: 'Design Quality',
-        text: `Site width (~${Math.round(width)}m) supports <strong>dual aspect units</strong> — a strong London Plan preference (Policy D6). Dual aspect maximises daylight, cross-ventilation, and market value. Single aspect north-facing units should be avoided. Consider a central corridor plan with units wrapping the perimeter.`
+        tag: 'Unit Design',
+        text: `Site width ~${Math.round(siteWidth)}m allows a <strong>central corridor plan with ${Math.round(unitDepthEachSide)}m unit depth each side</strong>. This supports full dual aspect across the floor plate — a strong London Plan (D6) compliance position and <strong>5-10% sales premium</strong> over single-aspect. Recommended layout: 2-beds at corners (wrap two facades), 1-beds along flanks.`
       });
-    } else {
+    } else if (siteWidth >= 12) {
       insights.push({
         level: 'caution',
-        tag: 'Design Quality',
-        text: `Narrow site (~${Math.round(width)}m) will make <strong>dual aspect units challenging</strong>. Single aspect may be necessary — avoid north-facing. London Plan Policy D6 resists single-aspect units; strong design justification needed.`
+        tag: 'Unit Design',
+        text: `Site width ~${Math.round(siteWidth)}m gives <strong>${Math.round(unitDepthEachSide)}m depth per unit</strong> off a central corridor — tight for 2-beds. Studios and 1-beds will achieve dual aspect; <strong>2-beds will need corner positions</strong> (max 2 per floor). Policy D6 resists single-aspect north-facing units — ${Math.round(siteWidth * 0.3)} of floorplate may need to be studios/1-beds facing the better aspect.`
+      });
+    } else if (siteWidth > 0) {
+      insights.push({
+        level: 'critical',
+        tag: 'Unit Design',
+        text: `At ~${Math.round(siteWidth)}m wide, <strong>dual aspect is very challenging</strong>. Central corridor won't work — consider: deck access (adds ~1.5m per floor to external envelope), scissor section (dual aspect but complex construction, +£200-300/sqm), or accept single-aspect with <strong>mandatory mitigation</strong> (opening windows on two walls, balconies, min 2.5m ceiling height per London Plan). Expect planning officer pushback.`
       });
     }
   }
 
-  // Accessible units
-  if (isResi && planning.unitEstimate && planning.unitEstimate.total > 0) {
-    const total = planning.unitEstimate.total;
-    const wheelchair = Math.ceil(total * 0.1);
+  // OVERLOOKING — calculated from adjacent buildings
+  if (isResi && extra.adjacentBuildingDist) {
+    const dist = extra.adjacentBuildingDist;
+    if (dist < 18) {
+      const affectedFloors = Math.max(0, potentialFloors - 2); // ground + 1st usually below sightline
+      const affectedUnits = Math.round(affectedFloors * 1.5); // ~1.5 units per floor on affected face
+      insights.push({
+        level: 'critical',
+        tag: 'Overlooking',
+        text: `Nearest residential windows <strong>~${Math.round(dist)}m away</strong> — below the 18-21m guideline. <strong>${affectedUnits} units on the constrained face</strong> (floors 2-${potentialFloors}) will need mitigation: angled windows (15°+), juliet balconies with obscured lower panels, or winter gardens. This affects ~${Math.round(affectedUnits / Math.max(units, 1) * 100)}% of the scheme. <strong>Budget £2-4K per unit</strong> for privacy screening solutions.`
+      });
+    }
+  } else if (isResi) {
+    // Estimate from typical urban context
+    insights.push({
+      level: 'caution',
+      tag: 'Overlooking',
+      text: `On a ~${Math.round(siteWidth)}m × ~${Math.round(siteDepth)}m plot, <strong>check rear boundary-to-window distances</strong>. If <18m to neighbouring habitable rooms, upper floors (${floors + 1}+) will need privacy mitigation on that face — angled windows, obscured glazing, or winter gardens. This typically constrains <strong>1-2 units per floor</strong> and affects unit layout/value. Survey adjacent building positions before committing to massing.`
+    });
+  }
+
+  // ACCESSIBLE UNITS — specific sqm impact
+  if (isResi && units > 0) {
+    const wheelchair = Math.ceil(units * 0.1);
+    const extraSqm = wheelchair * 15; // ~15sqm larger per wheelchair unit
+    const extraCost = Math.round(extraSqm * 350); // £350/sqm extra fitout
     insights.push({
       level: 'caution',
       tag: 'Accessibility',
-      text: `London Plan requires <strong>90% M4(2) adaptable</strong> and <strong>10% M4(3) wheelchair accessible</strong> (~${wheelchair} units). Wheelchair units need larger footprints (min 15% larger GIA) and level access. Ground/lower floors are preferred. This affects unit mix and overall yield.`
+      text: `<strong>${wheelchair} wheelchair units</strong> required (10% M4(3)). Each needs ~15sqm more than standard — <strong>${extraSqm}sqm total</strong> absorbed into the scheme (~£${fmt(extraCost)} additional fitout). Locate at ground/1st floor for level access. Remaining ${units - wheelchair} units at M4(2) adaptable standard. <strong>Size your lifts for wheelchair stretcher from the start</strong> — retrofitting is 3x the cost.`
     });
   }
 
-  // Overlooking
-  if (isResi) {
+  // ENERGY — specific cost on this scheme
+  if (remainingCap > 200) {
+    const energyCost = Math.round(remainingCap * 20); // £20/sqm avg
+    const ashpUnits = isResi ? Math.ceil(units / 4) : Math.ceil(remainingCap / 500); // 1 ASHP per ~4 units or per 500sqm commercial
     insights.push({
       level: 'caution',
-      tag: 'Privacy',
-      text: `Standard <strong>18-21m overlooking distance</strong> window-to-window for habitable rooms. Check proximity to neighbouring residential windows — this often constrains massing on tight urban sites more than planning height policy. Consider oblique window angles or winter gardens on constrained elevations.`
+      tag: 'Energy',
+      text: `London Plan energy hierarchy on ${fmt(Math.round(remainingCap))}sqm new build: estimated <strong>£${fmt(energyCost)} additional</strong> for compliance (35% beyond Part L). ${isResi ? `~${ashpUnits} air source heat pump units` : 'Centralised ASHP system'}, enhanced fabric (triple glazing on north), MVHR to all ${isResi ? 'units' : 'floors'}. Whole Life Carbon assessment required — factor £8-15K in consultancy. PV array on roof adds ~${Math.round(footprint * 0.4)}sqm of panel area.`
     });
   }
 
-  // Energy
-  if (remainingCap > 500) {
-    insights.push({
-      level: 'caution',
-      tag: 'Sustainability',
-      text: `London Plan energy hierarchy applies: <strong>Be Lean → Be Clean → Be Green → Be Seen</strong>. Minimum 35% on-site carbon reduction beyond Part L. Major applications require a Whole Life Carbon assessment. Air source heat pumps now standard. Factor £15-25/sqm additional build cost for energy compliance.`
-    });
-  }
-
-  // Ground floor activation
-  if (!isResi && potentialH > 10) {
-    insights.push({
-      level: 'opportunity',
-      tag: 'Ground Floor',
-      text: `Town centre/high street locations typically require <strong>active ground floor frontage</strong> — retail, F&B, or community use at grade. Minimum 4m floor-to-ceiling at ground. This adds value through rental income diversification and supports planning consent.`
-    });
-  }
-
-  // Servicing & cycle parking
-  if (remainingCap > 300) {
-    const cycleSpaces = isResi ? Math.ceil((planning.unitEstimate?.total || 10) * 1.5) : Math.ceil(remainingCap / 50);
+  // SERVICING — specific numbers
+  if (remainingCap > 200) {
+    const cycleSpaces = isResi ? Math.ceil(units * 1.5) : Math.ceil(remainingCap / 50);
+    const cycleSqm = Math.round(cycleSpaces * 2.5);
+    const binSqm = isResi ? Math.round(units * 1.5) : Math.round(remainingCap * 0.01);
+    const totalServicing = cycleSqm + binSqm + 25; // +25 for plant/access
     insights.push({
       level: 'caution',
       tag: 'Servicing',
-      text: `London Plan cycle parking: <strong>~${cycleSpaces} long-stay spaces</strong> required. At 2.5sqm per space (inc. access), that's ~${Math.round(cycleSpaces * 2.5)}sqm. Typically basement-level. Also budget for bin stores (~15sqm per 10 units), delivery/servicing bay, and a Delivery & Servicing Plan.`
+      text: `Ground/basement space budget: <strong>${cycleSpaces} cycle spaces</strong> (${cycleSqm}sqm), <strong>bin stores</strong> (${binSqm}sqm), plant/access (~25sqm) = <strong>${totalServicing}sqm total servicing</strong>. On a ${Math.round(footprint)}sqm footprint, that's ${Math.round(totalServicing/footprint*100)}% of one floor. ${totalServicing > footprint * 0.5 ? '<strong>Basement likely required</strong> — budget £800-1200/sqm for basement construction.' : 'Should fit at ground level with careful planning.'}`
     });
   }
 
-  // Tall building assessment
+  // TALL BUILDING — specific consultant costs
   if (potentialH >= (planning.tallBuildingThreshold || 30)) {
+    const excess = Math.round(potentialH - planning.tallBuildingThreshold);
+    const windCost = potentialH > 50 ? '£40-80K' : '£15-30K';
+    const daylight = potentialH > 40 ? '£30-60K' : '£15-25K';
     insights.push({
       level: 'caution',
       tag: 'Tall Building',
-      text: `At ${potentialH}m, this exceeds the <strong>${planning.tallBuildingThreshold || 30}m tall building threshold</strong>. Requires: Townscape Visual Impact Assessment, wind microclimate study (pedestrian comfort), daylight/sunlight assessment (BRE), aviation safeguarding, and a design review panel appearance. Budget £80-150K+ in consultant fees.`
+      text: `At ${potentialH}m (${excess}m above ${planning.tallBuildingThreshold}m threshold): <strong>Tall Building Assessment triggered</strong>. Consultant budget: TVIA (£25-50K), wind microclimate (${windCost}), daylight/sunlight BRE (${daylight}), aviation safeguarding (£3-5K). <strong>Total: ~£${potentialH > 50 ? '100-200K' : '60-120K'} pre-application studies</strong>. Design review panel appearance required — allow 8-12 weeks for scheduling.`
     });
   }
 
-  // Right to light
-  if (potentialH > heightM + 6) {
+  // RIGHT TO LIGHT — specific to height increase
+  if (heightIncrease > 4) {
+    const affectedNeighbours = Math.ceil(siteDepth / 6); // rough estimate of adjacent windows
+    const rtlCost = affectedNeighbours > 5 ? '£20-40K' : '£8-15K';
     insights.push({
-      level: 'caution',
+      level: heightIncrease > 10 ? 'critical' : 'caution',
       tag: 'Right to Light',
-      text: `Significant upward extension (+${Math.round(potentialH - heightM)}m) increases <strong>Right to Light risk</strong> from neighbouring owners. A daylight/sunlight assessment (BRE 209) is essential early in design. Neighbours can seek injunctions or compensation. Factor in potential design compromises (setbacks, reduced height) on boundary-facing elevations.`
+      text: `<strong>+${Math.round(heightIncrease)}m height increase</strong> above existing ${Math.round(heightM)}m. Estimated <strong>${affectedNeighbours}+ neighbouring windows</strong> potentially affected (based on ~${Math.round(siteDepth)}m site depth). BRE daylight/sunlight study (${rtlCost}) needed early — <strong>before RIBA Stage 2</strong>. ${heightIncrease > 15 ? 'Significant RtL risk. Neighbours can seek injunctions. Consider stepped massing — full height at street face, reducing towards rear boundaries.' : 'Moderate RtL risk. Stepped upper floors on boundary-facing elevations likely needed.'} Factor potential £50-150K compensation pot for worst-case RtL negotiation.`
     });
   }
 
-  // Planning risk signal
-  let riskLevel = 'moderate';
+  // GROUND FLOOR STRATEGY — specific
+  if (plotArea > 150) {
+    const gfArea = Math.round(footprint * 0.85);
+    if (extra.floodZone >= 3) {
+      insights.push({
+        level: 'opportunity',
+        tag: 'Ground Floor',
+        text: `Flood zone forces non-resi ground floor — turn this into an advantage. <strong>${gfArea}sqm commercial at grade</strong> (Class E) provides ~£${fmt(Math.round(gfArea * 10.764 * (planning.financials?.commercialRentSqft || 30)))}/yr rental income and satisfies active frontage policy. 4.2m floor-to-ceiling minimum. Consider: co-working, F&B, or community/health use depending on local demand.`
+      });
+    } else if (!isResi && planning.zone <= 2) {
+      insights.push({
+        level: 'opportunity',
+        tag: 'Ground Floor',
+        text: `Inner London location — <strong>active ground floor frontage likely required</strong>. ${gfArea}sqm at grade with 4.2m f/f height. Current market favours flexible Class E fitout (shell & core) — lets tenants configure. Budget £150-250/sqft fitout contribution to secure quality tenants. Double-height ground floor also works as a design move — reads well at street level.`
+      });
+    }
+  }
+
+  // PLANNING RISK — calculated from actual constraints
+  let riskScore = 0;
   let riskFactors = [];
-  if (extra.inConservationArea) { riskLevel = 'high'; riskFactors.push('conservation area'); }
-  if (extra.floodZone >= 3) { riskLevel = 'high'; riskFactors.push('flood zone 3'); }
-  if (extra.nearbyListed?.length >= 3) { riskLevel = 'high'; riskFactors.push('multiple listed buildings'); }
-  if (planning.lvmfExposure === 'very high') { riskLevel = 'high'; riskFactors.push('LVMF views'); }
-  if (potentialH >= (planning.tallBuildingThreshold || 30) * 1.5) { riskFactors.push('significantly exceeds tall building threshold'); }
-  if (riskFactors.length === 0) { riskLevel = 'low'; }
+  if (extra.inConservationArea) { riskScore += 3; riskFactors.push(`conservation area (${extra.conservationName || 'unnamed'})`); }
+  if (extra.floodZone >= 3) { riskScore += 2; riskFactors.push('Flood Zone 3'); }
+  if (extra.floodZone === 2) { riskScore += 1; riskFactors.push('Flood Zone 2'); }
+  if (extra.nearbyListed?.length >= 3) { riskScore += 2; riskFactors.push(`${extra.nearbyListed.length} listed buildings nearby`); }
+  else if (extra.nearbyListed?.length > 0) { riskScore += 1; riskFactors.push(`${extra.nearbyListed.length} listed building nearby`); }
+  if (planning.lvmfExposure === 'very high') { riskScore += 3; riskFactors.push('very high LVMF exposure'); }
+  else if (planning.lvmfExposure === 'high') { riskScore += 2; riskFactors.push('high LVMF exposure'); }
+  if (potentialH >= (planning.tallBuildingThreshold || 30)) { riskScore += 1; riskFactors.push(`exceeds ${planning.tallBuildingThreshold}m tall building threshold`); }
+  if (planning.article4Active) { riskScore += 1; riskFactors.push('Article 4 restrictions'); }
+
+  const riskLevel = riskScore >= 5 ? 'high' : riskScore >= 2 ? 'moderate' : 'low';
+  const consultCost = riskScore >= 5 ? '£150-300K' : riskScore >= 2 ? '£60-120K' : '£20-50K';
+  const timeline = riskScore >= 5 ? '9-15 months' : riskScore >= 2 ? '5-8 months' : '3-5 months';
 
   insights.push({
     level: riskLevel === 'high' ? 'critical' : (riskLevel === 'low' ? 'opportunity' : 'caution'),
     tag: 'Planning Risk',
-    text: `<strong>Planning risk: ${riskLevel}</strong>. ${riskFactors.length ? 'Key factors: ' + riskFactors.join(', ') + '.' : 'No major red flags identified.'} ${riskLevel === 'high' ? 'Pre-application advice essential. Consider a Design Review Panel early. Allow 6-12 months for planning.' : riskLevel === 'low' ? 'Straightforward planning context. 3-4 month determination likely for a well-prepared application.' : 'Standard planning process. Pre-app recommended but not critical. 4-6 month timeline.'}`
+    text: `<strong>Risk: ${riskLevel.toUpperCase()}</strong> (score ${riskScore}/15). ${riskFactors.length ? riskFactors.join(' + ') + '.' : 'No major red flags.'} Estimated <strong>pre-app consultant spend: ${consultCost}</strong>. Expected <strong>planning timeline: ${timeline}</strong> from pre-app to determination. ${riskLevel === 'high' ? 'Design Review Panel essential. Consider phased pre-app strategy — massing first, then detail.' : riskLevel === 'low' ? 'Clean site. Well-prepared delegated application likely. Focus spend on design quality to differentiate.' : 'Standard committee route likely. Strong design narrative will be key to officer support.'}`
   });
 
   return insights;
