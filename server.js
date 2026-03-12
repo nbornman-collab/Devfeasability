@@ -230,13 +230,13 @@ app.get('/api/epc', async (req, res) => {
     if (address) params.set('address', address.trim());
     const url = `https://epc.opendatacommunities.org/api/v1/domestic/search?${params}`;
     const r = await fetch(url, {
-      headers: { 'Accept': 'application/json', 'Authorization': 'Basic ' + Buffer.from('ace.archdev@gmail.com:').toString('base64') }
+      headers: { 'Accept': 'application/json', 'Authorization': 'Basic ' + Buffer.from('nbornman@gmail.com:e4446e7e0ddf7114800f23b27dbbd5e7ea7f0203').toString('base64') }
     });
     if (!r.ok) {
       // Try non-domestic (commercial)
       const url2 = `https://epc.opendatacommunities.org/api/v1/non-domestic/search?${params}`;
       const r2 = await fetch(url2, {
-        headers: { 'Accept': 'application/json', 'Authorization': 'Basic ' + Buffer.from('ace.archdev@gmail.com:').toString('base64') }
+        headers: { 'Accept': 'application/json', 'Authorization': 'Basic ' + Buffer.from('nbornman@gmail.com:e4446e7e0ddf7114800f23b27dbbd5e7ea7f0203').toString('base64') }
       });
       if (!r2.ok) return res.json({ certificates: [] });
       const data2 = await r2.json();
