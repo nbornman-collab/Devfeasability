@@ -144,6 +144,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 }
 .map-label.height-label{border-color:var(--accent);color:var(--accent2)}
 .map-label.capacity-label{border-color:var(--green);color:var(--green)}
+.map-label.pd-label{border-color:var(--green);color:var(--green);font-size:11px}
 .map-label .label-line{
   position:absolute;bottom:-20px;left:50%;width:1px;height:20px;
   background:var(--border);
@@ -194,7 +195,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 <script src="london-planning-engine.js"></script>
 <script>
-let map, marker, currentLabels = [];
+let map, marker, currentLabels = [], siteExtraData = {};
 
 async function init(){
   const cfg = await(await fetch('/api/config')).json();
@@ -210,24 +211,22 @@ async function init(){
   });
   map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
   map.on('style.load',()=>{
-    // Brighten roads
     try{
       map.setPaintProperty('road-street','line-color','#8a8ea8');
       map.setPaintProperty('road-secondary-tertiary','line-color','#8a8ea8');
       map.setPaintProperty('road-primary','line-color','#a0a4c0');
     }catch(e){}
-    // Brighten labels
     ['road-label','road-number-shield'].forEach(l=>{try{map.setPaintProperty(l,'text-color','#d0d4e8')}catch(e){}});
-    // 3D buildings
+    // Context buildings — ghosted
     if(!map.getLayer('3d-buildings')){
       map.addLayer({
         id:'3d-buildings',type:'fill-extrusion',source:'composite','source-layer':'building',
         minzoom:14,
         paint:{
-          'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#1e2240',30,'#282e55',80,'#353d6a',150,'#424c80'],
+          'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#1a1e38',30,'#222846',80,'#2a3258',150,'#323c6a'],
           'fill-extrusion-height':['get','height'],
           'fill-extrusion-base':['get','min_height'],
-          'fill-extrusion-opacity':.85,
+          'fill-extrusion-opacity':.6,
           'fill-extrusion-vertical-gradient':true,
         }
       });
@@ -236,19 +235,16 @@ async function init(){
       map.addLayer({
         id:'building-outlines',type:'line',source:'composite','source-layer':'building',
         minzoom:14,
-        paint:{'line-color':'rgba(130,140,180,0.2)','line-width':0.5}
+        paint:{'line-color':'rgba(100,110,160,0.15)','line-width':0.3}
       });
     }
     document.getElementById('loader').classList.add('hide');
-    // Demo: Southwark site
     searchAddress('Great Suffolk Street, London SE1');
   });
-
-  // Update labels on camera move
   map.on('move', updateLabelPositions);
 }
 
-// --- ADDRESS SEARCH ---
+// --- SEARCH ---
 function searchAddress(text){
   document.getElementById('search').value = text;
   fetch(`/api/geocode?text=${encodeURIComponent(text)}`)
@@ -280,77 +276,114 @@ document.getElementById('search').addEventListener('input',e=>{
 });
 document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))document.getElementById('results').classList.remove('show')});
 
-// --- SELECT RESULT ---
+// --- SELECT RESULT + FETCH ALL DATA ---
 async function selectResult(feature){
   const [lng,lat] = feature.center || feature.geometry.coordinates;
   map.flyTo({center:[lng,lat],zoom:16.5,pitch:55,bearing:-15,duration:2000});
 
   if(marker) marker.remove();
   const el = document.createElement('div');
-  el.style.cssText = 'width:16px;height:16px;background:var(--accent);border:3px solid white;border-radius:50%;box-shadow:0 0 16px rgba(124,106,239,.6)';
+  el.style.cssText = 'width:16px;height:16px;background:#7c6aef;border:3px solid white;border-radius:50%;box-shadow:0 0 16px rgba(124,106,239,.6)';
   marker = new mapboxgl.Marker({element:el}).setLngLat([lng,lat]).addTo(map);
 
-  // Get borough
-  const boroughRes = await fetch(`/api/borough?lat=${lat}&lng=${lng}`);
-  const boroughData = await boroughRes.json();
-
-  // Get building data from Overpass
-  let buildingData = null;
-  try {
-    const bldgRes = await fetch(`/api/building?lat=${lat}&lng=${lng}&radius=25`);
-    const osmData = await bldgRes.json();
-    if(osmData.elements && osmData.elements.length > 0){
-      const building = osmData.elements.find(e => e.type === 'way' && e.tags);
-      if(building){
-        buildingData = {
-          name: building.tags.name || '',
-          levels: parseInt(building.tags['building:levels']) || null,
-          height: parseFloat(building.tags.height) || null,
-          use: building.tags['building'] || '',
-          architect: building.tags.architect || '',
-          startDate: building.tags.start_date || '',
-          nodes: osmData.elements.filter(e => e.type === 'node' && e.lat),
-          wayNodes: building.nodes || []
-        };
-      }
-    }
-  } catch(e){ console.warn('No OSM building data:', e); }
-
-  // Get planning context
   const address = feature.place_name || feature.text || '';
   const postcode = extractPostcode(address);
-  
-  // Estimate plot area from building footprint nodes
+
+  // Show loading state
+  document.getElementById('p-address').textContent = address.split(',')[0];
+  document.getElementById('p-subtitle').textContent = 'Loading…';
+  document.getElementById('panel-body').innerHTML = '<div class="section"><p class="narrative" style="color:var(--text3)">Fetching planning data…</p></div>';
+  document.getElementById('panel').classList.remove('collapsed');
+
+  // Parallel data fetches
+  const [boroughRes, buildingRes, ptalRes, floodRes, conservationRes, listedRes] = await Promise.allSettled([
+    fetch(`/api/borough?lat=${lat}&lng=${lng}`).then(r=>r.json()),
+    fetch(`/api/building?lat=${lat}&lng=${lng}&radius=25`).then(r=>r.json()),
+    fetch(`/api/ptal?lat=${lat}&lng=${lng}`).then(r=>r.json()),
+    fetch(`/api/flood-zone?lat=${lat}&lng=${lng}`).then(r=>r.json()),
+    fetch(`/api/conservation-areas?lat=${lat}&lng=${lng}&radius=80`).then(r=>r.json()),
+    fetch(`/api/listed-buildings?lat=${lat}&lng=${lng}&radius=150`).then(r=>r.json()),
+  ]);
+
+  const boroughData = boroughRes.status === 'fulfilled' ? boroughRes.value : { borough: 'Unknown' };
+  const osmData = buildingRes.status === 'fulfilled' ? buildingRes.value : { elements: [] };
+  const ptalData = ptalRes.status === 'fulfilled' ? ptalRes.value : { ptal: null };
+  const floodData = floodRes.status === 'fulfilled' ? floodRes.value : { floodZone: null };
+  const conservationData = conservationRes.status === 'fulfilled' ? conservationRes.value : { elements: [] };
+  const listedData = listedRes.status === 'fulfilled' ? listedRes.value : { elements: [] };
+
+  // Parse building
+  let buildingData = null;
+  if(osmData.elements && osmData.elements.length > 0){
+    const building = osmData.elements.find(e => e.type === 'way' && e.tags);
+    if(building){
+      buildingData = {
+        name: building.tags.name || '',
+        levels: parseInt(building.tags['building:levels']) || null,
+        height: parseFloat(building.tags.height) || null,
+        use: building.tags['building'] || '',
+        architect: building.tags.architect || '',
+        startDate: building.tags.start_date || '',
+        nodes: osmData.elements.filter(e => e.type === 'node' && e.lat),
+        wayNodes: building.nodes || []
+      };
+    }
+  }
+
+  // Plot area
   let plotArea = 0;
   if(buildingData && buildingData.nodes.length > 0 && buildingData.wayNodes.length > 0){
     const coords = buildingData.wayNodes.map(nid => buildingData.nodes.find(n => n.id === nid)).filter(Boolean);
     if(coords.length >= 3) plotArea = calcPolygonArea(coords);
   }
 
+  const osmUse = buildingData?.use || '';
+  const currentUse = guessUseClass(osmUse);
+  const buildingType = getBuildingTypeFromOSM(osmUse);
+  const isResidential = USE_CLASSES[currentUse]?.residential || false;
+  const ftf = isResidential ? 3.0 : 4.2;
   const floors = buildingData?.levels || 2;
-  const heightM = buildingData?.height || floors * 3.2;
-  const estimatedFloorArea = plotArea * floors * 0.85; // 85% efficiency
+  const heightM = buildingData?.height || floors * ftf;
+  const estimatedFloorArea = plotArea * floors * 0.85;
 
+  // Parse extra data
+  const conservationElements = conservationData.elements || [];
+  const inConservationArea = conservationElements.length > 0;
+  const conservationName = inConservationArea ? (conservationElements[0]?.tags?.name || 'Unnamed conservation area') : null;
+
+  const listedElements = (listedData.elements || []).filter(e => e.tags);
+  const nearbyListed = listedElements.map(e => ({
+    name: e.tags.name || 'Unnamed',
+    grade: e.tags.listed_status || e.tags['heritage:operator:ref'] || e.tags.heritage || '?',
+    heRef: e.tags.HE_ref || e.tags['ref:GB:nhle'] || ''
+  }));
+
+  const floodZone = floodData.floodZone || 1;
+  const ptal = ptalData.ptal;
+  const ptalBand = ptalData.ptalBand || (boroughData.zone <= 2 ? '4-6' : '2-3');
+  const nearestStations = ptalData.nearestStations || [];
+
+  // Store extra data for panel
+  siteExtraData = { floodZone, ptal, ptalBand, nearestStations, inConservationArea, conservationName, nearbyListed, postcode };
+
+  // Get planning context
   const planning = getPlanningContext(boroughData.borough, {
-    lat, lng,
-    plotArea: plotArea,
-    floorArea: estimatedFloorArea,
-    floors: floors,
-    currentUse: guessUseClass(buildingData?.use || ''),
+    lat, lng, plotArea, floorArea: estimatedFloorArea, floors,
+    currentUse, buildingType, ptalBand
   });
 
-  renderPanel(planning, address, boroughData, buildingData, { plotArea, floors, heightM, estimatedFloorArea, lat, lng, postcode });
-  renderSite3D(lat, lng, buildingData, planning, { plotArea, floors, heightM });
-  document.getElementById('panel').classList.remove('collapsed');
+  const siteInfo = { plotArea, floors, heightM, estimatedFloorArea, lat, lng, postcode, isResidential, currentUse, ftf };
+
+  renderPanel(planning, address, boroughData, buildingData, siteInfo);
+  renderSite3D(lat, lng, buildingData, planning, siteInfo);
 }
 
-// --- 3D SITE RENDERING ---
+// --- 3D RENDERING ---
 function renderSite3D(lat, lng, buildingData, planning, siteInfo){
-  // Remove old layers
-  ['site-fill','site-line','current-3d','potential-3d','setback-line'].forEach(id=>{
+  ['site-fill','site-line','site-line-inner','current-3d','potential-3d','pd-3d'].forEach(id=>{
     if(map.getLayer(id)) map.removeLayer(id);
   });
-  ['site','current-bldg','potential-bldg','setbacks'].forEach(id=>{
+  ['site','current-bldg','potential-bldg','pd-bldg'].forEach(id=>{
     if(map.getSource(id)) map.removeSource(id);
   });
   clearLabels();
@@ -362,41 +395,37 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
     .filter(Boolean)
     .map(n => [n.lon, n.lat]);
   if(coords.length < 3) return;
+  if(coords[0][0] !== coords[coords.length-1][0] || coords[0][1] !== coords[coords.length-1][1]) coords.push([...coords[0]]);
 
-  // Close the ring
-  if(coords[0][0] !== coords[coords.length-1][0] || coords[0][1] !== coords[coords.length-1][1]){
-    coords.push([...coords[0]]);
-  }
+  const siteGeoJSON = { type:'Feature', geometry:{type:'Polygon',coordinates:[coords]}, properties:{} };
 
-  const siteGeoJSON = {
-    type:'Feature',
-    geometry:{type:'Polygon',coordinates:[coords]},
-    properties:{}
-  };
-
-  // Site boundary
+  // Site/building boundary — solid line for building footprint
   map.addSource('site',{type:'geojson',data:siteGeoJSON});
-  map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#7c6aef','fill-opacity':.1}});
-  map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#9d8fff','line-width':2.5,'line-dasharray':[3,1.5]}});
+  map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#7c6aef','fill-opacity':.06}});
+  // Building footprint — solid hairline
+  map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#9d8fff','line-width':1.5,'line-opacity':0.8}});
+  // Property boundary estimate — dashed, slightly offset (approximation)
+  map.addLayer({id:'site-line-inner',type:'line',source:'site',paint:{'line-color':'#6b6f8a','line-width':1,'line-dasharray':[4,3],'line-opacity':0.5},'layout':{}});
 
   const currentHeight = siteInfo.heightM || 6.4;
-  const typicalH = planning.typicalHeight || {low:10,high:30};
-  const potentialHeightM = typicalH.high || 30;
+  const ftf = siteInfo.ftf || 3.2;
+  const typicalH = planning.typicalApprovedHeights || planning.typicalHeight || {low:10,mid:20,high:30};
+  const potentialHeightM = typicalH.mid || 20;
 
-  // Current building — amber
+  // Current building — solid mid grey, 80% opacity, hairline edges
   map.addSource('current-bldg',{type:'geojson',data:siteGeoJSON});
   map.addLayer({
     id:'current-3d',type:'fill-extrusion',source:'current-bldg',
     paint:{
-      'fill-extrusion-color':'#f5b731',
+      'fill-extrusion-color':'#8a8ea0',
       'fill-extrusion-height':currentHeight,
       'fill-extrusion-base':0,
-      'fill-extrusion-opacity':.55,
+      'fill-extrusion-opacity':.80,
       'fill-extrusion-vertical-gradient':true,
     }
   });
 
-  // Potential envelope — accent/purple
+  // Potential additional envelope — distinct colour, translucent
   if(potentialHeightM > currentHeight){
     map.addSource('potential-bldg',{type:'geojson',data:siteGeoJSON});
     map.addLayer({
@@ -405,34 +434,52 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
         'fill-extrusion-color':'#7c6aef',
         'fill-extrusion-height':potentialHeightM,
         'fill-extrusion-base':currentHeight,
-        'fill-extrusion-opacity':.25,
+        'fill-extrusion-opacity':.2,
         'fill-extrusion-vertical-gradient':true,
       }
     });
   }
 
-  // Centroid for labels
+  // PD upward extension massing (residential only)
+  if(planning.pdMassingPotential && planning.pdMassingPotential.additionalHeightM > 0){
+    const pdTop = currentHeight + planning.pdMassingPotential.additionalHeightM;
+    if(pdTop <= potentialHeightM){
+      map.addSource('pd-bldg',{type:'geojson',data:siteGeoJSON});
+      map.addLayer({
+        id:'pd-3d',type:'fill-extrusion',source:'pd-bldg',
+        paint:{
+          'fill-extrusion-color':'#2dd4a0',
+          'fill-extrusion-height':pdTop,
+          'fill-extrusion-base':currentHeight,
+          'fill-extrusion-opacity':.25,
+          'fill-extrusion-vertical-gradient':true,
+        }
+      });
+    }
+  }
+
   const centroid = getCentroid(coords);
 
-  // Height label
-  addLabel(centroid, potentialHeightM + 3, `${Math.round(potentialHeightM)}m max`, 'height-label');
-  
-  // Current height label
-  addLabel(centroid, currentHeight / 2, `${Math.round(currentHeight)}m existing`, '');
+  // Labels
+  addLabel(centroid, potentialHeightM + 3, `${Math.round(potentialHeightM)}m potential`, 'height-label');
+  addLabel(centroid, currentHeight + 1, `${Math.round(currentHeight)}m existing · ${siteInfo.floors}F`, '');
 
-  // Capacity label
+  if(planning.pdMassingPotential){
+    const pdH = currentHeight + planning.pdMassingPotential.additionalHeightM;
+    addLabel([centroid[0] - 0.00015, centroid[1]], pdH + 1, `PD: +${planning.pdMassingPotential.additionalFloors}F`, 'pd-label');
+  }
+
   if(planning.plotRatio && planning.plotRatio.remainingCapacity > 0){
     const cap = planning.plotRatio.remainingCapacity;
-    addLabel(
-      [centroid[0] + 0.0002, centroid[1]],
-      potentialHeightM * 0.6,
-      `+${fmt(Math.round(cap * 10.764))} sqft potential`,
-      'capacity-label'
-    );
+    const isResi = siteInfo.isResidential || siteInfo.currentUse === 'E';
+    const capLabel = isResi
+      ? `+${fmt(Math.round(cap))}sqm (${fmt(Math.round(cap * 10.764))}sqft)`
+      : `+${fmt(Math.round(cap))}sqm GFA`;
+    addLabel([centroid[0] + 0.00018, centroid[1]], potentialHeightM * 0.5, capLabel, 'capacity-label');
   }
 }
 
-// --- 3D LABEL SYSTEM ---
+// --- LABELS ---
 function addLabel(lngLat, heightM, text, className){
   const div = document.createElement('div');
   div.className = 'map-label ' + className;
@@ -449,9 +496,7 @@ function positionLabel(div){
   const lng = parseFloat(div.dataset.lng);
   const lat = parseFloat(div.dataset.lat);
   const heightM = parseFloat(div.dataset.heightM);
-  // Project the 3D point to screen coordinates
   const point = map.project(new mapboxgl.LngLat(lng, lat));
-  // Offset Y based on height and pitch
   const pitch = map.getPitch() * Math.PI / 180;
   const zoom = map.getZoom();
   const metersPerPixel = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom);
@@ -460,18 +505,13 @@ function positionLabel(div){
   div.style.top = (point.y - heightPixels) + 'px';
 }
 
-function updateLabelPositions(){
-  currentLabels.forEach(div => positionLabel(div));
-}
+function updateLabelPositions(){ currentLabels.forEach(positionLabel); }
+function clearLabels(){ currentLabels.forEach(div => div.remove()); currentLabels = []; }
 
-function clearLabels(){
-  currentLabels.forEach(div => div.remove());
-  currentLabels = [];
-}
-
-// --- PANEL RENDERING ---
+// --- PANEL ---
 function renderPanel(planning, address, boroughData, buildingData, siteInfo){
   const borough = planning.borough || boroughData.borough || 'Unknown';
+  const shortBorough = borough.replace('London Borough of ','').replace('City of ','').replace('Royal Borough of ','');
   const fin = planning.financials || LONDON_FINANCIALS[2];
   const plotArea = siteInfo.plotArea || 0;
   const plotAreaSqft = plotArea * 10.764;
@@ -479,52 +519,148 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
   const heightM = siteInfo.heightM || 6.4;
   const existingFloorArea = siteInfo.estimatedFloorArea || 0;
   const existingFloorAreaSqft = existingFloorArea * 10.764;
+  const isResi = siteInfo.isResidential;
+  const ftf = siteInfo.ftf || 3.2;
 
   const pr = planning.plotRatio || {};
-  const potentialFloorArea = pr.potentialFloorArea || 0;
-  const potentialFloorAreaSqft = potentialFloorArea * 10.764;
   const remainingCapacity = pr.remainingCapacity || 0;
   const remainingCapacitySqft = remainingCapacity * 10.764;
+  const potentialFloorArea = pr.potentialFloorArea || 0;
   const utilPct = potentialFloorArea > 0 ? Math.min(100, (existingFloorArea / potentialFloorArea) * 100) : 0;
 
-  // Estimate units
-  const avgUnitSqm = 75; // ~800 sqft
-  const potentialUnits = Math.floor(remainingCapacity / avgUnitSqm);
-  const typicalH = planning.typicalHeight || {low:10,high:30};
-  const potentialFloors = Math.floor(typicalH.high / 3.2);
+  const typicalH = planning.typicalApprovedHeights || {low:10,mid:20,high:30};
+  const potentialFloors = Math.floor(typicalH.mid / ftf);
 
-  // Financials
+  // Use-class-aware metrics
+  const unitEstimate = planning.unitEstimate;
+  const affordableUnits = planning.affordableUnits || 0;
+
+  // Financials — use correct rates based on use
+  const finRates = isResi ? { rent: fin.rentSqft, sale: fin.saleSqft } : { rent: fin.commercialRentSqft || fin.rentSqft, sale: fin.commercialSaleSqft || fin.saleSqft };
   const constructionCostLow = remainingCapacitySqft * fin.costLow;
   const constructionCostHigh = remainingCapacitySqft * fin.costHigh;
   const landCost = plotAreaSqft * fin.landSqft;
-  const saleRevenue = remainingCapacitySqft * fin.saleSqft;
-  const annualRent = remainingCapacitySqft * fin.rentSqft;
+  const saleRevenue = remainingCapacitySqft * finRates.sale;
+  const annualRent = remainingCapacitySqft * finRates.rent;
+  const cilEstimate = planning.cilEstimate || 0;
 
   let barColor = 'var(--green)';
   if(utilPct > 55) barColor = 'var(--amber)';
   if(utilPct > 80) barColor = 'var(--red)';
 
   document.getElementById('p-address').textContent = address.split(',')[0];
-  document.getElementById('p-subtitle').textContent = `${borough} · Zone ${planning.zone || '?'}${siteInfo.postcode ? ' · ' + siteInfo.postcode : ''}`;
+  document.getElementById('p-subtitle').textContent = `${shortBorough} · Zone ${planning.zone || '?'}${siteInfo.postcode ? ' · ' + siteInfo.postcode : ''}`;
+
+  // Extra data
+  const extra = siteExtraData;
+  const floodZone = extra.floodZone || 1;
+  const ptal = extra.ptal;
+  const inCA = extra.inConservationArea;
+  const caName = extra.conservationName;
+  const nearbyListed = extra.nearbyListed || [];
+  const stations = extra.nearestStations || [];
 
   // Narrative
-  const narrative = generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remainingCapacitySqft, potentialUnits, potentialFloors);
+  const narrative = generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remainingCapacity, remainingCapacitySqft, potentialFloors, extra);
 
-  // Use class info
-  const uc = planning.useClassInfo || {};
-
-  // PDR routes
+  // PDR
   let pdrHtml = '';
   if(planning.applicablePDR && planning.applicablePDR.length > 0){
-    pdrHtml = planning.applicablePDR.map(p =>
-      `<div style="margin-bottom:8px"><span class="pdr-tag available">${p.name}</span><div style="font-size:11px;color:var(--text3);margin-top:3px">${p.notes}${p.maxFloorspace ? ` · Max ${p.maxFloorspace}sqm` : ''}</div></div>`
-    ).join('');
+    pdrHtml = planning.applicablePDR.map(p => {
+      const blocked = planning.article4Active && p.from === 'E' && p.to === 'C3';
+      return `<div style="margin-bottom:10px">
+        <span class="pdr-tag ${blocked ? 'restricted' : 'available'}">${p.name}${blocked ? ' — ARTICLE 4' : ''}</span>
+        ${p.massingImpact ? `<div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5">${p.massingImpact}</div>` : ''}
+        <div style="font-size:11px;color:var(--text3);margin-top:3px">${p.notes}${p.maxFloorspace ? ` · Max ${p.maxFloorspace}sqm` : ''}</div>
+      </div>`;
+    }).join('');
   } else {
     pdrHtml = '<div style="font-size:12px;color:var(--text3)">No PDR routes from current use class</div>';
   }
 
-  // Height policy
-  const heightPolicyHtml = planning.heightPolicy ? `<div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px">${planning.heightPolicy}</div>` : '';
+  // PD massing
+  let pdMassingHtml = '';
+  if(planning.pdMassingPotential){
+    const pd = planning.pdMassingPotential;
+    pdMassingHtml = `<div class="stat full highlight-green" style="border-color:var(--green)">
+      <div class="stat-label">PD Massing Potential</div>
+      <div class="stat-value green">+${pd.additionalFloors} floors (${pd.additionalHeightM}m)</div>
+      <div class="stat-sub">${fmt(Math.round(pd.additionalAreaSqm))}sqm · ${pd.notes}</div>
+    </div>`;
+  }
+
+  // Constraints section
+  let constraintsHtml = '';
+  // Conservation
+  if(inCA){
+    constraintsHtml += `<div class="stat full" style="border-color:var(--amber)"><div class="stat-label">Conservation Area</div><div class="stat-value amber">${caName || 'Yes'}</div><div class="stat-sub">PDR restricted · Demolition requires consent · Design scrutiny heightened</div></div>`;
+  }
+  // Flood zone
+  if(floodZone > 1){
+    constraintsHtml += `<div class="stat"><div class="stat-label">Flood Zone</div><div class="stat-value ${floodZone >= 3 ? 'red' : 'amber'}">${floodZone}</div><div class="stat-sub">${floodZone >= 3 ? 'Sequential & Exception Test required' : 'Sequential Test may apply'}</div></div>`;
+  } else {
+    constraintsHtml += `<div class="stat"><div class="stat-label">Flood Zone</div><div class="stat-value green">1</div><div class="stat-sub">Low risk</div></div>`;
+  }
+  // PTAL
+  constraintsHtml += `<div class="stat"><div class="stat-label">PTAL Score</div><div class="stat-value ${ptal >= 4 ? 'green' : (ptal >= 2 ? '' : 'amber')}">${ptal !== null ? ptal + ' (' + (extra.ptalBand || '?') + ')' : 'Unknown'}</div><div class="stat-sub">${ptal >= 5 ? 'Excellent access' : ptal >= 3 ? 'Good access' : 'Moderate/poor access'}</div></div>`;
+  // LVMF
+  if(planning.lvmfExposure && planning.lvmfExposure !== 'none'){
+    constraintsHtml += `<div class="stat"><div class="stat-label">LVMF Exposure</div><div class="stat-value amber" style="font-size:13px;text-transform:capitalize">${planning.lvmfExposure}</div><div class="stat-sub">Protected vista check needed</div></div>`;
+  }
+  // Listed buildings nearby
+  if(nearbyListed.length > 0){
+    const grades = nearbyListed.map(l => l.grade).filter(Boolean);
+    constraintsHtml += `<div class="stat"><div class="stat-label">Listed Buildings</div><div class="stat-value amber">${nearbyListed.length} nearby</div><div class="stat-sub">${grades.length ? grades.join(', ') : 'Check setting impact'}</div></div>`;
+  }
+  // Article 4
+  if(planning.article4Active){
+    constraintsHtml += `<div class="stat full" style="border-color:var(--red)"><div class="stat-label">Article 4 Direction</div><div class="stat-value red" style="font-size:12px">${planning.article4Notes.join('; ')}</div></div>`;
+  }
+  // Tall building threshold
+  if(planning.tallBuildingThreshold){
+    constraintsHtml += `<div class="stat"><div class="stat-label">Tall Building</div><div class="stat-value">${planning.tallBuildingThreshold}m+</div><div class="stat-sub">Triggers assessment</div></div>`;
+  }
+
+  // Transport
+  let transportHtml = '';
+  if(stations.length > 0){
+    transportHtml = stations.slice(0,5).map(s =>
+      `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(42,45,66,.3);font-size:12px">
+        <span style="color:var(--text2)">${s.name}</span>
+        <span style="color:var(--text3);font-family:var(--mono)">${s.distance ? Math.round(s.distance) + 'm' : ''}</span>
+      </div>`
+    ).join('');
+  }
+
+  // Development potential — use-class aware
+  let devPotentialHtml = '';
+  if(isResi && unitEstimate){
+    devPotentialHtml = `
+      <div class="stat full highlight-green"><div class="stat-label">Remaining Capacity</div><div class="stat-value green">${fmt(Math.round(remainingCapacity))}sqm (${fmt(Math.round(remainingCapacitySqft))}sqft)</div></div>
+      <div class="stat"><div class="stat-label">Est. Units</div><div class="stat-value">${unitEstimate.total}</div><div class="stat-sub">at ~70sqm avg NIA</div></div>
+      <div class="stat"><div class="stat-label">Affordable (${Math.round(planning.affordableThreshold*100||35)}%)</div><div class="stat-value">${affordableUnits}</div><div class="stat-sub">${planning.affordableTarget || ''}</div></div>
+      <div class="stat"><div class="stat-label">Potential Height</div><div class="stat-value">${typicalH.mid}m</div><div class="stat-sub">~${potentialFloors} floors at ${ftf}m f/f</div></div>
+      <div class="stat"><div class="stat-label">Unit Mix</div><div class="stat-value" style="font-size:12px">${unitEstimate.byType ? Object.entries(unitEstimate.byType).map(([k,v])=>`${k}: ${v}`).join(' · ') : '—'}</div></div>
+      ${pdMassingHtml}`;
+  } else {
+    devPotentialHtml = `
+      <div class="stat full highlight-green"><div class="stat-label">Remaining GFA Capacity</div><div class="stat-value green">${fmt(Math.round(remainingCapacity))}sqm (${fmt(Math.round(remainingCapacitySqft))}sqft)</div></div>
+      <div class="stat"><div class="stat-label">Potential Height</div><div class="stat-value">${typicalH.mid}m</div><div class="stat-sub">~${potentialFloors} floors at ${ftf}m f/f</div></div>
+      <div class="stat"><div class="stat-label">Use Class</div><div class="stat-value">${planning.currentUse}</div><div class="stat-sub">${planning.useClassInfo?.name || ''}</div></div>
+      ${pdMassingHtml}`;
+  }
+
+  // Key policies
+  let policiesHtml = '';
+  if(planning.keyPolicies && planning.keyPolicies.length){
+    policiesHtml = planning.keyPolicies.map(p => `<div style="font-size:12px;color:var(--text2);padding:3px 0">📋 ${p}</div>`).join('');
+  }
+
+  // Opportunity areas
+  let oaHtml = '';
+  if(planning.opportunityAreas && planning.opportunityAreas.length){
+    oaHtml = `<div style="margin-top:8px;font-size:12px;color:var(--text2)">Nearby Opportunity Areas: <strong style="color:var(--text)">${planning.opportunityAreas.join(', ')}</strong></div>`;
+  }
 
   // Notes
   let notesHtml = '';
@@ -533,108 +669,108 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
   }
 
   document.getElementById('panel-body').innerHTML = `
-    <!-- Narrative -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Site Opportunity</div>
       <div class="narrative">${narrative}</div>
     </div>
-
-    <!-- Planning Context -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Planning Context</div>
-      ${heightPolicyHtml}
+      ${planning.heightPolicy ? `<div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:14px">${planning.heightPolicy}</div>` : ''}
       <div class="stat-grid">
-        <div class="stat"><div class="stat-label">Borough</div><div class="stat-value accent" style="font-size:14px">${borough.replace('London Borough of ','').replace('City of ','')}</div></div>
-        <div class="stat"><div class="stat-label">Use Class</div><div class="stat-value">${planning.currentUse || 'E'}</div><div class="stat-sub">${uc.name || ''}</div></div>
-        <div class="stat"><div class="stat-label">Plot Ratio</div><div class="stat-value">${pr.existing ? pr.existing.toFixed(1) : '—'}</div><div class="stat-sub">Potential: ${pr.potential ? pr.potential.toFixed(1) : '—'}</div></div>
-        <div class="stat"><div class="stat-label">Density Guide</div><div class="stat-value" style="font-size:14px">${planning.density ? planning.density.min + '–' + planning.density.max : '—'}</div><div class="stat-sub">units/ha (${planning.setting || ''})</div></div>
-        ${planning.conservationAreas ? '<div class="stat"><div class="stat-label">Conservation</div><div class="stat-value amber" style="font-size:14px">Check Required</div><div class="stat-sub">Borough has conservation areas</div></div>' : ''}
-        ${planning.lvmfViews ? '<div class="stat"><div class="stat-label">LVMF Views</div><div class="stat-value amber" style="font-size:14px">May Apply</div><div class="stat-sub">Protected vista check needed</div></div>' : ''}
-        ${planning.cilRate ? `<div class="stat"><div class="stat-label">CIL Rate</div><div class="stat-value">£${planning.cilRate}/sqm</div></div>` : ''}
-        ${planning.tallBuildingThreshold ? `<div class="stat"><div class="stat-label">Tall Building</div><div class="stat-value">${planning.tallBuildingThreshold}m+</div><div class="stat-sub">Requires assessment</div></div>` : ''}
+        <div class="stat"><div class="stat-label">Borough</div><div class="stat-value accent" style="font-size:14px">${shortBorough}</div></div>
+        <div class="stat"><div class="stat-label">Use Class</div><div class="stat-value">${planning.currentUse || 'E'}</div><div class="stat-sub">${planning.useClassInfo?.name || ''}</div></div>
+        <div class="stat"><div class="stat-label">Plot Ratio</div><div class="stat-value">${pr.existing ? pr.existing.toFixed(1) : '—'}</div><div class="stat-sub">Typical: ${pr.potential ? pr.potential.toFixed(1) : '—'}</div></div>
+        <div class="stat"><div class="stat-label">Density Guide</div><div class="stat-value" style="font-size:13px">${planning.density ? planning.density.minUnits + '–' + planning.density.maxUnits : '—'}</div><div class="stat-sub">u/ha · ${planning.setting || ''} · PTAL ${extra.ptalBand || '?'}</div></div>
       </div>
       <div class="util-bar-wrap">
         <div class="util-bar-label"><span style="color:var(--text3)">Plot Ratio Utilisation</span><span style="font-family:var(--mono);font-weight:600;color:${barColor}">${utilPct.toFixed(0)}%</span></div>
         <div class="util-bar"><div class="util-bar-fill" style="width:${Math.min(utilPct,100)}%;background:${barColor}"></div></div>
       </div>
+      ${policiesHtml}
+      ${oaHtml}
     </div>
-
-    <!-- PDR Routes -->
     <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Permitted Development</div>
-      ${pdrHtml}
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Constraints</div>
+      <div class="stat-grid">${constraintsHtml}</div>
     </div>
-
-    <!-- Current Building -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"/></svg>Existing Building</div>
       <div class="stat-grid">
-        <div class="stat highlight"><div class="stat-label">Plot Area</div><div class="stat-value">${fmt(Math.round(plotAreaSqft))} sqft</div><div class="stat-sub">${fmt(Math.round(plotArea))} sqm</div></div>
-        <div class="stat highlight"><div class="stat-label">Est. Floor Area</div><div class="stat-value">${fmt(Math.round(existingFloorAreaSqft))} sqft</div><div class="stat-sub">${fmt(Math.round(existingFloorArea))} sqm</div></div>
-        <div class="stat"><div class="stat-label">Floors</div><div class="stat-value">${floors}</div></div>
+        <div class="stat highlight"><div class="stat-label">Plot Area</div><div class="stat-value">${fmt(Math.round(plotArea))}sqm</div><div class="stat-sub">${fmt(Math.round(plotAreaSqft))}sqft</div></div>
+        <div class="stat highlight"><div class="stat-label">Est. Floor Area</div><div class="stat-value">${fmt(Math.round(existingFloorArea))}sqm</div><div class="stat-sub">${fmt(Math.round(existingFloorAreaSqft))}sqft</div></div>
+        <div class="stat"><div class="stat-label">Floors</div><div class="stat-value">${floors}</div><div class="stat-sub">${ftf}m floor-to-floor</div></div>
         <div class="stat"><div class="stat-label">Height</div><div class="stat-value">${Math.round(heightM)}m</div><div class="stat-sub">${Math.round(heightM * 3.281)}ft</div></div>
         ${buildingData?.startDate ? `<div class="stat"><div class="stat-label">Year Built</div><div class="stat-value">${buildingData.startDate}</div></div>` : ''}
         ${buildingData?.use ? `<div class="stat"><div class="stat-label">Building Type</div><div class="stat-value" style="font-size:13px;text-transform:capitalize">${buildingData.use.replace(/_/g,' ')}</div></div>` : ''}
       </div>
     </div>
-
-    <!-- Development Potential -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>Development Potential</div>
-      <div class="stat-grid">
-        <div class="stat full highlight-green"><div class="stat-label">Remaining Capacity</div><div class="stat-value green">${fmt(Math.round(remainingCapacitySqft))} sqft</div><div class="stat-sub">${fmt(Math.round(remainingCapacity))} sqm additional</div></div>
-        <div class="stat"><div class="stat-label">Potential Height</div><div class="stat-value">${typicalH.high}m</div><div class="stat-sub">~${potentialFloors} floors</div></div>
-        <div class="stat"><div class="stat-label">Est. Units</div><div class="stat-value">${potentialUnits}</div><div class="stat-sub">at 75sqm avg</div></div>
-      </div>
+      <div class="stat-grid">${devPotentialHtml}</div>
     </div>
-
-    <!-- Financials -->
     <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financial Estimates</div>
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Permitted Development</div>
+      ${pdrHtml}
+    </div>
+    ${transportHtml ? `<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76a6 6 0 010 8.49m-8.48-.01a6 6 0 010-8.49"/></svg>Transport</div>${transportHtml}</div>` : ''}
+    <div class="section">
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financial Estimates (${isResi ? 'Residential' : 'Commercial'})</div>
       <div class="fin-row"><span class="label">Est. Land Value</span><span class="value">£${fmt(Math.round(landCost))}</span></div>
       <div class="fin-row"><span class="label">Construction (low)</span><span class="value">£${fmt(Math.round(constructionCostLow))}</span></div>
       <div class="fin-row"><span class="label">Construction (high)</span><span class="value">£${fmt(Math.round(constructionCostHigh))}</span></div>
       <div class="fin-row"><span class="label">Cost/sqft</span><span class="value">£${fin.costLow}–£${fin.costHigh}</span></div>
-      ${planning.cilRate && remainingCapacity > 0 ? `<div class="fin-row"><span class="label">CIL Estimate</span><span class="value">£${fmt(Math.round(planning.cilRate * remainingCapacity))}</span></div>` : ''}
-      <div class="fin-row"><span class="label">Annual Rental Revenue</span><span class="value">£${fmt(Math.round(annualRent))}/yr</span></div>
-      <div class="fin-row total"><span class="label">Sale Revenue Potential</span><span class="value">£${fmt(Math.round(saleRevenue))}</span></div>
+      ${cilEstimate > 0 ? `<div class="fin-row"><span class="label">CIL Estimate</span><span class="value">£${fmt(Math.round(cilEstimate))}</span></div>` : ''}
+      ${affordableUnits > 0 ? `<div class="fin-row"><span class="label">Affordable Housing (${affordableUnits} units)</span><span class="value">Included in unit count</span></div>` : ''}
+      <div class="fin-row"><span class="label">Annual ${isResi ? 'Rental' : 'Lease'} Revenue</span><span class="value">£${fmt(Math.round(annualRent))}/yr</span></div>
+      <div class="fin-row total"><span class="label">${isResi ? 'Sale Revenue' : 'Capital Value'} Potential</span><span class="value">£${fmt(Math.round(saleRevenue))}</span></div>
     </div>
-
-    <!-- Notes -->
-    ${notesHtml ? `<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>Planning Notes</div>${notesHtml}</div>` : ''}
+    ${notesHtml ? `<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Planning Notes</div>${notesHtml}</div>` : ''}
   `;
 }
 
 // --- NARRATIVE ---
-function generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remainingCapacitySqft, potentialUnits, potentialFloors){
-  const plotAreaSqft = (siteInfo.plotArea || 0) * 10.764;
-  const borough = planning.borough?.replace('London Borough of ','').replace('City of ','') || 'this borough';
+function generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remainingCapacity, remainingCapacitySqft, potentialFloors, extra){
+  const plotArea = siteInfo.plotArea || 0;
+  const borough = planning.borough?.replace('London Borough of ','').replace('City of ','').replace('Royal Borough of ','') || 'this borough';
   const floors = siteInfo.floors || 2;
   const heightM = siteInfo.heightM || 6.4;
-  const existingAreaSqft = (siteInfo.estimatedFloorArea || 0) * 10.764;
+  const existingArea = siteInfo.estimatedFloorArea || 0;
+  const isResi = siteInfo.isResidential;
+  const uc = planning.useClassInfo || {};
 
-  let html = `<p>A <strong>${fmt(Math.round(plotAreaSqft))} sqft</strong> site in <strong>${borough}</strong>`;
-  if(buildingData?.use) html += ` currently occupied by a <strong>${buildingData.use.replace(/_/g,' ')}</strong> structure`;
-  html += `. The existing building is approximately <strong>${floors} floors</strong> (${Math.round(heightM)}m) with an estimated <strong>${fmt(Math.round(existingAreaSqft))} sqft</strong> of floor area.</p>`;
+  let html = `<p>A <strong>${fmt(Math.round(plotArea))}sqm</strong> (${fmt(Math.round(plotArea * 10.764))}sqft) site in <strong>${borough}</strong>`;
+  if(uc.name) html += `, currently <strong>Use Class ${planning.currentUse}</strong> (${uc.desc})`;
+  html += `. The existing structure is approximately <strong>${floors} floors</strong> (${Math.round(heightM)}m) with an estimated <strong>${fmt(Math.round(existingArea))}sqm</strong> GFA.</p>`;
 
-  if(utilPct < 45){
-    html += `<div class="opportunity">🏗️ <strong>Significant opportunity.</strong> This site is utilising only <span class="highlight">${utilPct.toFixed(0)}%</span> of its estimated plot ratio capacity. `;
-    html += `Approximately <strong>${fmt(Math.round(remainingCapacitySqft))} sqft</strong> of additional development may be possible — enough for roughly <strong>${potentialUnits} residential units</strong> `;
-    html += `up to <strong>${potentialFloors} floors</strong>.`;
-    if(planning.conservationAreas) html += ` <strong>Conservation area check required</strong> — may constrain.`;
-    if(planning.lvmfViews) html += ` LVMF strategic views may apply.`;
-    html += `</div>`;
-  } else if(utilPct < 75){
-    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}% plot ratio utilisation</span>, there is moderate remaining capacity of <strong>${fmt(Math.round(remainingCapacitySqft))} sqft</strong>, `;
-    html += `potentially accommodating <strong>${potentialUnits} additional units</strong>.</p>`;
-  } else {
-    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}%</span> utilisation, this site is near its estimated capacity. `;
-    html += `Limited additional development potential of <strong>${fmt(Math.round(remainingCapacitySqft))} sqft</strong> remains.</p>`;
+  // Constraints summary
+  let constraints = [];
+  if(extra.inConservationArea) constraints.push(`within <strong>${extra.conservationName || 'a conservation area'}</strong>`);
+  if(extra.floodZone > 1) constraints.push(`<strong>Flood Zone ${extra.floodZone}</strong>`);
+  if(extra.nearbyListed?.length > 0) constraints.push(`<strong>${extra.nearbyListed.length} listed building${extra.nearbyListed.length > 1 ? 's' : ''}</strong> nearby`);
+  if(planning.lvmfExposure === 'high' || planning.lvmfExposure === 'very high') constraints.push('within <strong>LVMF view corridors</strong>');
+  if(planning.article4Active) constraints.push('<strong>Article 4</strong> restrictions apply');
+
+  if(constraints.length > 0){
+    html += `<p style="margin-top:8px;color:var(--amber)">⚠ Key constraints: ${constraints.join(', ')}.</p>`;
   }
 
-  // PDR note
-  if(planning.applicablePDR && planning.applicablePDR.length > 0){
-    html += `<p style="margin-top:8px;font-size:13px;color:var(--text3)">Permitted development routes may apply — see PDR section below.</p>`;
+  // Opportunity
+  if(utilPct < 45){
+    html += `<div class="opportunity">🏗️ <strong>Significant opportunity.</strong> This site is utilising only <span class="highlight">${utilPct.toFixed(0)}%</span> of estimated plot ratio capacity. `;
+    html += `Approximately <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> of additional ${isResi ? 'residential' : 'commercial'} floor area may be achievable`;
+    if(planning.unitEstimate && isResi) html += ` — roughly <strong>${planning.unitEstimate.total} units</strong>`;
+    html += ` across up to <strong>${potentialFloors} floors</strong>.`;
+    if(planning.pdMassingPotential){
+      html += ` Under Permitted Development, <strong>+${planning.pdMassingPotential.additionalFloors} floors</strong> (${fmt(Math.round(planning.pdMassingPotential.additionalAreaSqm))}sqm) may be achievable without full planning permission.`;
+    }
+    html += `</div>`;
+  } else if(utilPct < 75){
+    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}%</span> utilisation, moderate remaining capacity of <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> ${isResi ? '(~' + (planning.unitEstimate?.total || '?') + ' units)' : 'GFA'}.</p>`;
+  } else {
+    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}%</span> utilisation, this site is near capacity. Limited additional potential of <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> remains.</p>`;
+    if(planning.pdMassingPotential){
+      html += `<p style="margin-top:6px;font-size:13px;color:var(--green)">However, PD upward extension may allow <strong>+${planning.pdMassingPotential.additionalFloors} floors</strong> without planning permission.</p>`;
+    }
   }
 
   return html;
@@ -642,53 +778,27 @@ function generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remai
 
 // --- UTILITIES ---
 function fmt(n){return Math.round(n).toLocaleString('en-GB')}
-
 function extractPostcode(address){
   const match = address.match(/[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}/i);
   return match ? match[0].toUpperCase() : '';
 }
-
-function guessUseClass(osmType){
-  const map = {
-    'residential': 'C3', 'apartments': 'C3', 'house': 'C3', 'detached': 'C3', 'terrace': 'C3',
-    'commercial': 'E', 'retail': 'E', 'office': 'E', 'shop': 'E',
-    'industrial': 'B2', 'warehouse': 'B8',
-    'hotel': 'C1', 'church': 'F1', 'school': 'F1',
-    'yes': 'E', '': 'E'
-  };
-  return map[osmType.toLowerCase()] || 'E';
-}
-
 function calcPolygonArea(nodes){
-  // Haversine-based polygon area from lat/lng nodes
-  const R = 6371000; // Earth radius in meters
+  const R = 6371000;
   let area = 0;
   const n = nodes.length;
   for(let i = 0; i < n; i++){
     const j = (i + 1) % n;
-    const lat1 = nodes[i].lat * Math.PI / 180;
-    const lat2 = nodes[j].lat * Math.PI / 180;
-    const lng1 = nodes[i].lon * Math.PI / 180;
-    const lng2 = nodes[j].lon * Math.PI / 180;
-    area += (lng2 - lng1) * (2 + Math.sin(lat1) + Math.sin(lat2));
+    area += (nodes[j].lon - nodes[i].lon) * Math.PI / 180 * (2 + Math.sin(nodes[i].lat * Math.PI / 180) + Math.sin(nodes[j].lat * Math.PI / 180));
   }
-  area = Math.abs(area * R * R / 2);
-  return area;
+  return Math.abs(area * R * R / 2);
 }
-
 function getCentroid(coords){
-  let sumLng = 0, sumLat = 0;
-  const n = coords.length - 1; // Exclude closing point
-  for(let i = 0; i < n; i++){
-    sumLng += coords[i][0];
-    sumLat += coords[i][1];
-  }
-  return [sumLng/n, sumLat/n];
+  let sLng = 0, sLat = 0;
+  const n = coords.length - 1;
+  for(let i = 0; i < n; i++){ sLng += coords[i][0]; sLat += coords[i][1]; }
+  return [sLng/n, sLat/n];
 }
-
-// Panel toggle
 document.getElementById('toggle').onclick = () => document.getElementById('panel').classList.toggle('collapsed');
-
 init();
 </script>
 </body>
