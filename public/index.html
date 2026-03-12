@@ -176,27 +176,24 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   white-space:nowrap;transform:translate(-50%,0);
   transition:opacity .3s, top .15s ease-out, left .15s ease-out;
 }
-.map-label.height-label{border-color:var(--accent);color:var(--accent2)}
-.map-label.capacity-label{border-color:var(--green);color:var(--green)}
-.map-label.pd-label{border-color:var(--green);color:var(--green);font-size:11px}
-.map-label.existing-label{border-color:var(--text3);color:var(--text3)}
+.map-label.height-label{border-color:var(--green);color:var(--green)}
+.map-label.pd-label{border-color:#5aebc2;color:#5aebc2;font-size:11px}
+.map-label.existing-label{border-color:#d4727a;color:#d4727a}
 .map-label .leader{
   position:absolute;pointer-events:none;
   stroke-width:1;stroke:var(--border);fill:none;
   overflow:visible;
 }
-.map-label.height-label .leader{stroke:var(--accent)}
-.map-label.capacity-label .leader{stroke:var(--green)}
-.map-label.pd-label .leader{stroke:var(--green)}
-.map-label.existing-label .leader{stroke:var(--text3)}
+.map-label.height-label .leader{stroke:var(--green)}
+.map-label.pd-label .leader{stroke:#5aebc2}
+.map-label.existing-label .leader{stroke:#d4727a}
 .map-label .leader-dot{
   position:absolute;width:4px;height:4px;border-radius:50%;
   background:var(--border);
 }
-.map-label.height-label .leader-dot{background:var(--accent)}
-.map-label.capacity-label .leader-dot{background:var(--green)}
-.map-label.pd-label .leader-dot{background:var(--green)}
-.map-label.existing-label .leader-dot{background:var(--text3)}
+.map-label.height-label .leader-dot{background:var(--green)}
+.map-label.pd-label .leader-dot{background:#5aebc2}
+.map-label.existing-label .leader-dot{background:#d4727a}
 
 /* Responsive */
 @media(max-width:768px){
@@ -222,9 +219,9 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   border:1px solid var(--border);color:var(--text3);line-height:1.8;display:none">
   <div><span style="display:inline-block;width:18px;height:0;border-top:1.5px solid #9d8fff;vertical-align:middle;margin-right:6px"></span>Building footprint</div>
   <div><span style="display:inline-block;width:18px;height:0;border-top:1.2px dashed #e8c44a;vertical-align:middle;margin-right:6px"></span>Property line (est.)</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#9a9eb4;opacity:.82;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Existing</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#4d9fff;opacity:.3;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Potential</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#2dd4a0;opacity:.3;vertical-align:middle;margin-right:6px;border-radius:2px"></span>PD (no planning)</div>
+  <div><span style="display:inline-block;width:10px;height:10px;background:#d4727a;opacity:.75;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Existing</div>
+  <div><span style="display:inline-block;width:10px;height:10px;background:#2dd4a0;opacity:.35;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Potential</div>
+  <div><span style="display:inline-block;width:10px;height:10px;background:#5aebc2;opacity:.4;vertical-align:middle;margin-right:6px;border-radius:2px"></span>PD (no planning)</div>
 </div>
 
 <div class="search-wrap">
@@ -487,45 +484,45 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   const typicalH = planning.typicalApprovedHeights || planning.typicalHeight || {low:10,mid:20,high:30};
   const potentialHeightM = typicalH.mid || 20;
 
-  // Current building — solid mid grey, 80% opacity
+  // Current building — light pinky-red, reads clearly against dark map
   map.addSource('current-bldg',{type:'geojson',data:siteGeoJSON});
   map.addLayer({
     id:'current-3d',type:'fill-extrusion',source:'current-bldg',
     paint:{
-      'fill-extrusion-color':'#9a9eb4',
+      'fill-extrusion-color':'#d4727a',
       'fill-extrusion-height':currentHeight,
       'fill-extrusion-base':0,
-      'fill-extrusion-opacity':.82,
+      'fill-extrusion-opacity':.75,
       'fill-extrusion-vertical-gradient':false,
     }
   });
   // Hairline edges on existing
   map.addLayer({
     id:'current-edge',type:'line',source:'current-bldg',
-    paint:{'line-color':'rgba(200,205,230,0.2)','line-width':0.8}
+    paint:{'line-color':'rgba(230,160,165,0.3)','line-width':0.8}
   });
 
-  // Potential additional envelope — bright blue, clearly distinct from grey existing
+  // Potential additional envelope — green, clearly distinct from pink existing
   if(potentialHeightM > currentHeight){
     map.addSource('potential-bldg',{type:'geojson',data:siteGeoJSON});
     map.addLayer({
       id:'potential-3d',type:'fill-extrusion',source:'potential-bldg',
       paint:{
-        'fill-extrusion-color':'#4d9fff',
+        'fill-extrusion-color':'#2dd4a0',
         'fill-extrusion-height':potentialHeightM,
         'fill-extrusion-base':currentHeight,
-        'fill-extrusion-opacity':.22,
+        'fill-extrusion-opacity':.25,
         'fill-extrusion-vertical-gradient':true,
       }
     });
     // Edge on potential
     map.addLayer({
       id:'potential-edge',type:'line',source:'potential-bldg',
-      paint:{'line-color':'rgba(77,159,255,0.35)','line-width':0.7}
+      paint:{'line-color':'rgba(45,212,160,0.35)','line-width':0.7}
     });
   }
 
-  // PD upward extension massing (residential only)
+  // PD upward extension massing — slightly brighter green to distinguish from full potential
   if(planning.pdMassingPotential && planning.pdMassingPotential.additionalHeightM > 0){
     const pdTop = currentHeight + planning.pdMassingPotential.additionalHeightM;
     if(pdTop <= potentialHeightM){
@@ -533,38 +530,32 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
       map.addLayer({
         id:'pd-3d',type:'fill-extrusion',source:'pd-bldg',
         paint:{
-          'fill-extrusion-color':'#2dd4a0',
+          'fill-extrusion-color':'#5aebc2',
           'fill-extrusion-height':pdTop,
           'fill-extrusion-base':currentHeight,
-          'fill-extrusion-opacity':.28,
+          'fill-extrusion-opacity':.35,
           'fill-extrusion-vertical-gradient':true,
         }
       });
       map.addLayer({
         id:'pd-edge',type:'line',source:'pd-bldg',
-        paint:{'line-color':'rgba(45,212,160,0.3)','line-width':0.7}
+        paint:{'line-color':'rgba(90,235,194,0.3)','line-width':0.7}
       });
     }
   }
 
   const centroid = getCentroid(coords);
 
-  // Labels — offset to sides with leaders, anchored to massing tops
-  addLabel(centroid, potentialHeightM, `${Math.round(potentialHeightM)}m potential · ${Math.round(potentialHeightM / (siteInfo.ftf || 3.0))}F`, 'height-label', 'right');
-  addLabel(centroid, currentHeight, `${Math.round(currentHeight)}m existing · ${siteInfo.floors}F`, 'existing-label', 'left');
+  // Labels — heights only, no capacity label (that's in the panel)
+  // Max height label anchored to TOP of potential massing volume
+  const potentialFloorCount = Math.round(potentialHeightM / (siteInfo.ftf || 3.0));
+  addLabel(centroid, potentialHeightM, `${Math.round(potentialHeightM)}m · ${potentialFloorCount}F max`, 'height-label', 'right');
+  // Existing label anchored to top of existing building
+  addLabel(centroid, currentHeight, `${Math.round(currentHeight)}m · ${siteInfo.floors}F existing`, 'existing-label', 'left');
 
   if(planning.pdMassingPotential){
     const pdH = currentHeight + planning.pdMassingPotential.additionalHeightM;
-    addLabel(centroid, pdH, `PD: +${planning.pdMassingPotential.additionalFloors}F (${Math.round(pdH)}m)`, 'pd-label', 'left');
-  }
-
-  if(planning.plotRatio && planning.plotRatio.remainingCapacity > 0){
-    const cap = planning.plotRatio.remainingCapacity;
-    const isResi = siteInfo.isResidential || siteInfo.currentUse === 'E';
-    const capLabel = isResi
-      ? `+${fmt(Math.round(cap))}sqm (${fmt(Math.round(cap * 10.764))}sqft)`
-      : `+${fmt(Math.round(cap))}sqm GFA`;
-    addLabel(centroid, potentialHeightM * 0.6, capLabel, 'capacity-label', 'right');
+    addLabel(centroid, pdH, `PD: +${planning.pdMassingPotential.additionalFloors}F (${Math.round(pdH)}m)`, 'pd-label', 'right');
   }
 
   // Resolve collisions after all labels placed
