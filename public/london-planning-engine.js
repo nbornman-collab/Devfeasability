@@ -464,6 +464,171 @@ function getBuildingTypeFromOSM(osmType) {
   return 'commercial';
 }
 
+// ========== ARCHITECT INSIGHTS ==========
+function getArchitectInsights(planning, siteInfo, extra) {
+  const insights = [];
+  const heightM = siteInfo.heightM || 6;
+  const potentialH = planning.typicalApprovedHeights?.mid || 20;
+  const isResi = siteInfo.isResidential;
+  const floors = siteInfo.floors || 2;
+  const remainingCap = planning.plotRatio?.remainingCapacity || 0;
+  const plotArea = siteInfo.plotArea || 0;
+
+  // CRITICAL: Second staircase (18m+ residential)
+  if (isResi && potentialH >= 18) {
+    insights.push({
+      level: 'critical',
+      tag: 'Fire Safety',
+      text: `At ${potentialH}m, a <strong>second staircase</strong> is required for residential (18m+ threshold). This typically consumes 8-12sqm per floor of lettable area and fundamentally affects core design. Budget for ~10% GIA loss vs single-stair schemes. Post-Grenfell cladding restrictions also apply above 18m.`
+    });
+  }
+
+  // CRITICAL: Conservation area
+  if (extra.inConservationArea) {
+    insights.push({
+      level: 'critical',
+      tag: 'Heritage',
+      text: `Site is within <strong>${extra.conservationName || 'a conservation area'}</strong>. Demolition requires conservation area consent. New development must preserve or enhance character — expect <strong>design scrutiny on materials, proportions, roofline, and fenestration</strong>. Permitted development rights are significantly restricted. Pre-application advice strongly recommended.`
+    });
+  }
+
+  // CRITICAL: Flood zone
+  if (extra.floodZone >= 3) {
+    insights.push({
+      level: 'critical',
+      tag: 'Flood Risk',
+      text: `<strong>Flood Zone 3</strong> — high probability. Sequential Test required (must prove no suitable sites in lower-risk zones). If residential, Exception Test also required. Finished floor levels must be above flood level + freeboard. Ground floor may need to be commercial/parking. Significant impact on unit yield and viability.`
+    });
+  } else if (extra.floodZone === 2) {
+    insights.push({
+      level: 'caution',
+      tag: 'Flood Risk',
+      text: `<strong>Flood Zone 2</strong> — medium probability. Sequential Test may apply. Flood Risk Assessment required with planning application. Ground floor design needs consideration.`
+    });
+  }
+
+  // CAUTION: Listed buildings
+  if (extra.nearbyListed && extra.nearbyListed.length > 0) {
+    const count = extra.nearbyListed.length;
+    insights.push({
+      level: 'caution',
+      tag: 'Heritage',
+      text: `<strong>${count} listed building${count > 1 ? 's' : ''}</strong> within 150m. Any development must demonstrate it does not harm their <strong>setting</strong>. Height, massing, materials, and sight lines from/to listed buildings will be assessed. A Heritage Statement will be required with any application.`
+    });
+  }
+
+  // CAUTION: LVMF
+  if (planning.lvmfExposure === 'high' || planning.lvmfExposure === 'very high') {
+    insights.push({
+      level: 'caution',
+      tag: 'Protected Views',
+      text: `<strong>LVMF exposure: ${planning.lvmfExposure}</strong>. Development may fall within protected vista corridors. Height is likely capped by view geometry. A Townscape Visual Impact Assessment (TVIA) will be required. 3D modelling of the proposal within the view corridor is essential at pre-app stage.`
+    });
+  }
+
+  // OPPORTUNITY: Dual aspect
+  if (isResi && plotArea > 200) {
+    const width = Math.sqrt(plotArea);
+    if (width > 14) {
+      insights.push({
+        level: 'opportunity',
+        tag: 'Design Quality',
+        text: `Site width (~${Math.round(width)}m) supports <strong>dual aspect units</strong> — a strong London Plan preference (Policy D6). Dual aspect maximises daylight, cross-ventilation, and market value. Single aspect north-facing units should be avoided. Consider a central corridor plan with units wrapping the perimeter.`
+      });
+    } else {
+      insights.push({
+        level: 'caution',
+        tag: 'Design Quality',
+        text: `Narrow site (~${Math.round(width)}m) will make <strong>dual aspect units challenging</strong>. Single aspect may be necessary — avoid north-facing. London Plan Policy D6 resists single-aspect units; strong design justification needed.`
+      });
+    }
+  }
+
+  // Accessible units
+  if (isResi && planning.unitEstimate && planning.unitEstimate.total > 0) {
+    const total = planning.unitEstimate.total;
+    const wheelchair = Math.ceil(total * 0.1);
+    insights.push({
+      level: 'caution',
+      tag: 'Accessibility',
+      text: `London Plan requires <strong>90% M4(2) adaptable</strong> and <strong>10% M4(3) wheelchair accessible</strong> (~${wheelchair} units). Wheelchair units need larger footprints (min 15% larger GIA) and level access. Ground/lower floors are preferred. This affects unit mix and overall yield.`
+    });
+  }
+
+  // Overlooking
+  if (isResi) {
+    insights.push({
+      level: 'caution',
+      tag: 'Privacy',
+      text: `Standard <strong>18-21m overlooking distance</strong> window-to-window for habitable rooms. Check proximity to neighbouring residential windows — this often constrains massing on tight urban sites more than planning height policy. Consider oblique window angles or winter gardens on constrained elevations.`
+    });
+  }
+
+  // Energy
+  if (remainingCap > 500) {
+    insights.push({
+      level: 'caution',
+      tag: 'Sustainability',
+      text: `London Plan energy hierarchy applies: <strong>Be Lean → Be Clean → Be Green → Be Seen</strong>. Minimum 35% on-site carbon reduction beyond Part L. Major applications require a Whole Life Carbon assessment. Air source heat pumps now standard. Factor £15-25/sqm additional build cost for energy compliance.`
+    });
+  }
+
+  // Ground floor activation
+  if (!isResi && potentialH > 10) {
+    insights.push({
+      level: 'opportunity',
+      tag: 'Ground Floor',
+      text: `Town centre/high street locations typically require <strong>active ground floor frontage</strong> — retail, F&B, or community use at grade. Minimum 4m floor-to-ceiling at ground. This adds value through rental income diversification and supports planning consent.`
+    });
+  }
+
+  // Servicing & cycle parking
+  if (remainingCap > 300) {
+    const cycleSpaces = isResi ? Math.ceil((planning.unitEstimate?.total || 10) * 1.5) : Math.ceil(remainingCap / 50);
+    insights.push({
+      level: 'caution',
+      tag: 'Servicing',
+      text: `London Plan cycle parking: <strong>~${cycleSpaces} long-stay spaces</strong> required. At 2.5sqm per space (inc. access), that's ~${Math.round(cycleSpaces * 2.5)}sqm. Typically basement-level. Also budget for bin stores (~15sqm per 10 units), delivery/servicing bay, and a Delivery & Servicing Plan.`
+    });
+  }
+
+  // Tall building assessment
+  if (potentialH >= (planning.tallBuildingThreshold || 30)) {
+    insights.push({
+      level: 'caution',
+      tag: 'Tall Building',
+      text: `At ${potentialH}m, this exceeds the <strong>${planning.tallBuildingThreshold || 30}m tall building threshold</strong>. Requires: Townscape Visual Impact Assessment, wind microclimate study (pedestrian comfort), daylight/sunlight assessment (BRE), aviation safeguarding, and a design review panel appearance. Budget £80-150K+ in consultant fees.`
+    });
+  }
+
+  // Right to light
+  if (potentialH > heightM + 6) {
+    insights.push({
+      level: 'caution',
+      tag: 'Right to Light',
+      text: `Significant upward extension (+${Math.round(potentialH - heightM)}m) increases <strong>Right to Light risk</strong> from neighbouring owners. A daylight/sunlight assessment (BRE 209) is essential early in design. Neighbours can seek injunctions or compensation. Factor in potential design compromises (setbacks, reduced height) on boundary-facing elevations.`
+    });
+  }
+
+  // Planning risk signal
+  let riskLevel = 'moderate';
+  let riskFactors = [];
+  if (extra.inConservationArea) { riskLevel = 'high'; riskFactors.push('conservation area'); }
+  if (extra.floodZone >= 3) { riskLevel = 'high'; riskFactors.push('flood zone 3'); }
+  if (extra.nearbyListed?.length >= 3) { riskLevel = 'high'; riskFactors.push('multiple listed buildings'); }
+  if (planning.lvmfExposure === 'very high') { riskLevel = 'high'; riskFactors.push('LVMF views'); }
+  if (potentialH >= (planning.tallBuildingThreshold || 30) * 1.5) { riskFactors.push('significantly exceeds tall building threshold'); }
+  if (riskFactors.length === 0) { riskLevel = 'low'; }
+
+  insights.push({
+    level: riskLevel === 'high' ? 'critical' : (riskLevel === 'low' ? 'opportunity' : 'caution'),
+    tag: 'Planning Risk',
+    text: `<strong>Planning risk: ${riskLevel}</strong>. ${riskFactors.length ? 'Key factors: ' + riskFactors.join(', ') + '.' : 'No major red flags identified.'} ${riskLevel === 'high' ? 'Pre-application advice essential. Consider a Design Review Panel early. Allow 6-12 months for planning.' : riskLevel === 'low' ? 'Straightforward planning context. 3-4 month determination likely for a well-prepared application.' : 'Standard planning process. Pre-app recommended but not critical. 4-6 month timeline.'}`
+  });
+
+  return insights;
+}
+
 // ========== EXPORTS ==========
 if (typeof window !== 'undefined') {
   window.getPlanningContext = getPlanningContext;
@@ -476,4 +641,5 @@ if (typeof window !== 'undefined') {
   window.LVMF_VIEWS = LVMF_VIEWS;
   window.SPACE_STANDARDS = SPACE_STANDARDS;
   window.DENSITY_MATRIX = DENSITY_MATRIX;
+  window.getArchitectInsights = getArchitectInsights;
 }

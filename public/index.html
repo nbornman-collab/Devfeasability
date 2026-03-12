@@ -90,6 +90,40 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .util-bar{height:10px;background:var(--surface);border-radius:5px;overflow:hidden;position:relative}
 .util-bar-fill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.4,0,.2,1)}
 
+/* Power bars */
+.power-bar-wrap{margin-bottom:14px}
+.power-bar-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.power-bar-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text3)}
+.power-bar-values{font:600 13px var(--mono);color:var(--text)}
+.power-bar-values .current{color:var(--text3)}
+.power-bar-values .potential{color:var(--green)}
+.power-bar{height:14px;background:var(--surface);border-radius:7px;overflow:hidden;position:relative;display:flex}
+.power-bar .existing{height:100%;background:#8a8ea0;border-radius:7px 0 0 7px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.power-bar .added{height:100%;background:var(--accent);opacity:.6;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.power-bar .pd-added{height:100%;background:var(--green);opacity:.5;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.power-bar-legend{display:flex;gap:14px;margin-top:6px;font-size:10px;color:var(--text3)}
+.power-bar-legend span::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.power-bar-legend .leg-existing::before{background:#8a8ea0}
+.power-bar-legend .leg-potential::before{background:var(--accent)}
+.power-bar-legend .leg-pd::before{background:var(--green)}
+
+/* Insight cards */
+.insight{margin-bottom:10px;padding:12px 14px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--border);font-size:12px;line-height:1.6;color:var(--text2)}
+.insight.critical{border-left-color:var(--red)}
+.insight.opportunity{border-left-color:var(--green)}
+.insight.caution{border-left-color:var(--amber)}
+.insight strong{color:var(--text);font-weight:600}
+.insight .insight-tag{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:3px;margin-right:6px}
+.insight.critical .insight-tag{background:rgba(239,100,97,.15);color:var(--red)}
+.insight.opportunity .insight-tag{background:rgba(45,212,160,.12);color:var(--green)}
+.insight.caution .insight-tag{background:rgba(245,183,49,.12);color:var(--amber)}
+
+/* Prominent constraint flags */
+.constraint-flag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;margin:3px 4px 3px 0}
+.constraint-flag.red{background:rgba(239,100,97,.12);color:var(--red);border:1px solid rgba(239,100,97,.2)}
+.constraint-flag.amber{background:rgba(245,183,49,.1);color:var(--amber);border:1px solid rgba(245,183,49,.2)}
+.constraint-flag.green{background:rgba(45,212,160,.1);color:var(--green);border:1px solid rgba(45,212,160,.2)}
+
 /* Narrative */
 .narrative{font-size:14px;line-height:1.75;color:var(--text2)}
 .narrative strong{color:var(--text);font-weight:600}
@@ -508,6 +542,27 @@ function positionLabel(div){
 function updateLabelPositions(){ currentLabels.forEach(positionLabel); }
 function clearLabels(){ currentLabels.forEach(div => div.remove()); currentLabels = []; }
 
+// --- POWER BARS ---
+function renderPowerBar(title, current, potential, pdAdded, unit, showLegend){
+  if(!potential || potential <= 0) return '';
+  const total = potential;
+  const existPct = Math.min(100, (current / total) * 100);
+  const addedPct = Math.min(100 - existPct, ((potential - current - (pdAdded||0)) / total) * 100);
+  const pdPct = pdAdded ? Math.min(100 - existPct, (pdAdded / total) * 100) : 0;
+  return `<div class="power-bar-wrap">
+    <div class="power-bar-header">
+      <span class="power-bar-title">${title}</span>
+      <span class="power-bar-values"><span class="current">${fmt(Math.round(current))}${unit}</span> → <span class="potential">${fmt(Math.round(potential))}${unit}</span></span>
+    </div>
+    <div class="power-bar">
+      <div class="existing" style="width:${existPct}%"></div>
+      ${pdPct > 0 ? `<div class="pd-added" style="width:${pdPct}%"></div>` : ''}
+      <div class="added" style="width:${Math.max(0,addedPct)}%"></div>
+    </div>
+    ${showLegend ? `<div class="power-bar-legend"><span class="leg-existing">Existing</span>${pdPct > 0 ? '<span class="leg-pd">PD Extension</span>' : ''}<span class="leg-potential">Planning Potential</span></div>` : ''}
+  </div>`;
+}
+
 // --- PANEL ---
 function renderPanel(planning, address, boroughData, buildingData, siteInfo){
   const borough = planning.borough || boroughData.borough || 'Unknown';
@@ -668,51 +723,117 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
     notesHtml = planning.notes.map(n => `<div class="note-item">${n}</div>`).join('');
   }
 
+  // POWER BARS
+  const pdArea = planning.pdMassingPotential?.additionalAreaSqm || 0;
+  const pdFloors = planning.pdMassingPotential?.additionalFloors || 0;
+  const pdHeightM = planning.pdMassingPotential?.additionalHeightM || 0;
+  const potentialArea = pr.potentialFloorArea || existingFloorArea;
+  const potentialHeightFull = typicalH.mid || 20;
+
+  const powerBarsHtml = `
+    ${renderPowerBar('Floor Area', existingFloorArea, potentialArea, pdArea, 'sqm', true)}
+    ${renderPowerBar('Height', heightM, potentialHeightFull, pdHeightM, 'm', false)}
+    ${renderPowerBar('Floors', floors, potentialFloors, pdFloors, 'F', false)}
+  `;
+
+  // ARCHITECT INSIGHTS
+  const insights = getArchitectInsights(planning, siteInfo, extra);
+  let insightsHtml = insights.map(i =>
+    `<div class="insight ${i.level}"><span class="insight-tag">${i.tag}</span>${i.text}</div>`
+  ).join('');
+
+  // CONSTRAINT FLAGS (prominent, not buried)
+  let flagsHtml = '';
+  if(inCA) flagsHtml += `<span class="constraint-flag red">🏛 Conservation Area</span>`;
+  if(floodZone >= 3) flagsHtml += `<span class="constraint-flag red">🌊 Flood Zone ${floodZone}</span>`;
+  else if(floodZone === 2) flagsHtml += `<span class="constraint-flag amber">🌊 Flood Zone 2</span>`;
+  else flagsHtml += `<span class="constraint-flag green">✓ Flood Zone 1</span>`;
+  if(nearbyListed.length > 0) flagsHtml += `<span class="constraint-flag amber">🏛 ${nearbyListed.length} Listed Building${nearbyListed.length>1?'s':''}</span>`;
+  if(planning.article4Active) flagsHtml += `<span class="constraint-flag red">⚠ Article 4</span>`;
+  if(planning.lvmfExposure === 'high' || planning.lvmfExposure === 'very high') flagsHtml += `<span class="constraint-flag amber">👁 LVMF Views</span>`;
+  flagsHtml += `<span class="constraint-flag ${ptal >= 4 ? 'green' : ptal >= 2 ? 'amber' : 'red'}">🚇 PTAL ${ptal !== null ? ptal : '?'}</span>`;
+
   document.getElementById('panel-body').innerHTML = `
+    <!-- 1. NARRATIVE -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Site Opportunity</div>
       <div class="narrative">${narrative}</div>
     </div>
+
+    <!-- 2. POWER BARS — the opportunity at a glance -->
+    <div class="section">
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>Capacity</div>
+      ${powerBarsHtml}
+      <div class="stat-grid" style="margin-top:14px">
+        <div class="stat full highlight-green"><div class="stat-label">Additional ${isResi ? 'Residential' : 'GFA'} Capacity</div><div class="stat-value green">${fmt(Math.round(remainingCapacity))}sqm · ${fmt(Math.round(remainingCapacitySqft))}sqft</div></div>
+        ${isResi && unitEstimate ? `
+          <div class="stat"><div class="stat-label">Est. Units</div><div class="stat-value">${unitEstimate.total}</div><div class="stat-sub">${unitEstimate.byType ? Object.entries(unitEstimate.byType).map(([k,v])=>`${v}× ${k}`).join(', ') : ''}</div></div>
+          <div class="stat"><div class="stat-label">Affordable (${Math.round((planning.affordableThreshold||0.35)*100)}%)</div><div class="stat-value">${affordableUnits}</div><div class="stat-sub">${planning.affordableTarget || ''}</div></div>
+        ` : `
+          <div class="stat"><div class="stat-label">Use Class</div><div class="stat-value">${planning.currentUse}</div><div class="stat-sub">${planning.useClassInfo?.name || ''}</div></div>
+          <div class="stat"><div class="stat-label">Potential Height</div><div class="stat-value">${typicalH.mid}m</div><div class="stat-sub">~${potentialFloors}F at ${ftf}m f/f</div></div>
+        `}
+      </div>
+      ${planning.pdMassingPotential ? `<div class="stat-grid" style="margin-top:10px"><div class="stat full" style="border-color:var(--green)"><div class="stat-label">PD Massing (No Planning Required)</div><div class="stat-value green">+${planning.pdMassingPotential.additionalFloors} floors · +${fmt(Math.round(planning.pdMassingPotential.additionalAreaSqm))}sqm</div><div class="stat-sub">${planning.pdMassingPotential.notes}</div></div></div>` : ''}
+    </div>
+
+    <!-- 3. CONSTRAINT FLAGS — prominent -->
+    <div class="section">
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Constraints</div>
+      <div style="margin-bottom:14px;line-height:2.2">${flagsHtml}</div>
+      ${inCA ? `<div style="font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.5">📍 <strong>${caName || 'Conservation Area'}</strong> — demolition requires consent, design scrutiny heightened, PDR restricted</div>` : ''}
+      ${nearbyListed.length > 0 ? `<div style="font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.5">🏛 Nearby: ${nearbyListed.slice(0,3).map(l=>`<strong>${l.name}</strong>${l.grade?' ('+l.grade+')':''}`).join(', ')}${nearbyListed.length > 3 ? ` +${nearbyListed.length-3} more` : ''}</div>` : ''}
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-label">Flood Zone</div><div class="stat-value ${floodZone >= 3 ? 'red' : floodZone === 2 ? 'amber' : 'green'}">${floodZone}</div><div class="stat-sub">${floodZone >= 3 ? 'Sequential + Exception Test' : floodZone === 2 ? 'Sequential Test may apply' : 'Low risk'}</div></div>
+        <div class="stat"><div class="stat-label">PTAL</div><div class="stat-value ${ptal >= 4 ? 'green' : ptal >= 2 ? '' : 'amber'}">${ptal !== null ? ptal : '?'}</div><div class="stat-sub">${ptal >= 5 ? 'Excellent access' : ptal >= 3 ? 'Good access' : ptal !== null ? 'Moderate access' : 'Unknown'}</div></div>
+        ${planning.tallBuildingThreshold ? `<div class="stat"><div class="stat-label">Tall Building Threshold</div><div class="stat-value">${planning.tallBuildingThreshold}m</div><div class="stat-sub">${potentialHeightFull >= planning.tallBuildingThreshold ? 'Triggers assessment' : 'Below threshold'}</div></div>` : ''}
+        ${planning.lvmfExposure && planning.lvmfExposure !== 'none' ? `<div class="stat"><div class="stat-label">LVMF Exposure</div><div class="stat-value amber" style="text-transform:capitalize">${planning.lvmfExposure}</div></div>` : ''}
+      </div>
+    </div>
+
+    <!-- 4. EXISTING BUILDING -->
+    <div class="section">
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"/></svg>Existing Building</div>
+      <div class="stat-grid">
+        <div class="stat highlight"><div class="stat-label">Plot Area</div><div class="stat-value">${fmt(Math.round(plotArea))}sqm</div><div class="stat-sub">${fmt(Math.round(plotAreaSqft))}sqft</div></div>
+        <div class="stat highlight"><div class="stat-label">Est. Floor Area (GIA)</div><div class="stat-value">${fmt(Math.round(existingFloorArea))}sqm</div><div class="stat-sub">${fmt(Math.round(existingFloorAreaSqft))}sqft</div></div>
+        <div class="stat"><div class="stat-label">Floors</div><div class="stat-value">${floors}</div></div>
+        <div class="stat"><div class="stat-label">Height</div><div class="stat-value">${Math.round(heightM)}m</div><div class="stat-sub">${Math.round(heightM * 3.281)}ft</div></div>
+        ${buildingData?.startDate ? `<div class="stat"><div class="stat-label">Year Built</div><div class="stat-value">${buildingData.startDate}</div></div>` : ''}
+        ${buildingData?.use ? `<div class="stat"><div class="stat-label">Building Type</div><div class="stat-value" style="font-size:13px;text-transform:capitalize">${buildingData.use.replace(/_/g,' ')}</div></div>` : ''}
+      </div>
+    </div>
+
+    <!-- 5. PLANNING CONTEXT -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Planning Context</div>
       ${planning.heightPolicy ? `<div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:14px">${planning.heightPolicy}</div>` : ''}
       <div class="stat-grid">
         <div class="stat"><div class="stat-label">Borough</div><div class="stat-value accent" style="font-size:14px">${shortBorough}</div></div>
         <div class="stat"><div class="stat-label">Use Class</div><div class="stat-value">${planning.currentUse || 'E'}</div><div class="stat-sub">${planning.useClassInfo?.name || ''}</div></div>
-        <div class="stat"><div class="stat-label">Plot Ratio</div><div class="stat-value">${pr.existing ? pr.existing.toFixed(1) : '—'}</div><div class="stat-sub">Typical: ${pr.potential ? pr.potential.toFixed(1) : '—'}</div></div>
-        <div class="stat"><div class="stat-label">Density Guide</div><div class="stat-value" style="font-size:13px">${planning.density ? planning.density.minUnits + '–' + planning.density.maxUnits : '—'}</div><div class="stat-sub">u/ha · ${planning.setting || ''} · PTAL ${extra.ptalBand || '?'}</div></div>
+        <div class="stat"><div class="stat-label">Plot Ratio</div><div class="stat-value">${pr.existing ? pr.existing.toFixed(1) : '—'} → ${pr.potential ? pr.potential.toFixed(1) : '—'}</div></div>
+        <div class="stat"><div class="stat-label">Density Guide</div><div class="stat-value" style="font-size:13px">${planning.density ? planning.density.minUnits + '–' + planning.density.maxUnits + ' u/ha' : '—'}</div><div class="stat-sub">${planning.setting || ''} · PTAL ${extra.ptalBand || '?'}</div></div>
       </div>
-      <div class="util-bar-wrap">
-        <div class="util-bar-label"><span style="color:var(--text3)">Plot Ratio Utilisation</span><span style="font-family:var(--mono);font-weight:600;color:${barColor}">${utilPct.toFixed(0)}%</span></div>
-        <div class="util-bar"><div class="util-bar-fill" style="width:${Math.min(utilPct,100)}%;background:${barColor}"></div></div>
-      </div>
-      ${policiesHtml}
+      ${policiesHtml ? `<div style="margin-top:12px">${policiesHtml}</div>` : ''}
       ${oaHtml}
     </div>
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Constraints</div>
-      <div class="stat-grid">${constraintsHtml}</div>
-    </div>
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"/></svg>Existing Building</div>
-      <div class="stat-grid">
-        <div class="stat highlight"><div class="stat-label">Plot Area</div><div class="stat-value">${fmt(Math.round(plotArea))}sqm</div><div class="stat-sub">${fmt(Math.round(plotAreaSqft))}sqft</div></div>
-        <div class="stat highlight"><div class="stat-label">Est. Floor Area</div><div class="stat-value">${fmt(Math.round(existingFloorArea))}sqm</div><div class="stat-sub">${fmt(Math.round(existingFloorAreaSqft))}sqft</div></div>
-        <div class="stat"><div class="stat-label">Floors</div><div class="stat-value">${floors}</div><div class="stat-sub">${ftf}m floor-to-floor</div></div>
-        <div class="stat"><div class="stat-label">Height</div><div class="stat-value">${Math.round(heightM)}m</div><div class="stat-sub">${Math.round(heightM * 3.281)}ft</div></div>
-        ${buildingData?.startDate ? `<div class="stat"><div class="stat-label">Year Built</div><div class="stat-value">${buildingData.startDate}</div></div>` : ''}
-        ${buildingData?.use ? `<div class="stat"><div class="stat-label">Building Type</div><div class="stat-value" style="font-size:13px;text-transform:capitalize">${buildingData.use.replace(/_/g,' ')}</div></div>` : ''}
-      </div>
-    </div>
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>Development Potential</div>
-      <div class="stat-grid">${devPotentialHtml}</div>
-    </div>
+
+    <!-- 6. PERMITTED DEVELOPMENT -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Permitted Development</div>
       ${pdrHtml}
     </div>
+
+    <!-- 7. TRANSPORT -->
     ${transportHtml ? `<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76a6 6 0 010 8.49m-8.48-.01a6 6 0 010-8.49"/></svg>Transport</div>${transportHtml}</div>` : ''}
+
+    <!-- 8. ARCHITECT INSIGHTS -->
+    <div class="section">
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Design & Planning Intelligence</div>
+      ${insightsHtml}
+    </div>
+
+    <!-- 9. FINANCIALS -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financial Estimates (${isResi ? 'Residential' : 'Commercial'})</div>
       <div class="fin-row"><span class="label">Est. Land Value</span><span class="value">£${fmt(Math.round(landCost))}</span></div>
@@ -720,11 +841,13 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
       <div class="fin-row"><span class="label">Construction (high)</span><span class="value">£${fmt(Math.round(constructionCostHigh))}</span></div>
       <div class="fin-row"><span class="label">Cost/sqft</span><span class="value">£${fin.costLow}–£${fin.costHigh}</span></div>
       ${cilEstimate > 0 ? `<div class="fin-row"><span class="label">CIL Estimate</span><span class="value">£${fmt(Math.round(cilEstimate))}</span></div>` : ''}
-      ${affordableUnits > 0 ? `<div class="fin-row"><span class="label">Affordable Housing (${affordableUnits} units)</span><span class="value">Included in unit count</span></div>` : ''}
+      ${affordableUnits > 0 ? `<div class="fin-row"><span class="label">Affordable (${affordableUnits} units)</span><span class="value">Built into scheme</span></div>` : ''}
       <div class="fin-row"><span class="label">Annual ${isResi ? 'Rental' : 'Lease'} Revenue</span><span class="value">£${fmt(Math.round(annualRent))}/yr</span></div>
       <div class="fin-row total"><span class="label">${isResi ? 'Sale Revenue' : 'Capital Value'} Potential</span><span class="value">£${fmt(Math.round(saleRevenue))}</span></div>
     </div>
-    ${notesHtml ? `<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Planning Notes</div>${notesHtml}</div>` : ''}
+
+    <!-- 10. PLANNING NOTES -->
+    ${notesHtml ? `<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Borough Notes</div>${notesHtml}</div>` : ''}
   `;
 }
 
