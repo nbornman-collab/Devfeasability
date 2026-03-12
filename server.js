@@ -219,8 +219,36 @@ app.get('/api/borough', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.get('/api/version', (req, res) => {
-  res.json({ version: '4.1.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
+// EPC data from Open Data Communities
+app.get('/api/epc', async (req, res) => {
+  try {
+    const { postcode, address } = req.query;
+    if (!postcode && !address) return res.json({ certificates: [] });
+    // EPC API uses basic auth with empty username + API key, but open data endpoint is free
+    const params = new URLSearchParams({ size: '5' });
+    if (postcode) params.set('postcode', postcode.trim());
+    if (address) params.set('address', address.trim());
+    const url = `https://epc.opendatacommunities.org/api/v1/domestic/search?${params}`;
+    const r = await fetch(url, {
+      headers: { 'Accept': 'application/json', 'Authorization': 'Basic ' + Buffer.from('ace.archdev@gmail.com:').toString('base64') }
+    });
+    if (!r.ok) {
+      // Try non-domestic (commercial)
+      const url2 = `https://epc.opendatacommunities.org/api/v1/non-domestic/search?${params}`;
+      const r2 = await fetch(url2, {
+        headers: { 'Accept': 'application/json', 'Authorization': 'Basic ' + Buffer.from('ace.archdev@gmail.com:').toString('base64') }
+      });
+      if (!r2.ok) return res.json({ certificates: [] });
+      const data2 = await r2.json();
+      return res.json({ certificates: data2.rows || [], type: 'non-domestic' });
+    }
+    const data = await r.json();
+    res.json({ certificates: data.rows || [], type: 'domestic' });
+  } catch (e) { res.status(500).json({ error: e.message, certificates: [] }); }
 });
 
-app.listen(PORT, () => console.log(`DevFeasibility v4.1 (London) running on port ${PORT}`));
+app.get('/api/version', (req, res) => {
+  res.json({ version: '4.3.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
+});
+
+app.listen(PORT, () => console.log(`DevFeasibility v4.3 (London) running on port ${PORT}`));
