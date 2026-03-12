@@ -439,12 +439,14 @@ async function selectResult(feature){
 // --- 3D RENDERING ---
 function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   // Clean up all layers including dynamic floor lines
-  const layersToRemove = ['site-fill','site-line','prop-line','current-3d','current-edge','potential-3d','potential-edge','pd-3d','pd-edge'];
-  for(let f = 0; f < 30; f++) layersToRemove.push('floor-line-'+f);
+  const layersToRemove = ['site-line','prop-line','current-3d','current-edge','potential-3d','potential-edge','pd-3d','pd-edge'];
   layersToRemove.forEach(id=>{ if(map.getLayer(id)) map.removeLayer(id); });
   const sourcesToRemove = ['site','prop-boundary','current-bldg','potential-bldg','pd-bldg'];
-  for(let f = 0; f < 30; f++) sourcesToRemove.push('floor-line-'+f);
   sourcesToRemove.forEach(id=>{ if(map.getSource(id)) map.removeSource(id); });
+  // Reset context building opacity
+  if(map.getLayer('3d-buildings')){
+    map.setPaintProperty('3d-buildings','fill-extrusion-opacity',0.35);
+  }
   clearLabels();
 
   if(!buildingData || !buildingData.wayNodes || buildingData.wayNodes.length < 3) return;
@@ -462,13 +464,12 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   const propCoords = bufferPolygon(coords, 0.000018); // ~2m at London lat
   const propGeoJSON = { type:'Feature', geometry:{type:'Polygon',coordinates:[propCoords]}, properties:{} };
 
-  // Property boundary — dashed, wider area
+  // Property boundary — dashed line only, no fill
   map.addSource('prop-boundary',{type:'geojson',data:propGeoJSON});
   map.addLayer({id:'prop-line',type:'line',source:'prop-boundary',paint:{'line-color':'#e8c44a','line-width':1.2,'line-dasharray':[5,3],'line-opacity':0.6}});
 
-  // Building footprint — solid hairline
+  // Building footprint — solid line only, no fill (avoids z-fighting)
   map.addSource('site',{type:'geojson',data:siteGeoJSON});
-  map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#7c6aef','fill-opacity':.04}});
   map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#9d8fff','line-width':1.5,'line-opacity':0.9}});
 
   const currentHeight = siteInfo.heightM || 6.4;
@@ -476,25 +477,29 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   const typicalH = planning.typicalApprovedHeights || planning.typicalHeight || {low:10,mid:20,high:30};
   const potentialHeightM = typicalH.mid || 20;
 
-  // Current building — bright coral, high visibility against dark map
-  map.addSource('current-bldg',{type:'geojson',data:siteGeoJSON});
+  // Inset the existing building polygon slightly to avoid z-fighting with potential above
+  const existingCoords = bufferPolygon(coords, -0.000005); // ~0.5m inset
+  const existingGeoJSON = { type:'Feature', geometry:{type:'Polygon',coordinates:[existingCoords]}, properties:{} };
+
+  // Current building — bright coral, high visibility, separate geometry from potential
+  map.addSource('current-bldg',{type:'geojson',data:existingGeoJSON});
   map.addLayer({
     id:'current-3d',type:'fill-extrusion',source:'current-bldg',
     paint:{
       'fill-extrusion-color':'#ef8b6e',
       'fill-extrusion-height':currentHeight,
       'fill-extrusion-base':0,
-      'fill-extrusion-opacity':.88,
+      'fill-extrusion-opacity':.9,
       'fill-extrusion-vertical-gradient':false,
     }
   });
   // Strong edge on existing
   map.addLayer({
-    id:'current-edge',type:'line',source:'current-bldg',
+    id:'current-edge',type:'line',source:'site',
     paint:{'line-color':'#ef8b6e','line-width':2.5,'line-opacity':0.9}
   });
 
-  // Potential additional envelope — green
+  // Potential additional envelope — green, uses original (outer) polygon
   if(potentialHeightM > currentHeight){
     map.addSource('potential-bldg',{type:'geojson',data:siteGeoJSON});
     map.addLayer({
@@ -503,34 +508,15 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
         'fill-extrusion-color':'#2dd4a0',
         'fill-extrusion-height':potentialHeightM,
         'fill-extrusion-base':currentHeight,
-        'fill-extrusion-opacity':.28,
+        'fill-extrusion-opacity':.3,
         'fill-extrusion-vertical-gradient':false,
       }
     });
     // Strong edge on potential
     map.addLayer({
       id:'potential-edge',type:'line',source:'potential-bldg',
-      paint:{'line-color':'#2dd4a0','line-width':2,'line-opacity':0.7}
+      paint:{'line-color':'#2dd4a0','line-width':2,'line-opacity':0.8}
     });
-
-    // Floor lines in the green zone — one per new floor
-    const ftfVal = siteInfo.ftf || 3.0;
-    const newFloors = Math.floor((potentialHeightM - currentHeight) / ftfVal);
-    for(let f = 0; f < newFloors; f++){
-      const floorH = currentHeight + (f * ftfVal);
-      const floorTop = floorH + 0.15; // thin slab
-      const floorId = 'floor-line-' + f;
-      map.addSource(floorId, {type:'geojson', data:siteGeoJSON});
-      map.addLayer({
-        id: floorId, type:'fill-extrusion', source: floorId,
-        paint:{
-          'fill-extrusion-color':'#2dd4a0',
-          'fill-extrusion-height': floorTop,
-          'fill-extrusion-base': floorH,
-          'fill-extrusion-opacity': 0.6,
-        }
-      });
-    }
   }
 
   // PD upward extension massing
@@ -556,6 +542,20 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   }
 
   const centroid = getCentroid(coords);
+
+  // Hide context buildings that overlap the site (within ~40m)
+  // Create a masking volume that renders on top of context buildings
+  if(map.getLayer('3d-buildings')){
+    // Use Mapbox filter to exclude buildings near the site
+    // Since we can't filter by distance, we lower context opacity near site
+    map.setPaintProperty('3d-buildings','fill-extrusion-opacity',
+      ['interpolate',['linear'],['zoom'],
+        14, 0.35,
+        16, 0.2,  // more transparent when zoomed in to site
+        18, 0.12
+      ]
+    );
+  }
 
   // Labels — heights only, no capacity label (that's in the panel)
   // Max height label anchored to TOP of potential massing volume
