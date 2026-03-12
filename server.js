@@ -175,14 +175,36 @@ app.get('/api/ptal', async (req, res) => {
 app.get('/api/planning-apps', async (req, res) => {
   try {
     const { lat, lng } = req.query;
-    const radius = req.query.radius || 200;
-    // Planning London Datahub API
-    const url = `https://planningdata.london.gov.uk/api/v1/planning_applications?lat=${lat}&lng=${lng}&radius=${radius}&limit=20&order=-decision_date`;
+    const radius = req.query.krad || 0.3; // km radius, default 300m
+    // PlanIt API — free, spatial search, real planning data
+    const url = `https://www.planit.org.uk/api/applics/json?lat=${lat}&lng=${lng}&krad=${radius}&limit=25&sort=-decided_date`;
     const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
     if (r.ok) {
-      res.json(await r.json());
+      const data = await r.json();
+      // Parse and clean up for front-end
+      const apps = (data.records || []).map(a => ({
+        address: a.address || '',
+        description: a.description || '',
+        reference: a.uid || a.name || '',
+        status: a.app_state || '',
+        type: a.app_type || a.other_fields?.application_type || '',
+        size: a.app_size || '',
+        decidedDate: a.decided_date || '',
+        startDate: a.start_date || '',
+        decision: a.other_fields?.decision || a.app_state || '',
+        decidedBy: a.other_fields?.decided_by || '',
+        ward: a.other_fields?.ward_name || '',
+        borough: a.area_name || '',
+        distance: a.distance ? Math.round(a.distance * 1000) : null, // convert km to m
+        url: a.url || a.link || '',
+        docsUrl: a.other_fields?.docs_url || '',
+        lat: a.location_y,
+        lng: a.location_x,
+        nComments: a.other_fields?.n_comments || 0,
+        nDocs: a.other_fields?.n_documents || 0,
+      }));
+      res.json({ results: apps, total: data.records?.length || 0, source: 'planit' });
     } else {
-      // Return empty if API unavailable
       res.json({ results: [], source: 'unavailable' });
     }
   } catch (e) { res.status(500).json({ error: e.message, results: [] }); }

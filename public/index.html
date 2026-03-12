@@ -420,7 +420,16 @@ async function selectResult(feature){
 
   renderPanel(planning, address, boroughData, buildingData, siteInfo);
 
-  // Async EPC fetch (non-blocking — updates panel when ready)
+  // Async data fetches (non-blocking — update panel when ready)
+  // Planning precedent
+  fetch(`/api/planning-apps?lat=${lat}&lng=${lng}&krad=0.3`).then(r=>r.json()).then(appData => {
+    if(appData.results && appData.results.length > 0){
+      siteExtraData.planningApps = appData.results;
+      renderPrecedentSection(appData.results, siteInfo, planning);
+    }
+  }).catch(()=>{});
+
+  // EPC
   if(postcode){
     fetch(`/api/epc?postcode=${encodeURIComponent(postcode)}`).then(r=>r.json()).then(epcData => {
       if(epcData.certificates && epcData.certificates.length > 0){
@@ -1028,17 +1037,33 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
       ${insightsHtml}
     </div>
 
-    <!-- 9. FINANCIALS -->
+    <!-- 9. DEVELOPER PRO FORMA -->
     <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Financial Estimates (${isResi ? 'Residential' : 'Commercial'})</div>
-      <div class="fin-row"><span class="label">Est. Land Value</span><span class="value">£${fmt(Math.round(landCost))}</span></div>
-      <div class="fin-row"><span class="label">Construction (low)</span><span class="value">£${fmt(Math.round(constructionCostLow))}</span></div>
-      <div class="fin-row"><span class="label">Construction (high)</span><span class="value">£${fmt(Math.round(constructionCostHigh))}</span></div>
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Developer Pro Forma (${isResi ? 'Residential' : 'Commercial'})</div>
+
+      <div class="stat-grid" style="margin-bottom:14px">
+        <div class="stat highlight-green"><div class="stat-label">${isResi ? 'GDV (Sales)' : 'Capital Value'}</div><div class="stat-value green">£${fmt(Math.round(saleRevenue))}</div><div class="stat-sub">at £${finRates.sale}/sqft</div></div>
+        <div class="stat"><div class="stat-label">Total Dev Cost</div><div class="stat-value">£${fmt(Math.round(constructionCostHigh + landCost + cilEstimate))}</div><div class="stat-sub">land + build + CIL</div></div>
+      </div>
+
+      <div class="fin-row"><span class="label">Land Value (current use)</span><span class="value">£${fmt(Math.round(landCost))}</span></div>
+      <div class="fin-row"><span class="label">Construction</span><span class="value">£${fmt(Math.round(constructionCostLow))}–£${fmt(Math.round(constructionCostHigh))}</span></div>
       <div class="fin-row"><span class="label">Cost/sqft</span><span class="value">£${fin.costLow}–£${fin.costHigh}</span></div>
       ${cilEstimate > 0 ? `<div class="fin-row"><span class="label">CIL Estimate</span><span class="value">£${fmt(Math.round(cilEstimate))}</span></div>` : ''}
-      ${affordableUnits > 0 ? `<div class="fin-row"><span class="label">Affordable (${affordableUnits} units)</span><span class="value">Built into scheme</span></div>` : ''}
-      <div class="fin-row"><span class="label">Annual ${isResi ? 'Rental' : 'Lease'} Revenue</span><span class="value">£${fmt(Math.round(annualRent))}/yr</span></div>
-      <div class="fin-row total"><span class="label">${isResi ? 'Sale Revenue' : 'Capital Value'} Potential</span><span class="value">£${fmt(Math.round(saleRevenue))}</span></div>
+      ${affordableUnits > 0 ? `<div class="fin-row"><span class="label">Affordable (${affordableUnits} units @ 35%)</span><span class="value">Built in</span></div>` : ''}
+      <div class="fin-row"><span class="label">Annual ${isResi ? 'Rental' : 'Lease'} Income</span><span class="value">£${fmt(Math.round(annualRent))}/yr</span></div>
+      <div class="fin-row"><span class="label">${isResi ? 'Rental Yield' : 'Yield'} (on GDV)</span><span class="value">${saleRevenue > 0 ? (annualRent / saleRevenue * 100).toFixed(1) : '?'}%</span></div>
+      <div class="fin-row total"><span class="label">Development Margin</span><span class="value" style="color:${(saleRevenue - constructionCostHigh - landCost - cilEstimate) > 0 ? 'var(--green)' : 'var(--red)'}">£${fmt(Math.round(saleRevenue - constructionCostHigh - landCost - cilEstimate))}</span></div>
+      <div class="fin-row"><span class="label">Margin on GDV</span><span class="value">${saleRevenue > 0 ? ((saleRevenue - constructionCostHigh - landCost - cilEstimate) / saleRevenue * 100).toFixed(1) : '?'}%</span></div>
+
+      <div class="insight ${(saleRevenue - constructionCostHigh - landCost - cilEstimate) / saleRevenue > 0.2 ? 'opportunity' : (saleRevenue - constructionCostHigh - landCost - cilEstimate) / saleRevenue > 0.1 ? 'caution' : 'critical'}" style="margin-top:12px">
+        <span class="insight-tag">Viability</span>
+        ${(saleRevenue - constructionCostHigh - landCost - cilEstimate) / saleRevenue > 0.2
+          ? `<strong>Strong viability signal.</strong> ${((saleRevenue - constructionCostHigh - landCost - cilEstimate) / saleRevenue * 100).toFixed(0)}% margin on GDV exceeds the typical 15-20% developer hurdle rate. Scheme is likely financeable.`
+          : (saleRevenue - constructionCostHigh - landCost - cilEstimate) / saleRevenue > 0.1
+          ? `<strong>Marginal viability.</strong> ${((saleRevenue - constructionCostHigh - landCost - cilEstimate) / saleRevenue * 100).toFixed(0)}% margin on GDV is tight. Sensitive to construction cost overruns and sales rate. Affordable housing negotiation may be needed.`
+          : `<strong>Viability challenge.</strong> ${((saleRevenue - constructionCostHigh - landCost - cilEstimate) / saleRevenue * 100).toFixed(0)}% margin below typical hurdle rate. May need: reduced affordable housing, grant funding, or higher-density scheme to stack up.`}
+      </div>
     </div>
 
     <!-- 10. PLANNING NOTES -->
@@ -1098,6 +1123,93 @@ function generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remai
 function fmt(n){return Math.round(n).toLocaleString('en-GB')}
 
 // --- EPC / ADAPTIVE REUSE SECTION ---
+// --- PLANNING PRECEDENT SECTION ---
+function renderPrecedentSection(apps, siteInfo, planning){
+  if(!apps || !apps.length) return;
+
+  // Filter to meaningful applications (exclude discharge of conditions, minor amendments)
+  const meaningful = apps.filter(a => {
+    const desc = (a.description || '').toLowerCase();
+    const type = (a.type || '').toLowerCase();
+    return !type.includes('discharge') && !type.includes('condition') &&
+           !type.includes('amendment') && !type.includes('non-material') &&
+           !desc.includes('discharge of condition') && !desc.includes('variation of condition');
+  });
+
+  // Categorise
+  const approved = meaningful.filter(a => ['Permitted','Approved','Grant'].some(s => (a.status||'').includes(s) || (a.decision||'').includes(s)));
+  const refused = meaningful.filter(a => ['Refused','Refuse'].some(s => (a.status||'').includes(s) || (a.decision||'').includes(s)));
+  const major = meaningful.filter(a => a.size === 'Large' || a.size === 'Major');
+
+  // Stats
+  const totalMeaningful = meaningful.length;
+  const approvalRate = totalMeaningful > 0 ? Math.round((approved.length / totalMeaningful) * 100) : null;
+
+  // Extract height/floor info from descriptions where possible
+  const heightMentions = [];
+  meaningful.forEach(a => {
+    const desc = (a.description || '');
+    const storeyMatch = desc.match(/(\d+)[\s-]*(?:storey|story|floor)/i);
+    if(storeyMatch) heightMentions.push({ floors: parseInt(storeyMatch[1]), app: a });
+    const heightMatch = desc.match(/(\d+(?:\.\d+)?)\s*m(?:etre)?s?\s*(?:high|height|tall)/i);
+    if(heightMatch) heightMentions.push({ heightM: parseFloat(heightMatch[1]), app: a });
+  });
+
+  // Recent major schemes
+  const recentMajor = major.slice(0, 3);
+
+  // Build HTML
+  let html = `
+    <div class="section" id="precedent-section">
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Local Precedent (300m)</div>
+      <div class="stat-grid" style="margin-bottom:14px">
+        <div class="stat"><div class="stat-label">Applications</div><div class="stat-value">${totalMeaningful}</div><div class="stat-sub">within 300m</div></div>
+        <div class="stat ${approvalRate >= 70 ? 'highlight-green' : ''}"><div class="stat-label">Approval Rate</div><div class="stat-value ${approvalRate >= 70 ? 'green' : approvalRate >= 50 ? '' : 'red'}">${approvalRate !== null ? approvalRate + '%' : '?'}</div><div class="stat-sub">${approved.length} approved · ${refused.length} refused</div></div>
+        ${major.length > 0 ? `<div class="stat"><div class="stat-label">Major Schemes</div><div class="stat-value">${major.length}</div><div class="stat-sub">Large/major applications</div></div>` : ''}
+        ${heightMentions.length > 0 ? `<div class="stat"><div class="stat-label">Heights Approved</div><div class="stat-value">${heightMentions.map(h => h.floors ? h.floors+'F' : h.heightM+'m').join(', ')}</div><div class="stat-sub">from descriptions</div></div>` : ''}
+      </div>`;
+
+  // Precedent signal
+  const signal = approvalRate >= 75 ? 'opportunity' : approvalRate >= 50 ? 'caution' : 'critical';
+  const signalText = approvalRate >= 75
+    ? `Strong approval precedent — ${approvalRate}% of nearby applications approved. This area has an established pattern of planning consent. ${major.length > 0 ? `${major.length} major scheme${major.length>1?'s':''} approved nearby — demonstrates officer/committee appetite for significant development.` : ''}`
+    : approvalRate >= 50
+    ? `Mixed precedent — ${approvalRate}% approval rate. Some resistance to development in this area. Strong design narrative and pre-application engagement will be important.`
+    : `Challenging area — only ${approvalRate}% of applications approved. Expect scrutiny. Pre-app essential. Consider Design Review Panel early.`;
+
+  html += `<div class="insight ${signal}"><span class="insight-tag">Precedent Signal</span>${signalText}</div>`;
+
+  // Show recent notable applications
+  const notable = [...recentMajor, ...approved.filter(a => !recentMajor.includes(a)).slice(0, 2)].slice(0, 5);
+  if(notable.length > 0){
+    html += `<div style="margin-top:12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px">Recent Notable Applications</div>`;
+    notable.forEach(a => {
+      const statusColor = ['Permitted','Approved','Grant'].some(s => (a.status+' '+a.decision).includes(s)) ? 'green' : ['Refused'].some(s => (a.status+' '+a.decision).includes(s)) ? 'red' : '';
+      const desc = a.description.length > 150 ? a.description.substring(0, 150) + '…' : a.description;
+      html += `<div style="padding:10px 12px;background:var(--surface2);border-radius:8px;margin-bottom:8px;border:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font:600 11px var(--mono);color:var(--accent)">${a.reference}</span>
+          <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;
+            ${statusColor === 'green' ? 'background:rgba(5,150,105,.1);color:var(--green)' : statusColor === 'red' ? 'background:rgba(220,38,38,.1);color:var(--red)' : 'color:var(--text3)'}">${a.decision || a.status}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:4px">${desc}</div>
+        <div style="font-size:10px;color:var(--text3)">${a.address} · ${a.decidedDate || a.startDate}${a.distance ? ' · '+a.distance+'m away' : ''}</div>
+        ${a.url ? `<a href="${a.url}" target="_blank" style="font-size:10px;color:var(--accent);text-decoration:none">View application →</a>` : ''}
+      </div>`;
+    });
+  }
+
+  html += `</div>`;
+
+  // Insert before the insights section
+  const insightsSection = document.querySelector('#panel-body .section:nth-child(4)');
+  if(insightsSection){
+    insightsSection.insertAdjacentHTML('beforebegin', html);
+  } else {
+    document.getElementById('panel-body').insertAdjacentHTML('beforeend', html);
+  }
+}
+
 function renderEPCSection(epcData, siteInfo){
   const certs = epcData.certificates || [];
   if(!certs.length) return;
