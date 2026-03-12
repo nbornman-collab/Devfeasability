@@ -475,26 +475,22 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   const typicalH = planning.typicalApprovedHeights || planning.typicalHeight || {low:10,mid:20,high:30};
   const potentialHeightM = typicalH.mid || 20;
 
-  // Inset the existing building polygon slightly to avoid z-fighting with potential above
-  const existingCoords = bufferPolygon(coords, -0.000005); // ~0.5m inset
-  const existingGeoJSON = { type:'Feature', geometry:{type:'Polygon',coordinates:[existingCoords]}, properties:{} };
-
-  // Current building — solid terracotta red on light map
-  map.addSource('current-bldg',{type:'geojson',data:existingGeoJSON});
+  // Existing building — let Mapbox 3d-buildings render the grey mass
+  // We just highlight with: red outline at grade + thin red roof cap at transition
+  map.addLayer({
+    id:'current-edge',type:'line',source:'site',
+    paint:{'line-color':'#c0392b','line-width':2.5,'line-opacity':0.9}
+  });
+  // Thin red cap at roof of existing — marks where potential starts
+  map.addSource('current-bldg',{type:'geojson',data:siteGeoJSON});
   map.addLayer({
     id:'current-3d',type:'fill-extrusion',source:'current-bldg',
     paint:{
       'fill-extrusion-color':'#c0392b',
-      'fill-extrusion-height':currentHeight,
-      'fill-extrusion-base':0,
-      'fill-extrusion-opacity':.85,
-      'fill-extrusion-vertical-gradient':false,
+      'fill-extrusion-height': currentHeight,
+      'fill-extrusion-base': Math.max(0, currentHeight - 0.4),
+      'fill-extrusion-opacity': 0.85,
     }
-  });
-  // Strong dark edge on existing
-  map.addLayer({
-    id:'current-edge',type:'line',source:'site',
-    paint:{'line-color':'#922b21','line-width':2,'line-opacity':0.9}
   });
 
   // Potential additional envelope — rich green, translucent with floor lines
@@ -561,13 +557,13 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
 
   const centroid = getCentroid(coords);
 
-  // Fade context buildings when zoomed into site
+  // Keep context buildings visible but softer — they provide the existing mass
   if(map.getLayer('3d-buildings')){
     map.setPaintProperty('3d-buildings','fill-extrusion-opacity',
       ['interpolate',['linear'],['zoom'],
-        14, 0.4,
-        16, 0.25,
-        18, 0.15
+        14, 0.45,
+        16, 0.4,
+        18, 0.35
       ]
     );
   }
