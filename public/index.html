@@ -178,22 +178,13 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 }
 .map-label.height-label{border-color:var(--green);color:var(--green)}
 .map-label.pd-label{border-color:#5aebc2;color:#5aebc2;font-size:11px}
-.map-label.existing-label{border-color:#d4727a;color:#d4727a}
+.map-label.existing-label{border-color:#ef8b6e;color:#ef8b6e}
 .map-label .leader{
   position:absolute;pointer-events:none;
   stroke-width:1;stroke:var(--border);fill:none;
   overflow:visible;
 }
-.map-label.height-label .leader{stroke:var(--green)}
-.map-label.pd-label .leader{stroke:#5aebc2}
-.map-label.existing-label .leader{stroke:#d4727a}
-.map-label .leader-dot{
-  position:absolute;width:4px;height:4px;border-radius:50%;
-  background:var(--border);
-}
-.map-label.height-label .leader-dot{background:var(--green)}
-.map-label.pd-label .leader-dot{background:#5aebc2}
-.map-label.existing-label .leader-dot{background:#d4727a}
+.map-label .leader,.map-label .leader-dot{display:none}
 
 /* Responsive */
 @media(max-width:768px){
@@ -219,7 +210,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   border:1px solid var(--border);color:var(--text3);line-height:1.8;display:none">
   <div><span style="display:inline-block;width:18px;height:0;border-top:1.5px solid #9d8fff;vertical-align:middle;margin-right:6px"></span>Building footprint</div>
   <div><span style="display:inline-block;width:18px;height:0;border-top:1.2px dashed #e8c44a;vertical-align:middle;margin-right:6px"></span>Property line (est.)</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#d4727a;opacity:.75;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Existing</div>
+  <div><span style="display:inline-block;width:10px;height:10px;background:#ef8b6e;opacity:.88;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Existing</div>
   <div><span style="display:inline-block;width:10px;height:10px;background:#2dd4a0;opacity:.35;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Potential</div>
   <div><span style="display:inline-block;width:10px;height:10px;background:#5aebc2;opacity:.4;vertical-align:middle;margin-right:6px;border-radius:2px"></span>PD (no planning)</div>
 </div>
@@ -447,12 +438,13 @@ async function selectResult(feature){
 
 // --- 3D RENDERING ---
 function renderSite3D(lat, lng, buildingData, planning, siteInfo){
-  ['site-fill','site-line','prop-line','current-3d','current-edge','potential-3d','potential-edge','pd-3d','pd-edge'].forEach(id=>{
-    if(map.getLayer(id)) map.removeLayer(id);
-  });
-  ['site','prop-boundary','current-bldg','potential-bldg','pd-bldg'].forEach(id=>{
-    if(map.getSource(id)) map.removeSource(id);
-  });
+  // Clean up all layers including dynamic floor lines
+  const layersToRemove = ['site-fill','site-line','prop-line','current-3d','current-edge','potential-3d','potential-edge','pd-3d','pd-edge'];
+  for(let f = 0; f < 30; f++) layersToRemove.push('floor-line-'+f);
+  layersToRemove.forEach(id=>{ if(map.getLayer(id)) map.removeLayer(id); });
+  const sourcesToRemove = ['site','prop-boundary','current-bldg','potential-bldg','pd-bldg'];
+  for(let f = 0; f < 30; f++) sourcesToRemove.push('floor-line-'+f);
+  sourcesToRemove.forEach(id=>{ if(map.getSource(id)) map.removeSource(id); });
   clearLabels();
 
   if(!buildingData || !buildingData.wayNodes || buildingData.wayNodes.length < 3) return;
@@ -484,25 +476,25 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   const typicalH = planning.typicalApprovedHeights || planning.typicalHeight || {low:10,mid:20,high:30};
   const potentialHeightM = typicalH.mid || 20;
 
-  // Current building — light pinky-red, reads clearly against dark map
+  // Current building — bright coral, high visibility against dark map
   map.addSource('current-bldg',{type:'geojson',data:siteGeoJSON});
   map.addLayer({
     id:'current-3d',type:'fill-extrusion',source:'current-bldg',
     paint:{
-      'fill-extrusion-color':'#d4727a',
+      'fill-extrusion-color':'#ef8b6e',
       'fill-extrusion-height':currentHeight,
       'fill-extrusion-base':0,
-      'fill-extrusion-opacity':.75,
+      'fill-extrusion-opacity':.88,
       'fill-extrusion-vertical-gradient':false,
     }
   });
-  // Hairline edges on existing
+  // Strong edge on existing
   map.addLayer({
     id:'current-edge',type:'line',source:'current-bldg',
-    paint:{'line-color':'rgba(230,160,165,0.3)','line-width':0.8}
+    paint:{'line-color':'#ef8b6e','line-width':2.5,'line-opacity':0.9}
   });
 
-  // Potential additional envelope — green, clearly distinct from pink existing
+  // Potential additional envelope — green
   if(potentialHeightM > currentHeight){
     map.addSource('potential-bldg',{type:'geojson',data:siteGeoJSON});
     map.addLayer({
@@ -511,18 +503,37 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
         'fill-extrusion-color':'#2dd4a0',
         'fill-extrusion-height':potentialHeightM,
         'fill-extrusion-base':currentHeight,
-        'fill-extrusion-opacity':.25,
-        'fill-extrusion-vertical-gradient':true,
+        'fill-extrusion-opacity':.28,
+        'fill-extrusion-vertical-gradient':false,
       }
     });
-    // Edge on potential
+    // Strong edge on potential
     map.addLayer({
       id:'potential-edge',type:'line',source:'potential-bldg',
-      paint:{'line-color':'rgba(45,212,160,0.35)','line-width':0.7}
+      paint:{'line-color':'#2dd4a0','line-width':2,'line-opacity':0.7}
     });
+
+    // Floor lines in the green zone — one per new floor
+    const ftfVal = siteInfo.ftf || 3.0;
+    const newFloors = Math.floor((potentialHeightM - currentHeight) / ftfVal);
+    for(let f = 0; f < newFloors; f++){
+      const floorH = currentHeight + (f * ftfVal);
+      const floorTop = floorH + 0.15; // thin slab
+      const floorId = 'floor-line-' + f;
+      map.addSource(floorId, {type:'geojson', data:siteGeoJSON});
+      map.addLayer({
+        id: floorId, type:'fill-extrusion', source: floorId,
+        paint:{
+          'fill-extrusion-color':'#2dd4a0',
+          'fill-extrusion-height': floorTop,
+          'fill-extrusion-base': floorH,
+          'fill-extrusion-opacity': 0.6,
+        }
+      });
+    }
   }
 
-  // PD upward extension massing — slightly brighter green to distinguish from full potential
+  // PD upward extension massing
   if(planning.pdMassingPotential && planning.pdMassingPotential.additionalHeightM > 0){
     const pdTop = currentHeight + planning.pdMassingPotential.additionalHeightM;
     if(pdTop <= potentialHeightM){
@@ -533,13 +544,13 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
           'fill-extrusion-color':'#5aebc2',
           'fill-extrusion-height':pdTop,
           'fill-extrusion-base':currentHeight,
-          'fill-extrusion-opacity':.35,
-          'fill-extrusion-vertical-gradient':true,
+          'fill-extrusion-opacity':.38,
+          'fill-extrusion-vertical-gradient':false,
         }
       });
       map.addLayer({
         id:'pd-edge',type:'line',source:'pd-bldg',
-        paint:{'line-color':'rgba(90,235,194,0.3)','line-width':0.7}
+        paint:{'line-color':'#5aebc2','line-width':2,'line-opacity':0.6}
       });
     }
   }
@@ -626,8 +637,8 @@ function positionLabel(div){
   const labelH = div.offsetHeight || 26;
   const pad = 8; // viewport padding
 
-  // Adaptive offset — smaller on mobile
-  const baseOffset = mapW < 500 ? 60 : 120;
+  // Tight offset — labels sit close to massing
+  const baseOffset = mapW < 500 ? 40 : 70;
   const labelOffset = side === 'left' ? -baseOffset : baseOffset;
   const ox = parseFloat(div.dataset.offsetX) || 0;
   const oy = parseFloat(div.dataset.offsetY) || 0;
