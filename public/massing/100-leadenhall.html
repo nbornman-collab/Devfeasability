@@ -12,73 +12,94 @@
 :root{
   --bg:#0c0e14;--surface:#161822;--surface2:#1e2030;--surface3:#262840;
   --border:#2a2d42;--text:#e8e9f0;--text2:#9498b3;--text3:#626680;
-  --accent:#818cf8;--accent2:#6366f1;--green:#34d399;--green2:#059669;
-  --red:#f87171;--red2:#dc2626;--amber:#fbbf24;
+  --accent:#818cf8;--green:#34d399;--green2:#059669;
+  --red:#f87171;--amber:#fbbf24;--blue:#60a5fa;
   --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
 html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text);overflow:hidden}
-#map{position:absolute;inset:0}
+#map{position:absolute;inset:0;right:min(640px,33vw)}
 
 /* Top bar */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:10;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(12,14,20,.95) 0%,transparent 100%);pointer-events:none}
+.topbar{position:fixed;top:0;left:0;right:min(640px,33vw);z-index:10;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(12,14,20,.95) 0%,transparent 100%);pointer-events:none}
 .topbar>*{pointer-events:auto}
 .logo{font:800 16px var(--sans);color:var(--text)}
 .logo span{color:var(--accent)}
-.site-name{font:300 13px var(--sans);color:var(--text2)}
-.site-name strong{font-weight:700;color:var(--text)}
 
-/* Option selector */
-.options-bar{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;box-shadow:0 8px 32px rgba(0,0,0,.4)}
-.opt-btn{padding:10px 20px;border:none;border-radius:9px;font:600 12px var(--sans);cursor:pointer;transition:all .2s;background:transparent;color:var(--text3);letter-spacing:0.3px}
+/* Option tabs - floating over map */
+.options-bar{position:fixed;top:70px;left:24px;z-index:10;display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.opt-btn{padding:10px 18px;border:none;border-radius:9px;font:600 11px var(--sans);cursor:pointer;transition:all .2s;background:transparent;color:var(--text3);letter-spacing:0.3px;position:relative}
 .opt-btn:hover{color:var(--text2);background:var(--surface2)}
-.opt-btn.active{background:var(--accent2);color:white;box-shadow:0 2px 12px rgba(99,102,241,.3)}
-.opt-btn .sub{display:block;font:400 9px var(--sans);margin-top:2px;opacity:.7}
+.opt-btn.active{color:white;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.opt-btn.opt-a.active{background:#059669}
+.opt-btn.opt-b.active{background:#6366f1}
+.opt-btn.opt-c.active{background:#f59e0b;color:#1a1d2e}
+.opt-btn.opt-e.active{background:#dc2626}
+.opt-btn .sub{display:block;font:400 8px var(--sans);margin-top:1px;opacity:.7}
 
-/* Scheme panel */
-.scheme-panel{position:fixed;bottom:0;left:0;right:0;z-index:10;background:linear-gradient(0deg,var(--bg) 0%,rgba(12,14,20,.97) 85%,transparent 100%);padding:20px 24px 24px;transition:transform .3s}
+/* Side panel */
+.panel{position:fixed;top:0;right:0;width:min(640px,33vw);height:100%;background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:5}
+.panel-header{padding:24px 28px 16px;border-bottom:1px solid var(--border)}
+.panel-header h1{font:800 11px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:8px}
+.panel-header .address{font:700 22px var(--sans);color:var(--text);line-height:1.3}
+.panel-header .subtitle{font:400 12px var(--sans);color:var(--text3);margin-top:4px}
 
-.scheme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1400px;margin:0 auto}
-.scheme-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;transition:all .2s}
-.scheme-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-.scheme-card.highlight{border-color:var(--accent);box-shadow:0 0 20px rgba(99,102,241,.15)}
-.card-title{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.card-title .dot{width:6px;height:6px;border-radius:50%}
+/* Scheme header in panel */
+.scheme-header{padding:20px 28px;border-bottom:1px solid var(--border);background:var(--surface)}
+.scheme-name{font:800 16px var(--sans);color:var(--text);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.scheme-name .dot{width:10px;height:10px;border-radius:50%}
+.scheme-desc{font:300 12px var(--sans);color:var(--text3)}
 
-.stat-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)}
+/* Hero metrics */
+.hero-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);margin:0}
+.hero-metric{text-align:center;padding:18px 12px;background:var(--surface)}
+.hero-metric .label{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:5px}
+.hero-metric .value{font:800 24px var(--mono);letter-spacing:-0.5px}
+
+/* Section */
+.section{padding:20px 28px;border-bottom:1px solid var(--border)}
+.section-title{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* Stat rows */
+.stat-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)}
 .stat-row:last-child{border-bottom:none}
-.stat-label{font:400 11px var(--sans);color:var(--text3)}
-.stat-value{font:600 11px var(--mono);color:var(--text)}
+.stat-label{font:400 12px var(--sans);color:var(--text3)}
+.stat-value{font:600 12px var(--mono);color:var(--text)}
 .stat-value.green{color:var(--green)}
 .stat-value.red{color:var(--red)}
 .stat-value.accent{color:var(--accent)}
 .stat-value.amber{color:var(--amber)}
 
-/* Floor plan preview */
-.floorplan-wrap{margin:12px 0 8px;aspect-ratio:1;background:var(--surface2);border-radius:8px;border:1px solid var(--border);overflow:hidden;position:relative}
-.floorplan-wrap svg{width:100%;height:100%}
-.fp-label{position:absolute;bottom:4px;right:6px;font:500 8px var(--mono);color:var(--text3);background:var(--surface);padding:1px 5px;border-radius:3px}
-
-/* Unit mix bar */
-.mix-bar{height:16px;display:flex;border-radius:4px;overflow:hidden;margin:8px 0 4px}
-.mix-seg{display:flex;align-items:center;justify-content:center;font:600 7px var(--mono);color:white;letter-spacing:0.3px}
-.mix-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
-.mix-legend span{font:400 8px var(--sans);color:var(--text3);display:flex;align-items:center;gap:3px}
-.mix-legend .swatch{width:8px;height:8px;border-radius:2px}
-
-/* Compare button */
-.compare-section{max-width:1400px;margin:12px auto 0;text-align:center}
-.compare-btn{padding:8px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text2);font:600 11px var(--sans);cursor:pointer;transition:all .2s}
-.compare-btn:hover{background:var(--accent2);color:white;border-color:var(--accent2)}
-
 /* Risk badge */
-.risk{display:inline-block;padding:2px 8px;border-radius:4px;font:600 8px var(--sans);text-transform:uppercase;letter-spacing:0.5px;margin-top:6px}
+.risk{display:inline-block;padding:4px 12px;border-radius:5px;font:600 10px var(--sans);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px}
 .risk.low{background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.2)}
 .risk.medium{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.2)}
 .risk.high{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2)}
 
+/* Brief text */
+.brief{font:400 12px/1.7 var(--sans);color:var(--text2)}
+.brief strong{color:var(--text);font-weight:600}
+
+/* Bar */
+.bar-row{margin-bottom:12px}
+.bar-label{display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--text3);margin-bottom:4px}
+.bar-track{height:20px;background:var(--surface3);border-radius:5px;overflow:hidden;display:flex}
+.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font:600 8px var(--mono);color:white}
+
+/* Pro forma */
+.proforma{width:100%;border-collapse:collapse}
+.proforma td{padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.proforma td:last-child{text-align:right;font-family:var(--mono);font-weight:500}
+.proforma tr.total td{border-top:2px solid var(--text3);border-bottom:none;padding-top:10px;font-weight:700;font-size:13px}
+.proforma tr.total td:last-child{color:var(--green)}
+
+/* Export btn */
+.export-btn{display:block;width:100%;padding:14px;background:var(--accent);color:white;border:none;border-radius:8px;font:700 13px var(--sans);cursor:pointer;text-align:center;margin-top:12px;letter-spacing:0.5px}
+.export-btn:hover{background:#6366f1}
+
 @media(max-width:900px){
-  .scheme-grid{grid-template-columns:1fr 1fr;gap:8px}
-  .topbar{padding:10px 16px}
+  #map{right:0;bottom:50%}
+  .topbar{right:0}
+  .panel{width:100%;height:50%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border)}
 }
 </style>
 </head>
@@ -88,115 +109,80 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 <div class="topbar">
   <div class="logo">D&A <span>Studio</span></div>
-  <div class="site-name"><strong>100 Leadenhall Street</strong> · City of London · EC3A 3BP</div>
 </div>
 
 <div class="options-bar" id="optbar">
-  <button class="opt-btn active" onclick="selectOption(0)">Option A<span class="sub">Conservative</span></button>
-  <button class="opt-btn" onclick="selectOption(1)">Option B<span class="sub">Mid-Rise</span></button>
-  <button class="opt-btn" onclick="selectOption(2)">Option C<span class="sub">Tower</span></button>
-  <button class="opt-btn" onclick="selectOption(3)">Existing<span class="sub">Current</span></button>
+  <button class="opt-btn opt-a active" onclick="selectOption(0)">Option A<span class="sub">10F Conservative</span></button>
+  <button class="opt-btn opt-b" onclick="selectOption(1)">Option B<span class="sub">14F Mid-Rise</span></button>
+  <button class="opt-btn opt-c" onclick="selectOption(2)">Option C<span class="sub">22F Tower</span></button>
+  <button class="opt-btn opt-e" onclick="selectOption(3)">Existing<span class="sub">6F Current</span></button>
 </div>
 
-<div class="scheme-panel">
-  <div class="scheme-grid" id="scheme-grid"></div>
-  <div class="compare-section">
-    <button class="compare-btn" onclick="window.open('/reports/100-leadenhall-street.html','_blank')">📄 Full Feasibility Report</button>
+<div class="panel" id="panel">
+  <div class="panel-header">
+    <h1>Massing Options</h1>
+    <div class="address">100 Leadenhall Street</div>
+    <div class="subtitle">City of London · EC3A 3BP · Zone 1 · PTAL 6a</div>
   </div>
+  <div id="panel-body"></div>
 </div>
 
 <script>
-const SITE_COORDS = [[-0.08259,51.5134005],[-0.0821961,51.5132966],[-0.0821247,51.5134014],[-0.0819302,51.5133502],[-0.0820016,51.5132453],[-0.0819164,51.5132229],[-0.081999,51.5131017],[-0.0818608,51.5130662],[-0.0819137,51.5129858],[-0.0819665,51.5129056],[-0.0821068,51.5129432],[-0.0821645,51.5128585],[-0.082317,51.5126344],[-0.0823821,51.5125273],[-0.0825761,51.5125823],[-0.0825578,51.512611],[-0.0827687,51.512668],[-0.0827198,51.5127406],[-0.0829906,51.512812],[-0.0828411,51.5130317],[-0.0827872,51.5131108],[-0.082735,51.5131881],[-0.0828704,51.5132236],[-0.0828227,51.513294],[-0.0826873,51.5132585],[-0.08259,51.5134005]];
-const CENTROID = [-0.08240,51.51303];
-const PLOT_AREA = 4378; // sqm
-const EXISTING_HEIGHT = 25; // m
+// CORRECT polygon for 100 Leadenhall Street (OSM way 150335050)
+const SITE_COORDS = [[-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,51.51396],[-0.0799754,51.5136468],[-0.079809,51.5136257],[-0.0798425,51.5135377],[-0.0798828,51.513445],[-0.0804144,51.5135131],[-0.0803568,51.5136783],[-0.0802864,51.5136687],[-0.0802571,51.5137575],[-0.080298,51.5137608],[-0.0802591,51.5138813],[-0.0803085,51.5138886],[-0.0803056,51.5138968],[-0.0802763,51.5140146]];
+const CENTROID = [-0.0801551,51.5137673];
+const PLOT_AREA = 1551; // sqm (actual footprint)
+const EXISTING_HEIGHT = 25;
 const EXISTING_FLOORS = 6;
-const FTF = 4.2; // commercial floor-to-floor
+const FTF = 4.2;
 
 const fmt = n => n?.toLocaleString('en-GB') || '—';
 
-// Three massing options + existing
+const OPTION_COLORS = {
+  a: {main:'#34d399',glow:'rgba(52,211,153,.15)',fill:'#059669',edge:'#34d399'},
+  b: {main:'#818cf8',glow:'rgba(129,140,248,.15)',fill:'#6366f1',edge:'#a5b4fc'},
+  c: {main:'#fbbf24',glow:'rgba(251,191,36,.15)',fill:'#d97706',edge:'#fbbf24'},
+  existing: {main:'#f87171',glow:'rgba(248,113,113,.15)',fill:'#dc2626',edge:'#f87171'}
+};
+
 const OPTIONS = [
   {
-    name: 'Option A — Conservative',
-    desc: '10-storey podium + setback',
-    color: '#059669',
-    height: 42,
-    floors: 10,
-    podiumFloors: 6,
-    podiumHeight: 25,
-    towerFloors: 4,
-    towerHeight: 17,
-    towerFootprintPct: 0.65, // upper floors step back
-    coverage: 0.80,
-    niaEfficiency: 0.82,
-    units: null, // commercial
-    isResi: false,
-    costSqft: 380,
-    saleSqft: 1250,
-    risk: 'low',
-    riskLabel: 'Low Risk',
-    planningNotes: 'Within established height envelope. Minimal impact on protected views. Pre-app likely positive.',
-    layout: 'Full floor plate to 6F, setback upper 4F. Central core, perimeter offices. Active ground floor retail.',
-    staircase: 'Dual staircase (>18m)',
-    breeam: 'Excellent',
+    key:'a', name:'Option A — Conservative', desc:'10-storey podium with upper setback',
+    height:42, floors:10, podiumFloors:6, podiumHeight:25, towerFloors:4, towerFootprintPct:0.65,
+    coverage:0.80, niaEfficiency:0.82, costSqft:380, saleSqft:1250,
+    risk:'low', riskLabel:'Low Planning Risk',
+    planningNotes:'Within established height envelope. Minimal impact on protected views. Pre-app likely to receive positive feedback from City planners.',
+    layout:'Full floor plate retained to 6F matching existing street wall. Upper 4 floors step back 3m on south and east facades. Central core with perimeter Grade A offices. Active ground floor retail/lobby (1,020 sqm).',
+    staircase:'Dual staircase (Building Safety Act — >18m)', breeam:'BREEAM Excellent',
   },
   {
-    name: 'Option B — Mid-Rise',
-    desc: '14-storey with stepped massing',
-    color: '#6366f1',
-    height: 60,
-    floors: 14,
-    podiumFloors: 6,
-    podiumHeight: 25,
-    towerFloors: 8,
-    towerHeight: 35,
-    towerFootprintPct: 0.55,
-    coverage: 0.80,
-    niaEfficiency: 0.80,
-    units: null,
-    isResi: false,
-    costSqft: 400,
-    saleSqft: 1307,
-    risk: 'medium',
-    riskLabel: 'Medium Risk',
-    planningNotes: 'At typical approved height. LVMF assessment required. Wind study needed. Good precedent nearby.',
-    layout: 'Podium 6F full plate. Tower 8F stepped back 3m south, 2m east. Central core with dual aspect office floors.',
-    staircase: 'Dual staircase (>18m)',
-    breeam: 'Outstanding',
+    key:'b', name:'Option B — Mid-Rise', desc:'14-storey stepped massing with sky terrace',
+    height:60, floors:14, podiumFloors:6, podiumHeight:25, towerFloors:8, towerFootprintPct:0.55,
+    coverage:0.80, niaEfficiency:0.80, costSqft:400, saleSqft:1307,
+    risk:'medium', riskLabel:'Medium Planning Risk',
+    planningNotes:'At typical approved height for this area. LVMF protected view assessment required (St Paul\'s sightlines). Wind microclimate study needed. Good precedent from nearby approvals.',
+    layout:'6F podium at full plate matching street context. 8F tower steps back 3m south, 2m east creating sky terrace at L7. Central core with dual aspect office floors (NIA ~680sqm/floor). Active ground floor.',
+    staircase:'Dual staircase + firefighter lift', breeam:'BREEAM Outstanding',
   },
   {
-    name: 'Option C — Tower',
-    desc: '22-storey slender tower',
-    color: '#f59e0b',
-    height: 92,
-    floors: 22,
-    podiumFloors: 4,
-    podiumHeight: 17,
-    towerFloors: 18,
-    towerHeight: 75,
-    towerFootprintPct: 0.40,
-    coverage: 0.75,
-    niaEfficiency: 0.77,
-    units: null,
-    isResi: false,
-    costSqft: 450,
-    saleSqft: 1450,
-    risk: 'high',
-    riskLabel: 'High Risk',
-    planningNotes: 'Exceeds typical height. Full LVMF, wind, daylight studies. GLA referral likely. Strong design case needed.',
-    layout: 'Low podium 4F. Slender tower 18F (40% site coverage). Sky lobby at 12F. Premium upper floors.',
-    staircase: 'Dual staircase + firefighter lift',
-    breeam: 'Outstanding + Net Zero',
+    key:'c', name:'Option C — Tower', desc:'22-storey slender commercial tower',
+    height:92, floors:22, podiumFloors:4, podiumHeight:17, towerFloors:18, towerFootprintPct:0.40,
+    coverage:0.75, niaEfficiency:0.77, costSqft:450, saleSqft:1450,
+    risk:'high', riskLabel:'High Planning Risk',
+    planningNotes:'Exceeds typical height — requires exceptional design quality. Full LVMF, wind, daylight/sunlight studies. GLA referral likely. Strong urban design and public benefit case needed.',
+    layout:'Low 4F podium (17m) with public realm at ground. Slender tower rises 18F from L5 at 40% site coverage. Sky lobby at L12. Premium upper floors with panoramic views. Crown/top treatment needed.',
+    staircase:'Dual staircase + 2x firefighter lifts', breeam:'BREEAM Outstanding + Net Zero Carbon',
   }
 ];
 
-// Calculate financials for each option
+// Calculate financials
 OPTIONS.forEach(opt => {
-  const grossArea = PLOT_AREA * opt.coverage * opt.podiumFloors + PLOT_AREA * opt.towerFootprintPct * opt.coverage * opt.towerFloors;
+  const podiumGross = PLOT_AREA * opt.coverage * opt.podiumFloors;
+  const towerGross = PLOT_AREA * opt.towerFootprintPct * opt.coverage * opt.towerFloors;
+  const grossArea = podiumGross + towerGross;
   const nia = grossArea * opt.niaEfficiency;
-  const niaSqft = nia * 10.764;
-  const addedNia = nia - (PLOT_AREA * 0.80 * 0.82 * EXISTING_FLOORS); // subtract existing
+  const existingNia = PLOT_AREA * 0.80 * 0.82 * EXISTING_FLOORS;
+  const addedNia = Math.max(0, nia - existingNia);
   const addedNiaSqft = addedNia * 10.764;
   const constructionCost = addedNiaSqft * opt.costSqft;
   const fees = constructionCost * 0.12;
@@ -205,19 +191,19 @@ OPTIONS.forEach(opt => {
   const totalCost = constructionCost + fees + cil + finance;
   const gdv = addedNiaSqft * opt.saleSqft;
   const margin = gdv - totalCost;
-  const marginPct = gdv > 0 ? (margin/gdv*100).toFixed(0) : 0;
-  const yieldPct = ((addedNiaSqft * 55) / gdv * 100).toFixed(1); // £55/sqft commercial rent
-
-  opt.grossArea = Math.round(grossArea);
   opt.nia = Math.round(nia);
+  opt.existingNia = Math.round(existingNia);
   opt.addedNia = Math.round(addedNia);
   opt.addedNiaSqft = Math.round(addedNiaSqft);
   opt.constructionCost = Math.round(constructionCost);
+  opt.fees = Math.round(fees);
+  opt.cil = Math.round(cil);
+  opt.finance = Math.round(finance);
   opt.totalCost = Math.round(totalCost);
   opt.gdv = Math.round(gdv);
   opt.margin = Math.round(margin);
-  opt.marginPct = marginPct;
-  opt.yieldPct = yieldPct;
+  opt.marginPct = gdv > 0 ? (margin/gdv*100).toFixed(0) : '0';
+  opt.yieldPct = gdv > 0 ? ((addedNiaSqft * 55)/gdv*100).toFixed(1) : '0';
 });
 
 let map, currentOption = 0;
@@ -226,18 +212,13 @@ async function init(){
   const cfg = await(await fetch('/api/config')).json();
   mapboxgl.accessToken = cfg.mapboxToken;
   map = new mapboxgl.Map({
-    container:'map',
-    style:'mapbox://styles/mapbox/dark-v11',
-    center:CENTROID,
-    zoom:16.8,
-    pitch:60,
-    bearing:-30,
-    antialias:true
+    container:'map', style:'mapbox://styles/mapbox/dark-v11',
+    center:CENTROID, zoom:17.2, pitch:60, bearing:-20, antialias:true
   });
   map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
 
   map.on('style.load',()=>{
-    // Context buildings
+    // Dark context buildings
     map.addLayer({
       id:'3d-buildings',type:'fill-extrusion',source:'composite','source-layer':'building',
       minzoom:14,
@@ -245,153 +226,270 @@ async function init(){
         'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#1a1d2e',30,'#22253a',80,'#2a2d45',150,'#333650'],
         'fill-extrusion-height':['get','height'],
         'fill-extrusion-base':['get','min_height'],
-        'fill-extrusion-opacity':0.7,
+        'fill-extrusion-opacity':0.6,
         'fill-extrusion-vertical-gradient':true,
       }
     });
 
     // Site boundary
     map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
-    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':2,'line-opacity':0.8,'line-dasharray':[4,2]}});
+    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':2,'line-opacity':0.9,'line-dasharray':[4,2]}});
+    map.addLayer({id:'site-glow',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':8,'line-opacity':0.15,'line-blur':4}});
 
     // Massing sources
     map.addSource('podium',{type:'geojson',data:emptyPoly()});
     map.addSource('tower',{type:'geojson',data:emptyPoly()});
 
-    // Podium extrusion
     map.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{
-      'fill-extrusion-color':'#059669','fill-extrusion-height':25,'fill-extrusion-base':0,'fill-extrusion-opacity':0.45
+      'fill-extrusion-color':'#059669','fill-extrusion-height':25,'fill-extrusion-base':0,'fill-extrusion-opacity':0.65
     }});
-    // Tower extrusion
     map.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{
-      'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0.35
+      'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0.55
     }});
-    // Edges
-    map.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#34d399','line-width':1.5,'line-opacity':0.6}});
-    map.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':1.5,'line-opacity':0.6}});
+    map.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0.8}});
+    map.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0.8}});
 
-    renderSchemeCards();
+    // Floor line sources (pre-create up to 30)
+    for(let f=1;f<=30;f++){
+      const id='floor-'+f;
+      map.addSource(id,{type:'geojson',data:emptyPoly()});
+      map.addLayer({id:id,type:'fill-extrusion',source:id,paint:{
+        'fill-extrusion-color':'#ffffff','fill-extrusion-height':0,'fill-extrusion-base':0,'fill-extrusion-opacity':0
+      }});
+    }
+
     selectOption(0);
   });
 }
 
-function emptyPoly(){
-  return {type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,0],[0,0],[0,0]]]}};
+function emptyPoly(){return {type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,0.0001],[0.0001,0.0001],[0,0]]]}};}
+
+function bufferPoly(coords,dist){
+  const cx=coords.reduce((s,c)=>s+c[0],0)/coords.length;
+  const cy=coords.reduce((s,c)=>s+c[1],0)/coords.length;
+  return coords.map(c=>{const dx=c[0]-cx,dy=c[1]-cy,len=Math.sqrt(dx*dx+dy*dy)||0.00001;return[c[0]+(dx/len)*dist,c[1]+(dy/len)*dist]});
 }
 
-function bufferPolygon(coords, dist){
-  const cx = coords.reduce((s,c)=>s+c[0],0)/coords.length;
-  const cy = coords.reduce((s,c)=>s+c[1],0)/coords.length;
-  return coords.map(c => {
-    const dx=c[0]-cx, dy=c[1]-cy;
-    const len=Math.sqrt(dx*dx+dy*dy)||0.00001;
-    return [c[0]+(dx/len)*dist, c[1]+(dy/len)*dist];
-  });
-}
-
-function shrinkPolygon(coords, factor){
-  const cx = coords.reduce((s,c)=>s+c[0],0)/coords.length;
-  const cy = coords.reduce((s,c)=>s+c[1],0)/coords.length;
-  return coords.map(c => [cx+(c[0]-cx)*factor, cy+(c[1]-cy)*factor]);
+function shrinkPoly(coords,factor){
+  const cx=coords.reduce((s,c)=>s+c[0],0)/coords.length;
+  const cy=coords.reduce((s,c)=>s+c[1],0)/coords.length;
+  return coords.map(c=>[cx+(c[0]-cx)*factor,cy+(c[1]-cy)*factor]);
 }
 
 function selectOption(idx){
   currentOption = idx;
-  // Update buttons
-  document.querySelectorAll('.opt-btn').forEach((b,i)=>{
-    b.classList.toggle('active', i===idx);
-  });
+  document.querySelectorAll('.opt-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
 
-  if(idx === 3){
-    // Existing — show red outline at existing height
-    const podiumGeo = {type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPolygon(SITE_COORDS, 0.000003)]}};
-    map.getSource('podium').setData(podiumGeo);
-    map.getSource('tower').setData(emptyPoly());
-    map.setPaintProperty('podium-3d','fill-extrusion-color','#dc2626');
-    map.setPaintProperty('podium-3d','fill-extrusion-height',EXISTING_HEIGHT);
-    map.setPaintProperty('podium-3d','fill-extrusion-base',0);
-    map.setPaintProperty('podium-3d','fill-extrusion-opacity',0.35);
-    map.setPaintProperty('tower-3d','fill-extrusion-opacity',0);
-    map.setPaintProperty('podium-edge','line-color','#f87171');
-    map.setPaintProperty('tower-edge','line-opacity',0);
-  } else {
-    const opt = OPTIONS[idx];
-    // Podium = full site
-    const podiumCoords = bufferPolygon(SITE_COORDS, 0.000003);
-    const podiumGeo = {type:'Feature',geometry:{type:'Polygon',coordinates:[podiumCoords]}};
-    map.getSource('podium').setData(podiumGeo);
-    map.setPaintProperty('podium-3d','fill-extrusion-color',opt.color);
-    map.setPaintProperty('podium-3d','fill-extrusion-height',opt.podiumHeight);
-    map.setPaintProperty('podium-3d','fill-extrusion-base',0);
-    map.setPaintProperty('podium-3d','fill-extrusion-opacity',0.45);
-    map.setPaintProperty('podium-edge','line-color',opt.color);
-    map.setPaintProperty('podium-edge','line-opacity',0.6);
-
-    // Tower = shrunk footprint
-    const towerCoords = shrinkPolygon(SITE_COORDS, Math.sqrt(opt.towerFootprintPct));
-    const towerGeo = {type:'Feature',geometry:{type:'Polygon',coordinates:[towerCoords]}};
-    map.getSource('tower').setData(towerGeo);
-    map.setPaintProperty('tower-3d','fill-extrusion-color',opt.color);
-    map.setPaintProperty('tower-3d','fill-extrusion-height',opt.height);
-    map.setPaintProperty('tower-3d','fill-extrusion-base',opt.podiumHeight);
-    map.setPaintProperty('tower-3d','fill-extrusion-opacity',0.35);
-    map.setPaintProperty('tower-edge','line-color',opt.color);
-    map.setPaintProperty('tower-edge','line-opacity',0.6);
+  // Clear floor lines
+  for(let f=1;f<=30;f++){
+    map.setPaintProperty('floor-'+f,'fill-extrusion-opacity',0);
   }
 
-  // Highlight active card
-  document.querySelectorAll('.scheme-card').forEach((c,i)=>{
-    c.classList.toggle('highlight', i===idx);
-  });
+  if(idx===3){
+    // Existing
+    const col = OPTION_COLORS.existing;
+    const geo={type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}};
+    map.getSource('podium').setData(geo);
+    map.getSource('tower').setData(emptyPoly());
+    map.setPaintProperty('podium-3d','fill-extrusion-color',col.fill);
+    map.setPaintProperty('podium-3d','fill-extrusion-height',EXISTING_HEIGHT);
+    map.setPaintProperty('podium-3d','fill-extrusion-base',0);
+    map.setPaintProperty('podium-3d','fill-extrusion-opacity',0.5);
+    map.setPaintProperty('tower-3d','fill-extrusion-opacity',0);
+    map.setPaintProperty('podium-edge','line-color',col.edge);
+    map.setPaintProperty('tower-edge','line-opacity',0);
+
+    // Floor lines for existing
+    for(let f=1;f<=EXISTING_FLOORS;f++){
+      const h=f*FTF;
+      const id='floor-'+f;
+      map.getSource(id).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000006)]}});
+      map.setPaintProperty(id,'fill-extrusion-color',col.edge);
+      map.setPaintProperty(id,'fill-extrusion-height',h+0.15);
+      map.setPaintProperty(id,'fill-extrusion-base',h-0.15);
+      map.setPaintProperty(id,'fill-extrusion-opacity',0.5);
+    }
+
+    renderExistingPanel();
+  } else {
+    const opt=OPTIONS[idx];
+    const col=OPTION_COLORS[opt.key];
+
+    // Podium = full site, slightly outset
+    const podiumCoords=bufferPoly(SITE_COORDS,0.000004);
+    map.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[podiumCoords]}});
+    map.setPaintProperty('podium-3d','fill-extrusion-color',col.fill);
+    map.setPaintProperty('podium-3d','fill-extrusion-height',opt.podiumHeight);
+    map.setPaintProperty('podium-3d','fill-extrusion-base',0);
+    map.setPaintProperty('podium-3d','fill-extrusion-opacity',0.65);
+    map.setPaintProperty('podium-edge','line-color',col.edge);
+    map.setPaintProperty('podium-edge','line-opacity',0.8);
+
+    // Tower = shrunk footprint
+    const towerCoords=shrinkPoly(SITE_COORDS,Math.sqrt(opt.towerFootprintPct));
+    map.getSource('tower').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[towerCoords]}});
+    map.setPaintProperty('tower-3d','fill-extrusion-color',col.fill);
+    map.setPaintProperty('tower-3d','fill-extrusion-height',opt.height);
+    map.setPaintProperty('tower-3d','fill-extrusion-base',opt.podiumHeight);
+    map.setPaintProperty('tower-3d','fill-extrusion-opacity',0.55);
+    map.setPaintProperty('tower-edge','line-color',col.edge);
+    map.setPaintProperty('tower-edge','line-opacity',0.8);
+
+    // Floor lines — podium floors use full footprint, tower floors use shrunk
+    let floorIdx=1;
+    for(let f=1;f<=opt.podiumFloors;f++){
+      const h=f*FTF;
+      const id='floor-'+floorIdx;
+      map.getSource(id).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000006)]}});
+      map.setPaintProperty(id,'fill-extrusion-color',col.edge);
+      map.setPaintProperty(id,'fill-extrusion-height',h+0.15);
+      map.setPaintProperty(id,'fill-extrusion-base',h-0.15);
+      map.setPaintProperty(id,'fill-extrusion-opacity',0.5);
+      floorIdx++;
+    }
+    for(let f=1;f<=opt.towerFloors;f++){
+      const h=opt.podiumHeight+(f*FTF);
+      const id='floor-'+floorIdx;
+      const tCoords=shrinkPoly(SITE_COORDS,Math.sqrt(opt.towerFootprintPct));
+      map.getSource(id).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(tCoords,0.000004)]}});
+      map.setPaintProperty(id,'fill-extrusion-color',col.edge);
+      map.setPaintProperty(id,'fill-extrusion-height',h+0.15);
+      map.setPaintProperty(id,'fill-extrusion-base',h-0.15);
+      map.setPaintProperty(id,'fill-extrusion-opacity',0.4);
+      floorIdx++;
+    }
+
+    renderOptionPanel(opt);
+  }
 }
 
-function renderSchemeCards(){
-  const grid = document.getElementById('scheme-grid');
-  const cards = OPTIONS.map((opt,i) => {
-    return `
-    <div class="scheme-card" onclick="selectOption(${i})" style="cursor:pointer">
-      <div class="card-title"><div class="dot" style="background:${opt.color}"></div>${opt.name}</div>
-      <div style="font:300 10px var(--sans);color:var(--text3);margin-bottom:10px">${opt.desc}</div>
-      
-      <div class="stat-row"><span class="stat-label">Height</span><span class="stat-value">${opt.height}m / ${opt.floors}F</span></div>
-      <div class="stat-row"><span class="stat-label">Added NIA</span><span class="stat-value">${fmt(opt.addedNia)} sqm</span></div>
-      <div class="stat-row"><span class="stat-label">GDV</span><span class="stat-value green">£${fmt(Math.round(opt.gdv/1e6))}M</span></div>
-      <div class="stat-row"><span class="stat-label">Total Cost</span><span class="stat-value">£${fmt(Math.round(opt.totalCost/1e6))}M</span></div>
-      <div class="stat-row"><span class="stat-label">Margin</span><span class="stat-value green">£${fmt(Math.round(opt.margin/1e6))}M (${opt.marginPct}%)</span></div>
-      <div class="stat-row"><span class="stat-label">Yield</span><span class="stat-value accent">${opt.yieldPct}%</span></div>
-      <div class="stat-row"><span class="stat-label">Cost/sqft</span><span class="stat-value">£${opt.costSqft}</span></div>
-      
-      <div style="margin-top:8px;font:400 9px var(--sans);color:var(--text3);line-height:1.5">
-        ${opt.layout}
-      </div>
-      
-      <div style="margin-top:6px"><span class="risk ${opt.risk}">${opt.riskLabel}</span></div>
-      <div style="margin-top:4px;font:400 8px var(--sans);color:var(--text3);line-height:1.4">${opt.planningNotes}</div>
-    </div>`;
-  });
+function renderOptionPanel(opt){
+  const col=OPTION_COLORS[opt.key];
+  document.getElementById('panel-body').innerHTML = `
+    <div class="scheme-header">
+      <div class="scheme-name"><div class="dot" style="background:${col.main};width:10px;height:10px;border-radius:50%"></div>${opt.name}</div>
+      <div class="scheme-desc">${opt.desc}</div>
+    </div>
 
-  // 4th card = existing
-  cards.push(`
-    <div class="scheme-card" onclick="selectOption(3)" style="cursor:pointer">
-      <div class="card-title"><div class="dot" style="background:#dc2626"></div>Existing Building</div>
-      <div style="font:300 10px var(--sans);color:var(--text3);margin-bottom:10px">Current state — 6F commercial</div>
-      
-      <div class="stat-row"><span class="stat-label">Height</span><span class="stat-value">${EXISTING_HEIGHT}m / ${EXISTING_FLOORS}F</span></div>
-      <div class="stat-row"><span class="stat-label">Floor Area</span><span class="stat-value">${fmt(Math.round(PLOT_AREA*0.80*0.82*EXISTING_FLOORS))} sqm</span></div>
-      <div class="stat-row"><span class="stat-label">Plot Area</span><span class="stat-value">${fmt(PLOT_AREA)} sqm</span></div>
-      <div class="stat-row"><span class="stat-label">Coverage</span><span class="stat-value">~80%</span></div>
-      <div class="stat-row"><span class="stat-label">Use</span><span class="stat-value">Class E (Office)</span></div>
-      <div class="stat-row"><span class="stat-label">PTAL</span><span class="stat-value accent">6a</span></div>
-      
-      <div style="margin-top:10px;padding:10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border)">
-        <div style="font:600 9px var(--sans);color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Capacity Assessment</div>
-        <div style="font:700 22px var(--mono);color:var(--accent)">58%</div>
-        <div style="font:400 9px var(--sans);color:var(--text3)">underbuilt vs borough typical</div>
+    <div class="hero-strip">
+      <div class="hero-metric"><div class="label">GDV</div><div class="value" style="color:${col.main}">£${fmt(Math.round(opt.gdv/1e6))}M</div></div>
+      <div class="hero-metric"><div class="label">Margin</div><div class="value" style="color:var(--green)">${opt.marginPct}%</div></div>
+      <div class="hero-metric"><div class="label">Added NIA</div><div class="value" style="color:var(--text)">${fmt(opt.addedNia)}<span style="font-size:12px;color:var(--text3)"> sqm</span></div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Massing</div>
+      <div class="stat-row"><span class="stat-label">Total Height</span><span class="stat-value">${opt.height}m / ${opt.floors}F</span></div>
+      <div class="stat-row"><span class="stat-label">Podium</span><span class="stat-value">${opt.podiumHeight}m / ${opt.podiumFloors}F — full plate</span></div>
+      <div class="stat-row"><span class="stat-label">Tower</span><span class="stat-value">${opt.height-opt.podiumHeight}m / ${opt.towerFloors}F — ${Math.round(opt.towerFootprintPct*100)}% footprint</span></div>
+      <div class="stat-row"><span class="stat-label">Site Coverage</span><span class="stat-value">${Math.round(opt.coverage*100)}%</span></div>
+      <div class="stat-row"><span class="stat-label">NIA Efficiency</span><span class="stat-value">${Math.round(opt.niaEfficiency*100)}%</span></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Capacity</div>
+      <div class="bar-row">
+        <div class="bar-label"><span>Height</span><span>${opt.height}m of 100m typical max</span></div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${Math.min(100,opt.height/100*100)}%;background:${col.fill}">${opt.height}m</div>
+        </div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"><span>Floor Area</span><span>${fmt(opt.nia)} sqm total NIA</span></div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${Math.min(100,opt.existingNia/opt.nia*100)}%;background:var(--red)">${fmt(opt.existingNia)}</div>
+          <div class="bar-fill" style="width:${Math.min(100,opt.addedNia/opt.nia*100)}%;background:${col.fill}">+${fmt(opt.addedNia)}</div>
+        </div>
       </div>
     </div>
-  `);
 
-  grid.innerHTML = cards.join('');
+    <div class="section">
+      <div class="section-title">Layout & Design</div>
+      <div class="brief">${opt.layout}</div>
+      <div style="margin-top:10px">
+        <div class="stat-row"><span class="stat-label">Vertical Access</span><span class="stat-value">${opt.staircase}</span></div>
+        <div class="stat-row"><span class="stat-label">Sustainability</span><span class="stat-value">${opt.breeam}</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Pro Forma</div>
+      <table class="proforma">
+        <tr><td>Additional NIA</td><td>${fmt(opt.addedNia)} sqm (${fmt(opt.addedNiaSqft)} sqft)</td></tr>
+        <tr><td>Construction @ £${opt.costSqft}/sqft</td><td>£${fmt(Math.round(opt.constructionCost/1e6*10)/10)}M</td></tr>
+        <tr><td>Professional Fees (12%)</td><td>£${fmt(Math.round(opt.fees/1e6*10)/10)}M</td></tr>
+        <tr><td>CIL (£186/sqm)</td><td>£${fmt(Math.round(opt.cil/1e6*10)/10)}M</td></tr>
+        <tr><td>Finance (7%, 30mo)</td><td>£${fmt(Math.round(opt.finance/1e6*10)/10)}M</td></tr>
+        <tr><td style="font-weight:600">Total Development Cost</td><td style="font-weight:600">£${fmt(Math.round(opt.totalCost/1e6*10)/10)}M</td></tr>
+        <tr><td>Capital Value @ £${fmt(opt.saleSqft)}/sqft</td><td>£${fmt(Math.round(opt.gdv/1e6*10)/10)}M</td></tr>
+        <tr class="total"><td>Development Margin</td><td>£${fmt(Math.round(opt.margin/1e6*10)/10)}M (${opt.marginPct}%)</td></tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Planning Risk</div>
+      <div><span class="risk ${opt.risk}">${opt.riskLabel}</span></div>
+      <div class="brief" style="margin-top:10px">${opt.planningNotes}</div>
+    </div>
+
+    <div class="section">
+      <button class="export-btn" onclick="window.open('/reports/100-leadenhall-street.html','_blank')">📄 Export Full Report</button>
+    </div>
+  `;
+}
+
+function renderExistingPanel(){
+  const existingNia = Math.round(PLOT_AREA*0.80*0.82*EXISTING_FLOORS);
+  document.getElementById('panel-body').innerHTML = `
+    <div class="scheme-header" style="border-left:3px solid #f87171">
+      <div class="scheme-name"><div class="dot" style="background:#f87171;width:10px;height:10px;border-radius:50%"></div>Existing Building</div>
+      <div class="scheme-desc">6-storey commercial office — Class E</div>
+    </div>
+
+    <div class="hero-strip">
+      <div class="hero-metric"><div class="label">Height</div><div class="value" style="color:var(--red)">${EXISTING_HEIGHT}m</div></div>
+      <div class="hero-metric"><div class="label">Floors</div><div class="value">${EXISTING_FLOORS}F</div></div>
+      <div class="hero-metric"><div class="label">Underbuilt</div><div class="value" style="color:var(--accent)">58%</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Current Building</div>
+      <div class="stat-row"><span class="stat-label">Plot Area</span><span class="stat-value">${fmt(PLOT_AREA)} sqm</span></div>
+      <div class="stat-row"><span class="stat-label">Floor Area (NIA)</span><span class="stat-value">${fmt(existingNia)} sqm</span></div>
+      <div class="stat-row"><span class="stat-label">Coverage</span><span class="stat-value">~80%</span></div>
+      <div class="stat-row"><span class="stat-label">Use Class</span><span class="stat-value">Class E (Office)</span></div>
+      <div class="stat-row"><span class="stat-label">Building Levels</span><span class="stat-value">${EXISTING_FLOORS} (OSM)</span></div>
+      <div class="stat-row"><span class="stat-label">PTAL</span><span class="stat-value accent">6a — Excellent</span></div>
+      <div class="stat-row"><span class="stat-label">Flood Zone</span><span class="stat-value green">1 — Low Risk</span></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Capacity Assessment</div>
+      <div class="bar-row">
+        <div class="bar-label"><span>Height vs Borough Typical</span><span>${EXISTING_HEIGHT}m of 60m</span></div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:42%;background:#dc2626">${EXISTING_HEIGHT}m</div>
+          <div class="bar-fill" style="width:58%;background:rgba(255,255,255,.06)"></div>
+        </div>
+      </div>
+      <div class="brief" style="margin-top:12px">
+        This site is <strong>58% underbuilt</strong> relative to the City of London's typical approved height 
+        for this location. The Eastern Cluster policy actively encourages intensification. 
+        Adjacent buildings include 122 Leadenhall (225m), 22 Bishopsgate (278m), and 1 Undershaft (290m, u/c).
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Options Summary</div>
+      <div class="stat-row"><span class="stat-label">Option A — Conservative</span><span class="stat-value green">10F · £${fmt(Math.round(OPTIONS[0].gdv/1e6))}M GDV</span></div>
+      <div class="stat-row"><span class="stat-label">Option B — Mid-Rise</span><span class="stat-value accent">14F · £${fmt(Math.round(OPTIONS[1].gdv/1e6))}M GDV</span></div>
+      <div class="stat-row"><span class="stat-label">Option C — Tower</span><span class="stat-value amber">22F · £${fmt(Math.round(OPTIONS[2].gdv/1e6))}M GDV</span></div>
+    </div>
+
+    <div class="section">
+      <button class="export-btn" onclick="window.open('/reports/100-leadenhall-street.html','_blank')">📄 Export Full Report</button>
+    </div>
+  `;
 }
 
 init();
