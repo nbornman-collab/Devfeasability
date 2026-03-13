@@ -215,20 +215,28 @@ OPTIONS.forEach(opt => {
   opt.marginPct = gdv > 0 ? (margin/gdv*100).toFixed(0) : '0';
 });
 
-// ─── Primary building axis angle (SVG degrees) ───────────────────────────────
-// Find longest edge of polygon → that's the primary building orientation
-// Returns rotation angle in SVG coordinate space (degrees, clockwise)
-function buildingAxisDeg(scaleX, scaleY) {
-  let maxLen = 0, angleDeg = 0;
-  for(let i=0; i<SITE_COORDS.length-1; i++){
-    const c1=SITE_COORDS[i], c2=SITE_COORDS[i+1];
-    // SVG x increases east, SVG y increases south (lat flipped)
-    const dxSvg = (c2[0]-c1[0]) * M_PER_LNG * scaleX;
-    const dySvg = -((c2[1]-c1[1]) * M_PER_LAT * scaleY); // flip lat→SVG-y
-    const len = Math.sqrt(dxSvg*dxSvg + dySvg*dySvg);
-    if(len > maxLen){ maxLen=len; angleDeg = Math.atan2(dySvg, dxSvg)*180/Math.PI; }
-  }
-  return angleDeg;
+// ─── Principal building axis via PCA ────────────────────────────────────────
+// Uses covariance of polygon vertices in SVG space.
+// Returns { angle (SVG degrees, clockwise), elongation (ratio of principal axes) }
+// This gives the TRUE dominant direction of the mass, not just the longest edge.
+function buildingPrincipalAxis(scaleX, scaleY) {
+  const cx = SITE_COORDS.reduce((s,c)=>s+c[0],0)/SITE_COORDS.length;
+  const cy = SITE_COORDS.reduce((s,c)=>s+c[1],0)/SITE_COORDS.length;
+  // Convert to SVG space (x east, y south = inverted lat)
+  const pts = SITE_COORDS.map(c=>[
+    (c[0]-cx)*M_PER_LNG*scaleX,
+    -((c[1]-cy)*M_PER_LAT*scaleY)
+  ]);
+  const n = pts.length;
+  let cxx=0, cxy=0, cyy=0;
+  pts.forEach(([x,y])=>{ cxx+=x*x; cxy+=x*y; cyy+=y*y; });
+  cxx/=n; cxy/=n; cyy/=n;
+  const trace=cxx+cyy, det=cxx*cyy-cxy*cxy;
+  const disc=Math.sqrt(Math.max(0, trace*trace/4-det));
+  const lam1=trace/2+disc, lam2=trace/2-disc; // lam1 = dominant axis
+  const angle = Math.abs(cxy)>1e-8 ? Math.atan2(lam1-cxx,cxy)*180/Math.PI : (cxx>=cyy?0:90);
+  const elongation = lam2>1e-6 ? Math.sqrt(lam1/lam2) : 1;
+  return { angle, elongation };
 }
 
 // ─── SVG floor plan generator ───────────────────────────────────────────────
@@ -272,15 +280,17 @@ function makePlanSVG(opt, level='podium') {
   const podiumGIA = PLOT_AREA * (opt.coverage||0.80); // always needed for tower alignment
   const coreGIA = plateGIA * 0.22;
   const podiumCoreGIA = podiumGIA * 0.22;
-  // Compact rectangle: aspect ratio along building primary axis
-  const coreAspect = 1.35;
+
+  // ── BUILDING AXIS via PCA (dominant mass direction, not just longest edge) ─
+  const { angle: axisAngle, elongation } = buildingPrincipalAxis(scaleX, scaleY);
+  // Core aspect ratio shaped to match the building's principal elongation.
+  // If building is elongated 1.4:1, core is ~1.3:1 in same direction.
+  // Clamped 1.2–2.4 to stay buildable (min 7m on short face enforced by area).
+  const coreAspect = Math.min(Math.max(elongation * 0.85, 1.2), 2.4);
   const coreWm = Math.sqrt(coreGIA / coreAspect);
   const coreHm = coreWm * coreAspect;
   const podiumCoreWm = Math.sqrt(podiumCoreGIA / coreAspect);
   const podiumCoreHm = podiumCoreWm * coreAspect;
-
-  // ── BUILDING AXIS (rotate core to envelope) ────────────────────────────
-  const axisAngle = buildingAxisDeg(scaleX, scaleY); // SVG degrees
 
   // ── CORE POSITION ─────────────────────────────────────────────────────
   // Primary elevation: north (Leadenhall St) + east (cluster views) → protect as NIA
