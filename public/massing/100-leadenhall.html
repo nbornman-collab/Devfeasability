@@ -215,10 +215,28 @@ OPTIONS.forEach(opt => {
   opt.marginPct = gdv > 0 ? (margin/gdv*100).toFixed(0) : '0';
 });
 
+// ─── Primary building axis angle (SVG degrees) ───────────────────────────────
+// Find longest edge of polygon → that's the primary building orientation
+// Returns rotation angle in SVG coordinate space (degrees, clockwise)
+function buildingAxisDeg(scaleX, scaleY) {
+  let maxLen = 0, angleDeg = 0;
+  for(let i=0; i<SITE_COORDS.length-1; i++){
+    const c1=SITE_COORDS[i], c2=SITE_COORDS[i+1];
+    // SVG x increases east, SVG y increases south (lat flipped)
+    const dxSvg = (c2[0]-c1[0]) * M_PER_LNG * scaleX;
+    const dySvg = -((c2[1]-c1[1]) * M_PER_LAT * scaleY); // flip lat→SVG-y
+    const len = Math.sqrt(dxSvg*dxSvg + dySvg*dySvg);
+    if(len > maxLen){ maxLen=len; angleDeg = Math.atan2(dySvg, dxSvg)*180/Math.PI; }
+  }
+  return angleDeg;
+}
+
 // ─── SVG floor plan generator ───────────────────────────────────────────────
 // Core sizing: 22% of GIA (vetted by Nic 2026-03-13)
 // Core position: driven by polygon shape + views, not just centred
-// Satellite stair: in re-entrant corner / awkward space
+// Core ROTATED to building primary axis (not due north)
+// Tower core: aligns 2 faces to podium below, reduces on other 2
+// Satellite stair: in re-entrant SW corner
 function makePlanSVG(opt, level='podium') {
   const lons = SITE_COORDS.map(c=>c[0]);
   const lats = SITE_COORDS.map(c=>c[1]);
@@ -249,41 +267,58 @@ function makePlanSVG(opt, level='podium') {
   const sitePts = SITE_COORDS.map(c=>px(c[0],c[1]).join(',')).join(' ');
   const bldgPts = bldgCoords.map(c=>px(c[0],c[1]).join(',')).join(' ');
 
-  // ── CORE SIZING (22% GIA) ──────────────────────────────────────────────
-  // Floor plate GIA
+  // ── CORE SIZING (22% GIA — vetted) ────────────────────────────────────
   const plateGIA = PLOT_AREA * (isTower ? opt.towerFootprintPct||1 : 1) * (opt.coverage||0.80);
+  const podiumGIA = PLOT_AREA * (opt.coverage||0.80); // always needed for tower alignment
   const coreGIA = plateGIA * 0.22;
-  // Core as compact rectangle — roughly square for central core
-  const coreAspect = 1.4; // slightly taller than wide (stairs/lifts run N-S)
+  const podiumCoreGIA = podiumGIA * 0.22;
+  // Compact rectangle: aspect ratio along building primary axis
+  const coreAspect = 1.35;
   const coreWm = Math.sqrt(coreGIA / coreAspect);
   const coreHm = coreWm * coreAspect;
+  const podiumCoreWm = Math.sqrt(podiumCoreGIA / coreAspect);
+  const podiumCoreHm = podiumCoreWm * coreAspect;
 
-  // ── CORE POSITION ──────────────────────────────────────────────────────
-  // 100 Leadenhall: primary elevation = north (Leadenhall St) + east (cluster views)
-  // SW corner has a re-entrant notch → satellite stair goes there
-  // Primary core: offset slightly NE of centroid, away from SW notch
-  // In lon/lat: north = higher lat, east = less negative lon
-  const coreOffsetLon = (lonMax - lonMin) * 0.06;  // slight east offset
-  const coreOffsetLat = (latMax - latMin) * 0.05;  // slight north offset
-  const coreLon = cxLon + (isTower ? 0 : coreOffsetLon);
-  const coreLat = cyLat + (isTower ? 0 : coreOffsetLat);
+  // ── BUILDING AXIS (rotate core to envelope) ────────────────────────────
+  const axisAngle = buildingAxisDeg(scaleX, scaleY); // SVG degrees
+
+  // ── CORE POSITION ─────────────────────────────────────────────────────
+  // Primary elevation: north (Leadenhall St) + east (cluster views) → protect as NIA
+  // Core offset toward SW interior — away from prime faces
+  // Tower core: pins NE corner to match podium below, reduces SW
+  const coreOffsetLon = (lonMax-lonMin) * 0.05;
+  const coreOffsetLat = (latMax-latMin) * 0.04;
+  const coreLon = cxLon - coreOffsetLon * 0.3; // slight west of centroid
+  const coreLat = cyLat - coreOffsetLat * 0.2; // slight south of centroid
   const [cpx, cpy] = px(coreLon, coreLat);
   const cw = coreWm * scaleX;
   const ch = coreHm * scaleY;
+  const podiumCw = podiumCoreWm * scaleX;
+  const podiumCh = podiumCoreHm * scaleY;
 
-  // ── SATELLITE STAIR (SW corner — re-entrant zone) ──────────────────────
-  // SW corner of 100 Leadenhall: approx lon=-0.0804, lat=51.5135 (lower-left of polygon)
-  const satLon = lonMin + (lonMax-lonMin)*0.12;
-  const satLat = latMin + (latMax-latMin)*0.18;
+  // Tower core: align NE corner (primary lease faces) to podium, reduce SW
+  // In local rotated frame: right face stays, top face stays → shrink left & bottom
+  const twCw = cw;  // width in rotated frame (already from towerFootprintPct GIA)
+  const twCh = ch;
+  // Offset in rotated frame so NE corner matches podium NE corner
+  // podium NE corner = (podiumCw/2, -podiumCh/2) in local frame
+  // tower NE corner = (twCw/2, -twCh/2) in local frame — pin these
+  const twOffX = (podiumCw - twCw) / 2; // shift left by reduction amount
+  const twOffY = (twCh - podiumCh) / 2; // shift down by reduction amount
+
+  // ── SATELLITE STAIR (SW re-entrant — awkward corner) ──────────────────
+  // SW of polygon = lowest lat + most negative lon area
+  const satLon = lonMin + (lonMax-lonMin)*0.1;
+  const satLat = latMin + (latMax-latMin)*0.15;
   const [spx, spy] = px(satLon, satLat);
-  const satSize = Math.max(cw*0.45, 8);
+  const satSize = Math.max(podiumCw * 0.5, 9);
 
-  // ── LEASE SPAN ─────────────────────────────────────────────────────────
-  // From core face to nearest building perimeter (east direction = primary span)
+  // ── LEASE SPAN (E face: core edge → perimeter) ─────────────────────────
+  // East face of core → east perimeter (primary lease direction)
   const coreEdgeLon = coreLon + coreWm/2 / M_PER_LNG;
-  const perimLon = lonMax - (lonMax-lonMin)*0.05;
-  const leaseSpanM = Math.round((perimLon - coreEdgeLon) * M_PER_LNG);
-  const leaseOk = leaseSpanM >= 7.5;
+  const perimLon = lonMax - (lonMax-lonMin)*0.04;
+  const leaseSpanM = Math.round(Math.max(0,(perimLon - coreEdgeLon) * M_PER_LNG));
+  const leaseOk = leaseSpanM >= 7;
 
   // ── SETBACK LINE ───────────────────────────────────────────────────────
   let setbackPts = '';
@@ -292,58 +327,69 @@ function makePlanSVG(opt, level='podium') {
     setbackPts = SITE_COORDS.map(c=>px(cxLon+(c[0]-cxLon)*sf, cyLat+(c[1]-cyLat)*sf).join(',')).join(' ');
   }
 
-  // ── STRUCTURAL GRID (9m) ───────────────────────────────────────────────
-  const gridSpacingPx = 9 * scaleX;
-  let grid = '';
-  const [gx0] = px(lonMin, latMin);
-  for(let gx=gx0; gx<VW-pad; gx+=gridSpacingPx){
-    grid += `<line x1="${gx.toFixed(1)}" y1="${pad}" x2="${gx.toFixed(1)}" y2="${VH-pad}" stroke="${col.edge}" stroke-width="0.3" opacity="0.12" stroke-dasharray="1,4"/>`;
-  }
+  // ── STRUCTURAL GRID (9m, rotated with building) ────────────────────────
+  // Grid drawn in rotated space via SVG transform on a group
+  const gridSpacingPxX = 9 * scaleX;
   const gridSpacingPxY = 9 * scaleY;
-  const [,gy0] = px(lonMin, latMin);
-  for(let gy=gy0; gy>pad; gy-=gridSpacingPxY){
-    grid += `<line x1="${pad}" y1="${gy.toFixed(1)}" x2="${VW-pad}" y2="${gy.toFixed(1)}" stroke="${col.edge}" stroke-width="0.3" opacity="0.12" stroke-dasharray="1,4"/>`;
-  }
+  let grid = '';
+  for(let gx=-200; gx<400; gx+=gridSpacingPxX)
+    grid += `<line x1="${gx.toFixed(0)}" y1="-200" x2="${gx.toFixed(0)}" y2="400" stroke="${col.edge}" stroke-width="0.3" opacity="0.15" stroke-dasharray="1,5"/>`;
+  for(let gy=-200; gy<400; gy+=gridSpacingPxY)
+    grid += `<line x1="-200" y1="${gy.toFixed(0)}" x2="400" y2="${gy.toFixed(0)}" stroke="${col.edge}" stroke-width="0.3" opacity="0.15" stroke-dasharray="1,5"/>`;
 
-  // ── LEASE SPAN DIMENSION LINE ──────────────────────────────────────────
-  const lsX1 = cpx + cw/2;
+  // ── LEASE DIM LINE (unrotated, horizontal) ────────────────────────────
+  const lsX1 = cpx + (isTower ? twCw/2 + twOffX : podiumCw/2) * Math.cos(axisAngle*Math.PI/180);
   const lsX2 = px(perimLon, coreLat)[0];
-  const lsY = cpy - ch/2 - 4;
+  const lsY = cpy - podiumCh/2 - 5;
 
   const nax=VW-13, nay=13;
+  const clipId = `clip-${opt.key||'ex'}-${isTower?'t':'p'}`;
   const floorLabel = isTower ? `L${opt.podiumFloors+1}–${opt.floors} TOWER` : isExisting ? `L1–${EXISTING_FLOORS} EXISTING` : `L1–${opt.podiumFloors} PODIUM`;
+
+  // Core rect coordinates in local (rotated) frame
+  // Podium: centred
+  // Tower: pin NE corner → offset SW
+  const coreLocalX = isTower ? -podiumCw/2 + twOffX : -podiumCw/2;
+  const coreLocalY = isTower ? -podiumCh/2 + twOffY : -podiumCh/2;
+  const coreRectW  = isTower ? twCw : podiumCw;
+  const coreRectH  = isTower ? twCh : podiumCh;
+  const coreSqm    = Math.round(isTower ? coreGIA : podiumCoreGIA);
 
   return `<svg viewBox="0 0 ${VW} ${VH}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <clipPath id="clip-${opt.key||'e'}-${isTower?'t':'p'}">
-      <polygon points="${bldgPts}"/>
-    </clipPath>
+    <clipPath id="${clipId}"><polygon points="${bldgPts}"/></clipPath>
   </defs>
   <rect width="${VW}" height="${VH}" fill="var(--surface2)"/>
-  <!-- structural grid (clipped to building) -->
-  <g clip-path="url(#clip-${opt.key||'e'}-${isTower?'t':'p'})">${grid}</g>
-  <!-- site boundary -->
-  <polygon points="${sitePts}" fill="${col.fill}" fill-opacity="0.12" stroke="${col.edge}" stroke-width="1" stroke-dasharray="4,2" opacity="0.5"/>
+  <!-- structural grid — rotated to building axis, clipped to footprint -->
+  <g clip-path="url(#${clipId})">
+    <g transform="rotate(${axisAngle.toFixed(1)},${cpx.toFixed(1)},${cpy.toFixed(1)})">${grid}</g>
+  </g>
+  <!-- site boundary (dashed) -->
+  <polygon points="${sitePts}" fill="${col.fill}" fill-opacity="0.10" stroke="${col.edge}" stroke-width="1" stroke-dasharray="5,3" opacity="0.4"/>
   <!-- building footprint -->
-  <polygon points="${bldgPts}" fill="${col.fill}" fill-opacity="0.28" stroke="${col.edge}" stroke-width="1.5"/>
-  <!-- setback line -->
-  ${setbackPts ? `<polygon points="${setbackPts}" fill="none" stroke="${col.edge}" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>` : ''}
-  <!-- lease span dimension line -->
-  <line x1="${lsX1.toFixed(1)}" y1="${lsY.toFixed(1)}" x2="${lsX2.toFixed(1)}" y2="${lsY.toFixed(1)}" stroke="${leaseOk ? col.edge : '#f87171'}" stroke-width="0.8" opacity="0.7"/>
-  <line x1="${lsX1.toFixed(1)}" y1="${(lsY-3).toFixed(1)}" x2="${lsX1.toFixed(1)}" y2="${(lsY+3).toFixed(1)}" stroke="${leaseOk ? col.edge : '#f87171'}" stroke-width="0.8"/>
-  <line x1="${lsX2.toFixed(1)}" y1="${(lsY-3).toFixed(1)}" x2="${lsX2.toFixed(1)}" y2="${(lsY+3).toFixed(1)}" stroke="${leaseOk ? col.edge : '#f87171'}" stroke-width="0.8"/>
-  <text x="${((lsX1+lsX2)/2).toFixed(1)}" y="${(lsY-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="${leaseOk ? col.main : '#f87171'}" font-weight="600">${leaseSpanM}m${leaseOk ? '' : ' ⚠'}</text>
-  <!-- primary core -->
-  <rect x="${(cpx-cw/2).toFixed(1)}" y="${(cpy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="rgba(0,0,0,0.8)" stroke="${col.edge}" stroke-width="1.2"/>
-  <text x="${cpx.toFixed(1)}" y="${(cpy-2).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" font-weight="700" fill="white" opacity="0.9">CORE</text>
-  <text x="${cpx.toFixed(1)}" y="${(cpy+4).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="white" opacity="0.5">${Math.round(coreGIA)}sqm</text>
-  <!-- satellite stair (SW re-entrant) -->
-  ${!isTower ? `<rect x="${(spx-satSize/2).toFixed(1)}" y="${(spy-satSize/2).toFixed(1)}" width="${satSize.toFixed(1)}" height="${satSize.toFixed(1)}" fill="rgba(0,0,0,0.6)" stroke="${col.edge}" stroke-width="0.8" stroke-dasharray="2,1"/>
-  <text x="${spx.toFixed(1)}" y="${spy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="white" opacity="0.7">STAIR</text>` : ''}
+  <polygon points="${bldgPts}" fill="${col.fill}" fill-opacity="0.25" stroke="${col.edge}" stroke-width="1.5"/>
+  <!-- setback dashed line -->
+  ${setbackPts ? `<polygon points="${setbackPts}" fill="none" stroke="${col.edge}" stroke-width="1" stroke-dasharray="4,2.5" opacity="0.55"/>` : ''}
+  <!-- satellite stair (SW re-entrant corner) -->
+  ${!isTower && !isExisting ? `<g transform="rotate(${axisAngle.toFixed(1)},${spx.toFixed(1)},${spy.toFixed(1)})">
+    <rect x="${(spx-satSize/2).toFixed(1)}" y="${(spy-satSize*0.6).toFixed(1)}" width="${satSize.toFixed(1)}" height="${(satSize*1.2).toFixed(1)}" fill="rgba(0,0,0,0.65)" stroke="${col.edge}" stroke-width="0.8" stroke-dasharray="2,1.5"/>
+    <text x="${spx.toFixed(1)}" y="${spy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="white" opacity="0.8">STAIR</text>
+  </g>` : ''}
+  <!-- primary core — rotated to building axis, correct face alignment -->
+  <g transform="rotate(${axisAngle.toFixed(1)},${cpx.toFixed(1)},${cpy.toFixed(1)})">
+    <rect x="${(cpx+coreLocalX).toFixed(1)}" y="${(cpy+coreLocalY).toFixed(1)}" width="${coreRectW.toFixed(1)}" height="${coreRectH.toFixed(1)}" fill="rgba(0,0,0,0.82)" stroke="${col.edge}" stroke-width="1.3"/>
+    <text x="${(cpx+coreLocalX+coreRectW/2).toFixed(1)}" y="${(cpy+coreLocalY+coreRectH/2-2).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" font-weight="700" fill="white" opacity="0.9">CORE</text>
+    <text x="${(cpx+coreLocalX+coreRectW/2).toFixed(1)}" y="${(cpy+coreLocalY+coreRectH/2+4).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="3.8" fill="white" opacity="0.5">${coreSqm}sqm</text>
+  </g>
+  <!-- lease span dim line (horizontal, unrotated) -->
+  <line x1="${lsX1.toFixed(1)}" y1="${lsY.toFixed(1)}" x2="${lsX2.toFixed(1)}" y2="${lsY.toFixed(1)}" stroke="${leaseOk?col.edge:'#f87171'}" stroke-width="0.9" opacity="0.8"/>
+  <line x1="${lsX1.toFixed(1)}" y1="${(lsY-3).toFixed(1)}" x2="${lsX1.toFixed(1)}" y2="${(lsY+3).toFixed(1)}" stroke="${leaseOk?col.edge:'#f87171'}" stroke-width="0.9"/>
+  <line x1="${lsX2.toFixed(1)}" y1="${(lsY-3).toFixed(1)}" x2="${lsX2.toFixed(1)}" y2="${(lsY+3).toFixed(1)}" stroke="${leaseOk?col.edge:'#f87171'}" stroke-width="0.9"/>
+  <text x="${((lsX1+lsX2)/2).toFixed(1)}" y="${(lsY-4).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="${leaseOk?col.main:'#f87171'}" font-weight="700">${leaseSpanM}m${leaseOk?' ✓':' ⚠'}</text>
   <!-- floor label -->
   <text x="5" y="9" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="${col.main}">${floorLabel}</text>
-  <!-- lease span label -->
-  <text x="5" y="${VH-3}" font-family="Inter,sans-serif" font-size="5" fill="${leaseOk ? 'var(--text3)' : '#f87171'}">Lease span: ${leaseSpanM}m${leaseOk ? ' ✓' : ' — below 7.5m BCO min ⚠'}</text>
+  <!-- lease OK/warn -->
+  <text x="5" y="${VH-3}" font-family="Inter,sans-serif" font-size="5" fill="${leaseOk?'var(--text3)':'#f87171'}">${leaseOk ? `≥7m lease span ✓` : `${leaseSpanM}m — below 7m min ⚠`}</text>
   <!-- north arrow -->
   <g transform="translate(${nax},${nay})">
     <circle r="7" fill="var(--surface3)" stroke="var(--border)" stroke-width="0.5"/>
@@ -351,9 +397,8 @@ function makePlanSVG(opt, level='podium') {
     <polygon points="0,5 1.5,-1.5 0,0 -1.5,-1.5" fill="var(--surface2)" opacity="0.8"/>
     <text x="0" y="-6.5" text-anchor="middle" font-family="Inter,sans-serif" font-size="4" font-weight="700" fill="${col.main}">N</text>
   </g>
-  <!-- width dim -->
-  <line x1="${pad}" y1="${VH-8}" x2="${VW-pad}" y2="${VH-8}" stroke="var(--text3)" stroke-width="0.4" opacity="0.3"/>
-  <text x="${VW/2}" y="${VH-3}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4.5" fill="var(--text3)" opacity="0.4">~${Math.round(widthM)}m wide</text>
+  <!-- width -->
+  <text x="${VW/2}" y="${VH-1}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4.5" fill="var(--text3)" opacity="0.35">~${Math.round(widthM)}m</text>
 </svg>`;
 }
 
@@ -629,62 +674,140 @@ function renderExistingPanel(){
 
 function renderComparePanel(){
   const cols = OPTIONS.map(o=>OPTION_COLORS[o.key]);
-  const riskColors = {low:'var(--green)',medium:'var(--amber)',high:'var(--red)'};
+  const maxGdv = Math.max(...OPTIONS.map(o=>o.gdv));
+  const maxMarginPct = Math.max(...OPTIONS.map(o=>parseFloat(o.marginPct)));
 
-  const rows = [
-    ['Height',         ...OPTIONS.map(o=>`${o.height}m / ${o.floors}F`)],
-    ['Podium',         ...OPTIONS.map(o=>`${o.podiumFloors}F @ ${o.podiumHeight}m`)],
-    ['Tower',          ...OPTIONS.map(o=>`${o.towerFloors}F @ ${Math.round(o.towerFootprintPct*100)}%`)],
-    ['Added NIA',      ...OPTIONS.map(o=>`${fmt(o.addedNia)} sqm`)],
-    ['GDV',            ...OPTIONS.map(o=>`£${Math.round(o.gdv/1e6)}M`)],
-    ['Total Cost',     ...OPTIONS.map(o=>`£${(o.totalCost/1e6).toFixed(1)}M`)],
-    ['Margin',         ...OPTIONS.map(o=>`£${(o.margin/1e6).toFixed(1)}M`)],
-    ['Margin %',       ...OPTIONS.map(o=>`${o.marginPct}%`)],
-    ['Build £/sqft',   ...OPTIONS.map(o=>`£${o.costSqft}`)],
-    ['Sale £/sqft',    ...OPTIONS.map(o=>`£${fmt(o.saleSqft)}`)],
-    ['BREEAM',         ...OPTIONS.map(o=>o.breeam.replace('BREEAM ',''))],
-    ['Planning Risk',  ...OPTIONS.map(o=>`<span class="risk ${o.risk}">${o.riskLabel.replace(' Planning Risk','')}</span>`)],
+  const assessments = [
+    {
+      verdict:'Viable — fast consent, low exposure',
+      verdictColor:'var(--green)',
+      pros:[
+        'Lowest planning risk — sits within established City height envelope',
+        'Fastest consent route — pre-app likely positive, no GLA referral',
+        'Lowest capital exposure — £380/sqft, manageable finance',
+        'Delivers meaningful NIA uplift with minimal regulatory friction',
+      ],
+      cons:[
+        'Leaves significant capacity on the table — underuses PTAL 6a + Eastern Cluster policy',
+        'BREEAM Excellent only — institutional investors increasingly require Outstanding',
+        'Limited premium floors — only 4 tower levels with views command rent premium',
+        'May not satisfy City\'s density aspirations — harder to argue public benefit',
+      ],
+      for:'Best fit for a risk-averse developer, pre-sale strategy, or constrained funding timeline.'
+    },
+    {
+      verdict:'★ Recommended — best risk-adjusted return',
+      verdictColor:OPTION_COLORS.b.main,
+      pros:[
+        `Highest margin % (${OPTIONS[1].marginPct}%) — best risk-adjusted return of the three`,
+        'Established precedent nearby — comparable approvals support the planning case',
+        'LVMF impact manageable — not in primary St Paul\'s protected view cone',
+        'Sky terrace at L7 adds planning appeal and tenant amenity (BCO quality benchmark)',
+        'BREEAM Outstanding achievable — required by institutional investors and ESG funds',
+        '8F of tower floors commands significant rent premium from cluster views',
+      ],
+      cons:[
+        'LVMF protected view assessment required — adds ~3–4 months to pre-app programme',
+        'Wind microclimate study needed at street level (standard for this height)',
+        'Slightly higher build cost vs Option A (£400/sqft)',
+      ],
+      for:'The recommended option for most developer profiles. Maximises risk-adjusted return within a proven planning envelope. Commission LVMF study in parallel with pre-app to minimise programme impact.'
+    },
+    {
+      verdict:'High upside — high risk, not for the faint-hearted',
+      verdictColor:OPTION_COLORS.c.main,
+      pros:[
+        `Highest absolute GDV (£${Math.round(OPTIONS[2].gdv/1e6)}M) — maximum value extraction`,
+        'Premium upper floors (L15–22) command significant City rent premium',
+        'Aligns with Eastern Cluster height aspirations — good fit with City\'s own SPD',
+        'Sky lobby + public benefit package can build political and officer support',
+        'Statement architecture potential — attracts pre-lets from prestige tenants',
+      ],
+      cons:[
+        'GLA referral near-certain — adds 6–12 months to planning programme',
+        'Full environmental suite required: wind, daylight/sunlight, LVMF, microclimate, townscape',
+        `Tower floor lease spans (~6m each side) below BCO 7.5m minimum — leasability risk on upper floors`,
+        'Exceptional design quality required — architect and consultant fee premium',
+        '£450/sqft build cost + longer finance carry = highest capital at risk',
+        'Planning failure risk is real — strong design case is non-negotiable',
+      ],
+      for:'Right scheme if developer has appetite for a 30–42 month planning process, budget for exceptional design, and institutional backing. Not appropriate for a spec development without pre-let.'
+    }
   ];
 
-  // GDV bar chart
-  const maxGdv = Math.max(...OPTIONS.map(o=>o.gdv));
+  const rows = [
+    ['Height',       ...OPTIONS.map(o=>`${o.height}m / ${o.floors}F`)],
+    ['Added NIA',    ...OPTIONS.map(o=>`${fmt(o.addedNia)} sqm`)],
+    ['GDV',          ...OPTIONS.map(o=>`£${Math.round(o.gdv/1e6)}M`)],
+    ['Total Cost',   ...OPTIONS.map(o=>`£${(o.totalCost/1e6).toFixed(1)}M`)],
+    ['Margin',       ...OPTIONS.map(o=>`£${(o.margin/1e6).toFixed(1)}M`)],
+    ['Margin %',     ...OPTIONS.map(o=>`${o.marginPct}%`)],
+    ['Build £/sqft', ...OPTIONS.map(o=>`£${o.costSqft}`)],
+    ['BREEAM',       ...OPTIONS.map(o=>o.breeam.replace('BREEAM ',''))],
+    ['Planning',     ...OPTIONS.map(o=>`<span class="risk ${o.risk}">${o.risk}</span>`)],
+    ['Programme',    'Pre-app 3mo','Pre-app 6mo+','Pre-app 9mo+'],
+  ];
 
   document.getElementById('panel-body').innerHTML = `
     <div class="scheme-header">
       <div class="scheme-name">Options Comparison</div>
-      <div class="scheme-desc">Side-by-side analysis — 100 Leadenhall Street</div>
+      <div class="scheme-desc">Risk · Return · Planning — 100 Leadenhall Street</div>
     </div>
 
-    <!-- GDV chart -->
+    <!-- recommendation banner -->
+    <div style="padding:14px 24px;background:rgba(99,102,241,.12);border-bottom:1px solid rgba(99,102,241,.2);border-left:3px solid ${OPTION_COLORS.b.main}">
+      <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:4px">D&A Studio Recommendation</div>
+      <div style="font:700 14px var(--sans);color:${OPTION_COLORS.b.main}">Option B — Mid-Rise</div>
+      <div style="font:400 11px var(--sans);color:var(--text2);margin-top:4px;line-height:1.6">Best risk-adjusted return. Proven planning path. Strong tenant appeal. Commission LVMF study in parallel with pre-app to protect programme.</div>
+    </div>
+
+    <!-- GDV + margin chart -->
     <div class="section">
-      <div class="section-title">GDV Comparison</div>
+      <div class="section-title">Return vs Risk</div>
       ${OPTIONS.map((o,i)=>`
         <div class="bar-row">
           <div class="bar-label">
-            <span style="color:${cols[i].main};font-weight:600">Option ${o.key.toUpperCase()}</span>
-            <span>£${Math.round(o.gdv/1e6)}M GDV · ${o.marginPct}% margin</span>
+            <span style="color:${cols[i].main};font-weight:700">Option ${o.key.toUpperCase()} · ${o.floors}F</span>
+            <span style="color:var(--text2)">£${Math.round(o.gdv/1e6)}M GDV · <strong style="color:${parseFloat(o.marginPct)===maxMarginPct?'var(--green)':'var(--text)'}">${o.marginPct}% margin</strong></span>
           </div>
           <div class="bar-track">
-            <div class="bar-fill" style="width:${Math.round(o.totalCost/maxGdv*100)}%;background:var(--surface3);color:var(--text3)">Cost</div>
-            <div class="bar-fill" style="width:${Math.round(o.margin/maxGdv*100)}%;background:${cols[i].fill}">Margin</div>
+            <div class="bar-fill" style="width:${Math.round(o.totalCost/maxGdv*100)}%;background:rgba(255,255,255,.07);min-width:30px;color:var(--text3);font-size:7px">cost</div>
+            <div class="bar-fill" style="width:${Math.round(o.margin/maxGdv*100)}%;background:${cols[i].fill}">+£${(o.margin/1e6).toFixed(0)}M</div>
           </div>
         </div>`).join('')}
     </div>
 
-    <!-- Comparison matrix -->
+    <!-- Per-option assessments -->
+    ${OPTIONS.map((o,i)=>`
+    <div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div style="font:700 13px var(--sans);color:${cols[i].main}">Option ${o.key.toUpperCase()} — ${o.floors}F · ${o.height}m</div>
+        <div style="font:600 9px var(--sans);color:${assessments[i].verdictColor};background:rgba(255,255,255,.05);padding:3px 8px;border-radius:4px;border:1px solid currentColor">${assessments[i].verdict}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+        <div>
+          ${assessments[i].pros.map(p=>`<div style="display:flex;gap:5px;margin-bottom:5px"><span style="color:var(--green);font-size:10px;margin-top:1px;flex-shrink:0">✓</span><span style="font:400 11px var(--sans);color:var(--text2);line-height:1.5">${p}</span></div>`).join('')}
+        </div>
+        <div>
+          ${assessments[i].cons.map(c=>`<div style="display:flex;gap:5px;margin-bottom:5px"><span style="color:var(--red);font-size:10px;margin-top:1px;flex-shrink:0">✗</span><span style="font:400 11px var(--sans);color:var(--text2);line-height:1.5">${c}</span></div>`).join('')}
+        </div>
+      </div>
+      <div style="font:400 11px var(--sans);color:var(--text3);font-style:italic;padding-top:8px;border-top:1px solid var(--border)">${assessments[i].for}</div>
+    </div>`).join('')}
+
+    <!-- data matrix -->
     <div class="section" style="padding:0">
-      <!-- header row -->
-      <div style="display:grid;grid-template-columns:36% repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1px">
-        <div style="background:var(--surface2);padding:10px 14px;font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3)"></div>
+      <div style="display:grid;grid-template-columns:34% repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1px">
+        <div style="background:var(--surface2);padding:10px 14px;font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3)">Metric</div>
         ${OPTIONS.map((o,i)=>`<div style="background:var(--surface2);padding:10px 12px;border-top:2px solid ${cols[i].main}">
-          <div style="font:700 11px var(--sans);color:${cols[i].main}">Option ${o.key.toUpperCase()}</div>
-          <div style="font:400 9px var(--sans);color:var(--text3)">${o.floors}F · ${o.height}m</div>
+          <div style="font:700 11px var(--sans);color:${cols[i].main}">Opt ${o.key.toUpperCase()}</div>
+          <div style="font:400 9px var(--sans);color:var(--text3)">${o.floors}F</div>
         </div>`).join('')}
       </div>
       ${rows.map(r=>`
-        <div style="display:grid;grid-template-columns:36% repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1px">
-          <div style="background:var(--surface);padding:8px 14px;font:400 11px var(--sans);color:var(--text3)">${r[0]}</div>
-          ${r.slice(1).map((v,i)=>`<div style="background:var(--bg);padding:8px 12px;font:500 11px var(--mono);color:var(--text)">${v}</div>`).join('')}
+        <div style="display:grid;grid-template-columns:34% repeat(3,1fr);gap:1px;background:var(--border);margin-bottom:1px">
+          <div style="background:var(--surface);padding:7px 14px;font:400 11px var(--sans);color:var(--text3)">${r[0]}</div>
+          ${r.slice(1).map((v,i)=>`<div style="background:var(--bg);padding:7px 10px;font:500 11px var(--mono);color:var(--text)">${v}</div>`).join('')}
         </div>`).join('')}
     </div>
 
