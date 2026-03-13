@@ -501,8 +501,9 @@ function buildContextMap(token){
   `;
 }
 
-// ── Ground floor plan — street section, kerb lines, city block masses ─────────
-// Layered: road → pavement → kerb → city blocks → site → building → core → dims
+// ── Ground floor plan v5 ──────────────────────────────────────────────────────
+// Padding-based scale so building reads at correct proportional size.
+// Existing footprint (grey dashed) + proposed (white solid) distinguished.
 function buildGroundFloorPlan(){
   const svg=document.getElementById('gf-plan-svg');
   const VW=280,VH=320,p=D.polygon;
@@ -510,306 +511,276 @@ function buildGroundFloorPlan(){
   const lonMin=Math.min(...lons),lonMax=Math.max(...lons);
   const latMin=Math.min(...lats),latMax=Math.max(...lats);
   const wM=(lonMax-lonMin)*M_PER_LNG, hM=(latMax-latMin)*M_PER_LAT;
-  // Scale: show ~2.2× context, preserve aspect ratio
-  const ctxF=2.2;
-  const scX=(VW-50)/(wM*ctxF), scY=(VH-80)/(hM*ctxF);
-  const sc=Math.min(scX,scY);
   const cLon=(lonMin+lonMax)/2, cLat=(latMin+latMax)/2;
-  function px(lon,lat){return [(lon-cLon)*M_PER_LNG*sc+VW/2, VH/2+5-(lat-cLat)*M_PER_LAT*sc];}
 
-  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
+  // Context padding (metres beyond site boundary)
+  const padN=42,padS=28,padE=32,padW=28;
+  const annotH=32; // px reserved at bottom for scale/north/legend
 
-  // Key SVG pixel positions
-  const [,siteTopY]=px(cLon,latMax);
-  const [,siteBotY]=px(cLon,latMin);
-  const [siteLeftX]=px(lonMin,cLat);
-  const [siteRightX]=px(lonMax,cLat);
+  // Scale: fit view to SVG, Y-axis usually constrains
+  const sc=Math.min((VW-8)/(wM+padW+padE),(VH-annotH-5)/(hM+padN+padS));
+
+  // Origin: site centroid in SVG pixel space
+  const originX=(VW-(wM+padW+padE)*sc)/2+(padW+wM/2)*sc;
+  const originY=5+(padN+hM/2)*sc;
+  function px(lon,lat){return[(lon-cLon)*M_PER_LNG*sc+originX, originY-(lat-cLat)*M_PER_LAT*sc];}
+
+  // Key site edges in SVG px
+  const [,siteTopY]=px(cLon,latMax);   // N face (Leadenhall Street side)
+  const [,siteBotY]=px(cLon,latMin);   // S face
+  const [siteLeftX]=px(lonMin,cLat);   // W face
+  const [siteRightX]=px(lonMax,cLat);  // E face (Lime Street side)
   const [ccx,ccy]=px(cLon,cLat);
 
-  // ── Street section dimensions (metres → px) ──────────────────────────────
-  // Leadenhall Street (N): ~18m total
-  const lsN_pave = 3*sc;   // footway each side
-  const lsN_carr = 12*sc;  // carriageway
-  const lsN_total = lsN_pave*2 + lsN_carr;
-  // Lime Street (E): ~12m total
-  const lsE_pave = 2*sc;
-  const lsE_carr = 8*sc;
-  const lsE_total = lsE_pave*2 + lsE_carr;
-  // South lane: ~10m
-  const lsS_pave = 2*sc;
-  const lsS_carr = 6*sc;
-  const lsS_total = lsS_pave*2 + lsS_carr;
-  // West lane: ~10m
-  const lsW_pave = 1.5*sc;
-  const lsW_carr = 7*sc;
-  const lsW_total = lsW_pave*2 + lsW_carr;
+  // Street section strata (metres → px)
+  const stN={pave:3*sc,carr:12*sc,total:18*sc}; // Leadenhall Street
+  const stE={pave:2*sc,carr:8*sc,total:12*sc};  // Lime Street
+  const stS={pave:2*sc,carr:6*sc,total:10*sc};  // South lane
+  const stW={pave:1.5*sc,carr:7*sc,total:10*sc};// Billiter Street
 
-  // ── Leadenhall Street horizontal strata ───────────────────────────────────
-  const lsN_siteKerb   = siteTopY;               // kerb at site face
-  const lsN_siteEdge   = siteTopY - lsN_pave;    // inner edge of carriageway (S)
-  const lsN_adjEdge    = siteTopY - lsN_pave - lsN_carr; // inner edge of carriageway (N)
-  const lsN_adjKerb    = siteTopY - lsN_total;   // kerb at N adj building
+  // Carriageway kerb positions
+  const kN_S=siteTopY-stN.pave, kN_N=kN_S-stN.carr;         // Leadenhall
+  const kE_W=siteRightX+stE.pave, kE_E=kE_W+stE.carr;       // Lime
+  const kS_N=siteBotY+stS.pave, kS_S=kS_N+stS.carr;         // South
+  const kW_E=siteLeftX-stW.pave, kW_W=kW_E-stW.carr;        // Billiter
 
-  // ── Lime Street vertical strata ───────────────────────────────────────────
-  const lsE_siteKerb   = siteRightX;
-  const lsE_siteEdge   = siteRightX + lsE_pave;
-  const lsE_adjEdge    = siteRightX + lsE_pave + lsE_carr;
-  const lsE_adjKerb    = siteRightX + lsE_total;
+  // City block edges (fill to viewport)
+  const blkNbot=siteTopY-stN.total;  // bottom of N block = top of street
+  const blkSTop=siteBotY+stS.total;  // top of S block
+  const blkELeft=siteRightX+stE.total;
+  const blkWRight=siteLeftX-stW.total;
 
-  // ── South lane strata ─────────────────────────────────────────────────────
-  const lsS_siteKerb   = siteBotY;
-  const lsS_siteEdge   = siteBotY + lsS_pave;
-  const lsS_adjEdge    = siteBotY + lsS_pave + lsS_carr;
-  const lsS_adjKerb    = siteBotY + lsS_total;
-
-  // ── West lane strata ──────────────────────────────────────────────────────
-  const lsW_siteKerb   = siteLeftX;
-  const lsW_siteEdge   = siteLeftX - lsW_pave;
-  const lsW_adjEdge    = siteLeftX - lsW_pave - lsW_carr;
-  const lsW_adjKerb    = siteLeftX - lsW_total;
-
-  // ── City block extents (full-bleed fills = realistic urban context) ───────
-  const blkN_y1=0,         blkN_y2=lsN_adjKerb;
-  const blkE_x1=lsE_adjKerb, blkE_x2=VW;
-  const blkS_y1=lsS_adjKerb, blkS_y2=VH;
-  const blkW_x1=0,          blkW_x2=lsW_adjKerb;
-  // Full vertical extent for E/W blocks
-  const blkEW_y1=0, blkEW_y2=VH;
-
-  // ── Site polygon & building footprint ─────────────────────────────────────
+  // Polygon points
   const sitePts=p.map(c=>px(c[0],c[1]).join(',')).join(' ');
   const bldgPts=p.map(c=>[cLon+(c[0]-cLon)*0.92,cLat+(c[1]-cLat)*0.92]).map(c=>px(c[0],c[1]).join(',')).join(' ');
+  // Existing footprint (current 6-storey building — same plan, show as grey)
+  const existPts=p.map(c=>[cLon+(c[0]-cLon)*0.88,cLat+(c[1]-cLat)*0.88]).map(c=>px(c[0],c[1]).join(',')).join(' ');
 
-  // ── Core (22% GIA, AABB axis) ─────────────────────────────────────────────
+  // Core: 22% GIA, AABB axis → rotate(0°) for N-S dominant building
   const coreGIA=D.plotArea*0.80*0.22;
   const elong=hM>=wM?hM/wM:wM/hM;
-  const axisAngle=hM>=wM?90:0;
   const aspect=Math.min(Math.max(elong*0.85,1.2),2.4);
   const cw=Math.sqrt(coreGIA/aspect)*sc, ch=cw*aspect;
+  const axisAngle=hM>=wM?90:0;
 
-  // ── Section cut ───────────────────────────────────────────────────────────
+  // Section cut + dimensions
   const [,secY]=px(cLon,cLat);
-  const secX1=lsW_adjKerb-2, secX2=lsE_adjKerb+2;
-
-  // ── Dimension lines (in street gaps, not overlapping blocks) ─────────────
-  const dimY = lsS_siteEdge + lsS_carr/2;   // E-W dim in south carriageway
-  const dimX = lsW_siteEdge - lsW_carr/2;   // N-S dim in west carriageway
-
-  // ── Scale bar ─────────────────────────────────────────────────────────────
+  const dimY=(kS_N+kS_S)/2;    // E-W dim in south carriageway
+  const dimX=(kW_E+kW_W)/2;    // N-S dim in west carriageway
   const scBar=20*sc;
 
-  // ── Colour palette ────────────────────────────────────────────────────────
-  const col={
-    blk:'#a8abb8',     // city block mass
-    road:'#c8c9d0',    // carriageway
-    pave:'#d8d9e0',    // footway/pavement
-    site:'#e4e5ea',    // site interior
-    bldg:'#ffffff',    // proposed building
-    core:'#1a1d2e',    // core
-    kerb:'#9a9daa',    // kerb/curb line — subtle but present
-    str:'#5a5d70',     // street label
-    dim:'#1a1d2e',     // dimension lines & text
+  const C={
+    road:'#bfc0c8',pave:'#cfd0d8',blk:'#9fa2b0',
+    site:'#e0e1e6',exist:'#c8cad4',bldg:'#ffffff',
+    core:'#1a1d2e',kerb:'#91939f',str:'#585b6e',dim:'#1a1d2e'
   };
 
+  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
   svg.innerHTML=`
-    <!-- ① Road surface — base layer everywhere -->
-    <rect width="${VW}" height="${VH}" fill="${col.road}"/>
+    <rect width="${VW}" height="${VH}" fill="${C.road}"/>
 
-    <!-- ② City block masses — full bleed, architectural grey -->
-    <rect x="${blkW_x1}" y="${blkEW_y1}" width="${blkW_x2-blkW_x1}" height="${blkEW_y2}" fill="${col.blk}"/>
-    <rect x="${blkE_x1}" y="${blkEW_y1}" width="${blkE_x2-blkE_x1}" height="${blkEW_y2}" fill="${col.blk}"/>
-    <rect x="${blkW_x2}" y="${blkN_y1}" width="${blkE_x1-blkW_x2}" height="${blkN_y2-blkN_y1}" fill="${col.blk}"/>
-    <rect x="${blkW_x2}" y="${blkS_y1}" width="${blkE_x1-blkW_x2}" height="${blkS_y2-blkS_y1}" fill="${col.blk}"/>
+    <!-- City block masses — full-bleed to viewport edges -->
+    <rect x="0" y="0" width="${VW}" height="${blkNbot}" fill="${C.blk}"/>
+    <rect x="0" y="${blkSTop}" width="${VW}" height="${VH-blkSTop}" fill="${C.blk}"/>
+    <rect x="0" y="${blkNbot}" width="${blkWRight}" height="${blkSTop-blkNbot}" fill="${C.blk}"/>
+    <rect x="${blkELeft}" y="${blkNbot}" width="${VW-blkELeft}" height="${blkSTop-blkNbot}" fill="${C.blk}"/>
 
-    <!-- ③ Pavement / footway zones — lighter than road -->
-    <!-- Leadenhall St: S pavement (site side) -->
-    <rect x="${blkW_x2}" y="${lsN_adjEdge}" width="${blkE_x1-blkW_x2}" height="${lsN_pave}" fill="${col.pave}"/>
-    <!-- Leadenhall St: N pavement (adj building side) -->
-    <rect x="${blkW_x2}" y="${lsN_adjKerb}" width="${blkE_x1-blkW_x2}" height="${lsN_pave}" fill="${col.pave}"/>
-    <!-- Lime St: W pavement (site side) -->
-    <rect x="${lsE_siteKerb}" y="${blkN_y2}" width="${lsE_pave}" height="${blkS_y1-blkN_y2}" fill="${col.pave}"/>
-    <!-- Lime St: E pavement (adj building side) -->
-    <rect x="${lsE_adjEdge}" y="${blkN_y2}" width="${lsE_pave}" height="${blkS_y1-blkN_y2}" fill="${col.pave}"/>
-    <!-- South lane: N pavement (site side) -->
-    <rect x="${blkW_x2}" y="${lsS_siteKerb}" width="${blkE_x1-blkW_x2}" height="${lsS_pave}" fill="${col.pave}"/>
-    <!-- South lane: S pavement -->
-    <rect x="${blkW_x2}" y="${lsS_adjEdge}" width="${blkE_x1-blkW_x2}" height="${lsS_pave}" fill="${col.pave}"/>
-    <!-- West lane: E pavement (site side) -->
-    <rect x="${lsW_adjEdge}" y="${blkN_y2}" width="${lsW_pave}" height="${blkS_y1-blkN_y2}" fill="${col.pave}"/>
-    <!-- West lane: W pavement -->
-    <rect x="${lsW_siteKerb}" y="${blkN_y2}" width="${lsW_pave}" height="${blkS_y1-blkN_y2}" fill="${col.pave}"/>
+    <!-- Pavement zones — lighter than road, one strip each side of each street -->
+    <rect x="${blkWRight}" y="${kN_N}" width="${blkELeft-blkWRight}" height="${stN.pave}" fill="${C.pave}"/>
+    <rect x="${blkWRight}" y="${siteTopY-stN.pave}" width="${blkELeft-blkWRight}" height="${stN.pave}" fill="${C.pave}"/>
+    <rect x="${siteRightX}" y="${blkNbot}" width="${stE.pave}" height="${blkSTop-blkNbot}" fill="${C.pave}"/>
+    <rect x="${kE_E}" y="${blkNbot}" width="${stE.pave}" height="${blkSTop-blkNbot}" fill="${C.pave}"/>
+    <rect x="${blkWRight}" y="${siteBotY}" width="${blkELeft-blkWRight}" height="${stS.pave}" fill="${C.pave}"/>
+    <rect x="${blkWRight}" y="${kS_S}" width="${blkELeft-blkWRight}" height="${stS.pave}" fill="${C.pave}"/>
+    <rect x="${kW_E}" y="${blkNbot}" width="${stW.pave}" height="${blkSTop-blkNbot}" fill="${C.pave}"/>
+    <rect x="${kW_W-stW.pave}" y="${blkNbot}" width="${stW.pave}" height="${blkSTop-blkNbot}" fill="${C.pave}"/>
 
-    <!-- ④ Kerb lines — thin but precise, define road/pavement boundary -->
-    <!-- Leadenhall St kerbs -->
-    <line x1="${blkW_x2}" y1="${lsN_siteEdge}" x2="${blkE_x1}" y2="${lsN_siteEdge}" stroke="${col.kerb}" stroke-width="0.7"/>
-    <line x1="${blkW_x2}" y1="${lsN_adjEdge}" x2="${blkE_x1}" y2="${lsN_adjEdge}" stroke="${col.kerb}" stroke-width="0.7"/>
-    <!-- Lime St kerbs -->
-    <line x1="${lsE_siteEdge}" y1="${blkN_y2}" x2="${lsE_siteEdge}" y2="${blkS_y1}" stroke="${col.kerb}" stroke-width="0.7"/>
-    <line x1="${lsE_adjEdge}" y1="${blkN_y2}" x2="${lsE_adjEdge}" y2="${blkS_y1}" stroke="${col.kerb}" stroke-width="0.7"/>
-    <!-- South lane kerbs -->
-    <line x1="${blkW_x2}" y1="${lsS_siteEdge}" x2="${lsE_siteKerb}" y2="${lsS_siteEdge}" stroke="${col.kerb}" stroke-width="0.7"/>
-    <line x1="${blkW_x2}" y1="${lsS_adjEdge}" x2="${lsE_siteKerb}" y2="${lsS_adjEdge}" stroke="${col.kerb}" stroke-width="0.7"/>
-    <!-- West lane kerbs -->
-    <line x1="${lsW_siteEdge}" y1="${blkN_y2}" x2="${lsW_siteEdge}" y2="${blkS_y1}" stroke="${col.kerb}" stroke-width="0.7"/>
-    <line x1="${lsW_adjEdge}" y1="${blkN_y2}" x2="${lsW_adjEdge}" y2="${blkS_y1}" stroke="${col.kerb}" stroke-width="0.7"/>
+    <!-- Kerb lines — precise road/pavement boundary -->
+    <line x1="${blkWRight}" y1="${kN_S}" x2="${blkELeft}" y2="${kN_S}" stroke="${C.kerb}" stroke-width="0.7"/>
+    <line x1="${blkWRight}" y1="${kN_N}" x2="${blkELeft}" y2="${kN_N}" stroke="${C.kerb}" stroke-width="0.7"/>
+    <line x1="${kE_W}" y1="${blkNbot}" x2="${kE_W}" y2="${blkSTop}" stroke="${C.kerb}" stroke-width="0.7"/>
+    <line x1="${kE_E}" y1="${blkNbot}" x2="${kE_E}" y2="${blkSTop}" stroke="${C.kerb}" stroke-width="0.7"/>
+    <line x1="${blkWRight}" y1="${kS_N}" x2="${blkELeft}" y2="${kS_N}" stroke="${C.kerb}" stroke-width="0.7"/>
+    <line x1="${blkWRight}" y1="${kS_S}" x2="${blkELeft}" y2="${kS_S}" stroke="${C.kerb}" stroke-width="0.7"/>
+    <line x1="${kW_E}" y1="${blkNbot}" x2="${kW_E}" y2="${blkSTop}" stroke="${C.kerb}" stroke-width="0.7"/>
+    <line x1="${kW_W}" y1="${blkNbot}" x2="${kW_W}" y2="${blkSTop}" stroke="${C.kerb}" stroke-width="0.7"/>
 
-    <!-- ⑤ Site interior — lighter reading than adjacent blocks -->
-    <polygon points="${sitePts}" fill="${col.site}" stroke="none"/>
+    <!-- Site interior -->
+    <polygon points="${sitePts}" fill="${C.site}"/>
 
-    <!-- ⑥ Proposed building footprint — white, crisp border -->
-    <polygon points="${bldgPts}" fill="${col.bldg}" stroke="${col.core}" stroke-width="1.8"/>
+    <!-- Existing building — grey fill, dashed edge -->
+    <polygon points="${existPts}" fill="${C.exist}" stroke="#80838f" stroke-width="0.8" stroke-dasharray="3,2"/>
 
-    <!-- ⑦ Core — dark mass, rotated to dominant building axis -->
+    <!-- Proposed building — white, solid -->
+    <polygon points="${bldgPts}" fill="${C.bldg}" stroke="${C.core}" stroke-width="1.8"/>
+
+    <!-- Core -->
     <g transform="rotate(${(axisAngle-90).toFixed(1)},${ccx.toFixed(1)},${ccy.toFixed(1)})">
-      <rect x="${(ccx-cw/2).toFixed(1)}" y="${(ccy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="${col.core}" rx="1"/>
+      <rect x="${(ccx-cw/2).toFixed(1)}" y="${(ccy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="${C.core}" rx="1"/>
     </g>
 
-    <!-- ⑧ Site boundary — thin dashed over everything (red-line equivalent) -->
-    <polygon points="${sitePts}" fill="none" stroke="${col.core}" stroke-width="0.7" stroke-dasharray="4,2"/>
+    <!-- Site boundary dashed -->
+    <polygon points="${sitePts}" fill="none" stroke="${C.core}" stroke-width="0.7" stroke-dasharray="4,2"/>
 
-    <!-- ⑨ Entrance marker — solid bar on north facade -->
-    ${(()=>{const [ex,ey]=px(cLon,latMax);return `<rect x="${ex-10}" y="${ey-1.5}" width="20" height="3" fill="${col.core}"/>`;})()}
+    <!-- Entrance marker N face -->
+    ${(()=>{const[ex,ey]=px(cLon,latMax);return`<rect x="${ex-10}" y="${ey-1.5}" width="20" height="3" fill="${C.core}"/>`;})()}
 
-    <!-- ⑩ Section cut A-A -->
-    <line x1="${secX1}" y1="${secY.toFixed(1)}" x2="${secX2}" y2="${secY.toFixed(1)}" stroke="${col.dim}" stroke-width="0.8" stroke-dasharray="5,3"/>
-    <circle cx="${secX1+5}" cy="${secY.toFixed(1)}" r="4.5" fill="${col.core}"/>
-    <text x="${secX1+5}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
-    <circle cx="${secX2-5}" cy="${secY.toFixed(1)}" r="4.5" fill="${col.core}"/>
-    <text x="${secX2-5}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
+    <!-- Section cut A-A -->
+    <line x1="0" y1="${secY.toFixed(1)}" x2="${VW}" y2="${secY.toFixed(1)}" stroke="${C.dim}" stroke-width="0.8" stroke-dasharray="5,3"/>
+    <circle cx="6" cy="${secY.toFixed(1)}" r="5" fill="${C.core}"/>
+    <text x="6" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
+    <circle cx="${VW-6}" cy="${secY.toFixed(1)}" r="5" fill="${C.core}"/>
+    <text x="${VW-6}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
 
-    <!-- ⑪ Core annotation -->
-    <text x="${(ccx+cw/2+5).toFixed(1)}" y="${ccy.toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="${col.dim}">CORE</text>
-    <text x="${(ccx+cw/2+5).toFixed(1)}" y="${(ccy+7).toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="${col.dim}">${Math.round(coreGIA)}m²</text>
+    <!-- Core label -->
+    <text x="${(ccx+cw/2+4).toFixed(1)}" y="${(ccy-3).toFixed(1)}" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">CORE</text>
+    <text x="${(ccx+cw/2+4).toFixed(1)}" y="${(ccy+5).toFixed(1)}" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">${Math.round(coreGIA)}m²</text>
 
-    <!-- ⑫ Street labels — centred in carriageway -->
-    <text x="${(blkW_x2+lsE_siteKerb)/2}" y="${(lsN_siteEdge+lsN_adjEdge)/2}"
+    <!-- Street labels centred in carriageway -->
+    <text x="${(siteLeftX+siteRightX)/2}" y="${(kN_S+kN_N)/2}"
       text-anchor="middle" dominant-baseline="middle"
-      font-family="Inter,sans-serif" font-size="5.5" font-weight="700" letter-spacing="1.2"
-      fill="${col.str}">LEADENHALL STREET</text>
-    <text x="${(lsE_siteEdge+lsE_adjEdge)/2}" y="${(siteTopY+siteBotY)/2}"
-      text-anchor="middle" dominant-baseline="middle"
-      font-family="Inter,sans-serif" font-size="5" font-weight="700" letter-spacing="0.8"
-      fill="${col.str}" transform="rotate(-90,${(lsE_siteEdge+lsE_adjEdge)/2},${(siteTopY+siteBotY)/2})">LIME STREET</text>
-    <text x="${(lsW_siteEdge+lsW_adjEdge)/2}" y="${(siteTopY+siteBotY)/2}"
-      text-anchor="middle" dominant-baseline="middle"
-      font-family="Inter,sans-serif" font-size="4.5" font-weight="600" letter-spacing="0.5"
-      fill="${col.str}" transform="rotate(-90,${(lsW_siteEdge+lsW_adjEdge)/2},${(siteTopY+siteBotY)/2})">BILLITER ST</text>
+      font-family="Inter,sans-serif" font-size="5.5" font-weight="700" letter-spacing="1" fill="${C.str}">LEADENHALL STREET</text>
+    <text x="${(kE_W+kE_E)/2}" y="${(siteTopY+siteBotY)/2}"
+      text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5" font-weight="700"
+      fill="${C.str}" transform="rotate(-90,${(kE_W+kE_E)/2},${(siteTopY+siteBotY)/2})">LIME STREET</text>
+    <text x="${(kW_E+kW_W)/2}" y="${(siteTopY+siteBotY)/2}"
+      text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="4.5" font-weight="600"
+      fill="${C.str}" transform="rotate(-90,${(kW_E+kW_W)/2},${(siteTopY+siteBotY)/2})">BILLITER ST</text>
 
-    <!-- ⑬ Dimension: E-W site width — placed in south carriageway -->
-    <line x1="${siteLeftX}" y1="${dimY}" x2="${siteRightX}" y2="${dimY}" stroke="${col.dim}" stroke-width="0.7"/>
-    <line x1="${siteLeftX}" y1="${dimY-3}" x2="${siteLeftX}" y2="${dimY+3}" stroke="${col.dim}" stroke-width="1"/>
-    <line x1="${siteRightX}" y1="${dimY-3}" x2="${siteRightX}" y2="${dimY+3}" stroke="${col.dim}" stroke-width="1"/>
+    <!-- Dim: E-W in south carriageway -->
+    <line x1="${siteLeftX}" y1="${dimY}" x2="${siteRightX}" y2="${dimY}" stroke="${C.dim}" stroke-width="0.7"/>
+    <line x1="${siteLeftX}" y1="${dimY-3}" x2="${siteLeftX}" y2="${dimY+3}" stroke="${C.dim}" stroke-width="1"/>
+    <line x1="${siteRightX}" y1="${dimY-3}" x2="${siteRightX}" y2="${dimY+3}" stroke="${C.dim}" stroke-width="1"/>
     <text x="${(siteLeftX+siteRightX)/2}" y="${dimY-4}" text-anchor="middle"
-      font-family="JetBrains Mono,monospace" font-size="6" fill="${col.dim}">${Math.round(wM)}m</text>
+      font-family="JetBrains Mono,monospace" font-size="6" fill="${C.dim}">${Math.round(wM)}m</text>
 
-    <!-- ⑭ Dimension: N-S site depth — placed in west carriageway -->
-    <line x1="${dimX}" y1="${siteTopY}" x2="${dimX}" y2="${siteBotY}" stroke="${col.dim}" stroke-width="0.7"/>
-    <line x1="${dimX-3}" y1="${siteTopY}" x2="${dimX+3}" y2="${siteTopY}" stroke="${col.dim}" stroke-width="1"/>
-    <line x1="${dimX-3}" y1="${siteBotY}" x2="${dimX+3}" y2="${siteBotY}" stroke="${col.dim}" stroke-width="1"/>
-    <text x="${dimX}" y="${(siteTopY+siteBotY)/2}" text-anchor="middle" dominant-baseline="middle"
-      font-family="JetBrains Mono,monospace" font-size="6" fill="${col.dim}"
+    <!-- Dim: N-S in west carriageway (rotated) -->
+    <line x1="${dimX}" y1="${siteTopY}" x2="${dimX}" y2="${siteBotY}" stroke="${C.dim}" stroke-width="0.7"/>
+    <line x1="${dimX-3}" y1="${siteTopY}" x2="${dimX+3}" y2="${siteTopY}" stroke="${C.dim}" stroke-width="1"/>
+    <line x1="${dimX-3}" y1="${siteBotY}" x2="${dimX+3}" y2="${siteBotY}" stroke="${C.dim}" stroke-width="1"/>
+    <text x="${dimX}" y="${(siteTopY+siteBotY)/2}" dominant-baseline="middle" text-anchor="middle"
+      font-family="JetBrains Mono,monospace" font-size="6" fill="${C.dim}"
       transform="rotate(-90,${dimX},${(siteTopY+siteBotY)/2})">${Math.round(hM)}m</text>
 
-    <!-- ⑮ North arrow — clean minimal -->
-    <g transform="translate(${VW-16},${VH-38})">
-      <line x1="0" y1="9" x2="0" y2="-9" stroke="${col.dim}" stroke-width="1.5"/>
-      <polygon points="0,-9 -3,-1 3,-1" fill="${col.dim}"/>
-      <text x="0" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="${col.dim}">N</text>
+    <!-- Legend -->
+    <rect x="8" y="${VH-annotH+4}" width="8" height="6" fill="${C.exist}" stroke="#80838f" stroke-width="0.7" stroke-dasharray="3,2"/>
+    <text x="19" y="${VH-annotH+10}" font-family="Inter,sans-serif" font-size="6" fill="${C.dim}">Existing</text>
+    <rect x="60" y="${VH-annotH+4}" width="8" height="6" fill="${C.bldg}" stroke="${C.core}" stroke-width="1"/>
+    <text x="71" y="${VH-annotH+10}" font-family="Inter,sans-serif" font-size="6" fill="${C.dim}">Proposed</text>
+
+    <!-- North arrow -->
+    <g transform="translate(${VW-16},${VH-annotH+16})">
+      <line x1="0" y1="9" x2="0" y2="-9" stroke="${C.dim}" stroke-width="1.5"/>
+      <polygon points="0,-9 -3,-1 3,-1" fill="${C.dim}"/>
+      <text x="0" y="16" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="${C.dim}">N</text>
     </g>
 
-    <!-- ⑯ Scale bar — 20m -->
-    <line x1="10" y1="${VH-12}" x2="${10+scBar}" y2="${VH-12}" stroke="${col.dim}" stroke-width="1.8"/>
-    <line x1="10" y1="${VH-15}" x2="10" y2="${VH-9}" stroke="${col.dim}" stroke-width="1.5"/>
-    <line x1="${10+scBar}" y1="${VH-15}" x2="${10+scBar}" y2="${VH-9}" stroke="${col.dim}" stroke-width="1.5"/>
-    <text x="${10+scBar/2}" y="${VH-17}" text-anchor="middle"
-      font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="600" fill="${col.dim}">20m</text>
+    <!-- Scale bar 20m -->
+    <line x1="10" y1="${VH-10}" x2="${10+scBar}" y2="${VH-10}" stroke="${C.dim}" stroke-width="1.8"/>
+    <line x1="10" y1="${VH-13}" x2="10" y2="${VH-7}" stroke="${C.dim}" stroke-width="1.5"/>
+    <line x1="${10+scBar}" y1="${VH-13}" x2="${10+scBar}" y2="${VH-7}" stroke="${C.dim}" stroke-width="1.5"/>
+    <text x="${10+scBar/2}" y="${VH-15}" text-anchor="middle"
+      font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="600" fill="${C.dim}">20m</text>
   `;
 }
 
-// ── Massing section A-A — clean monochrome, E/W labels, scale bar ────────────
+// ── Massing section A-A v2 — existing zone vs new build zone ─────────────────
+// Existing (0→existH): medium grey — shows what's there now
+// New build (existH→propH): dark navy — new construction above existing
 function buildMassingSectionSVG(){
   const svg=document.getElementById('section-svg');
   const VW=280,VH=195;
-  // Scale: auto-fit proposed height with headroom
   const propH=D.potentialHeight, existH=D.heightM;
-  const scH=(VH-55)/propH; // px per metre height
-  const groundY=VH-30;
+  // Scale: fit proposed height to available vertical space
+  const scH=(VH-55)/propH;
+  const groundY=VH-28;
   const hy=h=>groundY-h*scH;
-  // Horizontal: site width in m → pixels
-  const siteWm=Math.sqrt(D.plotArea*1.1); // approx
-  const maxW=VW*0.38; // site takes up ~38% of width
-  const scW=maxW/siteWm;
-  const cx=VW/2;
-  const sitePxW=siteWm*scW;
-  // Adjacent context (immediate, schematic)
-  const ctxH=Math.round(existH*1.2); // immediate adjacent ~same height
-  const ctxGap=12*scW; // street gap (~12m)
-  const ctxW=18*scW;   // adjacent block width (~18m)
+  // Horizontal scale: site width in plan
+  const siteWm=Math.sqrt(D.plotArea*1.1);
+  const scW=VW*0.36/siteWm;
+  const cx=VW/2, sitePxW=siteWm*scW;
+  // Context: immediate adjacent buildings (~same height as existing)
+  const ctxH=Math.round(existH*1.2);
+  const ctxGap=12*scW, ctxW=20*scW;
   const ctxLx=cx-sitePxW/2-ctxGap-ctxW;
   const ctxRx=cx+sitePxW/2+ctxGap;
-  // 25° daylight angle from top of right context building
-  const angle25=Math.tan(25*Math.PI/180);
-  const dayX2=ctxRx-(ctxH*scH)/angle25;
-  // Floor plate lines
-  const floorLines=Array.from({length:Math.floor(propH/4.2)},(_,i)=>{
+  // 25° daylight angle from top of RH context building
+  const dayX2=ctxRx-(ctxH*scH)/Math.tan(25*Math.PI/180);
+  // Floor plates: white lines through both zones
+  const flrLines=Array.from({length:Math.floor(propH/4.2)},(_,i)=>{
     const fy=hy((i+1)*4.2);
-    return fy>hy(propH)+1?`<line x1="${(cx-sitePxW/2+1).toFixed(1)}" y1="${fy.toFixed(1)}" x2="${(cx+sitePxW/2-1).toFixed(1)}" y2="${fy.toFixed(1)}" stroke="white" stroke-width="0.5" opacity="0.6"/>`:''
+    return fy>hy(propH)+1?`<line x1="${(cx-sitePxW/2+1).toFixed(1)}" y1="${fy.toFixed(1)}" x2="${(cx+sitePxW/2-1).toFixed(1)}" y2="${fy.toFixed(1)}" stroke="white" stroke-width="0.5" opacity="0.5"/>`:''
   }).join('');
-  // Horizontal scale bar (20m)
-  const scBar20=20*scW;
-  const sbX=(VW-scBar20)/2, sbY=groundY+18;
+  // Scale bar 20m
+  const scBar20=20*scW, sbX=(VW-scBar20)/2, sbY=groundY+17;
+
   svg.innerHTML=`
-    <!-- Background -->
     <rect width="${VW}" height="${VH}" fill="white"/>
     <!-- Ground fill -->
     <rect x="0" y="${groundY}" width="${VW}" height="${VH-groundY}" fill="#c8c9ce"/>
-    <!-- Street gaps between site and context -->
-    <rect x="${cx+sitePxW/2}" y="${hy(0)}" width="${ctxGap}" height="${VH-groundY+2}" fill="#d8d9dd"/>
-    <rect x="${ctxLx+ctxW}" y="${hy(0)}" width="${ctxGap}" height="${VH-groundY+2}" fill="#d8d9dd"/>
-
-    <!-- Context buildings — mid grey, schematic -->
+    <!-- Street gaps -->
+    <rect x="${cx+sitePxW/2}" y="${hy(0)}" width="${ctxGap}" height="${VH}" fill="#d8d9dd"/>
+    <rect x="${ctxLx+ctxW}" y="${hy(0)}" width="${ctxGap}" height="${VH}" fill="#d8d9dd"/>
+    <!-- Context buildings (schematic, immediate adjacencies) -->
     <rect x="${ctxLx.toFixed(1)}" y="${hy(ctxH).toFixed(1)}" width="${ctxW.toFixed(1)}" height="${(ctxH*scH).toFixed(1)}" fill="#b0b3bf" stroke="#8a8d9a" stroke-width="0.8"/>
     <text x="${(ctxLx+ctxW/2).toFixed(1)}" y="${(hy(ctxH)-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#555">${ctxH}m</text>
     <rect x="${ctxRx.toFixed(1)}" y="${hy(ctxH).toFixed(1)}" width="${ctxW.toFixed(1)}" height="${(ctxH*scH).toFixed(1)}" fill="#b0b3bf" stroke="#8a8d9a" stroke-width="0.8"/>
     <text x="${(ctxRx+ctxW/2).toFixed(1)}" y="${(hy(ctxH)-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#555">${ctxH}m</text>
-
     <!-- 25° daylight angle -->
-    <line x1="${ctxRx.toFixed(1)}" y1="${hy(ctxH).toFixed(1)}" x2="${dayX2.toFixed(1)}" y2="${groundY}" stroke="#888" stroke-width="0.8" stroke-dasharray="3,2"/>
-    <text x="${((ctxRx+dayX2)/2).toFixed(1)}" y="${(hy(ctxH/2)+3).toFixed(1)}" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" fill="#888">25°</text>
+    <line x1="${ctxRx.toFixed(1)}" y1="${hy(ctxH).toFixed(1)}" x2="${dayX2.toFixed(1)}" y2="${groundY}" stroke="#999" stroke-width="0.8" stroke-dasharray="3,2"/>
+    <text x="${((ctxRx+dayX2)/2-4).toFixed(1)}" y="${(hy(ctxH/2)+2).toFixed(1)}" font-family="Inter,sans-serif" font-size="5.5" fill="#999">25°</text>
 
-    <!-- Existing building — outline only, dashed -->
-    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(existH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(existH*scH).toFixed(1)}" fill="none" stroke="#888" stroke-width="1" stroke-dasharray="5,2"/>
+    <!-- Zone 1: EXISTING building (0 → existH) — medium grey -->
+    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(existH).toFixed(1)}"
+      width="${sitePxW.toFixed(1)}" height="${(existH*scH).toFixed(1)}"
+      fill="#9098a8" stroke="none"/>
+    <!-- Zone 2: NEW BUILD (existH → propH) — dark navy -->
+    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(propH).toFixed(1)}"
+      width="${sitePxW.toFixed(1)}" height="${((propH-existH)*scH).toFixed(1)}"
+      fill="#1a1d2e" stroke="none"/>
+    <!-- Floor plates through both zones -->
+    ${flrLines}
+    <!-- Horizontal line at existing roof level — key datum -->
+    <line x1="${(cx-sitePxW/2-4).toFixed(1)}" y1="${hy(existH).toFixed(1)}"
+      x2="${(cx+sitePxW/2+4).toFixed(1)}" y2="${hy(existH).toFixed(1)}"
+      stroke="white" stroke-width="1" stroke-dasharray="4,2" opacity="0.7"/>
 
-    <!-- Proposed building — dark fill -->
-    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(propH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(propH*scH).toFixed(1)}" fill="#2a2d45"/>
-    ${floorLines}
+    <!-- Zone labels inside masses -->
+    <text x="${cx}" y="${(hy(existH/2)).toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white" opacity="0.7">EXISTING</text>
+    <text x="${cx}" y="${(hy(existH+(propH-existH)/2)).toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white" opacity="0.6">NEW BUILD</text>
 
-    <!-- Ground line — bold -->
+    <!-- Ground line -->
     <line x1="0" y1="${groundY}" x2="${VW}" y2="${groundY}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <text x="5" y="${groundY-3}" font-family="Inter,sans-serif" font-size="5.5" fill="#555" font-weight="600">GL</text>
+    <text x="5" y="${groundY-3}" font-family="Inter,sans-serif" font-size="5.5" fill="#666" font-weight="600">GL</text>
 
-    <!-- Height annotations — proposed -->
+    <!-- Height annotations -->
+    <!-- Proposed (right) -->
     <line x1="${(cx+sitePxW/2+3).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(cx+sitePxW/2+3).toFixed(1)}" y2="${groundY}" stroke="#1a1d2e" stroke-width="0.6"/>
     <line x1="${(cx+sitePxW/2).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(cx+sitePxW/2+8).toFixed(1)}" y2="${hy(propH).toFixed(1)}" stroke="#1a1d2e" stroke-width="0.6"/>
     <line x1="${(cx+sitePxW/2).toFixed(1)}" y1="${groundY}" x2="${(cx+sitePxW/2+8).toFixed(1)}" y2="${groundY}" stroke="#1a1d2e" stroke-width="0.6"/>
-    <text x="${(cx+sitePxW/2+6).toFixed(1)}" y="${(hy(propH/2)).toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#1a1d2e" font-weight="700">+${propH}m</text>
-
-    <!-- Height annotation — existing -->
+    <text x="${(cx+sitePxW/2+6).toFixed(1)}" y="${hy(propH/2).toFixed(1)}" dominant-baseline="middle"
+      font-family="JetBrains Mono,monospace" font-size="7" fill="#1a1d2e" font-weight="700">+${propH}m</text>
+    <!-- Existing (left) -->
     <line x1="${(cx-sitePxW/2-3).toFixed(1)}" y1="${hy(existH).toFixed(1)}" x2="${(cx-sitePxW/2-3).toFixed(1)}" y2="${groundY}" stroke="#666" stroke-width="0.6" stroke-dasharray="2,2"/>
-    <text x="${(cx-sitePxW/2-5).toFixed(1)}" y="${(hy(existH/2)).toFixed(1)}" dominant-baseline="middle" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="6.5" fill="#666">${existH}m exist.</text>
+    <text x="${(cx-sitePxW/2-5).toFixed(1)}" y="${hy(existH/2).toFixed(1)}" dominant-baseline="middle" text-anchor="end"
+      font-family="JetBrains Mono,monospace" font-size="6" fill="#666">${existH}m</text>
 
-    <!-- W and E orientation labels -->
-    <text x="6" y="${(groundY-6).toFixed(1)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#333">W</text>
-    <text x="${VW-10}" y="${(groundY-6).toFixed(1)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#333">E</text>
+    <!-- W and E labels -->
+    <text x="6" y="${(groundY-5).toFixed(1)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#333">W</text>
+    <text x="${VW-10}" y="${(groundY-5).toFixed(1)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#333">E</text>
 
-    <!-- Horizontal scale bar at ground level -->
+    <!-- Horizontal scale bar -->
     <line x1="${sbX.toFixed(1)}" y1="${sbY}" x2="${(sbX+scBar20).toFixed(1)}" y2="${sbY}" stroke="#1a1d2e" stroke-width="1.5"/>
     <line x1="${sbX.toFixed(1)}" y1="${sbY-3}" x2="${sbX.toFixed(1)}" y2="${sbY+3}" stroke="#1a1d2e" stroke-width="1.5"/>
     <line x1="${(sbX+scBar20).toFixed(1)}" y1="${sbY-3}" x2="${(sbX+scBar20).toFixed(1)}" y2="${sbY+3}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <text x="${(sbX+scBar20/2).toFixed(1)}" y="${sbY+8}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">20m</text>
+    <text x="${(sbX+scBar20/2).toFixed(1)}" y="${sbY+8}" text-anchor="middle"
+      font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">20m</text>
 
     <!-- Section label -->
-    <text x="${cx}" y="${VH-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" letter-spacing="1" fill="#555">SECTION  A–A  ·  LOOKING NORTH  ·  IMMEDIATE CONTEXT SCHEMATIC</text>
+    <text x="${cx}" y="${VH-2}" text-anchor="middle" font-family="Inter,sans-serif"
+      font-size="5.5" font-weight="700" letter-spacing="0.8" fill="#666">SECTION A–A  ·  LOOKING NORTH  ·  IMMEDIATE CONTEXT SCHEMATIC</text>
   `;
 }
 
