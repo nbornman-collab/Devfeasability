@@ -397,8 +397,53 @@ async function selectResult(feature){
   const buildingType = getBuildingTypeFromOSM(osmUse);
   const isResidential = USE_CLASSES[currentUse]?.residential || false;
   const ftf = isResidential ? 3.0 : 4.2;
-  const floors = buildingData?.levels || 2;
-  const heightM = buildingData?.height || floors * ftf;
+
+  // HEIGHT FIX: Query Mapbox 3D buildings layer for true height
+  // This catches cases where OSM has no height or wrong building
+  let mapboxHeight = null;
+  let mapboxMaxHeight = 0;
+  if(map.getLayer('3d-buildings')){
+    const point = map.project([lng, lat]);
+    // Query in a small box around the point to catch the actual building
+    const boxSize = 30; // pixels
+    const bbox = [[point.x - boxSize, point.y - boxSize], [point.x + boxSize, point.y + boxSize]];
+    const features = map.queryRenderedFeatures(bbox, { layers: ['3d-buildings'] });
+    if(features.length > 0){
+      // Find the tallest building at this location (handles multiple buildings sharing an address)
+      const heights = features.map(f => f.properties.height || 0).filter(h => h > 0);
+      if(heights.length > 0){
+        mapboxHeight = Math.max(...heights);
+        mapboxMaxHeight = mapboxHeight;
+        // Also get all distinct heights for the site (tower + podium detection)
+        const distinctHeights = [...new Set(heights.map(h => Math.round(h)))].sort((a,b) => b - a);
+        if(distinctHeights.length > 1){
+          console.log(`Multiple building heights at site: ${distinctHeights.join(', ')}m`);
+        }
+      }
+    }
+  }
+
+  // Use best available height: Mapbox > OSM height tag > OSM levels > default
+  const osmHeight = buildingData?.height;
+  const osmLevels = buildingData?.levels;
+  let heightM, floors;
+  if(mapboxHeight && mapboxHeight > 5){
+    heightM = mapboxHeight;
+    floors = Math.round(heightM / ftf);
+  } else if(osmHeight){
+    heightM = osmHeight;
+    floors = Math.round(heightM / ftf);
+  } else if(osmLevels){
+    floors = osmLevels;
+    heightM = floors * ftf;
+  } else {
+    floors = 2;
+    heightM = floors * ftf;
+  }
+
+  // ALREADY MAXIMISED check: if existing height >= typical approved, flag it
+  // (done after planning context is retrieved — see below)
+
   // Fallback: estimate plot area from typical urban plot if no polygon
   if(!plotArea || plotArea < 20) plotArea = 200; // conservative 200sqm default
   const estimatedFloorArea = plotArea * floors * 0.85;
@@ -429,8 +474,14 @@ async function selectResult(feature){
     currentUse, buildingType, ptalBand
   });
 
+  // Check if already maximised
+  const typicalApproved = planning.typicalApprovedHeights || {low:10,mid:20,high:30};
+  const isMaximised = heightM >= typicalApproved.mid * 0.9; // within 10% of typical max
+  const heightSource = mapboxHeight ? 'mapbox-3d' : osmHeight ? 'osm-height' : osmLevels ? 'osm-levels' : 'default';
+
   const siteInfo = { plotArea, floors, heightM, estimatedFloorArea, lat, lng, postcode, isResidential, currentUse, ftf,
-    buildingAge: buildingData?.startDate || null, buildingName: buildingData?.name || '' };
+    buildingAge: buildingData?.startDate || null, buildingName: buildingData?.name || '',
+    isMaximised, heightSource, mapboxHeight: mapboxMaxHeight };
 
   try {
     renderPanel(planning, address, boroughData, buildingData, siteInfo);
@@ -1036,31 +1087,10 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
 
   document.getElementById('panel-body').innerHTML = `
     <!-- 1. THE PUNCH -->
-    <div class="section" style="background:var(--surface2);padding:20px 24px 24px">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
-        <div style="text-align:center">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">${isResi ? 'GDV' : 'Capital Value'}</div>
-          <div style="font:700 20px var(--mono);color:var(--green)">&pound;${fmt(Math.round(saleRevenue / 1000000 * 10) / 10)}M</div>
-        </div>
-        <div style="text-align:center">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">Margin</div>
-          <div style="font:700 20px var(--mono);color:${marginColor}">${marginPct}%</div>
-        </div>
-        <div style="text-align:center">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">Underbuilt</div>
-          <div style="font:700 20px var(--mono);color:var(--accent)">${Math.round(100 - utilPct)}%</div>
-        </div>
-      </div>
-      <div style="font-size:13px;line-height:1.6;color:var(--text2)">
-        ${floors}F ${planning.currentUse || ''} on a site where <strong>${potentialFloors}F</strong> is achievable.
-        <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> (${fmt(Math.round(remainingCapacitySqft))}sqft) underbuilt.
-        ${isResi && unitEstimate ? '~<strong>' + unitEstimate.total + ' units</strong> potential.' : ''}
-      </div>
-      <div style="margin-top:10px;line-height:2">${flagsHtml}</div>
-    </div>
+    ${siteInfo.isMaximised ? '<div class="section" style="background:var(--surface2);padding:20px 24px 24px"><div style="padding:12px 16px;background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.15);border-radius:8px;margin-bottom:14px"><div style="font:600 13px var(--sans);color:var(--red);margin-bottom:4px">Site Already at Capacity</div><div style="font:400 12px var(--sans);color:var(--text2);line-height:1.5">This building is ' + Math.round(heightM) + 'm (' + floors + 'F) — already at or near the typical approved height for this area (' + (typicalH.mid) + 'm). Limited upward extension potential.' + (siteInfo.heightSource === "mapbox-3d" ? ' Height from Mapbox 3D data.' : '') + '</div></div><div style="font-size:13px;line-height:1.6;color:var(--text2)">' + floors + 'F ' + (planning.currentUse || "") + ' at ' + Math.round(heightM) + 'm. Typical approved height: ' + typicalH.mid + 'm.</div><div style="margin-top:10px;line-height:2">' + flagsHtml + '</div></div>' : '<div class="section" style="background:var(--surface2);padding:20px 24px 24px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px"><div style="text-align:center"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">' + (isResi ? "GDV" : "Capital Value") + '</div><div style="font:700 20px var(--mono);color:var(--green)">&pound;' + fmt(Math.round(saleRevenue / 1000000 * 10) / 10) + 'M</div></div><div style="text-align:center"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">Margin</div><div style="font:700 20px var(--mono);color:' + marginColor + '">' + marginPct + '%</div></div><div style="text-align:center"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">Underbuilt</div><div style="font:700 20px var(--mono);color:var(--accent)">' + Math.round(100 - utilPct) + '%</div></div></div><div style="font-size:13px;line-height:1.6;color:var(--text2)">' + floors + 'F ' + (planning.currentUse || "") + ' on a site where <strong>' + potentialFloors + 'F</strong> is achievable. <strong>' + fmt(Math.round(remainingCapacity)) + 'sqm</strong> (' + fmt(Math.round(remainingCapacitySqft)) + 'sqft) underbuilt.' + (isResi && unitEstimate ? " ~<strong>" + unitEstimate.total + " units</strong> potential." : "") + '</div><div style="margin-top:10px;line-height:2">' + flagsHtml + '</div></div>'}
 
     <!-- 2. THE OPPORTUNITY -->
-    ${opportunityHtml}
+    ${siteInfo.isMaximised ? '' : opportunityHtml}
 
     <!-- 3. THE DEAL -->
     <div class="section">
