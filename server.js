@@ -5,6 +5,20 @@ const PORT = process.env.PORT || 3000;
 
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN || '';
 
+// Simple in-memory cache for Overpass/external API responses (5 min TTL)
+const apiCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000;
+function cachedFetch(url, timeoutMs = 10000) {
+  const cached = apiCache.get(url);
+  if (cached && Date.now() - cached.ts < CACHE_TTL) return Promise.resolve(cached.data);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { signal: controller.signal })
+    .then(r => { clearTimeout(timeout); return r.json(); })
+    .then(data => { apiCache.set(url, { data, ts: Date.now() }); if (apiCache.size > 500) { const oldest = apiCache.keys().next().value; apiCache.delete(oldest); } return data; })
+    .catch(e => { clearTimeout(timeout); throw e; });
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve mapbox token
@@ -46,8 +60,7 @@ app.get('/api/building', async (req, res) => {
         const street = addrMatch[2].replace(/,.*$/, '').trim();
         const addrQuery = `[out:json][timeout:10];way["building"]["addr:housenumber"="${num}"]["addr:street"~"${street}",i](around:200,${lat},${lng});out body;>;out skel qt;`;
         const addrUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(addrQuery)}`;
-        const addrRes = await fetch(addrUrl);
-        const addrData = await addrRes.json();
+        const addrData = await cachedFetch(addrUrl, 12000);
         const addrWays = (addrData.elements || []).filter(e => e.type === 'way' && e.tags);
         if (addrWays.length > 0) {
           return res.json(addrData);
@@ -58,8 +71,7 @@ app.get('/api/building', async (req, res) => {
     // Strategy 2: Point-in-polygon (is_in) to get the building the pin is actually inside
     const isInQuery = `[out:json][timeout:10];is_in(${lat},${lng})->.a;way(pivot.a)["building"];out body;>;out skel qt;`;
     const isInUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(isInQuery)}`;
-    const isInRes = await fetch(isInUrl);
-    const isInData = await isInRes.json();
+    const isInData = await cachedFetch(isInUrl, 12000);
     const isInWays = (isInData.elements || []).filter(e => e.type === 'way' && e.tags);
     if (isInWays.length > 0) {
       return res.json(isInData);
@@ -68,8 +80,8 @@ app.get('/api/building', async (req, res) => {
     // Strategy 3: Fallback to radius search (original approach)
     const query = `[out:json][timeout:10];(way["building"](around:${radius},${lat},${lng});relation["building"](around:${radius},${lat},${lng}););out body;>;out skel qt;`;
     const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-    const r = await fetch(url);
-    res.json(await r.json());
+    const data = await cachedFetch(url, 12000);
+    res.json(data);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -80,8 +92,8 @@ app.get('/api/context-buildings', async (req, res) => {
     const radius = req.query.radius || 200;
     const query = `[out:json][timeout:15];(way["building"](around:${radius},${lat},${lng}););out tags;`;
     const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-    const r = await fetch(url);
-    res.json(await r.json());
+    const data = await cachedFetch(url, 15000);
+    res.json(data);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -111,8 +123,8 @@ app.get('/api/listed-buildings', async (req, res) => {
     } else {
       // Fallback: use Overpass for heritage data
       const query = `[out:json][timeout:10];(node["heritage"](around:${radius},${lat},${lng});way["heritage"](around:${radius},${lat},${lng});node["listed_status"](around:${radius},${lat},${lng});way["listed_status"](around:${radius},${lat},${lng});node["HE_ref"](around:${radius},${lat},${lng});way["HE_ref"](around:${radius},${lat},${lng}););out tags;`;
-      const oRes = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`);
-      res.json(await oRes.json());
+      const oData = await cachedFetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`, 12000);
+      res.json(oData);
     }
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -125,8 +137,8 @@ app.get('/api/conservation-areas', async (req, res) => {
     // Try Overpass for conservation area boundaries
     const query = `[out:json][timeout:10];(way["boundary"="protected_area"]["protect_class"="22"](around:${radius},${lat},${lng});relation["boundary"="protected_area"]["protect_class"="22"](around:${radius},${lat},${lng});way["heritage"="conservation_area"](around:${radius},${lat},${lng});relation["heritage"="conservation_area"](around:${radius},${lat},${lng}););out tags;`;
     const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-    const r = await fetch(url);
-    res.json(await r.json());
+    const data = await cachedFetch(url, 12000);
+    res.json(data);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
