@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D&A Studio — 100 Leadenhall Street — Massing Options</title>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0e14;--surface:#161822;--surface2:#1e2030;--surface3:#262840;
+  --border:#2a2d42;--text:#e8e9f0;--text2:#9498b3;--text3:#626680;
+  --accent:#818cf8;--accent2:#6366f1;--green:#34d399;--green2:#059669;
+  --red:#f87171;--red2:#dc2626;--amber:#fbbf24;
+  --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text);overflow:hidden}
+#map{position:absolute;inset:0}
+
+/* Top bar */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:10;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(12,14,20,.95) 0%,transparent 100%);pointer-events:none}
+.topbar>*{pointer-events:auto}
+.logo{font:800 16px var(--sans);color:var(--text)}
+.logo span{color:var(--accent)}
+.site-name{font:300 13px var(--sans);color:var(--text2)}
+.site-name strong{font-weight:700;color:var(--text)}
+
+/* Option selector */
+.options-bar{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.opt-btn{padding:10px 20px;border:none;border-radius:9px;font:600 12px var(--sans);cursor:pointer;transition:all .2s;background:transparent;color:var(--text3);letter-spacing:0.3px}
+.opt-btn:hover{color:var(--text2);background:var(--surface2)}
+.opt-btn.active{background:var(--accent2);color:white;box-shadow:0 2px 12px rgba(99,102,241,.3)}
+.opt-btn .sub{display:block;font:400 9px var(--sans);margin-top:2px;opacity:.7}
+
+/* Scheme panel */
+.scheme-panel{position:fixed;bottom:0;left:0;right:0;z-index:10;background:linear-gradient(0deg,var(--bg) 0%,rgba(12,14,20,.97) 85%,transparent 100%);padding:20px 24px 24px;transition:transform .3s}
+
+.scheme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1400px;margin:0 auto}
+.scheme-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;transition:all .2s}
+.scheme-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.scheme-card.highlight{border-color:var(--accent);box-shadow:0 0 20px rgba(99,102,241,.15)}
+.card-title{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.card-title .dot{width:6px;height:6px;border-radius:50%}
+
+.stat-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)}
+.stat-row:last-child{border-bottom:none}
+.stat-label{font:400 11px var(--sans);color:var(--text3)}
+.stat-value{font:600 11px var(--mono);color:var(--text)}
+.stat-value.green{color:var(--green)}
+.stat-value.red{color:var(--red)}
+.stat-value.accent{color:var(--accent)}
+.stat-value.amber{color:var(--amber)}
+
+/* Floor plan preview */
+.floorplan-wrap{margin:12px 0 8px;aspect-ratio:1;background:var(--surface2);border-radius:8px;border:1px solid var(--border);overflow:hidden;position:relative}
+.floorplan-wrap svg{width:100%;height:100%}
+.fp-label{position:absolute;bottom:4px;right:6px;font:500 8px var(--mono);color:var(--text3);background:var(--surface);padding:1px 5px;border-radius:3px}
+
+/* Unit mix bar */
+.mix-bar{height:16px;display:flex;border-radius:4px;overflow:hidden;margin:8px 0 4px}
+.mix-seg{display:flex;align-items:center;justify-content:center;font:600 7px var(--mono);color:white;letter-spacing:0.3px}
+.mix-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.mix-legend span{font:400 8px var(--sans);color:var(--text3);display:flex;align-items:center;gap:3px}
+.mix-legend .swatch{width:8px;height:8px;border-radius:2px}
+
+/* Compare button */
+.compare-section{max-width:1400px;margin:12px auto 0;text-align:center}
+.compare-btn{padding:8px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text2);font:600 11px var(--sans);cursor:pointer;transition:all .2s}
+.compare-btn:hover{background:var(--accent2);color:white;border-color:var(--accent2)}
+
+/* Risk badge */
+.risk{display:inline-block;padding:2px 8px;border-radius:4px;font:600 8px var(--sans);text-transform:uppercase;letter-spacing:0.5px;margin-top:6px}
+.risk.low{background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+.risk.medium{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.2)}
+.risk.high{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.2)}
+
+@media(max-width:900px){
+  .scheme-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .topbar{padding:10px 16px}
+}
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div class="topbar">
+  <div class="logo">D&A <span>Studio</span></div>
+  <div class="site-name"><strong>100 Leadenhall Street</strong> · City of London · EC3A 3BP</div>
+</div>
+
+<div class="options-bar" id="optbar">
+  <button class="opt-btn active" onclick="selectOption(0)">Option A<span class="sub">Conservative</span></button>
+  <button class="opt-btn" onclick="selectOption(1)">Option B<span class="sub">Mid-Rise</span></button>
+  <button class="opt-btn" onclick="selectOption(2)">Option C<span class="sub">Tower</span></button>
+  <button class="opt-btn" onclick="selectOption(3)">Existing<span class="sub">Current</span></button>
+</div>
+
+<div class="scheme-panel">
+  <div class="scheme-grid" id="scheme-grid"></div>
+  <div class="compare-section">
+    <button class="compare-btn" onclick="window.open('/reports/100-leadenhall-street.html','_blank')">📄 Full Feasibility Report</button>
+  </div>
+</div>
+
+<script>
+const SITE_COORDS = [[-0.08259,51.5134005],[-0.0821961,51.5132966],[-0.0821247,51.5134014],[-0.0819302,51.5133502],[-0.0820016,51.5132453],[-0.0819164,51.5132229],[-0.081999,51.5131017],[-0.0818608,51.5130662],[-0.0819137,51.5129858],[-0.0819665,51.5129056],[-0.0821068,51.5129432],[-0.0821645,51.5128585],[-0.082317,51.5126344],[-0.0823821,51.5125273],[-0.0825761,51.5125823],[-0.0825578,51.512611],[-0.0827687,51.512668],[-0.0827198,51.5127406],[-0.0829906,51.512812],[-0.0828411,51.5130317],[-0.0827872,51.5131108],[-0.082735,51.5131881],[-0.0828704,51.5132236],[-0.0828227,51.513294],[-0.0826873,51.5132585],[-0.08259,51.5134005]];
+const CENTROID = [-0.08240,51.51303];
+const PLOT_AREA = 4378; // sqm
+const EXISTING_HEIGHT = 25; // m
+const EXISTING_FLOORS = 6;
+const FTF = 4.2; // commercial floor-to-floor
+
+const fmt = n => n?.toLocaleString('en-GB') || '—';
+
+// Three massing options + existing
+const OPTIONS = [
+  {
+    name: 'Option A — Conservative',
+    desc: '10-storey podium + setback',
+    color: '#059669',
+    height: 42,
+    floors: 10,
+    podiumFloors: 6,
+    podiumHeight: 25,
+    towerFloors: 4,
+    towerHeight: 17,
+    towerFootprintPct: 0.65, // upper floors step back
+    coverage: 0.80,
+    niaEfficiency: 0.82,
+    units: null, // commercial
+    isResi: false,
+    costSqft: 380,
+    saleSqft: 1250,
+    risk: 'low',
+    riskLabel: 'Low Risk',
+    planningNotes: 'Within established height envelope. Minimal impact on protected views. Pre-app likely positive.',
+    layout: 'Full floor plate to 6F, setback upper 4F. Central core, perimeter offices. Active ground floor retail.',
+    staircase: 'Dual staircase (>18m)',
+    breeam: 'Excellent',
+  },
+  {
+    name: 'Option B — Mid-Rise',
+    desc: '14-storey with stepped massing',
+    color: '#6366f1',
+    height: 60,
+    floors: 14,
+    podiumFloors: 6,
+    podiumHeight: 25,
+    towerFloors: 8,
+    towerHeight: 35,
+    towerFootprintPct: 0.55,
+    coverage: 0.80,
+    niaEfficiency: 0.80,
+    units: null,
+    isResi: false,
+    costSqft: 400,
+    saleSqft: 1307,
+    risk: 'medium',
+    riskLabel: 'Medium Risk',
+    planningNotes: 'At typical approved height. LVMF assessment required. Wind study needed. Good precedent nearby.',
+    layout: 'Podium 6F full plate. Tower 8F stepped back 3m south, 2m east. Central core with dual aspect office floors.',
+    staircase: 'Dual staircase (>18m)',
+    breeam: 'Outstanding',
+  },
+  {
+    name: 'Option C — Tower',
+    desc: '22-storey slender tower',
+    color: '#f59e0b',
+    height: 92,
+    floors: 22,
+    podiumFloors: 4,
+    podiumHeight: 17,
+    towerFloors: 18,
+    towerHeight: 75,
+    towerFootprintPct: 0.40,
+    coverage: 0.75,
+    niaEfficiency: 0.77,
+    units: null,
+    isResi: false,
+    costSqft: 450,
+    saleSqft: 1450,
+    risk: 'high',
+    riskLabel: 'High Risk',
+    planningNotes: 'Exceeds typical height. Full LVMF, wind, daylight studies. GLA referral likely. Strong design case needed.',
+    layout: 'Low podium 4F. Slender tower 18F (40% site coverage). Sky lobby at 12F. Premium upper floors.',
+    staircase: 'Dual staircase + firefighter lift',
+    breeam: 'Outstanding + Net Zero',
+  }
+];
+
+// Calculate financials for each option
+OPTIONS.forEach(opt => {
+  const grossArea = PLOT_AREA * opt.coverage * opt.podiumFloors + PLOT_AREA * opt.towerFootprintPct * opt.coverage * opt.towerFloors;
+  const nia = grossArea * opt.niaEfficiency;
+  const niaSqft = nia * 10.764;
+  const addedNia = nia - (PLOT_AREA * 0.80 * 0.82 * EXISTING_FLOORS); // subtract existing
+  const addedNiaSqft = addedNia * 10.764;
+  const constructionCost = addedNiaSqft * opt.costSqft;
+  const fees = constructionCost * 0.12;
+  const cil = addedNia * 186;
+  const finance = constructionCost * 0.07 * 2.5;
+  const totalCost = constructionCost + fees + cil + finance;
+  const gdv = addedNiaSqft * opt.saleSqft;
+  const margin = gdv - totalCost;
+  const marginPct = gdv > 0 ? (margin/gdv*100).toFixed(0) : 0;
+  const yieldPct = ((addedNiaSqft * 55) / gdv * 100).toFixed(1); // £55/sqft commercial rent
+
+  opt.grossArea = Math.round(grossArea);
+  opt.nia = Math.round(nia);
+  opt.addedNia = Math.round(addedNia);
+  opt.addedNiaSqft = Math.round(addedNiaSqft);
+  opt.constructionCost = Math.round(constructionCost);
+  opt.totalCost = Math.round(totalCost);
+  opt.gdv = Math.round(gdv);
+  opt.margin = Math.round(margin);
+  opt.marginPct = marginPct;
+  opt.yieldPct = yieldPct;
+});
+
+let map, currentOption = 0;
+
+async function init(){
+  const cfg = await(await fetch('/api/config')).json();
+  mapboxgl.accessToken = cfg.mapboxToken;
+  map = new mapboxgl.Map({
+    container:'map',
+    style:'mapbox://styles/mapbox/dark-v11',
+    center:CENTROID,
+    zoom:16.8,
+    pitch:60,
+    bearing:-30,
+    antialias:true
+  });
+  map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
+
+  map.on('style.load',()=>{
+    // Context buildings
+    map.addLayer({
+      id:'3d-buildings',type:'fill-extrusion',source:'composite','source-layer':'building',
+      minzoom:14,
+      paint:{
+        'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#1a1d2e',30,'#22253a',80,'#2a2d45',150,'#333650'],
+        'fill-extrusion-height':['get','height'],
+        'fill-extrusion-base':['get','min_height'],
+        'fill-extrusion-opacity':0.7,
+        'fill-extrusion-vertical-gradient':true,
+      }
+    });
+
+    // Site boundary
+    map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
+    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':2,'line-opacity':0.8,'line-dasharray':[4,2]}});
+
+    // Massing sources
+    map.addSource('podium',{type:'geojson',data:emptyPoly()});
+    map.addSource('tower',{type:'geojson',data:emptyPoly()});
+
+    // Podium extrusion
+    map.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{
+      'fill-extrusion-color':'#059669','fill-extrusion-height':25,'fill-extrusion-base':0,'fill-extrusion-opacity':0.45
+    }});
+    // Tower extrusion
+    map.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{
+      'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0.35
+    }});
+    // Edges
+    map.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#34d399','line-width':1.5,'line-opacity':0.6}});
+    map.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':1.5,'line-opacity':0.6}});
+
+    renderSchemeCards();
+    selectOption(0);
+  });
+}
+
+function emptyPoly(){
+  return {type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,0],[0,0],[0,0]]]}};
+}
+
+function bufferPolygon(coords, dist){
+  const cx = coords.reduce((s,c)=>s+c[0],0)/coords.length;
+  const cy = coords.reduce((s,c)=>s+c[1],0)/coords.length;
+  return coords.map(c => {
+    const dx=c[0]-cx, dy=c[1]-cy;
+    const len=Math.sqrt(dx*dx+dy*dy)||0.00001;
+    return [c[0]+(dx/len)*dist, c[1]+(dy/len)*dist];
+  });
+}
+
+function shrinkPolygon(coords, factor){
+  const cx = coords.reduce((s,c)=>s+c[0],0)/coords.length;
+  const cy = coords.reduce((s,c)=>s+c[1],0)/coords.length;
+  return coords.map(c => [cx+(c[0]-cx)*factor, cy+(c[1]-cy)*factor]);
+}
+
+function selectOption(idx){
+  currentOption = idx;
+  // Update buttons
+  document.querySelectorAll('.opt-btn').forEach((b,i)=>{
+    b.classList.toggle('active', i===idx);
+  });
+
+  if(idx === 3){
+    // Existing — show red outline at existing height
+    const podiumGeo = {type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPolygon(SITE_COORDS, 0.000003)]}};
+    map.getSource('podium').setData(podiumGeo);
+    map.getSource('tower').setData(emptyPoly());
+    map.setPaintProperty('podium-3d','fill-extrusion-color','#dc2626');
+    map.setPaintProperty('podium-3d','fill-extrusion-height',EXISTING_HEIGHT);
+    map.setPaintProperty('podium-3d','fill-extrusion-base',0);
+    map.setPaintProperty('podium-3d','fill-extrusion-opacity',0.35);
+    map.setPaintProperty('tower-3d','fill-extrusion-opacity',0);
+    map.setPaintProperty('podium-edge','line-color','#f87171');
+    map.setPaintProperty('tower-edge','line-opacity',0);
+  } else {
+    const opt = OPTIONS[idx];
+    // Podium = full site
+    const podiumCoords = bufferPolygon(SITE_COORDS, 0.000003);
+    const podiumGeo = {type:'Feature',geometry:{type:'Polygon',coordinates:[podiumCoords]}};
+    map.getSource('podium').setData(podiumGeo);
+    map.setPaintProperty('podium-3d','fill-extrusion-color',opt.color);
+    map.setPaintProperty('podium-3d','fill-extrusion-height',opt.podiumHeight);
+    map.setPaintProperty('podium-3d','fill-extrusion-base',0);
+    map.setPaintProperty('podium-3d','fill-extrusion-opacity',0.45);
+    map.setPaintProperty('podium-edge','line-color',opt.color);
+    map.setPaintProperty('podium-edge','line-opacity',0.6);
+
+    // Tower = shrunk footprint
+    const towerCoords = shrinkPolygon(SITE_COORDS, Math.sqrt(opt.towerFootprintPct));
+    const towerGeo = {type:'Feature',geometry:{type:'Polygon',coordinates:[towerCoords]}};
+    map.getSource('tower').setData(towerGeo);
+    map.setPaintProperty('tower-3d','fill-extrusion-color',opt.color);
+    map.setPaintProperty('tower-3d','fill-extrusion-height',opt.height);
+    map.setPaintProperty('tower-3d','fill-extrusion-base',opt.podiumHeight);
+    map.setPaintProperty('tower-3d','fill-extrusion-opacity',0.35);
+    map.setPaintProperty('tower-edge','line-color',opt.color);
+    map.setPaintProperty('tower-edge','line-opacity',0.6);
+  }
+
+  // Highlight active card
+  document.querySelectorAll('.scheme-card').forEach((c,i)=>{
+    c.classList.toggle('highlight', i===idx);
+  });
+}
+
+function renderSchemeCards(){
+  const grid = document.getElementById('scheme-grid');
+  const cards = OPTIONS.map((opt,i) => {
+    return `
+    <div class="scheme-card" onclick="selectOption(${i})" style="cursor:pointer">
+      <div class="card-title"><div class="dot" style="background:${opt.color}"></div>${opt.name}</div>
+      <div style="font:300 10px var(--sans);color:var(--text3);margin-bottom:10px">${opt.desc}</div>
+      
+      <div class="stat-row"><span class="stat-label">Height</span><span class="stat-value">${opt.height}m / ${opt.floors}F</span></div>
+      <div class="stat-row"><span class="stat-label">Added NIA</span><span class="stat-value">${fmt(opt.addedNia)} sqm</span></div>
+      <div class="stat-row"><span class="stat-label">GDV</span><span class="stat-value green">£${fmt(Math.round(opt.gdv/1e6))}M</span></div>
+      <div class="stat-row"><span class="stat-label">Total Cost</span><span class="stat-value">£${fmt(Math.round(opt.totalCost/1e6))}M</span></div>
+      <div class="stat-row"><span class="stat-label">Margin</span><span class="stat-value green">£${fmt(Math.round(opt.margin/1e6))}M (${opt.marginPct}%)</span></div>
+      <div class="stat-row"><span class="stat-label">Yield</span><span class="stat-value accent">${opt.yieldPct}%</span></div>
+      <div class="stat-row"><span class="stat-label">Cost/sqft</span><span class="stat-value">£${opt.costSqft}</span></div>
+      
+      <div style="margin-top:8px;font:400 9px var(--sans);color:var(--text3);line-height:1.5">
+        ${opt.layout}
+      </div>
+      
+      <div style="margin-top:6px"><span class="risk ${opt.risk}">${opt.riskLabel}</span></div>
+      <div style="margin-top:4px;font:400 8px var(--sans);color:var(--text3);line-height:1.4">${opt.planningNotes}</div>
+    </div>`;
+  });
+
+  // 4th card = existing
+  cards.push(`
+    <div class="scheme-card" onclick="selectOption(3)" style="cursor:pointer">
+      <div class="card-title"><div class="dot" style="background:#dc2626"></div>Existing Building</div>
+      <div style="font:300 10px var(--sans);color:var(--text3);margin-bottom:10px">Current state — 6F commercial</div>
+      
+      <div class="stat-row"><span class="stat-label">Height</span><span class="stat-value">${EXISTING_HEIGHT}m / ${EXISTING_FLOORS}F</span></div>
+      <div class="stat-row"><span class="stat-label">Floor Area</span><span class="stat-value">${fmt(Math.round(PLOT_AREA*0.80*0.82*EXISTING_FLOORS))} sqm</span></div>
+      <div class="stat-row"><span class="stat-label">Plot Area</span><span class="stat-value">${fmt(PLOT_AREA)} sqm</span></div>
+      <div class="stat-row"><span class="stat-label">Coverage</span><span class="stat-value">~80%</span></div>
+      <div class="stat-row"><span class="stat-label">Use</span><span class="stat-value">Class E (Office)</span></div>
+      <div class="stat-row"><span class="stat-label">PTAL</span><span class="stat-value accent">6a</span></div>
+      
+      <div style="margin-top:10px;padding:10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border)">
+        <div style="font:600 9px var(--sans);color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Capacity Assessment</div>
+        <div style="font:700 22px var(--mono);color:var(--accent)">58%</div>
+        <div style="font:400 9px var(--sans);color:var(--text3)">underbuilt vs borough typical</div>
+      </div>
+    </div>
+  `);
+
+  grid.innerHTML = cards.join('');
+}
+
+init();
+</script>
+</body>
+</html>
