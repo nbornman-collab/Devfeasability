@@ -812,12 +812,19 @@ function getAnchorPixel(div){
   const lng = parseFloat(div.dataset.lng);
   const lat = parseFloat(div.dataset.lat);
   const heightM = parseFloat(div.dataset.anchorHeightM);
-  const point = map.project(new mapboxgl.LngLat(lng, lat));
-  const pitch = map.getPitch() * Math.PI / 180;
+  // Project ground point
+  const groundPt = map.project(new mapboxgl.LngLat(lng, lat));
+  // Use Mapbox's internal camera to convert meters to pixels at this zoom/pitch
+  // The mercatorZfromAltitude gives us the correct scale factor
   const zoom = map.getZoom();
-  const metersPerPixel = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom);
-  const heightPixels = heightM / metersPerPixel * Math.cos(pitch);
-  return { x: point.x, y: point.y - heightPixels };
+  const pitch = map.getPitch() * Math.PI / 180;
+  const latRad = lat * Math.PI / 180;
+  // Pixels per meter at this zoom level (on the ground plane)
+  const scale = Math.pow(2, zoom) * 512 / (40075016.686 * Math.cos(latRad));
+  // In pitched view, vertical extrusions appear shorter by sin(pitch) 
+  // because we're looking at an angle
+  const heightPixels = heightM * scale * Math.sin(pitch);
+  return { x: groundPt.x, y: groundPt.y - heightPixels };
 }
 
 function positionLabel(div){
