@@ -400,24 +400,36 @@ async function selectResult(feature){
     }
   }, 20000);
 
-  const [boroughRes, buildingRes, ptalRes, floodRes, conservationRes, listedRes] = await Promise.allSettled([
-    fetchWithTimeout(`/api/borough?lat=${lat}&lng=${lng}`),
-    fetchWithTimeout(`/api/building?lat=${lat}&lng=${lng}&radius=25&address=${encodeURIComponent(address.split(',')[0])}`, 15000),
-    fetchWithTimeout(`/api/ptal?lat=${lat}&lng=${lng}`),
-    fetchWithTimeout(`/api/flood-zone?lat=${lat}&lng=${lng}`),
-    fetchWithTimeout(`/api/conservation-areas?lat=${lat}&lng=${lng}&radius=80`),
-    fetchWithTimeout(`/api/listed-buildings?lat=${lat}&lng=${lng}&radius=150`),
+  // PHASE 1: Critical data only (3 fast calls — borough, building, ptal)
+  const [boroughRes, buildingRes, ptalRes] = await Promise.allSettled([
+    fetchWithTimeout(`/api/borough?lat=${lat}&lng=${lng}`, 8000),
+    fetchWithTimeout(`/api/building?lat=${lat}&lng=${lng}&radius=25&address=${encodeURIComponent(address.split(',')[0])}`, 12000),
+    fetchWithTimeout(`/api/ptal?lat=${lat}&lng=${lng}`, 8000),
   ]);
 
   clearTimeout(panelTimeout);
-  console.log('All API calls settled', {borough: boroughRes.status, building: buildingRes.status, ptal: ptalRes.status, flood: floodRes.status, conservation: conservationRes.status, listed: listedRes.status});
+  console.log('Phase 1 settled', {borough: boroughRes.status, building: buildingRes.status, ptal: ptalRes.status});
   const boroughData = boroughRes.status === 'fulfilled' ? boroughRes.value : { borough: 'Unknown' };
   if (!postcode && boroughData.postcode) postcode = boroughData.postcode;
   const osmData = buildingRes.status === 'fulfilled' ? buildingRes.value : { elements: [] };
   const ptalData = ptalRes.status === 'fulfilled' ? ptalRes.value : { ptal: null };
-  const floodData = floodRes.status === 'fulfilled' ? floodRes.value : { floodZone: null };
-  const conservationData = conservationRes.status === 'fulfilled' ? conservationRes.value : { elements: [] };
-  const listedData = listedRes.status === 'fulfilled' ? listedRes.value : { elements: [] };
+
+  // PHASE 2: Secondary data (fire & forget — update panel when ready)
+  // These use Overpass and can be slow; don't block the main render
+  let floodData = { floodZone: null };
+  let conservationData = { elements: [] };
+  let listedData = { elements: [] };
+  // Start fetching in background
+  const phase2 = Promise.allSettled([
+    fetchWithTimeout(`/api/flood-zone?lat=${lat}&lng=${lng}`, 10000),
+    fetchWithTimeout(`/api/conservation-areas?lat=${lat}&lng=${lng}&radius=80`, 10000),
+    fetchWithTimeout(`/api/listed-buildings?lat=${lat}&lng=${lng}&radius=150`, 10000),
+  ]).then(([floodRes, conservationRes, listedRes]) => {
+    floodData = floodRes.status === 'fulfilled' ? floodRes.value : { floodZone: null };
+    conservationData = conservationRes.status === 'fulfilled' ? conservationRes.value : { elements: [] };
+    listedData = listedRes.status === 'fulfilled' ? listedRes.value : { elements: [] };
+    console.log('Phase 2 settled', {flood: floodRes.status, conservation: conservationRes.status, listed: listedRes.status});
+  });
 
   // Parse building
   let buildingData = null;
