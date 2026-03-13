@@ -16,7 +16,7 @@
 | Legal / professional services | 6–8m | 12–16m | Some cellular, needs shallower spans |
 | Tech HQ / flexible workspace | 8–10m | 16–20m | Breakout zones, collaboration areas |
 | Financial services (standard) | 7.5–9m | 15–18m | Similar to Grade A |
-| **Trading floor** | **12–20m+** | **24–40m+** | Deep open plan, column-free critical, raised floor essential |
+| **Trading floor** | **12–20m+** | **24–40m+** | Deep open plan, wider structural grid, raised floor essential. NOT fully column-free — columns remain but at wider centres (12–15m grid). Fully column-free = crazy floor structure, not viable. |
 | Boutique / HQ single-tenant | 6–8m | 10–14m | Often wants perimeter cellular, terraces |
 | Data-heavy / back office | 9–12m | 18–24m | Deep plan acceptable, less daylight dependency |
 
@@ -45,7 +45,7 @@
 | Commercial office | **20–25%** | Lifts + stairs + WC + risers + lobby |
 | Residential | **~30%** | Higher corridor/stair/lobby ratio per unit |
 
-**FLAG FOR NIC:** Are these of GIA or NIA? Assumed GIA. If NIA, the gross area impact is larger.
+✅ VETTED (Nic 2026-03-13): % of GIA confirmed.
 
 ### Core Sizing by Floor Plate (commercial)
 
@@ -125,7 +125,7 @@ Lease span check: plate ~22m × 21m, core ~10m × 10m → 6m each side ⚠️ Be
 | Building >18m (BSA) | 2 protected | Building Safety Act |
 | Single stair building | Special case | Only if every flat has alternative means — resi only |
 
-**FLAG FOR NIC:** Does 3rd staircase have a specific ADB table reference, or is this a judgement call based on coverage geometry?
+✅ VETTED (Nic 2026-03-13): Fire engineer's judgement call — no single ADB table reference. Geometry informs the case.
 
 ---
 
@@ -165,7 +165,7 @@ Atriums are the design solution when a floor plate exceeds comfortable daylight/
 - Smoke control system mandatory: mechanical extraction from top of atrium
 - Balconies/walkways onto atrium must have smoke curtains at each level
 - BS EN 12101-6: smoke management by CFD analysis for complex geometries
-- **FLAG FOR NIC:** Any simpler approaches (e.g., natural ventilation via rooflights) that still comply?
+- ✅ VETTED (Nic 2026-03-13): Natural ventilation via rooflights acceptable. Detailed fire strategy is Tier 3 — not required at feasibility stage.
 
 ---
 

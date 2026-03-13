@@ -216,6 +216,9 @@ OPTIONS.forEach(opt => {
 });
 
 // ─── SVG floor plan generator ───────────────────────────────────────────────
+// Core sizing: 22% of GIA (vetted by Nic 2026-03-13)
+// Core position: driven by polygon shape + views, not just centred
+// Satellite stair: in re-entrant corner / awkward space
 function makePlanSVG(opt, level='podium') {
   const lons = SITE_COORDS.map(c=>c[0]);
   const lats = SITE_COORDS.map(c=>c[1]);
@@ -224,7 +227,7 @@ function makePlanSVG(opt, level='podium') {
   const widthM=(lonMax-lonMin)*M_PER_LNG;
   const heightM=(latMax-latMin)*M_PER_LAT;
   const VW=200, VH=Math.round(VW*heightM/widthM);
-  const pad=22;
+  const pad=20;
   const scaleX=(VW-pad*2)/widthM;
   const scaleY=(VH-pad*2)/heightM;
 
@@ -237,87 +240,120 @@ function makePlanSVG(opt, level='podium') {
   const col = isExisting ? OPTION_COLORS.existing : OPTION_COLORS[opt.key];
   const footprintFactor = isTower ? Math.sqrt(opt.towerFootprintPct||1) : 1;
 
-  // Site boundary
-  const sitePts = SITE_COORDS.map(c=>px(c[0],c[1]).join(',')).join(' ');
-
-  // Building footprint (shrunk if tower level)
+  // Centroid
   const cxLon = SITE_COORDS.reduce((s,c)=>s+c[0],0)/SITE_COORDS.length;
   const cyLat = SITE_COORDS.reduce((s,c)=>s+c[1],0)/SITE_COORDS.length;
-  const bldgCoords = SITE_COORDS.map(c=>{
-    const f = footprintFactor * 0.95; // slight inset from site boundary
-    return [cxLon+(c[0]-cxLon)*f, cyLat+(c[1]-cyLat)*f];
-  });
+
+  // Building footprint
+  const bldgCoords = SITE_COORDS.map(c=>[cxLon+(c[0]-cxLon)*footprintFactor*0.95, cyLat+(c[1]-cyLat)*footprintFactor*0.95]);
+  const sitePts = SITE_COORDS.map(c=>px(c[0],c[1]).join(',')).join(' ');
   const bldgPts = bldgCoords.map(c=>px(c[0],c[1]).join(',')).join(' ');
 
-  // Setback line (if podium and there is a setback)
-  let setbackPts = '';
-  if (!isTower && !isExisting && opt.towerFloors > 0) {
-    const sf = Math.sqrt(opt.towerFootprintPct) * 0.95;
-    const setbackCoords = SITE_COORDS.map(c=>[cxLon+(c[0]-cxLon)*sf, cyLat+(c[1]-cyLat)*sf]);
-    setbackPts = setbackCoords.map(c=>px(c[0],c[1]).join(',')).join(' ');
-  }
+  // ── CORE SIZING (22% GIA) ──────────────────────────────────────────────
+  // Floor plate GIA
+  const plateGIA = PLOT_AREA * (isTower ? opt.towerFootprintPct||1 : 1) * (opt.coverage||0.80);
+  const coreGIA = plateGIA * 0.22;
+  // Core as compact rectangle — roughly square for central core
+  const coreAspect = 1.4; // slightly taller than wide (stairs/lifts run N-S)
+  const coreWm = Math.sqrt(coreGIA / coreAspect);
+  const coreHm = coreWm * coreAspect;
 
-  // Core: central rectangle, proportional to floor size
-  const coreWm = isTower ? 5 : 8;
-  const coreHm = isTower ? 8 : 14;
-  const [cpx, cpy] = px(cxLon, cyLat);
+  // ── CORE POSITION ──────────────────────────────────────────────────────
+  // 100 Leadenhall: primary elevation = north (Leadenhall St) + east (cluster views)
+  // SW corner has a re-entrant notch → satellite stair goes there
+  // Primary core: offset slightly NE of centroid, away from SW notch
+  // In lon/lat: north = higher lat, east = less negative lon
+  const coreOffsetLon = (lonMax - lonMin) * 0.06;  // slight east offset
+  const coreOffsetLat = (latMax - latMin) * 0.05;  // slight north offset
+  const coreLon = cxLon + (isTower ? 0 : coreOffsetLon);
+  const coreLat = cyLat + (isTower ? 0 : coreOffsetLat);
+  const [cpx, cpy] = px(coreLon, coreLat);
   const cw = coreWm * scaleX;
   const ch = coreHm * scaleY;
 
-  // Circulation spine (corridor along one axis)
-  const corrW = isTower ? 2.5 : 3;
-  const corrL = (widthM * footprintFactor * 0.9 - coreWm) / 2;
+  // ── SATELLITE STAIR (SW corner — re-entrant zone) ──────────────────────
+  // SW corner of 100 Leadenhall: approx lon=-0.0804, lat=51.5135 (lower-left of polygon)
+  const satLon = lonMin + (lonMax-lonMin)*0.12;
+  const satLat = latMin + (latMax-latMin)*0.18;
+  const [spx, spy] = px(satLon, satLat);
+  const satSize = Math.max(cw*0.45, 8);
 
-  // Hatch lines for usable area (subtle grid)
-  let hatch = '';
-  const hatchSpacing = 8;
-  for(let hx=pad+hatchSpacing; hx<VW-pad; hx+=hatchSpacing){
-    hatch += `<line x1="${hx}" y1="${pad}" x2="${hx}" y2="${VH-pad}" stroke="${col.edge}" stroke-width="0.3" opacity="0.2" stroke-dasharray="2,3"/>`;
+  // ── LEASE SPAN ─────────────────────────────────────────────────────────
+  // From core face to nearest building perimeter (east direction = primary span)
+  const coreEdgeLon = coreLon + coreWm/2 / M_PER_LNG;
+  const perimLon = lonMax - (lonMax-lonMin)*0.05;
+  const leaseSpanM = Math.round((perimLon - coreEdgeLon) * M_PER_LNG);
+  const leaseOk = leaseSpanM >= 7.5;
+
+  // ── SETBACK LINE ───────────────────────────────────────────────────────
+  let setbackPts = '';
+  if (!isTower && !isExisting && (opt.towerFloors||0) > 0) {
+    const sf = Math.sqrt(opt.towerFootprintPct) * 0.95;
+    setbackPts = SITE_COORDS.map(c=>px(cxLon+(c[0]-cxLon)*sf, cyLat+(c[1]-cyLat)*sf).join(',')).join(' ');
   }
 
-  // Dimension line (width)
-  const [dxL,dyL] = px(lonMin, latMin-0.00002);
-  const [dxR,dyR] = px(lonMax, latMin-0.00002);
+  // ── STRUCTURAL GRID (9m) ───────────────────────────────────────────────
+  const gridSpacingPx = 9 * scaleX;
+  let grid = '';
+  const [gx0] = px(lonMin, latMin);
+  for(let gx=gx0; gx<VW-pad; gx+=gridSpacingPx){
+    grid += `<line x1="${gx.toFixed(1)}" y1="${pad}" x2="${gx.toFixed(1)}" y2="${VH-pad}" stroke="${col.edge}" stroke-width="0.3" opacity="0.12" stroke-dasharray="1,4"/>`;
+  }
+  const gridSpacingPxY = 9 * scaleY;
+  const [,gy0] = px(lonMin, latMin);
+  for(let gy=gy0; gy>pad; gy-=gridSpacingPxY){
+    grid += `<line x1="${pad}" y1="${gy.toFixed(1)}" x2="${VW-pad}" y2="${gy.toFixed(1)}" stroke="${col.edge}" stroke-width="0.3" opacity="0.12" stroke-dasharray="1,4"/>`;
+  }
 
-  // North arrow
-  const nax=VW-14, nay=14;
+  // ── LEASE SPAN DIMENSION LINE ──────────────────────────────────────────
+  const [lsX1] = [cpx + cw/2];
+  const [lsX2] = px(perimLon, coreLat);
+  const lsY = cpy - ch/2 - 4;
+
+  const nax=VW-13, nay=13;
+  const floorLabel = isTower ? `L${opt.podiumFloors+1}–${opt.floors} TOWER` : isExisting ? `L1–${EXISTING_FLOORS} EXISTING` : `L1–${opt.podiumFloors} PODIUM`;
 
   return `<svg viewBox="0 0 ${VW} ${VH}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <clipPath id="site-clip"><polygon points="${sitePts}"/></clipPath>
+    <clipPath id="clip-${opt.key||'e'}-${isTower?'t':'p'}">
+      <polygon points="${bldgPts}"/>
+    </clipPath>
   </defs>
-  <!-- background -->
   <rect width="${VW}" height="${VH}" fill="var(--surface2)"/>
-  <!-- hatch -->
-  <g clip-path="url(#site-clip)">${hatch}</g>
-  <!-- site boundary fill -->
-  <polygon points="${sitePts}" fill="${col.fill}" fill-opacity="0.18" stroke="none"/>
-  <!-- building footprint fill -->
-  <polygon points="${bldgPts}" fill="${col.fill}" fill-opacity="0.35"/>
-  <!-- setback dashed line -->
-  ${setbackPts ? `<polygon points="${setbackPts}" fill="none" stroke="${col.edge}" stroke-width="1.2" stroke-dasharray="4,2.5" opacity="0.7"/>` : ''}
+  <!-- structural grid (clipped to building) -->
+  <g clip-path="url(#clip-${opt.key||'e'}-${isTower?'t':'p'})">${grid}</g>
   <!-- site boundary -->
-  <polygon points="${sitePts}" fill="none" stroke="${col.edge}" stroke-width="1.5"/>
-  <!-- core -->
-  <rect x="${cpx-cw/2}" y="${cpy-ch/2}" width="${cw}" height="${ch}" fill="rgba(0,0,0,0.75)" stroke="${col.edge}" stroke-width="1"/>
-  <text x="${cpx}" y="${cpy}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5.5" font-weight="600" fill="white" opacity="0.8">CORE</text>
-  <!-- corridor lines -->
-  <line x1="${cpx+cw/2}" y1="${cpy}" x2="${cpx+cw/2+corrL*scaleX*0.5}" y2="${cpy}" stroke="${col.edge}" stroke-width="0.8" opacity="0.4" stroke-dasharray="2,2"/>
-  <line x1="${cpx-cw/2}" y1="${cpy}" x2="${cpx-cw/2-corrL*scaleX*0.5}" y2="${cpy}" stroke="${col.edge}" stroke-width="0.8" opacity="0.4" stroke-dasharray="2,2"/>
-  <!-- setback label -->
-  ${setbackPts && opt.setbackM ? `<text x="${VW/2}" y="${VH-6}" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" fill="${col.edge}" opacity="0.8">${opt.setbackM}m setback above L${opt.podiumFloors}</text>` : ''}
+  <polygon points="${sitePts}" fill="${col.fill}" fill-opacity="0.12" stroke="${col.edge}" stroke-width="1" stroke-dasharray="4,2" opacity="0.5"/>
+  <!-- building footprint -->
+  <polygon points="${bldgPts}" fill="${col.fill}" fill-opacity="0.28" stroke="${col.edge}" stroke-width="1.5"/>
+  <!-- setback line -->
+  ${setbackPts ? `<polygon points="${setbackPts}" fill="none" stroke="${col.edge}" stroke-width="1" stroke-dasharray="3,2" opacity="0.6"/>` : ''}
+  <!-- lease span dimension line -->
+  <line x1="${lsX1.toFixed(1)}" y1="${lsY.toFixed(1)}" x2="${lsX2[0].toFixed(1)}" y2="${lsY.toFixed(1)}" stroke="${leaseOk ? col.edge : '#f87171'}" stroke-width="0.8" opacity="0.7"/>
+  <line x1="${lsX1.toFixed(1)}" y1="${(lsY-3).toFixed(1)}" x2="${lsX1.toFixed(1)}" y2="${(lsY+3).toFixed(1)}" stroke="${leaseOk ? col.edge : '#f87171'}" stroke-width="0.8"/>
+  <line x1="${lsX2[0].toFixed(1)}" y1="${(lsY-3).toFixed(1)}" x2="${lsX2[0].toFixed(1)}" y2="${(lsY+3).toFixed(1)}" stroke="${leaseOk ? col.edge : '#f87171'}" stroke-width="0.8"/>
+  <text x="${((lsX1+lsX2[0])/2).toFixed(1)}" y="${(lsY-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="${leaseOk ? col.main : '#f87171'}" font-weight="600">${leaseSpanM}m${leaseOk ? '' : ' ⚠'}</text>
+  <!-- primary core -->
+  <rect x="${(cpx-cw/2).toFixed(1)}" y="${(cpy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="rgba(0,0,0,0.8)" stroke="${col.edge}" stroke-width="1.2"/>
+  <text x="${cpx.toFixed(1)}" y="${(cpy-2).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" font-weight="700" fill="white" opacity="0.9">CORE</text>
+  <text x="${cpx.toFixed(1)}" y="${(cpy+4).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="white" opacity="0.5">${Math.round(coreGIA)}sqm</text>
+  <!-- satellite stair (SW re-entrant) -->
+  ${!isTower ? `<rect x="${(spx-satSize/2).toFixed(1)}" y="${(spy-satSize/2).toFixed(1)}" width="${satSize.toFixed(1)}" height="${satSize.toFixed(1)}" fill="rgba(0,0,0,0.6)" stroke="${col.edge}" stroke-width="0.8" stroke-dasharray="2,1"/>
+  <text x="${spx.toFixed(1)}" y="${spy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="4" fill="white" opacity="0.7">STAIR</text>` : ''}
   <!-- floor label -->
-  <text x="6" y="10" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="${col.main}" opacity="0.9">${isTower ? `L${opt.podiumFloors+1}–${opt.floors} TOWER` : isExisting ? 'L1–6 EXISTING' : `L1–${opt.podiumFloors} PODIUM`}</text>
+  <text x="5" y="9" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="${col.main}">${floorLabel}</text>
+  <!-- lease span label -->
+  <text x="5" y="${VH-3}" font-family="Inter,sans-serif" font-size="5" fill="${leaseOk ? 'var(--text3)' : '#f87171'}">Lease span: ${leaseSpanM}m${leaseOk ? ' ✓' : ' — below 7.5m BCO min ⚠'}</text>
   <!-- north arrow -->
   <g transform="translate(${nax},${nay})">
-    <circle cx="0" cy="0" r="8" fill="var(--surface3)" stroke="var(--border)" stroke-width="0.5"/>
-    <polygon points="0,-6 2,2 0,0 -2,2" fill="${col.main}" opacity="0.9"/>
-    <polygon points="0,6 2,-2 0,0 -2,-2" fill="var(--surface2)" opacity="0.8"/>
-    <text x="0" y="-7.5" text-anchor="middle" font-family="Inter,sans-serif" font-size="4.5" font-weight="700" fill="${col.main}">N</text>
+    <circle r="7" fill="var(--surface3)" stroke="var(--border)" stroke-width="0.5"/>
+    <polygon points="0,-5 1.5,1.5 0,0 -1.5,1.5" fill="${col.main}"/>
+    <polygon points="0,5 1.5,-1.5 0,0 -1.5,-1.5" fill="var(--surface2)" opacity="0.8"/>
+    <text x="0" y="-6.5" text-anchor="middle" font-family="Inter,sans-serif" font-size="4" font-weight="700" fill="${col.main}">N</text>
   </g>
-  <!-- dim line -->
-  <line x1="${pad}" y1="${VH-6}" x2="${VW-pad}" y2="${VH-6}" stroke="var(--text3)" stroke-width="0.5" opacity="0.4"/>
-  <text x="${VW/2}" y="${VH-2}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="var(--text3)" opacity="0.5">~${Math.round(widthM)}m</text>
+  <!-- width dim -->
+  <line x1="${pad}" y1="${VH-8}" x2="${VW-pad}" y2="${VH-8}" stroke="var(--text3)" stroke-width="0.4" opacity="0.3"/>
+  <text x="${VW/2}" y="${VH-3}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4.5" fill="var(--text3)" opacity="0.4">~${Math.round(widthM)}m wide</text>
 </svg>`;
 }
 
