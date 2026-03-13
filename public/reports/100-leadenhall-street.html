@@ -501,192 +501,285 @@ function buildContextMap(token){
   `;
 }
 
-// ── Ground floor plan v5 ──────────────────────────────────────────────────────
-// Padding-based scale so building reads at correct proportional size.
-// Existing footprint (grey dashed) + proposed (white solid) distinguished.
-function buildGroundFloorPlan(){
+// ── Ground floor plan v6 — OS 1:500 style ────────────────────────────────────
+// Fetches real OSM building footprints, road geometry, tree nodes via Overpass.
+// Renders in OS-inspired monochrome: roads → buildings → trees → site → proposed
+// Falls back to rectangle-based context if Overpass fails.
+async function buildGroundFloorPlan(){
   const svg=document.getElementById('gf-plan-svg');
-  const VW=280,VH=320,p=D.polygon;
-  const lons=p.map(c=>c[0]),lats=p.map(c=>c[1]);
-  const lonMin=Math.min(...lons),lonMax=Math.max(...lons);
-  const latMin=Math.min(...lats),latMax=Math.max(...lats);
+  const VW=280, VH=320, p=D.polygon;
+  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
+
+  // Loading state
+  svg.innerHTML=`<rect width="${VW}" height="${VH}" fill="#f0f0ee"/>
+    <text x="${VW/2}" y="${VH/2}" text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="8" fill="#999">Loading…</text>`;
+
+  const lons=p.map(c=>c[0]), lats=p.map(c=>c[1]);
+  const lonMin=Math.min(...lons), lonMax=Math.max(...lons);
+  const latMin=Math.min(...lats), latMax=Math.max(...lats);
   const wM=(lonMax-lonMin)*M_PER_LNG, hM=(latMax-latMin)*M_PER_LAT;
   const cLon=(lonMin+lonMax)/2, cLat=(latMin+latMax)/2;
 
-  // Context padding (metres beyond site boundary)
-  const padN=42,padS=28,padE=32,padW=28;
-  const annotH=32; // px reserved at bottom for scale/north/legend
-
-  // Scale: fit view to SVG, Y-axis usually constrains
+  // Scale: padding-based, Y-constrained
+  const padN=42, padS=28, padE=34, padW=28, annotH=32;
   const sc=Math.min((VW-8)/(wM+padW+padE),(VH-annotH-5)/(hM+padN+padS));
-
-  // Origin: site centroid in SVG pixel space
   const originX=(VW-(wM+padW+padE)*sc)/2+(padW+wM/2)*sc;
   const originY=5+(padN+hM/2)*sc;
-  function px(lon,lat){return[(lon-cLon)*M_PER_LNG*sc+originX, originY-(lat-cLat)*M_PER_LAT*sc];}
+  function px(lon,lat){ return[(lon-cLon)*M_PER_LNG*sc+originX, originY-(lat-cLat)*M_PER_LAT*sc]; }
 
-  // Key site edges in SVG px
-  const [,siteTopY]=px(cLon,latMax);   // N face (Leadenhall Street side)
-  const [,siteBotY]=px(cLon,latMin);   // S face
-  const [siteLeftX]=px(lonMin,cLat);   // W face
-  const [siteRightX]=px(lonMax,cLat);  // E face (Lime Street side)
+  // Key site geometry
+  const [,siteTopY]=px(cLon,latMax);
+  const [,siteBotY]=px(cLon,latMin);
+  const [siteLeftX]=px(lonMin,cLat);
+  const [siteRightX]=px(lonMax,cLat);
   const [ccx,ccy]=px(cLon,cLat);
-
-  // Street section strata (metres → px)
-  const stN={pave:3*sc,carr:12*sc,total:18*sc}; // Leadenhall Street
-  const stE={pave:2*sc,carr:8*sc,total:12*sc};  // Lime Street
-  const stS={pave:2*sc,carr:6*sc,total:10*sc};  // South lane
-  const stW={pave:1.5*sc,carr:7*sc,total:10*sc};// Billiter Street
-
-  // Carriageway kerb positions
-  const kN_S=siteTopY-stN.pave, kN_N=kN_S-stN.carr;         // Leadenhall
-  const kE_W=siteRightX+stE.pave, kE_E=kE_W+stE.carr;       // Lime
-  const kS_N=siteBotY+stS.pave, kS_S=kS_N+stS.carr;         // South
-  const kW_E=siteLeftX-stW.pave, kW_W=kW_E-stW.carr;        // Billiter
-
-  // City block edges (fill to viewport)
-  const blkNbot=siteTopY-stN.total;  // bottom of N block = top of street
-  const blkSTop=siteBotY+stS.total;  // top of S block
-  const blkELeft=siteRightX+stE.total;
-  const blkWRight=siteLeftX-stW.total;
-
-  // Polygon points
   const sitePts=p.map(c=>px(c[0],c[1]).join(',')).join(' ');
   const bldgPts=p.map(c=>[cLon+(c[0]-cLon)*0.92,cLat+(c[1]-cLat)*0.92]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  // Existing footprint (current 6-storey building — same plan, show as grey)
   const existPts=p.map(c=>[cLon+(c[0]-cLon)*0.88,cLat+(c[1]-cLat)*0.88]).map(c=>px(c[0],c[1]).join(',')).join(' ');
 
-  // Core: 22% GIA, AABB axis → rotate(0°) for N-S dominant building
+  // Core: 22% GIA, pinned to NE corner (Leadenhall St × Lime St)
   const coreGIA=D.plotArea*0.80*0.22;
   const elong=hM>=wM?hM/wM:wM/hM;
   const aspect=Math.min(Math.max(elong*0.85,1.2),2.4);
   const cw=Math.sqrt(coreGIA/aspect)*sc, ch=cw*aspect;
-  const axisAngle=hM>=wM?90:0;
+  // NE corner of proposed building (inner face, 92% offset)
+  const [coreNEx,coreNEy]=px(cLon+(lonMax-cLon)*0.92, cLat+(latMax-cLat)*0.92);
+  // Core rect: NE corner at coreNEx/coreNEy, extends W and S
+  // axisAngle=90 (N-S dominant) → rotation=0°, no transform needed
 
-  // Section cut + dimensions
-  const [,secY]=px(cLon,cLat);
-  const dimY=(kS_N+kS_S)/2;    // E-W dim in south carriageway
-  const dimX=(kW_E+kW_W)/2;    // N-S dim in west carriageway
-  const scBar=20*sc;
+  // ── Fetch OSM data ────────────────────────────────────────────────────────
+  const pad=0.002; // ~160m
+  const bbox=`${latMin-pad},${lonMin-pad*1.5},${latMax+pad},${lonMax+pad*1.5}`;
+  const query=`[out:json][timeout:12];(
+    way[building](${bbox});
+    way[highway~"^(primary|secondary|tertiary|residential|service|pedestrian|living_street)$"](${bbox});
+    way[highway=footway](${bbox});
+    node[natural=tree](${bbox});
+    way[landuse~"^(grass|garden|recreation_ground)$"](${bbox});
+    way[leisure~"^(garden|park|pitch)$"](${bbox});
+  );out body;>;out skel qt;`;
 
+  let osmData={elements:[]};
+  try {
+    const ctrl=new AbortController();
+    const timer=setTimeout(()=>ctrl.abort(),10000);
+    const res=await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,{signal:ctrl.signal});
+    clearTimeout(timer);
+    osmData=await res.json();
+  } catch(e){ console.warn('Overpass unavailable, using fallback',e); }
+
+  // Index nodes
+  const nodeIdx={};
+  osmData.elements.filter(e=>e.type==='node').forEach(n=>{ nodeIdx[n.id]={lon:n.lon,lat:n.lat}; });
+
+  // Classify ways
+  const buildings=[], roads=[], footways=[], greenAreas=[], trees=[];
+  osmData.elements.filter(e=>e.type==='way').forEach(w=>{
+    const pts=(w.nodes||[]).map(id=>nodeIdx[id]).filter(Boolean);
+    if(!pts.length) return;
+    const t=w.tags||{};
+    if(t.building) buildings.push({pts,tags:t});
+    else if(t.highway==='footway'||t.highway==='path') footways.push({pts,tags:t});
+    else if(t.highway) roads.push({pts,tags:t,hw:t.highway});
+    else if(t.landuse||t.leisure) greenAreas.push({pts,tags:t});
+  });
+  osmData.elements.filter(e=>e.type==='node'&&(e.tags||{}).natural==='tree').forEach(n=>{
+    trees.push({lon:n.lon,lat:n.lat,tags:n.tags||{}});
+  });
+
+  // Road stroke width (metres → px)
+  const RW={primary:14,secondary:12,tertiary:10,residential:8,service:5,pedestrian:8,living_street:6};
+  const rw=hw=>(RW[hw]||8)*sc;
+
+  // Helper: way → SVG polyline/polygon pts
+  function wayPts(pts){ return pts.map(n=>px(n.lon,n.lat).join(',')).join(' '); }
+
+  // Is a building centroid inside/near our site?
+  function isOurSite(pts){
+    const cl=pts.reduce((s,n)=>s+n.lat,0)/pts.length;
+    const cn=pts.reduce((s,n)=>s+n.lon,0)/pts.length;
+    return cn>lonMin-0.0001&&cn<lonMax+0.0001&&cl>latMin-0.0001&&cl<latMax+0.0001;
+  }
+
+  // Road label angle from way geometry
+  function roadAngle(pts){
+    if(pts.length<2) return 0;
+    const i=Math.floor(pts.length/2);
+    const a=pts[Math.max(0,i-1)], b=pts[Math.min(pts.length-1,i+1)];
+    const [ax,ay]=px(a.lon,a.lat), [bx,by]=px(b.lon,b.lat);
+    let ang=Math.atan2(by-ay,bx-ax)*180/Math.PI;
+    if(ang>90||ang<-90) ang+=180;
+    return ang;
+  }
+
+  // Monochrome OS palette
   const C={
-    road:'#bfc0c8',pave:'#cfd0d8',blk:'#9fa2b0',
-    site:'#e0e1e6',exist:'#c8cad4',bldg:'#ffffff',
-    core:'#1a1d2e',kerb:'#91939f',str:'#585b6e',dim:'#1a1d2e'
+    bg:'#f0f0ee',          // paper
+    road:'#aaacb4',        // carriageway
+    footway:'#d0d1d6',     // footway/pavement
+    bldgFill:'#c2c4cc',    // neighbouring buildings
+    bldgStroke:'#86889a',  // building outline
+    green:'#d4d5cc',       // soft landscape
+    treeFill:'#bcbdb4',    // tree canopy
+    treeStroke:'#8a8b82',  // tree edge
+    site:'#e4e4e0',        // site interior
+    exist:'#b0b2bc',       // existing building fill
+    bldg:'#ffffff',        // proposed building
+    core:'#1a1d2e',        // core
+    bdry:'#1a1d2e',        // site boundary
+    dim:'#1a1d2e',
+    roadTxt:'#50536a',
   };
 
-  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
-  svg.innerHTML=`
-    <rect width="${VW}" height="${VH}" fill="${C.road}"/>
+  const out=[];
 
-    <!-- City block masses — full-bleed to viewport edges -->
-    <rect x="0" y="0" width="${VW}" height="${blkNbot}" fill="${C.blk}"/>
-    <rect x="0" y="${blkSTop}" width="${VW}" height="${VH-blkSTop}" fill="${C.blk}"/>
-    <rect x="0" y="${blkNbot}" width="${blkWRight}" height="${blkSTop-blkNbot}" fill="${C.blk}"/>
-    <rect x="${blkELeft}" y="${blkNbot}" width="${VW-blkELeft}" height="${blkSTop-blkNbot}" fill="${C.blk}"/>
+  // ① Background
+  out.push(`<rect width="${VW}" height="${VH}" fill="${C.bg}"/>`);
 
-    <!-- Pavement zones — lighter than road, one strip each side of each street -->
-    <rect x="${blkWRight}" y="${kN_N}" width="${blkELeft-blkWRight}" height="${stN.pave}" fill="${C.pave}"/>
-    <rect x="${blkWRight}" y="${siteTopY-stN.pave}" width="${blkELeft-blkWRight}" height="${stN.pave}" fill="${C.pave}"/>
-    <rect x="${siteRightX}" y="${blkNbot}" width="${stE.pave}" height="${blkSTop-blkNbot}" fill="${C.pave}"/>
-    <rect x="${kE_E}" y="${blkNbot}" width="${stE.pave}" height="${blkSTop-blkNbot}" fill="${C.pave}"/>
-    <rect x="${blkWRight}" y="${siteBotY}" width="${blkELeft-blkWRight}" height="${stS.pave}" fill="${C.pave}"/>
-    <rect x="${blkWRight}" y="${kS_S}" width="${blkELeft-blkWRight}" height="${stS.pave}" fill="${C.pave}"/>
-    <rect x="${kW_E}" y="${blkNbot}" width="${stW.pave}" height="${blkSTop-blkNbot}" fill="${C.pave}"/>
-    <rect x="${kW_W-stW.pave}" y="${blkNbot}" width="${stW.pave}" height="${blkSTop-blkNbot}" fill="${C.pave}"/>
+  // ② Green / soft landscape
+  greenAreas.forEach(a=>{
+    out.push(`<polygon points="${wayPts(a.pts)}" fill="${C.green}" stroke="none"/>`);
+  });
 
-    <!-- Kerb lines — precise road/pavement boundary -->
-    <line x1="${blkWRight}" y1="${kN_S}" x2="${blkELeft}" y2="${kN_S}" stroke="${C.kerb}" stroke-width="0.7"/>
-    <line x1="${blkWRight}" y1="${kN_N}" x2="${blkELeft}" y2="${kN_N}" stroke="${C.kerb}" stroke-width="0.7"/>
-    <line x1="${kE_W}" y1="${blkNbot}" x2="${kE_W}" y2="${blkSTop}" stroke="${C.kerb}" stroke-width="0.7"/>
-    <line x1="${kE_E}" y1="${blkNbot}" x2="${kE_E}" y2="${blkSTop}" stroke="${C.kerb}" stroke-width="0.7"/>
-    <line x1="${blkWRight}" y1="${kS_N}" x2="${blkELeft}" y2="${kS_N}" stroke="${C.kerb}" stroke-width="0.7"/>
-    <line x1="${blkWRight}" y1="${kS_S}" x2="${blkELeft}" y2="${kS_S}" stroke="${C.kerb}" stroke-width="0.7"/>
-    <line x1="${kW_E}" y1="${blkNbot}" x2="${kW_E}" y2="${blkSTop}" stroke="${C.kerb}" stroke-width="0.7"/>
-    <line x1="${kW_W}" y1="${blkNbot}" x2="${kW_W}" y2="${blkSTop}" stroke="${C.kerb}" stroke-width="0.7"/>
+  // ③ Road carriageways (thick grey stroke)
+  roads.forEach(r=>{
+    out.push(`<polyline points="${wayPts(r.pts)}" fill="none"
+      stroke="${C.road}" stroke-width="${rw(r.hw).toFixed(1)}"
+      stroke-linecap="round" stroke-linejoin="round"/>`);
+  });
 
-    <!-- Site interior -->
-    <polygon points="${sitePts}" fill="${C.site}"/>
+  // ③b Footways (thinner, lighter)
+  footways.forEach(r=>{
+    out.push(`<polyline points="${wayPts(r.pts)}" fill="none"
+      stroke="${C.footway}" stroke-width="${(3*sc).toFixed(1)}"
+      stroke-linecap="round"/>`);
+  });
 
-    <!-- Existing building — grey fill, dashed edge -->
-    <polygon points="${existPts}" fill="${C.exist}" stroke="#80838f" stroke-width="0.8" stroke-dasharray="3,2"/>
+  // ④ Building footprints (over roads — correct OS convention)
+  buildings.forEach(b=>{
+    if(isOurSite(b.pts)) return;
+    out.push(`<polygon points="${wayPts(b.pts)}"
+      fill="${C.bldgFill}" stroke="${C.bldgStroke}" stroke-width="0.6"/>`);
+  });
 
-    <!-- Proposed building — white, solid -->
-    <polygon points="${bldgPts}" fill="${C.bldg}" stroke="${C.core}" stroke-width="1.8"/>
+  // ⑤ Tree canopy circles
+  const treeR=(3.5*sc).toFixed(1);
+  trees.forEach(t=>{
+    const [tx,ty]=px(t.lon,t.lat);
+    out.push(`<circle cx="${tx.toFixed(1)}" cy="${ty.toFixed(1)}" r="${treeR}"
+      fill="${C.treeFill}" stroke="${C.treeStroke}" stroke-width="0.6"/>`);
+    out.push(`<circle cx="${tx.toFixed(1)}" cy="${ty.toFixed(1)}" r="1" fill="${C.treeStroke}"/>`);
+  });
 
-    <!-- Core -->
-    <g transform="rotate(${(axisAngle-90).toFixed(1)},${ccx.toFixed(1)},${ccy.toFixed(1)})">
-      <rect x="${(ccx-cw/2).toFixed(1)}" y="${(ccy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="${C.core}" rx="1"/>
-    </g>
+  // Fallback: if no OSM buildings loaded, draw minimal grey blocks
+  if(!buildings.length){
+    const stN=18*sc, stE=12*sc, stS=10*sc, stW=10*sc;
+    [[0,0,VW,siteTopY-stN],[0,siteBotY+stS,VW,VH-(siteBotY+stS)],
+     [0,siteTopY-stN,siteLeftX-stW,siteBotY+stS-(siteTopY-stN)],
+     [siteRightX+stE,siteTopY-stN,VW-(siteRightX+stE),siteBotY+stS-(siteTopY-stN)]
+    ].forEach(([x,y,w,h])=>{
+      out.push(`<rect x="${x}" y="${y}" width="${Math.max(0,w)}" height="${Math.max(0,h)}" fill="${C.bldgFill}"/>`);
+    });
+  }
 
-    <!-- Site boundary dashed -->
-    <polygon points="${sitePts}" fill="none" stroke="${C.core}" stroke-width="0.7" stroke-dasharray="4,2"/>
+  // ⑥ Site interior fill
+  out.push(`<polygon points="${sitePts}" fill="${C.site}"/>`);
 
-    <!-- Entrance marker N face -->
-    ${(()=>{const[ex,ey]=px(cLon,latMax);return`<rect x="${ex-10}" y="${ey-1.5}" width="20" height="3" fill="${C.core}"/>`;})()}
+  // ⑦ Existing building (grey dashed — current state)
+  out.push(`<polygon points="${existPts}"
+    fill="${C.exist}" stroke="#888" stroke-width="0.7" stroke-dasharray="3,2"/>`);
 
-    <!-- Section cut A-A -->
-    <line x1="0" y1="${secY.toFixed(1)}" x2="${VW}" y2="${secY.toFixed(1)}" stroke="${C.dim}" stroke-width="0.8" stroke-dasharray="5,3"/>
-    <circle cx="6" cy="${secY.toFixed(1)}" r="5" fill="${C.core}"/>
-    <text x="6" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
-    <circle cx="${VW-6}" cy="${secY.toFixed(1)}" r="5" fill="${C.core}"/>
-    <text x="${VW-6}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
+  // ⑧ Proposed building (white, bold outline)
+  out.push(`<polygon points="${bldgPts}"
+    fill="${C.bldg}" stroke="${C.core}" stroke-width="1.8"/>`);
 
-    <!-- Core label -->
-    <text x="${(ccx+cw/2+4).toFixed(1)}" y="${(ccy-3).toFixed(1)}" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">CORE</text>
-    <text x="${(ccx+cw/2+4).toFixed(1)}" y="${(ccy+5).toFixed(1)}" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">${Math.round(coreGIA)}m²</text>
+  // ⑨ Core — NE-pinned (top-right at NE corner, extends W and S)
+  out.push(`<rect x="${(coreNEx-cw).toFixed(1)}" y="${coreNEy.toFixed(1)}"
+    width="${cw.toFixed(1)}" height="${ch.toFixed(1)}"
+    fill="${C.core}" rx="1"/>`);
 
-    <!-- Street labels centred in carriageway -->
-    <text x="${(siteLeftX+siteRightX)/2}" y="${(kN_S+kN_N)/2}"
+  // ⑩ Site boundary — bold dashed (red-line equivalent)
+  out.push(`<polygon points="${sitePts}"
+    fill="none" stroke="${C.bdry}" stroke-width="1" stroke-dasharray="5,2"/>`);
+
+  // ⑪ Entrance marker (N facade midpoint)
+  const [ex,ey]=px(cLon,latMax);
+  out.push(`<rect x="${ex-10}" y="${ey-1.5}" width="20" height="3" fill="${C.core}"/>`);
+
+  // ⑫ Section cut A-A
+  const [,secY]=px(cLon,cLat);
+  out.push(`<line x1="0" y1="${secY.toFixed(1)}" x2="${VW}" y2="${secY.toFixed(1)}"
+    stroke="${C.dim}" stroke-width="0.8" stroke-dasharray="5,3"/>
+  <circle cx="6" cy="${secY.toFixed(1)}" r="5" fill="${C.core}"/>
+  <text x="6" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+    font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
+  <circle cx="${VW-6}" cy="${secY.toFixed(1)}" r="5" fill="${C.core}"/>
+  <text x="${VW-6}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+    font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>`);
+
+  // ⑬ Core annotation (left of core mass)
+  out.push(`<text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+6).toFixed(1)}"
+    text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">CORE</text>
+  <text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+13).toFixed(1)}"
+    text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">${Math.round(coreGIA)}m²</text>`);
+
+  // ⑭ Road name labels from OSM (deduplicated, angle-matched)
+  const labelled=new Set();
+  roads.forEach(r=>{
+    const name=r.tags?.name; if(!name||labelled.has(name)) return;
+    labelled.add(name);
+    const mid=r.pts[Math.floor(r.pts.length/2)]; if(!mid) return;
+    const [lx,ly]=px(mid.lon,mid.lat);
+    const ang=roadAngle(r.pts);
+    out.push(`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}"
       text-anchor="middle" dominant-baseline="middle"
-      font-family="Inter,sans-serif" font-size="5.5" font-weight="700" letter-spacing="1" fill="${C.str}">LEADENHALL STREET</text>
-    <text x="${(kE_W+kE_E)/2}" y="${(siteTopY+siteBotY)/2}"
-      text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5" font-weight="700"
-      fill="${C.str}" transform="rotate(-90,${(kE_W+kE_E)/2},${(siteTopY+siteBotY)/2})">LIME STREET</text>
-    <text x="${(kW_E+kW_W)/2}" y="${(siteTopY+siteBotY)/2}"
-      text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="4.5" font-weight="600"
-      fill="${C.str}" transform="rotate(-90,${(kW_E+kW_W)/2},${(siteTopY+siteBotY)/2})">BILLITER ST</text>
+      font-family="Inter,sans-serif" font-size="5.5" font-weight="700" letter-spacing="0.8"
+      fill="${C.roadTxt}" transform="rotate(${ang.toFixed(1)},${lx.toFixed(1)},${ly.toFixed(1)})"
+      >${name}</text>`);
+  });
 
-    <!-- Dim: E-W in south carriageway -->
-    <line x1="${siteLeftX}" y1="${dimY}" x2="${siteRightX}" y2="${dimY}" stroke="${C.dim}" stroke-width="0.7"/>
-    <line x1="${siteLeftX}" y1="${dimY-3}" x2="${siteLeftX}" y2="${dimY+3}" stroke="${C.dim}" stroke-width="1"/>
-    <line x1="${siteRightX}" y1="${dimY-3}" x2="${siteRightX}" y2="${dimY+3}" stroke="${C.dim}" stroke-width="1"/>
-    <text x="${(siteLeftX+siteRightX)/2}" y="${dimY-4}" text-anchor="middle"
-      font-family="JetBrains Mono,monospace" font-size="6" fill="${C.dim}">${Math.round(wM)}m</text>
+  // ⑮ Dimensions (E-W below site, N-S left of site)
+  const dimY=siteBotY+10, dimX=siteLeftX-12;
+  const scBar=20*sc;
+  out.push(`<line x1="${siteLeftX}" y1="${dimY}" x2="${siteRightX}" y2="${dimY}" stroke="${C.dim}" stroke-width="0.7"/>
+  <line x1="${siteLeftX}" y1="${dimY-3}" x2="${siteLeftX}" y2="${dimY+3}" stroke="${C.dim}" stroke-width="1"/>
+  <line x1="${siteRightX}" y1="${dimY-3}" x2="${siteRightX}" y2="${dimY+3}" stroke="${C.dim}" stroke-width="1"/>
+  <text x="${(siteLeftX+siteRightX)/2}" y="${dimY-4}" text-anchor="middle"
+    font-family="JetBrains Mono,monospace" font-size="5.5" fill="${C.dim}">${Math.round(wM)}m</text>`);
+  out.push(`<line x1="${dimX}" y1="${siteTopY}" x2="${dimX}" y2="${siteBotY}" stroke="${C.dim}" stroke-width="0.7"/>
+  <line x1="${dimX-3}" y1="${siteTopY}" x2="${dimX+3}" y2="${siteTopY}" stroke="${C.dim}" stroke-width="1"/>
+  <line x1="${dimX-3}" y1="${siteBotY}" x2="${dimX+3}" y2="${siteBotY}" stroke="${C.dim}" stroke-width="1"/>
+  <text x="${dimX}" y="${(siteTopY+siteBotY)/2}" text-anchor="middle" dominant-baseline="middle"
+    font-family="JetBrains Mono,monospace" font-size="5.5" fill="${C.dim}"
+    transform="rotate(-90,${dimX},${(siteTopY+siteBotY)/2})">${Math.round(hM)}m</text>`);
 
-    <!-- Dim: N-S in west carriageway (rotated) -->
-    <line x1="${dimX}" y1="${siteTopY}" x2="${dimX}" y2="${siteBotY}" stroke="${C.dim}" stroke-width="0.7"/>
-    <line x1="${dimX-3}" y1="${siteTopY}" x2="${dimX+3}" y2="${siteTopY}" stroke="${C.dim}" stroke-width="1"/>
-    <line x1="${dimX-3}" y1="${siteBotY}" x2="${dimX+3}" y2="${siteBotY}" stroke="${C.dim}" stroke-width="1"/>
-    <text x="${dimX}" y="${(siteTopY+siteBotY)/2}" dominant-baseline="middle" text-anchor="middle"
-      font-family="JetBrains Mono,monospace" font-size="6" fill="${C.dim}"
-      transform="rotate(-90,${dimX},${(siteTopY+siteBotY)/2})">${Math.round(hM)}m</text>
+  // ⑯ Legend
+  out.push(`<rect x="8" y="${VH-annotH+4}" width="8" height="6"
+    fill="${C.exist}" stroke="#888" stroke-width="0.7" stroke-dasharray="3,2"/>
+  <text x="19" y="${VH-annotH+10}" font-family="Inter,sans-serif" font-size="6" fill="${C.dim}">Existing</text>
+  <rect x="60" y="${VH-annotH+4}" width="8" height="6"
+    fill="${C.bldg}" stroke="${C.core}" stroke-width="1"/>
+  <text x="71" y="${VH-annotH+10}" font-family="Inter,sans-serif" font-size="6" fill="${C.dim}">Proposed</text>`);
 
-    <!-- Legend -->
-    <rect x="8" y="${VH-annotH+4}" width="8" height="6" fill="${C.exist}" stroke="#80838f" stroke-width="0.7" stroke-dasharray="3,2"/>
-    <text x="19" y="${VH-annotH+10}" font-family="Inter,sans-serif" font-size="6" fill="${C.dim}">Existing</text>
-    <rect x="60" y="${VH-annotH+4}" width="8" height="6" fill="${C.bldg}" stroke="${C.core}" stroke-width="1"/>
-    <text x="71" y="${VH-annotH+10}" font-family="Inter,sans-serif" font-size="6" fill="${C.dim}">Proposed</text>
+  // ⑰ North arrow
+  out.push(`<g transform="translate(${VW-16},${VH-annotH+16})">
+    <line x1="0" y1="9" x2="0" y2="-9" stroke="${C.dim}" stroke-width="1.5"/>
+    <polygon points="0,-9 -3,-1 3,-1" fill="${C.dim}"/>
+    <text x="0" y="16" text-anchor="middle"
+      font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="${C.dim}">N</text>
+  </g>`);
 
-    <!-- North arrow -->
-    <g transform="translate(${VW-16},${VH-annotH+16})">
-      <line x1="0" y1="9" x2="0" y2="-9" stroke="${C.dim}" stroke-width="1.5"/>
-      <polygon points="0,-9 -3,-1 3,-1" fill="${C.dim}"/>
-      <text x="0" y="16" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="${C.dim}">N</text>
-    </g>
+  // ⑱ Scale bar 20m
+  out.push(`<line x1="10" y1="${VH-10}" x2="${10+scBar}" y2="${VH-10}" stroke="${C.dim}" stroke-width="1.8"/>
+  <line x1="10" y1="${VH-13}" x2="10" y2="${VH-7}" stroke="${C.dim}" stroke-width="1.5"/>
+  <line x1="${10+scBar}" y1="${VH-13}" x2="${10+scBar}" y2="${VH-7}" stroke="${C.dim}" stroke-width="1.5"/>
+  <text x="${10+scBar/2}" y="${VH-15}" text-anchor="middle"
+    font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="600" fill="${C.dim}">20m</text>`);
 
-    <!-- Scale bar 20m -->
-    <line x1="10" y1="${VH-10}" x2="${10+scBar}" y2="${VH-10}" stroke="${C.dim}" stroke-width="1.8"/>
-    <line x1="10" y1="${VH-13}" x2="10" y2="${VH-7}" stroke="${C.dim}" stroke-width="1.5"/>
-    <line x1="${10+scBar}" y1="${VH-13}" x2="${10+scBar}" y2="${VH-7}" stroke="${C.dim}" stroke-width="1.5"/>
-    <text x="${10+scBar/2}" y="${VH-15}" text-anchor="middle"
-      font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="600" fill="${C.dim}">20m</text>
-  `;
+  svg.innerHTML=out.join('\n');
 }
 
-// ── Massing section A-A v2 — existing zone vs new build zone ─────────────────
-// Existing (0→existH): medium grey — shows what's there now
-// New build (existH→propH): dark navy — new construction above existing
 function buildMassingSectionSVG(){
   const svg=document.getElementById('section-svg');
   const VW=280,VH=195;
@@ -784,8 +877,9 @@ function buildMassingSectionSVG(){
   `;
 }
 
+
 // ── Init ─────────────────────────────────────────────────────────────────────
-buildGroundFloorPlan();
+buildGroundFloorPlan().catch(console.error);
 buildMassingSectionSVG();
 fetch('/api/config').then(r=>r.json()).then(cfg=>buildContextMap(cfg.mapboxToken)).catch(()=>buildContextMap(null));
 </script>
