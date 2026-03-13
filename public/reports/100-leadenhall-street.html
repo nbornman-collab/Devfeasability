@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>D&A Studio — 100 Leadenhall Street</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@page { size: A4 portrait; margin: 0; }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--dark:#0c0e14;--text:#1a1d2e;--text2:#4a4e6a;--text3:#8b8fa8;
+  --accent:#4f46e5;--green:#059669;--red:#dc2626;--amber:#d97706;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+.page{width:210mm;min-height:297mm;position:relative;overflow:hidden;page-break-after:always;background:white}
+.page:last-child{page-break-after:auto}
+
+/* COVER */
+.cover{background:var(--dark);color:white;display:flex;flex-direction:column}
+.cover-top{flex:1;position:relative;overflow:hidden;min-height:160mm}
+.cover-image{position:absolute;inset:0;background:url('https://maps.google.com/maps?layer=c&cbll=51.5138,-0.0800&cbp=12,220,,0,5&output=thumbnail&w=1200&h=800') center/cover;opacity:0.25;filter:brightness(0.8)}
+.cover-gradient{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,var(--dark) 100%)}
+.cover-logo{position:absolute;top:36px;left:48px;z-index:2}
+.cover-logo .mark{font:800 22px var(--sans);color:white;letter-spacing:-0.5px}
+.cover-logo .mark span{color:#818cf8}
+.cover-logo .tag{font:400 9px var(--sans);color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+.cover-content{position:relative;z-index:2;padding:0 48px 48px}
+.cover-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.25);border-radius:6px;font:600 10px var(--sans);letter-spacing:1.5px;text-transform:uppercase;color:#a5b4fc;margin-bottom:20px}
+.cover-address{font:900 46px/1.08 var(--sans);letter-spacing:-1px;margin-bottom:10px}
+.cover-sub{font:300 18px var(--sans);color:rgba(255,255,255,.5);margin-bottom:36px}
+.cover-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(255,255,255,.06);border-radius:8px;overflow:hidden}
+.cover-cell{padding:14px 16px;background:rgba(255,255,255,.03)}
+.cover-cell dt{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);margin-bottom:4px}
+.cover-cell dd{font:600 13px var(--sans);color:rgba(255,255,255,.85)}
+
+/* INNER PAGES */
+.page-inner{padding:36px 48px}
+.page-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid var(--accent)}
+.page-title{font:800 11px var(--sans);text-transform:uppercase;letter-spacing:2.5px;color:var(--accent)}
+.page-ref{font:500 9px var(--mono);color:var(--text3)}
+.section-title{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:8px}
+.section-title:first-child{margin-top:0}
+.section-title .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+
+/* Metrics */
+.metric-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:#e5e7eb;border-radius:8px;overflow:hidden;margin-bottom:20px}
+.metric{background:white;padding:16px 12px;text-align:center}
+.metric .label{font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:5px}
+.metric .value{font:700 19px var(--mono);color:var(--text)}
+.metric .value.green{color:var(--green)}
+.metric .value.red{color:var(--red)}
+.metric .value.accent{color:var(--accent)}
+
+/* Hero metrics (big 3) */
+.hero-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px}
+.hero-metric{text-align:center;padding:20px;background:linear-gradient(135deg,#f8f9fb,#f0f1f5);border-radius:10px;border:1px solid #e8e9ee}
+.hero-metric .label{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:6px}
+.hero-metric .value{font:800 28px var(--mono);letter-spacing:-0.5px}
+
+/* Flags */
+.flags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.flag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:4px;font:500 9px var(--sans)}
+.flag.green{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+.flag.amber{background:#fffbeb;color:#92400e;border:1px solid #fcd34d}
+.flag.red{background:#fef2f2;color:#991b1b;border:1px solid #fca5a5}
+
+/* Bars */
+.bar-row{margin-bottom:14px}
+.bar-label{display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--text2);margin-bottom:5px}
+.bar-track{height:22px;background:#e8e9ee;border-radius:5px;overflow:hidden;display:flex}
+.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font:600 8px var(--mono);color:white;letter-spacing:0.3px}
+.bar-fill.existing{background:linear-gradient(90deg,#c0392b,#e74c3c)}
+.bar-fill.potential{background:linear-gradient(90deg,#059669,#10b981)}
+
+/* Split */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+/* Pro forma */
+.proforma{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px}
+.proforma th{text-align:left;font-weight:700;padding:8px 10px;border-bottom:2px solid #e5e7eb;font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--text3)}
+.proforma td{padding:8px 10px;border-bottom:1px solid #f3f4f6;font-size:11px}
+.proforma td:last-child{text-align:right;font-family:var(--mono);font-weight:500;font-size:11px}
+.proforma tr:hover td{background:#fafbfc}
+.proforma tr.total{font-weight:700}
+.proforma tr.total td{border-top:2px solid var(--text);border-bottom:none;padding-top:10px;font-size:12px}
+.proforma tr.total td:last-child{color:var(--green);font-size:13px}
+.proforma tr.subtotal td{font-weight:600;border-bottom:1px solid #d1d5db}
+
+/* Brief */
+.brief{background:linear-gradient(135deg,#f8f9fb,#f0f1f5);border-radius:8px;padding:18px 20px;font:400 11px/1.75 var(--sans);color:var(--text2);margin-bottom:16px;border:1px solid #e8e9ee}
+.brief strong{color:var(--text);font-weight:600}
+.brief li{margin-bottom:2px}
+
+/* Precedent cards */
+.precedent{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.prec-card{background:#f8f9fb;border-radius:6px;padding:12px 14px;border:1px solid #eee}
+.prec-card .addr{font:600 10px var(--sans);color:var(--text);margin-bottom:4px;line-height:1.3}
+.prec-card .detail{font:400 9px var(--sans);color:var(--text3);line-height:1.5}
+.prec-card .status{display:inline-block;padding:2px 8px;border-radius:3px;font:600 7px var(--sans);text-transform:uppercase;letter-spacing:0.5px;margin-top:6px}
+.prec-card .status.approved{background:#ecfdf5;color:#065f46}
+
+/* Narrative */
+.narrative{font:400 11px/1.8 var(--sans);color:var(--text2);margin-bottom:14px}
+.narrative strong{color:var(--text);font-weight:600}
+
+/* Footer */
+.page-footer{position:absolute;bottom:0;left:0;right:0;padding:14px 48px;display:flex;justify-content:space-between;align-items:center;font:400 8px var(--sans);color:var(--text3)}
+.page-footer .logo{font:700 9px var(--sans);color:var(--text3)}
+.page-footer .logo span{color:var(--accent)}
+
+/* Disclaimer */
+.disclaimer{font:400 8px/1.6 var(--sans);color:#bbb;margin-top:24px;padding-top:14px;border-top:1px solid #eee}
+.disclaimer strong{color:#999}
+
+/* Transport grid */
+.transport-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.station-card{padding:10px 12px;background:#f8f9fb;border-radius:6px;border:1px solid #eee}
+.station-card .name{font:600 10px var(--sans);color:var(--text);margin-bottom:2px}
+.station-card .info{font:400 9px var(--sans);color:var(--text3)}
+.station-card .dist{font:500 9px var(--mono);color:var(--accent)}
+
+/* Policy list */
+.policy-list{list-style:none;padding:0}
+.policy-list li{padding:6px 0;border-bottom:1px solid #f3f4f6;font:400 10px var(--sans);color:var(--text2);display:flex;align-items:flex-start;gap:8px}
+.policy-list li::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0}
+
+@media print{body{background:white}.page{box-shadow:none;margin:0}.no-print{display:none!important}}
+@media screen{body{background:#cbd5e1;padding:20px}.page{margin:0 auto 20px;box-shadow:0 4px 30px rgba(0,0,0,.15);border-radius:4px}}
+</style>
+</head>
+<body>
+
+<div class="no-print" style="position:fixed;top:20px;right:20px;z-index:100;display:flex;gap:10px">
+  <button onclick="window.print()" style="padding:12px 28px;background:var(--accent);color:white;border:none;border-radius:8px;font:700 14px var(--sans);cursor:pointer;box-shadow:0 4px 12px rgba(79,70,229,.35)">⬇ Export PDF</button>
+</div>
+
+<!-- PAGE 1: COVER -->
+<div class="page cover">
+  <div class="cover-top">
+    <div class="cover-image"></div>
+    <div class="cover-gradient"></div>
+    <div class="cover-logo">
+      <div class="mark">D&A <span>Studio</span></div>
+      <div class="tag">Development & Architecture</div>
+    </div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-badge">📐 Development Feasibility Assessment</div>
+    <div class="cover-address">100 Leadenhall Street</div>
+    <div class="cover-sub">City of London, EC3A 3BP</div>
+    <div class="cover-grid">
+      <div class="cover-cell"><dt>Borough</dt><dd>City of London</dd></div>
+      <div class="cover-cell"><dt>Zone</dt><dd>Zone 1</dd></div>
+      <div class="cover-cell"><dt>Ward</dt><dd>Lime Street</dd></div>
+      <div class="cover-cell"><dt>PTAL</dt><dd>6a (Excellent)</dd></div>
+      <div class="cover-cell"><dt>Coordinates</dt><dd>51.5138, -0.0800</dd></div>
+      <div class="cover-cell"><dt>Date</dt><dd>13 March 2026</dd></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: SITE OVERVIEW -->
+<div class="page">
+  <div class="page-inner">
+    <div class="page-header">
+      <div class="page-title">01 — Site Overview</div>
+      <div class="page-ref">DA-EC3A3BP-X7F2K</div>
+    </div>
+
+    <div class="metric-strip">
+      <div class="metric"><div class="label">Existing</div><div class="value">6F / 25m</div></div>
+      <div class="metric"><div class="label">Potential</div><div class="value green">14F / 60m</div></div>
+      <div class="metric"><div class="label">Plot Area</div><div class="value">1,551 sqm</div></div>
+      <div class="metric"><div class="label">Use Class</div><div class="value">E (Office)</div></div>
+      <div class="metric"><div class="label">PTAL</div><div class="value">6a</div></div>
+      <div class="metric"><div class="label">Flood Zone</div><div class="value">1</div></div>
+    </div>
+
+    <div class="flags">
+      <span class="flag green">✓ Flood Zone 1</span>
+      <span class="flag green">🚇 PTAL 6a — Excellent</span>
+      <span class="flag green">✓ No Conservation Area</span>
+      <span class="flag amber">👁 LVMF Protected Views</span>
+      <span class="flag green">✓ Tall Buildings Zone</span>
+    </div>
+
+    <div class="section-title"><div class="dot"></div>Site Context</div>
+    <div class="narrative">
+      <strong>100 Leadenhall Street</strong> is a <strong>6-storey commercial office building</strong> in the 
+      <strong>City of London</strong>, Zone 1. The building occupies a <strong>1,551 sqm</strong> footprint 
+      at a current height of <strong>25m</strong>. The site sits within the City's Eastern Cluster — the primary 
+      tall buildings zone — surrounded by towers including 122 Leadenhall Street (The Cheesegrater, 225m), 
+      1 Undershaft (under construction, 290m), and 22 Bishopsgate (278m). Borough planning policy and area 
+      precedent suggest a potential of <strong>14F / 60m</strong>, representing <strong>12,408 sqm</strong> of 
+      additional commercial floor area. The site benefits from exceptional transport accessibility (PTAL 6a) 
+      with Fenchurch Street, Monument, Tower Hill, Bank, and Aldgate stations all within 500m.
+    </div>
+
+    <div class="section-title"><div class="dot"></div>Height Analysis</div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Height Utilisation</span><span>25m of 60m potential (42%)</span></div>
+      <div class="bar-track">
+        <div class="bar-fill existing" style="width:42%">6F existing</div>
+        <div class="bar-fill potential" style="width:58%">+8F potential</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Floor Area</span><span>7,910 sqm of 20,318 sqm</span></div>
+      <div class="bar-track">
+        <div class="bar-fill existing" style="width:39%">7,910 sqm</div>
+        <div class="bar-fill potential" style="width:61%">+12,408 sqm</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Capacity Index</span><span>58% underbuilt vs borough typical</span></div>
+      <div class="bar-track">
+        <div class="bar-fill potential" style="width:58%">58% opportunity</div>
+        <div class="bar-fill existing" style="width:42%">42% utilised</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Page 2 of 4</span></div>
+</div>
+
+<!-- PAGE 3: THE OPPORTUNITY -->
+<div class="page">
+  <div class="page-inner">
+    <div class="page-header">
+      <div class="page-title">02 — Development Opportunity</div>
+      <div class="page-ref">DA-EC3A3BP-X7F2K</div>
+    </div>
+
+    <div class="hero-strip">
+      <div class="hero-metric">
+        <div class="label">Capital Value</div>
+        <div class="value" style="color:var(--green)">£174.5M</div>
+      </div>
+      <div class="hero-metric">
+        <div class="label">Development Margin</div>
+        <div class="value" style="color:var(--green)">49%</div>
+      </div>
+      <div class="hero-metric">
+        <div class="label">Underbuilt</div>
+        <div class="value" style="color:var(--accent)">58%</div>
+      </div>
+    </div>
+
+    <div class="section-title"><div class="dot"></div>Development Brief</div>
+    <div class="brief">
+      <ul style="list-style:none;padding:0">
+        <li>• <strong>14-storey commercial office building</strong> on 1,551 sqm site in the City's Eastern Cluster</li>
+        <li>• Central corridor, dual aspect layout (unit depth ~18m per side)</li>
+        <li>• Dual staircase required (building >18m under Building Safety Act 2022)</li>
+        <li>• +12,408 sqm NIA of Grade A office space across 8 additional floors</li>
+        <li>• Active ground floor (1,318 sqm commercial/retail) with 60m tower above</li>
+        <li>• Targeting BREEAM Outstanding and Net Zero Carbon in operation</li>
+        <li>• LVMF protected view assessment required (St Paul's Cathedral sightlines)</li>
+        <li>• Wind microclimate assessment and daylight/sunlight study needed</li>
+      </ul>
+    </div>
+
+    <div class="split">
+      <div>
+        <div class="section-title" style="margin-top:0"><div class="dot"></div>Pro Forma Estimate</div>
+        <table class="proforma">
+          <thead><tr><th>Item</th><th style="text-align:right">Value</th></tr></thead>
+          <tbody>
+            <tr><td>Additional Floor Area</td><td>12,408 sqm (133,559 sqft)</td></tr>
+            <tr><td>Construction Cost</td><td>£53.4M</td></tr>
+            <tr><td>Professional Fees (12%)</td><td>£6.4M</td></tr>
+            <tr><td>Land Value (existing use)</td><td>£18.7M</td></tr>
+            <tr><td>CIL Estimate</td><td>£9.8M</td></tr>
+            <tr><td>Finance Costs (7%, 30mo)</td><td>£5.2M</td></tr>
+            <tr class="subtotal"><td>Total Development Cost</td><td>£93.5M</td></tr>
+            <tr><td>Capital Value (£1,307/sqft)</td><td>£174.5M</td></tr>
+            <tr class="total"><td>Development Margin</td><td>£81.0M (46%)</td></tr>
+          </tbody>
+        </table>
+        <div style="font:400 8px var(--sans);color:var(--text3);line-height:1.5">
+          Construction: £400/sqft (City Grade A office). Sale: £1,307/sqft benchmark.
+          Land: £1,120/sqft plot value. CIL: City of London rate £186/sqm.
+        </div>
+      </div>
+      <div>
+        <div class="section-title" style="margin-top:0"><div class="dot"></div>Planning Precedent</div>
+        <div class="precedent" style="grid-template-columns:1fr">
+          <div class="prec-card">
+            <div class="addr">1 Undershaft, EC3A 8EE</div>
+            <div class="detail">73-storey (290m) commercial tower. 128,000 sqm office, retail, and public observation deck. Demolition of existing Aviva Tower.</div>
+            <span class="status approved">Approved</span>
+          </div>
+          <div class="prec-card">
+            <div class="addr">60 Gracechurch Street, EC3V 0HR</div>
+            <div class="detail">Major commercial redevelopment with radar mitigation scheme. Multiple conditions discharged 2024-2026.</div>
+            <span class="status approved">Approved</span>
+          </div>
+          <div class="prec-card">
+            <div class="addr">85 Gracechurch Street, EC3V 0AA</div>
+            <div class="detail">Partial demolition and reconfiguration adjacent to Leadenhall Market conservation area.</div>
+            <span class="status approved">Permitted</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Page 3 of 4</span></div>
+</div>
+
+<!-- PAGE 4: CONTEXT -->
+<div class="page">
+  <div class="page-inner">
+    <div class="page-header">
+      <div class="page-title">03 — Area Context & Policy</div>
+      <div class="page-ref">DA-EC3A3BP-X7F2K</div>
+    </div>
+
+    <div class="split" style="margin-bottom:20px">
+      <div>
+        <div class="section-title" style="margin-top:0"><div class="dot"></div>Planning Policy Framework</div>
+        <ul class="policy-list">
+          <li>City Plan 2036 — adopted April 2022</li>
+          <li>Policy S21: City Cluster — tall buildings encouraged in defined area</li>
+          <li>Protected Views SPD — LVMF assessment required for buildings >25m</li>
+          <li>Wind Microclimate Guidelines — ground-level wind study mandatory</li>
+          <li>London Plan Policy D9 — Tall Buildings (boroughs define suitable locations)</li>
+          <li>Policy DE2: New Development — exceptional design quality expected in the City</li>
+          <li>Article 4 Direction — removes PD rights for office-to-residential conversion</li>
+          <li>City of London CIL: £186/sqm (£17.28/sqft) for office development</li>
+        </ul>
+      </div>
+      <div>
+        <div class="section-title" style="margin-top:0"><div class="dot"></div>Transport Accessibility</div>
+        <div class="transport-grid" style="grid-template-columns:1fr">
+          <div class="station-card">
+            <div class="name">Fenchurch Street</div>
+            <div class="info">National Rail (c2c) · <span class="dist">219m</span></div>
+          </div>
+          <div class="station-card">
+            <div class="name">Monument</div>
+            <div class="info">Circle, District · <span class="dist">311m</span></div>
+          </div>
+          <div class="station-card">
+            <div class="name">Tower Hill</div>
+            <div class="info">Circle, District · <span class="dist">440m</span></div>
+          </div>
+          <div class="station-card">
+            <div class="name">Bank</div>
+            <div class="info">Central, Northern, W&C, DLR · <span class="dist">472m</span></div>
+          </div>
+          <div class="station-card">
+            <div class="name">Aldgate</div>
+            <div class="info">Circle, Metropolitan · <span class="dist">504m</span></div>
+          </div>
+        </div>
+        <div class="narrative" style="font-size:10px">
+          PTAL score of <strong>6a (Excellent)</strong> — the highest band. 
+          8 stations within 520m covering National Rail, Underground (5 lines), 
+          DLR, and extensive bus network. Zero car parking policy applies.
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title"><div class="dot"></div>Height Context</div>
+    <div class="narrative">
+      100 Leadenhall Street sits in the <strong>City Cluster</strong> — London's primary tall buildings zone. 
+      Existing height of <strong>25m (6F)</strong> is significantly below the area's established context: 
+      122 Leadenhall Street (225m), 22 Bishopsgate (278m), The Scalpel (190m), and 1 Undershaft (290m, 
+      under construction). The City Plan 2036 actively encourages intensification in this zone, with typical 
+      approved heights of <strong>30-100m</strong> for new commercial development. At 60m, the proposed 
+      development sits comfortably within the established height range and below the protected view corridors 
+      from key LVMF viewing points. Height data sourced from Mapbox 3D building models cross-referenced 
+      with OpenStreetMap.
+    </div>
+
+    <div class="section-title"><div class="dot"></div>Methodology</div>
+    <div class="narrative" style="font-size:9px;color:var(--text3);line-height:1.6">
+      This assessment uses open data from OpenStreetMap, Mapbox, the Environment Agency, Transport for London, 
+      and the PlanIt API for planning application records. Height data is derived from Mapbox 3D building models 
+      (Microsoft Building Footprints) with OpenStreetMap cross-referencing. Financial estimates use City of London 
+      benchmark rates for Grade A office construction (£400/sqft), land value (£1,120/sqft plot), and sale price 
+      (£1,307/sqft). Planning policy context is derived from the City Plan 2036 and the London Plan 2021. 
+      Plot ratio and floor area calculations use a 0.85 net-to-gross efficiency factor.
+    </div>
+
+    <div class="disclaimer">
+      <strong>Disclaimer:</strong> This report is produced by D&A Studio for indicative purposes only.
+      All financial figures are estimates based on publicly available data and standard industry benchmarks.
+      Actual development costs, values, and planning outcomes may differ materially. This report does not
+      constitute professional advice and should not be relied upon for investment decisions without independent 
+      verification by qualified surveyors, planning consultants, and financial advisors. Planning policy analysis 
+      reflects publicly adopted policy at the date of production and may not capture emerging policy, 
+      site-specific constraints, or pre-application discussions. Heritage, environmental, and structural 
+      assessments are beyond the scope of this report.<br><br>
+      © D&A Studio 2026. All rights reserved. Report generated by DevFeasibility™. Ref: DA-EC3A3BP-X7F2K.
+    </div>
+  </div>
+  <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Page 4 of 4</span></div>
+</div>
+
+</body>
+</html>
