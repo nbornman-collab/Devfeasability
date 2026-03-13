@@ -468,150 +468,259 @@ function mercPx(lng,lat,cLng,cLat,zoom,W,H){
   return [(toX(lng)-toX(cLng))+W/2,(toY(lat)-toY(cLat))+H/2];
 }
 
-// ── Context map ──────────────────────────────────────────────────────────────
+// ── Context map — monochrome, no shadow, site as dark polygon ────────────────
 function buildContextMap(token){
   const W=700,H=260,zoom=16.5;
   const img=document.getElementById('ctx-map-img');
   if(token){
     img.src=`https://api.mapbox.com/styles/v1/mapbox/light-v11/static/${D.lng},${D.lat},${zoom},0,0/${W}x${H}@2x?access_token=${token}`;
-  } else {
-    img.src=`https://maps.googleapis.com/maps/api/staticmap?center=${D.lat},${D.lng}&zoom=16&size=${W}x${H}&maptype=roadmap`;
   }
   img.style.height=H+'px';
   const svg=document.getElementById('ctx-map-svg');
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   const p=D.polygon;
-  const shadowH=D.potentialHeight,shadowLatOff=shadowH*1.19/M_PER_LAT;
-  const shadowPts=p.map(c=>mercPx(c[0],c[1]+shadowLatOff,D.lng,D.lat,zoom,W,H).join(',')).join(' ');
   const sitePts=p.map(c=>mercPx(c[0],c[1],D.lng,D.lat,zoom,W,H).join(',')).join(' ');
-  const [cx,cy]=mercPx(D.lng,D.lat,D.lng,D.lat,zoom,W,H);
+  // Scale bar: 100m
   const mPx=100/(156543.03*Math.cos(D.lat*Math.PI/180)/Math.pow(2,zoom));
+  const sbX=20, sbY=H-18;
   svg.innerHTML=`
-    <polygon points="${shadowPts}" fill="rgba(30,32,50,0.18)"/>
-    <polygon points="${sitePts}" fill="rgba(79,70,229,0.15)" stroke="#4f46e5" stroke-width="2"/>
-    <line x1="${W*0.05}" y1="${cy}" x2="${W*0.95}" y2="${cy}" stroke="#dc2626" stroke-width="1" stroke-dasharray="6,3" opacity="0.75"/>
-    <text x="${W*0.05+2}" y="${cy-3}" font-family="Inter,sans-serif" font-size="7" fill="#dc2626" font-weight="700">A</text>
-    <text x="${W*0.95-8}" y="${cy-3}" font-family="Inter,sans-serif" font-size="7" fill="#dc2626" font-weight="700">A'</text>
-    <g transform="translate(${W-22},22)"><circle r="10" fill="white" fill-opacity="0.85" stroke="#ccc" stroke-width="0.5"/><polygon points="0,-7 2,2 0,0 -2,2" fill="#1a1d2e"/><polygon points="0,7 2,-2 0,0 -2,-2" fill="#bbb"/><text x="0" y="-9" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#1a1d2e">N</text></g>
-    <line x1="16" y1="${H-14}" x2="${16+mPx}" y2="${H-14}" stroke="#1a1d2e" stroke-width="2" opacity="0.7"/>
-    <line x1="16" y1="${H-17}" x2="16" y2="${H-11}" stroke="#1a1d2e" stroke-width="1.5" opacity="0.7"/>
-    <line x1="${16+mPx}" y1="${H-17}" x2="${16+mPx}" y2="${H-11}" stroke="#1a1d2e" stroke-width="1.5" opacity="0.7"/>
-    <text x="${16+mPx/2}" y="${H-19}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#1a1d2e" font-weight="600" opacity="0.8">100m</text>
+    <!-- Site polygon — dark, reads immediately on grey base map -->
+    <polygon points="${sitePts}" fill="#1a1d2e" fill-opacity="0.75" stroke="white" stroke-width="1.5"/>
+    <!-- North arrow — minimal, top right -->
+    <g transform="translate(${W-20},20)">
+      <line x1="0" y1="8" x2="0" y2="-8" stroke="#1a1d2e" stroke-width="1.5"/>
+      <polygon points="0,-8 -3,0 3,0" fill="#1a1d2e"/>
+      <text x="0" y="16" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="#1a1d2e">N</text>
+    </g>
+    <!-- Scale bar -->
+    <rect x="${sbX-1}" y="${sbY-8}" width="${mPx+2}" height="12" fill="white" fill-opacity="0.7" rx="2"/>
+    <line x1="${sbX}" y1="${sbY}" x2="${sbX+mPx}" y2="${sbY}" stroke="#1a1d2e" stroke-width="2"/>
+    <line x1="${sbX}" y1="${sbY-3}" x2="${sbX}" y2="${sbY+3}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <line x1="${sbX+mPx}" y1="${sbY-3}" x2="${sbX+mPx}" y2="${sbY+3}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <text x="${sbX+mPx/2}" y="${sbY-5}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#1a1d2e" font-weight="700">100m</text>
   `;
 }
 
-// ── Ground floor plan SVG ────────────────────────────────────────────────────
+// ── Ground floor plan — monochrome, no shadow, rect neighbours, street labels ─
 function buildGroundFloorPlan(){
   const svg=document.getElementById('gf-plan-svg');
-  const VW=280,VH=300,p=D.polygon;
+  const VW=280,VH=310,p=D.polygon;
   const lons=p.map(c=>c[0]),lats=p.map(c=>c[1]);
   const lonMin=Math.min(...lons),lonMax=Math.max(...lons);
   const latMin=Math.min(...lats),latMax=Math.max(...lats);
-  const wM=(lonMax-lonMin)*M_PER_LNG,hM=(latMax-latMin)*M_PER_LAT;
-  const ctxF=2.0;
-  const scX=(VW-50)/(wM*ctxF),scY=(VH-60)/(hM*ctxF);
+  const wM=(lonMax-lonMin)*M_PER_LNG, hM=(latMax-latMin)*M_PER_LAT;
+  // Scale: show ~2.2× context, preserve aspect ratio
+  const ctxF=2.2;
+  const scX=(VW-50)/(wM*ctxF), scY=(VH-80)/(hM*ctxF);
   const sc=Math.min(scX,scY);
-  const cLon=(lonMin+lonMax)/2,cLat=(latMin+latMax)/2;
+  const cLon=(lonMin+lonMax)/2, cLat=(latMin+latMax)/2;
   function px(lon,lat){return [(lon-cLon)*M_PER_LNG*sc+VW/2, VH/2+5-(lat-cLat)*M_PER_LAT*sc];}
+
+  // Key pixel positions
+  const [,siteTopY]=px(cLon,latMax);
+  const [,siteBotY]=px(cLon,latMin);
+  const [siteLeftX]=px(lonMin,cLat);
+  const [siteRightX]=px(lonMax,cLat);
+  const [ccx,ccy]=px(cLon,cLat);
+  const sitePxW=siteRightX-siteLeftX, sitePxH=siteBotY-siteTopY;
+
+  // Site polygon
   const sitePts=p.map(c=>px(c[0],c[1]).join(',')).join(' ');
   const bldgPts=p.map(c=>[cLon+(c[0]-cLon)*0.92,cLat+(c[1]-cLat)*0.92]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  // Shadow: noon London spring 40° elevation → length = h×1.19, due north
-  const shadowLatOff=D.potentialHeight*1.19/M_PER_LAT;
-  const shadowPts=p.map(c=>[c[0],c[1]+shadowLatOff]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  // AABB dominant axis — robust against polygon irregularity
-  const widthM=(lonMax-lonMin)*M_PER_LNG, heightM2=(latMax-latMin)*M_PER_LAT;
-  const axisAngle=heightM2>=widthM?90:0;
-  const elongation=heightM2>=widthM?heightM2/widthM:widthM/heightM2;
-  // Core: 22% GIA, shaped to principal axis
+
+  // Core: 22% GIA, AABB axis
   const coreGIA=D.plotArea*0.80*0.22;
-  const aspect=Math.min(Math.max(elongation*0.85,1.2),2.4);
-  const coreWm=Math.sqrt(coreGIA/aspect),coreHm=coreWm*aspect;
-  const cw=coreWm*sc,ch=coreHm*sc;
-  const [ccx,ccy]=px(cLon,cLat);
-  // Schematic neighbouring buildings
-  const nbN=p.map(c=>[c[0]*0.8+cLon*0.2,c[1]+(latMax-latMin)*0.6+0.00015]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  const nbE=p.map(c=>[c[0]+(lonMax-lonMin)*0.6+0.00015,c[1]*0.8+cLat*0.2]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  // Trees
-  const trees=[
-    [lonMin-(lonMax-lonMin)*0.28,latMax+(latMax-latMin)*0.22],
-    [lonMin-(lonMax-lonMin)*0.38,latMin-(latMax-latMin)*0.18],
-    [lonMax+(lonMax-lonMin)*0.28,latMax+(latMax-latMin)*0.18],
-    [lonMax+(lonMax-lonMin)*0.22,latMin-(latMax-latMin)*0.22],
-  ].map(([tln,tlt])=>{const [tx,ty]=px(tln,tlt);return `<circle cx="${tx.toFixed(1)}" cy="${ty.toFixed(1)}" r="5" fill="#d1fae5" stroke="#059669" stroke-width="0.8"/><circle cx="${tx.toFixed(1)}" cy="${ty.toFixed(1)}" r="2" fill="#059669" opacity="0.5"/>`;}).join('');
-  const [cx1]=px(lonMin-(lonMax-lonMin)*0.65,cLat);const [cx2]=px(lonMax+(lonMax-lonMin)*0.65,cLat);
-  const [,cy0]=px(cLon,cLat);
+  const elong=hM>=wM?hM/wM:wM/hM;
+  const axisAngle=hM>=wM?90:0;
+  const aspect=Math.min(Math.max(elong*0.85,1.2),2.4);
+  const cw=Math.sqrt(coreGIA/aspect)*sc, ch=cw*aspect;
+
+  // Street widths in px (approximate)
+  const stN=18*sc;  // Leadenhall Street (N) ~18m
+  const stE=10*sc;  // Lime Street (E) ~10m
+  const stS=10*sc;  // southern lane ~10m
+  const stW=10*sc;  // western lane ~10m
+
+  // Adjacent buildings as simple rectangles (no polygon offsets)
+  const adjNy2=siteTopY-stN, adjNy1=adjNy2-25*sc;
+  const adjNx1=siteLeftX-20*sc, adjNx2=siteRightX+15*sc;
+
+  const adjEy1=siteTopY-5*sc, adjEy2=siteBotY+10*sc;
+  const adjEx1=siteRightX+stE, adjEx2=adjEx1+22*sc;
+
+  const adjWy1=siteTopY+5*sc, adjWy2=siteBotY-5*sc;
+  const adjWx2=siteLeftX-stW, adjWx1=adjWx2-18*sc;
+
+  const adjSy1=siteBotY+stS, adjSy2=adjSy1+18*sc;
+  const adjSx1=siteLeftX+5*sc, adjSx2=siteRightX-5*sc;
+
+  // Section cut A-A at centroid (horizontal, E-W)
+  const [,secY]=px(cLon,cLat);
+  const secX1=siteLeftX-40, secX2=siteRightX+40;
+
+  // Dimension lines — site width (E-W) and depth (N-S)
+  const dimYbot=siteBotY+stS+adjSy2-adjSy1+8;
+  const dimXright=siteRightX+stE+adjEx2-adjEx1+10;
+
+  // Scale bar 20m
   const scBar=20*sc;
-  const shadowLabel=()=>{const [sx,sy]=px(cLon,cLat+(latMax-latMin)*0.92+shadowLatOff*0.4);return `<text x="${sx}" y="${Math.min(sy,VH-52)}" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" fill="#666">Shadow (noon, ${D.potentialHeight}m, 40° elev)</text>`;};
+
+  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
   svg.innerHTML=`
-    <rect width="${VW}" height="${VH}" fill="#f0f1f5"/>
-    <rect x="0" y="0" width="${VW}" height="${VH}" fill="#e8e4d9" opacity="0.35"/>
-    <polygon points="${shadowPts}" fill="rgba(30,32,50,0.12)"/>
-    <polygon points="${nbN}" fill="#dde0ea" stroke="#b0b4c8" stroke-width="0.8"/>
-    <polygon points="${nbE}" fill="#dde0ea" stroke="#b0b4c8" stroke-width="0.8"/>
-    <polygon points="${sitePts}" fill="#f8f9fb" stroke="#4f46e5" stroke-width="1" stroke-dasharray="5,2"/>
-    <polygon points="${bldgPts}" fill="white" stroke="#1a1d2e" stroke-width="1.5"/>
+    <!-- Background (road/pavement tone) -->
+    <rect width="${VW}" height="${VH}" fill="#d8d9dd"/>
+    <!-- Pavement tone inside blocks -->
+    <rect x="${adjNx1-8}" y="${adjNy1-8}" width="${(adjNx2-adjNx1)+adjEx2-adjEx1+stE+16}" height="${(adjSy2-adjNy1)+25}" fill="#e4e5e9"/>
+
+    <!-- Adjacent buildings — simple rectangles, mid grey -->
+    <rect x="${adjNx1.toFixed(1)}" y="${adjNy1.toFixed(1)}" width="${(adjNx2-adjNx1).toFixed(1)}" height="${(adjNy2-adjNy1).toFixed(1)}" fill="#b0b3bf" stroke="white" stroke-width="0.5"/>
+    <rect x="${adjEx1.toFixed(1)}" y="${adjEy1.toFixed(1)}" width="${(adjEx2-adjEx1).toFixed(1)}" height="${(adjEy2-adjEy1).toFixed(1)}" fill="#b0b3bf" stroke="white" stroke-width="0.5"/>
+    <rect x="${adjWx1.toFixed(1)}" y="${adjWy1.toFixed(1)}" width="${(adjWx2-adjWx1).toFixed(1)}" height="${(adjWy2-adjWy1).toFixed(1)}" fill="#b0b3bf" stroke="white" stroke-width="0.5"/>
+    <rect x="${adjSx1.toFixed(1)}" y="${adjSy1.toFixed(1)}" width="${(adjSx2-adjSx1).toFixed(1)}" height="${(adjSy2-adjSy1).toFixed(1)}" fill="#b0b3bf" stroke="white" stroke-width="0.5"/>
+
+    <!-- Site boundary (thin black dashed — red-line equivalent) -->
+    <polygon points="${sitePts}" fill="#e8e9ed" stroke="#1a1d2e" stroke-width="0.8" stroke-dasharray="4,2"/>
+    <!-- Building footprint (solid, white fill) -->
+    <polygon points="${bldgPts}" fill="white" stroke="#1a1d2e" stroke-width="1.8"/>
+
+    <!-- Core — dark, rotated to principal axis -->
     <g transform="rotate(${(axisAngle-90).toFixed(1)},${ccx.toFixed(1)},${ccy.toFixed(1)})">
-      <rect x="${(ccx-cw/2).toFixed(1)}" y="${(ccy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="#2a2d45" rx="1"/>
-      <text x="${ccx.toFixed(1)}" y="${ccy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="white">CORE</text>
+      <rect x="${(ccx-cw/2).toFixed(1)}" y="${(ccy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="#1a1d2e" rx="1"/>
     </g>
-    ${(()=>{const [ex,ey]=px(cLon,latMax+(latMax-latMin)*0.09);return `<polygon points="${ex},${ey} ${ex-4},${ey+8} ${ex+4},${ey+8}" fill="#4f46e5" opacity="0.8"/>`;})()}
-    ${trees}
-    <line x1="${cx1}" y1="${cy0}" x2="${cx2}" y2="${cy0}" stroke="#dc2626" stroke-width="1" stroke-dasharray="5,3" opacity="0.7"/>
-    <text x="${cx1+2}" y="${cy0-3}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#dc2626">A</text>
-    <text x="${cx2-8}" y="${cy0-3}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#dc2626">A'</text>
-    ${shadowLabel()}
-    <g transform="translate(${VW-18},${VH-50})"><circle r="10" fill="white" fill-opacity="0.9" stroke="#ccc" stroke-width="0.5"/><polygon points="0,-7 2,2 0,0 -2,2" fill="#1a1d2e"/><polygon points="0,7 2,-2 0,0 -2,-2" fill="#ccc"/><text x="0" y="-9" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#1a1d2e">N</text></g>
-    <line x1="12" y1="${VH-14}" x2="${12+scBar}" y2="${VH-14}" stroke="#1a1d2e" stroke-width="2"/>
-    <line x1="12" y1="${VH-17}" x2="12" y2="${VH-11}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <line x1="${12+scBar}" y1="${VH-17}" x2="${12+scBar}" y2="${VH-11}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <text x="${12+scBar/2}" y="${VH-19}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="600" fill="#1a1d2e">20m</text>
-    <text x="${VW/2}" y="14" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#1a1d2e" opacity="0.6">100 Leadenhall Street</text>
-    <rect x="6" y="${VH-28}" width="6" height="6" fill="#1a1d2e"/><text x="15" y="${VH-23}" font-family="Inter,sans-serif" font-size="6" fill="#555">Building</text>
-    <rect x="60" y="${VH-28}" width="6" height="6" fill="rgba(30,32,50,0.12)" stroke="#666" stroke-width="0.5"/><text x="69" y="${VH-23}" font-family="Inter,sans-serif" font-size="6" fill="#555">Shadow</text>
-    <circle cx="115" cy="${VH-25}" r="4" fill="#d1fae5" stroke="#059669" stroke-width="0.8"/><text x="122" y="${VH-23}" font-family="Inter,sans-serif" font-size="6" fill="#555">Tree</text>
-    <rect x="150" y="${VH-28}" width="6" height="6" fill="#dde0ea" stroke="#b0b4c8" stroke-width="0.5"/><text x="159" y="${VH-23}" font-family="Inter,sans-serif" font-size="6" fill="#555">Adjacent</text>
+    <!-- Core label outside core box -->
+    <text x="${(ccx+cw/2+4).toFixed(1)}" y="${ccy.toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="#1a1d2e" font-weight="600">CORE · ${Math.round(coreGIA)}m²</text>
+
+    <!-- Entrance marker (north facade) -->
+    ${(()=>{const [ex,ey]=px(cLon,latMax);return `<rect x="${ex-8}" y="${ey-2}" width="16" height="3" fill="#1a1d2e"/>`;})()}
+
+    <!-- Section cut A-A -->
+    <line x1="${secX1}" y1="${secY.toFixed(1)}" x2="${secX2}" y2="${secY.toFixed(1)}" stroke="#1a1d2e" stroke-width="0.8" stroke-dasharray="5,3"/>
+    <circle cx="${secX1+4}" cy="${secY.toFixed(1)}" r="4" fill="#1a1d2e"/>
+    <text x="${secX1+4}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5" fill="white" font-weight="700">A</text>
+    <circle cx="${secX2-4}" cy="${secY.toFixed(1)}" r="4" fill="#1a1d2e"/>
+    <text x="${secX2-4}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5" fill="white" font-weight="700">A</text>
+
+    <!-- Street labels -->
+    <text x="${(siteLeftX+siteRightX)/2}" y="${(siteTopY-stN/2).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="6" font-weight="600" fill="#5a5d6e" letter-spacing="0.8">LEADENHALL STREET</text>
+    <text x="${(adjEx1+adjEx2)/2}" y="${((adjEy1+adjEy2)/2).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="600" fill="#5a5d6e" letter-spacing="0.5" transform="rotate(-90,${(adjEx1+adjEx2)/2},${(adjEy1+adjEy2)/2})">LIME ST</text>
+
+    <!-- Dimension: site width E-W -->
+    ${(()=>{
+      const dy=siteBotY+stS+10;
+      return `<line x1="${siteLeftX}" y1="${dy}" x2="${siteRightX}" y2="${dy}" stroke="#1a1d2e" stroke-width="0.6"/>
+      <line x1="${siteLeftX}" y1="${dy-3}" x2="${siteLeftX}" y2="${dy+3}" stroke="#1a1d2e" stroke-width="0.8"/>
+      <line x1="${siteRightX}" y1="${dy-3}" x2="${siteRightX}" y2="${dy+3}" stroke="#1a1d2e" stroke-width="0.8"/>
+      <text x="${(siteLeftX+siteRightX)/2}" y="${dy-3}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">${Math.round(wM)}m</text>`;
+    })()}
+
+    <!-- Dimension: site depth N-S -->
+    ${(()=>{
+      const dx=siteRightX+stE+adjEx2-adjEx1+12;
+      return `<line x1="${dx}" y1="${siteTopY}" x2="${dx}" y2="${siteBotY}" stroke="#1a1d2e" stroke-width="0.6"/>
+      <line x1="${dx-3}" y1="${siteTopY}" x2="${dx+3}" y2="${siteTopY}" stroke="#1a1d2e" stroke-width="0.8"/>
+      <line x1="${dx-3}" y1="${siteBotY}" x2="${dx+3}" y2="${siteBotY}" stroke="#1a1d2e" stroke-width="0.8"/>
+      <text x="${dx+4}" y="${(siteTopY+siteBotY)/2}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">${Math.round(hM)}m</text>`;
+    })()}
+
+    <!-- North arrow — minimal line style -->
+    <g transform="translate(${VW-16},${VH-40})">
+      <line x1="0" y1="10" x2="0" y2="-10" stroke="#1a1d2e" stroke-width="1.5"/>
+      <polygon points="0,-10 -3,-2 3,-2" fill="#1a1d2e"/>
+      <text x="0" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#1a1d2e">N</text>
+    </g>
+
+    <!-- Scale bar 20m -->
+    <line x1="10" y1="${VH-12}" x2="${10+scBar}" y2="${VH-12}" stroke="#1a1d2e" stroke-width="2"/>
+    <line x1="10" y1="${VH-15}" x2="10" y2="${VH-9}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <line x1="${10+scBar}" y1="${VH-15}" x2="${10+scBar}" y2="${VH-9}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <text x="${10+scBar/2}" y="${VH-17}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="600" fill="#1a1d2e">20m</text>
   `;
 }
 
-// ── Massing section A-A ──────────────────────────────────────────────────────
+// ── Massing section A-A — clean monochrome, E/W labels, scale bar ────────────
 function buildMassingSectionSVG(){
   const svg=document.getElementById('section-svg');
-  const VW=280,VH=200,groundY=155,scH=1.4,scW=2.2,cx=VW/2;
-  const siteW=Math.sqrt(D.plotArea*1.1),sitePxW=siteW*scW;
-  const existH=D.heightM,propH=D.potentialHeight;
-  const ctxH=Math.min(existH*1.5,35);
-  const ctxW=siteW*0.8*scW,ctxGap=siteW*0.6*scW;
+  const VW=280,VH=195;
+  // Scale: auto-fit proposed height with headroom
+  const propH=D.potentialHeight, existH=D.heightM;
+  const scH=(VH-55)/propH; // px per metre height
+  const groundY=VH-30;
   const hy=h=>groundY-h*scH;
-  const ctxLx=cx-sitePxW/2-ctxGap-ctxW,ctxRx=cx+sitePxW/2+ctxGap;
-  const ctxRTopX=ctxRx,ctxRTopY=hy(ctxH);
+  // Horizontal: site width in m → pixels
+  const siteWm=Math.sqrt(D.plotArea*1.1); // approx
+  const maxW=VW*0.38; // site takes up ~38% of width
+  const scW=maxW/siteWm;
+  const cx=VW/2;
+  const sitePxW=siteWm*scW;
+  // Adjacent context (immediate, schematic)
+  const ctxH=Math.round(existH*1.2); // immediate adjacent ~same height
+  const ctxGap=12*scW; // street gap (~12m)
+  const ctxW=18*scW;   // adjacent block width (~18m)
+  const ctxLx=cx-sitePxW/2-ctxGap-ctxW;
+  const ctxRx=cx+sitePxW/2+ctxGap;
+  // 25° daylight angle from top of right context building
   const angle25=Math.tan(25*Math.PI/180);
-  const dayX2=ctxRTopX-(ctxH*scH)/angle25;
-  const floorLines=Array.from({length:Math.floor(propH/4.2)},(_,i)=>{const fy=hy((i+1)*4.2);return fy>hy(propH)+2?`<line x1="${(cx-sitePxW/2+2).toFixed(1)}" y1="${fy.toFixed(1)}" x2="${(cx+sitePxW/2-2).toFixed(1)}" y2="${fy.toFixed(1)}" stroke="#4f46e5" stroke-width="0.4" opacity="0.5"/>`:''}).join('');
+  const dayX2=ctxRx-(ctxH*scH)/angle25;
+  // Floor plate lines
+  const floorLines=Array.from({length:Math.floor(propH/4.2)},(_,i)=>{
+    const fy=hy((i+1)*4.2);
+    return fy>hy(propH)+1?`<line x1="${(cx-sitePxW/2+1).toFixed(1)}" y1="${fy.toFixed(1)}" x2="${(cx+sitePxW/2-1).toFixed(1)}" y2="${fy.toFixed(1)}" stroke="white" stroke-width="0.5" opacity="0.6"/>`:''
+  }).join('');
+  // Horizontal scale bar (20m)
+  const scBar20=20*scW;
+  const sbX=(VW-scBar20)/2, sbY=groundY+18;
   svg.innerHTML=`
-    <defs><linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#f0f1f5"/></linearGradient></defs>
-    <rect width="${VW}" height="${VH}" fill="url(#sky2)"/>
-    <rect x="0" y="${groundY}" width="${VW}" height="${VH-groundY}" fill="#e8e4d9"/>
-    <rect x="${cx+sitePxW/2}" y="${groundY-2}" width="${ctxGap}" height="8" fill="#d6d0c4" opacity="0.8"/>
-    <rect x="${ctxLx+ctxW}" y="${groundY-2}" width="${ctxGap}" height="8" fill="#d6d0c4" opacity="0.8"/>
-    <rect x="${ctxLx}" y="${hy(ctxH).toFixed(1)}" width="${ctxW}" height="${(ctxH*scH).toFixed(1)}" fill="#c8cad6" stroke="#9095a8" stroke-width="0.8"/>
-    <text x="${ctxLx+ctxW/2}" y="${(hy(ctxH)-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#555">${Math.round(ctxH)}m</text>
-    <rect x="${ctxRx}" y="${hy(ctxH).toFixed(1)}" width="${ctxW}" height="${(ctxH*scH).toFixed(1)}" fill="#c8cad6" stroke="#9095a8" stroke-width="0.8"/>
-    <text x="${ctxRx+ctxW/2}" y="${(hy(ctxH)-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#555">${Math.round(ctxH)}m</text>
-    <line x1="${ctxRTopX}" y1="${ctxRTopY.toFixed(1)}" x2="${dayX2.toFixed(1)}" y2="${groundY}" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2" opacity="0.85"/>
-    <text x="${((ctxRTopX+dayX2)/2-8).toFixed(1)}" y="${((ctxRTopY+groundY)/2).toFixed(1)}" font-family="Inter,sans-serif" font-size="6" fill="#d97706">25°</text>
-    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(existH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(existH*scH).toFixed(1)}" fill="rgba(220,38,38,0.08)" stroke="#dc2626" stroke-width="1" stroke-dasharray="4,2"/>
-    <rect x="${(cx-sitePxW/2+2).toFixed(1)}" y="${hy(propH).toFixed(1)}" width="${(sitePxW-4).toFixed(1)}" height="${(propH*scH).toFixed(1)}" fill="rgba(79,70,229,0.18)" stroke="#4f46e5" stroke-width="1.5"/>
+    <!-- Background -->
+    <rect width="${VW}" height="${VH}" fill="white"/>
+    <!-- Ground fill -->
+    <rect x="0" y="${groundY}" width="${VW}" height="${VH-groundY}" fill="#c8c9ce"/>
+    <!-- Street gaps between site and context -->
+    <rect x="${cx+sitePxW/2}" y="${hy(0)}" width="${ctxGap}" height="${VH-groundY+2}" fill="#d8d9dd"/>
+    <rect x="${ctxLx+ctxW}" y="${hy(0)}" width="${ctxGap}" height="${VH-groundY+2}" fill="#d8d9dd"/>
+
+    <!-- Context buildings — mid grey, schematic -->
+    <rect x="${ctxLx.toFixed(1)}" y="${hy(ctxH).toFixed(1)}" width="${ctxW.toFixed(1)}" height="${(ctxH*scH).toFixed(1)}" fill="#b0b3bf" stroke="#8a8d9a" stroke-width="0.8"/>
+    <text x="${(ctxLx+ctxW/2).toFixed(1)}" y="${(hy(ctxH)-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#555">${ctxH}m</text>
+    <rect x="${ctxRx.toFixed(1)}" y="${hy(ctxH).toFixed(1)}" width="${ctxW.toFixed(1)}" height="${(ctxH*scH).toFixed(1)}" fill="#b0b3bf" stroke="#8a8d9a" stroke-width="0.8"/>
+    <text x="${(ctxRx+ctxW/2).toFixed(1)}" y="${(hy(ctxH)-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#555">${ctxH}m</text>
+
+    <!-- 25° daylight angle -->
+    <line x1="${ctxRx.toFixed(1)}" y1="${hy(ctxH).toFixed(1)}" x2="${dayX2.toFixed(1)}" y2="${groundY}" stroke="#888" stroke-width="0.8" stroke-dasharray="3,2"/>
+    <text x="${((ctxRx+dayX2)/2).toFixed(1)}" y="${(hy(ctxH/2)+3).toFixed(1)}" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" fill="#888">25°</text>
+
+    <!-- Existing building — outline only, dashed -->
+    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(existH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(existH*scH).toFixed(1)}" fill="none" stroke="#888" stroke-width="1" stroke-dasharray="5,2"/>
+
+    <!-- Proposed building — dark fill -->
+    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(propH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(propH*scH).toFixed(1)}" fill="#2a2d45"/>
     ${floorLines}
-    <line x1="0" y1="${groundY}" x2="${VW}" y2="${groundY}" stroke="#555" stroke-width="1.5"/>
-    <text x="${cx}" y="${VH-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#666">SECTION A–A  (looking north)</text>
-    <line x1="${(cx+sitePxW/2+4).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(cx+sitePxW/2+4).toFixed(1)}" y2="${groundY}" stroke="#4f46e5" stroke-width="0.8"/>
-    <text x="${(cx+sitePxW/2+7).toFixed(1)}" y="${((hy(propH)+groundY)/2).toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#4f46e5" font-weight="700">${propH}m</text>
-    <line x1="${(cx-sitePxW/2-4).toFixed(1)}" y1="${hy(existH).toFixed(1)}" x2="${(cx-sitePxW/2-4).toFixed(1)}" y2="${groundY}" stroke="#dc2626" stroke-width="0.8"/>
-    <text x="${(cx-sitePxW/2-7).toFixed(1)}" y="${((hy(existH)+groundY)/2).toFixed(1)}" dominant-baseline="middle" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="7" fill="#dc2626" font-weight="700">${existH}m</text>
-    <rect x="6" y="6" width="10" height="8" fill="rgba(79,70,229,0.18)" stroke="#4f46e5" stroke-width="1"/><text x="19" y="13" font-family="Inter,sans-serif" font-size="7" fill="#333">Proposed</text>
-    <rect x="80" y="6" width="10" height="8" fill="rgba(220,38,38,0.08)" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,2"/><text x="93" y="13" font-family="Inter,sans-serif" font-size="7" fill="#333">Existing</text>
-    <rect x="148" y="6" width="10" height="8" fill="#c8cad6" stroke="#9095a8" stroke-width="0.8"/><text x="161" y="13" font-family="Inter,sans-serif" font-size="7" fill="#333">Context</text>
-    <line x1="218" y1="10" x2="228" y2="10" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2"/><text x="231" y="13" font-family="Inter,sans-serif" font-size="7" fill="#d97706">25° angle</text>
+
+    <!-- Ground line — bold -->
+    <line x1="0" y1="${groundY}" x2="${VW}" y2="${groundY}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <text x="5" y="${groundY-3}" font-family="Inter,sans-serif" font-size="5.5" fill="#555" font-weight="600">GL</text>
+
+    <!-- Height annotations — proposed -->
+    <line x1="${(cx+sitePxW/2+3).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(cx+sitePxW/2+3).toFixed(1)}" y2="${groundY}" stroke="#1a1d2e" stroke-width="0.6"/>
+    <line x1="${(cx+sitePxW/2).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(cx+sitePxW/2+8).toFixed(1)}" y2="${hy(propH).toFixed(1)}" stroke="#1a1d2e" stroke-width="0.6"/>
+    <line x1="${(cx+sitePxW/2).toFixed(1)}" y1="${groundY}" x2="${(cx+sitePxW/2+8).toFixed(1)}" y2="${groundY}" stroke="#1a1d2e" stroke-width="0.6"/>
+    <text x="${(cx+sitePxW/2+6).toFixed(1)}" y="${(hy(propH/2)).toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#1a1d2e" font-weight="700">+${propH}m</text>
+
+    <!-- Height annotation — existing -->
+    <line x1="${(cx-sitePxW/2-3).toFixed(1)}" y1="${hy(existH).toFixed(1)}" x2="${(cx-sitePxW/2-3).toFixed(1)}" y2="${groundY}" stroke="#666" stroke-width="0.6" stroke-dasharray="2,2"/>
+    <text x="${(cx-sitePxW/2-5).toFixed(1)}" y="${(hy(existH/2)).toFixed(1)}" dominant-baseline="middle" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="6.5" fill="#666">${existH}m exist.</text>
+
+    <!-- W and E orientation labels -->
+    <text x="6" y="${(groundY-6).toFixed(1)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#333">W</text>
+    <text x="${VW-10}" y="${(groundY-6).toFixed(1)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#333">E</text>
+
+    <!-- Horizontal scale bar at ground level -->
+    <line x1="${sbX.toFixed(1)}" y1="${sbY}" x2="${(sbX+scBar20).toFixed(1)}" y2="${sbY}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <line x1="${sbX.toFixed(1)}" y1="${sbY-3}" x2="${sbX.toFixed(1)}" y2="${sbY+3}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <line x1="${(sbX+scBar20).toFixed(1)}" y1="${sbY-3}" x2="${(sbX+scBar20).toFixed(1)}" y2="${sbY+3}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <text x="${(sbX+scBar20/2).toFixed(1)}" y="${sbY+8}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">20m</text>
+
+    <!-- Section label -->
+    <text x="${cx}" y="${VH-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" letter-spacing="1" fill="#555">SECTION  A–A  ·  LOOKING NORTH  ·  IMMEDIATE CONTEXT SCHEMATIC</text>
   `;
 }
 
