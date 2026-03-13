@@ -433,9 +433,23 @@ function buildGroundFloorPlan(d) {
   // Neighbouring building (schematic, N and E)
   const nbN = polyCoords.map(c=>[c[0]*0.8+cLon*0.2, c[1]+(latMax-latMin)*0.6+0.00015]).map(c=>px(c[0],c[1]).join(',')).join(' ');
   const nbE = polyCoords.map(c=>[c[0]+(lonMax-lonMin)*0.6+0.00015, c[1]*0.8+cLat*0.2]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  // Core schematic
+  // ── PCA principal axis ─────────────────────────────────────────────────
+  const pPts = polyCoords.map(c=>[(c[0]-cLon)*69270*sc, -((c[1]-cLat)*111320*sc)]);
+  const pN = pPts.length;
+  let _cxx=0,_cxy=0,_cyy=0;
+  pPts.forEach(([x,y])=>{_cxx+=x*x;_cxy+=x*y;_cyy+=y*y;});
+  _cxx/=pN;_cxy/=pN;_cyy/=pN;
+  const _tr=_cxx+_cyy,_det=_cxx*_cyy-_cxy*_cxy,_disc=Math.sqrt(Math.max(0,_tr*_tr/4-_det));
+  const _lam1=_tr/2+_disc,_lam2=_tr/2-_disc;
+  const axisAngle = Math.abs(_cxy)>1e-8 ? Math.atan2(_lam1-_cxx,_cxy)*180/Math.PI : (_cxx>=_cyy?0:90);
+  const elongation = _lam2>1e-6 ? Math.sqrt(_lam1/_lam2) : 1;
+  const coreAspect = Math.min(Math.max(elongation*0.85,1.2),2.4);
+  // Core: 22% GIA, shaped to principal axis, rotated by (axisAngle-90°)
+  const coreGIA = (d.plotArea||wM*hM) * 0.22;
+  const coreWm = Math.sqrt(coreGIA/coreAspect), coreHm = coreWm*coreAspect;
   const [ccx,ccy]=px(cLon,cLat);
-  const coreW=wM*0.22*0.9*sc, coreH=hM*0.22*1.4*sc;
+  const coreW=coreWm*sc, coreH=coreHm*sc;
+  const rotDeg=(axisAngle-90).toFixed(1);
   svg.innerHTML = `
     <!-- Background -->
     <rect width="${VW}" height="${VH}" fill="#f0f1f5"/>
@@ -450,9 +464,11 @@ function buildGroundFloorPlan(d) {
     <polygon points="${sitePts}" fill="#f8f9fb" stroke="#4f46e5" stroke-width="1" stroke-dasharray="5,2"/>
     <!-- Building footprint -->
     <polygon points="${bldgPts}" fill="white" stroke="#1a1d2e" stroke-width="1.5"/>
-    <!-- Core -->
-    <rect x="${(ccx-coreW/2).toFixed(1)}" y="${(ccy-coreH/2).toFixed(1)}" width="${coreW.toFixed(1)}" height="${coreH.toFixed(1)}" fill="#2a2d45" rx="1"/>
-    <text x="${ccx.toFixed(1)}" y="${ccy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="white">CORE</text>
+    <!-- Core — PCA axis, (axisAngle-90°) rotation -->
+    <g transform="rotate(${rotDeg},${ccx.toFixed(1)},${ccy.toFixed(1)})">
+      <rect x="${(ccx-coreW/2).toFixed(1)}" y="${(ccy-coreH/2).toFixed(1)}" width="${coreW.toFixed(1)}" height="${coreH.toFixed(1)}" fill="#2a2d45" rx="1"/>
+      <text x="${ccx.toFixed(1)}" y="${ccy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="white">CORE</text>
+    </g>
     <!-- Entrance arrow (north face) -->
     ${(()=>{const [ex,ey]=px(cLon,latMax+(latMax-latMin)*0.08);return `<polygon points="${ex},${ey} ${ex-4},${ey+8} ${ex+4},${ey+8}" fill="#4f46e5" opacity="0.8"/>`;})()}
     <!-- Trees -->
