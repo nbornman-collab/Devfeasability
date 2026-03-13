@@ -343,10 +343,10 @@ async function selectResult(feature){
   document.getElementById('panel-body').innerHTML = '<div class="section"><p class="narrative" style="color:var(--text3)">Fetching planning data…</p></div>';
   document.getElementById('panel').classList.remove('collapsed');
 
-  // Load Google Street View (interactive embed — no API key needed)
+  // Load Google Street View (interactive embed)
   const svWrap = document.getElementById('sv-wrap');
   const svFrame = document.getElementById('sv-frame');
-  svFrame.src = `https://www.google.com/maps/@${lat},${lng},3a,75y,210h,90t/data=!3m7!1e1!3m5!1s!2e0!3e11!7i16384!8i8192?entry=ttu&output=embed`;
+  svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${lat},${lng}&cbp=12,0,,0,0&output=svembed&ie=UTF8&source=embed`;
   svWrap.style.display = 'block';
 
   // Parallel data fetches
