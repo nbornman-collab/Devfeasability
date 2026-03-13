@@ -308,7 +308,8 @@ async function init(){
       });
     }
     document.getElementById('loader').classList.add('hide');
-    searchAddress('Great Suffolk Street, London SE1');
+    // Ready — no auto-search, let user pick a site
+    document.getElementById('search').placeholder = 'Search any London address…';
   });
   map.on('move', updateLabelPositions);
 }

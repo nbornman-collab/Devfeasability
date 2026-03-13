@@ -14,9 +14,20 @@ function cachedFetch(url, timeoutMs = 10000) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   return fetch(url, { signal: controller.signal })
-    .then(r => { clearTimeout(timeout); return r.json(); })
-    .then(data => { apiCache.set(url, { data, ts: Date.now() }); if (apiCache.size > 500) { const oldest = apiCache.keys().next().value; apiCache.delete(oldest); } return data; })
-    .catch(e => { clearTimeout(timeout); throw e; });
+    .then(r => { clearTimeout(timeout); return r.text(); })
+    .then(text => {
+      try {
+        const data = JSON.parse(text);
+        apiCache.set(url, { data, ts: Date.now() });
+        if (apiCache.size > 500) { const oldest = apiCache.keys().next().value; apiCache.delete(oldest); }
+        return data;
+      } catch {
+        // Overpass sometimes returns XML errors
+        console.warn('cachedFetch: non-JSON response from', url.substring(0, 80), text.substring(0, 100));
+        return { elements: [] };
+      }
+    })
+    .catch(e => { clearTimeout(timeout); console.warn('cachedFetch timeout/error:', e.message); return { elements: [] }; });
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -51,37 +62,39 @@ app.get('/api/building', async (req, res) => {
     const { lat, lng, address } = req.query;
     const radius = req.query.radius || 25;
 
-    // Strategy 1: If we have a street address, search by addr tags (much more reliable)
+    // Fire all strategies in parallel — use best result
+    const promises = [];
+
+    // Strategy 1: Address tag match (most precise)
     if (address) {
-      // Parse "100 Leadenhall Street" -> housenumber=100, street=Leadenhall Street
       const addrMatch = address.match(/^(\d+[\-\d]*[a-zA-Z]?)\s+(.+?)(?:,.*)?$/);
       if (addrMatch) {
         const num = addrMatch[1];
         const street = addrMatch[2].replace(/,.*$/, '').trim();
-        const addrQuery = `[out:json][timeout:10];way["building"]["addr:housenumber"="${num}"]["addr:street"~"${street}",i](around:200,${lat},${lng});out body;>;out skel qt;`;
-        const addrUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(addrQuery)}`;
-        const addrData = await cachedFetch(addrUrl, 12000);
-        const addrWays = (addrData.elements || []).filter(e => e.type === 'way' && e.tags);
-        if (addrWays.length > 0) {
-          return res.json(addrData);
-        }
+        const addrQuery = `[out:json][timeout:8];way["building"]["addr:housenumber"="${num}"]["addr:street"~"${street}",i](around:200,${lat},${lng});out body;>;out skel qt;`;
+        promises.push(cachedFetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(addrQuery)}`, 10000).then(d => ({ strategy: 'addr', data: d })));
       }
     }
 
-    // Strategy 2: Point-in-polygon (is_in) to get the building the pin is actually inside
-    const isInQuery = `[out:json][timeout:10];is_in(${lat},${lng})->.a;way(pivot.a)["building"];out body;>;out skel qt;`;
-    const isInUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(isInQuery)}`;
-    const isInData = await cachedFetch(isInUrl, 12000);
-    const isInWays = (isInData.elements || []).filter(e => e.type === 'way' && e.tags);
-    if (isInWays.length > 0) {
-      return res.json(isInData);
-    }
+    // Strategy 2: Radius search (fast, reliable)
+    const query = `[out:json][timeout:8];(way["building"](around:${radius},${lat},${lng}););out body;>;out skel qt;`;
+    promises.push(cachedFetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`, 10000).then(d => ({ strategy: 'radius', data: d })));
 
-    // Strategy 3: Fallback to radius search (original approach)
-    const query = `[out:json][timeout:10];(way["building"](around:${radius},${lat},${lng});relation["building"](around:${radius},${lat},${lng}););out body;>;out skel qt;`;
-    const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-    const data = await cachedFetch(url, 12000);
-    res.json(data);
+    // Race — return first one with valid building ways
+    const results = await Promise.allSettled(promises);
+    // Prefer address match, then radius
+    const addrResult = results.find(r => r.status === 'fulfilled' && r.value.strategy === 'addr');
+    if (addrResult) {
+      const ways = (addrResult.value.data.elements || []).filter(e => e.type === 'way' && e.tags);
+      if (ways.length > 0) return res.json(addrResult.value.data);
+    }
+    const radiusResult = results.find(r => r.status === 'fulfilled' && r.value.strategy === 'radius');
+    if (radiusResult) {
+      const ways = (radiusResult.value.data.elements || []).filter(e => e.type === 'way' && e.tags);
+      if (ways.length > 0) return res.json(radiusResult.value.data);
+    }
+    // All failed — return empty
+    res.json({ elements: [] });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
