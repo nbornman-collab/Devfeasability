@@ -264,7 +264,8 @@ async function init(){
     antialias:true
   });
   map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
-  map.on('style.load',()=>{
+  map.on('error', e => { console.error('Map error:', e.error); document.getElementById('loader').classList.add('hide'); });
+  map.on('style.load',()=>{ try {
     // Context buildings — soft grey, subservient to site massing
     if(!map.getLayer('3d-buildings')){
       map.addLayer({
@@ -307,8 +308,8 @@ async function init(){
         }
       });
     }
+    } catch(e) { console.error('style.load error:', e); }
     document.getElementById('loader').classList.add('hide');
-    // Ready — no auto-search, let user pick a site
     document.getElementById('search').placeholder = 'Search any London address…';
   });
   map.on('move', updateLabelPositions);
@@ -1485,7 +1486,9 @@ function getCentroid(coords){
   return [sLng/n, sLat/n];
 }
 document.getElementById('toggle').onclick = () => document.getElementById('panel').classList.toggle('collapsed');
-init();
+// Safety: hide loader after 5s even if map style fails to load
+setTimeout(() => document.getElementById('loader').classList.add('hide'), 5000);
+init().catch(e => { console.error('Init failed:', e); document.getElementById('loader').classList.add('hide'); });
 </script>
 </body>
 </html>
