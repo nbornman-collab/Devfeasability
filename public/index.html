@@ -367,19 +367,11 @@ async function selectResult(feature){
   document.getElementById('panel-body').innerHTML = '<div class="section"><p class="narrative" style="color:var(--text3)">Fetching planning data…</p></div>';
   document.getElementById('panel').classList.remove('collapsed');
 
-  // Load Google Street View (interactive embed)
-  // Use building centroid if available, offset ~15m south for frontage view
+  // Load Google Street View immediately with geocode point (update after building data)
   const svWrap = document.getElementById('sv-wrap');
   const svFrame = document.getElementById('sv-frame');
-  let svLat = lat, svLng = lng;
-  if(buildingData && buildingData.wayNodes && buildingData.wayNodes.length >= 3){
-    const bCoords = buildingData.wayNodes.map(nid => buildingData.nodes.find(n => n.id === nid)).filter(Boolean).map(n => [n.lon, n.lat]);
-    if(bCoords.length >= 3){ const bc = getCentroid(bCoords); svLat = bc[1]; svLng = bc[0]; }
-  }
-  const svOffsetLat = svLat - 0.00015; // ~15m south (toward street)
-  const svOffsetLng = svLng;
-  // heading=0 faces north, adjust based on typical street orientation
-  svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${svOffsetLat},${svOffsetLng}&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed`;
+  const svOffsetLat = lat - 0.00015; // ~15m south
+  svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${svOffsetLat},${lng}&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed`;
   svWrap.style.display = 'block';
 
   // Parallel data fetches
@@ -477,8 +469,10 @@ async function selectResult(feature){
       if(dist > 30){
         console.log(`Building centroid ${dist.toFixed(0)}m from geocode point — re-centering map`);
         map.flyTo({center:bldgCentroid, zoom:17, pitch:55, bearing:-15, duration:1500});
-        // Move marker too
         if(marker) marker.setLngLat(bldgCentroid);
+        // Update Street View to building centroid
+        const svOff = bldgCentroid[1] - 0.00015;
+        svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${svOff},${bldgCentroid[0]}&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed`;
       }
     }
   }
