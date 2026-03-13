@@ -433,16 +433,9 @@ function buildGroundFloorPlan(d) {
   // Neighbouring building (schematic, N and E)
   const nbN = polyCoords.map(c=>[c[0]*0.8+cLon*0.2, c[1]+(latMax-latMin)*0.6+0.00015]).map(c=>px(c[0],c[1]).join(',')).join(' ');
   const nbE = polyCoords.map(c=>[c[0]+(lonMax-lonMin)*0.6+0.00015, c[1]*0.8+cLat*0.2]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  // ── PCA principal axis ─────────────────────────────────────────────────
-  const pPts = polyCoords.map(c=>[(c[0]-cLon)*69270*sc, -((c[1]-cLat)*111320*sc)]);
-  const pN = pPts.length;
-  let _cxx=0,_cxy=0,_cyy=0;
-  pPts.forEach(([x,y])=>{_cxx+=x*x;_cxy+=x*y;_cyy+=y*y;});
-  _cxx/=pN;_cxy/=pN;_cyy/=pN;
-  const _tr=_cxx+_cyy,_det=_cxx*_cyy-_cxy*_cxy,_disc=Math.sqrt(Math.max(0,_tr*_tr/4-_det));
-  const _lam1=_tr/2+_disc,_lam2=_tr/2-_disc;
-  const axisAngle = Math.abs(_cxy)>1e-8 ? Math.atan2(_lam1-_cxx,_cxy)*180/Math.PI : (_cxx>=_cyy?0:90);
-  const elongation = _lam2>1e-6 ? Math.sqrt(_lam1/_lam2) : 1;
+  // ── AABB dominant axis — robust against polygon irregularity ──────────
+  const axisAngle = hM >= wM ? 90 : 0; // 90=N-S dominant, 0=E-W dominant
+  const elongation = hM >= wM ? hM/wM : wM/hM;
   const coreAspect = Math.min(Math.max(elongation*0.85,1.2),2.4);
   // Core: 22% GIA, shaped to principal axis, rotated by (axisAngle-90°)
   const coreGIA = (d.plotArea||wM*hM) * 0.22;

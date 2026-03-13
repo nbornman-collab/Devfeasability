@@ -215,28 +215,21 @@ OPTIONS.forEach(opt => {
   opt.marginPct = gdv > 0 ? (margin/gdv*100).toFixed(0) : '0';
 });
 
-// ─── Principal building axis via PCA ────────────────────────────────────────
-// Uses covariance of polygon vertices in SVG space.
-// Returns { angle (SVG degrees, clockwise), elongation (ratio of principal axes) }
-// This gives the TRUE dominant direction of the mass, not just the longest edge.
-function buildingPrincipalAxis(scaleX, scaleY) {
-  const cx = SITE_COORDS.reduce((s,c)=>s+c[0],0)/SITE_COORDS.length;
-  const cy = SITE_COORDS.reduce((s,c)=>s+c[1],0)/SITE_COORDS.length;
-  // Convert to SVG space (x east, y south = inverted lat)
-  const pts = SITE_COORDS.map(c=>[
-    (c[0]-cx)*M_PER_LNG*scaleX,
-    -((c[1]-cy)*M_PER_LAT*scaleY)
-  ]);
-  const n = pts.length;
-  let cxx=0, cxy=0, cyy=0;
-  pts.forEach(([x,y])=>{ cxx+=x*x; cxy+=x*y; cyy+=y*y; });
-  cxx/=n; cxy/=n; cyy/=n;
-  const trace=cxx+cyy, det=cxx*cyy-cxy*cxy;
-  const disc=Math.sqrt(Math.max(0, trace*trace/4-det));
-  const lam1=trace/2+disc, lam2=trace/2-disc; // lam1 = dominant axis
-  const angle = Math.abs(cxy)>1e-8 ? Math.atan2(lam1-cxx,cxy)*180/Math.PI : (cxx>=cyy?0:90);
-  const elongation = lam2>1e-6 ? Math.sqrt(lam1/lam2) : 1;
-  return { angle, elongation };
+// ─── Principal building axis — AABB dominant direction ──────────────────────
+// Uses the axis-aligned bounding box to determine which direction the mass
+// is elongated. Simple, predictable, not skewed by polygon irregularity.
+// Returns { angle (SVG degrees: 90=N-S, 0=E-W), elongation (h/w or w/h) }
+// Rotation applied as rotate(angle-90°): N-S→0°, E-W→-90°.
+function buildingPrincipalAxis() {
+  const lons = SITE_COORDS.map(c=>c[0]);
+  const lats = SITE_COORDS.map(c=>c[1]);
+  const widthM  = (Math.max(...lons)-Math.min(...lons))*M_PER_LNG;
+  const heightM = (Math.max(...lats)-Math.min(...lats))*M_PER_LAT;
+  if(heightM >= widthM){
+    return { angle:90, elongation:heightM/widthM }; // N-S dominant
+  } else {
+    return { angle:0, elongation:widthM/heightM }; // E-W dominant
+  }
 }
 
 // ─── SVG floor plan generator ───────────────────────────────────────────────
@@ -282,7 +275,7 @@ function makePlanSVG(opt, level='podium') {
   const podiumCoreGIA = podiumGIA * 0.22;
 
   // ── BUILDING AXIS via PCA (dominant mass direction, not just longest edge) ─
-  const { angle: axisAngle, elongation } = buildingPrincipalAxis(scaleX, scaleY);
+  const { angle: axisAngle, elongation } = buildingPrincipalAxis();
   // Core aspect ratio shaped to match the building's principal elongation.
   // If building is elongated 1.4:1, core is ~1.3:1 in same direction.
   // Clamped 1.2–2.4 to stay buildable (min 7m on short face enforced by area).

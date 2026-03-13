@@ -518,15 +518,10 @@ function buildGroundFloorPlan(){
   // Shadow: noon London spring 40° elevation → length = h×1.19, due north
   const shadowLatOff=D.potentialHeight*1.19/M_PER_LAT;
   const shadowPts=p.map(c=>[c[0],c[1]+shadowLatOff]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  // PCA principal axis for core rotation
-  const pts=p.map(c=>[(c[0]-cLon)*M_PER_LNG*sc,-((c[1]-cLat)*M_PER_LAT*sc)]);
-  const n=pts.length;let cxx=0,cxy=0,cyy=0;
-  pts.forEach(([x,y])=>{cxx+=x*x;cxy+=x*y;cyy+=y*y;});
-  cxx/=n;cxy/=n;cyy/=n;
-  const tr=cxx+cyy,det=cxx*cyy-cxy*cxy,disc=Math.sqrt(Math.max(0,tr*tr/4-det));
-  const lam1=tr/2+disc,lam2=tr/2-disc;
-  const axisAngle=Math.abs(cxy)>1e-8?Math.atan2(lam1-cxx,cxy)*180/Math.PI:(cxx>=cyy?0:90);
-  const elongation=lam2>1e-6?Math.sqrt(lam1/lam2):1;
+  // AABB dominant axis — robust against polygon irregularity
+  const widthM=(lonMax-lonMin)*M_PER_LNG, heightM2=(latMax-latMin)*M_PER_LAT;
+  const axisAngle=heightM2>=widthM?90:0;
+  const elongation=heightM2>=widthM?heightM2/widthM:widthM/heightM2;
   // Core: 22% GIA, shaped to principal axis
   const coreGIA=D.plotArea*0.80*0.22;
   const aspect=Math.min(Math.max(elongation*0.85,1.2),2.4);
