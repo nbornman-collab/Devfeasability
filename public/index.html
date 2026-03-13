@@ -517,7 +517,11 @@ async function selectResult(feature){
   }
 
   // ALWAYS render 3D — even if panel fails
-  renderSite3D(lat, lng, buildingData, planning, siteInfo);
+  try {
+    renderSite3D(lat, lng, buildingData, planning, siteInfo);
+  } catch(e) {
+    console.error('renderSite3D error:', e);
+  }
 
   // Async data fetches (non-blocking — update panel when ready)
   // Planning precedent
@@ -541,6 +545,7 @@ async function selectResult(feature){
 
 // --- 3D RENDERING ---
 function renderSite3D(lat, lng, buildingData, planning, siteInfo){
+  console.log('renderSite3D called', {lat, lng, hasBuilding: !!buildingData, wayNodes: buildingData?.wayNodes?.length, floors: siteInfo?.floors, heightM: siteInfo?.heightM});
   // Clean up all layers including dynamic floor lines
   const layersToRemove = ['site-line','prop-line','current-3d','current-edge','potential-3d','potential-edge','pd-3d','pd-edge'];
   for(let f = 1; f <= 30; f++) layersToRemove.push('floor-line-'+f);
@@ -554,13 +559,16 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   }
   clearLabels();
 
-  if(!buildingData || !buildingData.wayNodes || buildingData.wayNodes.length < 3) return;
+  if(!buildingData || !buildingData.wayNodes || buildingData.wayNodes.length < 3){
+    console.warn('renderSite3D: bail — no building polygon', {buildingData});
+    return;
+  }
 
   const coords = buildingData.wayNodes
     .map(nid => buildingData.nodes.find(n => n.id === nid))
     .filter(Boolean)
     .map(n => [n.lon, n.lat]);
-  if(coords.length < 3) return;
+  if(coords.length < 3){ console.warn('renderSite3D: bail — coords < 3 after node lookup'); return; }
   if(coords[0][0] !== coords[coords.length-1][0] || coords[0][1] !== coords[coords.length-1][1]) coords.push([...coords[0]]);
 
   const siteGeoJSON = { type:'Feature', geometry:{type:'Polygon',coordinates:[coords]}, properties:{} };
@@ -601,6 +609,7 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
     id:'current-edge',type:'line',source:'site',
     paint:{'line-color':'#c0392b','line-width':2.5,'line-opacity':0.9}
   });
+  console.log('3D massing: existing shell added', {currentHeight, existingOutsetCoords: existingOutsetCoords.length});
 
   // Potential additional envelope — rich green, translucent with floor lines
   if(potentialHeightM > currentHeight){
