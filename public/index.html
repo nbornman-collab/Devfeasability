@@ -228,7 +228,10 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 <div class="panel" id="panel">
   <div class="panel-header">
-    <h1>DevFeasibility</h1>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h1>DevFeasibility</h1>
+      <button id="export-btn" onclick="exportPDF()" style="display:none;padding:5px 12px;background:var(--accent);color:white;border:none;border-radius:5px;font:600 10px var(--sans);cursor:pointer;letter-spacing:0.5px;text-transform:uppercase">📄 Export PDF</button>
+    </div>
     <div class="address" id="p-address">—</div>
     <div class="subtitle" id="p-subtitle"></div>
   </div>
@@ -250,6 +253,13 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 <script src="london-planning-engine.js"></script>
 <script>
 let map, marker, currentLabels = [], siteExtraData = {};
+let currentReportData = null;
+
+function exportPDF(){
+  if(!currentReportData) return;
+  const dataStr = encodeURIComponent(JSON.stringify(currentReportData));
+  window.open(`/report.html?data=${dataStr}`, '_blank');
+}
 
 async function init(){
   const cfg = await(await fetch('/api/config')).json();
@@ -1273,6 +1283,50 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
 
     ${notesHtml ? '<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Notes</div>' + notesHtml + '</div>' : ''}
   `;
+
+  // Populate report data for PDF export
+  currentReportData = {
+    address: address.split(',')[0],
+    borough: planning.borough || boroughData.borough,
+    postcode: siteInfo.postcode,
+    zone: planning.zone,
+    lat: siteInfo.lat, lng: siteInfo.lng,
+    floors, heightM, plotArea,
+    useClass: planning.currentUse || siteInfo.currentUse || 'Unknown',
+    potentialFloors, potentialHeight: potentialHeightFull,
+    existingArea: existingFloorArea, potentialArea: potentialFloorArea,
+    remainingCapacity, gdv: saleRevenue,
+    marginPct: marginPct !== '?' ? parseFloat(marginPct) : null,
+    underbuiltPct: 100 - utilPct,
+    newFloors: Math.max(0, potentialFloors - floors),
+    units: unitEstimate ? unitEstimate.total : null,
+    ptal: extra.ptal, floodZone: extra.floodZone,
+    isMaximised: siteInfo.isMaximised,
+    briefLines: briefLines || [],
+    flags: [],
+    proforma: [
+      {label: 'Additional Floor Area', value: fmt(Math.round(remainingCapacity)) + ' sqm (' + fmt(Math.round(remainingCapacitySqft)) + ' sqft)'},
+      {label: 'Construction Cost (high)', value: '£' + fmt(Math.round(constructionCostHigh))},
+      {label: 'Land Value Estimate', value: '£' + fmt(Math.round(landCost))},
+      {label: 'CIL Estimate', value: '£' + fmt(Math.round(cilEstimate))},
+      {label: 'Total Development Cost', value: '£' + fmt(Math.round(constructionCostHigh + landCost + cilEstimate))},
+      {label: isResi ? 'Gross Development Value' : 'Capital Value', value: '£' + fmt(Math.round(saleRevenue)), total: true},
+      {label: 'Development Margin', value: '£' + fmt(Math.round(margin)) + ' (' + marginPct + '%)', total: true},
+    ],
+    policyText: planning.keyPolicies ? planning.keyPolicies.map(p => '<strong>' + p + '</strong>').join(' · ') + '<br>' + (planning.heightStrategy || '') : null,
+    transportText: stations.length > 0 ? stations.map(s => '<strong>' + s.name + '</strong> (' + s.dist + ')').join(', ') + '<br>PTAL: ' + (extra.ptal || '?') : null,
+    heightContextText: `Existing building at <strong>${Math.round(heightM)}m</strong> (${floors}F). Borough typical approved height: <strong>${potentialHeightFull}m</strong> (low: ${typicalH.low}m, high: ${typicalH.high}m). Height source: ${siteInfo.heightSource || 'OSM'}.`,
+  };
+  // Add constraint flags
+  if(inCA) currentReportData.flags.push({text: '🏛 Conservation Area' + (caName ? ': ' + caName : ''), color: 'red'});
+  if(floodZone >= 3) currentReportData.flags.push({text: '🌊 Flood Zone ' + floodZone, color: 'red'});
+  else if(floodZone === 2) currentReportData.flags.push({text: '🌊 Flood Zone 2', color: 'amber'});
+  else currentReportData.flags.push({text: '✓ Flood Zone 1', color: 'green'});
+  if(nearbyListed.length > 0) currentReportData.flags.push({text: '🏛 ' + nearbyListed.length + ' Listed Building' + (nearbyListed.length>1?'s':''), color: 'amber'});
+  currentReportData.flags.push({text: '🚇 PTAL ' + (ptal !== null ? ptal : '?'), color: ptal >= 4 ? 'green' : ptal >= 2 ? 'amber' : 'red'});
+
+  // Show export button
+  document.getElementById('export-btn').style.display = 'inline-block';
 }
 
 // --- NARRATIVE ---

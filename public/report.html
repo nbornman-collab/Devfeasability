@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>D&A Studio — Development Feasibility Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@page { size: A4 portrait; margin: 0; }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--dark:#0f1117;--text:#1a1d2e;--text2:#4a4e6a;--text3:#8b8fa8;
+  --accent:#4f46e5;--green:#059669;--red:#dc2626;--amber:#d97706;
+  --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* PAGE 1: COVER */
+.page{width:210mm;min-height:297mm;position:relative;overflow:hidden;page-break-after:always;background:white}
+.page:last-child{page-break-after:auto}
+
+.cover{background:var(--dark);color:white;display:flex;flex-direction:column;justify-content:flex-end;padding:0}
+.cover-image{position:absolute;top:0;left:0;right:0;bottom:0;background-size:cover;background-position:center;opacity:0.35}
+.cover-content{position:relative;z-index:1;padding:50px 50px 60px}
+.cover-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;font:500 11px var(--sans);letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:24px}
+.cover-address{font:800 42px/1.15 var(--sans);letter-spacing:-0.5px;margin-bottom:12px;max-width:80%}
+.cover-subtitle{font:400 16px var(--sans);color:rgba(255,255,255,.6);margin-bottom:40px}
+.cover-meta{display:flex;gap:40px;font:400 12px var(--sans);color:rgba(255,255,255,.4)}
+.cover-meta dt{font-weight:600;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;font-size:9px;margin-bottom:3px}
+.cover-logo{position:absolute;top:40px;left:50px;z-index:2;font:700 18px var(--sans);color:white;letter-spacing:-0.3px}
+.cover-logo span{color:var(--accent);font-weight:800}
+
+/* PAGE 2: SITE ANALYSIS */
+.page-inner{padding:40px 50px}
+.page-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px;padding-bottom:16px;border-bottom:2px solid #eee}
+.page-title{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--accent)}
+.page-ref{font:400 10px var(--sans);color:var(--text3)}
+.section-title{font:700 11px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text2);margin:28px 0 14px;padding-bottom:8px;border-bottom:1px solid #eee}
+.section-title:first-child{margin-top:0}
+
+/* Split layout */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.img-frame{background:#e8e9ee;border-radius:8px;overflow:hidden;aspect-ratio:4/3;position:relative}
+.img-frame img{width:100%;height:100%;object-fit:cover}
+.img-frame .caption{position:absolute;bottom:0;left:0;right:0;padding:6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.6));font:500 9px var(--sans);color:white;letter-spacing:0.5px}
+
+/* Metric strips */
+.metric-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:1px;background:#eee;border-radius:8px;overflow:hidden;margin-bottom:20px}
+.metric{background:white;padding:14px 12px;text-align:center}
+.metric .label{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:4px}
+.metric .value{font:700 18px var(--mono);color:var(--text)}
+.metric .value.green{color:var(--green)}
+.metric .value.red{color:var(--red)}
+.metric .value.accent{color:var(--accent)}
+
+/* Constraint flags */
+.flags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.flag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:4px;font:500 9px var(--sans)}
+.flag.green{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}
+.flag.amber{background:#fffbeb;color:#92400e;border:1px solid #fcd34d}
+.flag.red{background:#fef2f2;color:#991b1b;border:1px solid #fca5a5}
+
+/* Power bars */
+.bar-row{margin-bottom:12px}
+.bar-label{display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--text2);margin-bottom:4px}
+.bar-track{height:18px;background:#e8e9ee;border-radius:4px;overflow:hidden;display:flex}
+.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font:600 8px var(--mono);color:white;letter-spacing:0.5px}
+.bar-fill.existing{background:#c0392b}
+.bar-fill.potential{background:var(--green)}
+.bar-fill.pd{background:#10b981}
+
+/* Pro forma table */
+.proforma{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px}
+.proforma th{text-align:left;font-weight:600;padding:6px 8px;border-bottom:2px solid #eee;font-size:9px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3)}
+.proforma td{padding:6px 8px;border-bottom:1px solid #f0f0f0}
+.proforma td:last-child{text-align:right;font-family:var(--mono);font-weight:500}
+.proforma tr.total{font-weight:700;border-top:2px solid var(--text)}
+.proforma tr.total td{border-bottom:none;padding-top:8px}
+.proforma tr.total td:last-child{color:var(--green)}
+
+/* Brief */
+.brief{background:#f8f9fb;border-radius:8px;padding:16px 18px;font:400 11px/1.7 var(--sans);color:var(--text2);margin-bottom:16px}
+.brief strong{color:var(--text);font-weight:600}
+
+/* Planning precedent */
+.precedent{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.prec-card{background:#f8f9fb;border-radius:6px;padding:10px 12px;border:1px solid #eee}
+.prec-card .addr{font:600 10px var(--sans);color:var(--text);margin-bottom:3px}
+.prec-card .detail{font:400 9px var(--sans);color:var(--text3);line-height:1.5}
+.prec-card .status{display:inline-block;padding:2px 6px;border-radius:3px;font:600 8px var(--sans);text-transform:uppercase;letter-spacing:0.5px;margin-top:4px}
+.prec-card .status.approved{background:#ecfdf5;color:#065f46}
+.prec-card .status.pending{background:#fffbeb;color:#92400e}
+
+/* Footer */
+.page-footer{position:absolute;bottom:0;left:0;right:0;padding:16px 50px;display:flex;justify-content:space-between;font:400 8px var(--sans);color:var(--text3);border-top:1px solid #eee}
+
+/* Context narrative */
+.narrative{font:400 11px/1.8 var(--sans);color:var(--text2);margin-bottom:16px}
+.narrative strong{color:var(--text)}
+
+/* Disclaimer */
+.disclaimer{font:400 8px/1.5 var(--sans);color:#bbb;margin-top:20px;padding-top:12px;border-top:1px solid #eee}
+
+@media print{
+  body{background:white}
+  .page{box-shadow:none;margin:0}
+  .no-print{display:none !important}
+}
+@media screen{
+  body{background:#e5e7eb;padding:20px}
+  .page{margin:0 auto 20px;box-shadow:0 2px 20px rgba(0,0,0,.12);border-radius:4px}
+}
+</style>
+</head>
+<body>
+
+<!-- Print button (screen only) -->
+<div class="no-print" style="position:fixed;top:20px;right:20px;z-index:100;display:flex;gap:10px">
+  <button onclick="window.print()" style="padding:10px 24px;background:var(--accent);color:white;border:none;border-radius:6px;font:600 13px var(--sans);cursor:pointer;box-shadow:0 2px 8px rgba(79,70,229,.3)">Export PDF</button>
+  <button onclick="window.close()" style="padding:10px 16px;background:white;color:var(--text);border:1px solid #ddd;border-radius:6px;font:600 13px var(--sans);cursor:pointer">Close</button>
+</div>
+
+<!-- PAGE 1: COVER -->
+<div class="page cover" id="pg-cover">
+  <div class="cover-image" id="cover-bg"></div>
+  <div class="cover-logo">D&A <span>Studio</span></div>
+  <div class="cover-content">
+    <div class="cover-badge">📐 Development Feasibility Assessment</div>
+    <div class="cover-address" id="r-address">—</div>
+    <div class="cover-subtitle" id="r-subtitle">London, United Kingdom</div>
+    <div class="cover-meta">
+      <dl><dt>Borough</dt><dd id="r-borough">—</dd></dl>
+      <dl><dt>Postcode</dt><dd id="r-postcode">—</dd></dl>
+      <dl><dt>Zone</dt><dd id="r-zone">—</dd></dl>
+      <dl><dt>Coordinates</dt><dd id="r-coords">—</dd></dl>
+      <dl><dt>Date</dt><dd id="r-date">—</dd></dl>
+      <dl><dt>Reference</dt><dd id="r-ref">—</dd></dl>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: SITE OVERVIEW -->
+<div class="page">
+  <div class="page-inner">
+    <div class="page-header">
+      <div class="page-title">Site Overview</div>
+      <div class="page-ref" id="r-ref2">—</div>
+    </div>
+
+    <div class="split">
+      <div class="img-frame" id="r-streetview">
+        <div class="caption">Google Street View</div>
+      </div>
+      <div class="img-frame" id="r-mapview">
+        <div class="caption">3D Massing Analysis</div>
+      </div>
+    </div>
+
+    <div class="metric-strip" id="r-metrics">
+      <div class="metric"><div class="label">Existing</div><div class="value" id="r-existing">—</div></div>
+      <div class="metric"><div class="label">Potential</div><div class="value green" id="r-potential">—</div></div>
+      <div class="metric"><div class="label">Plot Area</div><div class="value" id="r-plotarea">—</div></div>
+      <div class="metric"><div class="label">Use Class</div><div class="value" id="r-useclass">—</div></div>
+      <div class="metric"><div class="label">PTAL</div><div class="value" id="r-ptal">—</div></div>
+      <div class="metric"><div class="label">Flood Zone</div><div class="value" id="r-flood">—</div></div>
+    </div>
+
+    <div class="flags" id="r-flags"></div>
+
+    <div class="section-title">Site Context</div>
+    <div class="narrative" id="r-narrative">—</div>
+
+    <div class="section-title">Height Analysis</div>
+    <div id="r-bars"></div>
+  </div>
+  <div class="page-footer"><span>D&A Studio — Development Feasibility Assessment</span><span>Page 2 of 4</span></div>
+</div>
+
+<!-- PAGE 3: THE OPPORTUNITY -->
+<div class="page">
+  <div class="page-inner">
+    <div class="page-header">
+      <div class="page-title">Development Opportunity</div>
+      <div class="page-ref" id="r-ref3">—</div>
+    </div>
+
+    <div class="metric-strip">
+      <div class="metric"><div class="label">GDV</div><div class="value green" id="r-gdv">—</div></div>
+      <div class="metric"><div class="label">Margin</div><div class="value" id="r-margin">—</div></div>
+      <div class="metric"><div class="label">Underbuilt</div><div class="value accent" id="r-underbuilt">—</div></div>
+      <div class="metric"><div class="label">New Floors</div><div class="value" id="r-newfloors">—</div></div>
+      <div class="metric"><div class="label">+Floor Area</div><div class="value" id="r-newarea">—</div></div>
+      <div class="metric"><div class="label">Units</div><div class="value" id="r-units">—</div></div>
+    </div>
+
+    <div class="section-title">Development Brief</div>
+    <div class="brief" id="r-brief">—</div>
+
+    <div class="section-title">Pro Forma Estimate</div>
+    <table class="proforma" id="r-proforma">
+      <thead><tr><th>Item</th><th>Value</th></tr></thead>
+      <tbody id="r-proforma-body"></tbody>
+    </table>
+
+    <div class="section-title">Planning Precedent</div>
+    <div class="precedent" id="r-precedent">
+      <div style="font:400 11px var(--sans);color:var(--text3)">No planning precedent data available for this location.</div>
+    </div>
+  </div>
+  <div class="page-footer"><span>D&A Studio — Development Feasibility Assessment</span><span>Page 3 of 4</span></div>
+</div>
+
+<!-- PAGE 4: CONTEXT & DISCLAIMER -->
+<div class="page">
+  <div class="page-inner">
+    <div class="page-header">
+      <div class="page-title">Area Context & Policy</div>
+      <div class="page-ref" id="r-ref4">—</div>
+    </div>
+
+    <div class="split" style="margin-bottom:20px">
+      <div>
+        <div class="section-title" style="margin-top:0">Borough Planning Policy</div>
+        <div class="narrative" id="r-policy">—</div>
+      </div>
+      <div>
+        <div class="section-title" style="margin-top:0">Transport Accessibility</div>
+        <div class="narrative" id="r-transport">—</div>
+      </div>
+    </div>
+
+    <div class="section-title">Height Context</div>
+    <div class="narrative" id="r-heightcontext">—</div>
+
+    <div class="section-title">Methodology</div>
+    <div class="narrative" style="font-size:9px;color:var(--text3);line-height:1.6">
+      This assessment uses open data from OpenStreetMap, Mapbox, the Environment Agency, TfL,
+      and local planning authority records. Height data is derived from Mapbox 3D building models
+      with OpenStreetMap cross-referencing. Financial estimates use borough-level benchmark rates
+      for construction cost, land value, and sale price per square foot. Planning policy context
+      is derived from adopted local plans and the London Plan 2021. This report is indicative only
+      and should not be relied upon for investment decisions without independent professional verification.
+    </div>
+
+    <div class="disclaimer">
+      <strong>Disclaimer:</strong> This report is produced by D&A Studio for indicative purposes only.
+      All financial figures are estimates based on publicly available data and standard industry benchmarks.
+      Actual development costs, values, and planning outcomes may differ materially. This report does not
+      constitute professional advice. D&A Studio accepts no liability for decisions made based on this information.
+      Planning policy analysis reflects publicly adopted policy at the date of production and may not capture
+      emerging policy, site-specific constraints, or pre-application discussions. Always seek independent
+      professional advice before making investment or development decisions.<br><br>
+      © D&A Studio <span id="r-year">2026</span>. All rights reserved. Report generated by DevFeasibility™.
+    </div>
+  </div>
+  <div class="page-footer"><span>D&A Studio — Development Feasibility Assessment</span><span>Page 4 of 4</span></div>
+</div>
+
+<script>
+// Populate from URL params (passed from main app)
+const params = new URLSearchParams(window.location.search);
+const data = params.get('data') ? JSON.parse(decodeURIComponent(params.get('data'))) : null;
+
+if(data) populateReport(data);
+
+function populateReport(d){
+  const fmt = n => n?.toLocaleString('en-GB') || '—';
+  const ref = 'DA-' + (d.postcode || 'XX').replace(/\s/g,'') + '-' + Date.now().toString(36).toUpperCase().slice(-5);
+  const dateStr = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+
+  // Cover
+  document.getElementById('r-address').textContent = d.address || '—';
+  document.getElementById('r-subtitle').textContent = `${d.borough || 'London'}, United Kingdom`;
+  document.getElementById('r-borough').textContent = d.borough || '—';
+  document.getElementById('r-postcode').textContent = d.postcode || '—';
+  document.getElementById('r-zone').textContent = d.zone ? `Zone ${d.zone}` : '—';
+  document.getElementById('r-coords').textContent = d.lat && d.lng ? `${d.lat.toFixed(5)}, ${d.lng.toFixed(5)}` : '—';
+  document.getElementById('r-date').textContent = dateStr;
+  document.getElementById('r-ref').textContent = ref;
+  ['r-ref2','r-ref3','r-ref4'].forEach(id => document.getElementById(id).textContent = ref);
+
+  // Cover background — use Street View static image
+  if(d.lat && d.lng){
+    document.getElementById('cover-bg').style.backgroundImage = 
+      `url(https://maps.google.com/maps?layer=c&cbll=${d.lat},${d.lng}&cbp=12,0,,0,0&output=thumbnail&w=800&h=600)`;
+  }
+
+  // Page 2: Site Overview
+  document.getElementById('r-existing').textContent = `${d.floors || '?'}F / ${d.heightM ? Math.round(d.heightM)+'m' : '?'}`;
+  document.getElementById('r-potential').textContent = `${d.potentialFloors || '?'}F / ${d.potentialHeight ? Math.round(d.potentialHeight)+'m' : '?'}`;
+  document.getElementById('r-plotarea').textContent = d.plotArea ? fmt(Math.round(d.plotArea)) + 'sqm' : '—';
+  document.getElementById('r-useclass').textContent = d.useClass || '—';
+  document.getElementById('r-ptal').textContent = d.ptal !== null ? d.ptal : '—';
+  document.getElementById('r-flood').textContent = d.floodZone ? `Zone ${d.floodZone}` : '—';
+
+  // Flags
+  const flagsEl = document.getElementById('r-flags');
+  if(d.flags && d.flags.length){
+    flagsEl.innerHTML = d.flags.map(f => `<span class="flag ${f.color}">${f.text}</span>`).join('');
+  }
+
+  // Narrative
+  const narrativeLines = [];
+  narrativeLines.push(`<strong>${d.address || 'This site'}</strong> is a <strong>${d.floors || '?'}-storey ${d.useClass || 'building'}</strong> `);
+  narrativeLines.push(`in <strong>${d.borough || 'London'}</strong>, Zone ${d.zone || '?'}. `);
+  narrativeLines.push(`The building occupies a <strong>${fmt(Math.round(d.plotArea || 0))}sqm</strong> footprint `);
+  narrativeLines.push(`at a current height of <strong>${d.heightM ? Math.round(d.heightM) : '?'}m</strong>. `);
+  if(d.potentialFloors > d.floors){
+    narrativeLines.push(`Borough planning policy and area precedent suggest a potential of <strong>${d.potentialFloors}F / ${Math.round(d.potentialHeight || 0)}m</strong>, `);
+    narrativeLines.push(`representing <strong>${fmt(Math.round(d.remainingCapacity || 0))}sqm</strong> of additional floor area.`);
+  }
+  document.getElementById('r-narrative').innerHTML = narrativeLines.join('');
+
+  // Height bars
+  const barsEl = document.getElementById('r-bars');
+  const existPct = d.potentialHeight > 0 ? Math.min(100, (d.heightM / d.potentialHeight) * 100) : 50;
+  const potPct = 100 - existPct;
+  barsEl.innerHTML = `
+    <div class="bar-row">
+      <div class="bar-label"><span>Height Utilisation</span><span>${Math.round(d.heightM||0)}m of ${Math.round(d.potentialHeight||0)}m</span></div>
+      <div class="bar-track">
+        <div class="bar-fill existing" style="width:${existPct}%">${d.floors||'?'}F existing</div>
+        <div class="bar-fill potential" style="width:${potPct}%">+${(d.potentialFloors||0)-(d.floors||0)}F potential</div>
+      </div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label"><span>Floor Area</span><span>${fmt(Math.round(d.existingArea||0))}sqm of ${fmt(Math.round(d.potentialArea||0))}sqm</span></div>
+      <div class="bar-track">
+        <div class="bar-fill existing" style="width:${d.potentialArea > 0 ? Math.min(100,(d.existingArea/d.potentialArea)*100) : 50}%">${fmt(Math.round(d.existingArea||0))}</div>
+        <div class="bar-fill potential" style="width:${d.potentialArea > 0 ? Math.min(100,((d.potentialArea-d.existingArea)/d.potentialArea)*100) : 50}%">+${fmt(Math.round((d.potentialArea||0)-(d.existingArea||0)))}</div>
+      </div>
+    </div>
+  `;
+
+  // Page 3: Opportunity
+  document.getElementById('r-gdv').textContent = d.gdv ? '£' + fmt(Math.round(d.gdv / 1000000 * 10)/10) + 'M' : '—';
+  document.getElementById('r-margin').textContent = d.marginPct ? d.marginPct + '%' : '—';
+  document.getElementById('r-margin').style.color = d.marginPct > 20 ? 'var(--green)' : d.marginPct > 10 ? 'var(--amber)' : 'var(--red)';
+  document.getElementById('r-underbuilt').textContent = d.underbuiltPct ? Math.round(d.underbuiltPct) + '%' : '—';
+  document.getElementById('r-newfloors').textContent = d.newFloors ? '+' + d.newFloors : '—';
+  document.getElementById('r-newarea').textContent = d.remainingCapacity ? '+' + fmt(Math.round(d.remainingCapacity)) + 'sqm' : '—';
+  document.getElementById('r-units').textContent = d.units || '—';
+
+  // Brief
+  if(d.briefLines && d.briefLines.length){
+    document.getElementById('r-brief').innerHTML = d.briefLines.map(l => `• ${l}`).join('<br>');
+  }
+
+  // Pro forma
+  if(d.proforma){
+    const tbody = document.getElementById('r-proforma-body');
+    d.proforma.forEach(row => {
+      const tr = document.createElement('tr');
+      if(row.total) tr.className = 'total';
+      tr.innerHTML = `<td>${row.label}</td><td>${row.value}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Precedent
+  if(d.precedent && d.precedent.length){
+    const precEl = document.getElementById('r-precedent');
+    precEl.innerHTML = d.precedent.slice(0,4).map(p => `
+      <div class="prec-card">
+        <div class="addr">${p.address || '—'}</div>
+        <div class="detail">${p.description || '—'}</div>
+        <span class="status ${p.status === 'Approved' ? 'approved' : 'pending'}">${p.status || '—'}</span>
+      </div>
+    `).join('');
+  }
+
+  // Page 4: Context
+  if(d.policyText) document.getElementById('r-policy').innerHTML = d.policyText;
+  if(d.transportText) document.getElementById('r-transport').innerHTML = d.transportText;
+  if(d.heightContextText) document.getElementById('r-heightcontext').innerHTML = d.heightContextText;
+}
+</script>
+</body>
+</html>
