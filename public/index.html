@@ -349,6 +349,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))docum
 
 // --- SELECT RESULT + FETCH ALL DATA ---
 async function selectResult(feature){
+ try {
   const [lng,lat] = feature.center || feature.geometry.coordinates;
   map.flyTo({center:[lng,lat],zoom:16.5,pitch:55,bearing:-15,duration:2000});
 
@@ -386,8 +387,18 @@ async function selectResult(feature){
   const fetchWithTimeout = (url, ms = 12000) => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), ms);
-    return fetch(url, {signal: controller.signal}).then(r => { clearTimeout(timeout); return r.json(); });
+    return fetch(url, {signal: controller.signal})
+      .then(r => { clearTimeout(timeout); return r.json(); })
+      .catch(e => { clearTimeout(timeout); console.warn('fetchWithTimeout failed:', url, e.message); return { elements: [], error: e.message }; });
   };
+
+  // Safety: if selectResult takes >20s, show error
+  const panelTimeout = setTimeout(() => {
+    const body = document.getElementById('panel-body');
+    if(body && body.innerHTML.includes('Fetching')){
+      body.innerHTML = '<div class="section"><p style="color:var(--red)">Data fetch timed out. Try searching again.</p></div>';
+    }
+  }, 20000);
 
   const [boroughRes, buildingRes, ptalRes, floodRes, conservationRes, listedRes] = await Promise.allSettled([
     fetchWithTimeout(`/api/borough?lat=${lat}&lng=${lng}`),
@@ -398,6 +409,8 @@ async function selectResult(feature){
     fetchWithTimeout(`/api/listed-buildings?lat=${lat}&lng=${lng}&radius=150`),
   ]);
 
+  clearTimeout(panelTimeout);
+  console.log('All API calls settled', {borough: boroughRes.status, building: buildingRes.status, ptal: ptalRes.status, flood: floodRes.status, conservation: conservationRes.status, listed: listedRes.status});
   const boroughData = boroughRes.status === 'fulfilled' ? boroughRes.value : { borough: 'Unknown' };
   if (!postcode && boroughData.postcode) postcode = boroughData.postcode;
   const osmData = buildingRes.status === 'fulfilled' ? buildingRes.value : { elements: [] };
@@ -581,6 +594,10 @@ async function selectResult(feature){
         renderEPCSection(epcData, siteInfo);
       }
     }).catch(()=>{});
+  }
+ } catch(err) {
+    console.error('selectResult fatal error:', err);
+    document.getElementById('panel-body').innerHTML = '<div class="section"><p style="color:var(--red)">Error loading site data: ' + err.message + '</p></div>';
   }
 }
 
