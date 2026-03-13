@@ -34,8 +34,38 @@ app.get('/api/reverse', async (req, res) => {
 // Overpass API — building footprint + tags
 app.get('/api/building', async (req, res) => {
   try {
-    const { lat, lng } = req.query;
+    const { lat, lng, address } = req.query;
     const radius = req.query.radius || 25;
+
+    // Strategy 1: If we have a street address, search by addr tags (much more reliable)
+    if (address) {
+      // Parse "100 Leadenhall Street" -> housenumber=100, street=Leadenhall Street
+      const addrMatch = address.match(/^(\d+[\-\d]*[a-zA-Z]?)\s+(.+?)(?:,.*)?$/);
+      if (addrMatch) {
+        const num = addrMatch[1];
+        const street = addrMatch[2].replace(/,.*$/, '').trim();
+        const addrQuery = `[out:json][timeout:10];way["building"]["addr:housenumber"="${num}"]["addr:street"~"${street}",i](around:200,${lat},${lng});out body;>;out skel qt;`;
+        const addrUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(addrQuery)}`;
+        const addrRes = await fetch(addrUrl);
+        const addrData = await addrRes.json();
+        const addrWays = (addrData.elements || []).filter(e => e.type === 'way' && e.tags);
+        if (addrWays.length > 0) {
+          return res.json(addrData);
+        }
+      }
+    }
+
+    // Strategy 2: Point-in-polygon (is_in) to get the building the pin is actually inside
+    const isInQuery = `[out:json][timeout:10];is_in(${lat},${lng})->.a;way(pivot.a)["building"];out body;>;out skel qt;`;
+    const isInUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(isInQuery)}`;
+    const isInRes = await fetch(isInUrl);
+    const isInData = await isInRes.json();
+    const isInWays = (isInData.elements || []).filter(e => e.type === 'way' && e.tags);
+    if (isInWays.length > 0) {
+      return res.json(isInData);
+    }
+
+    // Strategy 3: Fallback to radius search (original approach)
     const query = `[out:json][timeout:10];(way["building"](around:${radius},${lat},${lng});relation["building"](around:${radius},${lat},${lng}););out body;>;out skel qt;`;
     const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
     const r = await fetch(url);
@@ -227,6 +257,25 @@ app.get('/api/land-registry', async (req, res) => {
 app.get('/api/borough', async (req, res) => {
   try {
     const { lat, lng } = req.query;
+
+    // Strategy 1: postcodes.io — free, accurate borough from point-in-polygon
+    try {
+      const pcRes = await fetch(`https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}&limit=1`);
+      const pcData = await pcRes.json();
+      if (pcData.result && pcData.result.length > 0) {
+        const r = pcData.result[0];
+        const borough = r.admin_district || 'Unknown';
+        return res.json({
+          borough: borough,
+          fullName: `${borough}, London`,
+          postcode: r.postcode || '',
+          ward: r.admin_ward || '',
+          parish: r.parish || ''
+        });
+      }
+    } catch (e) { /* fall through to Mapbox */ }
+
+    // Strategy 2: Mapbox reverse geocode (fallback)
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&types=district,locality,place&country=gb`;
     const r = await fetch(url);
     const data = await r.json();

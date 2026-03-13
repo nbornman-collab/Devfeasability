@@ -328,7 +328,7 @@ async function selectResult(feature){
   marker = new mapboxgl.Marker({element:el}).setLngLat([lng,lat]).addTo(map);
 
   const address = feature.place_name || feature.text || '';
-  const postcode = extractPostcode(address);
+  let postcode = extractPostcode(address);
 
   // Show loading state
   document.getElementById('p-address').textContent = address.split(',')[0];
@@ -339,7 +339,7 @@ async function selectResult(feature){
   // Parallel data fetches
   const [boroughRes, buildingRes, ptalRes, floodRes, conservationRes, listedRes] = await Promise.allSettled([
     fetch(`/api/borough?lat=${lat}&lng=${lng}`).then(r=>r.json()),
-    fetch(`/api/building?lat=${lat}&lng=${lng}&radius=25`).then(r=>r.json()),
+    fetch(`/api/building?lat=${lat}&lng=${lng}&radius=25&address=${encodeURIComponent(address.split(',')[0])}`).then(r=>r.json()),
     fetch(`/api/ptal?lat=${lat}&lng=${lng}`).then(r=>r.json()),
     fetch(`/api/flood-zone?lat=${lat}&lng=${lng}`).then(r=>r.json()),
     fetch(`/api/conservation-areas?lat=${lat}&lng=${lng}&radius=80`).then(r=>r.json()),
@@ -347,6 +347,7 @@ async function selectResult(feature){
   ]);
 
   const boroughData = boroughRes.status === 'fulfilled' ? boroughRes.value : { borough: 'Unknown' };
+  if (!postcode && boroughData.postcode) postcode = boroughData.postcode;
   const osmData = buildingRes.status === 'fulfilled' ? buildingRes.value : { elements: [] };
   const ptalData = ptalRes.status === 'fulfilled' ? ptalRes.value : { ptal: null };
   const floodData = floodRes.status === 'fulfilled' ? floodRes.value : { floodZone: null };
@@ -962,6 +963,57 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
   const marginPct = saleRevenue > 0 ? (margin / saleRevenue * 100).toFixed(0) : '?';
   const marginColor = margin / saleRevenue > 0.2 ? 'var(--green)' : margin / saleRevenue > 0.1 ? 'var(--amber)' : 'var(--red)';
 
+  // THE PHYSICAL OPPORTUNITY
+  const newFloors = Math.max(0, potentialFloors - floors);
+  const totalFloors = potentialFloors;
+  const newHeight = typicalH.mid || 20;
+  const pdFloors2 = planning.pdMassingPotential?.additionalFloors || 0;
+  const pdArea2 = planning.pdMassingPotential?.additionalAreaSqm || 0;
+  const siteWidth2 = plotArea > 0 ? Math.sqrt(plotArea * 0.6) : 0;
+  const footprint2 = plotArea * 0.7;
+  const corridorWidth = 1.8;
+  const unitDepth = siteWidth2 > 0 ? (siteWidth2 - corridorWidth) / 2 : 0;
+
+  // Layout type
+  let layoutType = 'single-aspect';
+  if (siteWidth2 >= 16) layoutType = 'central corridor, dual aspect';
+  else if (siteWidth2 >= 12) layoutType = 'central corridor, mixed aspect';
+  else if (siteWidth2 >= 8) layoutType = 'deck access or scissor section';
+
+  // Second staircase
+  const needsSecondStair = isResi && newHeight >= 18;
+  const stairNote = needsSecondStair ? 'Dual staircase required (>18m)' : newHeight >= 15 ? 'Single staircase (below 18m threshold)' : 'Single staircase';
+
+  // Unit mix text
+  let unitMixText = '';
+  if (isResi && unitEstimate?.byType) {
+    unitMixText = Object.entries(unitEstimate.byType).map(([k,v]) => v + 'x ' + k).join(', ');
+  }
+
+  // Development brief
+  const briefLines = [];
+  briefLines.push(totalFloors + '-storey ' + (isResi ? 'residential' : planning.currentUse || 'commercial') + ' building on ' + fmt(Math.round(plotArea)) + 'sqm site');
+  if (plotArea > 100) briefLines.push(layoutType + (unitDepth > 0 ? ' (' + Math.round(unitDepth) + 'm unit depth)' : ''));
+  briefLines.push(stairNote);
+  if (isResi && unitEstimate) briefLines.push(unitEstimate.total + ' units' + (affordableUnits > 0 ? ' (' + affordableUnits + ' affordable at ' + Math.round((planning.affordableThreshold||0.35)*100) + '%)' : ''));
+  if (isResi) briefLines.push('10% M4(3) wheelchair accessible');
+  if (extra.floodZone >= 3 || (!isResi && planning.zone <= 2)) briefLines.push('Active ground floor (' + fmt(Math.round(footprint2 * 0.85)) + 'sqm commercial)');
+
+  const opportunityHtml = `
+    <div class="section">
+      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"></polygon></svg>The Opportunity</div>
+      <p style="font-size:14px;line-height:1.7;color:var(--text);margin:0 0 16px">
+        Add <strong>${newFloors} floors</strong> to the existing ${floors}F (${Math.round(heightM)}m) building, reaching <strong>${totalFloors}F / ${Math.round(newHeight)}m</strong>.
+        This creates <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> (${fmt(Math.round(remainingCapacitySqft))}sqft) of new ${isResi ? 'residential' : 'commercial'} space${isResi && unitEstimate ? ' &mdash; approximately <strong>' + unitEstimate.total + ' units</strong> across a mix of ' + unitMixText : ''}.
+        ${pdFloors2 > 0 ? '<br>PD route available for <strong>+' + pdFloors2 + ' floors</strong> (+' + fmt(Math.round(pdArea2)) + 'sqm) without planning consent.' : ''}
+      </p>
+      <div style="padding:14px 16px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--accent)">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);margin-bottom:8px">Development Brief</div>
+        ${briefLines.map(l => '<div style="font-size:13px;color:var(--text);line-height:1.6;padding:2px 0">' + l + '</div>').join('')}
+      </div>
+    </div>
+  `;
+
   document.getElementById('panel-body').innerHTML = `
     <!-- 1. THE PUNCH -->
     <div class="section" style="background:var(--surface2);padding:20px 24px 24px">
@@ -987,7 +1039,10 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
       <div style="margin-top:10px;line-height:2">${flagsHtml}</div>
     </div>
 
-    <!-- 2. THE DEAL -->
+    <!-- 2. THE OPPORTUNITY -->
+    ${opportunityHtml}
+
+    <!-- 3. THE DEAL -->
     <div class="section">
       <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>Development Capacity</div>
       ${powerBarsHtml}
