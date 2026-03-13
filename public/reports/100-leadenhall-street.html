@@ -501,10 +501,11 @@ function buildContextMap(token){
   `;
 }
 
-// ── Ground floor plan — monochrome, no shadow, rect neighbours, street labels ─
+// ── Ground floor plan — street section, kerb lines, city block masses ─────────
+// Layered: road → pavement → kerb → city blocks → site → building → core → dims
 function buildGroundFloorPlan(){
   const svg=document.getElementById('gf-plan-svg');
-  const VW=280,VH=310,p=D.polygon;
+  const VW=280,VH=320,p=D.polygon;
   const lons=p.map(c=>c[0]),lats=p.map(c=>c[1]);
   const lonMin=Math.min(...lons),lonMax=Math.max(...lons);
   const latMin=Math.min(...lats),latMax=Math.max(...lats);
@@ -516,124 +517,212 @@ function buildGroundFloorPlan(){
   const cLon=(lonMin+lonMax)/2, cLat=(latMin+latMax)/2;
   function px(lon,lat){return [(lon-cLon)*M_PER_LNG*sc+VW/2, VH/2+5-(lat-cLat)*M_PER_LAT*sc];}
 
-  // Key pixel positions
+  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
+
+  // Key SVG pixel positions
   const [,siteTopY]=px(cLon,latMax);
   const [,siteBotY]=px(cLon,latMin);
   const [siteLeftX]=px(lonMin,cLat);
   const [siteRightX]=px(lonMax,cLat);
   const [ccx,ccy]=px(cLon,cLat);
-  const sitePxW=siteRightX-siteLeftX, sitePxH=siteBotY-siteTopY;
 
-  // Site polygon
+  // ── Street section dimensions (metres → px) ──────────────────────────────
+  // Leadenhall Street (N): ~18m total
+  const lsN_pave = 3*sc;   // footway each side
+  const lsN_carr = 12*sc;  // carriageway
+  const lsN_total = lsN_pave*2 + lsN_carr;
+  // Lime Street (E): ~12m total
+  const lsE_pave = 2*sc;
+  const lsE_carr = 8*sc;
+  const lsE_total = lsE_pave*2 + lsE_carr;
+  // South lane: ~10m
+  const lsS_pave = 2*sc;
+  const lsS_carr = 6*sc;
+  const lsS_total = lsS_pave*2 + lsS_carr;
+  // West lane: ~10m
+  const lsW_pave = 1.5*sc;
+  const lsW_carr = 7*sc;
+  const lsW_total = lsW_pave*2 + lsW_carr;
+
+  // ── Leadenhall Street horizontal strata ───────────────────────────────────
+  const lsN_siteKerb   = siteTopY;               // kerb at site face
+  const lsN_siteEdge   = siteTopY - lsN_pave;    // inner edge of carriageway (S)
+  const lsN_adjEdge    = siteTopY - lsN_pave - lsN_carr; // inner edge of carriageway (N)
+  const lsN_adjKerb    = siteTopY - lsN_total;   // kerb at N adj building
+
+  // ── Lime Street vertical strata ───────────────────────────────────────────
+  const lsE_siteKerb   = siteRightX;
+  const lsE_siteEdge   = siteRightX + lsE_pave;
+  const lsE_adjEdge    = siteRightX + lsE_pave + lsE_carr;
+  const lsE_adjKerb    = siteRightX + lsE_total;
+
+  // ── South lane strata ─────────────────────────────────────────────────────
+  const lsS_siteKerb   = siteBotY;
+  const lsS_siteEdge   = siteBotY + lsS_pave;
+  const lsS_adjEdge    = siteBotY + lsS_pave + lsS_carr;
+  const lsS_adjKerb    = siteBotY + lsS_total;
+
+  // ── West lane strata ──────────────────────────────────────────────────────
+  const lsW_siteKerb   = siteLeftX;
+  const lsW_siteEdge   = siteLeftX - lsW_pave;
+  const lsW_adjEdge    = siteLeftX - lsW_pave - lsW_carr;
+  const lsW_adjKerb    = siteLeftX - lsW_total;
+
+  // ── City block extents (full-bleed fills = realistic urban context) ───────
+  const blkN_y1=0,         blkN_y2=lsN_adjKerb;
+  const blkE_x1=lsE_adjKerb, blkE_x2=VW;
+  const blkS_y1=lsS_adjKerb, blkS_y2=VH;
+  const blkW_x1=0,          blkW_x2=lsW_adjKerb;
+  // Full vertical extent for E/W blocks
+  const blkEW_y1=0, blkEW_y2=VH;
+
+  // ── Site polygon & building footprint ─────────────────────────────────────
   const sitePts=p.map(c=>px(c[0],c[1]).join(',')).join(' ');
   const bldgPts=p.map(c=>[cLon+(c[0]-cLon)*0.92,cLat+(c[1]-cLat)*0.92]).map(c=>px(c[0],c[1]).join(',')).join(' ');
 
-  // Core: 22% GIA, AABB axis
+  // ── Core (22% GIA, AABB axis) ─────────────────────────────────────────────
   const coreGIA=D.plotArea*0.80*0.22;
   const elong=hM>=wM?hM/wM:wM/hM;
   const axisAngle=hM>=wM?90:0;
   const aspect=Math.min(Math.max(elong*0.85,1.2),2.4);
   const cw=Math.sqrt(coreGIA/aspect)*sc, ch=cw*aspect;
 
-  // Street widths in px (approximate)
-  const stN=18*sc;  // Leadenhall Street (N) ~18m
-  const stE=10*sc;  // Lime Street (E) ~10m
-  const stS=10*sc;  // southern lane ~10m
-  const stW=10*sc;  // western lane ~10m
-
-  // Adjacent buildings as simple rectangles (no polygon offsets)
-  const adjNy2=siteTopY-stN, adjNy1=adjNy2-25*sc;
-  const adjNx1=siteLeftX-20*sc, adjNx2=siteRightX+15*sc;
-
-  const adjEy1=siteTopY-5*sc, adjEy2=siteBotY+10*sc;
-  const adjEx1=siteRightX+stE, adjEx2=adjEx1+22*sc;
-
-  const adjWy1=siteTopY+5*sc, adjWy2=siteBotY-5*sc;
-  const adjWx2=siteLeftX-stW, adjWx1=adjWx2-18*sc;
-
-  const adjSy1=siteBotY+stS, adjSy2=adjSy1+18*sc;
-  const adjSx1=siteLeftX+5*sc, adjSx2=siteRightX-5*sc;
-
-  // Section cut A-A at centroid (horizontal, E-W)
+  // ── Section cut ───────────────────────────────────────────────────────────
   const [,secY]=px(cLon,cLat);
-  const secX1=siteLeftX-40, secX2=siteRightX+40;
+  const secX1=lsW_adjKerb-2, secX2=lsE_adjKerb+2;
 
-  // Dimension lines — site width (E-W) and depth (N-S)
-  const dimYbot=siteBotY+stS+adjSy2-adjSy1+8;
-  const dimXright=siteRightX+stE+adjEx2-adjEx1+10;
+  // ── Dimension lines (in street gaps, not overlapping blocks) ─────────────
+  const dimY = lsS_siteEdge + lsS_carr/2;   // E-W dim in south carriageway
+  const dimX = lsW_siteEdge - lsW_carr/2;   // N-S dim in west carriageway
 
-  // Scale bar 20m
+  // ── Scale bar ─────────────────────────────────────────────────────────────
   const scBar=20*sc;
 
-  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
+  // ── Colour palette ────────────────────────────────────────────────────────
+  const col={
+    blk:'#a8abb8',     // city block mass
+    road:'#c8c9d0',    // carriageway
+    pave:'#d8d9e0',    // footway/pavement
+    site:'#e4e5ea',    // site interior
+    bldg:'#ffffff',    // proposed building
+    core:'#1a1d2e',    // core
+    kerb:'#9a9daa',    // kerb/curb line — subtle but present
+    str:'#5a5d70',     // street label
+    dim:'#1a1d2e',     // dimension lines & text
+  };
+
   svg.innerHTML=`
-    <!-- Background (road/pavement tone) -->
-    <rect width="${VW}" height="${VH}" fill="#d8d9dd"/>
-    <!-- Pavement tone inside blocks -->
-    <rect x="${adjNx1-8}" y="${adjNy1-8}" width="${(adjNx2-adjNx1)+adjEx2-adjEx1+stE+16}" height="${(adjSy2-adjNy1)+25}" fill="#e4e5e9"/>
+    <!-- ① Road surface — base layer everywhere -->
+    <rect width="${VW}" height="${VH}" fill="${col.road}"/>
 
-    <!-- Adjacent buildings — simple rectangles, mid grey -->
-    <rect x="${adjNx1.toFixed(1)}" y="${adjNy1.toFixed(1)}" width="${(adjNx2-adjNx1).toFixed(1)}" height="${(adjNy2-adjNy1).toFixed(1)}" fill="#b0b3bf" stroke="white" stroke-width="0.5"/>
-    <rect x="${adjEx1.toFixed(1)}" y="${adjEy1.toFixed(1)}" width="${(adjEx2-adjEx1).toFixed(1)}" height="${(adjEy2-adjEy1).toFixed(1)}" fill="#b0b3bf" stroke="white" stroke-width="0.5"/>
-    <rect x="${adjWx1.toFixed(1)}" y="${adjWy1.toFixed(1)}" width="${(adjWx2-adjWx1).toFixed(1)}" height="${(adjWy2-adjWy1).toFixed(1)}" fill="#b0b3bf" stroke="white" stroke-width="0.5"/>
-    <rect x="${adjSx1.toFixed(1)}" y="${adjSy1.toFixed(1)}" width="${(adjSx2-adjSx1).toFixed(1)}" height="${(adjSy2-adjSy1).toFixed(1)}" fill="#b0b3bf" stroke="white" stroke-width="0.5"/>
+    <!-- ② City block masses — full bleed, architectural grey -->
+    <rect x="${blkW_x1}" y="${blkEW_y1}" width="${blkW_x2-blkW_x1}" height="${blkEW_y2}" fill="${col.blk}"/>
+    <rect x="${blkE_x1}" y="${blkEW_y1}" width="${blkE_x2-blkE_x1}" height="${blkEW_y2}" fill="${col.blk}"/>
+    <rect x="${blkW_x2}" y="${blkN_y1}" width="${blkE_x1-blkW_x2}" height="${blkN_y2-blkN_y1}" fill="${col.blk}"/>
+    <rect x="${blkW_x2}" y="${blkS_y1}" width="${blkE_x1-blkW_x2}" height="${blkS_y2-blkS_y1}" fill="${col.blk}"/>
 
-    <!-- Site boundary (thin black dashed — red-line equivalent) -->
-    <polygon points="${sitePts}" fill="#e8e9ed" stroke="#1a1d2e" stroke-width="0.8" stroke-dasharray="4,2"/>
-    <!-- Building footprint (solid, white fill) -->
-    <polygon points="${bldgPts}" fill="white" stroke="#1a1d2e" stroke-width="1.8"/>
+    <!-- ③ Pavement / footway zones — lighter than road -->
+    <!-- Leadenhall St: S pavement (site side) -->
+    <rect x="${blkW_x2}" y="${lsN_adjEdge}" width="${blkE_x1-blkW_x2}" height="${lsN_pave}" fill="${col.pave}"/>
+    <!-- Leadenhall St: N pavement (adj building side) -->
+    <rect x="${blkW_x2}" y="${lsN_adjKerb}" width="${blkE_x1-blkW_x2}" height="${lsN_pave}" fill="${col.pave}"/>
+    <!-- Lime St: W pavement (site side) -->
+    <rect x="${lsE_siteKerb}" y="${blkN_y2}" width="${lsE_pave}" height="${blkS_y1-blkN_y2}" fill="${col.pave}"/>
+    <!-- Lime St: E pavement (adj building side) -->
+    <rect x="${lsE_adjEdge}" y="${blkN_y2}" width="${lsE_pave}" height="${blkS_y1-blkN_y2}" fill="${col.pave}"/>
+    <!-- South lane: N pavement (site side) -->
+    <rect x="${blkW_x2}" y="${lsS_siteKerb}" width="${blkE_x1-blkW_x2}" height="${lsS_pave}" fill="${col.pave}"/>
+    <!-- South lane: S pavement -->
+    <rect x="${blkW_x2}" y="${lsS_adjEdge}" width="${blkE_x1-blkW_x2}" height="${lsS_pave}" fill="${col.pave}"/>
+    <!-- West lane: E pavement (site side) -->
+    <rect x="${lsW_adjEdge}" y="${blkN_y2}" width="${lsW_pave}" height="${blkS_y1-blkN_y2}" fill="${col.pave}"/>
+    <!-- West lane: W pavement -->
+    <rect x="${lsW_siteKerb}" y="${blkN_y2}" width="${lsW_pave}" height="${blkS_y1-blkN_y2}" fill="${col.pave}"/>
 
-    <!-- Core — dark, rotated to principal axis -->
+    <!-- ④ Kerb lines — thin but precise, define road/pavement boundary -->
+    <!-- Leadenhall St kerbs -->
+    <line x1="${blkW_x2}" y1="${lsN_siteEdge}" x2="${blkE_x1}" y2="${lsN_siteEdge}" stroke="${col.kerb}" stroke-width="0.7"/>
+    <line x1="${blkW_x2}" y1="${lsN_adjEdge}" x2="${blkE_x1}" y2="${lsN_adjEdge}" stroke="${col.kerb}" stroke-width="0.7"/>
+    <!-- Lime St kerbs -->
+    <line x1="${lsE_siteEdge}" y1="${blkN_y2}" x2="${lsE_siteEdge}" y2="${blkS_y1}" stroke="${col.kerb}" stroke-width="0.7"/>
+    <line x1="${lsE_adjEdge}" y1="${blkN_y2}" x2="${lsE_adjEdge}" y2="${blkS_y1}" stroke="${col.kerb}" stroke-width="0.7"/>
+    <!-- South lane kerbs -->
+    <line x1="${blkW_x2}" y1="${lsS_siteEdge}" x2="${lsE_siteKerb}" y2="${lsS_siteEdge}" stroke="${col.kerb}" stroke-width="0.7"/>
+    <line x1="${blkW_x2}" y1="${lsS_adjEdge}" x2="${lsE_siteKerb}" y2="${lsS_adjEdge}" stroke="${col.kerb}" stroke-width="0.7"/>
+    <!-- West lane kerbs -->
+    <line x1="${lsW_siteEdge}" y1="${blkN_y2}" x2="${lsW_siteEdge}" y2="${blkS_y1}" stroke="${col.kerb}" stroke-width="0.7"/>
+    <line x1="${lsW_adjEdge}" y1="${blkN_y2}" x2="${lsW_adjEdge}" y2="${blkS_y1}" stroke="${col.kerb}" stroke-width="0.7"/>
+
+    <!-- ⑤ Site interior — lighter reading than adjacent blocks -->
+    <polygon points="${sitePts}" fill="${col.site}" stroke="none"/>
+
+    <!-- ⑥ Proposed building footprint — white, crisp border -->
+    <polygon points="${bldgPts}" fill="${col.bldg}" stroke="${col.core}" stroke-width="1.8"/>
+
+    <!-- ⑦ Core — dark mass, rotated to dominant building axis -->
     <g transform="rotate(${(axisAngle-90).toFixed(1)},${ccx.toFixed(1)},${ccy.toFixed(1)})">
-      <rect x="${(ccx-cw/2).toFixed(1)}" y="${(ccy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="#1a1d2e" rx="1"/>
-    </g>
-    <!-- Core label outside core box -->
-    <text x="${(ccx+cw/2+4).toFixed(1)}" y="${ccy.toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="#1a1d2e" font-weight="600">CORE · ${Math.round(coreGIA)}m²</text>
-
-    <!-- Entrance marker (north facade) -->
-    ${(()=>{const [ex,ey]=px(cLon,latMax);return `<rect x="${ex-8}" y="${ey-2}" width="16" height="3" fill="#1a1d2e"/>`;})()}
-
-    <!-- Section cut A-A -->
-    <line x1="${secX1}" y1="${secY.toFixed(1)}" x2="${secX2}" y2="${secY.toFixed(1)}" stroke="#1a1d2e" stroke-width="0.8" stroke-dasharray="5,3"/>
-    <circle cx="${secX1+4}" cy="${secY.toFixed(1)}" r="4" fill="#1a1d2e"/>
-    <text x="${secX1+4}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5" fill="white" font-weight="700">A</text>
-    <circle cx="${secX2-4}" cy="${secY.toFixed(1)}" r="4" fill="#1a1d2e"/>
-    <text x="${secX2-4}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5" fill="white" font-weight="700">A</text>
-
-    <!-- Street labels -->
-    <text x="${(siteLeftX+siteRightX)/2}" y="${(siteTopY-stN/2).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="6" font-weight="600" fill="#5a5d6e" letter-spacing="0.8">LEADENHALL STREET</text>
-    <text x="${(adjEx1+adjEx2)/2}" y="${((adjEy1+adjEy2)/2).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="600" fill="#5a5d6e" letter-spacing="0.5" transform="rotate(-90,${(adjEx1+adjEx2)/2},${(adjEy1+adjEy2)/2})">LIME ST</text>
-
-    <!-- Dimension: site width E-W -->
-    ${(()=>{
-      const dy=siteBotY+stS+10;
-      return `<line x1="${siteLeftX}" y1="${dy}" x2="${siteRightX}" y2="${dy}" stroke="#1a1d2e" stroke-width="0.6"/>
-      <line x1="${siteLeftX}" y1="${dy-3}" x2="${siteLeftX}" y2="${dy+3}" stroke="#1a1d2e" stroke-width="0.8"/>
-      <line x1="${siteRightX}" y1="${dy-3}" x2="${siteRightX}" y2="${dy+3}" stroke="#1a1d2e" stroke-width="0.8"/>
-      <text x="${(siteLeftX+siteRightX)/2}" y="${dy-3}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">${Math.round(wM)}m</text>`;
-    })()}
-
-    <!-- Dimension: site depth N-S -->
-    ${(()=>{
-      const dx=siteRightX+stE+adjEx2-adjEx1+12;
-      return `<line x1="${dx}" y1="${siteTopY}" x2="${dx}" y2="${siteBotY}" stroke="#1a1d2e" stroke-width="0.6"/>
-      <line x1="${dx-3}" y1="${siteTopY}" x2="${dx+3}" y2="${siteTopY}" stroke="#1a1d2e" stroke-width="0.8"/>
-      <line x1="${dx-3}" y1="${siteBotY}" x2="${dx+3}" y2="${siteBotY}" stroke="#1a1d2e" stroke-width="0.8"/>
-      <text x="${dx+4}" y="${(siteTopY+siteBotY)/2}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">${Math.round(hM)}m</text>`;
-    })()}
-
-    <!-- North arrow — minimal line style -->
-    <g transform="translate(${VW-16},${VH-40})">
-      <line x1="0" y1="10" x2="0" y2="-10" stroke="#1a1d2e" stroke-width="1.5"/>
-      <polygon points="0,-10 -3,-2 3,-2" fill="#1a1d2e"/>
-      <text x="0" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#1a1d2e">N</text>
+      <rect x="${(ccx-cw/2).toFixed(1)}" y="${(ccy-ch/2).toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="${col.core}" rx="1"/>
     </g>
 
-    <!-- Scale bar 20m -->
-    <line x1="10" y1="${VH-12}" x2="${10+scBar}" y2="${VH-12}" stroke="#1a1d2e" stroke-width="2"/>
-    <line x1="10" y1="${VH-15}" x2="10" y2="${VH-9}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <line x1="${10+scBar}" y1="${VH-15}" x2="${10+scBar}" y2="${VH-9}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <text x="${10+scBar/2}" y="${VH-17}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="600" fill="#1a1d2e">20m</text>
+    <!-- ⑧ Site boundary — thin dashed over everything (red-line equivalent) -->
+    <polygon points="${sitePts}" fill="none" stroke="${col.core}" stroke-width="0.7" stroke-dasharray="4,2"/>
+
+    <!-- ⑨ Entrance marker — solid bar on north facade -->
+    ${(()=>{const [ex,ey]=px(cLon,latMax);return `<rect x="${ex-10}" y="${ey-1.5}" width="20" height="3" fill="${col.core}"/>`;})()}
+
+    <!-- ⑩ Section cut A-A -->
+    <line x1="${secX1}" y1="${secY.toFixed(1)}" x2="${secX2}" y2="${secY.toFixed(1)}" stroke="${col.dim}" stroke-width="0.8" stroke-dasharray="5,3"/>
+    <circle cx="${secX1+5}" cy="${secY.toFixed(1)}" r="4.5" fill="${col.core}"/>
+    <text x="${secX1+5}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
+    <circle cx="${secX2-5}" cy="${secY.toFixed(1)}" r="4.5" fill="${col.core}"/>
+    <text x="${secX2-5}" y="${secY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>
+
+    <!-- ⑪ Core annotation -->
+    <text x="${(ccx+cw/2+5).toFixed(1)}" y="${ccy.toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="${col.dim}">CORE</text>
+    <text x="${(ccx+cw/2+5).toFixed(1)}" y="${(ccy+7).toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="5" fill="${col.dim}">${Math.round(coreGIA)}m²</text>
+
+    <!-- ⑫ Street labels — centred in carriageway -->
+    <text x="${(blkW_x2+lsE_siteKerb)/2}" y="${(lsN_siteEdge+lsN_adjEdge)/2}"
+      text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="5.5" font-weight="700" letter-spacing="1.2"
+      fill="${col.str}">LEADENHALL STREET</text>
+    <text x="${(lsE_siteEdge+lsE_adjEdge)/2}" y="${(siteTopY+siteBotY)/2}"
+      text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="5" font-weight="700" letter-spacing="0.8"
+      fill="${col.str}" transform="rotate(-90,${(lsE_siteEdge+lsE_adjEdge)/2},${(siteTopY+siteBotY)/2})">LIME STREET</text>
+    <text x="${(lsW_siteEdge+lsW_adjEdge)/2}" y="${(siteTopY+siteBotY)/2}"
+      text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="4.5" font-weight="600" letter-spacing="0.5"
+      fill="${col.str}" transform="rotate(-90,${(lsW_siteEdge+lsW_adjEdge)/2},${(siteTopY+siteBotY)/2})">BILLITER ST</text>
+
+    <!-- ⑬ Dimension: E-W site width — placed in south carriageway -->
+    <line x1="${siteLeftX}" y1="${dimY}" x2="${siteRightX}" y2="${dimY}" stroke="${col.dim}" stroke-width="0.7"/>
+    <line x1="${siteLeftX}" y1="${dimY-3}" x2="${siteLeftX}" y2="${dimY+3}" stroke="${col.dim}" stroke-width="1"/>
+    <line x1="${siteRightX}" y1="${dimY-3}" x2="${siteRightX}" y2="${dimY+3}" stroke="${col.dim}" stroke-width="1"/>
+    <text x="${(siteLeftX+siteRightX)/2}" y="${dimY-4}" text-anchor="middle"
+      font-family="JetBrains Mono,monospace" font-size="6" fill="${col.dim}">${Math.round(wM)}m</text>
+
+    <!-- ⑭ Dimension: N-S site depth — placed in west carriageway -->
+    <line x1="${dimX}" y1="${siteTopY}" x2="${dimX}" y2="${siteBotY}" stroke="${col.dim}" stroke-width="0.7"/>
+    <line x1="${dimX-3}" y1="${siteTopY}" x2="${dimX+3}" y2="${siteTopY}" stroke="${col.dim}" stroke-width="1"/>
+    <line x1="${dimX-3}" y1="${siteBotY}" x2="${dimX+3}" y2="${siteBotY}" stroke="${col.dim}" stroke-width="1"/>
+    <text x="${dimX}" y="${(siteTopY+siteBotY)/2}" text-anchor="middle" dominant-baseline="middle"
+      font-family="JetBrains Mono,monospace" font-size="6" fill="${col.dim}"
+      transform="rotate(-90,${dimX},${(siteTopY+siteBotY)/2})">${Math.round(hM)}m</text>
+
+    <!-- ⑮ North arrow — clean minimal -->
+    <g transform="translate(${VW-16},${VH-38})">
+      <line x1="0" y1="9" x2="0" y2="-9" stroke="${col.dim}" stroke-width="1.5"/>
+      <polygon points="0,-9 -3,-1 3,-1" fill="${col.dim}"/>
+      <text x="0" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="${col.dim}">N</text>
+    </g>
+
+    <!-- ⑯ Scale bar — 20m -->
+    <line x1="10" y1="${VH-12}" x2="${10+scBar}" y2="${VH-12}" stroke="${col.dim}" stroke-width="1.8"/>
+    <line x1="10" y1="${VH-15}" x2="10" y2="${VH-9}" stroke="${col.dim}" stroke-width="1.5"/>
+    <line x1="${10+scBar}" y1="${VH-15}" x2="${10+scBar}" y2="${VH-9}" stroke="${col.dim}" stroke-width="1.5"/>
+    <text x="${10+scBar/2}" y="${VH-17}" text-anchor="middle"
+      font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="600" fill="${col.dim}">20m</text>
   `;
 }
 
