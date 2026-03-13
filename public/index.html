@@ -286,6 +286,27 @@ async function init(){
         paint:{'line-color':'rgba(160,165,185,0.2)','line-width':0.5}
       });
     }
+    // Street number labels on buildings at close zoom
+    if(!map.getLayer('building-numbers')){
+      map.addLayer({
+        id:'building-numbers',type:'symbol',source:'composite','source-layer':'housenum_label',
+        minzoom:17,
+        layout:{
+          'text-field':['get','house_num'],
+          'text-font':['DIN Pro Medium','Arial Unicode MS Regular'],
+          'text-size':['interpolate',['linear'],['zoom'],17,9,19,12],
+          'text-anchor':'center',
+          'text-allow-overlap':false,
+          'text-padding':2,
+        },
+        paint:{
+          'text-color':'#4a4e6a',
+          'text-halo-color':'rgba(255,255,255,0.9)',
+          'text-halo-width':1.5,
+          'text-opacity':['interpolate',['linear'],['zoom'],17,0.5,18,0.85],
+        }
+      });
+    }
     document.getElementById('loader').classList.add('hide');
     searchAddress('Great Suffolk Street, London SE1');
   });
@@ -344,9 +365,14 @@ async function selectResult(feature){
   document.getElementById('panel').classList.remove('collapsed');
 
   // Load Google Street View (interactive embed)
+  // Offset camera ~20m south toward main street for better frontage view
+  // FOV zoom: 0 = max zoom out (widest view)
   const svWrap = document.getElementById('sv-wrap');
   const svFrame = document.getElementById('sv-frame');
-  svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${lat},${lng}&cbp=11,0,,0,5&output=svembed&ie=UTF8&source=embed`;
+  const svOffsetLat = lat - 0.00015; // ~15m south (toward street)
+  const svOffsetLng = lng;
+  // heading=0 faces north, adjust based on typical street orientation
+  svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${svOffsetLat},${svOffsetLng}&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed`;
   svWrap.style.display = 'block';
 
   // Parallel data fetches
@@ -556,22 +582,24 @@ function renderSite3D(lat, lng, buildingData, planning, siteInfo){
   const typicalH = planning.typicalApprovedHeights || planning.typicalHeight || {low:10,mid:20,high:30};
   const potentialHeightM = typicalH.mid || 20;
 
-  // Existing building — let Mapbox 3d-buildings render the grey mass
-  // We just highlight with: red outline at grade + thin red roof cap at transition
-  map.addLayer({
-    id:'current-edge',type:'line',source:'site',
-    paint:{'line-color':'#c0392b','line-width':2.5,'line-opacity':0.9}
-  });
-  // Thin red cap at roof of existing — marks where potential starts
-  map.addSource('current-bldg',{type:'geojson',data:siteGeoJSON});
+  // Existing building — red translucent shell OUTSIDE the Mapbox grey mass
+  // Slightly outset so it envelops the context building beneath
+  const existingOutsetCoords = bufferPolygon(coords, 0.000004); // ~0.4m outset
+  const existingOutsetGeo = { type:'Feature', geometry:{type:'Polygon',coordinates:[existingOutsetCoords]}, properties:{} };
+  map.addSource('current-bldg',{type:'geojson',data:existingOutsetGeo});
   map.addLayer({
     id:'current-3d',type:'fill-extrusion',source:'current-bldg',
     paint:{
       'fill-extrusion-color':'#c0392b',
       'fill-extrusion-height': currentHeight,
-      'fill-extrusion-base': Math.max(0, currentHeight - 0.4),
-      'fill-extrusion-opacity': 0.85,
+      'fill-extrusion-base': 0,
+      'fill-extrusion-opacity': 0.35,
     }
+  });
+  // Red outline at grade
+  map.addLayer({
+    id:'current-edge',type:'line',source:'site',
+    paint:{'line-color':'#c0392b','line-width':2.5,'line-opacity':0.9}
   });
 
   // Potential additional envelope — rich green, translucent with floor lines
