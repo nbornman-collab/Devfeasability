@@ -63,27 +63,38 @@ Core at 22% = ~103 sqm → leaves ~363 sqm NIA
 Lease span check: plate ~22m × 21m, core ~10m × 10m → 6m each side ⚠️ Below BCO 7.5m ideal
 → **Flag as leasability risk in pro forma**
 
-### Core Position Logic
+### Core Position Logic (updated from Nic, 2026-03-13)
 
-| Building geometry | Core type | Rationale |
-|---|---|---|
-| Square / deep plate (depth >15m both ways) | **Central** | Efficient lift grouping, equal spans all round |
-| Rectangular, depth ratio <1:2 | **Central or offset central** | Standard commercial podium |
-| Skinny / linear (one dim <12m) | **Side core** | Central would kill lease depth |
-| Blade / tower (very slender, one dim <10m) | **End core** | Maximise uninterrupted floor plate |
-| Very large plate (>2,000 sqm) | **Dual core** | Single core = excessive travel distances |
+**The real driver is views + shape, not geometry alone.**
 
-**For DevFeasibility logic:**
-- Compute plate aspect ratio (width:depth)
-- If <1:1.5 → central core
-- If 1:1.5–1:3 → offset or side core
-- If >1:3 → end core
-- If plate >2,000 sqm → dual core (flag)
+1. **Views come first** — premium outlook (river, park, skyline) stays as leasable NIA. Core never goes on the best elevation if avoidable.
 
-### Core Orientation
-- Rotate long axis of core to face **primary elevation** (street / landmark / view)
-- This maximises lease depth on the prime face and positions stairs on secondary facades
-- **FLAG FOR NIC:** Is this always the rule, or does structural efficiency sometimes override?
+2. **Core offset from envelope** — not centred geometrically. Position is driven by establishing *workable lease spans* across the usable parts of the plate. The core is placed where it best divides the floor into viable lease bays.
+
+3. **Weird / re-entrant spaces → core goes there** — irregular shapes from London's organic street pattern create corners, acute angles, and recesses that are poor for open-plan leasing. These are prime core locations (stairs, WC, risers, plant). Waste nothing.
+
+4. **Primary core is compact** — one tight cluster of lifts + main stairs. Efficient, easy to locate by occupiers, structurally rational.
+
+5. **Satellite cores / secondary stairs** go in:
+   - Awkward corners that don't lease well
+   - Far ends of deep or elongated plates (to satisfy 45m travel distance)
+   - Recesses and notches in irregular polygons
+   - This is NOT a design failure — it's London practice
+
+6. **London's organic plan shapes** — rare to get a clean rectangle in the City. Most sites have chamfers, step-backs, party wall kinks, or irregular street frontages. The core strategy responds to this directly.
+
+**Implication for DevFeasibility floor plan logic:**
+- Analyse the site polygon for re-entrant corners, acute angles, or narrow recesses → these are candidate core/stair locations
+- Find the longest unobstructed elevation (likely the primary street frontage or best views) → protect that as NIA
+- Primary core should be compact — roughly square in plan
+- Satellite stairs placed to achieve 45m travel distance coverage of the whole plate
+- Flag if plate geometry forces a stair into a prime elevation (design problem — note it)
+
+**For 100 Leadenhall specifically:**
+- Site is roughly rectangular with a notch in the SW corner
+- Primary elevation likely north (Leadenhall Street) or east (views to cluster)
+- The SW notch / re-entrant is the natural satellite stair location
+- Primary core should sit mid-plate, slightly north-of-centre
 
 ---
 
