@@ -1316,6 +1316,10 @@ function renderPanel(planning, address, boroughData, buildingData, siteInfo){
     policyText: planning.keyPolicies ? planning.keyPolicies.map(p => '<strong>' + p + '</strong>').join(' · ') + '<br>' + (planning.heightStrategy || '') : null,
     transportText: stations.length > 0 ? stations.map(s => '<strong>' + s.name + '</strong> (' + s.dist + ')').join(', ') + '<br>PTAL: ' + (extra.ptal || '?') : null,
     heightContextText: `Existing building at <strong>${Math.round(heightM)}m</strong> (${floors}F). Borough typical approved height: <strong>${potentialHeightFull}m</strong> (low: ${typicalH.low}m, high: ${typicalH.high}m). Height source: ${siteInfo.heightSource || 'OSM'}.`,
+    // Polygon for site plan drawings in PDF
+    polygon: (buildingData && buildingData.wayNodes && buildingData.wayNodes.length >= 3)
+      ? buildingData.wayNodes.map(nid => buildingData.nodes.find(n => n.id === nid)).filter(Boolean).map(n => [n.lon, n.lat])
+      : null,
   };
   // Add constraint flags
   if(inCA) currentReportData.flags.push({text: '🏛 Conservation Area' + (caName ? ': ' + caName : ''), color: 'red'});
