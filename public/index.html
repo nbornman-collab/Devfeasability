@@ -346,7 +346,7 @@ async function selectResult(feature){
   // Load Google Street View (interactive embed)
   const svWrap = document.getElementById('sv-wrap');
   const svFrame = document.getElementById('sv-frame');
-  svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${lat},${lng}&cbp=12,0,,0,0&output=svembed&ie=UTF8&source=embed`;
+  svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${lat},${lng}&cbp=11,0,,0,5&output=svembed&ie=UTF8&source=embed`;
   svWrap.style.display = 'block';
 
   // Parallel data fetches
@@ -432,7 +432,15 @@ async function selectResult(feature){
   const siteInfo = { plotArea, floors, heightM, estimatedFloorArea, lat, lng, postcode, isResidential, currentUse, ftf,
     buildingAge: buildingData?.startDate || null, buildingName: buildingData?.name || '' };
 
-  renderPanel(planning, address, boroughData, buildingData, siteInfo);
+  try {
+    renderPanel(planning, address, boroughData, buildingData, siteInfo);
+  } catch(e) {
+    console.error('renderPanel error:', e);
+    document.getElementById('panel-body').innerHTML = '<div class="section"><p style="color:var(--red)">Panel render error: ' + e.message + '</p></div>';
+  }
+
+  // ALWAYS render 3D — even if panel fails
+  renderSite3D(lat, lng, buildingData, planning, siteInfo);
 
   // Async data fetches (non-blocking — update panel when ready)
   // Planning precedent
@@ -452,7 +460,6 @@ async function selectResult(feature){
       }
     }).catch(()=>{});
   }
-  renderSite3D(lat, lng, buildingData, planning, siteInfo);
 }
 
 // --- 3D RENDERING ---
