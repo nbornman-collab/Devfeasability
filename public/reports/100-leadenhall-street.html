@@ -1025,11 +1025,11 @@ function buildMassing3DCanvas(canvasId, propH){
   const scene = new THREE.Scene();
 
   // ── Camera: perspective, SE elevated (looking NW toward building) ──────────
-  const fov = 22;
+  const fov = 28;
   const camera = new THREE.PerspectiveCamera(fov, W/H, 1, 5000);
-  const camR = Math.max(wM, hM, propH) * 4.2;
-  camera.position.set(camR, camR * 0.55, camR);
-  camera.lookAt(0, propH * 0.38, 0);
+  const camR = Math.max(wM, hM, propH) * 2.4;
+  camera.position.set(camR, camR * 0.7, camR);
+  camera.lookAt(0, propH * 0.50, 0);
 
   // ── Lighting ───────────────────────────────────────────────────────────────
   scene.add(new THREE.AmbientLight(0xffffff, 0.50));
@@ -1045,7 +1045,7 @@ function buildMassing3DCanvas(canvasId, propH){
   scene.add(fill);
 
   // ── Ground plane ──────────────────────────────────────────────────────────
-  const gpGeo = new THREE.PlaneGeometry(wM*3.5, hM*3.5);
+  const gpGeo = new THREE.PlaneGeometry(wM*2.0, hM*2.0);
   gpGeo.rotateX(-Math.PI/2);
   const gpMat = new THREE.MeshLambertMaterial({color:0xd4d5dc});
   scene.add(new THREE.Mesh(gpGeo, gpMat));
@@ -1068,10 +1068,10 @@ function buildMassing3DCanvas(canvasId, propH){
   }
 
   // Existing zone: 0 → existH (grey)
-  addBox(wM, existH, hM, 0, existH/2, 0, 0x9098a8, 0x1a1d2e);
+  addBox(wM, existH, hM, 0, existH/2, 0, 0xa0a8b8, 0x1a1d2e);
 
   // New build zone: existH → propH (light green)
-  addBox(wM, newH,   hM, 0, existH + newH/2, 0, 0x88b898, 0x1a1d2e);
+  addBox(wM, newH,   hM, 0, existH + newH/2, 0, 0xa8cca8, 0x1a1d2e);
 
   // ── Floor plates — thin horizontal planes on all 4 sides ─────────────────
   const floorStep = 4.2;
