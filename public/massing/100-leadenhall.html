@@ -83,7 +83,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .proforma tr.total td:last-child{color:var(--green)}
 
 /* Floor plan */
-.fp-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;position:relative;padding:12px}
+.fp-wrap{background:transparent;overflow:hidden;position:relative;padding:0}
 .fp-wrap svg{display:block;width:100%;height:auto}
 .fp-meta{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
 .fp-tag{font:500 9px var(--sans);color:var(--text3);background:var(--surface3);padding:2px 8px;border-radius:3px;display:flex;align-items:center;gap:4px}
@@ -186,33 +186,72 @@ const OPTIONS = [
   }
 ];
 
+// ─── Market data — City of London / EC3 Eastern Cluster ─────────────────────
+// Source: Savills City Investment Watch Feb 2026, C&W Q4 2025 MarketBeat
+// Update: sites/100-leadenhall/MARKET.md
+const MARKET = {
+  erv:     {a:750,   b:800,   c:850  },  // £/sqm NIA pa gross ERV
+  niy:     {a:0.055, b:0.0525,c:0.0525}, // net initial yield (City prime 5.25%)
+  costGsm: {a:4100,  b:5000,  c:6250 },  // £/sqm GIA construction (BCIS basis)
+  progYrs: {a:2.5,   b:3.0,   c:4.0  },  // construction programme years
+  cilNia:  200,    // £/sqm NIA — CoL CIL Charging Schedule 2024/25
+  s106:    750000, // £ estimated S106
+  demo:    2000000,// £ demolition + enabling
+  fees:    0.13,   // professional fees % of construction
+  contg:   0.075,  // contingency % of construction
+  finRate: 0.075,  // finance rate pa (SONIA + 275bps)
+  ltc:     0.60,   // loan to cost
+  rfMo:    13,     // rent-free months (13mo on 10yr lease)
+  ltMo:    120,    // lease term months
+};
+const EXISTING_NIA = 4700; // sqm — MARKET.md baseline
+const EXISTING_EUV = 38000000; // £38M — ~4,700sqm NIA × £450/sqm pa / 5.5% yield
+
 OPTIONS.forEach(opt => {
-  const podiumGross = PLOT_AREA * opt.coverage * opt.podiumFloors;
-  const towerGross = PLOT_AREA * opt.towerFootprintPct * opt.coverage * opt.towerFloors;
-  const grossArea = podiumGross + towerGross;
-  const nia = grossArea * opt.niaEfficiency;
-  const existingNia = PLOT_AREA * 0.80 * 0.82 * EXISTING_FLOORS;
-  const addedNia = Math.max(0, nia - existingNia);
-  const addedNiaSqft = addedNia * 10.764;
-  const constructionCost = addedNiaSqft * opt.costSqft;
-  const fees = constructionCost * 0.12;
-  const cil = addedNia * 186;
-  const finance = constructionCost * 0.07 * 2.5;
-  const totalCost = constructionCost + fees + cil + finance;
-  const gdv = addedNiaSqft * opt.saleSqft;
-  const margin = gdv - totalCost;
-  opt.nia = Math.round(nia);
-  opt.existingNia = Math.round(existingNia);
-  opt.addedNia = Math.round(addedNia);
-  opt.addedNiaSqft = Math.round(addedNiaSqft);
-  opt.constructionCost = Math.round(constructionCost);
-  opt.fees = Math.round(fees);
-  opt.cil = Math.round(cil);
-  opt.finance = Math.round(finance);
-  opt.totalCost = Math.round(totalCost);
-  opt.gdv = Math.round(gdv);
-  opt.margin = Math.round(margin);
-  opt.marginPct = gdv > 0 ? (margin/gdv*100).toFixed(0) : '0';
+  // ── NIA — corrected: no double coverage on tower ──────────────────────────
+  const podiumGIA = PLOT_AREA * opt.coverage * opt.podiumFloors;
+  const towerGIA  = PLOT_AREA * opt.towerFootprintPct * opt.towerFloors; // towerFootprintPct is absolute
+  const totalGIA  = podiumGIA + towerGIA;
+  const totalNIA  = Math.round(totalGIA * opt.niaEfficiency);
+  const addedNia  = Math.max(0, totalNIA - EXISTING_NIA);
+
+  // ── GDV — yield-capitalised on effective rent ─────────────────────────────
+  const grossErvPa = totalNIA * MARKET.erv[opt.key];               // £ pa gross
+  const effErvPa   = grossErvPa * (1 - MARKET.rfMo / MARKET.ltMo); // after rent-free
+  const gdv        = effErvPa / MARKET.niy[opt.key];                // yield-capitalised
+
+  // ── TDC ──────────────────────────────────────────────────────────────────
+  const constCost  = totalGIA  * MARKET.costGsm[opt.key];
+  const feesCost   = constCost * MARKET.fees;
+  const contgCost  = constCost * MARKET.contg;
+  const cilCost    = totalNIA  * MARKET.cilNia;
+  const agentFees  = grossErvPa * 0.15;                             // letting fees (one-off)
+  const preFin     = constCost + feesCost + contgCost + cilCost + agentFees + MARKET.s106 + MARKET.demo;
+  const finCost    = preFin * MARKET.ltc * MARKET.finRate * (MARKET.progYrs[opt.key] / 2);
+  const tdc        = preFin + finCost;
+
+  // ── Profit on cost (industry standard) ───────────────────────────────────
+  const profit = gdv - tdc;
+  const poc    = tdc > 0 ? (profit / tdc * 100) : 0;
+
+  opt.totalGIA     = Math.round(totalGIA);
+  opt.nia          = totalNIA;
+  opt.existingNia  = EXISTING_NIA;
+  opt.addedNia     = Math.round(addedNia);
+  opt.addedNiaSqft = Math.round(addedNia * 10.764);
+  opt.grossErvPa   = Math.round(grossErvPa);
+  opt.gdv          = Math.round(gdv);
+  opt.constCost    = Math.round(constCost);
+  opt.fees         = Math.round(feesCost);
+  opt.contingency  = Math.round(contgCost);
+  opt.cil          = Math.round(cilCost);
+  opt.agentFees    = Math.round(agentFees);
+  opt.finance      = Math.round(finCost);
+  opt.tdc          = Math.round(tdc);
+  opt.rlv          = Math.round(gdv - tdc);          // residual land value
+  opt.rlvUplift    = Math.round(gdv - tdc - EXISTING_EUV); // uplift vs EUV
+  opt.margin       = Math.round(profit);
+  opt.marginPct    = poc.toFixed(0); // profit on cost %
 });
 
 // ─── Principal building axis — AABB dominant direction ──────────────────────
@@ -413,18 +452,16 @@ async function init(){
   mapboxgl.accessToken = cfg.mapboxToken;
   map = new mapboxgl.Map({
     container:'map', style:'mapbox://styles/mapbox/dark-v11',
-    center:CENTROID, zoom:17.2, pitch:60, bearing:-20, antialias:true
+    center:CENTROID, zoom:17.2, pitch:0, bearing:0, antialias:true
   });
   map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
 
   map.on('style.load',()=>{
     map.addLayer({
-      id:'3d-buildings',type:'fill-extrusion',source:'composite','source-layer':'building',minzoom:14,
+      id:'ctx-buildings',type:'fill',source:'composite','source-layer':'building',minzoom:14,
       paint:{
-        'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#1a1d2e',30,'#22253a',80,'#2a2d45',150,'#333650'],
-        'fill-extrusion-height':['get','height'],
-        'fill-extrusion-base':['get','min_height'],
-        'fill-extrusion-opacity':0.6,'fill-extrusion-vertical-gradient':true,
+        'fill-color':['step',['get','height'],'#1a1d2e',30,'#22253a',80,'#2a2d45'],
+        'fill-opacity':0.85
       }
     });
 
@@ -538,8 +575,8 @@ function renderOptionPanel(opt){
     </div>
     <div class="hero-strip">
       <div class="hero-metric"><div class="label">GDV</div><div class="value" style="color:${col.main}">£${Math.round(opt.gdv/1e6)}M</div></div>
-      <div class="hero-metric"><div class="label">Margin</div><div class="value" style="color:var(--green)">${opt.marginPct}%</div></div>
-      <div class="hero-metric"><div class="label">Added NIA</div><div class="value">${fmt(opt.addedNia)}<span style="font:400 11px var(--sans);color:var(--text3)"> sqm</span></div></div>
+      <div class="hero-metric"><div class="label">Profit on Cost</div><div class="value" style="color:var(--green)">${opt.marginPct}%</div></div>
+      <div class="hero-metric"><div class="label">Total NIA</div><div class="value">${fmt(opt.nia)}<span style="font:400 11px var(--sans);color:var(--text3)"> sqm</span></div></div>
     </div>
 
     <div class="section">
@@ -593,17 +630,46 @@ function renderOptionPanel(opt){
     </div>
 
     <div class="section">
-      <div class="section-title">Pro Forma</div>
+      <div class="section-title">Development Appraisal</div>
+      <div style="font:400 10px var(--sans);color:var(--text3);margin-bottom:10px">Indicative only · Verify with instructed agent and QS</div>
+      <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:6px">Area</div>
       <table class="proforma">
-        <tr><td>Additional NIA</td><td>${fmt(opt.addedNia)} sqm · ${fmt(opt.addedNiaSqft)} sqft</td></tr>
-        <tr><td>Construction @ £${opt.costSqft}/sqft</td><td>£${(opt.constructionCost/1e6).toFixed(1)}M</td></tr>
-        <tr><td>Professional Fees (12%)</td><td>£${(opt.fees/1e6).toFixed(1)}M</td></tr>
-        <tr><td>CIL (£186/sqm)</td><td>£${(opt.cil/1e6).toFixed(1)}M</td></tr>
-        <tr><td>Finance (7%, 30mo)</td><td>£${(opt.finance/1e6).toFixed(1)}M</td></tr>
-        <tr><td style="font-weight:600;color:var(--text)">Total Development Cost</td><td style="font-weight:600;color:var(--text)">£${(opt.totalCost/1e6).toFixed(1)}M</td></tr>
-        <tr><td>Capital Value @ £${fmt(opt.saleSqft)}/sqft</td><td>£${(opt.gdv/1e6).toFixed(1)}M</td></tr>
-        <tr class="total"><td>Development Margin</td><td>£${(opt.margin/1e6).toFixed(1)}M (${opt.marginPct}%)</td></tr>
+        <tr><td>Total GIA</td><td>${fmt(opt.totalGIA)} sqm</td></tr>
+        <tr><td>Total NIA (${Math.round(opt.niaEfficiency*100)}% efficiency)</td><td>${fmt(opt.nia)} sqm</td></tr>
+        <tr><td>Added NIA vs existing</td><td>+${fmt(opt.addedNia)} sqm</td></tr>
       </table>
+      <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin:10px 0 6px">GDV</div>
+      <table class="proforma">
+        <tr><td>ERV (gross)</td><td>£${MARKET.erv[opt.key]}/sqm pa <span style="color:var(--text3);font-size:10px">Savills Feb '26</span></td></tr>
+        <tr><td>Gross ERV (total)</td><td>£${(opt.grossErvPa/1e6).toFixed(2)}M pa</td></tr>
+        <tr><td>NIY</td><td>${(MARKET.niy[opt.key]*100).toFixed(2)}% <span style="color:var(--text3);font-size:10px">City prime, Savills Feb '26</span></td></tr>
+        <tr class="total"><td>GDV (yield-capitalised)</td><td>£${(opt.gdv/1e6).toFixed(1)}M</td></tr>
+      </table>
+      <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin:10px 0 6px">Total Development Cost</div>
+      <table class="proforma">
+        <tr><td>Construction (£${fmt(MARKET.costGsm[opt.key])}/sqm GIA)</td><td>£${(opt.constCost/1e6).toFixed(1)}M</td></tr>
+        <tr><td>Professional Fees (13%)</td><td>£${(opt.fees/1e6).toFixed(1)}M</td></tr>
+        <tr><td>Contingency (7.5%)</td><td>£${(opt.contingency/1e6).toFixed(1)}M</td></tr>
+        <tr><td>CIL (£200/sqm NIA)</td><td>£${(opt.cil/1e6).toFixed(1)}M</td></tr>
+        <tr><td>Agent / Letting Fees (15%)</td><td>£${(opt.agentFees/1e6).toFixed(1)}M</td></tr>
+        <tr><td>S106 (estimated)</td><td>£${(MARKET.s106/1e6).toFixed(2)}M</td></tr>
+        <tr><td>Demolition + enabling</td><td>£${(MARKET.demo/1e6).toFixed(1)}M</td></tr>
+        <tr><td>Finance (${MARKET.progYrs[opt.key]}yr @ ${(MARKET.finRate*100).toFixed(1)}%)</td><td>£${(opt.finance/1e6).toFixed(1)}M</td></tr>
+        <tr style="font-weight:600;color:var(--text)"><td>Total Development Cost</td><td>£${(opt.tdc/1e6).toFixed(1)}M</td></tr>
+      </table>
+      <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin:10px 0 6px">Return</div>
+      <table class="proforma">
+        <tr><td>Profit</td><td>£${(opt.margin/1e6).toFixed(1)}M</td></tr>
+        <tr class="total"><td>Profit on Cost</td><td style="color:${opt.margin>0?'var(--green)':'#f87171'}">${opt.marginPct}%</td></tr>
+        <tr><td style="color:var(--text3);font-size:10px">Target (speculative)</td><td style="color:var(--text3);font-size:10px">${opt.key==='a'?'15–18%':opt.key==='b'?'18–22%':'22–28%'} <em>excl. land</em></td></tr>
+      </table>
+      <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin:10px 0 6px">Residual Land Value</div>
+      <table class="proforma">
+        <tr><td>RLV (GDV − TDC)</td><td>£${(opt.rlv/1e6).toFixed(1)}M</td></tr>
+        <tr><td>Existing Use Value (est.)</td><td>£${(EXISTING_EUV/1e6).toFixed(0)}M</td></tr>
+        <tr class="total"><td>Development Uplift</td><td style="color:${opt.rlvUplift>=0?'var(--green)':'#f87171'}">${opt.rlvUplift>=0?'+':''}£${(opt.rlvUplift/1e6).toFixed(1)}M</td></tr>
+      </table>
+      <div style="margin-top:8px;font:400 10px var(--sans);color:var(--text3);line-height:1.5">EUV est. ~4,700sqm NIA × £450/sqm pa / 5.5% yield · Source: Savills City Investment Watch Feb 2026</div>
     </div>
 
     <div class="section">
@@ -702,7 +768,7 @@ function renderComparePanel(){
       verdict:'★ Recommended — best risk-adjusted return',
       verdictColor:OPTION_COLORS.b.main,
       pros:[
-        `Highest margin % (${OPTIONS[1].marginPct}%) — best risk-adjusted return of the three`,
+        `Highest profit on cost (${OPTIONS[1].marginPct}%) — best risk-adjusted return of the three`,
         'Established precedent nearby — comparable approvals support the planning case',
         'LVMF impact manageable — not in primary St Paul\'s protected view cone',
         'Sky terrace at L7 adds planning appeal and tenant amenity (BCO quality benchmark)',
@@ -741,11 +807,12 @@ function renderComparePanel(){
   const rows = [
     ['Height',       ...OPTIONS.map(o=>`${o.height}m / ${o.floors}F`)],
     ['Added NIA',    ...OPTIONS.map(o=>`${fmt(o.addedNia)} sqm`)],
+    ['NIA',          ...OPTIONS.map(o=>`${fmt(o.nia)} sqm`)],
     ['GDV',          ...OPTIONS.map(o=>`£${Math.round(o.gdv/1e6)}M`)],
-    ['Total Cost',   ...OPTIONS.map(o=>`£${(o.totalCost/1e6).toFixed(1)}M`)],
-    ['Margin',       ...OPTIONS.map(o=>`£${(o.margin/1e6).toFixed(1)}M`)],
-    ['Margin %',     ...OPTIONS.map(o=>`${o.marginPct}%`)],
-    ['Build £/sqft', ...OPTIONS.map(o=>`£${o.costSqft}`)],
+    ['TDC',          ...OPTIONS.map(o=>`£${(o.tdc/1e6).toFixed(1)}M`)],
+    ['Profit',       ...OPTIONS.map(o=>`£${(o.margin/1e6).toFixed(1)}M`)],
+    ['Profit/Cost',  ...OPTIONS.map(o=>`${o.marginPct}%`)],
+    ['Build £/sqm',  ...OPTIONS.map(o=>`£${fmt(MARKET.costGsm[o.key])}`)],
     ['BREEAM',       ...OPTIONS.map(o=>o.breeam.replace('BREEAM ',''))],
     ['Planning',     ...OPTIONS.map(o=>`<span class="risk ${o.risk}">${o.risk}</span>`)],
     ['Programme',    'Pre-app 3mo','Pre-app 6mo+','Pre-app 9mo+'],
@@ -771,10 +838,10 @@ function renderComparePanel(){
         <div class="bar-row">
           <div class="bar-label">
             <span style="color:${cols[i].main};font-weight:700">Option ${o.key.toUpperCase()} · ${o.floors}F</span>
-            <span style="color:var(--text2)">£${Math.round(o.gdv/1e6)}M GDV · <strong style="color:${parseFloat(o.marginPct)===maxMarginPct?'var(--green)':'var(--text)'}">${o.marginPct}% margin</strong></span>
+            <span style="color:var(--text2)">£${Math.round(o.gdv/1e6)}M GDV · <strong style="color:${parseFloat(o.marginPct)===maxMarginPct?'var(--green)':'var(--text)'}">${o.marginPct}% profit on cost</strong></span>
           </div>
           <div class="bar-track">
-            <div class="bar-fill" style="width:${Math.round(o.totalCost/maxGdv*100)}%;background:rgba(255,255,255,.07);min-width:30px;color:var(--text3);font-size:7px">cost</div>
+            <div class="bar-fill" style="width:${Math.round(o.tdc/maxGdv*100)}%;background:rgba(255,255,255,.07);min-width:30px;color:var(--text3);font-size:7px">TDC</div>
             <div class="bar-fill" style="width:${Math.round(o.margin/maxGdv*100)}%;background:${cols[i].fill}">+£${(o.margin/1e6).toFixed(0)}M</div>
           </div>
         </div>`).join('')}
