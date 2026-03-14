@@ -457,13 +457,8 @@ async function init(){
   map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
 
   map.on('style.load',()=>{
-    map.addLayer({
-      id:'ctx-buildings',type:'fill',source:'composite','source-layer':'building',minzoom:14,
-      paint:{
-        'fill-color':['step',['get','height'],'#1a1d2e',30,'#22253a',80,'#2a2d45'],
-        'fill-opacity':0.85
-      }
-    });
+    // ctx-buildings layer removed — Mapbox base map already renders context buildings
+    // Adding a custom dark fill from OSM composite caused offset vs base map rendering
 
     map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
     map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':2,'line-opacity':0.9,'line-dasharray':[4,2]}});
