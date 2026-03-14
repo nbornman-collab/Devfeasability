@@ -142,7 +142,6 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
 .stat-val{font:800 14px var(--mono);color:var(--accent)}
 .stat-lbl{font:400 7px var(--sans);color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 </head>
 <body>
 
@@ -1264,16 +1263,28 @@ const REPORT_OPTS = [
 ];
 
 // ── Init ─────────────────────────────────────────────────────────────────────
+// SVG drawings: run immediately — no external deps
 buildGroundFloorPlan().catch(console.error);
 buildMassingSectionSVG();
-buildMassing3DCanvas('massing-3d-canvas', REPORT_OPTS[1]);  // default = Option B
 fetch('/api/config').then(r=>r.json()).then(cfg=>buildContextMap(cfg.mapboxToken)).catch(()=>buildContextMap(null));
-
-// Option pages — pass full opt object for correct stepped geometry
 const [optA,optB,optC] = REPORT_OPTS;
-buildGFPlanStatic('gfp-opt-a'); buildMassingSectionSVG('sec-opt-a',42);  buildMassing3DCanvas('iso-opt-a',optA);
-buildGFPlanStatic('gfp-opt-b'); buildMassingSectionSVG('sec-opt-b',60);  buildMassing3DCanvas('iso-opt-b',optB);
-buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92);  buildMassing3DCanvas('iso-opt-c',optC);
+buildGFPlanStatic('gfp-opt-a'); buildMassingSectionSVG('sec-opt-a',42);
+buildGFPlanStatic('gfp-opt-b'); buildMassingSectionSVG('sec-opt-b',60);
+buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92);
+
+// Three.js: load async — page renders without it, 3D fills in once loaded
+(function loadThreeJS(){
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js';
+  s.onload = function(){
+    buildMassing3DCanvas('massing-3d-canvas', REPORT_OPTS[1]);
+    buildMassing3DCanvas('iso-opt-a', optA);
+    buildMassing3DCanvas('iso-opt-b', optB);
+    buildMassing3DCanvas('iso-opt-c', optC);
+  };
+  s.onerror = function(){ console.warn('Three.js CDN failed — 3D views unavailable'); };
+  document.head.appendChild(s);
+})();
 </script>
 </body>
 </html>
