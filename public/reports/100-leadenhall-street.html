@@ -262,7 +262,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
         <div class="drawing-wrap" style="background:#f8f9fb">
           <svg id="section-svg" style="width:100%;display:block" viewBox="0 0 280 200"></svg>
         </div>
-        <div class="drawing-caption">Existing red · Proposed blue · Context grey · 25° daylight angle</div>
+        <div class="drawing-caption">Existing (grey) · Proposed new build (navy) · Context schematic · 25° daylight angle</div>
       </div>
     </div>
 
@@ -535,18 +535,25 @@ async function buildGroundFloorPlan(){
   const [siteRightX]=px(lonMax,cLat);
   const [ccx,ccy]=px(cLon,cLat);
   const sitePts=p.map(c=>px(c[0],c[1]).join(',')).join(' ');
-  const bldgPts=p.map(c=>[cLon+(c[0]-cLon)*0.92,cLat+(c[1]-cLat)*0.92]).map(c=>px(c[0],c[1]).join(',')).join(' ');
-  const existPts=p.map(c=>[cLon+(c[0]-cLon)*0.88,cLat+(c[1]-cLat)*0.88]).map(c=>px(c[0],c[1]).join(',')).join(' ');
+  // Proposed building fills site (99% — City of London buildings go to the boundary)
+  const bldgPts=p.map(c=>[cLon+(c[0]-cLon)*0.99,cLat+(c[1]-cLat)*0.99]).map(c=>px(c[0],c[1]).join(',')).join(' ');
+  // Existing building slightly smaller (shows current 6-storey footprint, realistic setback)
+  const existPts=p.map(c=>[cLon+(c[0]-cLon)*0.94,cLat+(c[1]-cLat)*0.94]).map(c=>px(c[0],c[1]).join(',')).join(' ');
 
-  // Core: 22% GIA, pinned to NE corner (Leadenhall St × Lime St)
+  // Core: 22% GIA, NE-pinned to actual NE polygon vertex (not bounding-box corner)
   const coreGIA=D.plotArea*0.80*0.22;
   const elong=hM>=wM?hM/wM:wM/hM;
   const aspect=Math.min(Math.max(elong*0.85,1.2),2.4);
   const cw=Math.sqrt(coreGIA/aspect)*sc, ch=cw*aspect;
-  // NE corner of proposed building (inner face, 92% offset)
-  const [coreNEx,coreNEy]=px(cLon+(lonMax-cLon)*0.92, cLat+(latMax-cLat)*0.92);
-  // Core rect: NE corner at coreNEx/coreNEy, extends W and S
-  // axisAngle=90 (N-S dominant) → rotation=0°, no transform needed
+  // Find true NE vertex: maximise (lon_normalised + lat_normalised)
+  const lonRange=lonMax-lonMin, latRange=latMax-latMin;
+  let _neScore=-Infinity, neVtx=p[0];
+  p.forEach(c=>{ const s=(c[0]-lonMin)/lonRange+(c[1]-latMin)/latRange; if(s>_neScore){_neScore=s;neVtx=c;} });
+  // Inner face of proposed building at NE vertex (99% scale inward)
+  const neInnerLon=cLon+(neVtx[0]-cLon)*0.99;
+  const neInnerLat=cLat+(neVtx[1]-cLat)*0.99;
+  const [coreNEx,coreNEy]=px(neInnerLon,neInnerLat);
+  // Core rect: top-right at NE corner, extends W and S (no rotation — axisAngle=90, rotate=0°)
 
   // ── Fetch OSM data ────────────────────────────────────────────────────────
   const pad=0.002; // ~160m
@@ -724,10 +731,13 @@ async function buildGroundFloorPlan(){
   <text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+13).toFixed(1)}"
     text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">${Math.round(coreGIA)}m²</text>`);
 
-  // ⑭ Road name labels from OSM (deduplicated, angle-matched)
+  // ⑭ Road name labels — major named roads only (primary/secondary/tertiary)
+  // Minor alleys, footways, service roads omitted at this scale
+  const majorHw=new Set(['primary','secondary','tertiary','pedestrian']);
   const labelled=new Set();
   roads.forEach(r=>{
     const name=r.tags?.name; if(!name||labelled.has(name)) return;
+    if(!majorHw.has(r.hw)) return; // skip minor roads
     labelled.add(name);
     const mid=r.pts[Math.floor(r.pts.length/2)]; if(!mid) return;
     const [lx,ly]=px(mid.lon,mid.lat);
