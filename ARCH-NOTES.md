@@ -247,3 +247,90 @@ Atriums are the design solution when a floor plate exceeds comfortable daylight/
 - Building Safety Act 2022 — higher risk buildings >18m
 - CIBSE Guide G — WC provision
 - *Nic Bornman direct input (2026-03-13)* — core ratios, position logic, lease span principles
+
+---
+
+## 10. MASSING STRATEGY — CONTEXT-DRIVEN SETBACKS
+
+> ✅ STANDARD FOR ALL SITES — agreed Nic Bornman 2026-03-14
+
+### Principle
+
+**Setbacks are justified by context, not applied by formula.**
+
+A massing that diminishes uniformly on all sides (the "wedding cake") is structurally clumsy and architecturally unconvincing. Stepped massing must be driven by site-specific reading of neighbours, heritage assets, views, and structural logic.
+
+---
+
+### Setback Logic — which faces hold, which recess
+
+For each site, assess the four principal faces before allocating setbacks:
+
+| Face condition | Default stance | Reason |
+|---|---|---|
+| Primary street frontage | **Hold** | Maintains street wall, continuity with neighbours |
+| Heritage asset sightline (Listed bldg, conservation area) | **Recess** | Primary face for setback — reduces perceived bulk from sensitive receptor |
+| Active secondary street | **Hold or minimal recession** | Preserves street enclosure, commercial animation |
+| Rear / party wall / service yard | **Recess** | Least visible, most flexibility |
+| Neighbouring tall building close by | **Hold or negotiate** | Mirror face often helps mutual shading balance; stepping away can increase mutual overshadowing |
+
+**Process:**
+1. Map the site — identify heritage assets within 200m, protected views, active frontages, secondary streets
+2. Identify the **primary receptor face** — which elevation is most visible from the sensitive asset?
+3. That face recesses. **All other faces hold** unless there is a specific, named reason.
+4. Document the reason for each face decision in the massing rationale narrative.
+
+---
+
+### Structural Logic — when does stepping make sense?
+
+Stepping is NOT free. Each step introduces:
+- A column transfer or outrigger (structural cost)
+- A change in structural grid (coordination cost)
+- A reduction in plate area (commercial cost — fewer NIA sqm)
+
+**When a step is justified:**
+- Planning requirement: protected view coridor, daylight/sunlight assessment, LVMF cone
+- Structural transfer already programmed: plant floor, sky lobby, podium crown — use it
+- Commercial: sky terrace creates premium identity floor, justifies rent uplift on floors above
+- Heritage: specific heritage view requires bulk reduction at a defined height
+
+**When a step is NOT needed:**
+- "It's what we always do" — not a reason
+- Making the tower "look slender" without wind/view justification
+- Equal reduction on all faces — usually means the context hasn't been read
+
+---
+
+### "Does the building need to get smaller as it goes up?"
+
+Not automatically. Assess per option:
+
+| Situation | Answer |
+|---|---|
+| Below 45m, street-engaged height | One step (at cornice height) often appropriate for planning legibility |
+| 45–80m, cluster context | Hold consistent plate unless specific view/daylight trigger. Consistency = structural and commercial efficiency |
+| 80m+, landmark scale | Stepping on selected faces (not all) can be argued. But if the cluster has consistent plates (22 Bishopsgate, Heron Tower), holding is defensible |
+| Structural transfer programmed (sky lobby, MEP floor) | Use it as the setback level — structurally rational, avoids additional transfer |
+
+**Key test:** *"What specific constraint forces this face to step at this height?"*
+If the answer is "nothing specific", hold the plate and argue it.
+
+---
+
+### Implementation in DevFeasibility
+
+- Each option has `podiumHeight`, `setbackM`, `towerFootprintPct`
+- 3D render uses two-box geometry: podium at full plate, tower with S/E recession only
+- `sbS = setbackM` (south — primary recession face in most London sites, heritage/daylight)
+- `sbE = setbackM × 0.6` (east — partial hold for street activity)
+- N and W faces always hold (adjust per site if context differs)
+- Each option page carries a **Massing Strategy** narrative paragraph explaining:
+  - Which faces hold and why (named specific context reason)
+  - What structural logic governs the step level
+  - Whether further diminution above the step is justified
+
+**This logic applies to all future sites — update face roles when adding a new site based on its specific heritage/view/frontage context.**
+
+---
+
