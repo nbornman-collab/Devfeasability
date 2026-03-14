@@ -142,6 +142,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
 .stat-val{font:800 14px var(--mono);color:var(--accent)}
 .stat-lbl{font:400 7px var(--sans);color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
 </head>
 <body>
 
@@ -272,7 +273,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
     <div style="margin-top:14px">
       <div class="drawing-label">3D Massing — Isometric SE View</div>
       <div class="drawing-wrap" style="background:#ffffff">
-        <svg id="massing-3d-svg" style="width:100%;display:block" viewBox="0 0 560 240"></svg>
+        <canvas id="massing-3d-canvas" style="width:100%;display:block;aspect-ratio:2.33/1"></canvas>
       </div>
       <div class="drawing-caption">Existing (grey) · New build (white) · Indicative massing · Not to scale</div>
     </div>
@@ -497,7 +498,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
   <div>
     <div class="drawing-label">3D Massing — Isometric SE View</div>
     <div class="drawing-wrap" style="background:#fff">
-      <svg id="iso-opt-a" style="width:100%;display:block" viewBox="0 0 560 200"></svg>
+      <canvas id="iso-opt-a" style="width:100%;display:block;aspect-ratio:2.8/1"></canvas>
     </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option A</span></div>
@@ -534,7 +535,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
   <div>
     <div class="drawing-label">3D Massing — Isometric SE View</div>
     <div class="drawing-wrap" style="background:#fff">
-      <svg id="iso-opt-b" style="width:100%;display:block" viewBox="0 0 560 200"></svg>
+      <canvas id="iso-opt-b" style="width:100%;display:block;aspect-ratio:2.8/1"></canvas>
     </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option B</span></div>
@@ -571,7 +572,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
   <div>
     <div class="drawing-label">3D Massing — Isometric SE View</div>
     <div class="drawing-wrap" style="background:#fff">
-      <svg id="iso-opt-c" style="width:100%;display:block" viewBox="0 0 560 200"></svg>
+      <canvas id="iso-opt-c" style="width:100%;display:block;aspect-ratio:2.8/1"></canvas>
     </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option C</span></div>
@@ -994,117 +995,141 @@ function buildMassingSectionSVG(svgId='section-svg', propH=D.potentialHeight){
 // Uses simplified rectangular footprint (avoids painter's algo issues with
 // irregular polygons). planS/scH tuned for 560×240 SVG.
 // svgId: target element, propH: proposed height (metres)
-function buildMassing3DSVG(svgId='massing-3d-svg', propH=D.potentialHeight){
-  const svg=document.getElementById(svgId);
-  if(!svg) return;
-  const VW=560, VH=240;
-  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
 
+// ── 3D Massing — Three.js WebGL (perspective camera, EdgesGeometry) ───────────
+// canvasId: <canvas> element; propH: proposed height in metres
+function buildMassing3DCanvas(canvasId, propH){
+  propH = propH || D.potentialHeight;
+  const canvas = document.getElementById(canvasId);
+  if(!canvas || !window.THREE) return;
+
+  const THREE = window.THREE;
   const lons=D.polygon.map(c=>c[0]), lats=D.polygon.map(c=>c[1]);
   const lonMin=Math.min(...lons), lonMax=Math.max(...lons);
   const latMin=Math.min(...lats), latMax=Math.max(...lats);
-  const wM=(lonMax-lonMin)*M_PER_LNG, hM=(latMax-latMin)*M_PER_LAT;
-  const existH=D.heightM;
+  const wM=(lonMax-lonMin)*M_PER_LNG; // ~42m E-W
+  const hM=(latMax-latMin)*M_PER_LAT; // ~63m N-S
+  const existH = D.heightM;           // 25m
+  const newH   = propH - existH;
 
-  // Use clean rectangle: half-dims from centroid
-  const ex=wM/2, ny=hM/2; // east extent, north extent
+  // Canvas physical size (2× for sharpness, CSS scales to container)
+  const W=1120, H=420;
+  canvas.width=W; canvas.height=H;
 
-  // Iso scale
-  const planS=1.6, scH=1.8;
-  const cx=VW*0.44, cy=VH*0.84;
-  function iso(x,y,z){
-    return [cx+(x-y)*planS, cy-((x+y)*planS*0.5+z*scH)];
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, preserveDrawingBuffer:true});
+  renderer.setSize(W, H, false);
+  renderer.setPixelRatio(1);
+  renderer.setClearColor(0xffffff, 1);
+  renderer.shadowMap.enabled = false;
+
+  const scene = new THREE.Scene();
+
+  // ── Camera: perspective, SE elevated (looking NW toward building) ──────────
+  const fov = 22;
+  const camera = new THREE.PerspectiveCamera(fov, W/H, 1, 5000);
+  const camR = Math.max(wM, hM, propH) * 4.2;
+  camera.position.set(camR, camR * 0.55, camR);
+  camera.lookAt(0, propH * 0.38, 0);
+
+  // ── Lighting ───────────────────────────────────────────────────────────────
+  scene.add(new THREE.AmbientLight(0xffffff, 0.50));
+
+  // Main sun: high NE (casts light on S and W faces → they appear lighter)
+  const sun = new THREE.DirectionalLight(0xffffff, 0.75);
+  sun.position.set(80, 160, 60);
+  scene.add(sun);
+
+  // Fill light: low from SW (lifts shadow faces slightly)
+  const fill = new THREE.DirectionalLight(0xffffff, 0.20);
+  fill.position.set(-60, 40, -80);
+  scene.add(fill);
+
+  // ── Ground plane ──────────────────────────────────────────────────────────
+  const gpGeo = new THREE.PlaneGeometry(wM*3.5, hM*3.5);
+  gpGeo.rotateX(-Math.PI/2);
+  const gpMat = new THREE.MeshLambertMaterial({color:0xd4d5dc});
+  scene.add(new THREE.Mesh(gpGeo, gpMat));
+
+  // ── Helper: box + edges ───────────────────────────────────────────────────
+  function addBox(w, h, d, cx, cy, cz, matColor, edgeColor){
+    const geo = new THREE.BoxGeometry(w, h, d);
+    const mesh = new THREE.Mesh(geo, new THREE.MeshPhongMaterial({
+      color: matColor, specular: 0x0a0a0a, shininess: 4
+    }));
+    mesh.position.set(cx, cy, cz);
+    scene.add(mesh);
+    const edges = new THREE.LineSegments(
+      new THREE.EdgesGeometry(geo),
+      new THREE.LineBasicMaterial({color: edgeColor})
+    );
+    edges.position.set(cx, cy, cz);
+    scene.add(edges);
+    return geo;
   }
 
-  // Rectangle corners (CW): NE, SE, SW, NW
-  // SE view: visible faces = east (NE→SE) and south (SE→SW)
-  const NE=[ex,ny], SE=[ex,-ny], SW=[-ex,-ny], NW=[-ex,ny];
+  // Existing zone: 0 → existH (grey)
+  addBox(wM, existH, hM, 0, existH/2, 0, 0x9098a8, 0x1a1d2e);
 
-  // Floor plate z-levels (every 4.2m, both zones)
-  const floors=[];
-  for(let h=4.2;h<propH;h+=4.2) floors.push(h);
+  // New build zone: existH → propH (light green)
+  addBox(wM, newH,   hM, 0, existH + newH/2, 0, 0x88b898, 0x1a1d2e);
 
-  // Colour palette — grey existing, light green new build
-  const C={
-    exist_E:'#6878a0',  exist_S:'#8898b8',  // existing grey
-    new_E:'#6a987a',    new_S:'#88b898',     // new build light green
-    top:'#c8e0c8',                           // roof (green-tinted light)
-    ground:'#d4d5dc',   gStroke:'#8a8d9a',
-    outline:'#1a1d2e',  dim:'#1a1d2e',
-    plate:'rgba(255,255,255,0.55)',          // floor plate lines
-  };
-
-  function quad(a,b,c,d,fill,stroke,sw){
-    return `<polygon points="${[a,b,c,d].map(p=>p.join(',')).join(' ')}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  // ── Floor plates — thin horizontal planes on all 4 sides ─────────────────
+  const floorStep = 4.2;
+  for(let fh = floorStep; fh < propH - 0.1; fh += floorStep){
+    const isExist = fh <= existH;
+    // Thin plane spanning full footprint
+    const fGeo = new THREE.PlaneGeometry(wM + 0.05, hM + 0.05);
+    fGeo.rotateX(-Math.PI/2);
+    const fMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff, transparent:true, opacity:0.30, depthWrite:false
+    });
+    const fMesh = new THREE.Mesh(fGeo, fMat);
+    fMesh.position.set(0, fh, 0);
+    scene.add(fMesh);
+    // Edge line across south face (most visible)
+    const pts=[
+      new THREE.Vector3(-wM/2, fh, hM/2),
+      new THREE.Vector3( wM/2, fh, hM/2)
+    ];
+    const lGeo = new THREE.BufferGeometry().setFromPoints(pts);
+    scene.add(new THREE.Line(lGeo, new THREE.LineBasicMaterial({
+      color: 0xffffff, transparent:true, opacity: isExist?0.35:0.45
+    })));
+    // And across east face
+    const pts2=[
+      new THREE.Vector3(wM/2, fh, -hM/2),
+      new THREE.Vector3(wM/2, fh,  hM/2)
+    ];
+    const lGeo2 = new THREE.BufferGeometry().setFromPoints(pts2);
+    scene.add(new THREE.Line(lGeo2, new THREE.LineBasicMaterial({
+      color: 0xffffff, transparent:true, opacity: isExist?0.35:0.45
+    })));
   }
-  function fline(x1,y1,x2,y2,col,sw,dash=''){
-    return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${col}" stroke-width="${sw}"${dash?` stroke-dasharray="${dash}"`:''}/>`
+
+  // ── Datum line at existH ──────────────────────────────────────────────────
+  // Dashed white line along south and east face edges at existH
+  // (THREE.js doesn't do native dashes on WebGL lines; use LineDashedMaterial)
+  function addDashedLine(p1, p2, col, dash, gap){
+    const geo = new THREE.BufferGeometry().setFromPoints([p1,p2]);
+    const mat = new THREE.LineDashedMaterial({color:col, dashSize:dash, gapSize:gap, linewidth:1});
+    const line = new THREE.Line(geo, mat);
+    line.computeLineDistances();
+    scene.add(line);
   }
+  addDashedLine(
+    new THREE.Vector3(-wM/2, existH, hM/2),
+    new THREE.Vector3( wM/2, existH, hM/2),
+    0xffffff, 1.5, 1
+  );
+  addDashedLine(
+    new THREE.Vector3(wM/2, existH,-hM/2),
+    new THREE.Vector3(wM/2, existH, hM/2),
+    0xffffff, 1.5, 1
+  );
 
-  const out=[];
-  out.push(`<rect width="${VW}" height="${VH}" fill="white"/>`);
-
-  // Ground shadow
-  const gpts=[NE,SE,SW,NW].map(p=>iso(p[0],p[1],0));
-  out.push(`<polygon points="${gpts.map(p=>p.join(',')).join(' ')}" fill="${C.ground}" stroke="${C.gStroke}" stroke-width="0.6"/>`);
-
-  // ── East face (NE→SE) — drawn first (further from SE viewer) ─────────────
-  // Existing zone (0→existH)
-  out.push(quad(iso(ex,ny,0),iso(ex,-ny,0),iso(ex,-ny,existH),iso(ex,ny,existH),C.exist_E,C.outline,0.7));
-  // New build zone (existH→propH)
-  out.push(quad(iso(ex,ny,existH),iso(ex,-ny,existH),iso(ex,-ny,propH),iso(ex,ny,propH),C.new_E,C.outline,0.8));
-  // Floor plates on east face
-  floors.forEach(h=>{
-    const [x1,y1]=iso(ex,ny,h), [x2,y2]=iso(ex,-ny,h);
-    out.push(fline(x1,y1,x2,y2,C.plate,0.5));
-  });
-  // Datum line at existH on east face
-  {const [x1,y1]=iso(ex,ny,existH),[x2,y2]=iso(ex,-ny,existH);
-   out.push(fline(x1,y1,x2,y2,'white',1,'4,2'));}
-
-  // ── South face (SE→SW) — drawn second (closer to SE viewer) ──────────────
-  // Existing zone
-  out.push(quad(iso(ex,-ny,0),iso(-ex,-ny,0),iso(-ex,-ny,existH),iso(ex,-ny,existH),C.exist_S,C.outline,0.7));
-  // New build zone
-  out.push(quad(iso(ex,-ny,existH),iso(-ex,-ny,existH),iso(-ex,-ny,propH),iso(ex,-ny,propH),C.new_S,C.outline,0.8));
-  // Floor plates on south face
-  floors.forEach(h=>{
-    const [x1,y1]=iso(ex,-ny,h), [x2,y2]=iso(-ex,-ny,h);
-    out.push(fline(x1,y1,x2,y2,C.plate,0.5));
-  });
-  // Datum at existH on south face
-  {const [x1,y1]=iso(ex,-ny,existH),[x2,y2]=iso(-ex,-ny,existH);
-   out.push(fline(x1,y1,x2,y2,'white',1,'4,2'));}
-
-  // ── Top face (propH) — drawn last ────────────────────────────────────────
-  out.push(quad(iso(ex,ny,propH),iso(ex,-ny,propH),iso(-ex,-ny,propH),iso(-ex,ny,propH),C.top,C.outline,0.8));
-
-  // ── Zone labels ──────────────────────────────────────────────────────────
-  // On south face, mid-height each zone
-  {const [lx,ly]=iso(0,-ny,existH*0.5);
-   out.push(`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white" opacity="0.8">EXISTING</text>`);}
-  {const [lx,ly]=iso(0,-ny,existH+(propH-existH)*0.5);
-   out.push(`<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white" opacity="0.8">NEW BUILD</text>`);}
-
-  // ── Dimension: total height on right of east face ─────────────────────────
-  const [ex0,ey0]=iso(ex,ny,0), [ex1,ey1]=iso(ex,ny,propH);
-  const [,eye]=iso(ex,ny,existH);
-  const dxOff=20;
-  out.push(`
-    <line x1="${ex0[0]+dxOff}" y1="${ey0[1]}" x2="${ex0[0]+dxOff}" y2="${ey1[1]}" stroke="${C.dim}" stroke-width="0.7"/>
-    <line x1="${ex0[0]+dxOff-3}" y1="${ey0[1]}" x2="${ex0[0]+dxOff+3}" y2="${ey0[1]}" stroke="${C.dim}" stroke-width="1"/>
-    <line x1="${ex0[0]+dxOff-3}" y1="${ey1[1]}" x2="${ex0[0]+dxOff+3}" y2="${ey1[1]}" stroke="${C.dim}" stroke-width="1"/>
-    <text x="${ex0[0]+dxOff+5}" y="${(ey0[1]+ey1[1])/2}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="${C.dim}">+${propH}m</text>
-    <line x1="${ex0[0]+dxOff-5}" y1="${eye[1]}" x2="${ex0[0]+dxOff+3}" y2="${eye[1]}" stroke="${C.dim}" stroke-width="0.6" stroke-dasharray="3,2"/>
-    <text x="${ex0[0]+dxOff+5}" y="${(ey0[1]+eye[1])/2}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#666">${existH}m</text>
-  `);
-
-  out.push(`<text x="${VW-6}" y="${VH-6}" text-anchor="end" font-family="Inter,sans-serif" font-size="6" fill="#999">ISOMETRIC · SE VIEW</text>`);
-  svg.innerHTML=out.join('\n');
+  renderer.render(scene, camera);
 }
 
-// ── Ground floor plan (static, no Overpass) — for option pages ───────────────
-// Uses rectangle-based context blocks (fast, no network call)
 function buildGFPlanStatic(svgId='gf-plan-static'){
   const svg=document.getElementById(svgId);
   if(!svg) return;
@@ -1186,16 +1211,17 @@ function buildGFPlanStatic(svgId='gf-plan-static'){
   `;
 }
 
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 buildGroundFloorPlan().catch(console.error);
 buildMassingSectionSVG();
-buildMassing3DSVG();
+buildMassing3DCanvas('massing-3d-canvas');
 fetch('/api/config').then(r=>r.json()).then(cfg=>buildContextMap(cfg.mapboxToken)).catch(()=>buildContextMap(null));
 
-// Option pages — each with static plan, section, and 3D at that height
-buildGFPlanStatic('gfp-opt-a'); buildMassingSectionSVG('sec-opt-a',42);  buildMassing3DSVG('iso-opt-a',42);
-buildGFPlanStatic('gfp-opt-b'); buildMassingSectionSVG('sec-opt-b',60);  buildMassing3DSVG('iso-opt-b',60);
-buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92);  buildMassing3DSVG('iso-opt-c',92);
+// Option pages
+buildGFPlanStatic('gfp-opt-a'); buildMassingSectionSVG('sec-opt-a',42);  buildMassing3DCanvas('iso-opt-a',42);
+buildGFPlanStatic('gfp-opt-b'); buildMassingSectionSVG('sec-opt-b',60);  buildMassing3DCanvas('iso-opt-b',60);
+buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92);  buildMassing3DCanvas('iso-opt-c',92);
 </script>
 </body>
 </html>
