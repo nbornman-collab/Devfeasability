@@ -507,6 +507,10 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
         <svg id="sec-opt-a" style="width:100%;display:block" viewBox="0 0 280 195"></svg>
       </div>
     </div>
+    <div style="margin-top:20px">
+      <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:10px">3D Massing — SE Isometric</div>
+      <canvas id="iso-opt-a" style="width:100%;display:block;aspect-ratio:2.8/1;border-radius:4px;overflow:hidden"></canvas>
+    </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option A</span></div>
 </div>
@@ -552,6 +556,10 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
         <svg id="sec-opt-b" style="width:100%;display:block" viewBox="0 0 280 195"></svg>
       </div>
     </div>
+    <div style="margin-top:20px">
+      <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:10px">3D Massing — SE Isometric</div>
+      <canvas id="iso-opt-b" style="width:100%;display:block;aspect-ratio:2.8/1;border-radius:4px;overflow:hidden"></canvas>
+    </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option B</span></div>
 </div>
@@ -596,6 +604,10 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:10px">Massing Section A–A</div>
         <svg id="sec-opt-c" style="width:100%;display:block" viewBox="0 0 280 195"></svg>
       </div>
+    </div>
+    <div style="margin-top:20px">
+      <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:10px">3D Massing — SE Isometric</div>
+      <canvas id="iso-opt-c" style="width:100%;display:block;aspect-ratio:2.8/1;border-radius:4px;overflow:hidden"></canvas>
     </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option C</span></div>
@@ -698,7 +710,7 @@ async function buildGroundFloorPlan(){
   let _neScore=-Infinity, neVtx=p[0];
   p.forEach(c=>{ const s=(c[0]-lonMin)/lonRange+(c[1]-latMin)/latRange; if(s>_neScore){_neScore=s;neVtx=c;} });
   // Inner face of proposed building at NE vertex (99% scale inward)
-  const neInnerLon=cLon+(neVtx[0]-cLon)*0.99;
+  const neInnerLon=cLon+(neVtx[0]-cLon)*0.72;
   const neInnerLat=cLat+(neVtx[1]-cLat)*0.99;
   const [coreNEx,coreNEy]=px(neInnerLon,neInnerLat);
   // Core rect: top-right at NE corner, extends W and S (no rotation — axisAngle=90, rotate=0°)
@@ -1215,7 +1227,9 @@ function buildGFPlanStatic(svgId='gf-plan-static'){
   const lonRange=lonMax-lonMin, latRange=latMax-latMin;
   let _s=-Infinity, neVtx=p[0];
   p.forEach(c=>{const s=(c[0]-lonMin)/lonRange+(c[1]-latMin)/latRange;if(s>_s){_s=s;neVtx=c;}});
-  const [coreNEx,coreNEy]=px(cLon+(neVtx[0]-cLon)*0.99,cLat+(neVtx[1]-cLat)*0.99);
+  // 0.72 factor: polygon has east-side notch — 0.99 pushes core through the wall
+  // 0.72 places core safely inside across full core height while remaining clearly NE
+  const [coreNEx,coreNEy]=px(cLon+(neVtx[0]-cLon)*0.72,cLat+(neVtx[1]-cLat)*0.72);
 
   const stN=18*sc, stE=12*sc, stS=10*sc, stW=10*sc;
   const sitePts=p.map(c=>px(c[0],c[1]).join(',')).join(' ');
@@ -1291,7 +1305,9 @@ buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92);
   s.src = 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js';
   s.onload = function(){
     buildMassing3DCanvas('massing-3d-canvas', REPORT_OPTS[1]);
-    // Option-specific 3D views removed — section drawings used instead
+    buildMassing3DCanvas('iso-opt-a', optA);
+    buildMassing3DCanvas('iso-opt-b', optB);
+    buildMassing3DCanvas('iso-opt-c', optC);
   };
   s.onerror = function(){ console.warn('Three.js CDN failed — 3D views unavailable'); };
   document.head.appendChild(s);
