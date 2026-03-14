@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Leadenhall Street — Development Feasibility Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a1d2e;
+    --secondary: #5a5d70;
+    --tertiary: #9fa2b0;
+    --light-bg: #f5f5f3;
+    --border: #e0e1e6;
+    --white: #ffffff;
+    --accent: #3d6bff;
+  }
+
+  html, body {
+    font-family: 'Inter', sans-serif;
+    background: #111;
+    color: var(--navy);
+  }
+
+  /* ── SLIDE SYSTEM ── */
+  .slide {
+    position: relative;
+    width: 100vw;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .slide + .slide { margin-top: 8px; }
+
+  /* slide branding footer */
+  .slide-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 32px;
+    right: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.62em;
+    color: var(--tertiary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .slide-footer .mark { color: var(--secondary); }
+  .slide-footer .num { font-family: 'JetBrains Mono', monospace; }
+
+  /* ── SLIDE 1: COVER ── */
+  #slide-1 {
+    background: var(--navy);
+    color: var(--white);
+    justify-content: center;
+    align-items: flex-start;
+    padding: 6% 8%;
+  }
+
+  .cover-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72em;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 20px;
+  }
+
+  .cover-title {
+    font-size: clamp(2.2rem, 5vw, 4.2rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+
+  .cover-subtitle {
+    font-size: clamp(0.85rem, 1.5vw, 1.1rem);
+    font-weight: 300;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.02em;
+    margin-bottom: 48px;
+  }
+
+  .cover-divider {
+    width: 48px;
+    height: 1px;
+    background: rgba(255,255,255,0.25);
+    margin-bottom: 48px;
+  }
+
+  .cover-stats {
+    display: flex;
+    gap: 64px;
+    margin-bottom: 56px;
+  }
+
+  .cover-stat { display: flex; flex-direction: column; gap: 6px; }
+
+  .cover-stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .cover-stat-label {
+    font-size: 0.72em;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .cover-divider-h {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    margin-bottom: 28px;
+  }
+
+  .cover-meta {
+    font-size: 0.72em;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  #slide-1 .slide-footer { color: rgba(255,255,255,0.25); }
+  #slide-1 .slide-footer .mark { color: rgba(255,255,255,0.4); }
+
+  /* ── SLIDES 2–5: CONTENT ── */
+  .slide-header {
+    padding: 28px 40px 0;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .slide-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62em;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--tertiary);
+    font-weight: 500;
+  }
+
+  .slide-title {
+    font-size: clamp(1rem, 1.8vw, 1.4rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+  }
+
+  .slide-body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    padding: 18px 40px 50px;
+    gap: 28px;
+  }
+
+  /* ── SLIDE 2: SITE CONTEXT ── */
+  .map-container {
+    position: relative;
+    flex: 0 0 55%;
+    background: var(--light-bg);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .map-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .map-fallback {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background: #dde0ea;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    color: var(--secondary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .map-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  .metrics-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .metric-card {
+    flex: 1;
+    background: var(--light-bg);
+    border-radius: 4px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+    font-weight: 600;
+    color: var(--navy);
+    white-space: nowrap;
+  }
+
+  .metric-label {
+    font-size: 0.72em;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  /* ── SLIDE 3: FINANCIAL ── */
+  .pro-forma-wrap {
+    flex: 0 0 54%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pro-forma-title {
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 10px;
+  }
+
+  table.pro-forma {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+  }
+
+  table.pro-forma th {
+    background: var(--navy);
+    color: var(--white);
+    padding: 7px 12px;
+    text-align: left;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 0.78em;
+  }
+
+  table.pro-forma td {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--navy);
+    vertical-align: middle;
+  }
+
+  table.pro-forma td:last-child {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+
+  table.pro-forma tr:nth-child(even) td { background: #f8f8f8; }
+
+  table.pro-forma .section-head td {
+    background: var(--light-bg);
+    font-weight: 600;
+    font-size: 0.75em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    padding-top: 8px;
+    border-bottom: none;
+  }
+
+  table.pro-forma .highlight td {
+    background: #eef1ff;
+    font-weight: 700;
+    color: var(--navy);
+    border-top: 1.5px solid var(--navy);
+  }
+
+  .financial-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .big-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .big-metric {
+    flex: 1;
+    background: var(--light-bg);
+    border-radius: 4px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .big-metric-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.4rem, 2.2vw, 2rem);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .big-metric-label {
+    font-size: 0.7em;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+
+  .cost-bar-wrap {
+    background: var(--light-bg);
+    border-radius: 4px;
+    padding: 14px 18px;
+  }
+
+  .cost-bar-title {
+    font-size: 0.65em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .cost-bar {
+    display: flex;
+    height: 28px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .bar-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62em;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .bar-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65em;
+    color: var(--secondary);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── SLIDE 4: DRAWINGS ── */
+  .drawings-left {
+    flex: 0 0 58%;
+    display: flex;
+    flex-direction: column;
+    background: var(--light-bg);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .drawings-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  .drawing-panel {
+    flex: 1;
+    background: var(--light-bg);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawing-label {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-size: 0.62em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    font-weight: 600;
+    background: rgba(245,245,243,0.9);
+    padding: 2px 6px;
+    border-radius: 2px;
+    z-index: 2;
+  }
+
+  .drawing-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ── SLIDE 5: PLANNING ── */
+  .planning-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .planning-col-title {
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .planning-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .planning-bullets li {
+    font-size: clamp(0.72rem, 0.95vw, 0.9rem);
+    color: var(--navy);
+    line-height: 1.55;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .planning-bullets li::before {
+    content: '—';
+    color: var(--tertiary);
+    font-weight: 300;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .planning-bullets .policy {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .design-intel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .intel-item {
+    background: var(--light-bg);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: clamp(0.7rem, 0.9vw, 0.86rem);
+    color: var(--navy);
+    line-height: 1.45;
+  }
+
+  .intel-item strong {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+
+  .next-steps {
+    flex: 1;
+  }
+
+  .next-steps-title {
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 12px;
+  }
+
+  .next-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: clamp(0.72rem, 0.9vw, 0.86rem);
+    color: var(--navy);
+    line-height: 1.4;
+  }
+
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8em;
+    font-weight: 600;
+    color: var(--accent);
+    width: 20px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    html, body { background: white; }
+    .slide { margin: 0 !important; width: 297mm; height: 167.0625mm; aspect-ratio: unset; page-break-after: always; break-after: page; }
+    .slide + .slide { margin-top: 0 !important; }
+    #print-btn { display: none !important; }
+    @page { size: 297mm 167.0625mm; margin: 0; }
+  }
+
+  /* ── PRINT BUTTON ── */
+  #print-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8em;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 9999;
+  }
+  #print-btn:hover { background: #2d3150; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 1: COVER
+══════════════════════════════════════════════ -->
+<section class="slide" id="slide-1">
+  <div class="cover-eyebrow">Development Feasibility Assessment</div>
+  <div class="cover-title">100 LEADENHALL<br>STREET</div>
+  <div class="cover-subtitle">Tier 2 Massing Study · City of London EC3A 3BP</div>
+  <div class="cover-divider"></div>
+  <div class="cover-stats">
+    <div class="cover-stat">
+      <span class="cover-stat-value">60m</span>
+      <span class="cover-stat-label">Proposed Height</span>
+    </div>
+    <div class="cover-stat">
+      <span class="cover-stat-value">14</span>
+      <span class="cover-stat-label">Floors</span>
+    </div>
+    <div class="cover-stat">
+      <span class="cover-stat-value">1,551m²</span>
+      <span class="cover-stat-label">Site Area</span>
+    </div>
+  </div>
+  <div class="cover-divider-h"></div>
+  <div class="cover-meta">D&amp;A Studio &nbsp;·&nbsp; March 2026 &nbsp;·&nbsp; DA-EC3A3BP-X7F2K</div>
+  <div class="slide-footer">
+    <span class="mark">D&amp;A Studio</span>
+    <span class="num">01 / 05</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 2: SITE CONTEXT
+══════════════════════════════════════════════ -->
+<section class="slide" id="slide-2">
+  <div class="slide-header">
+    <span class="slide-label">02</span>
+    <span class="slide-title">Site Context</span>
+  </div>
+  <div class="slide-body">
+    <div class="map-container" id="map-container">
+      <div class="map-fallback" id="map-fallback" style="display:flex;">
+        <svg id="site-map-svg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <img id="map-img" src="" alt="Site Context Map" style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0;">
+      <svg id="map-overlay-svg" class="map-overlay" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></svg>
+    </div>
+
+    <div class="metrics-panel">
+      <div class="metric-card">
+        <span class="metric-value">1,551 m²</span>
+        <span class="metric-label">Plot Area</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value">~42m × 63m</span>
+        <span class="metric-label">Approximate Dimensions</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value" style="color:var(--secondary)">6F / 25m</span>
+        <span class="metric-label">Current Height</span>
+      </div>
+      <div class="metric-card" style="background:#eef1ff;">
+        <span class="metric-value">14F / 60m</span>
+        <span class="metric-label">Proposed Height</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value">15,190 m²</span>
+        <span class="metric-label">GIA (Gross Internal Area)</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value">12,152 m²</span>
+        <span class="metric-label">NIA (Net Internal Area)</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-value">6a</span>
+        <span class="metric-label">PTAL Rating</span>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="mark">D&amp;A Studio</span>
+    <span class="num">02 / 05</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 3: FINANCIAL CASE
+══════════════════════════════════════════════ -->
+<section class="slide" id="slide-3">
+  <div class="slide-header">
+    <span class="slide-label">03</span>
+    <span class="slide-title">Financial Case — Development Pro Forma</span>
+  </div>
+  <div class="slide-body">
+    <div class="pro-forma-wrap">
+      <table class="pro-forma">
+        <thead>
+          <tr><th>Line Item</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr class="section-head"><td colspan="2">Area Schedule</td></tr>
+          <tr><td>Gross Internal Area (GIA)</td><td>15,190 m²</td></tr>
+          <tr><td>Net Internal Area (NIA)</td><td>12,152 m²</td></tr>
+
+          <tr class="section-head"><td colspan="2">Income</td></tr>
+          <tr><td>Office rent</td><td>£673 /m²</td></tr>
+          <tr><td>Gross Estimated Rental Value</td><td>£8.18M pa</td></tr>
+          <tr><td>Net Initial Yield (NIY)</td><td>4.50%</td></tr>
+          <tr class="highlight"><td>Gross Development Value (GDV)</td><td>£181.8M</td></tr>
+
+          <tr class="section-head"><td colspan="2">Costs</td></tr>
+          <tr><td>Construction (Base build)</td><td>£48.6M</td></tr>
+          <tr><td>Demolition + Prelims</td><td>£4.5M</td></tr>
+          <tr><td>Professional fees</td><td>£7.3M</td></tr>
+          <tr><td>Finance costs</td><td>£10.8M</td></tr>
+
+          <tr class="section-head"><td colspan="2">Appraisal</td></tr>
+          <tr><td>Developer profit</td><td>£36.4M</td></tr>
+          <tr class="highlight"><td>Residual Land Value (RLV)</td><td>£74.2M</td></tr>
+          <tr><td>Existing Use Value (EUV)</td><td>£25.0M</td></tr>
+          <tr><td>Development Uplift</td><td>£49.2M</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="financial-right">
+      <div class="big-metrics">
+        <div class="big-metric">
+          <div class="big-metric-value">£181.8M</div>
+          <div class="big-metric-label">Gross Development Value</div>
+        </div>
+        <div class="big-metric">
+          <div class="big-metric-value">£74.2M</div>
+          <div class="big-metric-label">Residual Land Value</div>
+        </div>
+        <div class="big-metric" style="background:#eef1ff;">
+          <div class="big-metric-value">27%</div>
+          <div class="big-metric-label">Profit on Cost</div>
+        </div>
+      </div>
+
+      <div class="cost-bar-wrap">
+        <div class="cost-bar-title">Cost / Profit Split (GDV = £181.8M)</div>
+        <div class="cost-bar">
+          <!-- Construction 48.6 = 26.7% -->
+          <div class="bar-seg" style="width:26.7%; background:#5a5d70;">£48.6M</div>
+          <!-- Demo+Prelims 4.5 = 2.5% -->
+          <div class="bar-seg" style="width:2.5%; background:#7880a0; font-size:0;"></div>
+          <!-- Prof fees 7.3 = 4.0% -->
+          <div class="bar-seg" style="width:4.0%; background:#9098b8; font-size:0;"></div>
+          <!-- Finance 10.8 = 5.9% -->
+          <div class="bar-seg" style="width:5.9%; background:#aeb5cc;">£10.8M</div>
+          <!-- Developer profit 36.4 = 20.0% -->
+          <div class="bar-seg" style="width:20.0%; background:#3d6bff;">£36.4M</div>
+          <!-- RLV 74.2 = 40.8% -->
+          <div class="bar-seg" style="flex:1; background:#1a1d2e;">£74.2M RLV</div>
+        </div>
+        <div class="bar-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#5a5d70;"></div>Construction</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#7880a0;"></div>Demo+Prelims</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#9098b8;"></div>Prof. Fees</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#aeb5cc;"></div>Finance</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#3d6bff;"></div>Profit</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#1a1d2e;"></div>RLV</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="mark">D&amp;A Studio</span>
+    <span class="num">03 / 05</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 4: DRAWINGS
+══════════════════════════════════════════════ -->
+<section class="slide" id="slide-4">
+  <div class="slide-header">
+    <span class="slide-label">04</span>
+    <span class="slide-title">Massing Drawings</span>
+  </div>
+  <div class="slide-body">
+    <div class="drawings-left">
+      <span class="drawing-label">3D Isometric — SE View</span>
+      <svg id="iso-svg" class="drawing-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="drawings-right">
+      <div class="drawing-panel">
+        <span class="drawing-label">Ground Floor Plan</span>
+        <svg id="plan-svg" class="drawing-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="drawing-panel">
+        <span class="drawing-label">Section A–A (W–E)</span>
+        <svg id="section-svg" class="drawing-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="mark">D&amp;A Studio</span>
+    <span class="num">04 / 05</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 5: PLANNING & CONCLUSIONS
+══════════════════════════════════════════════ -->
+<section class="slide" id="slide-5">
+  <div class="slide-header">
+    <span class="slide-label">05</span>
+    <span class="slide-title">Planning Context &amp; Conclusions</span>
+  </div>
+  <div class="slide-body">
+    <div class="planning-col">
+      <div class="planning-col-title">Planning Policy Framework</div>
+      <ul class="planning-bullets">
+        <li>
+          <span>
+            <span class="policy">CS1 CoLP 2040</span> — City of London Local Plan 2040, Policy CS1: Tall Buildings supports intensification in the Eastern Cluster
+          </span>
+        </li>
+        <li>
+          <span>
+            Site within the <strong>Eastern Cluster</strong> tall building zone — tall buildings supported in principle subject to design quality and heritage assessment
+          </span>
+        </li>
+        <li>
+          <span>
+            <strong>Leadenhall Market</strong> Grade II* — 120m NW. Townscape &amp; Visual Impact Assessment (TVIA) required; views from and to the market to be protected
+          </span>
+        </li>
+        <li>
+          <span>
+            <strong>Lloyd's of London</strong> Grade I — 80m E. Daylight and sunlight sensitivity; BRE Guidelines assessment mandatory for consented scheme
+          </span>
+        </li>
+        <li>
+          <span>
+            <span class="policy">BREEAM Outstanding</span> target required for major City of London office consent (Pol ENV1); onsite renewable energy strategy expected
+          </span>
+        </li>
+        <li>
+          <span>
+            <span class="policy">PTAL 6a</span> — Highest public transport accessibility. Zero car parking; Class E cycle parking (1 space per 2 employees) mandatory (CoLP T4)
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="planning-col" style="padding-left: 24px; border-left: 1px solid var(--border);">
+      <div class="planning-col-title">Design Intelligence</div>
+      <div class="design-intel">
+        <div class="intel-item">
+          <strong>2.4×</strong> FAR vs cluster benchmark — site is significantly underbuilt relative to neighbouring towers; strong planning rationale for intensification
+        </div>
+        <div class="intel-item">
+          <strong>22% GIA</strong> core efficiency — market standard for Grade A City office; net:gross ratio of 80% achievable with current massing
+        </div>
+        <div class="intel-item">
+          <strong>7m+ clear lease span</strong> on minimum 2 faces achieved with proposed massing — compliant with CoLP minimum leasable floorplate requirement
+        </div>
+      </div>
+
+      <div class="next-steps">
+        <div class="next-steps-title">Recommended Next Steps</div>
+        <div class="next-step">
+          <span class="step-num">01</span>
+          <span>Pre-application meeting with City of London Planning Department — establish heritage and massing parameters early</span>
+        </div>
+        <div class="next-step">
+          <span class="step-num">02</span>
+          <span>TVIA + daylight/sunlight assessment — commission specialist heritage and environmental consultants</span>
+        </div>
+        <div class="next-step">
+          <span class="step-num">03</span>
+          <span>RIBA Stage 1 design development — refine massing, establish core layout, and develop sustainability strategy to BREEAM Outstanding pathway</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="mark">D&amp;A Studio</span>
+    <span class="num">05 / 05</span>
+  </div>
+</section>
+
+<button id="print-btn" onclick="window.print()">⬇ Print / PDF</button>
+
+<script>
+// ══════════════════════════════════════════════
+// SITE DATA
+// ══════════════════════════════════════════════
+const SITE_COORDS_100L=[
+  [-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,51.51396],
+  [-0.0799754,51.5136468],[-0.079809,51.5136257],[-0.0798425,51.5135377],
+  [-0.0798828,51.513445],[-0.0804144,51.5135131],[-0.0803568,51.5136783],
+  [-0.0802864,51.5136687],[-0.0802571,51.5137575],[-0.080298,51.5137608],
+  [-0.0802591,51.5138813],[-0.0803085,51.5138886],[-0.0803056,51.5138968],
+  [-0.0802763,51.5140146]
+];
+
+const D = {
+  lat: 51.5137673, lng: -0.0801551,
+  polygon: SITE_COORDS_100L,
+  plotArea: 1551, heightM: 25, potentialHeight: 60,
+  address: '100 Leadenhall Street'
+};
+
+const M_PER_LNG = 69270, M_PER_LAT = 111320;
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+function svgEl(tag, attrs={}) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+function polyToMetres(coords) {
+  // Convert lon/lat to local metres (x=east, y=north)
+  const refLng = D.lng, refLat = D.lat;
+  return coords.map(([lng, lat]) => [
+    (lng - refLng) * M_PER_LNG,
+    (lat - refLat) * M_PER_LAT
+  ]);
+}
+
+// ══════════════════════════════════════════════
+// SLIDE 2: MAP
+// ══════════════════════════════════════════════
+async function initMap() {
+  try {
+    const res = await fetch('/api/config');
+    if (!res.ok) throw new Error('no config');
+    const cfg = await res.json();
+    const token = cfg.mapboxToken || cfg.MAPBOX_TOKEN || cfg.mapbox_token;
+    if (!token) throw new Error('no token');
+
+    const imgUrl = `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/-0.0801551,51.5137673,16,0/600x338@2x?access_token=${token}`;
+    const img = document.getElementById('map-img');
+    img.onload = () => {
+      img.style.display = 'block';
+      document.getElementById('map-fallback').style.display = 'none';
+      drawMapOverlay();
+    };
+    img.onerror = () => drawStaticMapFallback();
+    img.src = imgUrl;
+  } catch(e) {
+    drawStaticMapFallback();
+  }
+}
+
+function drawStaticMapFallback() {
+  const container = document.getElementById('map-fallback');
+  container.style.display = 'flex';
+  const svg = document.getElementById('site-map-svg');
+  const W = container.offsetWidth || 600, H = container.offsetHeight || 338;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  // Background
+  svg.appendChild(svgEl('rect', {width:W, height:H, fill:'#dde0ea'}));
+
+  // Label
+  const txt = svgEl('text', {x:W/2, y:H*0.4, 'text-anchor':'middle', fill:'#5a5d70',
+    'font-family':'Inter,sans-serif', 'font-size':'14', 'letter-spacing':'2',
+    'text-transform':'uppercase'});
+  txt.textContent = 'SITE CONTEXT MAP';
+  svg.appendChild(txt);
+
+  const sub = svgEl('text', {x:W/2, y:H*0.4+22, 'text-anchor':'middle', fill:'#9fa2b0',
+    'font-family':'JetBrains Mono,monospace', 'font-size':'11'});
+  sub.textContent = '51.5138°N  0.0802°W';
+  svg.appendChild(sub);
+
+  // Draw site polygon over fallback
+  drawSiteOnSVG(svg, W, H);
+}
+
+function drawSiteOnSVG(svg, W, H) {
+  const metres = polyToMetres(SITE_COORDS_100L);
+  const xs = metres.map(p=>p[0]), ys = metres.map(p=>p[1]);
+  const minX=Math.min(...xs), maxX=Math.max(...xs), minY=Math.min(...ys), maxY=Math.max(...ys);
+  const mW=maxX-minX, mH=maxY-minY;
+  const sc = Math.min(W*0.35/mW, H*0.35/mH);
+  const cx=W/2, cy=H/2;
+
+  const pts = metres.map(([x,y]) => {
+    const px = cx + (x-minX-mW/2)*sc;
+    const py = cy - (y-minY-mH/2)*sc;
+    return `${px},${py}`;
+  }).join(' ');
+
+  svg.appendChild(svgEl('polygon', {points:pts, fill:'rgba(26,29,46,0.15)',
+    stroke:'#1a1d2e', 'stroke-width':'2', 'stroke-linejoin':'round'}));
+}
+
+function drawMapOverlay() {
+  const cont = document.getElementById('map-container');
+  const svg = document.getElementById('map-overlay-svg');
+  const W = cont.offsetWidth, H = cont.offsetHeight;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  // For the Mapbox static image at zoom 16, centre -0.0801551,51.5137673
+  // pixel scale at zoom 16 ~ 156543 * cos(lat) / 2^zoom metres/pixel
+  const zoom = 16;
+  const latRad = D.lat * Math.PI / 180;
+  const mpp = 156543.03 * Math.cos(latRad) / Math.pow(2, zoom) * (600/W); // adjust for display size
+  // Actually compute proper scale for 600px wide image displayed at W pixels
+  const imgW = 600, imgH = 338;
+  const displayScale = W / imgW;
+  const mppImg = 156543.03 * Math.cos(latRad) / Math.pow(2, zoom) / 2; // @2x
+
+  const cx = W / 2, cy = H / 2;
+
+  const metres = polyToMetres(SITE_COORDS_100L);
+  const pts = metres.map(([mx, my]) => {
+    const px = cx + mx / mppImg * displayScale;
+    const py = cy - my / mppImg * displayScale;
+    return `${px.toFixed(1)},${py.toFixed(1)}`;
+  }).join(' ');
+
+  svg.appendChild(svgEl('polygon', {
+    points: pts,
+    fill: 'rgba(26,29,46,0.18)',
+    stroke: '#1a1d2e',
+    'stroke-width': '2',
+    'stroke-linejoin': 'round'
+  }));
+
+  // Site label
+  const cenX = cx, cenY = cy - 16;
+  const lbl = svgEl('text', {x:cenX, y:cenY, 'text-anchor':'middle',
+    fill:'#1a1d2e', 'font-family':'JetBrains Mono,monospace', 'font-size':'11',
+    'font-weight':'600', 'letter-spacing':'1'});
+  lbl.textContent = '100 LEADENHALL';
+  svg.appendChild(lbl);
+}
+
+// ══════════════════════════════════════════════
+// SLIDE 4: ISOMETRIC SVG
+// ══════════════════════════════════════════════
+function buildIso() {
+  const svgEl2 = document.getElementById('iso-svg');
+  const bbox = svgEl2.getBoundingClientRect();
+  const VW = bbox.width || 500, VH = bbox.height || 380;
+  svgEl2.setAttribute('viewBox', `0 0 ${VW} ${VH}`);
+
+  const planS = 1.6, scH = 1.8;
+  const cx = VW * 0.46, cy = VH * 0.82;
+  const existH = D.heightM; // 25m
+  const propH = D.potentialHeight; // 60m
+
+  // Convert polygon to local metres
+  const poly = polyToMetres(SITE_COORDS_100L);
+  const xs = poly.map(p=>p[0]), ys = poly.map(p=>p[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+
+  // Scale to fit reasonably
+  const siteW = maxX - minX, siteH = maxY - minY;
+  const fitScale = Math.min(VW * 0.28 / siteW, VH * 0.22 / siteH);
+  const scaled = poly.map(([x, y]) => [(x - minX - siteW/2) * fitScale, (y - minY - siteH/2) * fitScale]);
+  const existSVGH = existH * fitScale * scH / planS;
+  const propSVGH = propH * fitScale * scH / planS;
+
+  function iso(x, y, z) {
+    const sx = (x - y) * planS;
+    const sy = -((x + y) * planS * 0.5 + z * scH);
+    return [cx + sx, cy + sy];
+  }
+
+  const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  bg.setAttribute('width', VW); bg.setAttribute('height', VH); bg.setAttribute('fill', '#f5f5f3');
+  svgEl2.appendChild(bg);
+
+  const n = scaled.length - 1; // last == first for closed polygon
+  const faces = [];
+
+  // Helper: signed area of 2D polygon (positive = CCW in screen space)
+  function signedArea(pts) {
+    let a = 0;
+    for (let i = 0; i < pts.length - 1; i++) {
+      a += pts[i][0] * pts[i+1][1] - pts[i+1][0] * pts[i][1];
+    }
+    return a / 2;
+  }
+
+  // For each edge, build walls
+  for (let i = 0; i < n; i++) {
+    const [x1, y1] = scaled[i];
+    const [x2, y2] = scaled[(i + 1) % n];
+
+    // Outward normal for CW polygon
+    const nx = -(y2 - y1);
+    const ny = x2 - x1;
+
+    // Visible from SE if -(P2y-P1y) - (P2x-P1x) > 0
+    // i.e. nx - ny > 0 (for SE viewer direction)
+    const visible = (nx - ny) > 0;
+    if (!visible) continue;
+
+    // Depth key for painter's sort (average of corners projected)
+    // Use (cx-cy) of midpoint in metric space
+    const midX = (x1 + x2) / 2;
+    const midY = (y1 + y2) / 2;
+    const depthKey = midX - midY;
+
+    // Determine face colour based on normal direction
+    // east-ish: nx > 0, ny ~ 0 → east face
+    // south-ish: ny < 0 → south face
+    const ang = Math.atan2(ny, nx) * 180 / Math.PI;
+    // ang: east=0, north=90, west=180, south=-90
+
+    // Build existing zone wall (0 → existH)
+    {
+      const [p1] = [iso(x1, y1, 0)];
+      const [p2] = [iso(x2, y2, 0)];
+      const [p3] = [iso(x2, y2, existH * fitScale)];
+      const [p4] = [iso(x1, y1, existH * fitScale)];
+      const isEast = Math.abs(ang) < 90;
+      const fill = isEast ? '#7880a0' : '#9098b8';
+      faces.push({depthKey, pts:[p1,p2,p3,p4], fill, zone:'exist', edge:[x1,y1,x2,y2]});
+    }
+
+    // Build new build zone wall (existH → propH)
+    {
+      const [p1] = [iso(x1, y1, existH * fitScale)];
+      const [p2] = [iso(x2, y2, existH * fitScale)];
+      const [p3] = [iso(x2, y2, propH * fitScale)];
+      const [p4] = [iso(x1, y1, propH * fitScale)];
+      const isEast = Math.abs(ang) < 90;
+      const fill = isEast ? '#c8ccd8' : '#eceef4';
+      faces.push({depthKey: depthKey - 0.001, pts:[p1,p2,p3,p4], fill, zone:'new', edge:[x1,y1,x2,y2]});
+    }
+  }
+
+  // Roof face at propH
+  {
+    const roofPts = scaled.slice(0, n).map(([x, y]) => iso(x, y, propH * fitScale));
+    const depthKey = -99999; // front face (top)
+    faces.push({depthKey, pts: roofPts, fill: '#ffffff', zone: 'roof', stroke: '#c8ccd8'});
+  }
+
+  // Sort by depthKey ascending (back to front)
+  faces.sort((a, b) => a.depthKey - b.depthKey);
+
+  for (const face of faces) {
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    poly.setAttribute('points', face.pts.map(p => p.join(',')).join(' '));
+    poly.setAttribute('fill', face.fill);
+    poly.setAttribute('stroke', face.stroke || 'rgba(255,255,255,0.15)');
+    poly.setAttribute('stroke-width', '0.5');
+    svgEl2.appendChild(poly);
+  }
+
+  // Datum dashed line at existH on each visible wall face
+  for (let i = 0; i < n; i++) {
+    const [x1, y1] = scaled[i];
+    const [x2, y2] = scaled[(i + 1) % n];
+    const nx = -(y2 - y1), ny = x2 - x1;
+    const visible = (nx - ny) > 0;
+    if (!visible) continue;
+
+    const [da] = [iso(x1, y1, existH * fitScale)];
+    const [db] = [iso(x2, y2, existH * fitScale)];
+    const dline = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    dline.setAttribute('x1', da[0]); dline.setAttribute('y1', da[1]);
+    dline.setAttribute('x2', db[0]); dline.setAttribute('y2', db[1]);
+    dline.setAttribute('stroke', 'rgba(255,255,255,0.7)');
+    dline.setAttribute('stroke-width', '1.2');
+    dline.setAttribute('stroke-dasharray', '4 3');
+    svgEl2.appendChild(dline);
+  }
+
+  // Dimension annotations
+  // Find rightmost visible point at top
+  let rightX = -Infinity, rightPt60, rightPt25, rightBase;
+  for (let i = 0; i < n; i++) {
+    const [x, y] = scaled[i];
+    const pt = iso(x, y, 0);
+    if (pt[0] > rightX) {
+      rightX = pt[0];
+      rightPt60 = iso(x, y, propH * fitScale);
+      rightPt25 = iso(x, y, existH * fitScale);
+      rightBase = pt;
+    }
+  }
+
+  // +60m annotation
+  const dimX = rightX + 22;
+  const line60 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  line60.setAttribute('x1', dimX); line60.setAttribute('y1', rightPt60[1]);
+  line60.setAttribute('x2', dimX); line60.setAttribute('y2', rightBase[1]);
+  line60.setAttribute('stroke', '#9fa2b0'); line60.setAttribute('stroke-width', '1');
+  svgEl2.appendChild(line60);
+
+  const txt60 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  txt60.setAttribute('x', dimX + 5); txt60.setAttribute('y', rightPt60[1] - 4);
+  txt60.setAttribute('fill', '#5a5d70'); txt60.setAttribute('font-family', 'JetBrains Mono,monospace');
+  txt60.setAttribute('font-size', '10'); txt60.setAttribute('font-weight', '600');
+  txt60.textContent = '+60m';
+  svgEl2.appendChild(txt60);
+
+  const txt25 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  txt25.setAttribute('x', dimX + 5); txt25.setAttribute('y', rightPt25[1] - 4);
+  txt25.setAttribute('fill', '#9fa2b0'); txt25.setAttribute('font-family', 'JetBrains Mono,monospace');
+  txt25.setAttribute('font-size', '9');
+  txt25.textContent = '25m';
+  svgEl2.appendChild(txt25);
+
+  // Tick marks on dim line
+  for (const [px, py] of [[dimX, rightPt60[1]], [dimX, rightPt25[1]], [dimX, rightBase[1]]]) {
+    const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    tick.setAttribute('x1', px-4); tick.setAttribute('y1', py);
+    tick.setAttribute('x2', px+4); tick.setAttribute('y2', py);
+    tick.setAttribute('stroke', '#9fa2b0'); tick.setAttribute('stroke-width', '1');
+    svgEl2.appendChild(tick);
+  }
+
+  // Drawing title
+  const titleTxt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  titleTxt.setAttribute('x', VW/2); titleTxt.setAttribute('y', VH - 10);
+  titleTxt.setAttribute('text-anchor', 'middle'); titleTxt.setAttribute('fill', '#9fa2b0');
+  titleTxt.setAttribute('font-family', 'JetBrains Mono,monospace'); titleTxt.setAttribute('font-size', '9');
+  titleTxt.setAttribute('letter-spacing', '1');
+  titleTxt.textContent = 'ISO-SE · NTS';
+  svgEl2.appendChild(titleTxt);
+}
+
+// ══════════════════════════════════════════════
+// SLIDE 4: GROUND FLOOR PLAN
+// ══════════════════════════════════════════════
+function buildPlan() {
+  const svg = document.getElementById('plan-svg');
+  const bbox = svg.getBoundingClientRect();
+  const VW = bbox.width || 300, VH = bbox.height || 180;
+  svg.setAttribute('viewBox', `0 0 ${VW} ${VH}`);
+
+  // Background
+  svg.appendChild(svgEl('rect', {width:VW, height:VH, fill:'#e8eaee'}));
+
+  const metres = polyToMetres(SITE_COORDS_100L);
+  const xs = metres.map(p=>p[0]), ys = metres.map(p=>p[1]);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const wM = maxX - minX, hM = maxY - minY;
+
+  // Padding (in metres)
+  const padN=42, padS=28, padE=34, padW=28;
+  const annotH = 24;
+  const sc = Math.min((VW-8)/(wM+padW+padE), (VH-annotH-5)/(hM+padN+padS));
+
+  // Origin offset: bottom-left of site content area
+  const totalW = (wM + padW + padE) * sc;
+  const totalH = (hM + padN + padS) * sc;
+  const offX = (VW - totalW) / 2 + padW * sc;
+  const offY = (VH - annotH - totalH) / 2 + padN * sc + annotH;
+
+  function toSVG(mx, my) {
+    return [offX + (mx - minX) * sc, offY + (maxY - my) * sc];
+  }
+
+  // Site polygon (light grey)
+  const sitePts = metres.map(([x,y]) => toSVG(x,y).join(',')).join(' ');
+  svg.appendChild(svgEl('polygon', {points:sitePts, fill:'#d4d7df',
+    stroke:'#9fa2b0', 'stroke-width':'0.8', 'stroke-linejoin':'round'}));
+
+  // Building outline (99% scale from centroid)
+  const cenX = (minX + maxX) / 2, cenY = (minY + maxY) / 2;
+  const bldPts = metres.map(([x,y]) => {
+    const nx = cenX + (x - cenX) * 0.99;
+    const ny = cenY + (y - cenY) * 0.99;
+    return toSVG(nx, ny).join(',');
+  }).join(' ');
+  svg.appendChild(svgEl('polygon', {points:bldPts, fill:'#ffffff',
+    stroke:'#1a1d2e', 'stroke-width':'1.2', 'stroke-linejoin':'round'}));
+
+  // Core — NE-pinned, 22% of GIA
+  // Find NE vertex: max lon_norm + lat_norm → max (x + y) in our metric space
+  let neIdx = 0, maxSum = -Infinity;
+  metres.forEach(([x,y], i) => {
+    if (x + y > maxSum) { maxSum = x + y; neIdx = i; }
+  });
+  const [neX, neY] = metres[neIdx];
+  // Core area ≈ 22% of GIA. GIA ≈ plotArea * floors / ... use proportional
+  // Core footprint ≈ 0.22 * plotArea (per floor). sqrt for square core
+  const coreArea = D.plotArea * 0.22;
+  const coreW = Math.sqrt(coreArea) * 1.3 * sc; // slightly rectangular
+  const coreH = Math.sqrt(coreArea) * 0.77 * sc;
+  const [cneX, cneY] = toSVG(neX, neY);
+  // Offset slightly from NE vertex to keep inside building
+  const cx2 = cneX - coreW * 0.5 - 8 * sc;
+  const cy2 = cneY + coreH * 0.1;
+  svg.appendChild(svgEl('rect', {x:cx2, y:cy2, width:coreW, height:coreH,
+    fill:'#c8ccd8', stroke:'#1a1d2e', 'stroke-width':'0.8'}));
+
+  // Core hatch lines
+  for (let i = 0; i <= 3; i++) {
+    const lx = cx2 + (i/3) * coreW;
+    const line = svgEl('line', {x1:lx, y1:cy2, x2:lx, y2:cy2+coreH,
+      stroke:'#9fa2b0', 'stroke-width':'0.5'});
+    svg.appendChild(line);
+  }
+
+  // Street labels
+  // LEADENHALL STREET — N of site
+  const [sNx1] = toSVG(minX, maxY); const [sNx2] = toSVG(maxX, maxY);
+  const midNX = (sNx1 + sNx2) / 2;
+  const northLabelY = toSVG(minX, maxY)[1] - padN * sc * 0.45;
+  const stTxt = svgEl('text', {x:midNX, y:northLabelY, 'text-anchor':'middle',
+    fill:'#5a5d70', 'font-family':'Inter,sans-serif', 'font-size':'7',
+    'letter-spacing':'0.8', 'text-transform':'uppercase', 'font-weight':'500'});
+  stTxt.textContent = 'LEADENHALL STREET';
+  svg.appendChild(stTxt);
+
+  // LIME STREET — E of site (rotated)
+  const [lsY1] = toSVG(maxX, minY); const [lsY2] = toSVG(maxX, maxY);
+  const midEY = (toSVG(maxX, minY)[1] + toSVG(maxX, maxY)[1]) / 2;
+  const eastLabelX = toSVG(maxX, minY)[0] + padE * sc * 0.45;
+  const eTxt = svgEl('text', {x:eastLabelX, y:midEY, 'text-anchor':'middle',
+    fill:'#5a5d70', 'font-family':'Inter,sans-serif', 'font-size':'7',
+    'letter-spacing':'0.8', 'font-weight':'500',
+    transform:`rotate(90, ${eastLabelX}, ${midEY})`});
+  eTxt.textContent = 'LIME STREET';
+  svg.appendChild(eTxt);
+
+  // BILLITER ST — W of site (rotated)
+  const midWY = (toSVG(minX, minY)[1] + toSVG(minX, maxY)[1]) / 2;
+  const westLabelX = toSVG(minX, minY)[0] - padW * sc * 0.45;
+  const wTxt = svgEl('text', {x:westLabelX, y:midWY, 'text-anchor':'middle',
+    fill:'#5a5d70', 'font-family':'Inter,sans-serif', 'font-size':'7',
+    'letter-spacing':'0.8', 'font-weight':'500',
+    transform:`rotate(-90, ${westLabelX}, ${midWY})`});
+  wTxt.textContent = 'BILLITER ST';
+  svg.appendChild(wTxt);
+
+  // Dimensions
+  // E-W below
+  const dimYBase = toSVG(minX, minY)[1] + 10;
+  const [ewX1] = toSVG(minX, minY), [ewX2] = toSVG(maxX, minY);
+  svg.appendChild(svgEl('line', {x1:ewX1, y1:dimYBase, x2:ewX2, y2:dimYBase,
+    stroke:'#9fa2b0', 'stroke-width':'0.7'}));
+  svg.appendChild(svgEl('line', {x1:ewX1, y1:dimYBase-3, x2:ewX1, y2:dimYBase+3,
+    stroke:'#9fa2b0', 'stroke-width':'0.7'}));
+  svg.appendChild(svgEl('line', {x1:ewX2, y1:dimYBase-3, x2:ewX2, y2:dimYBase+3,
+    stroke:'#9fa2b0', 'stroke-width':'0.7'}));
+  const ewT = svgEl('text', {x:(ewX1+ewX2)/2, y:dimYBase+8, 'text-anchor':'middle',
+    fill:'#9fa2b0', 'font-family':'JetBrains Mono,monospace', 'font-size':'7'});
+  ewT.textContent = `~${Math.round(wM)}m`;
+  svg.appendChild(ewT);
+
+  // N-S left
+  const dimXBase = toSVG(minX, minY)[0] - 10;
+  const nsY1 = toSVG(minX, minY)[1], nsY2 = toSVG(minX, maxY)[1];
+  svg.appendChild(svgEl('line', {x1:dimXBase, y1:nsY1, x2:dimXBase, y2:nsY2,
+    stroke:'#9fa2b0', 'stroke-width':'0.7'}));
+  svg.appendChild(svgEl('line', {x1:dimXBase-3, y1:nsY1, x2:dimXBase+3, y2:nsY1,
+    stroke:'#9fa2b0', 'stroke-width':'0.7'}));
+  svg.appendChild(svgEl('line', {x1:dimXBase-3, y1:nsY2, x2:dimXBase+3, y2:nsY2,
+    stroke:'#9fa2b0', 'stroke-width':'0.7'}));
+  const nsT = svgEl('text', {x:dimXBase-4, y:(nsY1+nsY2)/2, 'text-anchor':'middle',
+    fill:'#9fa2b0', 'font-family':'JetBrains Mono,monospace', 'font-size':'7',
+    transform:`rotate(-90, ${dimXBase-4}, ${(nsY1+nsY2)/2})`});
+  nsT.textContent = `~${Math.round(hM)}m`;
+  svg.appendChild(nsT);
+
+  // North arrow
+  const naX = VW - 20, naY = VH - 30;
+  svg.appendChild(svgEl('line', {x1:naX, y1:naY+10, x2:naX, y2:naY-10,
+    stroke:'#1a1d2e', 'stroke-width':'1.2'}));
+  const arrow = svgEl('polygon', {points:`${naX},${naY-10} ${naX-4},${naY} ${naX+4},${naY}`,
+    fill:'#1a1d2e'});
+  svg.appendChild(arrow);
+  const nTxt = svgEl('text', {x:naX, y:naY+20, 'text-anchor':'middle',
+    fill:'#1a1d2e', 'font-family':'Inter,sans-serif', 'font-size':'8', 'font-weight':'700'});
+  nTxt.textContent = 'N';
+  svg.appendChild(nTxt);
+
+  // Scale bar 20m
+  const sbLen = 20 * sc;
+  const sbX = 12, sbY = VH - 18;
+  svg.appendChild(svgEl('rect', {x:sbX, y:sbY-4, width:sbLen, height:4, fill:'#1a1d2e'}));
+  const sbT = svgEl('text', {x:sbX + sbLen/2, y:sbY+8, 'text-anchor':'middle',
+    fill:'#1a1d2e', 'font-family':'JetBrains Mono,monospace', 'font-size':'7'});
+  sbT.textContent = '20m';
+  svg.appendChild(sbT);
+
+  // Drawing ref
+  const refT = svgEl('text', {x:VW/2, y:VH-4, 'text-anchor':'middle',
+    fill:'#9fa2b0', 'font-family':'JetBrains Mono,monospace', 'font-size':'7',
+    'letter-spacing':'0.5'});
+  refT.textContent = 'GF PLAN · NTS';
+  svg.appendChild(refT);
+}
+
+// ══════════════════════════════════════════════
+// SLIDE 4: SECTION A-A
+// ══════════════════════════════════════════════
+function buildSection() {
+  const svg = document.getElementById('section-svg');
+  const bbox = svg.getBoundingClientRect();
+  const VW = bbox.width || 300, VH = bbox.height || 180;
+  svg.setAttribute('viewBox', `0 0 ${VW} ${VH}`);
+  svg.appendChild(svgEl('rect', {width:VW, height:VH, fill:'#f0f1f4'}));
+
+  const padL=40, padR=40, padT=20, padB=32;
+  const drawW = VW - padL - padR;
+  const drawH = VH - padT - padB;
+
+  // Heights: existing 25m, proposed 60m
+  const existH = 25, propH = 60;
+  const scH = drawH / (propH * 1.15); // scale so 60m fits with headroom
+
+  const groundY = padT + drawH;
+  const buildingWidth = drawW * 0.32;
+  const bldX = padL + (drawW - buildingWidth) / 2;
+
+  // Ground line
+  svg.appendChild(svgEl('line', {x1:padL, y1:groundY, x2:VW-padR, y2:groundY,
+    stroke:'#1a1d2e', 'stroke-width':'1.5'}));
+
+  // Context buildings either side (~30m height, ~half width of main building)
+  const ctxH = 30 * scH;
+  const ctxW = buildingWidth * 0.55;
+
+  // West context
+  const wCtxX = bldX - ctxW - 8;
+  svg.appendChild(svgEl('rect', {x:wCtxX, y:groundY-ctxH, width:ctxW, height:ctxH,
+    fill:'#c8ccd8', stroke:'#9fa2b0', 'stroke-width':'0.5'}));
+  // Floor lines in context
+  for (let f = 1; f <= 5; f++) {
+    svg.appendChild(svgEl('line', {x1:wCtxX, y1:groundY-f*(ctxH/6),
+      x2:wCtxX+ctxW, y2:groundY-f*(ctxH/6),
+      stroke:'rgba(255,255,255,0.6)', 'stroke-width':'0.5'}));
+  }
+
+  // East context
+  const eCtxX = bldX + buildingWidth + 8;
+  svg.appendChild(svgEl('rect', {x:eCtxX, y:groundY-ctxH, width:ctxW, height:ctxH,
+    fill:'#c8ccd8', stroke:'#9fa2b0', 'stroke-width':'0.5'}));
+  for (let f = 1; f <= 5; f++) {
+    svg.appendChild(svgEl('line', {x1:eCtxX, y1:groundY-f*(ctxH/6),
+      x2:eCtxX+ctxW, y2:groundY-f*(ctxH/6),
+      stroke:'rgba(255,255,255,0.6)', 'stroke-width':'0.5'}));
+  }
+
+  // Existing zone (0-25m) grey
+  const exist25Y = groundY - existH * scH;
+  svg.appendChild(svgEl('rect', {x:bldX, y:exist25Y, width:buildingWidth,
+    height:existH*scH, fill:'#9098a8', stroke:'none'}));
+
+  // New build zone (25-60m) navy
+  const new60Y = groundY - propH * scH;
+  svg.appendChild(svgEl('rect', {x:bldX, y:new60Y, width:buildingWidth,
+    height:(propH-existH)*scH, fill:'#1a1d2e', stroke:'none'}));
+
+  // Outline
+  svg.appendChild(svgEl('rect', {x:bldX, y:new60Y, width:buildingWidth,
+    height:propH*scH, fill:'none', stroke:'#1a1d2e', 'stroke-width':'1.2'}));
+
+  // Floor lines in existing zone (6 floors in 25m)
+  const existFloors = 6;
+  for (let f = 1; f < existFloors; f++) {
+    const fy = groundY - f * (existH * scH / existFloors);
+    svg.appendChild(svgEl('line', {x1:bldX, y1:fy, x2:bldX+buildingWidth, y2:fy,
+      stroke:'rgba(255,255,255,0.5)', 'stroke-width':'0.5'}));
+  }
+
+  // Floor lines in new build zone (8 floors in 35m)
+  const newFloors = 8;
+  for (let f = 1; f < newFloors; f++) {
+    const fy = exist25Y - f * ((propH - existH) * scH / newFloors);
+    svg.appendChild(svgEl('line', {x1:bldX, y1:fy, x2:bldX+buildingWidth, y2:fy,
+      stroke:'rgba(255,255,255,0.4)', 'stroke-width':'0.4'}));
+  }
+
+  // Datum dashed line at 25m
+  svg.appendChild(svgEl('line', {x1:padL-4, y1:exist25Y, x2:VW-padR+4, y2:exist25Y,
+    stroke:'rgba(255,255,255,0.7)', 'stroke-width':'1',
+    'stroke-dasharray':'5 3'}));
+
+  // Daylight angle 25° from top of proposed
+  const dayX1 = bldX; // west face top
+  const dayY1 = new60Y;
+  const dayAngle = 25 * Math.PI / 180;
+  const dayLen = 60;
+  svg.appendChild(svgEl('line', {
+    x1:dayX1, y1:dayY1,
+    x2:dayX1 - dayLen * Math.cos(dayAngle),
+    y2:dayY1 + dayLen * Math.sin(dayAngle),
+    stroke:'#ff8c42', 'stroke-width':'1', 'stroke-dasharray':'4 2'
+  }));
+  const angTxt = svgEl('text', {
+    x:dayX1-dayLen*Math.cos(dayAngle)-4,
+    y:dayY1+dayLen*Math.sin(dayAngle),
+    'text-anchor':'end', fill:'#ff8c42',
+    'font-family':'JetBrains Mono,monospace', 'font-size':'7'
+  });
+  angTxt.textContent = '25°';
+  svg.appendChild(angTxt);
+
+  // Height dimensions
+  // +60m right
+  const dim60X = bldX + buildingWidth + 22;
+  svg.appendChild(svgEl('line', {x1:dim60X, y1:new60Y, x2:dim60X, y2:groundY,
+    stroke:'#5a5d70', 'stroke-width':'0.8'}));
+  for (const yy of [new60Y, groundY]) {
+    svg.appendChild(svgEl('line', {x1:dim60X-3, y1:yy, x2:dim60X+3, y2:yy,
+      stroke:'#5a5d70', 'stroke-width':'0.8'}));
+  }
+  const d60T = svgEl('text', {x:dim60X+5, y:new60Y+12,
+    fill:'#5a5d70', 'font-family':'JetBrains Mono,monospace', 'font-size':'8', 'font-weight':'600'});
+  d60T.textContent = '+60m';
+  svg.appendChild(d60T);
+
+  // 25m mark
+  const d25T = svgEl('text', {x:bldX-4, y:exist25Y-3,
+    'text-anchor':'end', fill:'#9fa2b0',
+    'font-family':'JetBrains Mono,monospace', 'font-size':'7'});
+  d25T.textContent = '25m';
+  svg.appendChild(d25T);
+
+  // W / E labels
+  for (const [x, lbl, anchor] of [
+    [padL, 'W', 'middle'],
+    [VW-padR, 'E', 'middle']
+  ]) {
+    const t = svgEl('text', {x, y:groundY+14, 'text-anchor':anchor,
+      fill:'#5a5d70', 'font-family':'Inter,sans-serif', 'font-size':'9', 'font-weight':'600',
+      'letter-spacing':'1'});
+    t.textContent = lbl;
+    svg.appendChild(t);
+  }
+
+  // Section A-A label
+  const secT = svgEl('text', {x:VW/2, y:VH-4, 'text-anchor':'middle',
+    fill:'#9fa2b0', 'font-family':'JetBrains Mono,monospace', 'font-size':'7',
+    'letter-spacing':'0.5'});
+  secT.textContent = 'SECTION A–A · NTS';
+  svg.appendChild(secT);
+
+  // Scale bar (not a real scale since NTS, but indicative)
+  const sbX = padL, sbY = VH - 18;
+  const sb20len = 20 * scH; // 20m height represented
+  svg.appendChild(svgEl('rect', {x:sbX, y:sbY-4, width:sb20len, height:4, fill:'#5a5d70'}));
+  const sbT = svgEl('text', {x:sbX+sb20len/2, y:sbY+8, 'text-anchor':'middle',
+    fill:'#5a5d70', 'font-family':'JetBrains Mono,monospace', 'font-size':'7'});
+  sbT.textContent = '20m';
+  svg.appendChild(sbT);
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Small delay to ensure layout is rendered
+  setTimeout(() => {
+    initMap();
+    buildIso();
+    buildPlan();
+    buildSection();
+  }, 100);
+});
+</script>
+</body>
+</html>
