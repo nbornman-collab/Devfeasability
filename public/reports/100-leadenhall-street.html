@@ -272,7 +272,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
     <div style="margin-top:14px">
       <div class="drawing-label">3D Massing — Isometric SE View</div>
       <div class="drawing-wrap" style="background:#ffffff">
-        <canvas id="massing-3d-canvas" style="width:100%;display:block;aspect-ratio:2.33/1"></canvas>
+        <svg id="massing-3d-canvas" style="width:100%;display:block"></svg>
       </div>
       <div class="drawing-caption">Existing (grey) · New build (white) · Indicative massing · Not to scale</div>
     </div>
@@ -509,7 +509,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
     </div>
     <div style="margin-top:20px">
       <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:10px">3D Massing — SE Isometric</div>
-      <canvas id="iso-opt-a" style="width:100%;display:block;aspect-ratio:2.8/1;border-radius:4px;overflow:hidden"></canvas>
+      <svg id="iso-opt-a" style="width:100%;display:block"></svg>
     </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option A</span></div>
@@ -558,7 +558,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
     </div>
     <div style="margin-top:20px">
       <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:10px">3D Massing — SE Isometric</div>
-      <canvas id="iso-opt-b" style="width:100%;display:block;aspect-ratio:2.8/1;border-radius:4px;overflow:hidden"></canvas>
+      <svg id="iso-opt-b" style="width:100%;display:block"></svg>
     </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option B</span></div>
@@ -607,7 +607,7 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
     </div>
     <div style="margin-top:20px">
       <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:10px">3D Massing — SE Isometric</div>
-      <canvas id="iso-opt-c" style="width:100%;display:block;aspect-ratio:2.8/1;border-radius:4px;overflow:hidden"></canvas>
+      <svg id="iso-opt-c" style="width:100%;display:block"></svg>
     </div>
   </div>
   <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Option C</span></div>
@@ -954,7 +954,8 @@ async function buildGroundFloorPlan(){
 // ── Massing section v3 — parameterised, floor plates both zones, light green ──
 // svgId: target SVG element id
 // propH: proposed height (metres), defaults to D.potentialHeight
-function buildMassingSectionSVG(svgId='section-svg', propH=D.potentialHeight){
+// opt: optional REPORT_OPTS entry — enables stepped setback profile
+function buildMassingSectionSVG(svgId='section-svg', propH=D.potentialHeight, opt=null){
   const svg=document.getElementById(svgId);
   if(!svg) return;
   const VW=280;
@@ -965,6 +966,9 @@ function buildMassingSectionSVG(svgId='section-svg', propH=D.potentialHeight){
   const VH=Math.round(propH*scH + gndPad + topPad);
   svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
   const groundY=VH-gndPad;
+  // Stepped setback: east face recedes by sbE above podH
+  const podH = opt ? opt.podiumHeight : existH;
+  const sbEm = opt ? opt.setbackM * 0.6 : 0; // east setback metres
   const hy=h=>groundY-h*scH;
   const siteWm=Math.sqrt(D.plotArea*1.1);
   const scW=VW*0.36/siteWm;
@@ -998,17 +1002,44 @@ function buildMassingSectionSVG(svgId='section-svg', propH=D.potentialHeight){
     <text x="${((ctxRx+dayX2)/2-4).toFixed(1)}" y="${(hy(ctxH/2)+2).toFixed(1)}" font-family="Inter,sans-serif" font-size="5.5" fill="#999">25°</text>
     <!-- Zone 1: EXISTING (0→existH) — light grey -->
     <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(existH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(existH*scH).toFixed(1)}" fill="#d0d2da"/>
-    <!-- Zone 2: NEW BUILD (existH→propH) — light green with floor plates -->
-    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(propH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${((propH-existH)*scH).toFixed(1)}" fill="#8ab08a"/>
-    <!-- Floor plates both zones -->
+    <!-- Zone 2: NEW BUILD stepped profile -->
+    ${(()=>{
+      const sbEpx = sbEm * scW;
+      const towerPxW = sitePxW - sbEpx;
+      const stepH = Math.max(podH, existH); // step level in section
+      const stepPx = hy(stepH);
+      const bL = cx - sitePxW/2; // building left (west)
+      const bR = bL + sitePxW;   // building right (east) — full width
+      const tR = bL + towerPxW;  // tower right (east, set back)
+      // Podium zone (existH→stepH if above)
+      const podZone = podH > existH
+        ? `<rect x="${bL.toFixed(1)}" y="${hy(podH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${((podH-existH)*scH).toFixed(1)}" fill="#8ab08a"/>` : '';
+      // Tower zone using L-shaped path: west+north face holds, east face steps in
+      const towerPath = `M${bL.toFixed(1)},${hy(propH).toFixed(1)} L${tR.toFixed(1)},${hy(propH).toFixed(1)} L${tR.toFixed(1)},${stepPx.toFixed(1)} L${bR.toFixed(1)},${stepPx.toFixed(1)} L${bR.toFixed(1)},${hy(stepH).toFixed(1)} L${bL.toFixed(1)},${hy(stepH).toFixed(1)} Z`;
+      const sbAnnot = sbEpx > 1 ? `
+        <line x1="${tR.toFixed(1)}" y1="${hy(stepH-2).toFixed(1)}" x2="${bR.toFixed(1)}" y2="${hy(stepH-2).toFixed(1)}" stroke="#888" stroke-width="0.5"/>
+        <text x="${((tR+bR)/2).toFixed(1)}" y="${hy(stepH-2)-3}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4.5" fill="#888">${(sbEm).toFixed(1)}m</text>` : '';
+      return podZone + `<path d="${towerPath}" fill="#8ab08a"/>` + sbAnnot;
+    })()}
+    <!-- Floor plates -->
     ${flrLines}
     <!-- Datum at existH -->
     <line x1="${(cx-sitePxW/2-4).toFixed(1)}" y1="${hy(existH).toFixed(1)}" x2="${(cx+sitePxW/2+4).toFixed(1)}" y2="${hy(existH).toFixed(1)}" stroke="white" stroke-width="1" stroke-dasharray="4,2" opacity="0.8"/>
     <!-- Zone labels -->
     <text x="${cx}" y="${(hy(existH/2)).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="#555">EXISTING</text>
-    <text x="${cx}" y="${(hy(existH+(propH-existH)/2)).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white" opacity="0.9">NEW BUILD</text>
-    <!-- Building outline -->
-    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(propH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(propH*scH).toFixed(1)}" fill="none" stroke="#1a1d2e" stroke-width="1.2"/>
+    <text x="${(cx-sitePxW/4).toFixed(1)}" y="${(hy(existH+(propH-existH)/2)).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white" opacity="0.9">NEW BUILD</text>
+    <!-- Building outline (L-shape for stepped massing) -->
+    ${(()=>{
+      const sbEpx = sbEm * scW;
+      const towerPxW = sitePxW - sbEpx;
+      const stepH = Math.max(podH, existH);
+      const bL = cx - sitePxW/2;
+      const bR = bL + sitePxW;
+      const tR = bL + towerPxW;
+      if(sbEpx<1) return `<rect x="${bL.toFixed(1)}" y="${hy(propH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(propH*scH).toFixed(1)}" fill="none" stroke="#1a1d2e" stroke-width="1.2"/>`;
+      const p=`M${bL.toFixed(1)},${groundY} L${bR.toFixed(1)},${groundY} L${bR.toFixed(1)},${hy(stepH).toFixed(1)} L${tR.toFixed(1)},${hy(stepH).toFixed(1)} L${tR.toFixed(1)},${hy(propH).toFixed(1)} L${bL.toFixed(1)},${hy(propH).toFixed(1)} Z`;
+      return `<path d="${p}" fill="none" stroke="#1a1d2e" stroke-width="1.2"/>`;
+    })()}
     <!-- Ground line -->
     <line x1="0" y1="${groundY}" x2="${VW}" y2="${groundY}" stroke="#1a1d2e" stroke-width="1.5"/>
     <text x="5" y="${groundY-3}" font-family="Inter,sans-serif" font-size="5.5" fill="#666" font-weight="600">GL</text>
@@ -1041,168 +1072,128 @@ function buildMassingSectionSVG(svgId='section-svg', propH=D.potentialHeight){
 // ── 3D Massing v3 — Three.js, context-driven stepped geometry ─────────────────
 // opt: full option object {height, podiumHeight, towerFootprintPct, setbackM, ...}
 //      OR a number for propH (backwards compat for main page default)
-function buildMassing3DCanvas(canvasId, opt){
-  // Normalise argument — accept number or option object
-  if(typeof opt === 'number' || opt === undefined){
-    const h = opt || D.potentialHeight;
-    opt = { height:h, podiumHeight:D.heightM, towerFootprintPct:0.55, setbackM:4 };
+// ── Pure SVG isometric massing — no Three.js dependency ─────────────────────
+function buildMassingIsoSVG(svgId, opt){
+  if(typeof opt==='number'||opt===undefined){
+    const h=opt||D.potentialHeight;
+    opt={height:h,podiumHeight:D.heightM,towerFootprintPct:0.55,setbackM:4};
   }
-  const canvas = document.getElementById(canvasId);
-  if(!canvas || !window.THREE) return;
-  const THREE = window.THREE;
+  const svg=document.getElementById(svgId);
+  if(!svg) return;
 
-  const lons=D.polygon.map(c=>c[0]), lats=D.polygon.map(c=>c[1]);
-  const lonMin=Math.min(...lons), lonMax=Math.max(...lons);
-  const latMin=Math.min(...lats), latMax=Math.max(...lats);
-  const wM=(lonMax-lonMin)*M_PER_LNG;  // ~42m E-W
-  const hM=(latMax-latMin)*M_PER_LAT;  // ~63m N-S
+  const VW=400, VH=240;
+  // Building footprint dimensions (metres)
+  const buildW=40, buildD=32; // E-W × N-S
+  const existH=D.heightM;     // 25m
+  const podH=opt.podiumHeight;
+  const propH=opt.height;
+  const sbS=opt.setbackM;
+  const sbE=Math.round(opt.setbackM*0.6);
+  const towerW=buildW-sbE;
+  const towerD=buildD-sbS;
 
-  const propH   = opt.height;
-  const podiumH = opt.podiumHeight;
-  const towerH  = propH - podiumH;
+  // Scale: dynamic — fit tallest point in VH with padding
+  const cos30=Math.cos(Math.PI/6), sin30=0.5;
+  const maxIsoH=propH+(buildW+buildD)*sin30;
+  const sc=Math.min(1.8,(VH-36)/maxIsoH);
 
-  // Setbacks: S and E faces only — N and W held (street frontage / heritage)
-  // East setback is smaller: Lime St boundary + Lloyd's adjacency limits how much you can pull back
-  const sbS = opt.setbackM;              // south face recession (primary — Leadenhall Market sightlines)
-  const sbE = opt.setbackM * 0.6;        // east face recession (partial — Lime Street activity held)
+  // Isometric projection (raw)
+  function iso(ex,ey,nz){return[(ex-nz)*sc*cos30, -ey*sc-(ex+nz)*sc*sin30];}
+  // Center horizontally on building mid
+  const [mx]=iso(buildW/2,0,buildD/2);
+  const originX=VW/2-mx, originY=VH-18-(buildD)*sc*sin30;
+  function isoC(ex,ey,nz){const[sx,sy]=iso(ex,ey,nz);return[sx+originX,sy+originY];}
 
-  // Tower footprint derived from setbacks for visual accuracy (use setbacks, not %)
-  // towerW: west face holds at -wM/2, east face steps in by sbE → tower W = wM - sbE
-  // towerD: north face holds at -hM/2, south face steps in by sbS → tower D = hM - sbS
-  const towerW = wM - sbE;
-  const towerD = hM - sbS;
-  // Tower center: west holds → center shifts east by sbE/2; north holds → center shifts south by sbS/2
-  const towerCx = -sbE/2;    // shifted slightly west so east face is set back (x=east in scene)
-  const towerCz = -sbS/2;    // shifted slightly north so south face is set back (z=south in scene)
-
-  // Canvas
-  const W=1120, H=420;
-  canvas.width=W; canvas.height=H;
-
-  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, preserveDrawingBuffer:true});
-  renderer.setSize(W, H, false);
-  renderer.setPixelRatio(1);
-  renderer.setClearColor(0xffffff, 1);
-
-  const scene = new THREE.Scene();
-
-  // Camera: perspective telephoto SE elevated, looking at building midpoint
-  const camera = new THREE.PerspectiveCamera(28, W/H, 1, 5000);
-  const camR = Math.max(wM, hM, propH) * 2.4;
-  camera.position.set(camR, camR * 0.7, camR);
-  camera.lookAt(0, propH * 0.50, 0);
-
-  // Lighting
-  scene.add(new THREE.AmbientLight(0xffffff, 0.50));
-  const sun = new THREE.DirectionalLight(0xffffff, 0.75);
-  sun.position.set(80, 160, 60);  // NE above
-  scene.add(sun);
-  const fill = new THREE.DirectionalLight(0xffffff, 0.20);
-  fill.position.set(-60, 40, -80);
-  scene.add(fill);
+  const out=[];
+  out.push(`<rect width="${VW}" height="${VH}" fill="white"/>`);
 
   // Ground plane
-  const gpGeo = new THREE.PlaneGeometry(wM*2.0, hM*2.0);
-  gpGeo.rotateX(-Math.PI/2);
-  scene.add(new THREE.Mesh(gpGeo, new THREE.MeshLambertMaterial({color:0xd4d5dc})));
+  const gp=[isoC(0,0,0),isoC(buildW,0,0),isoC(buildW,0,buildD),isoC(0,0,buildD)];
+  out.push(`<polygon points="${gp.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="#e4e5e9" stroke="#ccc" stroke-width="0.5"/>`);
 
-  // ── Box + edges helper ────────────────────────────────────────────────────
-  function addBox(w, h, d, cx, cy, cz, col){
-    const geo = new THREE.BoxGeometry(w, h, d);
-    const mat = new THREE.MeshPhongMaterial({color:col, specular:0x080808, shininess:4});
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(cx, cy, cz);
-    scene.add(mesh);
-    const edges = new THREE.LineSegments(
-      new THREE.EdgesGeometry(geo),
-      new THREE.LineBasicMaterial({color:0x1a1d2e})
-    );
-    edges.position.set(cx, cy, cz);
-    scene.add(edges);
-    return {geo, mesh};
+  function face(pts,fill,sw=0.7){
+    return`<polygon points="${pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="${fill}" stroke="#1a1d2e" stroke-width="${sw}"/>`;
+  }
+  function floorLines(x0,y,d,w,d2){
+    const[x1,y1]=isoC(x0,y,d),[x2,y2]=isoC(x0+w,y,d);
+    const[x3,y3]=isoC(x0+w,y,x0===0?0:0),[x4,y4]=isoC(x0+w,y,d2);
+    return`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>` +
+      `<line x1="${x3.toFixed(1)}" y1="${y3.toFixed(1)}" x2="${x4.toFixed(1)}" y2="${y4.toFixed(1)}" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>`;
   }
 
-  // ── Floor plates helper — horizontal lines on S and E faces ──────────────
-  function addFloorLines(x1, z1, x2, z2, y, col, opacity){
-    // south face: east→west at z=z_south, east face: north→south at x=x_east
-    const pts=[new THREE.Vector3(x1,y,z1), new THREE.Vector3(x2,y,z1)];
-    const pts2=[new THREE.Vector3(x1,y,z1), new THREE.Vector3(x1,y,z2)];
-    [pts,pts2].forEach(p=>{
-      const l=new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints(p),
-        new THREE.LineBasicMaterial({color:col,transparent:true,opacity})
-      );
-      scene.add(l);
-    });
+  // ── EXISTING (0→existH) ─────────────────────────────────────────────────
+  out.push(face([isoC(0,0,buildD),isoC(buildW,0,buildD),isoC(buildW,existH,buildD),isoC(0,existH,buildD)],'#d4d6de'));
+  out.push(face([isoC(buildW,0,0),isoC(buildW,0,buildD),isoC(buildW,existH,buildD),isoC(buildW,existH,0)],'#b8bac6'));
+  out.push(face([isoC(0,existH,0),isoC(buildW,existH,0),isoC(buildW,existH,buildD),isoC(0,existH,buildD)],'#c4c6d0'));
+  for(let h=4.2;h<existH;h+=4.2){
+    const[x1,y1]=isoC(0,h,buildD),[x2,y2]=isoC(buildW,h,buildD);
+    const[x3,y3]=isoC(buildW,h,0),[x4,y4]=isoC(buildW,h,buildD);
+    out.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>`);
+    out.push(`<line x1="${x3.toFixed(1)}" y1="${y3.toFixed(1)}" x2="${x4.toFixed(1)}" y2="${y4.toFixed(1)}" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>`);
   }
 
-  // ── Dashed datum line helper ──────────────────────────────────────────────
-  function addDashedLine(p1, p2){
-    const geo = new THREE.BufferGeometry().setFromPoints([p1,p2]);
-    const mat = new THREE.LineDashedMaterial({color:0xffffff,dashSize:1.2,gapSize:0.8});
-    const line = new THREE.Line(geo, mat);
-    line.computeLineDistances();
-    scene.add(line);
-  }
-
-  // ── PODIUM (existing / full plate) ────────────────────────────────────────
-  addBox(wM, podiumH, hM, 0, podiumH/2, 0, 0xa0a8b8);   // grey
-  // Floor plates on podium (E and S faces)
-  const podEast=wM/2, podSouth=hM/2, podNorth=-hM/2, podWest=-wM/2;
-  for(let fh=4.2; fh<podiumH; fh+=4.2){
-    addFloorLines(podEast, podSouth, podWest, podNorth, fh, 0xffffff, 0.35);
-  }
-
-  if(towerH > 0){
-    // ── TOWER (setback S and E, hold N and W) ──────────────────────────────
-    addBox(towerW, towerH, towerD, towerCx, podiumH + towerH/2, towerCz, 0xa8cca8);  // light green
-
-    // Sky terrace plate at transition (thin slab)
-    const terGeo = new THREE.BoxGeometry(wM + 0.4, 0.8, hM + 0.4);
-    const terMesh = new THREE.Mesh(terGeo, new THREE.MeshPhongMaterial({color:0xe0e8e0}));
-    terMesh.position.set(0, podiumH, 0);
-    scene.add(terMesh);
-    scene.add(Object.assign(
-      new THREE.LineSegments(new THREE.EdgesGeometry(terGeo), new THREE.LineBasicMaterial({color:0x1a1d2e})),
-      {position: new THREE.Vector3(0, podiumH, 0)}
-    ));
-
-    // Floor plates on tower
-    const twEast = towerCx + towerW/2;
-    const twSouth = towerCz + towerD/2;
-    const twNorth = towerCz - towerD/2;
-    const twWest = towerCx - towerW/2;
-    for(let fh=4.2; fh<towerH; fh+=4.2){
-      addFloorLines(twEast, twSouth, twWest, twNorth, podiumH+fh, 0xffffff, 0.40);
+  // ── PODIUM NEW BUILD (existH→podH if podH>existH) ──────────────────────
+  if(podH>existH){
+    out.push(face([isoC(0,existH,buildD),isoC(buildW,existH,buildD),isoC(buildW,podH,buildD),isoC(0,podH,buildD)],'#c0d8c0'));
+    out.push(face([isoC(buildW,existH,0),isoC(buildW,existH,buildD),isoC(buildW,podH,buildD),isoC(buildW,podH,0)],'#90b890'));
+    // Sky terrace exposed strips
+    if(sbS>0) out.push(face([isoC(0,podH,towerD),isoC(towerW,podH,towerD),isoC(towerW,podH,buildD),isoC(0,podH,buildD)],'#b4ccb4'));
+    if(sbE>0) out.push(face([isoC(towerW,podH,0),isoC(buildW,podH,0),isoC(buildW,podH,towerD),isoC(towerW,podH,towerD)],'#b4ccb4'));
+    for(let h=4.2;h<podH-existH;h+=4.2){
+      const hh=existH+h;
+      const[x1,y1]=isoC(0,hh,buildD),[x2,y2]=isoC(buildW,hh,buildD);
+      const[x3,y3]=isoC(buildW,hh,0),[x4,y4]=isoC(buildW,hh,buildD);
+      out.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>`);
+      out.push(`<line x1="${x3.toFixed(1)}" y1="${y3.toFixed(1)}" x2="${x4.toFixed(1)}" y2="${y4.toFixed(1)}" stroke="rgba(255,255,255,0.45)" stroke-width="0.5"/>`);
     }
-
-    // Datum at podiumH on south and east faces
-    addDashedLine(
-      new THREE.Vector3(-wM/2, podiumH, hM/2),
-      new THREE.Vector3( wM/2, podiumH, hM/2)
-    );
-    addDashedLine(
-      new THREE.Vector3(wM/2, podiumH, -hM/2),
-      new THREE.Vector3(wM/2, podiumH,  hM/2)
-    );
-
-    // Option C: sky lobby plate at L12 (~50m)
-    if(propH >= 85 && podiumH <= 20){
-      const skyH = podiumH + 12 * 4.2;  // L12 above podium base
-      const skyGeo = new THREE.BoxGeometry(towerW + 0.3, 1.2, towerD + 0.3);
-      const skyMesh = new THREE.Mesh(skyGeo, new THREE.MeshPhongMaterial({color:0x1a1d2e, transparent:true, opacity:0.7}));
-      skyMesh.position.set(towerCx, skyH, towerCz);
-      scene.add(skyMesh);
-    }
+  } else if(sbS>0||sbE>0){
+    // No podium zone above existing, but show sky terrace at existH if tower is set back
+    if(sbS>0) out.push(face([isoC(0,existH,towerD),isoC(towerW,existH,towerD),isoC(towerW,existH,buildD),isoC(0,existH,buildD)],'#b4ccb4'));
+    if(sbE>0) out.push(face([isoC(towerW,existH,0),isoC(buildW,existH,0),isoC(buildW,existH,towerD),isoC(towerW,existH,towerD)],'#b4ccb4'));
   }
 
-  renderer.render(scene, camera);
+  // ── TOWER NEW BUILD (podH or existH → propH, setback footprint) ──────────
+  const towerBase=Math.max(podH,existH);
+  // south face  out.push(face([isoC(0,towerBase,towerD),isoC(towerW,towerBase,towerD),isoC(towerW,propH,towerD),isoC(0,propH,towerD)],'#a8c8a8'));
+  // east face
+  out.push(face([isoC(towerW,towerBase,0),isoC(towerW,towerBase,towerD),isoC(towerW,propH,towerD),isoC(towerW,propH,0)],'#78a878'));
+  // top
+  out.push(face([isoC(0,propH,0),isoC(towerW,propH,0),isoC(towerW,propH,towerD),isoC(0,propH,towerD)],'#8ab08a'));
+  // Sky lobby band (Option C)
+  if(propH>=85&&podH<=20){
+    const skH=existH+12*4.2;
+    out.push(face([isoC(0,skH-0.8,towerD),isoC(towerW,skH-0.8,towerD),isoC(towerW,skH+0.8,towerD),isoC(0,skH+0.8,towerD)],'#2a2d3e',1.0));
+    out.push(face([isoC(towerW,skH-0.8,0),isoC(towerW,skH-0.8,towerD),isoC(towerW,skH+0.8,towerD),isoC(towerW,skH+0.8,0)],'#2a2d3e',1.0));
+  }
+  // Floor plates on tower
+  for(let h=4.2;h<propH-towerBase+0.1;h+=4.2){
+    const hh=towerBase+h;
+    const[x1,y1]=isoC(0,hh,towerD),[x2,y2]=isoC(towerW,hh,towerD);
+    const[x3,y3]=isoC(towerW,hh,0),[x4,y4]=isoC(towerW,hh,towerD);
+    out.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>`);
+    out.push(`<line x1="${x3.toFixed(1)}" y1="${y3.toFixed(1)}" x2="${x4.toFixed(1)}" y2="${y4.toFixed(1)}" stroke="rgba(255,255,255,0.5)" stroke-width="0.5"/>`);
+  }
+
+  // Labels
+  const[hx,hy]=isoC(towerW+3,towerBase+(propH-towerBase)/2,0);
+  out.push(`<text x="${hx.toFixed(1)}" y="${hy.toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="#1a1d2e">+${propH}m</text>`);
+  const[phx,phy]=isoC(buildW+3,existH/2,0);
+  out.push(`<text x="${phx.toFixed(1)}" y="${phy.toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#666">+${existH}m</text>`);
+
+  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
+  svg.innerHTML=out.join('');
 }
+
+// ── Legacy alias (kept in case called from main drawings page) ──────────────
+function buildMassing3DCanvas(canvasId, opt){
+  buildMassingIsoSVG(canvasId, opt);
+}
+
 
 function buildGFPlanStatic(svgId='gf-plan-static'){
   const svg=document.getElementById(svgId);
   if(!svg) return;
-  const VW=280, VH=240, p=D.polygon;
+  const VW=340, VH=300, p=D.polygon;
   svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
 
   const lons=p.map(c=>c[0]), lats=p.map(c=>c[1]);
@@ -1211,7 +1202,7 @@ function buildGFPlanStatic(svgId='gf-plan-static'){
   const wM=(lonMax-lonMin)*M_PER_LNG, hM=(latMax-latMin)*M_PER_LAT;
   const cLon=(lonMin+lonMax)/2, cLat=(latMin+latMax)/2;
 
-  const padN=38,padS=24,padE=30,padW=24, annotH=26;
+  const padN=52,padS=40,padE=48,padW=40, annotH=28;
   const sc=Math.min((VW-8)/(wM+padW+padE),(VH-annotH-4)/(hM+padN+padS));
   const originX=(VW-(wM+padW+padE)*sc)/2+(padW+wM/2)*sc;
   const originY=4+(padN+hM/2)*sc;
@@ -1242,7 +1233,17 @@ function buildGFPlanStatic(svgId='gf-plan-static'){
 
   const C={site:'#f0f1f3',bldg:'#fff',core:'#1a1d2e',coreF:'#c8cad4',str:'#585b6e',dim:'#1a1d2e'};
 
+  // Context building blocks (simplified — surrounding urban fabric)
+  const streetPx=12*sc; // ~12m street width in pixels
+  const ctxFill='#e8e9ec';
+  // N, S, E, W context rectangles inset from SVG edge to street edge
+  const ctxN=`<rect x="0" y="0" width="${VW}" height="${Math.max(1,siteTopY-streetPx).toFixed(1)}" fill="${ctxFill}"/>`;
+  const ctxS=`<rect x="0" y="${Math.min(VH-1,siteBotY+streetPx).toFixed(1)}" width="${VW}" height="${VH}" fill="${ctxFill}"/>`;
+  const ctxW=`<rect x="0" y="${Math.max(0,siteTopY-streetPx).toFixed(1)}" width="${Math.max(1,siteLeftX-streetPx).toFixed(1)}" height="${(siteBotY+streetPx-(siteTopY-streetPx)).toFixed(1)}" fill="${ctxFill}"/>`;
+  const ctxE=`<rect x="${Math.min(VW-1,siteRightX+streetPx).toFixed(1)}" y="${Math.max(0,siteTopY-streetPx).toFixed(1)}" width="${VW}" height="${(siteBotY+streetPx-(siteTopY-streetPx)).toFixed(1)}" fill="${ctxFill}"/>`;
+
   svg.innerHTML=`
+    ${ctxN}${ctxS}${ctxW}${ctxE}
     <polygon points="${sitePts}" fill="${C.site}" stroke="#bfc0c8" stroke-width="0.5"/>
     <polygon points="${bldgPts}" fill="${C.bldg}" stroke="${C.core}" stroke-width="1.6"/>
     <rect x="${(coreNEx-cw).toFixed(1)}" y="${coreNEy.toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="${C.coreF}" stroke="${C.core}" stroke-width="0.8" rx="1"/>
@@ -1257,12 +1258,7 @@ function buildGFPlanStatic(svgId='gf-plan-static'){
     <!-- Core label -->
     <text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+6).toFixed(1)}" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">CORE</text>
     <text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+13).toFixed(1)}" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">${Math.round(coreGIA)}m²</text>
-    <!-- Section cut -->
-    <line x1="0" y1="${ccy.toFixed(1)}" x2="${VW}" y2="${ccy.toFixed(1)}" stroke="${C.dim}" stroke-width="0.7" stroke-dasharray="5,3"/>
-    <circle cx="5" cy="${ccy.toFixed(1)}" r="4" fill="${C.core}"/>
-    <text x="5" y="${ccy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5" font-weight="700" fill="white">A</text>
-    <circle cx="${VW-5}" cy="${ccy.toFixed(1)}" r="4" fill="${C.core}"/>
-    <text x="${VW-5}" y="${ccy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5" font-weight="700" fill="white">A</text>
+    <!-- Section cut line removed per design review -->
     <!-- North arrow -->
     <g transform="translate(${VW-14},${VH-annotH+14})">
       <line x1="0" y1="8" x2="0" y2="-8" stroke="${C.dim}" stroke-width="1.5"/>
@@ -1294,23 +1290,15 @@ buildGroundFloorPlan().catch(console.error);
 buildMassingSectionSVG();
 fetch('/api/config').then(r=>r.json()).then(cfg=>buildContextMap(cfg.mapboxToken)).catch(()=>buildContextMap(null));
 const [optA,optB,optC] = REPORT_OPTS;
-buildGFPlanStatic('gfp-opt-a'); buildMassingSectionSVG('sec-opt-a',42);
-buildGFPlanStatic('gfp-opt-b'); buildMassingSectionSVG('sec-opt-b',60);
-buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92);
+buildGFPlanStatic('gfp-opt-a'); buildMassingSectionSVG('sec-opt-a',42,optA);
+buildGFPlanStatic('gfp-opt-b'); buildMassingSectionSVG('sec-opt-b',60,optB);
+buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92,optC);
 
-// Three.js: load async — page renders without it, 3D fills in once loaded
-(function loadThreeJS(){
-  const s = document.createElement('script');
-  s.src = '/lib/three.min.js';
-  s.onload = function(){
-    buildMassing3DCanvas('massing-3d-canvas', REPORT_OPTS[1]);
-    buildMassing3DCanvas('iso-opt-a', optA);
-    buildMassing3DCanvas('iso-opt-b', optB);
-    buildMassing3DCanvas('iso-opt-c', optC);
-  };
-  s.onerror = function(){ console.warn('Three.js CDN failed — 3D views unavailable'); };
-  document.head.appendChild(s);
-})();
+// 3D isometric — pure SVG, no Three.js dependency
+buildMassingIsoSVG('massing-3d-canvas', REPORT_OPTS[1]);
+buildMassingIsoSVG('iso-opt-a', optA);
+buildMassingIsoSVG('iso-opt-b', optB);
+buildMassingIsoSVG('iso-opt-c', optC);
 </script>
 </body>
 </html>
