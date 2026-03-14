@@ -498,3 +498,80 @@ Our role is to:
 
 ---
 
+
+---
+
+## 12. MARKET DATA — LIVE SOURCES (March 2026)
+
+> ✅ Sourced from live web research — Savills, Cushman & Wakefield, March 2026
+
+---
+
+### 12.1 City of London Office Investment Market (Savills, Feb 2026)
+
+**City prime NIY: 5.25%** — West End prime: 3.75%
+*(Source: Savills City Investment Watch, February 2026 — confirmed also in December 2025 issue)*
+
+**⚠️ CORRECTION to §11.2**: Previous estimate of 4.25–4.75% for City mid-rise was incorrect.
+The correct City prime yield benchmark is **5.25%**. West End is lower (3.75%) — do not conflate.
+
+**Comparable transactions (Savills City Investment Watch, 2025–2026):**
+
+| Asset | Location | Size (sqft) | Price | NIY | Cap Value/sqft | Notes |
+|---|---|---|---|---|---|---|
+| The Sans, 20 St John's Sq | Farringdon, EC1 | 36,724 | £45.9M | **5.85%** | £1,250 | BREEAM Excellent, EPC A, refurb 2023. Passing rent £77.95/sqft (£839/sqm). Aberdeen for Border to Coast |
+| 30 Moorgate | City Core, EC2 | 31,577 | £36M | — | **£1,140** | Owner-occupier (State Bank of India). 6F |
+| Finsbury House, EC2 | 50m from Liverpool St | 39,607 GIA | £9.5M | — | **£385/sqft NIA** | Consented but vacant. Long leasehold. Israeli buyer Eatos Group |
+| 2–4 Eastcheap, EC3 | City Core (our submarket) | 63,869 | £25.4M | **7.30%** | £398 | Highly reversionary, 2028 block date. Repositioning play. Greycoat |
+| Bavaria House, Appold St | 150m north Liverpool St | planning consent | — | — | — | 45F mixed-use tower scheme (229k sqft), sold with planning |
+
+**Key market signals (Savills / Cushman & Wakefield, Q4 2025 – Q1 2026):**
+- City investment volumes 2025: £3.0B+ (up **43% on 2024**, recovering from 1996-nadir low)
+- £2.0B+ under offer at start of 2026 across 41 deals
+- Active demand: 13.8M sqft, **up 51% on 10-year average** (Savills, Jan 2026)
+- **80% of space under offer is newly developed or extensively refurbished** — flight to quality is structural
+- 43% of pipeline pre-let between now and 2027
+- City vacancy rate: **7.1%** forecast at year-end (constrained in Core)
+- Owner-occupier deals = 19% of all 2025 City transactions
+- Grade A share of leasing activity: **74%** (C&W, 2025 — record high)
+
+**Mat Oakley, Director Commercial Research, Savills (January 2026):**
+> *"The office market remains our most favoured pick for investors in 2026, with steady (but highly location-focussed) tenant demand, a lack of new supply, and better-than-normal rental growth."*
+
+> *"The bulk of the completions are outside the Core, and the bulk of tenant demand is in the Core. Unless we see a surge in development completions in 2026 (or a rise in tenant exits), the undersupply and rental growth will be sustained."*
+
+> *"In some cases, a perfect location can compensate for a less-than-five-star building — something that should enable developers to value-engineer plans to a better return."*
+
+---
+
+### 12.2 Corrected ERV and Yield Assumptions (replace §11.2)
+
+From the Savills transaction evidence:
+- **The Sans passing rent: £77.95/sqft = £839/sqm pa** at 5.85% NIY on a recently refurbished building in EC1/Farringdon
+- For prime new-build Grade A in EC3 Eastern Cluster: **£75–85/sqft = £807–915/sqm pa** is the supported range
+- City prime yield: **5.25%** (core, best-in-class new-build)
+- Secondary / repositioning yield: 6.5–7.5% (as evidenced by 2–4 Eastcheap at 7.30%)
+
+**Corrected GDV calculation (replace §11.2 table):**
+
+| Option | NIA (sqm) | ERV | NIY | GDV |
+|---|---|---|---|---|
+| A — 10F / 42m | ~8,200 | £750/sqm pa | 5.50% | ~£112M |
+| B — 14F / 60m | ~10,300 | £800/sqm pa | 5.25% | ~£157M |
+| C — 22F / 92m | ~16,600 | £850/sqm pa (upper floor premium) | 5.25% | ~£268M |
+
+*NIA recalculated using corrected methodology (no double coverage). C with sky lobby commands premium on upper quartile floors.*
+
+---
+
+### 12.3 Appraisal Model — Error Log
+
+| Error | Previous | Corrected | Source |
+|---|---|---|---|
+| City prime NIY | 4.25–4.75% | **5.25%** | Savills City Investment Watch Feb 2026 |
+| NIA calculation | Double-applied coverage factor | Single coverage × towerFootprintPct | Code fix required |
+| Cost basis | Per sqft NIA | Per sqm GIA | Industry standard (BCIS) |
+| GDV basis | Capital value per sqft (addedNIA only) | Yield-capitalised, total NIA | RICS Red Book |
+| Margin basis | Margin/GDV | **Profit on cost** (industry standard) | RICS guidance |
+
+---
