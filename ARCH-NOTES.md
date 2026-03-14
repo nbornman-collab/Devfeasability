@@ -337,241 +337,144 @@ If the answer is "nothing specific", hold the plate and argue it.
 
 ---
 
-## 11. DEVELOPMENT APPRAISAL — MARKET ASSUMPTIONS & METHODOLOGY
-
-> Research basis: Cushman & Wakefield Q4 2025 London Office MarketBeat, BCO Guide to Specification 2023,
-> BCIS cost data, City of London CIL schedule 2024/25, RICS Red Book methodology.
-> All figures indicative — final inputs from instructed agent and QS.
 
 ---
 
-### 11.1 City of London Office Market Context (Q4 2025)
+## 11. DEVELOPMENT APPRAISAL — METHODOLOGY
 
-**Occupational market:**
-- Annual City of London take-up: ~9.5M sqft pa (consistent 2023–2025, per C&W)
-- Grade A share of leasing: **74%** — record high in 2025. Flight to quality is structural, not cyclical.
-- City Core Grade A supply: **1.1 years** only (vs 10-year avg 1.7 years) → acute undersupply
-- Implication: well-specified new City office is a landlord's market. Void risk is lower than historical norms for Grade A.
-
-**Prime rents (ERV) — City of London / EC3 Eastern Cluster:**
-
-| Specification | ERV Range | Central Assumption |
-|---|---|---|
-| Prime City Core, mid-rise (BCO Cat A) | £700–800/sqm NIA pa | **£750/sqm** |
-| Leadenhall/Lime St area (our site) | £660–750/sqm NIA pa | **£700/sqm** |
-| Upper floor premium (top quartile, City views) | +15–25% on base ERV | **+20%** |
-| Grade B existing stock | £420–500/sqm NIA pa | **£450/sqm** |
-
-**Effective rent (after incentives):**
-- Rent-free: ~12–15 months on 10–15 year lease (1 month per year of term)
-- Effective ERV = Gross ERV × (1 – rent-free/lease term) ≈ **Gross ERV × 0.88**
-- Agent letting fees: 15% of first year's rent
+> **Site-specific market inputs live in `sites/[site-name]/MARKET.md`** — not here.
+> This section contains the appraisal structure and universal benchmarks only.
+> Each time market research is done for a site, `sites/[site-name]/MARKET.md` is updated with a dated entry.
 
 ---
 
-### 11.2 Investment Market — Net Initial Yields
-
-| Scenario | NIY | Comment |
-|---|---|---|
-| Prime City Grade A, low-rise (≤6F) | 4.50–5.00% | Smaller lot size, broader investor pool |
-| Prime City Grade A, mid-rise (7–14F) | 4.25–4.75% | Institutional grade, tight availability |
-| Prime City, tower (15F+, speculative) | 4.75–5.25% | Planning risk premium + longer void |
-| **Reference case (Option B, 60m)** | **4.50%** | Central assumption |
-
----
-
-### 11.3 Construction Costs — City of London (2025, BCIS basis)
-
-**Per sqm of GIA** — not NIA. The correct cost basis for development appraisal.
-
-| Building type | Cost range (£/sqm GIA) | Central (£/sqm GIA) |
-|---|---|---|
-| Low-rise commercial (≤6F, Option A basis) | £3,800–4,500 | **£4,100** |
-| Mid-rise commercial (7–14F, Option B basis) | £4,500–5,500 | **£5,000** |
-| Tower (15F+, Option C basis — core-intensive) | £5,500–7,000 | **£6,250** |
-
-**Key cost drivers as height increases:**
-- Core becomes proportionally larger and more complex (structural, MEP)
-- Curtain wall area per sqm GIA increases (more perimeter per floor in slender tower)
-- Transfer structure at podium crown (Option B/C)
-- Sky lobby fit-out, additional evacuation lifts (BSA requirement >18m)
-- Extended programme → higher preliminaries, supervision, finance
-- BCIS TPI inflation: ~+4–6% pa projected 2025–26
-
-**Demolition + enabling (this site):** £1.5–2.5M (existing 6F office, Leadenhall St)
-**Professional fees:** 12–15% of construction cost (design, PM, legal, statutory)
-**CIL (City of London Eastern Cluster, office, 2024/25):** £200/sqm NIA
-**S106 (estimated, negotiated):** £500K–£2M depending on planning obligation scope
-
----
-
-### 11.4 Finance Assumptions (2025)
-
-| Item | Rate / Basis |
-|---|---|
-| Senior debt rate | SONIA (~5%) + 250–300bps spread ≈ **7.5–8.0% pa** |
-| Loan-to-cost | 55–65% of Total Development Cost |
-| Finance calc | 60% of TDC × rate × (construction programme / 2) |
-| Dividing by 2 approximates progressive drawdown on an S-curve |
-| Arrangement fee | 1.0–1.5% of facility |
-
----
-
-### 11.5 Development Programme
-
-| Option | Planning | Construction | Let-up | **Total** |
-|---|---|---|---|---|
-| A — 10F / 42m | 12–18 months | 24–30 months | 6–9 months | **42–57 months** |
-| B — 14F / 60m | 18–24 months (EIA, pre-app) | 30–36 months | 9–12 months | **57–72 months** |
-| C — 22F / 92m | 24–36 months (GLA referral, LVMF, wind) | 36–48 months | 12–18 months | **72–102 months** |
-
-Finance period = construction + let-up phase (planning typically funded separately / land cost).
-
----
-
-### 11.6 Profit Target — Speculative City Office
-
-| Risk level | Profit on cost target | Rationale |
-|---|---|---|
-| Low (Option A, consented-height-zone) | 15–18% | Planning certainty, shorter programme |
-| Medium (Option B, EIA required) | 18–22% | LVMF study, wind, longer programme |
-| High (Option C, GLA referral) | 22–28% | Exceptional planning risk, 6–8 year total programme |
-
----
-
-### 11.7 Existing Use Value (EUV) — 100 Leadenhall baseline
-
-For development viability, RLV must exceed EUV.
-
-| Assumption | Value |
-|---|---|
-| Existing NIA (6F, ~80% efficiency) | ~4,700 sqm |
-| Current passing rent (Grade B, older stock) | ~£450/sqm pa |
-| Gross ERV existing | ~£2.1M pa |
-| Capitalised at 5.5% (secondary City) | **~£38M EUV** |
-
-Development is viable if RLV > £38M. Development uplift = RLV – EUV.
-
----
-
-### 11.8 Correct Appraisal Structure (RICS Red Book / industry standard)
+### 11.1 Correct Appraisal Structure (RICS Red Book / industry standard)
 
 ```
 GDV  = Total NIA × Gross ERV (£/sqm pa) / NIY
-     - Less: letting incentives (rent free) discounted at NIY
-     - Less: agent fees (15% of first year rent)
+     - Less: letting incentives (rent-free) discounted at NIY
+     - Less: agent letting fees (15% of first year's rent)
      = Adjusted GDV
 
-TDC  = Construction (GIA × cost/sqm GIA)
-     + Demolition + enabling
+TDC  = Construction (GIA × cost/sqm GIA)      ← cost per sqm GIA, not NIA
+     + Demolition + enabling works
      + Professional fees (12–15% of construction)
-     + CIL (NIA × £200/sqm)
+     + CIL (NIA × £/sqm — per borough schedule)
      + S106 (negotiated lump sum)
-     + Finance (60% of TDC × rate × programme/2)
+     + Finance (loan-to-cost × rate × programme / 2)   ← /2 approximates S-curve drawdown
      + Contingency (5–10% of construction)
 
-Profit target = TDC × profit-on-cost % (see 11.6)
+Profit target = TDC × profit-on-cost %
 
 RLV  = Adjusted GDV – TDC – Profit target
-Uplift = RLV – EUV
+Uplift = RLV – EUV (Existing Use Value)
 
 Viable if: RLV > EUV
 ```
 
+**Critical methodological notes:**
+- Construction cost is per sqm **GIA** (gross) — not NIA. Do not apply NIA efficiency to cost.
+- GDV is yield-capitalised on **total NIA** — not just "added" NIA. The whole building is valued.
+- Margin is expressed as **profit on cost** (industry standard) — not margin on GDV.
+- NIY varies by location, building quality, lot size — always source from site's MARKET.md.
+
 ---
 
-### 11.9 Scenario Presentation (Architectural Role)
+### 11.2 Effective Rent Calculation
 
-**We do NOT determine the inputs — that is the developer and their agent's job.**
+```
+Effective ERV = Gross ERV × (1 – rent-free months / lease term months)
+Typical: 12–15 months rent-free on 10–15yr lease ≈ Gross ERV × 0.88–0.92
+```
+
+Agent letting fees: 15% of first year's gross rent (standard UK practice).
+
+---
+
+### 11.3 Finance Assumptions (general)
+
+| Item | Typical range | Notes |
+|---|---|---|
+| Senior debt rate | Base + 250–300bps | Base rate = SONIA; confirm at time of appraisal |
+| Loan-to-cost | 55–65% of TDC | |
+| Finance period | Construction + let-up | Planning typically funded from equity separately |
+| Arrangement fee | 1.0–1.5% of facility | |
+
+---
+
+### 11.4 Development Programme Benchmarks
+
+| Scale | Planning | Construction | Let-up | Total |
+|---|---|---|---|---|
+| Low-rise (≤6F, below tall building threshold) | 12–18 months | 24–30 months | 6–9 months | 42–57 months |
+| Mid-rise (7–14F, EIA required) | 18–24 months | 30–36 months | 9–12 months | 57–72 months |
+| Tower (15F+, GLA referral, LVMF) | 24–36 months | 36–48 months | 12–18 months | 72–102 months |
+
+*Planning period varies significantly by borough — update in MARKET.md per site.*
+
+---
+
+### 11.5 Profit on Cost Benchmarks — Speculative Office (general)
+
+| Risk level | Profit on cost | Rationale |
+|---|---|---|
+| Low (consented height, no EIA) | 15–18% | Planning certainty, shorter programme |
+| Medium (EIA required, LVMF study) | 18–22% | Planning risk premium |
+| High (GLA referral, 6–8yr programme) | 22–28% | Exceptional programme and planning risk |
+
+---
+
+### 11.6 Construction Cost Structure — General (£/sqm GIA)
+
+Costs increase with height due to: larger core as % of plate, greater curtain wall area, transfer structure, extended programme, BSA compliance costs (>18m), and sky lobby requirements.
+
+| Building type | Indicative range | Key cost driver at this scale |
+|---|---|---|
+| Low-rise ≤6F | £3,500–4,500 | Standard frame, straightforward logistics |
+| Mid-rise 7–14F | £4,500–5,500 | Transfer structure, additional lifts |
+| Tower 15F+ | £5,500–7,500 | Core-intensive, curtain wall ratio, BSA |
+
+*City-specific uplift (prelims, logistics, restricted hours): +3–5% on baseline. Confirm with QS.*
+*BCIS TPI: update annually. See MARKET.md for current inflation projections.*
+
+---
+
+### 11.7 Architectural Role in Appraisal
+
+**We do NOT set the inputs — that is the developer and their instructed agent.**
 
 Our role is to:
 1. Show we understand the structure of the appraisal
-2. Describe the scenarios that each massing option creates
-3. Flag the key sensitivities (rent, yield, construction cost) that make or break each option
+2. Describe the development scenario each massing option creates
+3. Flag the key sensitivities (rent, yield, cost, programme) that move each option
 4. Present ranges, not point estimates — honest about uncertainty
+5. Trigger Tier 3 commission: demonstrate that the right design can shift the variables
 
-**Narrative framing per option:**
-
-- **Option A**: "Lowest construction cost/sqm, lowest planning risk, shortest programme. Viable at current market rents without premium assumptions. Most immediately actionable."
-- **Option B**: "Moderate uplift over existing. Requires City Core ERV (£700/sqm) and 4.5% yield to achieve 18–20% profit on cost. Sky terrace creates a premium floor identity. LVMF assessment a key risk."
-- **Option C**: "Highest GDV potential but significant cost and programme risk. Construction cost premium (£6,250/sqm) and extended programme (6–8 years total) require premium rents (£750+/sqm upper floors) and a risk-adjusted yield. Requires exceptional design quality to justify to planners and investors."
-
----
-
+**Narrative framing per option scale (adapt for site):**
+- **Low-rise (Option A type):** Lowest construction cost/sqm. Lowest planning risk. Shortest programme. Most immediately actionable. Viable at prevailing market rents without premium assumptions.
+- **Mid-rise (Option B type):** Moderate GDV uplift. Requires Grade A ERV and prime yield assumption to hit 18–20% profit on cost. Sky terrace creates a premium identity floor. Key risk: EIA and LVMF assessment timeline.
+- **Tower (Option C type):** Highest GDV potential, highest cost and programme risk. Construction cost premium and extended programme (6–8 years total) require premium upper-floor rents and risk-adjusted yield. Requires exceptional design quality to justify to planners and investors.
 
 ---
 
-## 12. MARKET DATA — LIVE SOURCES (March 2026)
+### 11.8 Site Intelligence — Where to Find It
 
-> ✅ Sourced from live web research — Savills, Cushman & Wakefield, March 2026
+All site-specific market data is maintained in:
 
----
+```
+sites/
+  _template/
+    MARKET.md          ← copy this when starting a new site
+  100-leadenhall/
+    MARKET.md          ← City of London / EC3 — live, dated entries
+  [next-site]/
+    MARKET.md          ← populate on instruction
+```
 
-### 12.1 City of London Office Investment Market (Savills, Feb 2026)
-
-**City prime NIY: 5.25%** — West End prime: 3.75%
-*(Source: Savills City Investment Watch, February 2026 — confirmed also in December 2025 issue)*
-
-**⚠️ CORRECTION to §11.2**: Previous estimate of 4.25–4.75% for City mid-rise was incorrect.
-The correct City prime yield benchmark is **5.25%**. West End is lower (3.75%) — do not conflate.
-
-**Comparable transactions (Savills City Investment Watch, 2025–2026):**
-
-| Asset | Location | Size (sqft) | Price | NIY | Cap Value/sqft | Notes |
-|---|---|---|---|---|---|---|
-| The Sans, 20 St John's Sq | Farringdon, EC1 | 36,724 | £45.9M | **5.85%** | £1,250 | BREEAM Excellent, EPC A, refurb 2023. Passing rent £77.95/sqft (£839/sqm). Aberdeen for Border to Coast |
-| 30 Moorgate | City Core, EC2 | 31,577 | £36M | — | **£1,140** | Owner-occupier (State Bank of India). 6F |
-| Finsbury House, EC2 | 50m from Liverpool St | 39,607 GIA | £9.5M | — | **£385/sqft NIA** | Consented but vacant. Long leasehold. Israeli buyer Eatos Group |
-| 2–4 Eastcheap, EC3 | City Core (our submarket) | 63,869 | £25.4M | **7.30%** | £398 | Highly reversionary, 2028 block date. Repositioning play. Greycoat |
-| Bavaria House, Appold St | 150m north Liverpool St | planning consent | — | — | — | 45F mixed-use tower scheme (229k sqft), sold with planning |
-
-**Key market signals (Savills / Cushman & Wakefield, Q4 2025 – Q1 2026):**
-- City investment volumes 2025: £3.0B+ (up **43% on 2024**, recovering from 1996-nadir low)
-- £2.0B+ under offer at start of 2026 across 41 deals
-- Active demand: 13.8M sqft, **up 51% on 10-year average** (Savills, Jan 2026)
-- **80% of space under offer is newly developed or extensively refurbished** — flight to quality is structural
-- 43% of pipeline pre-let between now and 2027
-- City vacancy rate: **7.1%** forecast at year-end (constrained in Core)
-- Owner-occupier deals = 19% of all 2025 City transactions
-- Grade A share of leasing activity: **74%** (C&W, 2025 — record high)
-
-**Mat Oakley, Director Commercial Research, Savills (January 2026):**
-> *"The office market remains our most favoured pick for investors in 2026, with steady (but highly location-focussed) tenant demand, a lack of new supply, and better-than-normal rental growth."*
-
-> *"The bulk of the completions are outside the Core, and the bulk of tenant demand is in the Core. Unless we see a surge in development completions in 2026 (or a rise in tenant exits), the undersupply and rental growth will be sustained."*
-
-> *"In some cases, a perfect location can compensate for a less-than-five-star building — something that should enable developers to value-engineer plans to a better return."*
-
----
-
-### 12.2 Corrected ERV and Yield Assumptions (replace §11.2)
-
-From the Savills transaction evidence:
-- **The Sans passing rent: £77.95/sqft = £839/sqm pa** at 5.85% NIY on a recently refurbished building in EC1/Farringdon
-- For prime new-build Grade A in EC3 Eastern Cluster: **£75–85/sqft = £807–915/sqm pa** is the supported range
-- City prime yield: **5.25%** (core, best-in-class new-build)
-- Secondary / repositioning yield: 6.5–7.5% (as evidenced by 2–4 Eastcheap at 7.30%)
-
-**Corrected GDV calculation (replace §11.2 table):**
-
-| Option | NIA (sqm) | ERV | NIY | GDV |
-|---|---|---|---|---|
-| A — 10F / 42m | ~8,200 | £750/sqm pa | 5.50% | ~£112M |
-| B — 14F / 60m | ~10,300 | £800/sqm pa | 5.25% | ~£157M |
-| C — 22F / 92m | ~16,600 | £850/sqm pa (upper floor premium) | 5.25% | ~£268M |
-
-*NIA recalculated using corrected methodology (no double coverage). C with sky lobby commands premium on upper quartile floors.*
-
----
-
-### 12.3 Appraisal Model — Error Log
-
-| Error | Previous | Corrected | Source |
-|---|---|---|---|
-| City prime NIY | 4.25–4.75% | **5.25%** | Savills City Investment Watch Feb 2026 |
-| NIA calculation | Double-applied coverage factor | Single coverage × towerFootprintPct | Code fix required |
-| Cost basis | Per sqft NIA | Per sqm GIA | Industry standard (BCIS) |
-| GDV basis | Capital value per sqft (addedNIA only) | Yield-capitalised, total NIA | RICS Red Book |
-| Margin basis | Margin/GDV | **Profit on cost** (industry standard) | RICS guidance |
+**Update protocol:**
+- Every time web research is done for a site → append a dated row to the relevant section in MARKET.md
+- Do not overwrite existing entries — append below, newest first or with `[YYYY-MM-DD]` prefix
+- Record the source and a brief summary in the Research Log (§7 of MARKET.md)
+- If a metric changes materially (e.g. yield moves), add the new row and note the delta
 
 ---
