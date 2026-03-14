@@ -266,6 +266,14 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
       </div>
     </div>
 
+    <div style="margin-top:14px">
+      <div class="drawing-label">3D Massing — Isometric SE View</div>
+      <div class="drawing-wrap" style="background:#ffffff">
+        <svg id="massing-3d-svg" style="width:100%;display:block" viewBox="0 0 560 240"></svg>
+      </div>
+      <div class="drawing-caption">Existing (grey) · New build (white) · Indicative massing · Not to scale</div>
+    </div>
+
     <div class="section-title" style="margin-top:14px"><div class="dot"></div>Key Adjacencies</div>
     <div class="adj-list">
       <div class="adj-item"><strong>122 Leadenhall Street</strong><span>The Cheesegrater — 224m / 48F · Rogers Stirk Harbour · 2014</span></div>
@@ -888,9 +896,177 @@ function buildMassingSectionSVG(){
 }
 
 
+// ── 3D Isometric Massing ──────────────────────────────────────────────────────
+// SE viewpoint (looking NW), white block massing, minimalist.
+// Existing zone (0→existH): medium grey — current building
+// New build zone (existH→propH): white — proposed addition
+function buildMassing3DSVG(){
+  const svg=document.getElementById('massing-3d-svg');
+  if(!svg) return;
+  const VW=560, VH=240, p=D.polygon;
+  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
+
+  const lons=p.map(c=>c[0]), lats=p.map(c=>c[1]);
+  const lonMin=Math.min(...lons), lonMax=Math.max(...lons);
+  const latMin=Math.min(...lats), latMax=Math.max(...lats);
+  const cLon=(lonMin+lonMax)/2, cLat=(latMin+latMax)/2;
+
+  // Convert polygon to local plan coords (metres from centroid)
+  // Close the polygon (remove duplicate last point if present)
+  const raw=p.map(c=>[(c[0]-cLon)*M_PER_LNG, (c[1]-cLat)*M_PER_LAT]);
+  const pts=raw[0][0]===raw[raw.length-1][0]&&raw[0][1]===raw[raw.length-1][1]?raw.slice(0,-1):raw;
+  const nPts=pts.length;
+
+  const existH=D.heightM, propH=D.potentialHeight;
+
+  // Iso scale params
+  const planS=1.6;   // px per metre in plan
+  const scH=1.8;     // px per metre in height
+  // Viewer from SE → origin offset left-center of SVG to show building centered
+  const cx=VW*0.46, cy=VH*0.82;
+
+  // Isometric projection (SE view, looking NW)
+  // East(+x) goes right, North(+y) goes left, Up(+z) goes up
+  function iso(x,y,z){
+    const sx=(x-y)*planS;
+    const sy=-((x+y)*planS*0.5 + z*scH);
+    return [cx+sx, cy+sy];
+  }
+
+  // Outward normal for CW polygon (signed area < 0):
+  // n = (-(P2y-P1y), P2x-P1x)
+  // Face visible from SE viewer if n · (1,-1) > 0
+  // → -(P2y-P1y) - (P2x-P1x) > 0
+  function visible(p1,p2){
+    return (-(p2[1]-p1[1]) - (p2[0]-p1[0])) > 0;
+  }
+
+  // Face shade: east-facing vs south-facing
+  // nx component of outward normal: nx = -(P2y-P1y)
+  function faceType(p1,p2){
+    const nx=-(p2[1]-p1[1]);
+    const ny=(p2[0]-p1[0]);
+    // If nx > |ny|: predominantly east-facing; else south-facing
+    return nx > Math.abs(ny) ? 'east' : 'south';
+  }
+
+  // Colour palette — white block massing, minimalist
+  const C={
+    // Existing zone (grey)
+    exist_east:'#7880a0',   // east face (shadow, darker)
+    exist_south:'#9098b8',  // south face (lighter)
+    exist_top:'#a8b0c8',    // existing roof datum (partially visible at corners)
+    exist_stroke:'#3a3d50',
+    // New build zone (white)
+    new_east:'#c8ccd8',     // east face (very slight shadow)
+    new_south:'#eceef4',    // south face (near-white)
+    new_top:'#ffffff',      // proposed roof top
+    new_stroke:'#1a1d2e',
+    // Ground
+    ground:'#d4d5dc',
+    groundStroke:'#8a8d9a',
+    // Annotation
+    dim:'#1a1d2e',
+  };
+
+  // Collect visible edge faces with depth for painter's algorithm
+  const faces=[];
+  for(let i=0;i<nPts;i++){
+    const p1=pts[i], p2=pts[(i+1)%nPts];
+    if(!visible(p1,p2)) continue;
+    const ft=faceType(p1,p2);
+    const depth=(p1[0]+p2[0])/2-(p1[1]+p2[1])/2; // +x-y: higher = closer to SE viewer
+    faces.push({p1,p2,ft,depth});
+  }
+  // Sort: far (low depth) first
+  faces.sort((a,b)=>a.depth-b.depth);
+
+  // Helper: 4-point polygon SVG
+  function quad(a,b,c,d,fill,stroke,sw){
+    const pts=[a,b,c,d].map(p=>p.join(',')).join(' ');
+    return `<polygon points="${pts}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  }
+
+  const out=[];
+
+  // White background
+  out.push(`<rect width="${VW}" height="${VH}" fill="white"/>`);
+
+  // Ground shadow plane — subtle grey base
+  const groundPts=pts.map(pt=>iso(pt[0],pt[1],0));
+  out.push(`<polygon points="${groundPts.map(p=>p.join(',')).join(' ')}" fill="${C.ground}" stroke="${C.groundStroke}" stroke-width="0.6"/>`);
+
+  // Wall faces (painter order: far → near)
+  faces.forEach(({p1,p2,ft,depth})=>{
+    // Existing zone (0 → existH)
+    const bl=iso(p1[0],p1[1],0), br=iso(p2[0],p2[1],0);
+    const tl=iso(p1[0],p1[1],existH), tr=iso(p2[0],p2[1],existH);
+    const existFill=ft==='east'?C.exist_east:C.exist_south;
+    out.push(quad(bl,br,tr,tl,existFill,C.exist_stroke,0.6));
+
+    // New build zone (existH → propH)
+    const bl2=iso(p1[0],p1[1],existH), br2=iso(p2[0],p2[1],existH);
+    const tl2=iso(p1[0],p1[1],propH), tr2=iso(p2[0],p2[1],propH);
+    const newFill=ft==='east'?C.new_east:C.new_south;
+    out.push(quad(bl2,br2,tr2,tl2,newFill,C.new_stroke,0.7));
+
+    // Datum line at existH — marks existing/new divide clearly
+    const [lx1,ly1]=iso(p1[0],p1[1],existH);
+    const [lx2,ly2]=iso(p2[0],p2[1],existH);
+    out.push(`<line x1="${lx1.toFixed(1)}" y1="${ly1.toFixed(1)}" x2="${lx2.toFixed(1)}" y2="${ly2.toFixed(1)}" stroke="white" stroke-width="0.8" opacity="0.5" stroke-dasharray="3,2"/>`);
+  });
+
+  // Proposed top face (at propH) — white
+  const topPts=pts.map(pt=>iso(pt[0],pt[1],propH));
+  out.push(`<polygon points="${topPts.map(p=>p.join(',')).join(' ')}" fill="${C.new_top}" stroke="${C.new_stroke}" stroke-width="0.8"/>`);
+
+  // ── Dimension annotations ─────────────────────────────────────────────────
+  // Right-side (east face) vertical dimension: total proposed height
+  const eVtxIdx=pts.reduce((bi,pt,i)=>pt[0]>pts[bi][0]?i:bi,0); // easternmost vertex
+  const [ex0,ey0]=iso(pts[eVtxIdx][0],pts[eVtxIdx][1],0);
+  const [ex1,ey1]=iso(pts[eVtxIdx][0],pts[eVtxIdx][1],propH);
+  const [ex_e,]=iso(pts[eVtxIdx][0],pts[eVtxIdx][1],existH);
+  const [,ey_e]=iso(pts[eVtxIdx][0],pts[eVtxIdx][1],existH);
+  const dxOff=22; // right offset for dimension line
+  out.push(`
+    <!-- Total height dim -->
+    <line x1="${ex0+dxOff}" y1="${ey0}" x2="${ex0+dxOff}" y2="${ey1}" stroke="${C.dim}" stroke-width="0.7"/>
+    <line x1="${ex0+dxOff-3}" y1="${ey0}" x2="${ex0+dxOff+3}" y2="${ey0}" stroke="${C.dim}" stroke-width="1"/>
+    <line x1="${ex0+dxOff-3}" y1="${ey1}" x2="${ex0+dxOff+3}" y2="${ey1}" stroke="${C.dim}" stroke-width="1"/>
+    <text x="${ex0+dxOff+5}" y="${(ey0+ey1)/2}" dominant-baseline="middle"
+      font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="${C.dim}">+${propH}m</text>
+    <!-- Existing datum line across elevation -->
+    <line x1="${ex0+dxOff-6}" y1="${ey_e}" x2="${ex0+dxOff+3}" y2="${ey_e}" stroke="${C.dim}" stroke-width="0.6" stroke-dasharray="3,2"/>
+    <text x="${ex0+dxOff+5}" y="${(ey0+ey_e)/2}" dominant-baseline="middle"
+      font-family="JetBrains Mono,monospace" font-size="7" fill="#666">${existH}m</text>
+  `);
+
+  // Zone labels on south face (largest visible face)
+  // Find a good south-facing face to put labels on
+  const southFace=faces.find(f=>f.ft==='south'&&Math.abs((f.p2[0]-f.p1[0]))>8);
+  if(southFace){
+    const {p1,p2}=southFace;
+    const mcx=(p1[0]+p2[0])/2, mcy=(p1[1]+p2[1])/2;
+    const [lbx,lby]=iso(mcx,mcy,existH*0.5);
+    const [ltx,lty]=iso(mcx,mcy,existH+(propH-existH)*0.5);
+    out.push(`<text x="${lbx.toFixed(1)}" y="${lby.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white" opacity="0.7">EXISTING</text>`);
+    out.push(`<text x="${ltx.toFixed(1)}" y="${lty.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="${C.dim}" opacity="0.6">NEW BUILD</text>`);
+  }
+
+  // View direction label
+  out.push(`<text x="${VW-6}" y="${VH-6}" text-anchor="end"
+    font-family="Inter,sans-serif" font-size="6" fill="#888">ISOMETRIC · SE VIEW</text>`);
+
+  svg.innerHTML=out.join('\n');
+}
+
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 buildGroundFloorPlan().catch(console.error);
 buildMassingSectionSVG();
+buildMassing3DSVG();
 fetch('/api/config').then(r=>r.json()).then(cfg=>buildContextMap(cfg.mapboxToken)).catch(()=>buildContextMap(null));
 </script>
 </body>
