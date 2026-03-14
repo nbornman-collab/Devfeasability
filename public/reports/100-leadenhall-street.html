@@ -957,10 +957,14 @@ async function buildGroundFloorPlan(){
 function buildMassingSectionSVG(svgId='section-svg', propH=D.potentialHeight){
   const svg=document.getElementById(svgId);
   if(!svg) return;
-  const VW=280,VH=195;
+  const VW=280;
   const existH=D.heightM;
-  const scH=(VH-55)/propH;
-  const groundY=VH-28;
+  // Fixed absolute scale — 3.5 px per metre — so taller options appear proportionally taller
+  const scH=3.5;
+  const gndPad=28, topPad=22;
+  const VH=Math.round(propH*scH + gndPad + topPad);
+  svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
+  const groundY=VH-gndPad;
   const hy=h=>groundY-h*scH;
   const siteWm=Math.sqrt(D.plotArea*1.1);
   const scW=VW*0.36/siteWm;
@@ -1236,15 +1240,10 @@ function buildGFPlanStatic(svgId='gf-plan-static'){
   const bldgPts=p.map(c=>[cLon+(c[0]-cLon)*0.99,cLat+(c[1]-cLat)*0.99]).map(c=>px(c[0],c[1]).join(',')).join(' ');
   const scBar=20*sc;
 
-  const C={road:'#bfc0c8',blk:'#9fa2b0',site:'#e0e1e6',bldg:'#fff',core:'#1a1d2e',coreF:'#c8cad4',str:'#585b6e',dim:'#1a1d2e'};
+  const C={site:'#f0f1f3',bldg:'#fff',core:'#1a1d2e',coreF:'#c8cad4',str:'#585b6e',dim:'#1a1d2e'};
 
   svg.innerHTML=`
-    <rect width="${VW}" height="${VH}" fill="${C.road}"/>
-    <rect x="0" y="0" width="${VW}" height="${siteTopY-stN}" fill="${C.blk}"/>
-    <rect x="0" y="${siteBotY+stS}" width="${VW}" height="${VH-(siteBotY+stS)}" fill="${C.blk}"/>
-    <rect x="0" y="${siteTopY-stN}" width="${siteLeftX-stW}" height="${siteBotY+stS-(siteTopY-stN)}" fill="${C.blk}"/>
-    <rect x="${siteRightX+stE}" y="${siteTopY-stN}" width="${VW-(siteRightX+stE)}" height="${siteBotY+stS-(siteTopY-stN)}" fill="${C.blk}"/>
-    <polygon points="${sitePts}" fill="${C.site}"/>
+    <polygon points="${sitePts}" fill="${C.site}" stroke="#bfc0c8" stroke-width="0.5"/>
     <polygon points="${bldgPts}" fill="${C.bldg}" stroke="${C.core}" stroke-width="1.6"/>
     <rect x="${(coreNEx-cw).toFixed(1)}" y="${coreNEy.toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="${C.coreF}" stroke="${C.core}" stroke-width="0.8" rx="1"/>
     <polygon points="${sitePts}" fill="none" stroke="${C.core}" stroke-width="0.8" stroke-dasharray="4,2"/>
@@ -1302,7 +1301,7 @@ buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92);
 // Three.js: load async — page renders without it, 3D fills in once loaded
 (function loadThreeJS(){
   const s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js';
+  s.src = '/lib/three.min.js';
   s.onload = function(){
     buildMassing3DCanvas('massing-3d-canvas', REPORT_OPTS[1]);
     buildMassing3DCanvas('iso-opt-a', optA);
