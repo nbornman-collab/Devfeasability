@@ -15,8 +15,10 @@
   --accent:#4f46e5;--green:#059669;--red:#dc2626;--amber:#d97706;
   --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
-html,body{min-height:100%;font-family:var(--sans);background:var(--surface);color:var(--text)}
+html,body{height:100%;font-family:var(--sans);background:var(--surface);color:var(--text);overflow:hidden}
+#map{position:fixed;top:0;left:0;width:50%;height:100%;z-index:1}
 
+.panel{position:fixed;top:0;right:0;width:50%;height:100%;overflow-y:auto;overflow-x:hidden;background:var(--surface);z-index:5}
 .tier-nav{display:flex;align-items:center;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 24px}
 .tier-link{display:flex;align-items:center;gap:5px;padding:11px 12px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
 .tier-link .tid{font:700 9px var(--mono);color:var(--text3);letter-spacing:.5px}
@@ -52,10 +54,8 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
 .uplift-stat .ulbl{font:500 8px var(--sans);opacity:.6;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
 .uval.green{color:#34d399}.uval.amber{color:#fbbf24}.uval.purple{color:#a78bfa}
 
-/* Body */
-.body-grid{display:grid;grid-template-columns:1fr 340px}
-.main-col{padding:24px 28px;display:flex;flex-direction:column;gap:20px}
-.side-col{background:#fff;border-left:1px solid var(--border);display:flex;flex-direction:column;min-height:600px}
+/* Content */
+.content{padding:20px 24px;display:flex;flex-direction:column;gap:18px}
 
 .tags-row{display:flex;gap:7px;flex-wrap:wrap;padding:14px 28px;background:#fff;border-bottom:1px solid var(--border)}
 .tag{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font:600 10px var(--sans);letter-spacing:.2px;border:1px solid}
@@ -131,11 +131,17 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
 .skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:4px;height:14px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-@media(max-width:860px){.body-grid{grid-template-columns:1fr}.side-col{border-left:none;border-top:1px solid var(--border)}.signal-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){
+  #map{width:100%;height:45%;position:fixed;top:0}
+  .panel{width:100%;height:55%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border)}
+  .signal-grid{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
+<div id="map"></div>
 
+<div class="panel">
 <nav class="tier-nav">
   <a href="/t1/1-silk-st" class="tier-link active"><span class="tid">T1</span><span class="tname">Scout</span></a>
   <span class="tier-sep">·</span>
@@ -178,7 +184,7 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
   </div>
 </div>
 
-<!-- Tags -->
+<!-- Tags — inside panel, after hero -->
 <div class="tags-row">
   <div class="tag red">🏛️ NOT Eastern Cluster</div>
   <div class="tag amber">⚠️ Heritage Impact Assessment mandatory</div>
@@ -188,11 +194,7 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
   <div class="tag blue">🏢 Large City plot · 9,000 m²</div>
 </div>
 
-<div class="body-grid">
-  <div class="main-col">
-
-    <!-- Map -->
-    <div id="scout-map"></div>
+<div class="content">
 
     <!-- Market signals -->
     <div class="card">
@@ -304,22 +306,22 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
       </div>
     </div>
 
-  </div>
-
-  <!-- Side col — planning apps -->
-  <div class="side-col">
-    <div class="side-head">
-      <h2>Recent Planning Applications <span id="apps-count" style="font-weight:400;color:var(--text3)">within 300m</span></h2>
-    </div>
-    <div id="apps-list" style="flex:1;overflow-y:auto">
-      <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
-        <div class="skeleton" style="width:80%"></div>
-        <div class="skeleton" style="width:60%"></div>
-        <div class="skeleton" style="width:75%"></div>
+    <!-- Planning apps (inline, not side column) -->
+    <div class="card">
+      <div class="card-head">
+        <h3>Recent Planning Applications <span id="apps-count" style="font-weight:400;color:var(--text3)">within 300m</span></h3>
+      </div>
+      <div id="apps-list">
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+          <div class="skeleton" style="width:80%"></div>
+          <div class="skeleton" style="width:60%"></div>
+          <div class="skeleton" style="width:75%"></div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
+</div><!-- end .content -->
+</div><!-- end .panel -->
 
 <script>
 const LAT=51.52034, LNG=-0.09234;
@@ -435,7 +437,7 @@ async function fetchApps(){
 async function init(){
   const cfg=await(await fetch('/api/config')).json();
   mapboxgl.accessToken=cfg.mapboxToken;
-  const map=new mapboxgl.Map({container:'scout-map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:16,pitch:40,bearing:5,antialias:true});
+  const map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:16,pitch:50,bearing:5,antialias:true});
   map.addControl(new mapboxgl.NavigationControl(),'top-right');
   map.on('style.load',()=>{
     map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
