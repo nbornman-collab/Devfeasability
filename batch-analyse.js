@@ -50,10 +50,40 @@ async function getPTAL(lat, lng) {
   } catch { return null; }
 }
 
-function scoreSite(building, planning, plotArea, ptal) {
+// Big-box / institutional retail — name patterns to exclude
+const BIG_BOX_NAMES = /tesco|sainsbury|lidl|aldi|asda|waitrose|morrisons|ikea|marks\s*&\s*spencer|\bm&s\b|primark|h&m|\bnext\b|co-op|costco|homebase|b&q|halfords|argos|currys/i;
+const ANCHOR_SHOP_TAGS = new Set(['supermarket','hypermarket','mall','department_store','wholesale']);
+const ANCHOR_BUILDING_TAGS = new Set(['supermarket']);
+
+function isInstitutionalSite(tags, plotArea) {
+  if (tags.shop && ANCHOR_SHOP_TAGS.has(tags.shop)) return true;
+  if (tags.building && ANCHOR_BUILDING_TAGS.has(tags.building) && plotArea > 1000) return true;
+  if (tags.landuse === 'retail' && plotArea > 3000) return true;
+  if (tags.name && BIG_BOX_NAMES.test(tags.name)) return true;
+  return false;
+}
+
+function sweetSpotSizeScore(remainingCapacity) {
+  // Rewards 500–2000sqm sweet spot; penalises institutional scale
+  if (remainingCapacity < 200) return 0;
+  if (remainingCapacity < 500) return (remainingCapacity - 200) / 300 * 10; // 0–10
+  if (remainingCapacity <= 2000) return 10 + (remainingCapacity - 500) / 1500 * 5; // 10–15
+  if (remainingCapacity <= 5000) return 15 - (remainingCapacity - 2000) / 3000 * 7; // 15–8
+  return Math.max(2, 8 - (remainingCapacity - 5000) / 5000 * 6); // 8→2, floor 2
+}
+
+function acquirabilityScore(buildingType, plotArea, remainingCapacity, useClass) {
+  let score = 10;
+  if (plotArea > 3000) score -= 5; // large footprint = likely institutional
+  if (['retail', 'supermarket', 'E-anchor'].includes(buildingType) || useClass === 'E-anchor') score -= 3;
+  if (remainingCapacity > 5000) score -= 3; // mega-site
+  if (['warehouse', 'industrial', 'workshop', 'storage'].includes(buildingType)) score += 2; // often private
+  return Math.max(0, Math.min(10, score));
+}
+
+function scoreSite(building, planning, plotArea, ptal, buildingType = 'yes', useClass = 'E') {
   const floors = building.levels || 2;
   const ftf = 3.2;
-  const heightM = building.height || floors * ftf;
   const existingFloorArea = plotArea * floors;
   
   const typicalH = planning.typicalApprovedHeights || { low: 10, mid: 20, high: 30 };
@@ -84,17 +114,25 @@ function scoreSite(building, planning, plotArea, ptal) {
   if (planning.conservationArea) constraintRisk += 3;
   if (planning.lvmfExposure === 'high' || planning.lvmfExposure === 'very high') constraintRisk += 2;
   if (planning.article4Active) constraintRisk += 1;
+  // Active approved planning = site already in play
+  if (planning.recentApplications?.some(a => ['approved','under construction'].includes(a.status?.toLowerCase()))) constraintRisk += 4;
   // Normalize 0-10
   constraintRisk = Math.min(10, constraintRisk * 2);
+
+  // Data quality flag for suspicious single-storey large footprints
+  const dataQualityFlag = (floors === 1 && plotArea > 1500)
+    ? 'large-single-storey — verify floor count'
+    : null;
   
-  // Composite score (0-100)
-  const underbuiltScore = Math.min(30, underbuiltPct * 0.4); // 0-30
-  const marginScore = Math.min(25, Math.max(0, marginPct) * 0.8); // 0-25
-  const ptalScore = ptal ? Math.min(15, ptal * 2.5) : 7.5; // 0-15
-  const riskScore = Math.max(0, 15 - constraintRisk * 1.5); // 0-15
-  const sizeScore = Math.min(15, remainingCapacity / 500 * 15); // 0-15, bigger = better
+  // Composite score (0–110, ~100 typical)
+  const underbuiltScore = Math.min(30, underbuiltPct * 0.4);       // 0–30
+  const marginScore = Math.min(25, Math.max(0, marginPct) * 0.8);  // 0–25
+  const ptalScore = ptal ? Math.min(15, ptal * 2.5) : 7.5;         // 0–15
+  const riskScore = Math.max(0, 15 - constraintRisk * 1.5);        // 0–15
+  const sizeScore = sweetSpotSizeScore(remainingCapacity);          // 0–15, sweet spot
+  const acqScore = acquirabilityScore(buildingType, plotArea, remainingCapacity, useClass); // 0–10
   
-  const composite = Math.round(underbuiltScore + marginScore + ptalScore + riskScore + sizeScore);
+  const composite = Math.round(underbuiltScore + marginScore + ptalScore + riskScore + sizeScore + acqScore);
   
   return {
     underbuiltPct: Math.round(underbuiltPct),
@@ -109,6 +147,7 @@ function scoreSite(building, planning, plotArea, ptal) {
     composite,
     existingFloorArea: Math.round(existingFloorArea),
     potentialFloorArea: Math.round(potentialFloorArea),
+    ...(dataQualityFlag && { dataQualityFlag }),
   };
 }
 
@@ -137,8 +176,11 @@ async function main() {
     if (coords.length < 3) continue;
     
     const plotArea = calcPolygonArea(coords);
-    if (plotArea < 50 || plotArea > 5000) continue; // skip tiny/huge
+    if (plotArea < 50) continue; // skip tiny
     
+    // Skip institutional / big-box retail regardless of size
+    if (isInstitutionalSite(tags, plotArea)) continue;
+
     const centroid = getCentroid(coords);
     const address = [tags['addr:housenumber'], tags['addr:street']].filter(Boolean).join(' ') || tags.name || `Way ${way.id}`;
     const buildingType = tags.building || 'yes';
@@ -159,7 +201,9 @@ async function main() {
       { levels, height: parseFloat(tags.height) || null },
       planning,
       plotArea,
-      null // PTAL fetched later for top candidates only
+      null, // PTAL fetched later for top candidates only
+      buildingType,
+      useClass
     );
     
     if (score.underbuiltPct < 20) continue; // skip already dense
@@ -201,7 +245,9 @@ async function main() {
         buildingType: r.buildingType, ptalBand: ptal >= 5 ? '5-6' : ptal >= 3 ? '3-4' : '1-2'
       }),
       r.plotArea,
-      ptal
+      ptal,
+      r.buildingType,
+      r.useClass
     );
     Object.assign(r, rescore);
     // Rate limit

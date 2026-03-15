@@ -443,7 +443,8 @@ function guessUseClass(osmBuildingType) {
   const mapping = {
     'residential': 'C3', 'apartments': 'C3', 'house': 'C3', 'detached': 'C3',
     'terrace': 'C3', 'semidetached_house': 'C3', 'bungalow': 'C3', 'dormitory': 'C4',
-    'commercial': 'E', 'retail': 'E', 'office': 'E', 'shop': 'E', 'supermarket': 'E',
+    'commercial': 'E', 'retail': 'E', 'office': 'E', 'shop': 'E',
+    'supermarket': 'E-anchor', // institutional retail — flagged for acquirability penalty
     'restaurant': 'E', 'cafe': 'E', 'bank': 'E',
     'industrial': 'B2', 'warehouse': 'B8', 'storage': 'B8',
     'hotel': 'C1', 'hostel': 'C1',
