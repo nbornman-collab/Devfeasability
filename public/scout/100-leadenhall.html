@@ -317,44 +317,49 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
     <!-- T2 unlock teaser -->
     <div class="unlock-card">
       <div class="unlock-head">
-        <h3>T2 Appraise — Full Development Model</h3>
-        <p>Unlock 3 massing options, precise financials, floor plans and development margin</p>
+        <h3>Every site has a sweet spot. T2 finds it.</h3>
+        <p id="teaser-hook">On this site, choosing the wrong scenario costs up to <strong id="margin-delta" style="color:#4338ca">£—M</strong> in developer margin. T2 shows you exactly where the return curve peaks — and what each additional floor costs you.</p>
       </div>
       <div class="unlock-body">
-        <div class="unlock-row">
-          <div class="unlock-icon">📐</div>
-          <div>
-            <div class="unlock-text">3 massing options (Conservative / Mid-Rise / Tower) with 3D isometric views</div>
+
+        <!-- Blurred return curve teaser -->
+        <div style="position:relative;margin-bottom:16px;border-radius:6px;overflow:hidden;border:1px solid #c4b5fd">
+          <svg id="teaser-curve" viewBox="0 0 280 80" style="width:100%;display:block;filter:blur(2.5px);opacity:.55"></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+            <div style="font:700 11px 'Inter',sans-serif;color:#312e81">Return curve — locked</div>
+            <div style="font:400 9px 'Inter',sans-serif;color:#5b5299">Unlock T2 to see where this site peaks</div>
           </div>
         </div>
-        <div class="unlock-row">
-          <div class="unlock-icon">💰</div>
-          <div>
-            <div class="unlock-text">Full pro forma: construction cost, finance, CIL, S106, developer margin</div>
-            <div style="font:500 10px var(--mono);color:var(--text3);margin-top:3px">
-              Dev margin: <span class="lock-blur">██ – ██%</span> &nbsp;|&nbsp; Profit on cost: <span class="lock-blur">£██M</span>
-            </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+          <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:6px;padding:10px">
+            <div style="font:700 8px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#5b5299;margin-bottom:4px">What T1 tells you</div>
+            <div style="font:400 10px 'Inter',sans-serif;color:#4a506a;line-height:1.5">GDV range, uplift potential, planning context. The size of the prize.</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #a78bfa;border-radius:6px;padding:10px">
+            <div style="font:700 8px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#4338ca;margin-bottom:4px">What T2 tells you</div>
+            <div style="font:400 10px 'Inter',sans-serif;color:#3730a3;line-height:1.5">Exactly where the sweet spot is. What each extra floor costs. Which scenario to build.</div>
           </div>
         </div>
-        <div class="unlock-row">
-          <div class="unlock-icon">🏢</div>
-          <div>
-            <div class="unlock-text">Floor plans at 1:500 · Section with City skyline context · Core programme</div>
+
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:8px;font:400 10px 'Inter',sans-serif;color:#4a506a">
+            <span style="color:#4f46e5;font-weight:700">→</span> Know the right height before you brief an architect
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font:400 10px 'Inter',sans-serif;color:#4a506a">
+            <span style="color:#4f46e5;font-weight:700">→</span> See exactly where construction cost, compliance and finance compound
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font:400 10px 'Inter',sans-serif;color:#4a506a">
+            <span style="color:#4f46e5;font-weight:700">→</span> Understand which constraint limits your scheme — and whether it's worth fighting
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font:400 10px 'Inter',sans-serif;color:#4a506a">
+            <span style="color:#4f46e5;font-weight:700">→</span> Full pro forma: margin <span style="font-family:'JetBrains Mono',monospace;filter:blur(3px);letter-spacing:-1px">██–██%</span> · profit <span style="font-family:'JetBrains Mono',monospace;filter:blur(3px);letter-spacing:-1px">£██M</span>
           </div>
         </div>
-        <div class="unlock-row">
-          <div class="unlock-icon">⚠️</div>
-          <div>
-            <div class="unlock-text">BSA compliance flags · CIL breakdown · Planning risk assessment per option</div>
-          </div>
-        </div>
-        <div class="unlock-row">
-          <div class="unlock-icon">📊</div>
-          <div>
-            <div class="unlock-text">Sensitivity panel · IRR range · Comparable transaction evidence</div>
-          </div>
-        </div>
-        <a href="/t2/100-leadenhall" class="unlock-cta">Run full appraisal → T2 Appraise</a>
+
+        <a href="/t2/100-leadenhall" class="unlock-cta" style="font-size:13px;padding:13px">
+          Find the sweet spot → T2 Appraise
+        </a>
       </div>
     </div>
 
@@ -412,6 +417,38 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
   const mult   = (gdvHi / EXISTING_EUV).toFixed(1);
 
   set('gdv-hi-val', Math.round(gdvHi/1e6));
+
+  // Rough margin delta (highest vs lowest scenario profit)
+  const margins = GDV_OPTS.map(o=>{
+    const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
+    const nia=(PLOT_AREA*o.cov*o.podF+PLOT_AREA*o.twrPct*o.twrF)*o.nia;
+    const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
+    const cc=gea*5000; // rough avg cost
+    const tdc=cc*(1+0.13+0.075)+nia*200+gdv*0.15*0.1+2750000;
+    return gdv-tdc;
+  });
+  const mDelta=Math.round(Math.abs(Math.max(...margins)-Math.min(...margins))/1e6);
+  set('margin-delta','£'+mDelta+'M');
+
+  // Blurred teaser curve SVG
+  const W=280,H=80,pts=GDV_OPTS.map((o,i)=>{
+    const x=20+i*(W-40)/2;
+    const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
+    const nia=gea*o.nia;
+    const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
+    const cc=gea*(3800+i*1200);
+    const tdc=cc*(1.2)+nia*200+gdv*0.015+2750000;
+    const poc=(gdv-tdc)/tdc*100;
+    const y=H-10-(poc-20)/(50-20)*(H-20);
+    return `${x},${Math.max(5,Math.min(H-10,y)).toFixed(0)}`;
+  }).join(' ');
+  const tsvg=document.getElementById('teaser-curve');
+  if(tsvg) tsvg.innerHTML=`
+    <polyline points="${pts}" fill="none" stroke="#4f46e5" stroke-width="3"/>
+    ${GDV_OPTS.map((_,i)=>{const[x,y]=pts.split(' ')[i].split(',');return`<circle cx="${x}" cy="${y}" r="5" fill="#4f46e5"/>`;}).join('')}
+    <text x="20" y="${H-2}" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">Low</text>
+    <text x="${W/2}" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">Base</text>
+    <text x="${W-20}" y="${H-2}" text-anchor="end" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">High</text>`;
   set('uplift-max', fmtM(uplift));
   set('uplift-mult', mult + '×');
   set('uplift-nia', fmtK(niaHi));

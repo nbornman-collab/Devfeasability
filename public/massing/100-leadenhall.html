@@ -10,134 +10,118 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#ffffff;--surface:#f7f8fb;--surface2:#f0f2f6;--surface3:#e8eaef;
-  --border:#dde0ea;--text:#0f1117;--text2:#4a506a;--text3:#8892a8;
-  --accent:#4f46e5;--green:#059669;--red:#dc2626;--amber:#d97706;--blue:#2563eb;
-  --lo:#059669;--base:#4f46e5;--hi:#d97706;
+  --bg:#fff;--s1:#f7f8fb;--s2:#f0f2f6;--s3:#e8eaef;--border:#dde0ea;
+  --text:#0f1117;--t2:#4a506a;--t3:#8892a8;
+  --accent:#4f46e5;--lo:#059669;--base:#4f46e5;--hi:#d97706;
   --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
-html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--text);overflow:hidden}
-#map{position:absolute;inset:0;right:min(600px,38vw)}
+html,body{height:100%;font-family:var(--sans);background:#eef0f5;color:var(--text);overflow:hidden}
+#map{position:absolute;inset:0;right:min(620px,40vw)}
 
-/* ── Map overlays ── */
-.topbar{position:fixed;top:0;left:0;right:min(600px,38vw);z-index:10;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,transparent 100%);pointer-events:none}
+.topbar{position:fixed;top:0;left:0;right:min(620px,40vw);z-index:10;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,rgba(255,255,255,.95) 0%,transparent 100%);pointer-events:none}
 .topbar>*{pointer-events:auto}
-.logo{font:800 15px var(--sans);color:var(--text)}.logo span{color:var(--accent)}
-.scenario-bar{position:fixed;top:68px;left:24px;z-index:10;display:flex;gap:3px;background:rgba(255,255,255,.95);border:1px solid var(--border);border-radius:12px;padding:4px;box-shadow:0 4px 20px rgba(0,0,0,.1)}
-.sbar-btn{padding:8px 14px;border:none;border-radius:9px;font:600 11px var(--sans);cursor:pointer;transition:all .2s;background:transparent;color:var(--text3)}
+.logo{font:800 14px var(--sans);color:var(--text)}.logo span{color:var(--accent)}
+
+.sbar{position:fixed;top:58px;left:20px;z-index:10;display:flex;gap:3px;background:rgba(255,255,255,.96);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:0 4px 16px rgba(0,0,0,.09)}
+.sbar-btn{padding:7px 13px;border:none;border-radius:8px;font:600 11px var(--sans);cursor:pointer;background:transparent;color:var(--t3);transition:all .18s}
 .sbar-btn .sub{display:block;font:400 8px var(--sans);margin-top:1px;opacity:.7}
-.sbar-btn:hover{background:var(--surface);color:var(--text2)}
-.sbar-btn.active{color:white}
-.sbar-btn.lo.active{background:var(--lo)}
-.sbar-btn.base.active{background:var(--base)}
-.sbar-btn.hi.active{background:var(--hi)}
+.sbar-btn:hover{background:var(--s1)}
+.sbar-btn.active{color:#fff}
+.sbar-btn.lo.active{background:var(--lo)}.sbar-btn.base.active{background:var(--base)}.sbar-btn.hi.active{background:var(--hi)}
 
-/* ── Panel ── */
-.panel{position:fixed;top:0;right:0;width:min(600px,38vw);height:100%;background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:5;display:flex;flex-direction:column}
+/* Panel */
+.panel{position:fixed;top:0;right:0;width:min(620px,40vw);height:100%;background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:5}
 
-/* ── Tier nav ── */
-.tier-nav{display:flex;align-items:center;background:white;border-bottom:1px solid var(--border);padding:0 20px;flex-shrink:0}
-.tier-link{display:flex;align-items:center;gap:4px;padding:10px 12px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:border-color .15s;white-space:nowrap}
-.tier-link .tid{font:700 9px var(--mono);color:var(--text3);letter-spacing:.5px}
-.tier-link .tname{font:600 9px var(--sans);color:var(--text3)}
+/* Tier nav */
+.tier-nav{display:flex;align-items:center;background:var(--bg);border-bottom:1px solid var(--border);padding:0 18px;position:sticky;top:0;z-index:20}
+.tier-link{display:flex;align-items:center;gap:4px;padding:9px 10px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tier-link .tid{font:700 8px var(--mono);color:var(--t3);letter-spacing:.5px}
+.tier-link .tname{font:600 8px var(--sans);color:var(--t3)}
 .tier-link.active .tid{color:var(--accent)}.tier-link.active .tname{color:var(--text)}
 .tier-link.active{border-bottom-color:var(--accent)}
-.tier-link.locked{opacity:.35;cursor:not-allowed;pointer-events:none}
-.tier-sep{font:400 10px var(--sans);color:var(--border);padding:0 1px;user-select:none}
+.tier-link.locked{opacity:.3;cursor:not-allowed;pointer-events:none}
+.tier-sep{color:var(--border);padding:0 1px;font-size:10px;user-select:none}
 
-/* ── Site header ── */
-.site-header{padding:16px 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0}
-.site-addr{font:700 18px var(--sans);letter-spacing:-0.3px;margin-bottom:3px}
-.site-sub{font:400 11px var(--sans);color:var(--text3)}
+/* Site header */
+.site-hdr{padding:14px 20px 10px;border-bottom:1px solid var(--border);background:var(--bg)}
+.site-addr{font:700 17px var(--sans);letter-spacing:-.3px;margin-bottom:2px}
+.site-sub{font:400 10px var(--sans);color:var(--t3)}
 
-/* ── Overview (always visible) ── */
-.overview{padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
-.ov-section{margin-bottom:16px}
-.ov-section:last-child{margin-bottom:0}
-.ov-label{font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:8px}
+/* Decision strip — Level 1 */
+.decision-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+.ds-cell{background:var(--bg);padding:11px 14px}
+.ds-cell .ds-range{font:700 15px var(--mono);letter-spacing:-.5px;color:var(--text);margin-bottom:2px;white-space:nowrap}
+.ds-cell .ds-label{font:500 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--t3)}
+.ds-cell .ds-range span{color:var(--t3);font-weight:400;font-size:11px}
 
-/* Efficiency bars */
-.eff-row{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;cursor:pointer;transition:background .1s}
-.eff-row:hover{background:rgba(0,0,0,.04)}
-.eff-row.active{background:rgba(79,70,229,.06)}
-.eff-scenario{font:700 9px var(--mono);width:58px;flex-shrink:0}
-.eff-track{flex:1;height:14px;border-radius:3px;overflow:hidden;background:var(--surface3);display:flex}
-.eff-nia-fill{height:100%;transition:width .4s ease}
-.eff-stats{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;width:100px}
-.eff-pct{font:700 10px var(--mono)}
-.eff-m2{font:500 8px var(--mono);color:var(--text3)}
+/* Analysis zone — Level 2 */
+.analysis{padding:16px 20px;border-bottom:1px solid var(--border);background:var(--s1)}
+.az-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.az-row:last-child{margin-bottom:0}
+.az-label{font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--t3);margin-bottom:8px}
+.az-anno{font:400 9px/1.6 var(--sans);color:var(--t3);margin-top:7px;font-style:italic}
 
-/* Return curve */
-.curve-svg{display:block;width:100%;height:auto}
+/* Constraint timeline */
+.ct{display:flex;flex-direction:column;gap:0}
+.ct-group{margin-bottom:8px}
+.ct-group:last-child{margin-bottom:0}
+.ct-head{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);padding:4px 0 5px;border-bottom:1px solid var(--border);margin-bottom:4px}
+.ct-item{display:flex;align-items:flex-start;gap:7px;padding:4px 0;transition:opacity .2s}
+.ct-item.dim{opacity:.28}
+.ct-dot{width:7px;height:7px;border-radius:50%;margin-top:3px;flex-shrink:0}
+.ct-text{font:400 10px var(--sans);color:var(--t2);line-height:1.4}
+.ct-new{font:700 7px var(--sans);padding:1px 5px;border-radius:3px;color:#fff;margin-left:4px;flex-shrink:0;align-self:flex-start;margin-top:2px}
 
-/* Constraint stack */
-.c-grid{display:grid;grid-template-columns:1fr auto auto auto;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden}
-.c-head{padding:5px 8px;background:var(--surface2);font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);text-align:center}
-.c-head:first-child{text-align:left}
-.c-item-row{display:contents}
-.c-item-row>div{padding:5px 8px;border-top:1px solid var(--border);font:400 10px var(--sans);color:var(--text2);display:flex;align-items:center;gap:5px}
-.c-item-row>div:not(:first-child){text-align:center;justify-content:center;font:600 9px var(--mono)}
-.c-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.c-on{color:var(--text);background:white}
-.c-off{color:var(--text3);background:var(--surface);opacity:.55}
-.c-new{color:white;border-radius:4px;padding:0 5px;font:700 8px var(--sans)}
-
-/* ── Scenario detail ── */
-.scenario-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-.stab{flex:1;padding:10px 6px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;background:var(--bg)}
-.stab .stab-name{font:700 11px var(--sans);color:var(--text3);display:block}
-.stab .stab-sub{font:500 8px var(--sans);color:var(--text3);display:block;margin-top:1px}
+/* Scenario tabs */
+.stabs{display:flex;border-bottom:2px solid var(--border);background:var(--bg);position:sticky;top:36px;z-index:18}
+.stab{flex:1;padding:9px 4px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;background:transparent;border-top:none;border-left:none;border-right:none;font-family:var(--sans)}
+.stab-name{display:block;font:700 11px var(--sans);color:var(--t3)}
+.stab-sub{display:block;font:500 8px var(--sans);color:var(--t3);margin-top:1px}
 .stab.active .stab-name{color:var(--text)}
 .stab.lo.active{border-bottom-color:var(--lo)}.stab.lo.active .stab-name{color:var(--lo)}
 .stab.base.active{border-bottom-color:var(--base)}.stab.base.active .stab-name{color:var(--base)}
 .stab.hi.active{border-bottom-color:var(--hi)}.stab.hi.active .stab-name{color:var(--hi)}
 
-.detail{padding:16px 20px;flex:1}
-.d-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px}
-.d-metric{background:white;padding:12px;text-align:center}
-.d-metric .dv{font:800 18px var(--mono);letter-spacing:-0.5px}
-.d-metric .dl{font:500 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-top:3px}
-
-.d-section{margin-bottom:16px}
-.d-section-label{font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);margin-bottom:8px}
-.stat-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+/* Detail — Level 3 */
+.detail{padding:18px 20px}
+.d3-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:8px;overflow:hidden;margin-bottom:18px}
+.d3-metric{background:var(--bg);padding:13px 10px;text-align:center}
+.d3-metric .dv{font:800 20px var(--mono);letter-spacing:-.5px;margin-bottom:2px}
+.d3-metric .dl{font:500 7px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--t3)}
+.d3-section{margin-bottom:16px}
+.d3-lbl{font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--t3);margin-bottom:8px}
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06)}
 .stat-row:last-child{border-bottom:none}
-.stat-label{font:400 11px var(--sans);color:var(--text3)}
-.stat-value{font:600 11px var(--mono);color:var(--text)}
-.stat-value.green{color:var(--green)}.stat-value.red{color:var(--red)}.stat-value.accent{color:var(--accent)}
-
-.proforma{width:100%;border-collapse:collapse;font-size:11px}
-.proforma td{padding:5px 0;border-bottom:1px solid rgba(0,0,0,.06);color:var(--text2)}
-.proforma td:last-child{text-align:right;font-family:var(--mono);font-weight:500;color:var(--text)}
-.proforma tr.total td{border-top:1.5px solid var(--text);border-bottom:none;padding-top:7px;font-weight:700;font-size:12px;color:var(--text)}
-.proforma tr.total td:last-child{color:var(--green)}
-
-.narrative{font:400 11px/1.75 var(--sans);color:var(--text2);margin-bottom:12px}
-.narrative strong{color:var(--text);font-weight:600}
+.sl{font:400 11px var(--sans);color:var(--t3)}
+.sv{font:600 11px var(--mono);color:var(--text)}
+.sv.g{color:var(--lo)}.sv.a{color:var(--accent)}
+.pf{width:100%;border-collapse:collapse}
+.pf td{padding:4px 0;border-bottom:1px solid rgba(0,0,0,.05);font:400 10px var(--sans);color:var(--t2)}
+.pf td:last-child{text-align:right;font-family:var(--mono);font-weight:600;font-size:11px;color:var(--text)}
+.pf tr.ptotal td{border-top:1.5px solid var(--border);border-bottom:none;padding-top:7px;font-weight:700;font-size:11px}
+.pf tr.ptotal td:last-child{color:var(--lo)}
+.narr{font:400 11px/1.75 var(--sans);color:var(--t2);margin-top:4px}
+.narr strong{color:var(--text);font-weight:600}
 
 @media(max-width:900px){
   #map{right:0;bottom:50%}
-  .topbar{right:0}
+  .topbar,.sbar{right:0}
   .panel{width:100%;height:50%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border)}
 }
 </style>
 </head>
 <body>
-
 <div id="map"></div>
-
 <div class="topbar">
   <div class="logo">D&A <span>Studio</span></div>
 </div>
-
-<div class="scenario-bar">
+<div class="sbar">
   <button class="sbar-btn lo active" onclick="selectScenario(0)">Low<span class="sub">10F · 42m</span></button>
-  <button class="sbar-btn base" onclick="selectScenario(1)">Base<span class="sub">14F · 60m</span></button>
-  <button class="sbar-btn hi" onclick="selectScenario(2)">High<span class="sub">22F · 92m</span></button>
+  <button class="sbar-btn base"      onclick="selectScenario(1)">Base<span class="sub">14F · 60m</span></button>
+  <button class="sbar-btn hi"        onclick="selectScenario(2)">High<span class="sub">22F · 92m</span></button>
 </div>
 
 <div class="panel">
-  <!-- Tier nav -->
   <nav class="tier-nav">
     <a href="/t1/100-leadenhall" class="tier-link"><span class="tid">T1</span><span class="tname">Scout</span></a>
     <span class="tier-sep">·</span>
@@ -148,66 +132,57 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     <a class="tier-link locked"><span class="tid">T4</span><span class="tname">Commission</span></a>
   </nav>
 
-  <!-- Site header -->
-  <div class="site-header">
+  <div class="site-hdr">
     <div class="site-addr">100 Leadenhall Street</div>
-    <div class="site-sub">City of London · EC3A 3BP · 1,551 m² · Zone 1 · PTAL 6a</div>
+    <div class="site-sub">City of London · EC3A 3BP · 1,551 m² plot · PTAL 6a · Eastern Cluster</div>
   </div>
 
-  <!-- ── OVERVIEW — always visible, all scenarios simultaneously ── -->
-  <div class="overview">
+  <!-- LEVEL 1 — Decision strip: the headline numbers across all scenarios -->
+  <div class="decision-strip" id="decision-strip"></div>
 
-    <!-- GEA / NIA Efficiency -->
-    <div class="ov-section">
-      <div class="ov-label">GEA / NIA Efficiency — tap to focus</div>
-      <div id="eff-bars"></div>
-      <div style="font:400 9px var(--sans);color:var(--text3);margin-top:6px;line-height:1.6">
-        Grey gap = non-lettable area (core, structure, compliance). Efficiency drops as height increases — core grows, 2nd staircase above 50m, sky lobby above 20F. Each 1% efficiency drop across this GEA = ~£1.8M GDV.
+  <!-- LEVEL 2 — Analysis: everything simultaneous -->
+  <div class="analysis">
+
+    <!-- Vertical bars + Return curve -->
+    <div class="az-row">
+      <div>
+        <div class="az-label">GEA / NIA Efficiency</div>
+        <div id="vert-bars"></div>
+        <div class="az-anno">Coloured = lettable NIA. Grey = core, structure &amp; compliance. Efficiency falls as height rises — core grows, 2nd staircase above 50m absorbs ~40m²/floor, sky lobby at 20F+. Each 1% loss ≈ £1.8M GDV on this site.</div>
+      </div>
+      <div>
+        <div class="az-label">Return Curve — Margin % vs GEA</div>
+        <div id="return-curve"></div>
+        <div class="az-anno">Construction cost rises steeply above 15F (BCIS). Programme extends. Finance compounds. GDV per m² NIA does not rise proportionally — curve peaks at mid-rise, then falls.</div>
       </div>
     </div>
 
-    <!-- Return curve -->
-    <div class="ov-section">
-      <div class="ov-label">Return Curve — Profit on Cost % vs GEA</div>
-      <div id="return-curve"></div>
-      <div style="font:400 9px var(--sans);color:var(--text3);margin-top:6px;line-height:1.6">
-        Margin peaks at mid-rise. Construction cost rise, programme length and compliance costs compound as height increases — GDV per m² NIA does not rise proportionally.
-      </div>
-    </div>
-
-    <!-- Constraint stack -->
-    <div class="ov-section">
-      <div class="ov-label">Constraint Stack — what changes as you go up</div>
-      <div id="constraint-stack"></div>
+    <!-- Constraint timeline — full width -->
+    <div>
+      <div class="az-label">Constraint Progression — what triggers as you go up</div>
+      <div class="ct" id="constraint-timeline"></div>
     </div>
 
   </div>
 
-  <!-- ── SCENARIO TABS — drive detail only ── -->
-  <div class="scenario-tabs" id="scenario-tabs">
-    <div class="stab lo active" onclick="selectScenario(0)">
-      <span class="stab-name">Low</span><span class="stab-sub">10F · 42m · Conservative</span>
-    </div>
-    <div class="stab base" onclick="selectScenario(1)">
-      <span class="stab-name">Base</span><span class="stab-sub">14F · 60m · Mid-Rise</span>
-    </div>
-    <div class="stab hi" onclick="selectScenario(2)">
-      <span class="stab-name">High</span><span class="stab-sub">22F · 92m · Tower</span>
-    </div>
+  <!-- Scenario tabs — drive detail only -->
+  <div class="stabs" id="stabs">
+    <button class="stab lo active" onclick="selectScenario(0)"><span class="stab-name">Low</span><span class="stab-sub">10F · 42m</span></button>
+    <button class="stab base"      onclick="selectScenario(1)"><span class="stab-name">Base</span><span class="stab-sub">14F · 60m</span></button>
+    <button class="stab hi"        onclick="selectScenario(2)"><span class="stab-name">High</span><span class="stab-sub">22F · 92m</span></button>
   </div>
 
+  <!-- LEVEL 3 — Detail: scenario-specific, driven by tabs -->
   <div class="detail" id="detail"></div>
 </div>
 
 <script>
-// ── Site data ────────────────────────────────────────────────────────────────
 const SITE_COORDS=[[-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,51.51396],[-0.0799754,51.5136468],[-0.079809,51.5136257],[-0.0798425,51.5135377],[-0.0798828,51.513445],[-0.0804144,51.5135131],[-0.0803568,51.5136783],[-0.0802864,51.5136687],[-0.0802571,51.5137575],[-0.080298,51.5137608],[-0.0802591,51.5138813],[-0.0803085,51.5138886],[-0.0803056,51.5138968],[-0.0802763,51.5140146]];
 const CENTROID=[-0.0801551,51.5137673];
-const PLOT_AREA=1551, FTF=4.2, M_PER_LNG=69270, M_PER_LAT=111320;
+const PLOT_AREA=1551, FTF=4.2;
 const EXISTING_EUV=38000000;
 const fmt=n=>n?.toLocaleString('en-GB')?? '—';
 
-// ── Market ───────────────────────────────────────────────────────────────────
 const MARKET={
   erv:    {lo:750,  base:800, hi:850},
   niy:    {lo:0.055,base:0.0525,hi:0.0525},
@@ -217,272 +192,276 @@ const MARKET={
   fees:0.13, contg:0.075, finRate:0.075, ltc:0.60, rfMo:13, ltMo:120,
 };
 
-// ── Scenarios ────────────────────────────────────────────────────────────────
 const SCENARIOS=[
-  {key:'lo', label:'Low',  floors:10, podF:6, podH:25, twrF:4,  twrPct:0.65, cov:1.0, eff:0.82,
-   narrative:'Full floor plate to 6F matching existing street cornice. Tower steps back 3m south above L6 — response to Leadenhall Market sightlines. Single staircase compliant at this height. Lowest planning risk, shortest programme. Best margin efficiency — construction cost curve is still shallow here.'},
-  {key:'base',label:'Base',floors:14, podF:6, podH:25, twrF:8,  twrPct:0.55, cov:1.0, eff:0.80,
-   narrative:'6F podium holds full plate at street cornice. 8F tower steps back 4m south, 2m east. Mandatory 2nd staircase triggers above 50m — absorbed into core, net NIA impact ~40m² per upper floor. Planning precedent strong at this height for City Eastern Cluster. LVMF assessment required but manageable.'},
-  {key:'hi',  label:'High',floors:22, podF:4, podH:17, twrF:18, twrPct:0.40, cov:1.0, eff:0.77,
-   narrative:'Low 4F podium opens public realm at ground. Slender 18F tower at 40% coverage. Maximum height in this cluster — exceptional design quality and planning case required. LVMF Strategic View Assessment mandatory. Wind and daylight studies required. Construction cost premium significant. Programme 4 years — finance cost compounds materially.'},
+  {key:'lo', label:'Low',  col:'var(--lo)',  floors:10,podF:6,podH:25,twrF:4, twrPct:0.65,cov:1.0,eff:0.82,
+   narrative:'Full floor plate to 6F matching the existing Leadenhall Street cornice. Tower steps back <strong>3m south</strong> above L6 — direct response to Leadenhall Market sightlines. <strong>Single staircase</strong> is compliant at this height (BSA >18m registered, but sub-50m). Construction cost curve is still shallow here. Shortest programme, lowest finance cost. Best margin efficiency of the three scenarios.'},
+  {key:'base',label:'Base',col:'var(--base)',floors:14,podF:6,podH:25,twrF:8, twrPct:0.55,cov:1.0,eff:0.80,
+   narrative:'6F podium holds the full plate at street cornice. Tower steps back <strong>4m south, 2m east</strong>. <strong>Mandatory 2nd staircase</strong> triggers above 50m (BSA 2022 Higher Risk Building) — absorbed into core, net impact ~40m² per upper floor. Strong planning precedent at this height for City Eastern Cluster. LVMF assessment required but manageable. This is where the <strong>return curve peaks</strong> for this site.'},
+  {key:'hi',  label:'High',col:'var(--hi)',  floors:22,podF:4,podH:17,twrF:18,twrPct:0.40,cov:1.0,eff:0.77,
+   narrative:'Low 4F podium opens civic public realm at ground. Slender 18F tower at 40% site coverage. <strong>Maximum height for this cluster</strong> — exceptional design quality and planning justification required. LVMF Strategic View Assessment, wind microclimate study, full daylight/sunlight report all mandatory. Construction cost at £6,250/m² (+52% on Low). Programme 4 years — finance compounds hard. The absolute GDV is highest but <strong>margin % is lower than Base</strong>.'},
 ];
 
-// ── Compute financials ───────────────────────────────────────────────────────
 SCENARIOS.forEach(s=>{
-  const podGIA = PLOT_AREA * s.cov * s.podF;
-  const twrGIA = PLOT_AREA * s.twrPct * s.twrF;
-  s.gea = Math.round(podGIA + twrGIA);
-  s.nia = Math.round(s.gea * s.eff);
-  const grossErv = s.nia * MARKET.erv[s.key];
-  const effErv   = grossErv * (1 - MARKET.rfMo / MARKET.ltMo);
-  s.gdv = Math.round(effErv / MARKET.niy[s.key]);
-  s.constCost = Math.round(s.gea * MARKET.costGsm[s.key]);
-  s.fees  = Math.round(s.constCost * MARKET.fees);
-  s.contg = Math.round(s.constCost * MARKET.contg);
-  s.cil   = Math.round(s.nia * MARKET.cilNia);
-  s.letting = Math.round(grossErv * 0.15);
-  const preFin = s.constCost + s.fees + s.contg + s.cil + s.letting + MARKET.s106 + MARKET.demo;
-  s.finance = Math.round(preFin * MARKET.ltc * MARKET.finRate * (MARKET.progYrs[s.key] / 2));
-  s.tdc   = Math.round(preFin + s.finance);
-  s.profit= s.gdv - s.tdc;
-  s.poc   = (s.profit / s.tdc * 100).toFixed(1);
-  s.uplift= s.profit - EXISTING_EUV;
+  const podGIA=PLOT_AREA*s.cov*s.podF;
+  const twrGIA=PLOT_AREA*s.twrPct*s.twrF;
+  s.gea=Math.round(podGIA+twrGIA);
+  s.nia=Math.round(s.gea*s.eff);
+  const grossErv=s.nia*MARKET.erv[s.key];
+  const effErv=grossErv*(1-MARKET.rfMo/MARKET.ltMo);
+  s.gdv=Math.round(effErv/MARKET.niy[s.key]);
+  s.constCost=Math.round(s.gea*MARKET.costGsm[s.key]);
+  s.fees=Math.round(s.constCost*MARKET.fees);
+  s.contg=Math.round(s.constCost*MARKET.contg);
+  s.cil=Math.round(s.nia*MARKET.cilNia);
+  s.letting=Math.round(grossErv*0.15);
+  const preFin=s.constCost+s.fees+s.contg+s.cil+s.letting+MARKET.s106+MARKET.demo;
+  s.finance=Math.round(preFin*MARKET.ltc*MARKET.finRate*(MARKET.progYrs[s.key]/2));
+  s.tdc=Math.round(preFin+s.finance);
+  s.profit=s.gdv-s.tdc;
+  s.poc=(s.profit/s.tdc*100).toFixed(1);
+  s.core=Math.round(s.gea*0.22);
+  s.lspan=s.key==='lo'?'~11m':s.key==='base'?'~9m':'~7m';
 });
 
-// ── Return curve data (6F → 24F) ────────────────────────────────────────────
-const CURVE = [];
+const CURVE=[];
 for(let f=6;f<=24;f++){
-  const podF = f<=6?f:Math.min(f,6);
-  const twrF = Math.max(0,f-podF);
-  const twrPct = 1.0 - (f-6)/(24-6)*0.55; // 1.0 at 6F → 0.45 at 24F
-  const eff  = 0.85 - (f-6)/(24-6)*0.09;
-  const erv  = 740  + (f-6)/(24-6)*130;
-  const niy  = 0.057 - (f-6)/(24-6)*0.007;
-  const cost = 3700 + (f-6)/(24-6)*3000;
-  const prog = 1.8  + (f-6)/(24-6)*2.8;
-  const podGIA = PLOT_AREA * 1.0 * podF;
-  const twrGIA = PLOT_AREA * twrPct * twrF;
-  const gea = podGIA + twrGIA;
-  const nia = gea * eff;
-  const grossErv = nia * erv;
-  const effErv = grossErv * (1 - 13/120);
-  const gdv = effErv / niy;
-  const cc = gea * cost;
-  const preFin = cc*(1+0.13+0.075) + nia*200 + grossErv*0.15 + 750000 + 2000000;
-  const fin = preFin * 0.60 * 0.075 * (prog/2);
-  const tdc = preFin + fin;
-  const poc = (gdv-tdc)/tdc*100;
-  CURVE.push({f, gea:Math.round(gea), poc:Math.round(poc*10)/10});
+  const podF=Math.min(f,6),twrF=Math.max(0,f-podF);
+  const twrPct=1.0-(f-6)/(24-6)*0.55;
+  const eff=0.85-(f-6)/(24-6)*0.09;
+  const erv=740+(f-6)/(24-6)*130;
+  const niy=0.057-(f-6)/(24-6)*0.007;
+  const cost=3700+(f-6)/(24-6)*3000;
+  const prog=1.8+(f-6)/(24-6)*2.8;
+  const gea=PLOT_AREA*1.0*podF+PLOT_AREA*twrPct*twrF;
+  const nia=gea*eff;
+  const grossErv=nia*erv;
+  const effErv=grossErv*(1-13/120);
+  const gdv=effErv/niy;
+  const cc=gea*cost;
+  const preFin=cc*(1+0.13+0.075)+nia*200+grossErv*0.15+750000+2000000;
+  const fin=preFin*0.60*0.075*(prog/2);
+  const poc=(gdv-preFin-fin)/(preFin+fin)*100;
+  CURVE.push({f,gea:Math.round(gea),poc:Math.round(poc*10)/10});
 }
 
-// ── Constraint definitions ───────────────────────────────────────────────────
-const CONSTRAINTS=[
-  {text:'BSA Registered Building (>18m)',           note:'All scenarios',         lo:true, base:true, hi:true},
-  {text:'Professional indemnity — structural peer review', note:'Good practice',  lo:true, base:true, hi:true},
-  {text:'LVMF sightline assessment — St Paul\'s',   note:'Precautionary at 42m',  lo:true, base:true, hi:true},
-  {text:'2nd staircase required (BSA >50m)',         note:'Triggers at Base',      lo:false,base:true, hi:true},
-  {text:'6+ lifts — CIBSE Guide D round-trip target',note:'Triggers at Base',      lo:false,base:true, hi:true},
-  {text:'Daylight & sunlight study — adjoining properties',note:'Triggers at Base',lo:false,base:true, hi:true},
-  {text:'LVMF Strategic View Assessment — mandatory',note:'High only',             lo:false,base:false,hi:true},
-  {text:'Wind microclimate study — CIBSE AM14',      note:'High only',             lo:false,base:false,hi:true},
-  {text:'GLA referral — exceeds 30m threshold',      note:'High only',             lo:false,base:false,hi:true},
-  {text:'Building Assessment Certificate (BSR 2023)',note:'High only',             lo:false,base:false,hi:true},
+// CONSTRAINTS — 3 tiers
+const C_ALWAYS=[
+  {t:'BSA 2022 — Registered Building above 18m',n:'Applies all scenarios'},
+  {t:'LVMF precautionary review — St Paul\'s sightlines',n:'Required for any new commercial building here'},
+  {t:'Structural peer review — independent engineer',n:'Good practice, expected by City planners'},
+];
+const C_BASE=[
+  {t:'Mandatory 2nd staircase — BSA Higher Risk Building (>50m)',n:'Triggers above 50m. ~40m² net NIA cost per upper floor'},
+  {t:'6 passenger lifts minimum — CIBSE Guide D 80% handling capacity',n:'Round-trip time target breached at 4 lifts above 14F'},
+  {t:'Daylight & sunlight study — BRE 209',n:'Adjacent property impact assessment, expected from 14F+'},
+  {t:'Fire engineer appointment — simultaneous evacuation strategy',n:'Mandatory for HRB; strategy change from phased to simultaneous'},
+];
+const C_HIGH=[
+  {t:'LVMF Strategic View Assessment — mandatory',n:'Full 3D model of St Paul\'s view corridor. Height cap possible'},
+  {t:'Wind microclimate study — CIBSE AM14',n:'Pedestrian comfort at street level. Mitigation works likely'},
+  {t:'GLA referral — exceeds 30m EIA threshold',n:'Mayor of London direction required. Stage 1 & 2 referral'},
+  {t:'Building Assessment Certificate — BSR 2023',n:'New regulatory regime for 18m+ buildings. Mandatory from 2024'},
+  {t:'Sky lobby structural transfer — L12 ',n:'Transfer structure required. Cost and programme impact significant'},
 ];
 
-// ── Build overview components ────────────────────────────────────────────────
-let activeIdx = 0;
+let activeIdx=0;
 
-function buildEfficiencyBars(){
-  const maxGea = Math.max(...SCENARIOS.map(s=>s.gea));
-  return SCENARIOS.map((s,i)=>{
-    const col = s.key==='lo'?'var(--lo)':s.key==='base'?'var(--base)':'var(--hi)';
-    const niaPct = Math.round(s.nia/s.gea*100);
-    const geaPct = Math.round(s.gea/maxGea*100);
-    const isActive = i===activeIdx;
-    return `<div class="eff-row${isActive?' active':''}" onclick="selectScenario(${i})">
-      <div class="eff-scenario" style="color:${col}">${s.label}<br><span style="font:500 8px var(--mono);color:var(--text3)">${s.floors}F</span></div>
-      <div class="eff-track" style="position:relative">
-        <div class="eff-nia-fill" style="width:${Math.round(s.nia/maxGea*100)}%;background:${col};opacity:${isActive?1:.6}"></div>
-        <div style="flex:1;background:var(--surface3)"></div>
-        <div style="position:absolute;right:4px;top:50%;transform:translateY(-50%);font:600 8px var(--mono);color:var(--text3);white-space:nowrap">−${Math.round((s.gea-s.nia)/1000*10)/10}k</div>
-      </div>
-      <div class="eff-stats">
-        <div class="eff-pct" style="color:${col}">${niaPct}%</div>
-        <div class="eff-m2">${Math.round(s.nia/100)/10}k / ${Math.round(s.gea/100)/10}k</div>
-      </div>
+// ── Decision strip ───────────────────────────────────────────────────────────
+function buildDecisionStrip(){
+  const gdvLo=Math.round(SCENARIOS[0].gdv/1e6), gdvHi=Math.round(SCENARIOS[2].gdv/1e6);
+  const pocLo=SCENARIOS[0].poc, pocHi=SCENARIOS[2].poc;
+  const niaLo=Math.round(SCENARIOS[0].nia/100)/10, niaHi=Math.round(SCENARIOS[2].nia/100)/10;
+  const marginDelta=Math.round(Math.abs(SCENARIOS[0].profit-SCENARIOS[2].profit)/1e6);
+  document.getElementById('decision-strip').innerHTML=`
+    <div class="ds-cell">
+      <div class="ds-range">£${gdvLo}M <span>→ £${gdvHi}M</span></div>
+      <div class="ds-label">GDV range</div>
+    </div>
+    <div class="ds-cell">
+      <div class="ds-range">${pocLo}% <span>→ ${pocHi}%</span></div>
+      <div class="ds-label">Margin range</div>
+    </div>
+    <div class="ds-cell">
+      <div class="ds-range">${niaLo}k <span>→ ${niaHi}k m²</span></div>
+      <div class="ds-label">NIA range</div>
     </div>`;
-  }).join('');
 }
 
-function buildReturnCurve(){
-  const W=360, H=110, px=36, py=12, pr=12;
-  const maxGea=Math.max(...CURVE.map(c=>c.gea));
-  const minGea=Math.min(...CURVE.map(c=>c.gea));
-  const maxPoc=Math.max(...CURVE.map(c=>c.poc))+5;
-  const minPoc=Math.min(...CURVE.map(c=>c.poc))-3;
-  const tx=g=>px+(g-minGea)/(maxGea-minGea)*(W-px-pr);
-  const ty=p=>py+(maxPoc-p)/(maxPoc-minPoc)*(H-py-16);
-  const pts=CURVE.map(c=>`${tx(c.gea).toFixed(1)},${ty(c.poc).toFixed(1)}`).join(' ');
-  // Tick labels
-  const xTicks=[12000,14000,16000,18000,20000];
-  const yTicks=[20,30,40,50];
-  let xLabels='', yLabels='', xLines='', yLines='';
-  xTicks.forEach(g=>{const x=tx(g);xLabels+=`<text x="${x.toFixed(1)}" y="${H-2}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="var(--text3)">${Math.round(g/1000)}k</text>`;xLines+=`<line x1="${x.toFixed(1)}" y1="${py}" x2="${x.toFixed(1)}" y2="${H-14}" stroke="var(--border)" stroke-width="0.5"/>`});
-  yTicks.forEach(p=>{const y=ty(p);yLabels+=`<text x="${px-3}" y="${y.toFixed(1)}" text-anchor="end" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="var(--text3)">${p}%</text>`;yLines+=`<line x1="${px}" y1="${y.toFixed(1)}" x2="${W-pr}" y2="${y.toFixed(1)}" stroke="var(--border)" stroke-width="0.5"/>`});
-  // Scenario dots
-  const dots=SCENARIOS.map((s,i)=>{
-    const col=s.key==='lo'?'var(--lo)':s.key==='base'?'var(--base)':'var(--hi)';
-    const cx=tx(s.gea), cy_=ty(parseFloat(s.poc));
+// ── Vertical bars ────────────────────────────────────────────────────────────
+function buildVertBars(){
+  const W=220,H=170,bW=52,gap=13,baseY=H-30,maxH=baseY-16;
+  const maxGea=Math.max(...SCENARIOS.map(s=>s.gea));
+  const bars=SCENARIOS.map((s,i)=>{
+    const rawCol=i===0?'#059669':i===1?'#4f46e5':'#d97706';
+    const x=14+i*(bW+gap);
+    const barH=Math.round(s.gea/maxGea*maxH);
+    const niaH=Math.round(s.nia/s.gea*barH);
+    const gapH=barH-niaH;
+    const barTop=baseY-barH;
     const isAct=i===activeIdx;
-    return `<circle cx="${cx.toFixed(1)}" cy="${cy_.toFixed(1)}" r="${isAct?6:4}" fill="${col}" stroke="white" stroke-width="${isAct?2:1.5}" opacity="${isAct?1:.7}"/>
-    <text x="${cx.toFixed(1)}" y="${(cy_-9).toFixed(1)}" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="${col}">${s.poc}%</text>`;
+    const op=isAct?1:.4;
+    return `<g opacity="${op}" style="cursor:pointer" onclick="selectScenario(${i})">
+      <rect x="${x}" y="${barTop}" width="${bW}" height="${gapH}" fill="#e2e5ee" rx="3 3 0 0"/>
+      <rect x="${x}" y="${barTop+gapH}" width="${bW}" height="${niaH}" fill="${rawCol}" rx="0 0 3 3"/>
+      ${gapH>14?`<text x="${x+bW/2}" y="${barTop+gapH/2}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#8892a8">−${Math.round((s.gea-s.nia)/100)/10}k</text>`:''}
+      ${niaH>18?`<text x="${x+bW/2}" y="${barTop+gapH+niaH/2}" text-anchor="middle" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="9" font-weight="700" fill="white">${Math.round(s.eff*100)}%</text>`:''}
+      <text x="${x+bW/2}" y="${baseY+9}" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="${isAct?rawCol:'#8892a8'}">${s.label}</text>
+      <text x="${x+bW/2}" y="${baseY+18}" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" fill="#8892a8">${s.floors}F · ${Math.round(s.nia/100)/10}k NIA</text>
+      ${isAct?`<line x1="${x}" y1="${baseY+21}" x2="${x+bW}" y2="${baseY+21}" stroke="${rawCol}" stroke-width="2.5"/>`:''}
+    </g>`;
   }).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" class="curve-svg" xmlns="http://www.w3.org/2000/svg">
-    ${yLines}${xLines}
-    <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0.4"/>
-    ${dots}
-    <text x="${px}" y="${H-2}" font-family="Inter,sans-serif" font-size="7" fill="var(--text3)">GEA m²</text>
-    <text x="4" y="${py}" font-family="Inter,sans-serif" font-size="7" fill="var(--text3)">Margin %</text>
-  </svg>`;
+  const yTicks=[0,5000,10000,15000,20000].map(g=>{
+    const y=baseY-Math.round(g/maxGea*maxH);
+    if(y<8||y>baseY)return '';
+    return `<text x="11" y="${y}" text-anchor="end" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#c0c4d0">${g?Math.round(g/1000)+'k':'0'}</text>
+    <line x1="12" y1="${y}" x2="${W-4}" y2="${y}" stroke="#eef0f4" stroke-width=".5"/>`;
+  }).join('');
+  document.getElementById('vert-bars').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${yTicks}${bars}</svg>`;
 }
 
-function buildConstraintStack(){
-  const scenKeys=['lo','base','hi'];
-  const scenLabels=['Low','Base','High'];
-  const scenCols=['var(--lo)','var(--base)','var(--hi)'];
-  let rows=CONSTRAINTS.map(c=>{
-    const vals=scenKeys.map((k,i)=>{
-      const on=c[k];
-      const isAct=i===activeIdx;
-      let cell='';
-      if(on){
-        // Was it newly triggered vs previous scenario?
-        const prevOn = i===0 ? false : c[scenKeys[i-1]];
-        const isNew = on && !prevOn;
-        if(isNew) cell=`<div class="c-new" style="background:${scenCols[i]}">${isAct?'●':'◑'}</div>`;
-        else cell=`<span style="color:${isAct?scenCols[i]:'var(--text3)'};font-size:11px">●</span>`;
-      } else {
-        cell=`<span style="color:var(--border);font-size:11px">○</span>`;
-      }
-      return `<div class="${c[k]?'c-on':'c-off'}${i===activeIdx?' active':''}" style="${i===activeIdx&&c[k]?'background:rgba(79,70,229,.04)':''}">${cell}</div>`;
-    }).join('');
-    return `<div class="c-item-row"><div class="c-on" style="font:400 10px var(--sans);color:var(--text2)">${c.text}</div>${vals}</div>`;
+// ── Return curve ─────────────────────────────────────────────────────────────
+function buildReturnCurve(){
+  const W=210,H=150,lx=26,ry=10,bY=H-18,cH=bY-ry;
+  const maxGea=Math.max(...CURVE.map(c=>c.gea)),minGea=Math.min(...CURVE.map(c=>c.gea));
+  const maxPoc=Math.max(...CURVE.map(c=>c.poc))+4,minPoc=Math.min(...CURVE.map(c=>c.poc))-3;
+  const tx=g=>lx+(g-minGea)/(maxGea-minGea)*(W-lx-8);
+  const ty=p=>ry+(maxPoc-p)/(maxPoc-minPoc)*cH;
+  const pts=CURVE.map(c=>`${tx(c.gea).toFixed(1)},${ty(c.poc).toFixed(1)}`).join(' ');
+  const yT=[25,35,45,55].map(p=>{const y=ty(p);return y<ry||y>bY?'':
+    `<line x1="${lx}" y1="${y.toFixed(1)}" x2="${W-4}" y2="${y.toFixed(1)}" stroke="#eef0f4" stroke-width=".5"/>
+     <text x="${lx-3}" y="${y.toFixed(1)}" text-anchor="end" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#c0c4d0">${p}%</text>`;}).join('');
+  const dots=SCENARIOS.map((s,i)=>{
+    const rawCol=i===0?'#059669':i===1?'#4f46e5':'#d97706';
+    const cx=tx(s.gea),cy=ty(parseFloat(s.poc));
+    const isAct=i===activeIdx;
+    return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${isAct?6:3.5}" fill="${rawCol}" stroke="white" stroke-width="${isAct?2:1.5}" opacity="${isAct?1:.5}" style="cursor:pointer" onclick="selectScenario(${i})"/>
+    ${isAct?`<text x="${cx.toFixed(1)}" y="${(cy-9).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" font-weight="700" fill="${rawCol}">${s.poc}%</text>`:''}`;
   }).join('');
-  return `<div class="c-grid">
-    <div class="c-head">Constraint</div>
-    ${scenLabels.map((l,i)=>`<div class="c-head" style="color:${scenCols[i]}">${l}</div>`).join('')}
-    ${rows}
-  </div>`;
+  document.getElementById('return-curve').innerHTML=
+    `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
+      ${yT}
+      <polyline points="${pts}" fill="none" stroke="#c7cadb" stroke-width="2"/>
+      ${dots}
+      <text x="${lx}" y="${H-2}" font-family="Inter,sans-serif" font-size="6.5" fill="#c0c4d0">GEA m²</text>
+     </svg>`;
 }
 
+// ── Constraint timeline ───────────────────────────────────────────────────────
+function buildConstraintTimeline(){
+  const mkGroup=(items,head,triggerIdx,dotCol)=>{
+    const active=activeIdx>=triggerIdx;
+    const rows=items.map(c=>`
+      <div class="ct-item${active?'':' dim'}">
+        <div class="ct-dot" style="background:${active?dotCol:'#c0c4d0'}"></div>
+        <div class="ct-text">${c.t}<br><span style="font:400 9px var(--sans);color:var(--t3)">${c.n}</span></div>
+      </div>`).join('');
+    return `<div class="ct-group">${head}${rows}</div>`;
+  };
+  const alwaysHead=`<div class="ct-head" style="color:var(--t3)">Present in all scenarios</div>`;
+  const baseHead=`<div class="ct-head" style="color:${activeIdx>=1?'var(--base)':'var(--t3)'}">Triggers at Base · 14F / 50m+</div>`;
+  const hiHead=`<div class="ct-head" style="color:${activeIdx>=2?'var(--hi)':'var(--t3)'}">Triggers at High · 22F only</div>`;
+  document.getElementById('constraint-timeline').innerHTML=
+    mkGroup(C_ALWAYS,alwaysHead,0,'#8892a8')+
+    mkGroup(C_BASE,baseHead,1,'var(--base)')+
+    mkGroup(C_HIGH,hiHead,2,'var(--hi)');
+}
+
+// ── Detail panel ──────────────────────────────────────────────────────────────
 function buildDetail(s){
-  const col=s.key==='lo'?'var(--lo)':s.key==='base'?'var(--base)':'var(--hi)';
-  return `
-  <div class="d-metrics">
-    <div class="d-metric"><div class="dv" style="color:${col}">£${Math.round(s.gdv/1e6)}M</div><div class="dl">GDV</div></div>
-    <div class="d-metric"><div class="dv" style="color:var(--green)">${s.poc}%</div><div class="dl">Profit on Cost</div></div>
-    <div class="d-metric"><div class="dv">${Math.round(s.nia/100)/10}k</div><div class="dl">NIA m²</div></div>
+  const rawCol=s.key==='lo'?'#059669':s.key==='base'?'#4f46e5':'#d97706';
+  document.getElementById('detail').innerHTML=`
+  <div class="d3-metrics">
+    <div class="d3-metric"><div class="dv" style="color:${rawCol}">£${Math.round(s.gdv/1e6)}M</div><div class="dl">GDV</div></div>
+    <div class="d3-metric"><div class="dv" style="color:var(--lo)">${s.poc}%</div><div class="dl">Profit on cost</div></div>
+    <div class="d3-metric"><div class="dv">${Math.round(s.nia/100)/10}k</div><div class="dl">NIA m²</div></div>
   </div>
-  <div class="d-section">
-    <div class="d-section-label">Massing</div>
-    <div class="stat-row"><span class="stat-label">Total Height / Floors</span><span class="stat-value">${s.floors===10?42:s.floors===14?60:92}m · ${s.floors}F</span></div>
-    <div class="stat-row"><span class="stat-label">GEA</span><span class="stat-value">${fmt(s.gea)} m²</span></div>
-    <div class="stat-row"><span class="stat-label">NIA</span><span class="stat-value">${fmt(s.nia)} m² <span style="color:var(--text3);font-weight:400">(${Math.round(s.eff*100)}%)</span></span></div>
-    <div class="stat-row"><span class="stat-label">Tower coverage</span><span class="stat-value">${Math.round(s.twrPct*100)}% of site</span></div>
-    <div class="stat-row"><span class="stat-label">Core area (22% of plate)</span><span class="stat-value">${Math.round(s.gea*0.22)} m² indicative</span></div>
-    <div class="stat-row"><span class="stat-label">Lease span (min 7m req.)</span><span class="stat-value">${s.key==='lo'?'~11m':s.key==='base'?'~9m':'~7m'} clear</span></div>
-    <div class="stat-row"><span class="stat-label">Programme</span><span class="stat-value">${MARKET.progYrs[s.key]} years</span></div>
+  <div class="d3-section">
+    <div class="d3-lbl">Massing & Efficiency</div>
+    <div class="stat-row"><span class="sl">GEA</span><span class="sv">${fmt(s.gea)} m²</span></div>
+    <div class="stat-row"><span class="sl">NIA</span><span class="sv">${fmt(s.nia)} m² <span style="color:var(--t3);font-weight:400">(${Math.round(s.eff*100)}%)</span></span></div>
+    <div class="stat-row"><span class="sl">Core area (22% plate)</span><span class="sv">${fmt(s.core)} m²</span></div>
+    <div class="stat-row"><span class="sl">Lease span (min 7m)</span><span class="sv">${s.lspan} clear</span></div>
+    <div class="stat-row"><span class="sl">Programme</span><span class="sv">${MARKET.progYrs[s.key]} yrs</span></div>
+    <div class="stat-row"><span class="sl">Construction cost</span><span class="sv">£${(MARKET.costGsm[s.key]/1000).toFixed(1)}k/m² GIA</span></div>
   </div>
-  <div class="d-section">
-    <div class="d-section-label">Development Appraisal</div>
-    <table class="proforma">
-      <tr><td>Construction (£${(MARKET.costGsm[s.key]/1000).toFixed(1)}k/m² × ${fmt(s.gea)}m²)</td><td>−£${Math.round(s.constCost/1e6*10)/10}M</td></tr>
-      <tr><td>Professional fees (${Math.round(MARKET.fees*100)}%)</td><td>−£${Math.round(s.fees/1e6*10)/10}M</td></tr>
-      <tr><td>Contingency (${Math.round(MARKET.contg*100)}%)</td><td>−£${Math.round(s.contg/1e6*10)/10}M</td></tr>
-      <tr><td>CIL — City £140/m² + GLA £60/m²</td><td>−£${Math.round(s.cil/1e6*10)/10}M</td></tr>
-      <tr><td>Letting fees + S106</td><td>−£${Math.round((s.letting+MARKET.s106+MARKET.demo)/1e6*10)/10}M</td></tr>
+  <div class="d3-section">
+    <div class="d3-lbl">Development Appraisal</div>
+    <table class="pf">
+      <tr><td>Construction (${fmt(s.gea)}m² × £${(MARKET.costGsm[s.key]/1000).toFixed(1)}k)</td><td>−£${Math.round(s.constCost/1e6*10)/10}M</td></tr>
+      <tr><td>Professional fees (${Math.round(MARKET.fees*100)}%) + Contingency (${Math.round(MARKET.contg*100)}%)</td><td>−£${Math.round((s.fees+s.contg)/1e6*10)/10}M</td></tr>
+      <tr><td>CIL — City £140/m² + GLA £60/m² on ${fmt(s.nia)}m² NIA</td><td>−£${Math.round(s.cil/1e6*10)/10}M</td></tr>
+      <tr><td>Letting fees + S106 + Demolition</td><td>−£${Math.round((s.letting+MARKET.s106+MARKET.demo)/1e6*10)/10}M</td></tr>
       <tr><td>Finance (${Math.round(MARKET.finRate*100)}% × ${Math.round(MARKET.ltc*100)}% LTC × ${MARKET.progYrs[s.key]/2}yr avg)</td><td>−£${Math.round(s.finance/1e6*10)/10}M</td></tr>
-      <tr class="total"><td>Total Development Cost</td><td>£${Math.round(s.tdc/1e6*10)/10}M</td></tr>
-      <tr><td style="padding-top:6px">GDV (ERV £${MARKET.erv[s.key]}/m² ÷ ${(MARKET.niy[s.key]*100).toFixed(2)}% NIY)</td><td style="color:var(--green);font-weight:600">£${Math.round(s.gdv/1e6*10)/10}M</td></tr>
-      <tr class="total"><td>Developer Profit</td><td>£${Math.round(s.profit/1e6*10)/10}M</td></tr>
+      <tr class="ptotal"><td>Total Development Cost</td><td>£${Math.round(s.tdc/1e6*10)/10}M</td></tr>
+      <tr><td style="padding-top:6px">GDV (ERV £${MARKET.erv[s.key]}/m² ÷ ${(MARKET.niy[s.key]*100).toFixed(2)}% NIY)</td><td style="color:var(--lo);font-weight:700">£${Math.round(s.gdv/1e6*10)/10}M</td></tr>
+      <tr class="ptotal"><td>Developer profit</td><td>£${Math.round(s.profit/1e6*10)/10}M</td></tr>
     </table>
   </div>
-  <div class="d-section">
-    <div class="d-section-label">Scenario Assessment</div>
-    <div class="narrative">${s.narrative}</div>
+  <div class="d3-section">
+    <div class="d3-lbl">Scenario Assessment</div>
+    <div class="narr">${s.narrative}</div>
   </div>`;
 }
 
-function renderOverview(){
-  document.getElementById('eff-bars').innerHTML     = buildEfficiencyBars();
-  document.getElementById('return-curve').innerHTML = buildReturnCurve();
-  document.getElementById('constraint-stack').innerHTML = buildConstraintStack();
+// ── Render all overview ───────────────────────────────────────────────────────
+function renderAll(){
+  buildDecisionStrip();
+  buildVertBars();
+  buildReturnCurve();
+  buildConstraintTimeline();
+  buildDetail(SCENARIOS[activeIdx]);
 }
 
-// ── Scenario selection ───────────────────────────────────────────────────────
-let map, currentIdx=0;
-const SCENARIO_COLORS=['#059669','#4f46e5','#d97706'];
+// ── Scenario selection ────────────────────────────────────────────────────────
+let map;
+const MAP_COLS=['#059669','#4f46e5','#d97706'];
 
 function selectScenario(idx){
-  currentIdx=idx; activeIdx=idx;
+  activeIdx=idx;
   document.querySelectorAll('.sbar-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
   document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',i===idx));
-  renderOverview();
-  document.getElementById('detail').innerHTML = buildDetail(SCENARIOS[idx]);
-  updateMap(idx);
+  renderAll();
+  if(map) updateMap(idx);
 }
 
 function updateMap(idx){
-  if(!map) return;
-  const s=SCENARIOS[idx];
-  const col=SCENARIO_COLORS[idx];
-  const shrink=f=>{
-    const cx=SITE_COORDS.reduce((a,c)=>a+c[0],0)/SITE_COORDS.length;
-    const cy=SITE_COORDS.reduce((a,c)=>a+c[1],0)/SITE_COORDS.length;
-    return SITE_COORDS.map(c=>[cx+(c[0]-cx)*f,cy+(c[1]-cy)*f]);
-  };
-  const buf=coords=>{
-    const cx=coords.reduce((a,c)=>a+c[0],0)/coords.length;
-    const cy=coords.reduce((a,c)=>a+c[1],0)/coords.length;
-    return coords.map(c=>{const dx=c[0]-cx,dy=c[1]-cy,l=Math.sqrt(dx*dx+dy*dy)||1e-9;return[c[0]+dx/l*0.000005,c[1]+dy/l*0.000005]});
-  };
-  const podCoords=buf(SITE_COORDS);
-  const twrCoords=shrink(Math.sqrt(s.twrPct));
+  const s=SCENARIOS[idx], col=MAP_COLS[idx];
+  const cx=SITE_COORDS.reduce((a,c)=>a+c[0],0)/SITE_COORDS.length;
+  const cy=SITE_COORDS.reduce((a,c)=>a+c[1],0)/SITE_COORDS.length;
+  const shrink=f=>SITE_COORDS.map(c=>[cx+(c[0]-cx)*f,cy+(c[1]-cy)*f]);
+  const buf=coords=>coords.map(c=>{const dx=c[0]-cx,dy=c[1]-cy,l=Math.sqrt(dx*dx+dy*dy)||1e-9;return[c[0]+dx/l*0.000005,c[1]+dy/l*0.000005]});
   const empty={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,0.0001],[0.0001,0.0001],[0,0]]]}};
-  map.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[podCoords]}});
+  map.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[buf(SITE_COORDS)]}});
+  const twrCoords=shrink(Math.sqrt(s.twrPct));
   map.getSource('tower').setData(s.twrF>0?{type:'Feature',geometry:{type:'Polygon',coordinates:[twrCoords]}}:empty);
   map.setPaintProperty('podium-3d','fill-extrusion-color',col);
   map.setPaintProperty('podium-3d','fill-extrusion-height',s.podH);
-  map.setPaintProperty('podium-3d','fill-extrusion-opacity',0.65);
+  map.setPaintProperty('podium-3d','fill-extrusion-opacity',0.7);
   map.setPaintProperty('tower-3d','fill-extrusion-color',col);
   map.setPaintProperty('tower-3d','fill-extrusion-height',s.floors===10?42:s.floors===14?60:92);
   map.setPaintProperty('tower-3d','fill-extrusion-base',s.podH);
-  map.setPaintProperty('tower-3d','fill-extrusion-opacity',s.twrF>0?0.55:0);
+  map.setPaintProperty('tower-3d','fill-extrusion-opacity',s.twrF>0?0.6:0);
   map.setPaintProperty('site-line','line-color',col);
-  map.setPaintProperty('site-glow','line-color',col);
 }
 
-// ── Map init ─────────────────────────────────────────────────────────────────
 async function init(){
   const cfg=await(await fetch('/api/config')).json();
   mapboxgl.accessToken=cfg.mapboxToken;
-  map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:CENTROID,zoom:17.2,pitch:45,bearing:-20,antialias:true});
+  map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:CENTROID,zoom:17,pitch:50,bearing:-15,antialias:true});
   map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
   map.on('style.load',()=>{
-    const empty={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,0.0001],[0.0001,0.0001],[0,0]]]}};
+    const e={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,0.0001],[0.0001,0.0001],[0,0]]]}};
     map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
-    map.addSource('podium',{type:'geojson',data:empty});
-    map.addSource('tower',{type:'geojson',data:empty});
-    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':2,'line-opacity':0.9,'line-dasharray':[4,2]}});
-    map.addLayer({id:'site-glow',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':8,'line-opacity':0.12,'line-blur':4}});
-    map.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':25,'fill-extrusion-base':0,'fill-extrusion-opacity':0.65}});
-    map.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0.55}});
-    selectScenario(0);
+    map.addSource('podium',{type:'geojson',data:e});
+    map.addSource('tower',{type:'geojson',data:e});
+    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#059669','line-width':2,'line-dasharray':[4,2],'line-opacity':.8}});
+    map.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':25,'fill-extrusion-base':0,'fill-extrusion-opacity':0.7}});
+    map.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0.6}});
+    updateMap(0);
   });
 }
 
-renderOverview();
-document.getElementById('detail').innerHTML=buildDetail(SCENARIOS[0]);
+renderAll();
 init();
 </script>
 </body>
