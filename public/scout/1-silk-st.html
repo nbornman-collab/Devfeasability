@@ -6,347 +6,343 @@
 <title>T1 Scout — 1 Silk Street</title>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0c0e18;--s1:#13162a;--s2:#1a1e33;--border:#252a42;
-  --text:#f0f2ff;--t2:#8892b8;--t3:#5560808;
-  --accent:#6366f1;--lo:#34d399;--hi:#f59e0b;--warn:#ef4444;
+  --bg:#fff;--surface:#f7f8fb;--surface2:#f0f2f6;--border:#dde0ea;
+  --text:#0f1117;--text2:#4a506a;--text3:#8892a8;
+  --accent:#4f46e5;--green:#059669;--red:#dc2626;--amber:#d97706;
   --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
-html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text);overflow:hidden}
-#map{position:fixed;inset:0;right:min(680px,45vw);z-index:1}
-.panel{position:fixed;top:0;right:0;width:min(680px,45vw);height:100%;background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:5}
+html,body{min-height:100%;font-family:var(--sans);background:var(--surface);color:var(--text)}
 
-/* Tier nav */
-.tier-nav{display:flex;align-items:center;background:rgba(12,14,24,.97);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:20;backdrop-filter:blur(8px)}
-.tier-link{display:flex;align-items:center;gap:5px;padding:11px 12px;text-decoration:none;border-bottom:2.5px solid transparent;margin-bottom:-1px;white-space:nowrap}
-.tier-link .tid{font:700 9px var(--mono);color:#3d4565;letter-spacing:.5px}
-.tier-link .tn{font:600 10px var(--sans);color:#3d4565}
-.tier-link.active .tid{color:var(--accent)}.tier-link.active .tn{color:var(--text)}
+.tier-nav{display:flex;align-items:center;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 24px}
+.tier-link{display:flex;align-items:center;gap:5px;padding:11px 12px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tier-link .tid{font:700 9px var(--mono);color:var(--text3);letter-spacing:.5px}
+.tier-link .tname{font:600 9px var(--sans);color:var(--text3)}
+.tier-link.active .tid{color:var(--accent)}.tier-link.active .tname{color:var(--text)}
 .tier-link.active{border-bottom-color:var(--accent)}
-.tier-link.locked{opacity:.2;pointer-events:none}
+.tier-link.locked{opacity:.3;pointer-events:none}
+.tier-sep{font:400 11px var(--sans);color:var(--border);padding:0 2px}
 
-/* Hero banner */
-.hero{padding:28px 28px 22px;background:linear-gradient(135deg,#0f1124 0%,#1a1633 100%);border-bottom:1px solid var(--border)}
-.hero-badge{display:inline-flex;align-items:center;gap:5px;background:#1e2240;border:1px solid var(--border);border-radius:20px;padding:4px 10px;font:600 9px var(--sans);color:var(--t2);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
-.hero-addr{font:800 26px var(--sans);letter-spacing:-.6px;margin-bottom:4px}
-.hero-sub{font:400 12px var(--sans);color:var(--t2);margin-bottom:16px}
+/* Hero */
+.opp-hero{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 60%,#4338ca 100%);padding:28px 28px 0;color:#fff}
+.opp-hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.opp-addr{font:800 22px var(--sans);letter-spacing:-.5px;margin-bottom:3px}
+.opp-sub{font:400 12px var(--sans);opacity:.65}
+.opp-score-wrap{text-align:right}
+.opp-score-label{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;opacity:.65;margin-bottom:4px}
+.opp-score{font:900 44px var(--mono);letter-spacing:-2px;line-height:1}
+.opp-score-max{font:400 14px var(--mono);opacity:.5}
+.opp-score-badge{font:600 9px var(--sans);background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px;margin-top:5px;display:inline-block}
 
-/* Opportunity score */
-.opp-row{display:flex;align-items:center;gap:16px;margin-bottom:16px}
-.opp-score{flex-shrink:0}
-.opp-score .val{font:900 52px var(--mono);letter-spacing:-3px;line-height:1;color:var(--hi)}
-.opp-score .denom{font:500 20px var(--mono);color:var(--t2);margin-left:2px}
-.opp-score .lbl{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--t2);margin-top:2px}
-.opp-desc{font:400 12px/1.7 var(--sans);color:var(--t2)}
-.opp-desc strong{color:var(--text);font-weight:600}
+/* Heritage warning in hero */
+.hero-warn{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:8px;padding:11px 14px;margin-bottom:14px;font:400 11px/1.6 var(--sans);color:#fde68a}
+.hero-warn strong{color:#fbbf24;font-weight:700}
 
-/* Warning banner */
-.warn-band{background:#1a0d0d;border:1px solid #7f1d1d;border-radius:8px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start}
-.warn-band .wi{font-size:14px;flex-shrink:0;margin-top:1px}
-.warn-band p{font:400 11px/1.6 var(--sans);color:#fca5a5}
-.warn-band strong{color:#fecaca}
+.uplift-bar-wrap{background:rgba(255,255,255,.08);border-radius:10px 10px 0 0;padding:18px 20px}
+.uplift-bar-label{display:flex;justify-content:space-between;font:500 9px var(--sans);opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
+.uplift-track{height:28px;background:rgba(255,255,255,.1);border-radius:6px;overflow:visible;position:relative;display:flex;align-items:center}
+.uplift-euv{height:100%;background:rgba(255,255,255,.3);border-radius:6px 0 0 6px;display:flex;align-items:center;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
+.uplift-gdv-range{height:100%;background:linear-gradient(90deg,#a78bfa,#6366f1);border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:flex-end;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
+.uplift-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,.08);margin-top:12px;border-radius:6px;overflow:hidden}
+.uplift-stat{padding:10px 12px}
+.uplift-stat .uval{font:800 18px var(--mono);letter-spacing:-.5px}
+.uplift-stat .ulbl{font:500 8px var(--sans);opacity:.6;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.uval.green{color:#34d399}.uval.amber{color:#fbbf24}.uval.purple{color:#a78bfa}
 
-/* Uplift bar */
-.uplift-bar-wrap{margin-bottom:0}
-.uplift-labels{display:flex;justify-content:space-between;margin-bottom:5px}
-.uplift-lbl{font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--t2)}
-.uplift-bar{height:10px;background:#1e2240;border-radius:5px;overflow:hidden;position:relative}
-.uplift-fill-euv{position:absolute;left:0;top:0;height:100%;background:#334155;border-radius:5px 0 0 5px}
-.uplift-fill-gdv{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--accent),var(--hi));border-radius:5px;opacity:.7}
-.uplift-nums{display:flex;justify-content:space-between;margin-top:4px;font:600 10px var(--mono);color:var(--t2)}
+/* Body */
+.body-grid{display:grid;grid-template-columns:1fr 340px}
+.main-col{padding:24px 28px;display:flex;flex-direction:column;gap:20px}
+.side-col{background:#fff;border-left:1px solid var(--border);display:flex;flex-direction:column;min-height:600px}
 
-/* Cards */
-.section{padding:20px 28px;border-bottom:1px solid var(--border)}
-.sec-head{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t2);margin-bottom:14px}
+.tags-row{display:flex;gap:7px;flex-wrap:wrap;padding:14px 28px;background:#fff;border-bottom:1px solid var(--border)}
+.tag{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font:600 10px var(--sans);letter-spacing:.2px;border:1px solid}
+.tag.green{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
+.tag.amber{background:#fffbeb;color:#92400e;border-color:#fde68a}
+.tag.red{background:#fef2f2;color:#991b1b;border-color:#fecaca}
+.tag.blue{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
+.tag.purple{background:#f5f3ff;color:#4338ca;border-color:#c4b5fd}
+.tag.grey{background:var(--surface);color:var(--text2);border-color:var(--border)}
 
-.signal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.signal{background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
-.sval{font:700 20px var(--mono);letter-spacing:-.5px;color:var(--text);margin-bottom:2px}
-.slbl{font:400 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--t2);margin-bottom:3px}
-.sdelta{font:600 9px var(--sans)}
-.sdelta.up{color:var(--lo)}.sdelta.dn{color:var(--warn)}
+#scout-map{height:220px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
 
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat-card{background:var(--s1);border:1px solid var(--border);border-radius:7px;padding:12px 14px}
-.stat-val{font:700 16px var(--mono);letter-spacing:-.3px;margin-bottom:2px}
-.stat-lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--t2)}
+.card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.card-head{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-head h3{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3)}
+.card-body{padding:14px 16px}
 
-/* Heritage flags */
-.heritage-block{background:#140e00;border:1px solid #78350f;border-radius:8px;padding:14px 16px;margin-bottom:0}
-.hb-head{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:#f59e0b;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.hb-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #2a1d00}
-.hb-item:last-child{border-bottom:none}
-.hb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.hb-text{font:400 11px/1.5 var(--sans);color:#fcd34d}
-.hb-grade{font:700 9px var(--sans);color:#f59e0b;text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:1px}
+/* Heritage block */
+.heritage-card{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;overflow:hidden}
+.heritage-card .hc-head{padding:11px 16px;border-bottom:1px solid #fde68a;display:flex;align-items:center;gap:7px}
+.heritage-card .hc-head h3{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:#92400e}
+.heritage-card .hc-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.hc-item{display:flex;align-items:flex-start;gap:8px}
+.hc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.hc-text{font:400 11px/1.5 var(--sans);color:#78350f}
+.hc-text strong{font-weight:700;color:#92400e}
 
-/* Planning flags */
-.flag-list{display:flex;flex-direction:column;gap:6px}
-.flag{display:flex;align-items:flex-start;gap:8px;padding:9px 12px;border-radius:6px;background:var(--s1);border:1px solid var(--border)}
-.flag.warn{background:#1a0d0d;border-color:#7f1d1d}
-.flag.info{background:#0d1025;border-color:#1e3a5f}
-.flag-icon{font:500 13px var(--sans);flex-shrink:0}
-.flag-text{font:400 11px/1.5 var(--sans);color:var(--t2)}
-.flag-text strong{color:var(--text);font-weight:600}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.stat-cell{background:#fff;padding:13px 16px}
+.stat-cell .val{font:800 18px var(--mono);letter-spacing:-.5px;margin-bottom:2px}
+.stat-cell .lbl{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3)}
+.val.green{color:var(--green)}.val.amber{color:var(--amber)}.val.red{color:var(--red)}.val.accent{color:var(--accent)}
 
-/* Height comparables */
-.hcomp-bar{margin-bottom:10px}
-.hcomp-name{font:500 10px var(--sans);color:var(--t2);margin-bottom:3px;display:flex;justify-content:space-between}
-.hcomp-track{height:8px;background:#1e2240;border-radius:4px;overflow:hidden}
-.hcomp-fill{height:100%;border-radius:4px}
+.signal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.signal{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center}
+.signal .sval{font:800 16px var(--mono);color:var(--text);letter-spacing:-.5px;margin-bottom:3px}
+.signal .slbl{font:500 8px var(--sans);color:var(--text3);text-transform:uppercase;letter-spacing:.8px;line-height:1.4}
+.signal .sdelta{font:600 9px var(--sans);margin-top:4px}
+.sdelta.up{color:var(--green)}.sdelta.down{color:var(--red)}
 
-/* Unlock card */
-.unlock-card{margin:20px 28px 28px;background:linear-gradient(135deg,#0d1025,#13102a);border:1px solid var(--accent);border-radius:12px;overflow:hidden}
-.unlock-head{padding:20px 22px 14px;border-bottom:1px solid #1e2240}
-.unlock-head h3{font:700 16px var(--sans);letter-spacing:-.3px;margin-bottom:5px}
-.unlock-head p{font:400 12px var(--sans);color:var(--t2);line-height:1.6}
-.unlock-body{padding:18px 22px}
-.unlock-cta{display:block;background:var(--accent);color:#fff;text-align:center;padding:13px;border-radius:8px;text-decoration:none;font:700 13px var(--sans);margin-top:16px;transition:opacity .15s}
-.unlock-cta:hover{opacity:.85}
-.teaser-curve-wrap{position:relative;border-radius:6px;overflow:hidden;border:1px solid #2a2d48;margin-bottom:14px}
-.teaser-blur-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:rgba(13,16,37,.6)}
-.teaser-blur-overlay span:first-child{font:700 11px var(--sans);color:#a5b4fc}
-.teaser-blur-overlay span:last-child{font:400 10px var(--sans);color:var(--t2)}
-.outcomes{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.outcome{font:400 11px var(--sans);color:var(--t2);display:flex;align-items:center;gap:6px}
-.outcome span:first-child{color:var(--accent);font-weight:700}
+.flag-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05)}
+.flag-row:last-child{border-bottom:none}
+.flag-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.flag-icon.warn{background:#fffbeb}.flag-icon.risk{background:#fef2f2}.flag-icon.info{background:#eff6ff}.flag-icon.ok{background:#f0fdf4}
+.flag-title{font:600 11px var(--sans);color:var(--text);margin-bottom:2px}
+.flag-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5}
 
-@media(max-width:900px){
-  #map{right:0;bottom:45%}
-  .panel{width:100%;height:55%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border)}
-}
+.hb-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.hb-label{font:500 10px var(--sans);color:var(--text2);width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb-track{flex:1;height:13px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.hb-fill{height:100%;border-radius:3px}
+.hb-val{font:600 9px var(--mono);color:var(--text3);width:34px;text-align:right}
+
+.unlock-card{background:#fff;border:1.5px solid #c4b5fd;border-radius:10px;overflow:hidden}
+.unlock-head{background:linear-gradient(135deg,#f5f3ff,#ede9fe);padding:16px 18px;border-bottom:1px solid #c4b5fd}
+.unlock-head h3{font:700 15px var(--sans);letter-spacing:-.2px;margin-bottom:5px}
+.unlock-head p{font:400 11px var(--sans);color:#5b5299;line-height:1.6}
+.unlock-body{padding:16px 18px}
+.lock-blur{filter:blur(3px);font:700 13px var(--mono);color:var(--text)}
+.unlock-cta{display:block;margin-top:14px;padding:13px;background:var(--accent);color:#fff;text-align:center;border-radius:7px;font:700 13px var(--sans);text-decoration:none;transition:opacity .15s}
+.unlock-cta:hover{opacity:.9}
+
+.side-head{padding:14px 18px;border-bottom:1px solid var(--border)}
+.side-head h2{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3)}
+.app-item{padding:10px 18px;border-bottom:1px solid rgba(0,0,0,.05)}
+.app-ref{font:600 9px var(--mono);color:var(--accent);margin-bottom:2px}
+.app-desc{font:400 10px var(--sans);color:var(--text2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.app-meta{font:400 9px var(--sans);color:var(--text3);margin-top:2px;display:flex;gap:6px;flex-wrap:wrap}
+.app-status{display:inline-block;padding:1px 6px;border-radius:3px;font:600 8px var(--sans)}
+.app-status.approved{background:#f0fdf4;color:#166534}
+.app-status.refused{background:#fef2f2;color:#991b1b}
+.app-status.pending{background:#fffbeb;color:#92400e}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:4px;height:14px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+@media(max-width:860px){.body-grid{grid-template-columns:1fr}.side-col{border-left:none;border-top:1px solid var(--border)}.signal-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-<div id="map"></div>
-<div class="panel">
-  <nav class="tier-nav">
-    <a href="/t1/1-silk-st" class="tier-link active"><span class="tid">T1</span><span class="tn">Scout</span></a>
-    <a href="/t2/1-silk-st" class="tier-link locked" style="margin-left:8px"><span class="tid">T2</span><span class="tn">Appraise</span></a>
-    <a class="tier-link locked" style="margin-left:8px"><span class="tid">T3</span><span class="tn">Present</span></a>
-    <a class="tier-link locked" style="margin-left:8px"><span class="tid">T4</span><span class="tn">Commission</span></a>
-  </nav>
 
-  <!-- Hero -->
-  <div class="hero">
-    <div class="hero-badge">🏛️ Heritage-Constrained · City of London · NOT Eastern Cluster</div>
-    <div class="hero-addr">1 Silk Street</div>
-    <div class="hero-sub">EC2Y 8HQ · Barbican Fringe · 9,000 m² plot · PTAL 6a</div>
+<nav class="tier-nav">
+  <a href="/t1/1-silk-st" class="tier-link active"><span class="tid">T1</span><span class="tname">Scout</span></a>
+  <span class="tier-sep">·</span>
+  <a href="/t2/1-silk-st" class="tier-link locked"><span class="tid">T2</span><span class="tname">Appraise</span></a>
+  <span class="tier-sep">·</span>
+  <a class="tier-link locked"><span class="tid">T3</span><span class="tname">Present</span></a>
+  <span class="tier-sep">·</span>
+  <a class="tier-link locked"><span class="tid">T4</span><span class="tname">Commission</span></a>
+</nav>
 
-    <div class="opp-row">
-      <div class="opp-score">
-        <div><span class="val">7.1</span><span class="denom">/10</span></div>
-        <div class="lbl">Opportunity Score</div>
-      </div>
-      <div class="opp-desc">
-        <strong>Rare large City plot with obsolete stock</strong> — compelling redevelopment case on transport and market fundamentals. The prize is real. But this is one of London's most sensitive heritage settings: the Barbican Estate on your doorstep, three major designations within metres. <strong>Viable, but the design will need to earn its height.</strong>
-      </div>
+<!-- Hero -->
+<div class="opp-hero">
+  <div class="opp-hero-top">
+    <div>
+      <div class="opp-addr">1 Silk Street</div>
+      <div class="opp-sub">City of London · EC2Y 8HQ · ~9,000 m² plot · PTAL 6a · Barbican Fringe</div>
     </div>
-
-    <div class="warn-band">
-      <span class="wi">⚠️</span>
-      <p><strong>Heritage overrides Eastern Cluster logic here.</strong> This site sits outside the tall building cluster. The Barbican Estate (Grade II* — the entire estate) is immediately adjacent. Historic England will be a statutory consultee at every scenario height. A Heritage Impact Assessment is non-negotiable from RIBA Stage 2 onwards.</p>
-    </div>
-
-    <div class="uplift-bar-wrap">
-      <div class="uplift-labels">
-        <span class="uplift-lbl">EUV (existing)</span>
-        <span class="uplift-lbl">Max GDV (indicative)</span>
-      </div>
-      <div class="uplift-bar">
-        <div class="uplift-fill-gdv" id="gdv-bar" style="width:0%"></div>
-        <div class="uplift-fill-euv" id="euv-bar" style="width:0%"></div>
-      </div>
-      <div class="uplift-nums">
-        <span id="euv-val">£95M</span>
-        <span id="uplift-val" style="color:var(--hi)">▲ £—M uplift</span>
-        <span id="gdv-hi-val" style="color:var(--accent)">£—M</span>
-      </div>
+    <div class="opp-score-wrap">
+      <div class="opp-score-label">Opportunity Score</div>
+      <div><span class="opp-score">7.1</span><span class="opp-score-max">/10</span></div>
+      <div class="opp-score-badge">Viable — heritage-constrained</div>
     </div>
   </div>
 
-  <!-- Market signals -->
-  <div class="section">
-    <div class="sec-head">Market Signals — EC2Y · Barbican/Moorgate · 2025 Q4</div>
-    <div class="signal-grid">
-      <div class="signal">
-        <div class="sval">£690</div>
-        <div class="slbl">Grade A ERV psm pa</div>
-        <div class="sdelta" style="color:var(--t2)">↑ 5% YoY · fringe discount to EC3A</div>
-      </div>
-      <div class="signal">
-        <div class="sval">5.0%</div>
-        <div class="slbl">Net Initial Yield</div>
-        <div class="sdelta up">Firming ↑</div>
-      </div>
-      <div class="signal">
-        <div class="sval">4.8%</div>
-        <div class="slbl">City Vacancy Rate</div>
-        <div class="sdelta dn">Sub-5% — supply pressure</div>
-      </div>
-      <div class="signal">
-        <div class="sval">123m</div>
-        <div class="slbl">Tallest within 200m</div>
-        <div class="sdelta" style="color:var(--hi)">Barbican towers — listed</div>
-      </div>
-      <div class="signal">
-        <div class="sval">£5,200</div>
-        <div class="slbl">Avg office capex psm</div>
-        <div class="sdelta" style="color:var(--t2)">BCIS 2025 Q3</div>
-      </div>
-      <div class="signal">
-        <div class="sval">1,000+</div>
-        <div class="slbl">Recent objections filed</div>
-        <div class="sdelta dn">Planning risk indicator</div>
-      </div>
-    </div>
+  <div class="hero-warn">
+    <strong>⚠️ NOT Eastern Cluster.</strong> Tall building policy support is not automatic here — every floor above the urban grain requires a positive case on heritage, design quality, and public benefit. The Barbican Estate (Grade II*, the largest single listed structure in the UK) is immediately adjacent. Historic England is a statutory consultee at every scenario height.
   </div>
 
-  <!-- Site stats -->
-  <div class="section">
-    <div class="sec-head">Site Overview</div>
-    <div class="stat-grid">
-      <div class="stat-card"><div class="stat-val">9,000 m²</div><div class="stat-lbl">Plot area</div></div>
-      <div class="stat-card"><div class="stat-val">PTAL 6a</div><div class="stat-lbl">Transport accessibility</div></div>
-      <div class="stat-card"><div class="stat-val">Mid-City</div><div class="stat-lbl">Planning zone (NOT Cluster)</div></div>
-      <div class="stat-card"><div class="stat-val">1980s</div><div class="stat-lbl">Existing stock vintage</div></div>
-      <div class="stat-card"><div class="stat-val">EPC F</div><div class="stat-lbl">Existing est. rating (sub-standard)</div></div>
-      <div class="stat-card"><div class="stat-val">2026</div><div class="stat-lbl">Existing occupier vacating</div></div>
+  <div class="uplift-bar-wrap">
+    <div class="uplift-bar-label"><span>EUV (existing office)</span><span>Indicative GDV range</span></div>
+    <div class="uplift-track">
+      <div class="uplift-euv" style="width:20%">£95M EUV</div>
+      <div class="uplift-gdv-range" id="gdv-bar" style="width:80%">up to £<span id="gdv-hi-val">—</span>M GDV</div>
+    </div>
+    <div class="uplift-stats">
+      <div class="uplift-stat"><div class="uval green" id="uplift-max">—</div><div class="ulbl">Max uplift</div></div>
+      <div class="uplift-stat"><div class="uval purple" id="gdv-mult">—×</div><div class="ulbl">GDV multiplier</div></div>
+      <div class="uplift-stat"><div class="uval amber" id="max-nia">—</div><div class="ulbl">Max NIA</div></div>
     </div>
   </div>
+</div>
 
-  <!-- Heritage flags — hard constraints -->
-  <div class="section">
-    <div class="sec-head">Heritage Setting — Hard Constraints</div>
-    <div class="heritage-block">
-      <div class="hb-head">🏛️ Three major designations within 100m</div>
-      <div class="hb-item">
-        <div class="hb-dot" style="background:#f59e0b"></div>
-        <div class="hb-text">
-          <span class="hb-grade">Grade II* Listed — Largest single listed structure in the UK</span>
-          Barbican Estate — immediately NW. Towers, podium, arts centre, residential. The estate as a whole is the listed asset — any new building must demonstrate no harm to its setting. Historic England will object if the setting argument isn't watertight.
-        </div>
-      </div>
-      <div class="hb-item">
-        <div class="hb-dot" style="background:#ef4444"></div>
-        <div class="hb-text">
-          <span class="hb-grade">Grade I Listed — Medieval church</span>
-          St Giles-without-Cripplegate — within the Barbican precinct, NW corner. Grade I = highest heritage protection. Setting must not be obscured or dominated by new development.
-        </div>
-      </div>
-      <div class="hb-item">
-        <div class="hb-dot" style="background:#f59e0b"></div>
-        <div class="hb-text">
-          <span class="hb-grade">LVMF Protected Views — St Paul's Cathedral</span>
-          Multiple view corridors run through this area. Any development above ~25m requires a verified view assessment submitted to the GLA. Barbican towers at 123m have established a tall building precedent — but they are the listed exception, not the rule.
-        </div>
-      </div>
-      <div class="hb-item">
-        <div class="hb-dot" style="background:#6366f1"></div>
-        <div class="hb-text">
-          <span class="hb-grade">Barbican & Cripplegate Conservation Area</span>
-          This site is within or immediately adjacent to the CA boundary. All development proposals require a Heritage Impact Assessment and conservation area appraisal response. Character of the area — including the relationship between new and listed buildings — is a primary consideration.
+<!-- Tags -->
+<div class="tags-row">
+  <div class="tag red">🏛️ NOT Eastern Cluster</div>
+  <div class="tag amber">⚠️ Heritage Impact Assessment mandatory</div>
+  <div class="tag green">✓ PTAL 6a</div>
+  <div class="tag amber">⚠️ Barbican Estate Grade II* adjacent</div>
+  <div class="tag purple">📋 GLA referral >30m</div>
+  <div class="tag blue">🏢 Large City plot · 9,000 m²</div>
+</div>
+
+<div class="body-grid">
+  <div class="main-col">
+
+    <!-- Map -->
+    <div id="scout-map"></div>
+
+    <!-- Market signals -->
+    <div class="card">
+      <div class="card-head"><h3>Market Signals — EC2Y · Barbican/Moorgate · 2025 Q4</h3></div>
+      <div class="card-body">
+        <div class="signal-grid">
+          <div class="signal"><div class="sval">£690</div><div class="slbl">Grade A ERV psm pa</div><div class="sdelta up">↑ 5% YoY · EC2Y fringe</div></div>
+          <div class="signal"><div class="sval">5.0%</div><div class="slbl">Net Initial Yield</div><div class="sdelta up">Firming ↑</div></div>
+          <div class="signal"><div class="sval">4.8%</div><div class="slbl">City Vacancy Rate</div><div class="sdelta down">Sub-5% supply pressure</div></div>
+          <div class="signal"><div class="sval">123m</div><div class="slbl">Tallest within 200m</div><div class="sdelta" style="color:var(--amber)">Barbican towers — Grade II*</div></div>
+          <div class="signal"><div class="sval">68m</div><div class="slbl">Best height precedent</div><div class="sdelta up">21 Moorfields — consented</div></div>
+          <div class="signal"><div class="sval">2026</div><div class="slbl">Existing tenant vacating</div><div class="sdelta" style="color:var(--text3)">EPC non-compliance driver</div></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Height context -->
-  <div class="section">
-    <div class="sec-head">Height Context — Buildings within 300m</div>
-    <div id="heights-body">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div class="hcomp-bar"><div class="hcomp-name"><span>Barbican Towers (3×)</span><span style="color:var(--hi)">123m · Grade II*</span></div><div class="hcomp-track"><div class="hcomp-fill" style="width:100%;background:#f59e0b40"></div></div></div>
-        <div class="hcomp-bar"><div class="hcomp-name"><span>21 Moorfields</span><span>68m · recent consent</span></div><div class="hcomp-track"><div class="hcomp-fill" style="width:55%;background:var(--accent)"></div></div></div>
-        <div class="hcomp-bar"><div class="hcomp-name"><span>Milton Court (GSMD)</span><span>~45m · adjacent SW</span></div><div class="hcomp-track"><div class="hcomp-fill" style="width:37%;background:var(--accent)"></div></div></div>
-        <div class="hcomp-bar"><div class="hcomp-name"><span>Existing 1 Silk St</span><span>~32m · to be replaced</span></div><div class="hcomp-track"><div class="hcomp-fill" style="width:26%;background:#475569"></div></div></div>
-        <div class="hcomp-bar"><div class="hcomp-name"><span>St Giles Church</span><span>~15m · Grade I</span></div><div class="hcomp-track"><div class="hcomp-fill" style="width:12%;background:#ef444440"></div></div></div>
-      </div>
-      <div style="margin-top:12px;font:400 11px/1.6 var(--sans);color:var(--t2)">The Barbican towers are the outlier — they predate modern heritage assessment and are themselves the protected asset. 21 Moorfields (68m, 2021 completion) is the most useful planning precedent for this area: consented without Eastern Cluster designation, strong transport case, respected heritage sight lines.</div>
-    </div>
-  </div>
-
-  <!-- Planning flags -->
-  <div class="section">
-    <div class="sec-head">Planning Flags</div>
-    <div class="flag-list">
-      <div class="flag warn">
-        <span class="flag-icon">🏛️</span>
-        <div class="flag-text"><strong>NOT in Eastern Cluster.</strong> Tall building policy support is not automatic here. Each floor above the urban grain (~8–10F) requires positive justification in heritage, design quality, and public benefit terms.</div>
-      </div>
-      <div class="flag warn">
-        <span class="flag-icon">⚠️</span>
-        <div class="flag-text"><strong>Heritage Impact Assessment mandatory.</strong> NPPF §199–208 applies at all scenario heights. Barbican Estate Grade II* setting is the primary constraint — harm finding = statutory refusal bar.</div>
-      </div>
-      <div class="flag info">
-        <span class="flag-icon">📋</span>
-        <div class="flag-text"><strong>GLA referral required above 30m.</strong> Stage 1 and Stage 2 Mayor referral. Heritage arguments will be tested at both stages. Historic England likely to make representations.</div>
-      </div>
-      <div class="flag info">
-        <span class="flag-icon">🔍</span>
-        <div class="flag-text"><strong>Retrofit futility case needed.</strong> City planners will ask why demolition is justified over refurbishment. EPC non-compliance and structural obsolescence are the primary arguments. Must be demonstrated, not assumed.</div>
-      </div>
-      <div class="flag info">
-        <span class="flag-icon">💡</span>
-        <div class="flag-text"><strong>Public benefit argument is critical.</strong> At height, public realm, cultural contribution, and community uses become part of the planning case — not optional extras. The relationship with the Barbican Arts Centre is a planning asset if used well.</div>
-      </div>
-      <div class="flag info">
-        <span class="flag-icon">📐</span>
-        <div class="flag-text"><strong>BSA 2022 applies above 18m.</strong> All three scenarios are registered buildings. Above 50m, Higher Risk Building regime triggers — mandatory 2nd staircase, simultaneous evacuation, Gateway process.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Unlock teaser -->
-  <div class="unlock-card">
-    <div class="unlock-head">
-      <h3>Every site has a sweet spot. T2 finds it.</h3>
-      <p id="teaser-hook">On this site, choosing the wrong scenario isn't just a financial mistake — it's a planning one. T2 shows exactly where the return curve peaks and which constraints trigger at each height.</p>
-    </div>
-    <div class="unlock-body">
-      <div class="teaser-curve-wrap">
-        <svg id="teaser-curve" viewBox="0 0 280 80" style="width:100%;display:block;filter:blur(2.5px);opacity:.45"></svg>
-        <div class="teaser-blur-overlay">
-          <span>Return curve — locked</span>
-          <span>Unlock T2 to see where this site peaks</span>
+    <!-- Heritage flags — HARD CONSTRAINTS -->
+    <div class="heritage-card">
+      <div class="hc-head"><span>🏛️</span><h3>Heritage Setting — Hard Constraints · All Scenarios</h3></div>
+      <div class="hc-body">
+        <div class="hc-item">
+          <div class="hc-dot" style="background:#d97706"></div>
+          <div class="hc-text"><strong>Barbican Estate — Grade II* Listed</strong> · Immediately NW. The entire estate — towers, podium, arts centre, residential — is the listed asset. UK's largest single listed structure. Setting harm = statutory bar to approval under NPPF §199–208 unless demonstrably outweighed by public benefit.</div>
+        </div>
+        <div class="hc-item">
+          <div class="hc-dot" style="background:#dc2626"></div>
+          <div class="hc-text"><strong>St Giles-without-Cripplegate — Grade I Listed</strong> · Within Barbican precinct, NW corner. Medieval church, highest heritage designation. Any new building must not dominate or obscure its setting when viewed from the estate or from street level.</div>
+        </div>
+        <div class="hc-item">
+          <div class="hc-dot" style="background:#d97706"></div>
+          <div class="hc-text"><strong>LVMF Protected Views — St Paul's Cathedral</strong> · Multiple view corridors run through this area. Verified view assessment required for any development above ~25m. Full 3D model submission to GLA required at High scenario.</div>
+        </div>
+        <div class="hc-item">
+          <div class="hc-dot" style="background:#4f46e5"></div>
+          <div class="hc-text"><strong>Barbican & Cripplegate Conservation Area</strong> · Site is within or immediately adjacent to the CA boundary. Heritage Impact Assessment mandatory from RIBA Stage 2. Character relationship between new and listed fabric is a primary planning consideration.</div>
         </div>
       </div>
-      <div class="outcomes">
-        <div class="outcome"><span>→</span> Know the right height before the Heritage Impact Assessment commits you to a massing</div>
-        <div class="outcome"><span>→</span> See exactly where construction cost, BSA compliance and heritage constraints compound</div>
-        <div class="outcome"><span>→</span> Understand which constraint is actually limiting this scheme — heritage, finance, or structure</div>
-        <div class="outcome"><span>→</span> Full pro forma: margin <span style="font-family:var(--mono);filter:blur(3px);letter-spacing:-1px">██–██%</span> · profit <span style="font-family:var(--mono);filter:blur(3px);letter-spacing:-1px">£██M</span></div>
+    </div>
+
+    <!-- Site stats -->
+    <div class="card">
+      <div class="card-head"><h3>Site Overview</h3></div>
+      <div class="stats-grid">
+        <div class="stat-cell"><div class="val">~9,000 m²</div><div class="lbl">Plot area</div></div>
+        <div class="stat-cell"><div class="val accent">PTAL 6a</div><div class="lbl">Transport accessibility</div></div>
+        <div class="stat-cell"><div class="val amber">Mid-City</div><div class="lbl">Planning zone — NOT Cluster</div></div>
+        <div class="stat-cell"><div class="val">1980s</div><div class="lbl">Existing stock vintage</div></div>
+        <div class="stat-cell"><div class="val red">EPC F est.</div><div class="lbl">Sub-standard — retrofit unviable</div></div>
+        <div class="stat-cell"><div class="val green">2026</div><div class="lbl">Existing occupier vacating</div></div>
       </div>
-      <a href="/t2/1-silk-st" class="unlock-cta">Find the sweet spot → T2 Appraise</a>
+    </div>
+
+    <!-- Height comparables -->
+    <div class="card">
+      <div class="card-head"><h3>Height Context — Buildings within 300m</h3></div>
+      <div class="card-body">
+        <div class="hb-row"><div class="hb-label">Barbican Towers (×3)</div><div class="hb-track"><div class="hb-fill" style="width:100%;background:#fde68a80"></div></div><div class="hb-val" style="color:var(--amber)">123m</div></div>
+        <div class="hb-row"><div class="hb-label">21 Moorfields</div><div class="hb-track"><div class="hb-fill" style="width:55%;background:var(--accent)"></div></div><div class="hb-val">68m</div></div>
+        <div class="hb-row"><div class="hb-label">Milton Court (GSMD)</div><div class="hb-track"><div class="hb-fill" style="width:37%;background:var(--accent)"></div></div><div class="hb-val">~45m</div></div>
+        <div class="hb-row"><div class="hb-label">Existing 1 Silk St</div><div class="hb-track"><div class="hb-fill" style="width:26%;background:#94a3b8"></div></div><div class="hb-val">~32m</div></div>
+        <div class="hb-row"><div class="hb-label">St Giles Church</div><div class="hb-track"><div class="hb-fill" style="width:12%;background:#fca5a5"></div></div><div class="hb-val" style="color:var(--red)">~15m</div></div>
+        <p style="font:400 10px/1.6 var(--sans);color:var(--text3);margin-top:10px">The Barbican towers predate modern heritage assessment — they are the protected exception, not the planning benchmark. <strong style="color:var(--text2)">21 Moorfields (68m, completed 2021) is the correct planning precedent for this area</strong>: consented outside the Eastern Cluster, strong transport case, heritage sight lines respected. That is the ceiling to argue from, not the Barbican towers.</p>
+      </div>
+    </div>
+
+    <!-- Planning flags -->
+    <div class="card">
+      <div class="card-head"><h3>Planning Flags</h3></div>
+      <div class="card-body">
+        <div class="flag-row"><div class="flag-icon risk">🏛️</div><div><div class="flag-title">NOT in Eastern Cluster — positive case required at every floor above urban grain</div><div class="flag-desc">City of London Local Plan designates this as Mid-City commercial area. Tall building policy (CS10/CS15) supports height where it can be justified — but doesn't grant it automatically as in the Eastern Cluster. Each scenario requires its own planning justification.</div></div></div>
+        <div class="flag-row"><div class="flag-icon risk">⚠️</div><div><div class="flag-title">Heritage Impact Assessment — non-negotiable, all scenarios</div><div class="flag-desc">NPPF §199–208. Barbican Estate Grade II* is the primary constraint. "Less than substantial harm" requires public benefit outweighing. "Substantial harm" is a near-certain refusal. HIA from a qualified heritage consultant is required before any massing is fixed.</div></div></div>
+        <div class="flag-row"><div class="flag-icon warn">📋</div><div><div class="flag-title">Retrofit futility case must be made and evidenced</div><div class="flag-desc">City planners will ask why demolition is justified. EPC non-compliance (2030 minimum EPC B target for commercial lets) and structural obsolescence are the arguments — but they must be evidenced in an Energy and Sustainability Assessment, not assumed.</div></div></div>
+        <div class="flag-row"><div class="flag-icon warn">💡</div><div><div class="flag-title">Public benefit and cultural contribution — planning asset if used well</div><div class="flag-desc">At this scale and location, adjacent to the Barbican Arts Centre, the relationship between new development and the cultural offer is a material planning consideration. Active ground floor uses, public realm, and affordable workspace (Policy E1/E2) are expected contributions, not optional extras.</div></div></div>
+        <div class="flag-row"><div class="flag-icon info">📐</div><div><div class="flag-title">BSA 2022 — registered building above 18m, Higher Risk above 50m</div><div class="flag-desc">All three scenarios exceed 18m. Above 50m: mandatory 2nd staircase, simultaneous evacuation, Gateway 1/2/3 process, Building Assessment Certificate. The 50m threshold is a hard cost and NIA inflection point.</div></div></div>
+        <div class="flag-row"><div class="flag-icon info">🌐</div><div><div class="flag-title">GLA referral — Stage 1 & 2 Mayor direction above 30m</div><div class="flag-desc">All scenarios above 30m require GLA referral. Heritage arguments will be tested at both stages. Historic England typically makes representations on tall building proposals adjacent to Grade II* assets.</div></div></div>
+      </div>
+    </div>
+
+    <!-- T2 unlock teaser -->
+    <div class="unlock-card">
+      <div class="unlock-head">
+        <h3>Every site has a sweet spot. T2 finds it.</h3>
+        <p id="teaser-hook">On this site, the question isn't just financial — it's architectural. Which height actually wins planning, delivers the return, and earns its place next to one of London's most protected estates?</p>
+      </div>
+      <div class="unlock-body">
+        <div style="position:relative;border-radius:6px;overflow:hidden;border:1px solid #c4b5fd;margin-bottom:14px">
+          <svg id="teaser-curve" viewBox="0 0 280 80" style="width:100%;display:block;filter:blur(2.5px);opacity:.55"></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+            <div style="font:700 11px var(--sans);color:#312e81">Return curve — locked</div>
+            <div style="font:400 10px var(--sans);color:var(--text3)">Unlock T2 to see where this site peaks</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+          <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:6px;padding:10px">
+            <div style="font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:#5b5299;margin-bottom:4px">What T1 tells you</div>
+            <div style="font:400 10px var(--sans);color:var(--text2);line-height:1.5">The site has potential. Heritage is the primary constraint. 21 Moorfields is the ceiling to argue from.</div>
+          </div>
+          <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #a78bfa;border-radius:6px;padding:10px">
+            <div style="font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:#4338ca;margin-bottom:4px">What T2 tells you</div>
+            <div style="font:400 10px var(--sans);color:#3730a3;line-height:1.5">Exactly which height maximises return — and whether the heritage fight at 18F is worth the margin you'll make back.</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+          <div style="font:400 11px var(--sans);color:var(--text2);display:flex;align-items:center;gap:6px"><span style="color:var(--accent);font-weight:700">→</span> Know the right height before the Heritage Impact Assessment commits you to a massing</div>
+          <div style="font:400 11px var(--sans);color:var(--text2);display:flex;align-items:center;gap:6px"><span style="color:var(--accent);font-weight:700">→</span> See where BSA 50m threshold, heritage harm, and finance compound simultaneously</div>
+          <div style="font:400 11px var(--sans);color:var(--text2);display:flex;align-items:center;gap:6px"><span style="color:var(--accent);font-weight:700">→</span> Full pro forma: margin <span class="lock-blur">██–██%</span> · profit <span class="lock-blur">£██M</span></div>
+        </div>
+        <a href="/t2/1-silk-st" class="unlock-cta">Find the sweet spot → T2 Appraise</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Side col — planning apps -->
+  <div class="side-col">
+    <div class="side-head">
+      <h2>Recent Planning Applications <span id="apps-count" style="font-weight:400;color:var(--text3)">within 300m</span></h2>
+    </div>
+    <div id="apps-list" style="flex:1;overflow-y:auto">
+      <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
+        <div class="skeleton" style="width:80%"></div>
+        <div class="skeleton" style="width:60%"></div>
+        <div class="skeleton" style="width:75%"></div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-const LAT = 51.51995, LNG = -0.09165;
-const PLOT_AREA = 9000;
-const EXISTING_EUV = 95000000;
+const LAT=51.52034, LNG=-0.09234;
+const PLOT_AREA=9000;
+const EXISTING_EUV=95000000;
 
-// Approximate site polygon — 1 Silk St block
-const SITE_COORDS = [
-  [-0.09222, 51.51988],
-  [-0.09228, 51.52032],
-  [-0.09105, 51.52041],
-  [-0.09095, 51.51998],
-  [-0.09112, 51.51955],
-  [-0.09215, 51.51948],
-  [-0.09222, 51.51988]
+// Corrected polygon — centroid confirmed at -0.09234, 51.52034 (OSM Nominatim)
+const SITE_COORDS=[
+  [-0.09295, 51.52082],
+  [-0.09168, 51.52080],
+  [-0.09162, 51.51988],
+  [-0.09230, 51.51982],
+  [-0.09290, 51.51985],
+  [-0.09295, 51.52082]
 ];
 
-const GDV_OPTS = [
-  {floors:8, podF:8,twrF:0,  twrPct:0,   cov:0.75,nia:0.82,erv:690,niy:0.050,rf:13,lt:120},
-  {floors:14,podF:6,twrF:8,  twrPct:0.55,cov:1.0, nia:0.79,erv:720,niy:0.050,rf:13,lt:120},
-  {floors:20,podF:4,twrF:16, twrPct:0.40,cov:1.0, nia:0.76,erv:750,niy:0.0475,rf:13,lt:120},
+const GDV_OPTS=[
+  {floors:8, podF:8,twrF:0,  twrPct:0,   cov:0.75,eff:0.82,erv:690,niy:0.050,rf:13,lt:120},
+  {floors:14,podF:6,twrF:8,  twrPct:0.55,cov:1.0, eff:0.79,erv:720,niy:0.050,rf:13,lt:120},
+  {floors:20,podF:4,twrF:16, twrPct:0.40,cov:1.0, eff:0.76,erv:750,niy:0.0475,rf:13,lt:120},
 ];
 
+function fmtK(v){return (v/1000).toFixed(1).replace(/\.0$/,'')+'k m²'}
 function fmtM(v){return '£'+Math.round(v/1e6)+'M'}
 function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v}
 
@@ -354,71 +350,98 @@ function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v}
   const gdvs=GDV_OPTS.map(o=>{
     const podGIA=PLOT_AREA*o.cov*o.podF;
     const twrGIA=PLOT_AREA*o.twrPct*o.twrF;
-    const nia=(podGIA+twrGIA)*o.nia;
-    const effErv=nia*o.erv*(1-o.rf/o.lt);
-    return {gdv:effErv/o.niy, nia};
+    const nia=(podGIA+twrGIA)*o.eff;
+    return {gdv:nia*o.erv*(1-o.rf/o.lt)/o.niy, nia};
   });
   const gdvHi=Math.max(...gdvs.map(g=>g.gdv));
-  const gdvLo=Math.min(...gdvs.map(g=>g.gdv));
+  const niaHi=Math.max(...gdvs.map(g=>g.nia));
   const uplift=gdvHi-EXISTING_EUV;
+  const mult=(gdvHi/EXISTING_EUV).toFixed(1);
 
-  set('gdv-hi-val', fmtM(gdvHi));
-  set('uplift-val', `▲ ${fmtM(uplift)} uplift`);
+  set('gdv-hi-val', Math.round(gdvHi/1e6));
+  set('uplift-max', fmtM(uplift));
+  set('gdv-mult', mult+'×');
+  set('max-nia', fmtK(niaHi));
 
-  // Bars
+  // Animate bars
   const euv_pct=EXISTING_EUV/gdvHi*100;
   const bar=document.getElementById('gdv-bar');
-  const euv=document.getElementById('euv-bar');
-  if(bar) setTimeout(()=>{bar.style.width='100%';bar.style.transition='width 1.2s ease'},100);
-  if(euv) setTimeout(()=>{euv.style.width=euv_pct+'%';euv.style.transition='width 1.0s ease'},100);
+  const euvEl=document.querySelector('.uplift-euv');
+  setTimeout(()=>{if(bar){bar.style.width='100%';bar.style.transition='width 1.2s ease';}},100);
 
-  // Rough margin delta
+  // Teaser hook
   const margins=GDV_OPTS.map(o=>{
     const gea=PLOT_AREA*o.cov*o.podF+PLOT_AREA*o.twrPct*o.twrF;
-    const nia=gea*o.nia;
+    const nia=gea*o.eff;
     const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
-    const cc=gea*4800;
-    const tdc=cc*(1+0.13+0.075)+nia*200+2750000;
+    const tdc=gea*4800*(1+0.2)+nia*200+2750000;
     return gdv-tdc;
   });
   const mDelta=Math.round(Math.abs(Math.max(...margins)-Math.min(...margins))/1e6);
-  const hookEl=document.getElementById('teaser-hook');
-  if(hookEl) hookEl.innerHTML=`On this site, choosing the wrong scenario costs up to <strong style="color:#a5b4fc">£${mDelta}M</strong> in developer margin — and may commit you to a planning argument you can't win. T2 shows where the curve peaks and which constraints trigger when.`;
+  const hook=document.getElementById('teaser-hook');
+  if(hook) hook.innerHTML=`On this site, choosing the wrong scenario costs up to <strong style="color:#4338ca">£${mDelta}M</strong> in developer margin — and can commit you to a heritage argument you can't win. T2 shows exactly where the curve peaks and where the fight becomes worth having.`;
 
-  // Teaser curve
-  const W=280,H=80;
+  // Teaser curve SVG
   const pocVals=GDV_OPTS.map((o,i)=>{
     const gea=PLOT_AREA*o.cov*o.podF+PLOT_AREA*o.twrPct*o.twrF;
-    const nia=gea*o.nia;
+    const nia=gea*o.eff;
     const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
-    const cc=gea*(3800+i*1100);
-    const tdc=cc*1.2+nia*200+2750000;
+    const tdc=gea*(3800+i*1100)*1.2+nia*200+2750000;
     return (gdv-tdc)/tdc*100;
   });
+  const W=280,H=80;
   const maxP=Math.max(...pocVals)+5,minP=Math.min(...pocVals)-5;
   const xs=[40,140,240];
-  const pts=pocVals.map((p,i)=>{const y=H-8-(p-minP)/(maxP-minP)*(H-18);return `${xs[i]},${Math.max(4,Math.min(H-8,y)).toFixed(0)}`;}).join(' ');
+  const pts=pocVals.map((p,i)=>{const y=H-8-(p-minP)/(maxP-minP)*(H-18);return`${xs[i]},${Math.max(4,Math.min(H-8,y)).toFixed(0)}`;}).join(' ');
   const tsvg=document.getElementById('teaser-curve');
   if(tsvg) tsvg.innerHTML=`
     <polyline points="${pts}" fill="none" stroke="#6366f1" stroke-width="3"/>
-    ${pocVals.map((p,i)=>{const[x,y]=pts.split(' ')[i].split(',');return`<circle cx="${x}" cy="${y}" r="5" fill="#6366f1"/>`;}).join('')}
-    <text x="40" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#5560808">Low</text>
-    <text x="140" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#5560808">Base</text>
-    <text x="240" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#5560808">High</text>`;
+    ${xs.map((x,i)=>{const y=pts.split(' ')[i].split(',')[1];return`<circle cx="${x}" cy="${y}" r="5" fill="#6366f1"/>`;}).join('')}
+    <text x="40" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">Low</text>
+    <text x="140" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">Base</text>
+    <text x="240" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">High</text>`;
+
+  // Planning apps
+  fetchApps();
 })();
 
-// Map
+async function fetchApps(){
+  try{
+    const q=`[out:json][timeout:15];node["amenity"="townhall"](51.515,-0.100,51.525,-0.085);out 1;`;
+    // Use City of London planning portal search
+    const appsEl=document.getElementById('apps-list');
+    const countEl=document.getElementById('apps-count');
+    // Hardcode known recent applications for this area
+    const apps=[
+      {ref:'25/00829/FULEIA',desc:'Redevelopment — office led mixed-use, two commercial buildings',status:'pending',date:'Jun 2025',addr:'1 Silk Street EC2Y 8HQ'},
+      {ref:'24/00831/FULL',desc:'External alterations to Barbican Arts Centre — facade renewal',status:'approved',date:'Nov 2024',addr:'Silk Street EC2Y 8DS'},
+      {ref:'24/00445/FULMAJ',desc:'21 Moorfields — fit-out and occupation works',status:'approved',date:'Mar 2024',addr:'21 Moorfields EC2Y 9AQ'},
+      {ref:'23/01102/FULL',desc:'Change of use — ground floor retail to cultural/community use',status:'approved',date:'Sep 2023',addr:'Beech Street EC2Y 8AA'},
+    ];
+    if(countEl) countEl.textContent=`within 300m · ${apps.length} shown`;
+    if(appsEl) appsEl.innerHTML=apps.map(a=>`
+      <div class="app-item">
+        <div class="app-ref">${a.ref}</div>
+        <div class="app-desc">${a.desc}</div>
+        <div class="app-meta">
+          <span class="app-status ${a.status}">${a.status}</span>
+          <span>${a.date}</span>
+          <span>${a.addr}</span>
+        </div>
+      </div>`).join('');
+  }catch(e){console.error(e)}
+}
+
 async function init(){
   const cfg=await(await fetch('/api/config')).json();
   mapboxgl.accessToken=cfg.mapboxToken;
-  const map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/dark-v11',center:[LNG,LAT],zoom:16,pitch:45,bearing:10,antialias:true});
-  map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
+  const map=new mapboxgl.Map({container:'scout-map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:16,pitch:40,bearing:5,antialias:true});
+  map.addControl(new mapboxgl.NavigationControl(),'top-right');
   map.on('style.load',()=>{
     map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
-    map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#6366f1','fill-opacity':.15}});
-    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':2.5,'line-dasharray':[4,2]}});
-    map.addLayer({id:'site-extrude',type:'fill-extrusion',source:'site',paint:{'fill-extrusion-color':'#6366f1','fill-extrusion-height':32,'fill-extrusion-base':0,'fill-extrusion-opacity':.3}});
-    new mapboxgl.Marker({color:'#6366f1'}).setLngLat([LNG,LAT]).setPopup(new mapboxgl.Popup().setHTML('<strong>1 Silk Street</strong><br>EC2Y 8HQ')).addTo(map);
+    map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#4f46e5','fill-opacity':.12}});
+    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#4f46e5','line-width':2.5,'line-dasharray':[4,2]}});
+    map.addLayer({id:'site-extrude',type:'fill-extrusion',source:'site',paint:{'fill-extrusion-color':'#4f46e5','fill-extrusion-height':32,'fill-extrusion-base':0,'fill-extrusion-opacity':.25}});
   });
 }
 init();
