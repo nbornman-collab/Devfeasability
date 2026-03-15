@@ -389,6 +389,8 @@ function buildDetail(s){
     <div class="stat-row"><span class="stat-label">GEA</span><span class="stat-value">${fmt(s.gea)} m²</span></div>
     <div class="stat-row"><span class="stat-label">NIA</span><span class="stat-value">${fmt(s.nia)} m² <span style="color:var(--text3);font-weight:400">(${Math.round(s.eff*100)}%)</span></span></div>
     <div class="stat-row"><span class="stat-label">Tower coverage</span><span class="stat-value">${Math.round(s.twrPct*100)}% of site</span></div>
+    <div class="stat-row"><span class="stat-label">Core area (22% of plate)</span><span class="stat-value">${Math.round(s.gea*0.22)} m² indicative</span></div>
+    <div class="stat-row"><span class="stat-label">Lease span (min 7m req.)</span><span class="stat-value">${s.key==='lo'?'~11m':s.key==='base'?'~9m':'~7m'} clear</span></div>
     <div class="stat-row"><span class="stat-label">Programme</span><span class="stat-value">${MARKET.progYrs[s.key]} years</span></div>
   </div>
   <div class="d-section">
