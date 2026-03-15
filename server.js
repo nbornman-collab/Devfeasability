@@ -500,18 +500,55 @@ app.get('/api/os-buildings', async (req, res) => {
     }
 
     const fc = await r.json();
-    // Fix coordinates (convert BNG→WGS84 if needed) + calculate area
+    const qLat = parseFloat(lat), qLng = parseFloat(lng);
+
+    // Point-in-polygon (ray casting) for WGS84 coords
+    function pip(px, py, ring) {
+      let inside = false;
+      for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+        const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+        if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) inside = !inside;
+      }
+      return inside;
+    }
+
+    // Fix coordinates + score each building
     (fc.features || []).forEach(f => {
       if (f.geometry && f.geometry.coordinates) {
         f.geometry.coordinates = f.geometry.coordinates.map(ring => fixOSCoords(ring));
-        const coords = f.geometry.coordinates[0] || [];
+        const ring = f.geometry.coordinates[0] || [];
+        // Area
         let area = 0;
-        for (let i = 0; i < coords.length - 1; i++) {
-          area += (coords[i][0] * coords[i+1][1]) - (coords[i+1][0] * coords[i][1]);
+        for (let i = 0; i < ring.length - 1; i++) {
+          area += (ring[i][0] * ring[i+1][1]) - (ring[i+1][0] * ring[i][1]);
         }
         f.properties._area = Math.abs(area / 2) * 111320 * 69500;
+        // Centroid distance to query point
+        const cLon = ring.reduce((s,c) => s + c[0], 0) / ring.length;
+        const cLat = ring.reduce((s,c) => s + c[1], 0) / ring.length;
+        const dLon = (cLon - qLng) * 69500, dLat = (cLat - qLat) * 111320;
+        f.properties._dist = Math.sqrt(dLon*dLon + dLat*dLat);
+        // Does this building contain the query point?
+        f.properties._contains = pip(qLng, qLat, ring);
       }
     });
+
+    // Selection: prefer buildings that contain the query point; fallback to nearest
+    const containing = (fc.features || []).filter(f => f.properties._contains);
+    if (containing.length) {
+      // Among containing buildings, pick largest (handles multi-part campuses)
+      containing.sort((a,b) => (b.properties._area||0) - (a.properties._area||0));
+      fc.features = fc.features; // keep all for context overlay
+      fc._best = 0;
+      // Tag the best
+      const best = containing[0];
+      best.properties._selected = true;
+    } else {
+      // No containing building — pick nearest centroid
+      (fc.features || []).sort((a,b) => (a.properties._dist||999) - (b.properties._dist||999));
+      if (fc.features[0]) fc.features[0].properties._selected = true;
+    }
+
     res.json(fc);
   } catch (e) {
     res.status(500).json({ error: e.message });

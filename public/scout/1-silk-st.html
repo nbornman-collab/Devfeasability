@@ -474,10 +474,9 @@ async function init(){
         if(!fc.features||!fc.features.length){console.warn('OS API: no buildings returned');return;}
         console.log('OS buildings:',fc.features.length,'features');
 
-        // Find the largest building feature — likely the Linklaters complex
-        const sorted=[...fc.features].sort((a,b)=>(b.properties._area||0)-(a.properties._area||0));
-        const site=sorted[0];
-        console.log('Largest building area:',site.properties._area?.toFixed(0),'m²');
+        // Find the building that contains our centroid point (or nearest fallback)
+        const site=fc.features.find(f=>f.properties._selected) || fc.features[0];
+        console.log('Selected building area:',site.properties._area?.toFixed(0),'m² contains:',site.properties._contains);
 
         // Update site polygon to OS footprint
         map.getSource('site').setData({type:'Feature',geometry:site.geometry});
