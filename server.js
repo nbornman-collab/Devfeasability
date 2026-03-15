@@ -43,8 +43,7 @@ app.get('/t3/:site', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'reports', `${req.params.site}.html`));
 });
 app.get('/t1/:site', (req, res) => {
-  // T1 Scout — redirect to T2 until Scout page is built
-  res.redirect(302, `/t2/${req.params.site}`);
+  res.sendFile(path.join(__dirname, 'public', 'scout', `${req.params.site}.html`));
 });
 
 // Serve mapbox token
