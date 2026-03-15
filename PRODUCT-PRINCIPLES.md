@@ -22,3 +22,26 @@ The T1 Scout copy works when it compels a serious person to pay for T2 — not b
 - T1 does NOT explain the return curve, does NOT give margin figures, does NOT advise on which scenario to pursue
 - Those three things are what you pay for
 
+
+---
+
+## Competitive Positioning — Planning Consultants
+*Confirmed by Nic Bornman, 2026-03-15*
+
+The UK planning system has made itself opaque by design. The more impenetrable it is, the more indispensable the consultants who navigate it become. The tool translates that gas into signal.
+
+**The displacement isn't total — it's strategic.**
+
+The constraints are real (heritage, LVMF, BSA, CIL) but the logic isn't secret. It's codified: NPPF, BRE 209, CIBSE AM14. Planning consultants charge for knowing which paragraph applies. The tool applies it.
+
+**The real value:** A developer who arrives at a pre-app meeting having already surfaced the heritage constraints, identified the correct planning precedent, understood the BSA 50m trigger, and knows their return curve peaks at 14F — is no longer having the agenda set for them. That shifts power.
+
+**The pricing argument:**
+- Pre-app advice: £8–30K, 6–12 weeks
+- T2: fraction of that cost, available before any consultant is appointed
+- The tool doesn't replace the consultant — it shortens and sharpens the engagement
+- You go in knowing the answer, you're there to confirm it
+
+**One line:**
+The planning consultant charges for navigating the swirling gas. T2 tells you what the gas actually is before you pay anyone to navigate it.
+
