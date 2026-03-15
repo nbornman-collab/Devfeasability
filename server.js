@@ -420,6 +420,47 @@ app.get('/api/epc', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message, certificates: [] }); }
 });
 
+// BNG (OSGB36 EPSG:27700) → WGS84 lon/lat converter
+// Accurate to ~5m — sufficient for site boundary display
+function bngToWgs84(E, N) {
+  const a=6377563.396,b=6356256.910,F0=0.9996012717;
+  const lat0=0.85521133,lon0=-0.034906585,N0=-100000,E0=400000;
+  const e2=1-(b*b)/(a*a),n=(a-b)/(a+b),n2=n*n,n3=n*n*n;
+  const dN=N-N0;
+  let lat=lat0+dN/(a*F0);
+  for(let i=0;i<10;i++){
+    const M=a*F0*((1+n+1.25*n2+1.25*n3)*(lat-lat0)-(3*n+3*n2+2.625*n3)*Math.sin(lat-lat0)*Math.cos(lat+lat0)+(1.875*n2+1.875*n3)*Math.sin(2*(lat-lat0))*Math.cos(2*(lat+lat0))-(35/24)*n3*Math.sin(3*(lat-lat0))*Math.cos(3*(lat+lat0)));
+    if(Math.abs(dN-M)<1e-5)break;
+    lat=lat+(dN-M)/(a*F0);
+  }
+  const nu=a*F0/Math.sqrt(1-e2*Math.sin(lat)**2);
+  const rho=a*F0*(1-e2)/Math.pow(1-e2*Math.sin(lat)**2,1.5);
+  const eta2=nu/rho-1,t=Math.tan(lat),s=1/Math.cos(lat);
+  const dE=E-E0;
+  const VII=t/(2*rho*nu);
+  const VIII=t/(24*rho*nu**3)*(5+3*t**2+eta2-9*t**2*eta2);
+  const IX=t/(720*rho*nu**5)*(61+90*t**2+45*t**4);
+  const X=s/nu,XI=s/(6*nu**3)*(nu/rho+2*t**2);
+  const XII=s/(120*nu**5)*(5+28*t**2+24*t**4);
+  const XIIA=s/(5040*nu**7)*(61+662*t**2+1320*t**4+720*t**6);
+  const latOut=lat-VII*dE**2+VIII*dE**4-IX*dE**6;
+  const lonOut=lon0+X*dE-XI*dE**3+XII*dE**5-XIIA*dE**7;
+  return [lonOut*180/Math.PI, latOut*180/Math.PI]; // [lon, lat] GeoJSON order
+}
+
+function fixOSCoords(coords) {
+  // Detect BNG (values > 1000) and convert; otherwise pass through
+  if (!coords || !coords.length) return coords;
+  const sample = Array.isArray(coords[0]) ? coords[0] : coords;
+  if (Math.abs(sample[0]) > 1000) {
+    // It's BNG — recursively convert
+    if (Array.isArray(coords[0])) return coords.map(fixOSCoords);
+    return bngToWgs84(coords[0], coords[1]);
+  }
+  if (Array.isArray(coords[0])) return coords.map(fixOSCoords);
+  return coords;
+}
+
 // OS NGD API — building footprints (replaces broken HMLR WFS)
 // Returns GeoJSON FeatureCollection of building parts around a point
 app.get('/api/os-buildings', async (req, res) => {
@@ -435,14 +476,21 @@ app.get('/api/os-buildings', async (req, res) => {
     const maxLat = (parseFloat(lat) + buf).toFixed(6);
 
     // OS NGD Features API — bld-fts-buildingpart collection
+    // CRS84 = WGS84 lon/lat (GeoJSON standard). bbox-crs tells API our bbox is also in CRS84.
+    const CRS84 = 'http://www.opengis.net/def/crs/OGC/1.3/CRS84';
     const url = `https://api.os.uk/features/ngd/ofa/v1/collections/bld-fts-buildingpart/items` +
       `?bbox=${minLon},${minLat},${maxLon},${maxLat}` +
-      `&crs=http%3A%2F%2Fwww.opengis.net%2Fdef%2Fcrs%2FEPSG%2F0%2F4326` +
+      `&bbox-crs=${encodeURIComponent(CRS84)}` +
+      `&crs=${encodeURIComponent(CRS84)}` +
       `&limit=50` +
       `&key=${OS_API_KEY}`;
 
     const r = await fetch(url, {
-      headers: { 'Accept': 'application/geo+json', 'User-Agent': 'devfeasibility/1.0' },
+      headers: {
+        'Accept': 'application/geo+json',
+        'User-Agent': 'devfeasibility/1.0',
+        'Content-Crs': `<${CRS84}>`
+      },
       signal: AbortSignal.timeout(12000)
     });
 
@@ -452,9 +500,10 @@ app.get('/api/os-buildings', async (req, res) => {
     }
 
     const fc = await r.json();
-    // Attach area estimate to each feature for the client to pick the largest
+    // Fix coordinates (convert BNG→WGS84 if needed) + calculate area
     (fc.features || []).forEach(f => {
       if (f.geometry && f.geometry.coordinates) {
+        f.geometry.coordinates = f.geometry.coordinates.map(ring => fixOSCoords(ring));
         const coords = f.geometry.coordinates[0] || [];
         let area = 0;
         for (let i = 0; i < coords.length - 1; i++) {
