@@ -636,18 +636,19 @@ app.get('/api/epc', async (req, res) => {
     });
     if (!r.ok) return res.status(r.status).json({ error: `EPC API ${r.status}` });
     const data = await r.json();
-    // Return the most recent certificate (first result) with key fields
-    const rows = data.rows || [];
-    const results = rows.slice(0, 3).map(row => ({
-      address: row['address'],
+    // EPC API returns {column-names:[...], rows:[{...}]}
+    const rows = data.rows || data.certificates || [];
+    const results = rows.slice(0, 5).map(row => ({
+      address: row['address'] || [row['address1'],row['address2'],row['address3']].filter(Boolean).join(', '),
       postcode: row['postcode'],
       uprn: row['uprn'],
-      floorArea: parseFloat(row['total-floor-area'] || row['floor-area'] || 0),
-      epcRating: row['current-energy-rating'],
-      lodgementDate: row['lodgement-date'],
-      propertyType: row['property-type'] || row['building-reference-number'],
+      floorArea: parseFloat(row['floor-area'] || row['total-floor-area'] || 0),
+      epcRating: row['asset-rating-band'] || row['current-energy-rating'],
+      assetRating: row['asset-rating'],
+      lodgementDate: row['lodgement-date'] || row['lodgement-datetime'],
+      propertyType: row['property-type'],
       floorAreaUnit: 'm²'
-    }));
+    })).filter(r => r.floorArea > 0);
     res.json({ results, count: results.length });
   } catch (e) {
     res.status(500).json({ error: e.message });
