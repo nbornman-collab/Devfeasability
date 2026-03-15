@@ -610,12 +610,36 @@ async function initMap(){
   window._map=m;
   m.on('style.load',()=>{
     const e={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,.0001],[.0001,.0001],[0,0]]]}};
+
+    // ── Move 1: Mapbox 3D context buildings ──
+    m.addLayer({
+      id:'buildings-3d',source:'composite','source-layer':'building',
+      filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
+      paint:{
+        'fill-extrusion-color':'#d0d3db',
+        'fill-extrusion-height':['interpolate',['linear'],['zoom'],14,0,14.5,['get','height']],
+        'fill-extrusion-base':['interpolate',['linear'],['zoom'],14,0,14.5,['get','min_height']],
+        'fill-extrusion-opacity':0.6
+      }
+    });
+
     m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
     m.addSource('podium',{type:'geojson',data:e});
     m.addSource('tower',{type:'geojson',data:e});
     m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#059669','line-width':2.5,'line-dasharray':[4,2],'line-opacity':.8}});
     m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':25,'fill-extrusion-base':0,'fill-extrusion-opacity':.7}});
     m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':.6}});
+
+    // ── Move 3: HMLR title overlay ──
+    fetch(`/api/plot-boundary?lat=${LAT}&lng=${LNG}`)
+      .then(r=>r.json())
+      .then(fc=>{
+        if(!fc.features||!fc.features.length) return;
+        if(!m.getSource('hmlr')) m.addSource('hmlr',{type:'geojson',data:fc});
+        m.addLayer({id:'hmlr-line',type:'line',source:'hmlr',paint:{
+          'line-color':'#059669','line-width':1.5,'line-dasharray':[3,2],'line-opacity':0.5}});
+      }).catch(()=>{});
+
     updateMap(0);
   });
 }

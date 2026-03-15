@@ -440,10 +440,48 @@ async function init(){
   const map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:16,pitch:50,bearing:5,antialias:true});
   map.addControl(new mapboxgl.NavigationControl(),'top-right');
   map.on('style.load',()=>{
-    map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
+    // ── Move 1: Mapbox 3D building extrusions (context) ──
+    map.addLayer({
+      id:'buildings-3d',source:'composite','source-layer':'building',
+      filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
+      paint:{
+        'fill-extrusion-color':'#d4d7df',
+        'fill-extrusion-height':['interpolate',['linear'],['zoom'],15,0,15.05,['get','height']],
+        'fill-extrusion-base':['interpolate',['linear'],['zoom'],15,0,15.05,['get','min_height']],
+        'fill-extrusion-opacity':0.65
+      }
+    });
+
+    // ── Site polygon — fallback hardcoded, HMLR overrides if available ──
+    const fallbackGeo={type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}};
+    map.addSource('site',{type:'geojson',data:fallbackGeo});
     map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#4f46e5','fill-opacity':.12}});
     map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#4f46e5','line-width':2.5,'line-dasharray':[4,2]}});
-    map.addLayer({id:'site-extrude',type:'fill-extrusion',source:'site',paint:{'fill-extrusion-color':'#4f46e5','fill-extrusion-height':32,'fill-extrusion-base':0,'fill-extrusion-opacity':.25}});
+    map.addLayer({id:'site-extrude',type:'fill-extrusion',source:'site',paint:{
+      'fill-extrusion-color':'#4f46e5','fill-extrusion-height':32,
+      'fill-extrusion-base':0,'fill-extrusion-opacity':.2}});
+
+    // ── Move 3: HMLR INSPIRE — fetch real title boundaries ──
+    fetch(`/api/plot-boundary?lat=${LAT}&lng=${LNG}`)
+      .then(r=>r.json())
+      .then(fc=>{
+        if(!fc.features||!fc.features.length) return;
+        // Show all registered title polygons — more informative than a single outline
+        if(!map.getSource('hmlr')) map.addSource('hmlr',{type:'geojson',data:fc});
+        map.addLayer({id:'hmlr-fill',type:'fill',source:'hmlr',paint:{'fill-color':'#7c3aed','fill-opacity':0.08}});
+        map.addLayer({id:'hmlr-line',type:'line',source:'hmlr',paint:{
+          'line-color':'#7c3aed','line-width':2,
+          'line-dasharray':[4,2],'line-opacity':0.8}});
+        // Use union of title polygons to update site extrusion
+        const allCoords=fc.features.flatMap(f=>f.geometry.coordinates);
+        const allLons=allCoords.flat().map(c=>c[0]);
+        const allLats=allCoords.flat().map(c=>c[1]);
+        const cLon=(Math.min(...allLons)+Math.max(...allLons))/2;
+        const cLat=(Math.min(...allLats)+Math.max(...allLats))/2;
+        map.flyTo({center:[cLon,cLat],zoom:15.5,speed:0.8});
+        // Log title numbers in console for dev reference
+        console.log('HMLR titles found:',fc.features.map(f=>f.properties.titleNo).join(', '));
+      }).catch(e=>console.warn('HMLR unavailable:',e.message));
   });
 }
 init();

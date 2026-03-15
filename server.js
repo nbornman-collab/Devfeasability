@@ -124,17 +124,77 @@ app.get('/api/context-buildings', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// Land Registry INSPIRE — plot boundaries (WFS)
+// HM Land Registry INSPIRE — registered title polygons (WFS 2.0, GML → GeoJSON)
 app.get('/api/plot-boundary', async (req, res) => {
   try {
     const { lat, lng } = req.query;
-    const buffer = 0.0003; // ~30m
-    const bbox = `${parseFloat(lng)-buffer},${parseFloat(lat)-buffer},${parseFloat(lng)+buffer},${parseFloat(lat)+buffer}`;
-    const url = `https://inspire.landregistry.gov.uk/inspire/ows?service=WFS&version=2.0.0&request=GetFeature&typeNames=inspire:PREDEFINED&bbox=${bbox},urn:ogc:def:crs:EPSG::4326&outputFormat=application/json&count=5`;
-    const r = await fetch(url);
-    const text = await r.text();
-    try { res.json(JSON.parse(text)); } catch { res.json({ features: [], error: 'Parse error', raw: text.substring(0, 200) }); }
-  } catch (e) { res.status(500).json({ error: e.message }); }
+    if (!lat || !lng) return res.status(400).json({ error: 'lat/lng required' });
+    const buf = 0.0015; // ~150m — large enough to capture big commercial sites
+    const minLon = (parseFloat(lng) - buf).toFixed(6);
+    const minLat = (parseFloat(lat) - buf).toFixed(6);
+    const maxLon = (parseFloat(lng) + buf).toFixed(6);
+    const maxLat = (parseFloat(lat) + buf).toFixed(6);
+
+    const url = `https://inspire.landregistry.gov.uk/inspire/wfs` +
+      `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature` +
+      `&typeNames=inspire:RegisteredPoleland` +
+      `&COUNT=20` +
+      `&SRSNAME=urn:ogc:def:crs:EPSG::4326` +
+      `&BBOX=${minLon},${minLat},${maxLon},${maxLat},urn:ogc:def:crs:EPSG::4326`;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    let text = '';
+    try {
+      const r = await fetch(url, {
+        signal: controller.signal,
+        headers: { 'User-Agent': 'devfeasibility/1.0 (nbornman@gmail.com)' }
+      });
+      clearTimeout(timeout);
+      text = await r.text();
+    } catch (fetchErr) {
+      clearTimeout(timeout);
+      return res.json({ type: 'FeatureCollection', features: [], error: fetchErr.message });
+    }
+
+    // Parse GML response → GeoJSON
+    const features = [];
+    const memberRe = /<inspire:RegisteredPoleland[^>]*>([\s\S]*?)<\/inspire:RegisteredPoleland>/g;
+    let m;
+    while ((m = memberRe.exec(text)) !== null) {
+      const xml = m[1];
+      const titleMatch = xml.match(/<inspire:TITLE_NO[^>]*>(.*?)<\/inspire:TITLE_NO>/);
+      const titleNo = titleMatch ? titleMatch[1].trim() : '';
+      const rings = [];
+      const posRe = /<gml:posList[^>]*srsDimension="2"[^>]*>([\s\S]*?)<\/gml:posList>|<gml:posList[^>]*>([\s\S]*?)<\/gml:posList>/g;
+      let pr;
+      while ((pr = posRe.exec(xml)) !== null) {
+        const raw = (pr[1] || pr[2] || '').trim();
+        const nums = raw.split(/\s+/).map(Number).filter(n => !isNaN(n));
+        if (nums.length < 6) continue;
+        const coords = [];
+        for (let i = 0; i < nums.length - 1; i += 2) {
+          // HMLR GML in EPSG:4326 is latitude-first — swap to lon,lat for GeoJSON
+          const a = nums[i], b = nums[i + 1];
+          // Detect axis order: UK lat ~51, UK lon ~ -0.1
+          if (Math.abs(a) > 10) coords.push([b, a]); // a=lat, b=lon → swap
+          else coords.push([a, b]); // already lon,lat
+        }
+        if (coords.length >= 3) rings.push(coords);
+      }
+      if (rings.length > 0) {
+        features.push({
+          type: 'Feature',
+          geometry: { type: 'Polygon', coordinates: rings },
+          properties: { titleNo, source: 'hmlr-inspire' }
+        });
+      }
+    }
+
+    res.json({ type: 'FeatureCollection', features, count: features.length });
+  } catch (e) {
+    res.status(500).json({ type: 'FeatureCollection', features: [], error: e.message });
+  }
 });
 
 // Historic England — Listed Buildings near point
