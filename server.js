@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN || '';
+const OS_API_KEY = process.env.OS_API_KEY || '';
 
 // Simple in-memory cache for Overpass/external API responses (5 min TTL)
 const apiCache = new Map();
@@ -417,6 +418,55 @@ app.get('/api/epc', async (req, res) => {
     const data = await r.json();
     res.json({ certificates: data.rows || [], type: 'domestic' });
   } catch (e) { res.status(500).json({ error: e.message, certificates: [] }); }
+});
+
+// OS NGD API — building footprints (replaces broken HMLR WFS)
+// Returns GeoJSON FeatureCollection of building parts around a point
+app.get('/api/os-buildings', async (req, res) => {
+  try {
+    const { lat, lng } = req.query;
+    if (!lat || !lng) return res.status(400).json({ error: 'lat/lng required' });
+    if (!OS_API_KEY) return res.status(503).json({ error: 'OS_API_KEY not configured' });
+
+    const buf = parseFloat(req.query.buf || '0.001'); // ~100m default
+    const minLon = (parseFloat(lng) - buf).toFixed(6);
+    const minLat = (parseFloat(lat) - buf).toFixed(6);
+    const maxLon = (parseFloat(lng) + buf).toFixed(6);
+    const maxLat = (parseFloat(lat) + buf).toFixed(6);
+
+    // OS NGD Features API — bld-fts-buildingpart collection
+    const url = `https://api.os.uk/features/ngd/ofa/v1/collections/bld-fts-buildingpart/items` +
+      `?bbox=${minLon},${minLat},${maxLon},${maxLat}` +
+      `&crs=http%3A%2F%2Fwww.opengis.net%2Fdef%2Fcrs%2FEPSG%2F0%2F4326` +
+      `&limit=50` +
+      `&key=${OS_API_KEY}`;
+
+    const r = await fetch(url, {
+      headers: { 'Accept': 'application/geo+json', 'User-Agent': 'devfeasibility/1.0' },
+      signal: AbortSignal.timeout(12000)
+    });
+
+    if (!r.ok) {
+      const errText = await r.text();
+      return res.status(r.status).json({ error: `OS API ${r.status}`, detail: errText.substring(0, 200) });
+    }
+
+    const fc = await r.json();
+    // Attach area estimate to each feature for the client to pick the largest
+    (fc.features || []).forEach(f => {
+      if (f.geometry && f.geometry.coordinates) {
+        const coords = f.geometry.coordinates[0] || [];
+        let area = 0;
+        for (let i = 0; i < coords.length - 1; i++) {
+          area += (coords[i][0] * coords[i+1][1]) - (coords[i+1][0] * coords[i][1]);
+        }
+        f.properties._area = Math.abs(area / 2) * 111320 * 69500;
+      }
+    });
+    res.json(fc);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // Debug — raw HMLR response (remove after fixing parser)
