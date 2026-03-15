@@ -18,51 +18,81 @@
 html,body{min-height:100%;font-family:var(--sans);background:var(--surface);color:var(--text)}
 
 /* ── Tier nav ── */
-.tier-nav{display:flex;align-items:center;gap:0;background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 32px}
-.tier-link{display:flex;align-items:center;gap:5px;padding:11px 14px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:border-color .15s}
+.tier-nav{display:flex;align-items:center;background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 24px}
+.tier-link{display:flex;align-items:center;gap:5px;padding:11px 12px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:border-color .15s}
 .tier-link .tid{font:700 9px var(--mono);color:var(--text3);letter-spacing:.5px}
 .tier-link .tname{font:600 9px var(--sans);color:var(--text3)}
 .tier-link.active .tid{color:var(--accent)}
 .tier-link.active .tname{color:var(--text)}
 .tier-link.active{border-bottom-color:var(--accent)}
-.tier-link.locked{opacity:.4;cursor:not-allowed;pointer-events:none}
-.tier-sep{font:400 11px var(--sans);color:var(--border);padding:0 2px;user-select:none}
+.tier-link.locked{opacity:.35;cursor:not-allowed;pointer-events:none}
+.tier-sep{font:400 11px var(--sans);color:var(--border);padding:0 1px;user-select:none}
+
+/* ── Opportunity hero ── */
+.opp-hero{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 60%,#4338ca 100%);padding:28px 28px 0;color:white}
+.opp-hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.opp-addr{font:800 22px var(--sans);letter-spacing:-0.5px;margin-bottom:3px}
+.opp-sub{font:400 12px var(--sans);opacity:.65}
+.opp-score-wrap{text-align:right}
+.opp-score-label{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;opacity:.65;margin-bottom:4px}
+.opp-score{font:900 44px var(--mono);letter-spacing:-2px;line-height:1}
+.opp-score-max{font:400 14px var(--mono);opacity:.5}
+.opp-score-badge{font:600 9px var(--sans);background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px;margin-top:5px;display:inline-block}
+
+.uplift-bar-wrap{background:rgba(255,255,255,.08);border-radius:10px 10px 0 0;padding:18px 20px}
+.uplift-bar-label{display:flex;justify-content:space-between;font:500 9px var(--sans);opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
+.uplift-track{height:28px;background:rgba(255,255,255,.1);border-radius:6px;overflow:visible;position:relative;display:flex;align-items:center}
+.uplift-euv{height:100%;background:rgba(255,255,255,.3);border-radius:6px 0 0 6px;display:flex;align-items:center;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
+.uplift-gdv-range{height:100%;background:linear-gradient(90deg,#34d399,#059669);border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:flex-end;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
+.uplift-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,.08);margin-top:12px;border-radius:6px;overflow:hidden}
+.uplift-stat{padding:10px 12px}
+.uplift-stat .uval{font:800 18px var(--mono);letter-spacing:-0.5px}
+.uplift-stat .ulbl{font:500 8px var(--sans);opacity:.6;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.uplift-stat .uval.green{color:#34d399}
+.uplift-stat .uval.amber{color:#fbbf24}
 
 /* ── Layout ── */
-.hero{background:white;border-bottom:1px solid var(--border);padding:32px 32px 0}
-.hero-addr{font:800 26px var(--sans);color:var(--text);letter-spacing:-0.5px;margin-bottom:4px}
-.hero-sub{font:400 13px var(--sans);color:var(--text3);margin-bottom:20px}
-.hero-tags{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:20px}
-.tag{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font:600 10px var(--sans);letter-spacing:.3px;border:1px solid}
+.body-grid{display:grid;grid-template-columns:1fr 340px;gap:0}
+.main-col{padding:24px 28px;display:flex;flex-direction:column;gap:20px}
+.side-col{background:white;border-left:1px solid var(--border);display:flex;flex-direction:column;min-height:600px}
+
+/* ── Tags ── */
+.tags-row{display:flex;gap:7px;flex-wrap:wrap;padding:14px 28px;background:white;border-bottom:1px solid var(--border)}
+.tag{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font:600 10px var(--sans);letter-spacing:.2px;border:1px solid}
 .tag.green{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
 .tag.amber{background:#fffbeb;color:#92400e;border-color:#fde68a}
 .tag.blue{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
 .tag.purple{background:#f5f3ff;color:#4338ca;border-color:#c4b5fd}
 .tag.grey{background:var(--surface);color:var(--text2);border-color:var(--border)}
 
-.body-grid{display:grid;grid-template-columns:1fr 360px;gap:0;min-height:calc(100vh - 130px)}
-.main-col{padding:28px 32px;display:flex;flex-direction:column;gap:24px}
-.side-col{background:white;border-left:1px solid var(--border);display:flex;flex-direction:column}
-
 /* ── Map ── */
-#scout-map{height:260px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+#scout-map{height:220px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
 
 /* ── Cards ── */
 .card{background:white;border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.card-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-head{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .card-head h3{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3)}
-.card-head .badge{font:600 10px var(--mono);padding:2px 8px;border-radius:4px}
+.card-head .badge{font:600 9px var(--mono);padding:2px 8px;border-radius:4px}
 .card-body{padding:14px 16px}
 
-/* Stats grid */
+/* Stats 2×2 */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
-.stat-cell{background:white;padding:14px 16px}
-.stat-cell .val{font:800 20px var(--mono);color:var(--text);letter-spacing:-0.5px;margin-bottom:2px}
+.stat-cell{background:white;padding:13px 16px}
+.stat-cell .val{font:800 18px var(--mono);color:var(--text);letter-spacing:-0.5px;margin-bottom:2px}
 .stat-cell .lbl{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3)}
 .stat-cell .val.green{color:var(--green)}
 .stat-cell .val.amber{color:var(--amber)}
 .stat-cell .val.red{color:var(--red)}
 .stat-cell .val.accent{color:var(--accent)}
+
+/* Market signals */
+.signal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.signal{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center}
+.signal .sval{font:800 16px var(--mono);color:var(--text);letter-spacing:-0.5px;margin-bottom:3px}
+.signal .slbl{font:500 8px var(--sans);color:var(--text3);text-transform:uppercase;letter-spacing:.8px;line-height:1.4}
+.signal .sdelta{font:600 9px var(--sans);margin-top:4px}
+.signal .sdelta.up{color:var(--green)}
+.signal .sdelta.down{color:var(--red)}
 
 /* Flag rows */
 .flag-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05)}
@@ -75,49 +105,49 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
 .flag-title{font:600 11px var(--sans);color:var(--text);margin-bottom:2px}
 .flag-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5}
 
-/* Height bar chart */
-.height-bar-wrap{display:flex;flex-direction:column;gap:6px}
-.hb-row{display:flex;align-items:center;gap:8px}
-.hb-label{font:500 10px var(--sans);color:var(--text2);width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hb-track{flex:1;height:14px;background:var(--surface2);border-radius:3px;overflow:hidden;position:relative}
-.hb-fill{height:100%;border-radius:3px;transition:width .4s ease}
-.hb-val{font:600 9px var(--mono);color:var(--text3);width:36px;text-align:right}
+/* Height bars */
+.hb-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.hb-label{font:500 10px var(--sans);color:var(--text2);width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb-track{flex:1;height:13px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.hb-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.hb-val{font:600 9px var(--mono);color:var(--text3);width:34px;text-align:right}
 
-/* GDV range */
-.gdv-range{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);border-radius:8px;overflow:hidden}
-.gdv-cell{background:white;padding:14px;text-align:center}
-.gdv-cell .label{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-bottom:6px}
-.gdv-cell .val{font:800 18px var(--mono);letter-spacing:-0.5px}
-.gdv-cell .sub{font:400 9px var(--sans);color:var(--text3);margin-top:3px}
-.gdv-cell.mid{background:var(--surface)}
+/* T2 unlock teaser */
+.unlock-card{background:white;border:1.5px solid #c4b5fd;border-radius:10px;overflow:hidden}
+.unlock-head{background:linear-gradient(135deg,#f5f3ff,#ede9fe);padding:14px 18px;border-bottom:1px solid #c4b5fd}
+.unlock-head h3{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:#4338ca}
+.unlock-head p{font:400 11px var(--sans);color:#5b5299;margin-top:3px}
+.unlock-body{padding:16px 18px}
+.unlock-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.05)}
+.unlock-row:last-child{border-bottom:none}
+.unlock-icon{width:20px;height:20px;border-radius:4px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.unlock-text{font:500 11px var(--sans);color:var(--text2)}
+.lock-blur{filter:blur(3px);user-select:none;pointer-events:none;opacity:.5;font:700 13px var(--mono);color:var(--text)}
+.unlock-cta{display:block;margin-top:14px;padding:11px;background:var(--accent);color:white;text-align:center;border-radius:7px;font:700 12px var(--sans);text-decoration:none;transition:opacity .15s}
+.unlock-cta:hover{opacity:.9}
 
-/* CTA */
-.cta-block{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%);border-radius:8px;padding:24px;color:white;display:flex;align-items:center;justify-content:space-between;gap:16px;text-decoration:none;transition:opacity .15s}
-.cta-block:hover{opacity:.92}
-.cta-block h3{font:700 14px var(--sans);margin-bottom:4px}
-.cta-block p{font:400 11px var(--sans);opacity:.8}
-.cta-arrow{font-size:22px;opacity:.7}
-
-/* Side panel */
-.side-head{padding:16px 20px;border-bottom:1px solid var(--border)}
+/* Planning apps */
+.side-head{padding:14px 18px;border-bottom:1px solid var(--border)}
 .side-head h2{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3)}
-.planning-list{flex:1;overflow-y:auto}
-.app-item{padding:12px 20px;border-bottom:1px solid rgba(0,0,0,.05)}
+.app-item{padding:10px 18px;border-bottom:1px solid rgba(0,0,0,.05)}
 .app-item:last-child{border-bottom:none}
-.app-ref{font:600 9px var(--mono);color:var(--accent);margin-bottom:3px}
+.app-ref{font:600 9px var(--mono);color:var(--accent);margin-bottom:2px}
 .app-desc{font:400 10px var(--sans);color:var(--text2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.app-meta{font:400 9px var(--sans);color:var(--text3);margin-top:3px}
+.app-meta{font:400 9px var(--sans);color:var(--text3);margin-top:2px;display:flex;gap:6px;flex-wrap:wrap}
 .app-status{display:inline-block;padding:1px 6px;border-radius:3px;font:600 8px var(--sans)}
 .app-status.approved{background:#f0fdf4;color:#166534}
 .app-status.refused{background:#fef2f2;color:#991b1b}
 .app-status.pending{background:#fffbeb;color:#92400e}
 
-.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:4px;height:16px;width:80%}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:4px;height:14px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-@media(max-width:900px){
+@media(max-width:860px){
   .body-grid{grid-template-columns:1fr}
   .side-col{border-left:none;border-top:1px solid var(--border)}
+  .opp-hero{padding:20px 18px 0}
+  .main-col{padding:18px}
+  .signal-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -142,17 +172,53 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
   </a>
 </nav>
 
-<!-- Hero -->
-<div class="hero">
-  <div class="hero-addr">100 Leadenhall Street</div>
-  <div class="hero-sub">City of London · EC3A 3BP · 51.5138°N, 0.0802°W</div>
-  <div class="hero-tags" id="hero-tags">
-    <span class="tag grey">Zone 1</span>
-    <span class="tag purple">PTAL <span id="tag-ptal">…</span></span>
-    <span class="tag blue" id="tag-flood">Flood Zone …</span>
-    <span class="tag grey">1,551 m² plot</span>
-    <span class="tag grey" id="tag-borough">City of London</span>
+<!-- Opportunity hero banner -->
+<div class="opp-hero">
+  <div class="opp-hero-top">
+    <div>
+      <div class="opp-addr">100 Leadenhall Street</div>
+      <div class="opp-sub">City of London · EC3A 3BP · 1,551 m² plot · Zone 1</div>
+    </div>
+    <div class="opp-score-wrap">
+      <div class="opp-score-label">Opportunity Score</div>
+      <div><span class="opp-score">8.4</span><span class="opp-score-max">/10</span></div>
+      <div class="opp-score-badge">Strong opportunity</div>
+    </div>
   </div>
+  <!-- Uplift bar -->
+  <div class="uplift-bar-wrap">
+    <div class="uplift-bar-label">
+      <span>Current use value</span>
+      <span>Potential GDV range</span>
+    </div>
+    <div class="uplift-track">
+      <div class="uplift-euv" style="width:22%">£38M EUV</div>
+      <div class="uplift-gdv-range" id="gdv-bar" style="width:78%">up to £<span id="gdv-hi-val">—</span>M GDV</div>
+    </div>
+    <div class="uplift-stats">
+      <div class="uplift-stat">
+        <div class="uval green" id="uplift-max">—</div>
+        <div class="ulbl">Max uplift potential</div>
+      </div>
+      <div class="uplift-stat">
+        <div class="uval amber" id="uplift-mult">—×</div>
+        <div class="ulbl">Value multiplier on EUV</div>
+      </div>
+      <div class="uplift-stat">
+        <div class="uval" id="uplift-nia">—</div>
+        <div class="ulbl">Max potential NIA</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tags row -->
+<div class="tags-row">
+  <span class="tag purple">PTAL <span id="tag-ptal">6a — Excellent</span></span>
+  <span class="tag green" id="tag-flood">Flood Zone 1</span>
+  <span class="tag blue">Eastern Cluster — Tall Buildings Zone</span>
+  <span class="tag grey">City of London</span>
+  <span class="tag grey" id="tag-heritage">Loading heritage…</span>
 </div>
 
 <div class="body-grid">
@@ -163,6 +229,45 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
     <!-- Map -->
     <div id="scout-map"></div>
 
+    <!-- Market signals -->
+    <div class="card">
+      <div class="card-head"><h3>Market Signals — City of London · 2025 Q4</h3></div>
+      <div class="card-body">
+        <div class="signal-grid">
+          <div class="signal">
+            <div class="sval">£820</div>
+            <div class="slbl">Grade A ERV psm pa</div>
+            <div class="sdelta up">↑ 6.5% YoY</div>
+          </div>
+          <div class="signal">
+            <div class="sval">4.5%</div>
+            <div class="slbl">Net Initial Yield</div>
+            <div class="sdelta up">Firming ↑</div>
+          </div>
+          <div class="signal">
+            <div class="sval">4.2%</div>
+            <div class="slbl">City Vacancy Rate</div>
+            <div class="sdelta down">↓ from 6.1% 2023</div>
+          </div>
+          <div class="signal">
+            <div class="sval">278m</div>
+            <div class="slbl">Tallest in 300m</div>
+            <div class="sdelta" style="color:var(--accent)">Eastern Cluster</div>
+          </div>
+          <div class="signal">
+            <div class="sval">£5,200</div>
+            <div class="slbl">Avg. office capex psm</div>
+            <div class="sdelta" style="color:var(--text3)">BCIS 2025 Q3</div>
+          </div>
+          <div class="signal">
+            <div class="sval">3.2M ft²</div>
+            <div class="slbl">City take-up 2024</div>
+            <div class="sdelta up">↑ 14% on 2023</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Site stats -->
     <div class="card">
       <div class="card-head"><h3>Site Overview</h3></div>
@@ -172,11 +277,11 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
           <div class="lbl">Plot Area (GEA)</div>
         </div>
         <div class="stat-cell">
-          <div class="val accent" id="stat-ptal">…</div>
+          <div class="val accent" id="stat-ptal">6a — Excellent</div>
           <div class="lbl">PTAL Score</div>
         </div>
         <div class="stat-cell">
-          <div class="val green" id="stat-flood">…</div>
+          <div class="val green" id="stat-flood">Zone 1 — Low</div>
           <div class="lbl">Flood Zone</div>
         </div>
         <div class="stat-cell">
@@ -193,9 +298,9 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
         <span class="badge" id="flags-badge" style="background:var(--surface);color:var(--text3)">Loading…</span>
       </div>
       <div class="card-body" id="flags-body">
-        <div class="skeleton" style="margin-bottom:10px"></div>
-        <div class="skeleton" style="width:60%;margin-bottom:10px"></div>
-        <div class="skeleton" style="width:75%"></div>
+        <div class="skeleton" style="margin-bottom:10px;width:90%"></div>
+        <div class="skeleton" style="margin-bottom:10px;width:70%"></div>
+        <div class="skeleton" style="width:80%"></div>
       </div>
     </div>
 
@@ -203,63 +308,68 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
     <div class="card">
       <div class="card-head"><h3>Height Context — Buildings within 300m</h3></div>
       <div class="card-body" id="heights-body">
-        <div class="skeleton" style="margin-bottom:8px"></div>
-        <div class="skeleton" style="width:70%;margin-bottom:8px"></div>
+        <div class="skeleton" style="margin-bottom:7px;width:85%"></div>
+        <div class="skeleton" style="margin-bottom:7px;width:65%"></div>
         <div class="skeleton" style="width:50%"></div>
       </div>
     </div>
 
-    <!-- Rough GDV range -->
-    <div class="card">
-      <div class="card-head">
-        <h3>Indicative GDV Range</h3>
-        <span style="font:400 9px var(--sans);color:var(--text3)">Based on City of London ERV · 2025 Q4</span>
+    <!-- T2 unlock teaser -->
+    <div class="unlock-card">
+      <div class="unlock-head">
+        <h3>T2 Appraise — Full Development Model</h3>
+        <p>Unlock 3 massing options, precise financials, floor plans and development margin</p>
       </div>
-      <div class="card-body">
-        <div class="gdv-range">
-          <div class="gdv-cell">
-            <div class="label">Conservative</div>
-            <div class="val" id="gdv-lo" style="color:var(--text2)">—</div>
-            <div class="sub" id="gdv-lo-sub">10F · 42m</div>
-          </div>
-          <div class="gdv-cell mid">
-            <div class="label">Mid</div>
-            <div class="val" id="gdv-mid" style="color:var(--accent)">—</div>
-            <div class="sub" id="gdv-mid-sub">14F · 60m</div>
-          </div>
-          <div class="gdv-cell">
-            <div class="label">Optimistic</div>
-            <div class="val" id="gdv-hi" style="color:var(--text2)">—</div>
-            <div class="sub" id="gdv-hi-sub">22F · 92m</div>
+      <div class="unlock-body">
+        <div class="unlock-row">
+          <div class="unlock-icon">📐</div>
+          <div>
+            <div class="unlock-text">3 massing options (Conservative / Mid-Rise / Tower) with 3D isometric views</div>
           </div>
         </div>
-        <div style="font:400 9px var(--sans);color:var(--text3);margin-top:10px;line-height:1.6">
-          Indicative only — based on City Grade A ERV £770–£850/sqm, NIY 4.25–4.75%. 
-          Run T2 Appraise for full massing options, financial model and development margin.
+        <div class="unlock-row">
+          <div class="unlock-icon">💰</div>
+          <div>
+            <div class="unlock-text">Full pro forma: construction cost, finance, CIL, S106, developer margin</div>
+            <div style="font:500 10px var(--mono);color:var(--text3);margin-top:3px">
+              Dev margin: <span class="lock-blur">██ – ██%</span> &nbsp;|&nbsp; Profit on cost: <span class="lock-blur">£██M</span>
+            </div>
+          </div>
         </div>
+        <div class="unlock-row">
+          <div class="unlock-icon">🏢</div>
+          <div>
+            <div class="unlock-text">Floor plans at 1:500 · Section with City skyline context · Core programme</div>
+          </div>
+        </div>
+        <div class="unlock-row">
+          <div class="unlock-icon">⚠️</div>
+          <div>
+            <div class="unlock-text">BSA compliance flags · CIL breakdown · Planning risk assessment per option</div>
+          </div>
+        </div>
+        <div class="unlock-row">
+          <div class="unlock-icon">📊</div>
+          <div>
+            <div class="unlock-text">Sensitivity panel · IRR range · Comparable transaction evidence</div>
+          </div>
+        </div>
+        <a href="/t2/100-leadenhall" class="unlock-cta">Run full appraisal → T2 Appraise</a>
       </div>
     </div>
-
-    <!-- CTA -->
-    <a href="/t2/100-leadenhall" class="cta-block">
-      <div>
-        <h3>Run full massing appraisal</h3>
-        <p>Options A / B / C · Financial model · Floor plans · Section · Development margin</p>
-      </div>
-      <div class="cta-arrow">→</div>
-    </a>
 
   </div>
 
   <!-- Side column — planning applications -->
   <div class="side-col">
     <div class="side-head">
-      <h2>Recent Planning Applications <span id="apps-count" style="color:var(--text2);font-weight:400">within 300m</span></h2>
+      <h2>Recent Planning Applications <span id="apps-count" style="font-weight:400;color:var(--text2)">within 300m</span></h2>
     </div>
-    <div class="planning-list" id="apps-list">
-      <div style="padding:20px;text-align:center">
-        <div class="skeleton" style="margin:0 auto 8px;width:60%"></div>
-        <div class="skeleton" style="margin:0 auto;width:40%"></div>
+    <div id="apps-list" style="flex:1;overflow-y:auto">
+      <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
+        <div class="skeleton" style="width:80%"></div>
+        <div class="skeleton" style="width:60%"></div>
+        <div class="skeleton" style="width:75%"></div>
       </div>
     </div>
   </div>
@@ -269,69 +379,64 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
 <script>
 const LAT = 51.5137673, LNG = -0.0801551;
 const PLOT_AREA = 1551;
-// Rough GDV calc (same formula as massing tool)
+const EXISTING_EUV = 38000000;
+
 const GDV_OPTS = [
-  {label:'10F / 42m', floors:10, podFloors:6, twrFloors:4, twrPct:0.65, cov:1.0, nia:0.82, erv:770, niy:0.0475, rfMo:13, ltMo:120},
-  {label:'14F / 60m', floors:14, podFloors:6, twrFloors:8, twrPct:0.55, cov:1.0, nia:0.80, erv:810, niy:0.0450, rfMo:13, ltMo:120},
-  {label:'22F / 92m', floors:22, podFloors:4, twrFloors:18, twrPct:0.40, cov:1.0, nia:0.78, erv:850, niy:0.0425, rfMo:13, ltMo:120},
+  {floors:10,podF:6,twrF:4,twrPct:0.65,cov:1.0,nia:0.82,erv:770,niy:0.0475,rf:13,lt:120},
+  {floors:14,podF:6,twrF:8,twrPct:0.55,cov:1.0,nia:0.80,erv:810,niy:0.0450,rf:13,lt:120},
+  {floors:22,podF:4,twrF:18,twrPct:0.40,cov:1.0,nia:0.78,erv:850,niy:0.0425,rf:13,lt:120},
+];
+const KNOWN_HEIGHTS=[
+  {name:'22 Bishopsgate',h:278},{name:'Cheesegrater',h:224},{name:'NatWest Tower',h:183},
+  {name:'100 Bishopsgate',h:165},{name:'Scalpel',h:190},{name:"Lloyd's Building",h:88},
 ];
 
-// Pre-known context towers (supplement OSM)
-const KNOWN_HEIGHTS = [
-  {name:'22 Bishopsgate',      h:278},
-  {name:'Cheesegrater',        h:224},
-  {name:'NatWest Tower',       h:183},
-  {name:'100 Bishopsgate',     h:165},
-  {name:"Lloyd's Building",    h:88},
-  {name:'Scalpel',             h:190},
-];
-
-function fmtM(v){const m=v/1e6;return '£'+(m>=100?Math.round(m):m.toFixed(0))+'M';}
+function fmtM(v,decimals=0){const m=v/1e6;return '£'+(decimals?m.toFixed(decimals):Math.round(m))+'M';}
+function fmtK(v){return (v/1000).toFixed(1).replace(/\.0$/,'')+'k m²';}
 function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 
-// ── Rough GDV ─────────────────────────────────────────────────────────────
+// ── Compute GDV ──────────────────────────────────────────────────────────────
 (function(){
-  const ids = [['gdv-lo','gdv-lo-sub'],['gdv-mid','gdv-mid-sub'],['gdv-hi','gdv-hi-sub']];
-  GDV_OPTS.forEach((o,i)=>{
-    const podGIA = PLOT_AREA * o.cov * o.podFloors;
-    const twrGIA = PLOT_AREA * o.twrPct * o.twrFloors;
-    const nia    = (podGIA + twrGIA) * o.nia;
-    const effErv = nia * o.erv * (1 - o.rfMo / o.ltMo);
-    const gdv    = effErv / o.niy;
-    set(ids[i][0], fmtM(gdv));
-    set(ids[i][1], o.label);
+  const gdvs = GDV_OPTS.map(o=>{
+    const podGIA = PLOT_AREA * o.cov * o.podF;
+    const twrGIA = PLOT_AREA * o.twrPct * o.twrF;
+    const totalNIA = (podGIA + twrGIA) * o.nia;
+    const effErv = totalNIA * o.erv * (1 - o.rf / o.lt);
+    return {gdv: effErv / o.niy, nia: totalNIA};
   });
+  const gdvHi  = Math.max(...gdvs.map(g=>g.gdv));
+  const gdvLo  = Math.min(...gdvs.map(g=>g.gdv));
+  const niaHi  = Math.max(...gdvs.map(g=>g.nia));
+  const uplift = gdvHi - EXISTING_EUV;
+  const mult   = (gdvHi / EXISTING_EUV).toFixed(1);
+
+  set('gdv-hi-val', Math.round(gdvHi/1e6));
+  set('uplift-max', fmtM(uplift));
+  set('uplift-mult', mult + '×');
+  set('uplift-nia', fmtK(niaHi));
 })();
 
-// ── Map ───────────────────────────────────────────────────────────────────
-const SITE_POLYGON = [[-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,51.51396],[-0.0799754,51.5136468],[-0.079809,51.5136257],[-0.0798425,51.5135377],[-0.0798828,51.513445],[-0.0804144,51.5135131],[-0.0803568,51.5136783],[-0.0802864,51.5136687],[-0.0802571,51.5137575],[-0.080298,51.5137608],[-0.0802591,51.5138813],[-0.0803085,51.5138886],[-0.0803056,51.5138968],[-0.0802763,51.5140146]];
+// ── Map ──────────────────────────────────────────────────────────────────────
+const SITE_POLYGON=[[-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,51.51396],[-0.0799754,51.5136468],[-0.079809,51.5136257],[-0.0798425,51.5135377],[-0.0798828,51.513445],[-0.0804144,51.5135131],[-0.0803568,51.5136783],[-0.0802864,51.5136687],[-0.0802571,51.5137575],[-0.080298,51.5137608],[-0.0802591,51.5138813],[-0.0803085,51.5138886],[-0.0803056,51.5138968],[-0.0802763,51.5140146]];
 
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
-  mapboxgl.accessToken = cfg.mapboxToken;
-  const map = new mapboxgl.Map({
-    container:'scout-map',
-    style:'mapbox://styles/mapbox/light-v11',
-    center:[LNG, LAT], zoom:16.5,
-    interactive:true, attributionControl:false
+  mapboxgl.accessToken=cfg.mapboxToken;
+  const map=new mapboxgl.Map({
+    container:'scout-map',style:'mapbox://styles/mapbox/light-v11',
+    center:[LNG,LAT],zoom:16.2,interactive:true,attributionControl:false
   });
-  map.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
-  map.on('load', ()=>{
-    // Site polygon
-    map.addSource('site', {type:'geojson', data:{
-      type:'Feature',
-      geometry:{type:'Polygon', coordinates:[SITE_POLYGON]}
-    }});
-    map.addLayer({id:'site-fill', type:'fill', source:'site',
-      paint:{'fill-color':'#4f46e5','fill-opacity':0.25}});
-    map.addLayer({id:'site-line', type:'line', source:'site',
-      paint:{'line-color':'#4f46e5','line-width':2}});
+  map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
+  map.on('load',()=>{
+    map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_POLYGON]}}});
+    map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#4f46e5','fill-opacity':0.3}});
+    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#4f46e5','line-width':2.5}});
   });
 });
 
-// ── APIs ──────────────────────────────────────────────────────────────────
+// ── All API calls ─────────────────────────────────────────────────────────────
 async function loadAll(){
-  const [flood, ptal, listed, apps, ctxBldgs] = await Promise.allSettled([
+  const [flood,ptal,listed,apps,ctx]=await Promise.allSettled([
     fetch(`/api/flood-zone?lat=${LAT}&lng=${LNG}`).then(r=>r.json()),
     fetch(`/api/ptal?lat=${LAT}&lng=${LNG}`).then(r=>r.json()),
     fetch(`/api/listed-buildings?lat=${LAT}&lng=${LNG}&radius=200`).then(r=>r.json()),
@@ -339,162 +444,119 @@ async function loadAll(){
     fetch(`/api/context-buildings?lat=${LAT}&lng=${LNG}&radius=300`).then(r=>r.json()),
   ]);
 
-  // ── Flood zone ──
+  // Flood
   if(flood.status==='fulfilled'){
-    const fz = flood.value.floodZone ?? 1;
-    const fzLabel = fz===1 ? 'Zone 1 — Low' : fz===2 ? 'Zone 2 — Medium' : 'Zone 3 — High';
-    const fzColor = fz===1 ? 'var(--green)' : fz===2 ? 'var(--amber)' : 'var(--red)';
-    const el = document.getElementById('stat-flood');
-    if(el){el.textContent=fzLabel; el.style.color=fzColor;}
-    const tagEl = document.getElementById('tag-flood');
-    if(tagEl){
-      tagEl.textContent = `Flood Zone ${fz}`;
-      tagEl.className = 'tag ' + (fz===1?'green':fz===2?'amber':'red');
+    const fz=flood.value.floodZone??1;
+    const label=fz===1?'Zone 1 — Low':fz===2?'Zone 2 — Medium':'Zone 3 — High';
+    const col=fz===1?'var(--green)':fz===2?'var(--amber)':'var(--red)';
+    const el=document.getElementById('stat-flood');
+    if(el){el.textContent=label;el.style.color=col;}
+    const tag=document.getElementById('tag-flood');
+    if(tag){tag.textContent=`Flood Zone ${fz}`;tag.className='tag '+(fz===1?'green':fz===2?'amber':'red');}
+  }
+
+  // PTAL
+  if(ptal.status==='fulfilled'&&ptal.value.ptal!=null){
+    const p=ptal.value;
+    const band=p.ptal>=5?'6a':p.ptal>=4?'5':p.ptal>=3?'4':'3';
+    set('stat-ptal',band+' — '+(p.ptal>=5?'Excellent':p.ptal>=4?'Very Good':'Good'));
+    set('tag-ptal',band);
+  }
+
+  // Listed buildings
+  const listedEls=(listed.status==='fulfilled'?(listed.value.elements||[]):[]).filter(e=>e.tags);
+  set('stat-listed',listedEls.length>0?listedEls.length:'0');
+  const heritageTag=document.getElementById('tag-heritage');
+  if(heritageTag){
+    if(listedEls.length>0){
+      heritageTag.textContent=`${listedEls.length} Listed Building${listedEls.length>1?'s':''} nearby`;
+      heritageTag.className='tag amber';
+    } else {
+      heritageTag.textContent='No listed buildings on-site';
+      heritageTag.className='tag green';
     }
   }
 
-  // ── PTAL ──
-  if(ptal.status==='fulfilled'){
-    const p = ptal.value;
-    const score = p.ptal ?? 6;
-    const band = score >= 5 ? '6a' : score >= 4 ? '5' : score >= 3 ? '4' : '3';
-    const label = score >= 5 ? '6a — Excellent' : score >= 4 ? '5 — Very Good' : '4 — Good';
-    set('stat-ptal', label);
-    set('tag-ptal', band);
-  } else {
-    set('stat-ptal', '6a — Excellent'); // known value for this site
-    set('tag-ptal', '6a');
-  }
-
-  // ── Listed buildings ──
-  if(listed.status==='fulfilled'){
-    const els = (listed.value.elements || []).filter(e=>e.tags);
-    set('stat-listed', els.length > 0 ? els.length : '0');
-  } else {
-    set('stat-listed', '—');
-  }
-
-  // ── Planning flags ──
-  buildFlags(flood, listed);
-
-  // ── Heights ──
-  if(ctxBldgs.status==='fulfilled'){
-    buildHeights(ctxBldgs.value.elements || []);
-  } else {
-    buildHeights([]);
-  }
-
-  // ── Planning apps ──
-  if(apps.status==='fulfilled'){
-    buildApps(apps.value.results || []);
-  } else {
-    buildApps([]);
-  }
+  buildFlags(flood,listedEls);
+  buildHeights((ctx.status==='fulfilled'?ctx.value.elements:[])||[]);
+  buildApps((apps.status==='fulfilled'?apps.value.results:[])||[]);
 }
 
-function buildFlags(flood, listed){
-  const flags = [];
-
-  // Flood
-  const fz = flood.status==='fulfilled' ? (flood.value.floodZone??1) : 1;
-  if(fz===1){
-    flags.push({icon:'ok', sym:'✓', title:'Flood Zone 1 — Low Risk', desc:'Site lies within Flood Zone 1. No sequential test required. Standard drainage conditions apply.'});
-  } else if(fz===2){
-    flags.push({icon:'warn', sym:'⚠', title:'Flood Zone 2 — Medium Risk', desc:'Sequential test and flood risk assessment required. EA objection likely without mitigation measures.'});
-  } else {
-    flags.push({icon:'risk', sym:'✕', title:'Flood Zone 3 — High Risk', desc:'Exception test required. Development may be refused without significant mitigation. Consult EA early.'});
+function buildFlags(flood,listedEls){
+  const fz=flood.status==='fulfilled'?(flood.value.floodZone??1):1;
+  const flags=[
+    fz===1
+      ?{icon:'ok',sym:'✓',title:'Flood Zone 1 — Low Risk',desc:'No sequential test required. Standard drainage strategy applies. No EA objection expected on flood grounds.'}
+      :fz===2
+      ?{icon:'warn',sym:'⚠',title:'Flood Zone 2 — Medium Risk',desc:'Sequential test and flood risk assessment required before consent. EA consultation is a statutory requirement.'}
+      :{icon:'risk',sym:'✕',title:'Flood Zone 3 — High Risk',desc:'Exception test mandatory. Development may be refused without major mitigation. Consult EA at pre-app stage.'},
+    {icon:'warn',sym:'⚠',title:'Leadenhall Market — Grade II* Listed (85m SW)',desc:'Material consideration in any planning application above podium height. South face recession typically expected. Pre-app essential.'},
+    {icon:'info',sym:'ℹ',title:'Eastern Cluster — Tall Buildings Zone',desc:'City Core Strategy supports tall buildings in this cluster. Design Guide applies above 100m. Tall building justification required.'},
+    {icon:'info',sym:'ℹ',title:'LVMF — Protected Views of St Paul\'s Cathedral',desc:'Strategic sightlines cross the City of London. LVMF compliance assessment required for any scheme above existing cluster heights.'},
+    {icon:'ok',sym:'✓',title:'Conservation Area — Not Applicable',desc:'Site is not within a designated conservation area. Street-level design guidance still applies for public realm treatment.'},
+  ];
+  if(listedEls.length>0){
+    flags.splice(2,0,{icon:'warn',sym:'⚠',title:`${listedEls.length} Listed Building${listedEls.length>1?'s':''} within 200m`,desc:'Setting of listed buildings is a material consideration. Design & Access Statement must address visual impact on each asset.'});
   }
 
-  // City of London planning context — known facts for this site
-  flags.push({icon:'warn', sym:'⚠', title:'Leadenhall Market — Grade II* Listed (68m)', desc:'Leadenhall Market lies 85m SW. Sightlines from public realm are a material planning consideration. South face recession is typically expected above podium height.'});
-  flags.push({icon:'info', sym:'ℹ', title:'City of London Core Strategy — Tall Buildings Zone', desc:'Site falls within the City\'s identified tall buildings cluster (Eastern Cluster policy). Scheme design guide applies above 100m. Views of St Paul\'s Cathedral must be assessed.'});
-  flags.push({icon:'info', sym:'ℹ', title:'Strategic Views — St Paul\'s Heights', desc:'Protected View corridors cross the City. 100 Leadenhall falls within the Eastern Cluster where heights are assessed against the LVMF. Pre-application discussions essential above 70m.'});
-  flags.push({icon:'ok', sym:'✓', title:'Conservation Area — Not Applicable', desc:'Site does not lie within a designated conservation area. Adjoining area design guidance may still apply for façade treatment at street level.'});
-
-  // Listed within 200m
-  const listedEls = listed.status==='fulfilled' ? (listed.value.elements||[]).filter(e=>e.tags) : [];
-  if(listedEls.length > 0){
-    flags.push({icon:'warn', sym:'⚠', title:`${listedEls.length} Listed Building${listedEls.length>1?'s':''} within 200m`, desc:'Setting of listed buildings is a material planning consideration. Design and Access Statement must address visual impact on each listed asset.'});
+  const risks=flags.filter(f=>f.icon==='risk').length;
+  const warns=flags.filter(f=>f.icon==='warn').length;
+  const oks=flags.filter(f=>f.icon==='ok').length;
+  const badge=document.getElementById('flags-badge');
+  if(badge){
+    badge.textContent=`${risks} Risk · ${warns} Advisory · ${oks} Clear`;
+    badge.style.cssText=`font:600 9px var(--mono);padding:2px 8px;border-radius:4px;${risks>0?'background:#fef2f2;color:#991b1b':warns>0?'background:#fffbeb;color:#92400e':'background:#f0fdf4;color:#166534'}`;
   }
 
-  const badgeColor = flags.some(f=>f.icon==='risk') ? 'background:#fef2f2;color:#991b1b' :
-                     flags.some(f=>f.icon==='warn') ? 'background:#fffbeb;color:#92400e' :
-                     'background:#f0fdf4;color:#166534';
-  const badgeText = flags.filter(f=>f.icon==='risk').length + ' Risk · ' + flags.filter(f=>f.icon==='warn').length + ' Advisory · ' + flags.filter(f=>f.icon==='ok').length + ' Clear';
-
-  const badge = document.getElementById('flags-badge');
-  if(badge){badge.textContent=badgeText; badge.style.cssText=`font:600 9px var(--mono);padding:2px 8px;border-radius:4px;${badgeColor}`;}
-
-  html('flags-body', flags.map(f=>`
+  html('flags-body',flags.map(f=>`
     <div class="flag-row">
       <div class="flag-icon ${f.icon}">${f.sym}</div>
-      <div>
-        <div class="flag-title">${f.title}</div>
-        <div class="flag-desc">${f.desc}</div>
-      </div>
+      <div><div class="flag-title">${f.title}</div><div class="flag-desc">${f.desc}</div></div>
     </div>`).join(''));
 }
 
-function buildHeights(osmElements){
-  // Merge OSM heights with known heights
-  const osmH = osmElements
-    .filter(e=>e.tags && (e.tags.height||e.tags['building:levels']))
-    .map(e=>({
-      name: e.tags.name || e.tags['addr:housenumber'] || 'Unnamed building',
-      h: parseFloat(e.tags.height) || (parseFloat(e.tags['building:levels'])||1) * 4.0
-    }))
-    .filter(e=>e.h > 20);
-
-  // Merge: prefer known over OSM for named buildings
-  const knownNames = KNOWN_HEIGHTS.map(k=>k.name.toLowerCase());
-  const osmFiltered = osmH.filter(b=>!knownNames.includes(b.name.toLowerCase()));
-  const merged = [...KNOWN_HEIGHTS, ...osmFiltered]
-    .sort((a,b)=>b.h-a.h)
-    .slice(0,12);
-
-  const maxH = Math.max(...merged.map(b=>b.h), 100);
-
-  if(merged.length===0){
-    html('heights-body', '<div style="color:var(--text3);font:400 11px var(--sans)">Height data unavailable — OSM coverage incomplete for this area.</div>');
-    return;
-  }
-
-  html('heights-body', `
-    <div class="height-bar-wrap">
+function buildHeights(osmEls){
+  const osmH=osmEls.filter(e=>e.tags&&(e.tags.height||e.tags['building:levels']))
+    .map(e=>({name:e.tags.name||e.tags['addr:housenumber']||'Building',h:parseFloat(e.tags.height)||(parseFloat(e.tags['building:levels'])||1)*4.0}))
+    .filter(e=>e.h>20);
+  const knownNames=KNOWN_HEIGHTS.map(k=>k.name.toLowerCase());
+  const merged=[...KNOWN_HEIGHTS,...osmH.filter(b=>!knownNames.includes(b.name.toLowerCase()))]
+    .sort((a,b)=>b.h-a.h).slice(0,12);
+  const maxH=Math.max(...merged.map(b=>b.h),100);
+  html('heights-body',`
+    <div>
       ${merged.map(b=>{
-        const pct = Math.round(b.h/maxH*100);
-        const col = b.h>=200?'#4f46e5':b.h>=100?'#059669':b.h>=50?'#d97706':'#94a3b8';
+        const pct=Math.round(b.h/maxH*100);
+        const col=b.h>=200?'#4f46e5':b.h>=100?'#059669':b.h>=50?'#d97706':'#94a3b8';
         return `<div class="hb-row">
           <div class="hb-label" title="${b.name}">${b.name}</div>
-          <div class="hb-track">
-            <div class="hb-fill" style="width:${pct}%;background:${col}"></div>
-          </div>
+          <div class="hb-track"><div class="hb-fill" style="width:${pct}%;background:${col}"></div></div>
           <div class="hb-val">${b.h}m</div>
         </div>`;
       }).join('')}
     </div>
-    <div style="font:400 9px var(--sans);color:var(--text3);margin-top:10px">
-      Heights sourced from OpenStreetMap + Historic England records.
-      Eastern Cluster context: max precedent <strong style="color:var(--text)">${Math.max(...merged.map(b=>b.h))}m</strong>.
+    <div style="font:400 9px var(--sans);color:var(--text3);margin-top:10px;line-height:1.6">
+      Tallest precedent within 300m: <strong style="color:var(--text)">${Math.max(...merged.map(b=>b.h))}m</strong>. 
+      Site falls within Eastern Cluster — the City's designated tall buildings zone. 
+      Heights up to and beyond 100m have established precedent in this location.
     </div>`);
 }
 
 function buildApps(apps){
-  set('apps-count', `— ${apps.length} results within 300m`);
-  if(apps.length===0){
-    html('apps-list','<div style="padding:20px 20px;font:400 11px var(--sans);color:var(--text3)">No recent planning applications found via PlanIt.</div>');
+  set('apps-count',`— ${apps.length} results`);
+  if(!apps.length){
+    html('apps-list','<div style="padding:20px;font:400 11px var(--sans);color:var(--text3)">No recent applications found via PlanIt.</div>');
     return;
   }
-  const top = apps.slice(0,20);
-  html('apps-list', top.map(a=>{
-    const statusClass = /appro|grant/i.test(a.status) ? 'approved' :
-                        /refus|reject/i.test(a.status) ? 'refused' : 'pending';
-    const date = a.decidedDate || a.startDate || '';
-    const distStr = a.distance ? `${a.distance}m · ` : '';
+  html('apps-list',apps.slice(0,25).map(a=>{
+    const sc=/appro|grant/i.test(a.status)?'approved':/refus|reject/i.test(a.status)?'refused':'pending';
     return `<div class="app-item">
-      <div class="app-ref">${a.reference || '—'} <span class="app-status ${statusClass}">${a.status||'Pending'}</span></div>
-      <div class="app-desc">${a.description || 'No description available'}</div>
-      <div class="app-meta">${distStr}${date}</div>
+      <div class="app-ref">${a.reference||'—'} <span class="app-status ${sc}">${a.status||'Pending'}</span></div>
+      <div class="app-desc">${a.description||'No description'}</div>
+      <div class="app-meta">
+        ${a.distance?`<span>${a.distance}m</span>`:''}
+        ${a.decidedDate||a.startDate?`<span>${a.decidedDate||a.startDate}</span>`:''}
+      </div>
     </div>`;
   }).join(''));
 }
