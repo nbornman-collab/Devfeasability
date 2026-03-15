@@ -513,15 +513,15 @@ function triggerPrint(){
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Floors / Height</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">9,411m²</div>
+        <div id="m-a-nia" style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Total NIA</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">£114M</div>
+        <div id="m-a-gdv" style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Indicative GDV</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--green);letter-spacing:-0.5px">+£10.5M</div>
+        <div id="m-a-uplift" style="font:700 20px var(--mono);color:var(--green);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Dev. Uplift vs EUV</div>
       </div>
     </div>
@@ -570,15 +570,15 @@ function triggerPrint(){
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Floors / Height</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">11,415m²</div>
+        <div id="m-b-nia" style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Total NIA</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">£155M</div>
+        <div id="m-b-gdv" style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Indicative GDV</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--green);letter-spacing:-0.5px">+£18.5M</div>
+        <div id="m-b-uplift" style="font:700 20px var(--mono);color:var(--green);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Dev. Uplift vs EUV</div>
       </div>
     </div>
@@ -627,15 +627,15 @@ function triggerPrint(){
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Floors / Height</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">12,182m²</div>
+        <div id="m-c-nia" style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Total NIA</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">£176M</div>
+        <div id="m-c-gdv" style="font:700 20px var(--mono);color:var(--text);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Indicative GDV</div>
       </div>
       <div style="background:#fff;padding:14px 14px 12px">
-        <div style="font:700 20px var(--mono);color:var(--amber);letter-spacing:-0.5px">+£0.7M</div>
+        <div id="m-c-uplift" style="font:700 20px var(--mono);color:var(--amber);letter-spacing:-0.5px">—</div>
         <div style="font:600 7px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:5px">Dev. Uplift vs EUV</div>
       </div>
     </div>
@@ -1426,12 +1426,71 @@ function buildGFPlanStatic(svgId='gf-plan-static', optData=null){
 // ── Option data (mirrors massing tool) ───────────────────────────────────────
 const REPORT_OPTS = [
   {key:'a', height:42, podiumHeight:25, towerFootprintPct:0.65, setbackM:3,
-   floors:10, podiumFloors:6, towerFloors:4},
+   floors:10, podiumFloors:6, towerFloors:4, coverage:1.0, niaEfficiency:0.82},
   {key:'b', height:60, podiumHeight:25, towerFootprintPct:0.55, setbackM:4,
-   floors:14, podiumFloors:6, towerFloors:8},
+   floors:14, podiumFloors:6, towerFloors:8, coverage:1.0, niaEfficiency:0.80},
   {key:'c', height:92, podiumHeight:17, towerFootprintPct:0.40, setbackM:8,
-   floors:22, podiumFloors:4, towerFloors:18},
+   floors:22, podiumFloors:4, towerFloors:18, coverage:1.0, niaEfficiency:0.78},
 ];
+
+// ── Financial model — shared with massing tool ────────────────────────────────
+// Single source of truth. Sprint 2: these become editable sliders.
+const MARKET = {
+  erv:     {a:770,    b:810,    c:850   }, // £/sqm pa NIA (ERV, City Grade A)
+  niy:     {a:0.0475, b:0.0450, c:0.0425}, // net initial yield
+  costGsm: {a:4100,   b:5000,   c:6250  }, // £/sqm GIA construction (BCIS)
+  progYrs: {a:2.5,    b:3.0,    c:4.0   }, // construction programme years
+  cilNia:  200,    // £/sqm NIA — CoL CIL (City £140 + Mayoral £60)
+  s106:    750000, // £ estimated S106
+  demo:    2000000,// £ demolition + enabling
+  fees:    0.13,   // professional fees % of construction
+  contg:   0.075,  // contingency % of construction
+  finRate: 0.075,  // finance rate pa
+  ltc:     0.60,   // loan to cost
+  rfMo:    13,     // rent-free months
+  ltMo:    120,    // lease term months
+};
+const EXISTING_NIA = 4700;       // sqm — current building
+const EXISTING_EUV = 38000000;   // £38M — existing use value
+
+// Compute financials for each option and update metric cards
+(function computeFinancials(){
+  const fmt = v => {
+    const m = v / 1e6;
+    return (m >= 0 ? '+' : '') + '£' + (Math.abs(m) >= 10 ? Math.round(m) : m.toFixed(1)) + 'M';
+  };
+  const fmtNia = v => (v/1000).toFixed(1).replace(/\.0$/,'') + 'k m²';
+
+  REPORT_OPTS.forEach(opt => {
+    const podGIA   = D.plotArea * opt.coverage * opt.podiumFloors;
+    const twrGIA   = D.plotArea * opt.towerFootprintPct * opt.towerFloors;
+    const totalGIA = podGIA + twrGIA;
+    const totalNIA = Math.round(totalGIA * opt.niaEfficiency);
+
+    const grossErv = totalNIA * MARKET.erv[opt.key];
+    const effErv   = grossErv * (1 - MARKET.rfMo / MARKET.ltMo);
+    const gdv      = effErv / MARKET.niy[opt.key];
+
+    const const_   = totalGIA * MARKET.costGsm[opt.key];
+    const preFin   = const_ * (1 + MARKET.fees + MARKET.contg)
+                   + totalNIA * MARKET.cilNia
+                   + grossErv * 0.15     // letting fees
+                   + MARKET.s106 + MARKET.demo;
+    const fin      = preFin * MARKET.ltc * MARKET.finRate * (MARKET.progYrs[opt.key] / 2);
+    const tdc      = preFin + fin;
+    const profit   = gdv - tdc;
+    const uplift   = profit - EXISTING_EUV;
+
+    // Store on opt for use elsewhere (Sprint 2 sliders)
+    opt._nia = totalNIA; opt._gdv = gdv; opt._profit = profit; opt._uplift = uplift;
+
+    // Update metric cards
+    const set = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+    set(`m-${opt.key}-nia`,    fmtNia(totalNIA));
+    set(`m-${opt.key}-gdv`,    '£' + Math.round(gdv/1e6) + 'M');
+    set(`m-${opt.key}-uplift`, fmt(uplift));
+  });
+})();
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 // SVG drawings: run immediately — no external deps
