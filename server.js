@@ -32,6 +32,21 @@ function cachedFetch(url, timeoutMs = 10000) {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ── Tier routes: /t1/:site, /t2/:site, /t3/:site ──────────────────────────
+// T1 Scout  — site overview (placeholder until built)
+// T2 Appraise — massing tool
+// T3 Present  — full PDF report
+app.get('/t2/:site', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'massing', `${req.params.site}.html`));
+});
+app.get('/t3/:site', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'reports', `${req.params.site}.html`));
+});
+app.get('/t1/:site', (req, res) => {
+  // T1 Scout — redirect to T2 until Scout page is built
+  res.redirect(302, `/t2/${req.params.site}`);
+});
+
 // Serve mapbox token
 app.get('/api/config', (req, res) => {
   res.json({ mapboxToken: MAPBOX_TOKEN });
