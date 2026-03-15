@@ -122,6 +122,22 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .ic-body p:last-child{margin-bottom:0}
 .ic-callout{background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:10px 12px;margin-top:10px}
 .ic-callout p{font:500 11px/1.6 var(--sans);color:#92400e;margin:0}
+/* ── Assumption sliders ── */
+.assump-panel{border:1px solid var(--border);border-radius:8px;margin:0 20px 16px;overflow:hidden}
+.assump-head{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;background:var(--surface);user-select:none}
+.assump-head:hover{background:#f5f6fa}
+.assump-title{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--t2);flex-shrink:0}
+.assump-summary{font:400 11px var(--mono);color:var(--t3);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.assump-chev{font:10px sans-serif;color:var(--t3);flex-shrink:0;transition:transform .2s}
+.assump-body{padding:14px;border-top:1px solid var(--border);display:none}
+.slider-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px}
+.srow{display:flex;flex-direction:column;gap:3px}
+.smeta{display:flex;justify-content:space-between;align-items:baseline}
+.slbl{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--t2)}
+.sval{font:700 11px var(--mono);color:#4f46e5}
+.srange{width:100%;height:4px;accent-color:#4f46e5;cursor:pointer;margin:2px 0}
+.sbounds{display:flex;justify-content:space-between;font:400 9px var(--mono);color:var(--t3)}
+@media(max-width:600px){.slider-grid{grid-template-columns:1fr}}
 
 @media(max-width:1000px){
   #map{width:100%;height:45%;position:fixed;top:0}
@@ -190,6 +206,37 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 
   <!-- Hero metrics -->
   <div class="hero-grid" id="hero"></div>
+
+  <!-- ── Assumption sliders ── -->
+  <div class="assump-panel">
+    <div class="assump-head" onclick="toggleAssump(this)">
+      <span class="assump-title">⚙ Assumptions</span>
+      <span class="assump-summary">ERV £<span id="lbl-erv">800</span>/m² · Yield <span id="lbl-niy">5.25</span>% · Cost £<span id="lbl-cost">5,000</span>/m²</span>
+      <span class="assump-chev">▼</span>
+    </div>
+    <div class="assump-body" id="assump-body">
+      <div class="slider-grid">
+        <div class="srow"><div class="smeta"><span class="slbl">ERV</span><span class="sval" id="sv-erv">£800/m²</span></div>
+          <input type="range" class="srange" id="sl-erv" min="500" max="1200" step="25" value="800" oninput="onSlider('erv',+this.value)">
+          <div class="sbounds"><span>£500</span><span>£1,200</span></div></div>
+        <div class="srow"><div class="smeta"><span class="slbl">Net Yield</span><span class="sval" id="sv-niy">5.25%</span></div>
+          <input type="range" class="srange" id="sl-niy" min="3.5" max="7.5" step="0.25" value="5.25" oninput="onSlider('niy',+this.value)">
+          <div class="sbounds"><span>3.5%</span><span>7.5%</span></div></div>
+        <div class="srow"><div class="smeta"><span class="slbl">Build Cost (base)</span><span class="sval" id="sv-cost">£5,000/m²</span></div>
+          <input type="range" class="srange" id="sl-cost" min="3000" max="8000" step="100" value="5000" oninput="onSlider('cost',+this.value)">
+          <div class="sbounds"><span>£3k</span><span>£8k</span></div></div>
+        <div class="srow"><div class="smeta"><span class="slbl">S106</span><span class="sval" id="sv-s106">£750k</span></div>
+          <input type="range" class="srange" id="sl-s106" min="0" max="3000" step="50" value="750" oninput="onSlider('s106',+this.value)">
+          <div class="sbounds"><span>£0</span><span>£3M</span></div></div>
+        <div class="srow"><div class="smeta"><span class="slbl">Target Profit</span><span class="sval" id="sv-poc">20%</span></div>
+          <input type="range" class="srange" id="sl-poc" min="10" max="30" step="1" value="20" oninput="onSlider('poc',+this.value)">
+          <div class="sbounds"><span>10%</span><span>30%</span></div></div>
+      </div>
+      <div style="text-align:right;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+        <button onclick="resetAssump()" style="font:500 11px var(--sans);color:var(--t3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset defaults</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Scenario tabs -->
   <div class="stabs">
@@ -373,47 +420,110 @@ const SCENARIOS=[
    narrative:'Low 4F podium opens civic public realm at ground. Slender 18F tower at 40% site coverage. <strong>Maximum height for this cluster position</strong> — exceptional design quality and planning justification required. LVMF Strategic View Assessment, wind study, full daylight/sunlight report all mandatory. Construction cost at £6,250/m² (+52% on Low). Programme 4 years — finance compounds hard. Absolute GDV is highest but <strong>margin % is the lowest</strong> of the three.'},
 ];
 
-SCENARIOS.forEach(s=>{
-  const podGIA=PLOT_AREA*s.cov*s.podF;
-  const twrGIA=PLOT_AREA*s.twrPct*s.twrF;
-  s.gea=Math.round(podGIA+twrGIA);
-  s.nia=Math.round(s.gea*s.eff);
-  const grossErv=s.nia*MARKET.erv[s.key];
-  const effErv=grossErv*(1-MARKET.rfMo/MARKET.ltMo);
-  s.gdv=Math.round(effErv/MARKET.niy[s.key]);
-  s.constCost=Math.round(s.gea*MARKET.costGsm[s.key]);
-  s.fees=Math.round(s.constCost*MARKET.fees);
-  s.contg=Math.round(s.constCost*MARKET.contg);
-  s.cil=Math.round(s.nia*MARKET.cilNia);
-  s.letting=Math.round(grossErv*0.15);
-  const preFin=s.constCost+s.fees+s.contg+s.cil+s.letting+MARKET.s106+MARKET.demo;
-  s.finance=Math.round(preFin*MARKET.ltc*MARKET.finRate*(MARKET.progYrs[s.key]/2));
-  s.tdc=Math.round(preFin+s.finance);
-  s.profit=s.gdv-s.tdc;
-  s.poc=(s.profit/s.tdc*100).toFixed(1);
-  s.core=Math.round(s.gea*0.22);
-  s.lspan=s.key==='lo'?'~11m':s.key==='base'?'~9m':'~7m';
-});
+// ── Live assumption overrides ──────────────────────────────────────────────
+const DEFS={erv:800,niy:5.25,cost:5000,s106:750,poc:20}; // s106 in £k, poc = target profit %
+let S={...DEFS};
 
-const CURVE=[];
-for(let f=6;f<=24;f++){
-  const podF=Math.min(f,6),twrF=Math.max(0,f-podF);
-  const twrPct=1.0-(f-6)/(24-6)*0.55;
-  const eff=0.85-(f-6)/(24-6)*0.09;
-  const erv=740+(f-6)/(24-6)*130;
-  const niy=0.057-(f-6)/(24-6)*0.007;
-  const cost=3700+(f-6)/(24-6)*3000;
-  const prog=1.8+(f-6)/(24-6)*2.8;
-  const gea=PLOT_AREA*1.0*podF+PLOT_AREA*twrPct*twrF;
-  const nia=gea*eff;
-  const grossErv=nia*erv;
-  const effErv=grossErv*(1-13/120);
-  const gdv=effErv/niy;
-  const cc=gea*cost;
-  const preFin=cc*(1+0.13+0.075)+nia*200+grossErv*0.15+750000+2000000;
-  const fin=preFin*0.60*0.075*(prog/2);
-  const poc=(gdv-preFin-fin)/(preFin+fin)*100;
-  CURVE.push({f,gea:Math.round(gea),poc:Math.round(poc*10)/10});
+function calcScenarios(){
+  // Rebuild MARKET from live S
+  MARKET.erv={lo:Math.round(S.erv*.9375),base:S.erv,hi:Math.round(S.erv*1.0625)};
+  MARKET.niy={lo:S.niy/100+.0025,base:S.niy/100,hi:S.niy/100};
+  MARKET.costGsm={lo:Math.round(S.cost*.82),base:S.cost,hi:Math.round(S.cost*1.25)};
+  MARKET.s106=S.s106*1000;
+  SCENARIOS.forEach(s=>{
+    const podGIA=PLOT_AREA*s.cov*s.podF;
+    const twrGIA=PLOT_AREA*s.twrPct*s.twrF;
+    s.gea=Math.round(podGIA+twrGIA);
+    s.nia=Math.round(s.gea*s.eff);
+    const grossErv=s.nia*MARKET.erv[s.key];
+    const effErv=grossErv*(1-MARKET.rfMo/MARKET.ltMo);
+    s.gdv=Math.round(effErv/MARKET.niy[s.key]);
+    s.constCost=Math.round(s.gea*MARKET.costGsm[s.key]);
+    s.fees=Math.round(s.constCost*MARKET.fees);
+    s.contg=Math.round(s.constCost*MARKET.contg);
+    s.cil=Math.round(s.nia*MARKET.cilNia);
+    s.letting=Math.round(grossErv*.15);
+    const preFin=s.constCost+s.fees+s.contg+s.cil+s.letting+MARKET.s106+MARKET.demo;
+    s.finance=Math.round(preFin*MARKET.ltc*MARKET.finRate*(MARKET.progYrs[s.key]/2));
+    s.tdc=Math.round(preFin+s.finance);
+    s.profit=s.gdv-s.tdc;
+    s.poc=(s.profit/s.tdc*100).toFixed(1);
+    s.rlv=Math.round(s.gdv-s.tdc*(1+S.poc/100)); // Residual Land Value at target profit
+    s.core=Math.round(s.gea*.22);
+    s.lspan=s.key==='lo'?'~11m':s.key==='base'?'~9m':'~7m';
+  });
+}
+calcScenarios(); // initial calculation
+
+let CURVE=[];
+function buildCurveData(){
+  CURVE=[];
+  const ervBase=S.erv, niyBase=S.niy/100, costBase=S.cost;
+  for(let f=6;f<=24;f++){
+    const podF=Math.min(f,6),twrF=Math.max(0,f-podF);
+    const twrPct=1.0-(f-6)/(24-6)*.55;
+    const eff=.85-(f-6)/(24-6)*.09;
+    const erv=ervBase*(.925+(f-6)/(24-6)*.1625);
+    const niy=niyBase+.0045-(f-6)/(24-6)*.007;
+    const cost=costBase*(.74+(f-6)/(24-6)*.6);
+    const prog=1.8+(f-6)/(24-6)*2.8;
+    const gea=PLOT_AREA*1.0*podF+PLOT_AREA*twrPct*twrF;
+    const nia=gea*eff;
+    const grossErv=nia*erv;
+    const effErv=grossErv*(1-13/120);
+    const gdv=effErv/niy;
+    const cc=gea*cost;
+    const preFin=cc*(1+.13+.075)+nia*200+grossErv*.15+MARKET.s106+MARKET.demo;
+    const fin=preFin*.60*.075*(prog/2);
+    const poc=(gdv-preFin-fin)/(preFin+fin)*100;
+    CURVE.push({f,gea:Math.round(gea),poc:Math.round(poc*10)/10});
+  }
+}
+buildCurveData(); // initial
+
+function recalc(){
+  calcScenarios();
+  buildCurveData();
+  render();
+}
+
+// ── Slider handlers ────────────────────────────────────────────────────────
+function onSlider(key,v){
+  S[key]=v;
+  const fmt={
+    erv:`£${v}/m²`,niy:`${v}%`,
+    cost:`£${Number(v).toLocaleString()}/m²`,
+    s106:`£${v}k`,poc:`${v}%`
+  };
+  document.getElementById(`sv-${key}`).textContent=fmt[key];
+  document.getElementById('lbl-erv').textContent=S.erv;
+  document.getElementById('lbl-niy').textContent=S.niy;
+  document.getElementById('lbl-cost').textContent=Number(S.cost).toLocaleString();
+  recalc();
+}
+function resetAssump(){
+  S={...DEFS};
+  document.getElementById('sl-erv').value=DEFS.erv;
+  document.getElementById('sl-niy').value=DEFS.niy;
+  document.getElementById('sl-cost').value=DEFS.cost;
+  document.getElementById('sl-s106').value=DEFS.s106;
+  document.getElementById('sl-poc').value=DEFS.poc;
+  document.getElementById('sv-erv').textContent=`£${DEFS.erv}/m²`;
+  document.getElementById('sv-niy').textContent=`${DEFS.niy}%`;
+  document.getElementById('sv-cost').textContent=`£${DEFS.cost.toLocaleString()}/m²`;
+  document.getElementById('sv-s106').textContent=`£${DEFS.s106}k`;
+  document.getElementById('sv-poc').textContent=`${DEFS.poc}%`;
+  document.getElementById('lbl-erv').textContent=DEFS.erv;
+  document.getElementById('lbl-niy').textContent=DEFS.niy;
+  document.getElementById('lbl-cost').textContent=DEFS.cost.toLocaleString();
+  recalc();
+}
+function toggleAssump(el){
+  const b=document.getElementById('assump-body');
+  const c=el.querySelector('.assump-chev');
+  const open=b.style.display==='block';
+  b.style.display=open?'none':'block';
+  if(c)c.style.transform=open?'':'rotate(180deg)';
 }
 
 const C_ALWAYS=[
@@ -506,6 +616,8 @@ function render(){
       <tr class="total"><td>Total Development Cost</td><td>£${(s.tdc/1e6).toFixed(1)}M</td></tr>
       <tr><td style="padding-top:10px">GDV · ERV £${MARKET.erv[s.key]}/m² ÷ ${(MARKET.niy[s.key]*100).toFixed(2)}% NIY</td><td style="padding-top:10px;color:var(--lo)">£${(s.gdv/1e6).toFixed(1)}M</td></tr>
       <tr class="total highlight"><td>Developer Profit</td><td>£${(s.profit/1e6).toFixed(1)}M</td></tr>
+      <tr><td style="padding-top:10px;color:var(--t3)">Residual Land Value <span style="font-weight:400">(at ${S.poc}% target profit on cost)</span></td>
+          <td style="padding-top:10px;font-weight:700;color:${s.rlv>0?'var(--lo)':'#dc2626'}">${s.rlv>0?'':'−'}£${Math.abs(s.rlv/1e6).toFixed(1)}M</td></tr>
     </table>`;
 
   // Constraints
