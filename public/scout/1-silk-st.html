@@ -37,18 +37,18 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .opp-score-label{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;opacity:.65;margin-bottom:4px}
 .opp-score{font:900 44px var(--mono);letter-spacing:-2px;line-height:1}
 .opp-score-max{font:400 14px var(--mono);opacity:.5}
-.opp-score-badge{font:600 9px var(--sans);background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px;margin-top:5px;display:inline-block}
+.opp-score-badge{font:600 9px var(--sans);background:rgba(255,255,255,.15);padding:3px 10px;border-radius:0;margin-top:5px;display:inline-block}
 
 /* Heritage warning in hero */
-.hero-warn{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:8px;padding:11px 14px;margin-bottom:14px;font:400 11px/1.6 var(--sans);color:#fde68a}
+.hero-warn{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:0;padding:11px 14px;margin-bottom:14px;font:400 11px/1.6 var(--sans);color:#fde68a}
 .hero-warn strong{color:#fbbf24;font-weight:700}
 
-.uplift-bar-wrap{background:rgba(255,255,255,.08);border-radius:10px 10px 0 0;padding:18px 20px}
+.uplift-bar-wrap{background:rgba(255,255,255,.08);border-radius:0 10px 0 0;padding:18px 20px}
 .uplift-bar-label{display:flex;justify-content:space-between;font:500 9px var(--sans);opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
-.uplift-track{height:28px;background:rgba(255,255,255,.1);border-radius:6px;overflow:visible;position:relative;display:flex;align-items:center}
-.uplift-euv{height:100%;background:rgba(255,255,255,.3);border-radius:6px 0 0 6px;display:flex;align-items:center;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
+.uplift-track{height:28px;background:rgba(255,255,255,.1);border-radius:0;overflow:visible;position:relative;display:flex;align-items:center}
+.uplift-euv{height:100%;background:rgba(255,255,255,.3);border-radius:0 0 0 6px;display:flex;align-items:center;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
 .uplift-gdv-range{height:100%;background:linear-gradient(90deg,#a78bfa,#6366f1);border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:flex-end;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
-.uplift-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,.08);margin-top:12px;border-radius:6px;overflow:hidden}
+.uplift-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,.08);margin-top:12px;border-radius:0;overflow:hidden}
 .uplift-stat{padding:10px 12px}
 .uplift-stat .uval{font:800 18px var(--mono);letter-spacing:-.5px}
 .uplift-stat .ulbl{font:500 8px var(--sans);opacity:.6;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
@@ -58,7 +58,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .content{padding:20px 24px;display:flex;flex-direction:column;gap:18px}
 
 .tags-row{display:flex;gap:7px;flex-wrap:wrap;padding:14px 28px;background:#fff;border-bottom:1px solid var(--border)}
-.tag{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font:600 10px var(--sans);letter-spacing:.2px;border:1px solid}
+.tag{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:0;font:600 10px var(--sans);letter-spacing:.2px;border:1px solid}
 .tag.green{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
 .tag.amber{background:#fffbeb;color:#92400e;border-color:#fde68a}
 .tag.red{background:#fef2f2;color:#991b1b;border-color:#fecaca}
@@ -66,15 +66,15 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .tag.purple{background:#f5f3ff;color:#4338ca;border-color:#c4b5fd}
 .tag.grey{background:var(--surface);color:var(--text2);border-color:var(--border)}
 
-#scout-map{height:220px;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+#scout-map{height:220px;border-radius:0;overflow:hidden;border:1px solid var(--border)}
 
-.card{background:#fff;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.card{background:#fff;border:1px solid var(--border);border-radius:0;overflow:hidden}
 .card-head{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .card-head h3{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3)}
 .card-body{padding:14px 16px}
 
 /* Heritage block */
-.heritage-card{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;overflow:hidden}
+.heritage-card{background:#fffbeb;border:1px solid #fde68a;border-radius:0;overflow:hidden}
 .heritage-card .hc-head{padding:11px 16px;border-bottom:1px solid #fde68a;display:flex;align-items:center;gap:7px}
 .heritage-card .hc-head h3{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:#92400e}
 .heritage-card .hc-body{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
@@ -90,7 +90,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .val.green{color:var(--green)}.val.amber{color:var(--amber)}.val.red{color:var(--red)}.val.accent{color:var(--accent)}
 
 .signal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.signal{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center}
+.signal{background:var(--surface);border:1px solid var(--border);border-radius:0;padding:12px;text-align:center}
 .signal .sval{font:800 16px var(--mono);color:var(--text);letter-spacing:-.5px;margin-bottom:3px}
 .signal .slbl{font:500 8px var(--sans);color:var(--text3);text-transform:uppercase;letter-spacing:.8px;line-height:1.4}
 .signal .sdelta{font:600 9px var(--sans);margin-top:4px}
@@ -98,24 +98,24 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 .flag-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05)}
 .flag-row:last-child{border-bottom:none}
-.flag-icon{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.flag-icon{width:22px;height:22px;border-radius:0;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
 .flag-icon.warn{background:#fffbeb}.flag-icon.risk{background:#fef2f2}.flag-icon.info{background:#eff6ff}.flag-icon.ok{background:#f0fdf4}
 .flag-title{font:600 11px var(--sans);color:var(--text);margin-bottom:2px}
 .flag-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5}
 
 .hb-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .hb-label{font:500 10px var(--sans);color:var(--text2);width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hb-track{flex:1;height:13px;background:var(--surface2);border-radius:3px;overflow:hidden}
-.hb-fill{height:100%;border-radius:3px}
+.hb-track{flex:1;height:13px;background:var(--surface2);border-radius:0;overflow:hidden}
+.hb-fill{height:100%;border-radius:0}
 .hb-val{font:600 9px var(--mono);color:var(--text3);width:34px;text-align:right}
 
-.unlock-card{background:#fff;border:1.5px solid #c4b5fd;border-radius:10px;overflow:hidden}
+.unlock-card{background:#fff;border:1.5px solid #c4b5fd;border-radius:0;overflow:hidden}
 .unlock-head{background:linear-gradient(135deg,#f5f3ff,#ede9fe);padding:16px 18px;border-bottom:1px solid #c4b5fd}
 .unlock-head h3{font:700 15px var(--sans);letter-spacing:-.2px;margin-bottom:5px}
 .unlock-head p{font:400 11px var(--sans);color:#5b5299;line-height:1.6}
 .unlock-body{padding:16px 18px}
 .lock-blur{filter:blur(3px);font:700 13px var(--mono);color:var(--text)}
-.unlock-cta{display:block;margin-top:14px;padding:13px;background:var(--accent);color:#fff;text-align:center;border-radius:7px;font:700 13px var(--sans);text-decoration:none;transition:opacity .15s}
+.unlock-cta{display:block;margin-top:14px;padding:13px;background:var(--accent);color:#fff;text-align:center;border-radius:0;font:700 13px var(--sans);text-decoration:none;transition:opacity .15s}
 .unlock-cta:hover{opacity:.9}
 
 .side-head{padding:14px 18px;border-bottom:1px solid var(--border)}
@@ -124,11 +124,11 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .app-ref{font:600 9px var(--mono);color:var(--accent);margin-bottom:2px}
 .app-desc{font:400 10px var(--sans);color:var(--text2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .app-meta{font:400 9px var(--sans);color:var(--text3);margin-top:2px;display:flex;gap:6px;flex-wrap:wrap}
-.app-status{display:inline-block;padding:1px 6px;border-radius:3px;font:600 8px var(--sans)}
+.app-status{display:inline-block;padding:1px 6px;border-radius:0;font:600 8px var(--sans)}
 .app-status.approved{background:#f0fdf4;color:#166534}
 .app-status.refused{background:#fef2f2;color:#991b1b}
 .app-status.pending{background:#fffbeb;color:#92400e}
-.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:4px;height:14px}
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:0;height:14px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 @media(max-width:900px){
@@ -167,7 +167,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
   </div>
 
   <div class="hero-warn">
-    <strong>⚠️ NOT Eastern Cluster.</strong> Tall building policy support is not automatic here — every floor above the urban grain requires a positive case on heritage, design quality, and public benefit. The Barbican Estate (Grade II*, the largest single listed structure in the UK) is immediately adjacent. Historic England is a statutory consultee at every scenario height.
+    <strong>! NOT Eastern Cluster.</strong> Tall building policy support is not automatic here — every floor above the urban grain requires a positive case on heritage, design quality, and public benefit. The Barbican Estate (Grade II*, the largest single listed structure in the UK) is immediately adjacent. Historic England is a statutory consultee at every scenario height.
   </div>
 
   <div class="uplift-bar-wrap">
@@ -186,10 +186,10 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <!-- Tags — inside panel, after hero -->
 <div class="tags-row">
-  <div class="tag red">🏛️ NOT Eastern Cluster</div>
-  <div class="tag amber">⚠️ Heritage Impact Assessment mandatory</div>
+  <div class="tag red">️ NOT Eastern Cluster</div>
+  <div class="tag amber">! Heritage Impact Assessment mandatory</div>
   <div class="tag green">✓ PTAL 6a</div>
-  <div class="tag amber">⚠️ Barbican Estate Grade II* adjacent</div>
+  <div class="tag amber">! Barbican Estate Grade II* adjacent</div>
   <div class="tag purple">📋 GLA referral >30m</div>
   <div class="tag blue">🏢 Large City plot · 9,000 m²</div>
 </div>
@@ -213,7 +213,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
     <!-- Heritage flags — HARD CONSTRAINTS -->
     <div class="heritage-card">
-      <div class="hc-head"><span>🏛️</span><h3>Heritage Setting — Hard Constraints · All Scenarios</h3></div>
+      <div class="hc-head"><span>️</span><h3>Heritage Setting — Hard Constraints · All Scenarios</h3></div>
       <div class="hc-body">
         <div class="hc-item">
           <div class="hc-dot" style="background:#d97706"></div>
@@ -264,11 +264,11 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
     <div class="card">
       <div class="card-head"><h3>Planning Flags</h3></div>
       <div class="card-body">
-        <div class="flag-row"><div class="flag-icon risk">🏛️</div><div><div class="flag-title">NOT in Eastern Cluster — positive case required at every floor above urban grain</div><div class="flag-desc">City of London Local Plan designates this as Mid-City commercial area. Tall building policy (CS10/CS15) supports height where it can be justified — but doesn't grant it automatically as in the Eastern Cluster. Each scenario requires its own planning justification.</div></div></div>
-        <div class="flag-row"><div class="flag-icon risk">⚠️</div><div><div class="flag-title">Heritage Impact Assessment — non-negotiable, all scenarios</div><div class="flag-desc">NPPF §199–208. Barbican Estate Grade II* is the primary constraint. "Less than substantial harm" requires public benefit outweighing. "Substantial harm" is a near-certain refusal. HIA from a qualified heritage consultant is required before any massing is fixed.</div></div></div>
+        <div class="flag-row"><div class="flag-icon risk">️</div><div><div class="flag-title">NOT in Eastern Cluster — positive case required at every floor above urban grain</div><div class="flag-desc">City of London Local Plan designates this as Mid-City commercial area. Tall building policy (CS10/CS15) supports height where it can be justified — but doesn't grant it automatically as in the Eastern Cluster. Each scenario requires its own planning justification.</div></div></div>
+        <div class="flag-row"><div class="flag-icon risk">!</div><div><div class="flag-title">Heritage Impact Assessment — non-negotiable, all scenarios</div><div class="flag-desc">NPPF §199–208. Barbican Estate Grade II* is the primary constraint. "Less than substantial harm" requires public benefit outweighing. "Substantial harm" is a near-certain refusal. HIA from a qualified heritage consultant is required before any massing is fixed.</div></div></div>
         <div class="flag-row"><div class="flag-icon warn">📋</div><div><div class="flag-title">Retrofit futility case must be made and evidenced</div><div class="flag-desc">City planners will ask why demolition is justified. EPC non-compliance (2030 minimum EPC B target for commercial lets) and structural obsolescence are the arguments — but they must be evidenced in an Energy and Sustainability Assessment, not assumed.</div></div></div>
         <div class="flag-row"><div class="flag-icon warn">💡</div><div><div class="flag-title">Public benefit and cultural contribution — planning asset if used well</div><div class="flag-desc">At this scale and location, adjacent to the Barbican Arts Centre, the relationship between new development and the cultural offer is a material planning consideration. Active ground floor uses, public realm, and affordable workspace (Policy E1/E2) are expected contributions, not optional extras.</div></div></div>
-        <div class="flag-row"><div class="flag-icon info">📐</div><div><div class="flag-title">BSA 2022 — registered building above 18m, Higher Risk above 50m</div><div class="flag-desc">All three scenarios exceed 18m. Above 50m: mandatory 2nd staircase, simultaneous evacuation, Gateway 1/2/3 process, Building Assessment Certificate. The 50m threshold is a hard cost and NIA inflection point.</div></div></div>
+        <div class="flag-row"><div class="flag-icon info"></div><div><div class="flag-title">BSA 2022 — registered building above 18m, Higher Risk above 50m</div><div class="flag-desc">All three scenarios exceed 18m. Above 50m: mandatory 2nd staircase, simultaneous evacuation, Gateway 1/2/3 process, Building Assessment Certificate. The 50m threshold is a hard cost and NIA inflection point.</div></div></div>
         <div class="flag-row"><div class="flag-icon info">🌐</div><div><div class="flag-title">GLA referral — Stage 1 & 2 Mayor direction above 30m</div><div class="flag-desc">All scenarios above 30m require GLA referral. Heritage arguments will be tested at both stages. Historic England typically makes representations on tall building proposals adjacent to Grade II* assets.</div></div></div>
       </div>
     </div>
@@ -280,7 +280,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
         <p id="teaser-hook">On this site, the question isn't just financial — it's architectural. Which height actually wins planning, delivers the return, and earns its place next to one of London's most protected estates?</p>
       </div>
       <div class="unlock-body">
-        <div style="position:relative;border-radius:6px;overflow:hidden;border:1px solid #c4b5fd;margin-bottom:14px">
+        <div style="position:relative;border-radius:0;overflow:hidden;border:1px solid #c4b5fd;margin-bottom:14px">
           <svg id="teaser-curve" viewBox="0 0 280 80" style="width:100%;display:block;filter:blur(2.5px);opacity:.55"></svg>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
             <div style="font:700 11px var(--sans);color:#312e81">Return curve — locked</div>
@@ -288,11 +288,11 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-          <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:6px;padding:10px">
+          <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:0;padding:10px">
             <div style="font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:#5b5299;margin-bottom:4px">What T1 tells you</div>
             <div style="font:400 10px var(--sans);color:var(--text2);line-height:1.5">The site has potential. Heritage is the primary constraint. 21 Moorfields is the ceiling to argue from.</div>
           </div>
-          <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #a78bfa;border-radius:6px;padding:10px">
+          <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #a78bfa;border-radius:0;padding:10px">
             <div style="font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:#4338ca;margin-bottom:4px">What T2 tells you</div>
             <div style="font:400 10px var(--sans);color:#3730a3;line-height:1.5">Exactly which height maximises return — and whether the heritage fight at 18F is worth the margin you'll make back.</div>
           </div>

@@ -26,11 +26,11 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .logo{font:800 15px var(--sans);color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.4);letter-spacing:-.3px}
 .logo span{opacity:.7;font-weight:500}
 
-.scenario-pills{position:fixed;top:14px;left:50%;transform:translateX(calc(-100% - 14px));z-index:10;display:flex;gap:4px;background:rgba(255,255,255,.95);border-radius:12px;padding:4px;box-shadow:0 4px 20px rgba(0,0,0,.12);backdrop-filter:blur(8px)}
-.pill{padding:10px 18px;border:none;border-radius:9px;font:600 13px var(--sans);cursor:pointer;background:transparent;color:var(--t3);transition:all .2s;line-height:1}
+.scenario-pills{position:fixed;top:14px;left:50%;transform:translateX(calc(-100% - 14px));z-index:10;display:flex;gap:0;background:rgba(255,255,255,.97);border:1px solid var(--border);padding:0;backdrop-filter:blur(8px)}
+.pill{padding:10px 18px;border:none;border-right:1px solid var(--border);font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;background:transparent;color:var(--t3);transition:all .15s;line-height:1}.pill:last-child{border-right:none}
 .pill .pf{display:block;font:400 10px var(--sans);margin-top:2px;opacity:.6}
 .pill:hover{background:var(--s1)}
-.pill.active{color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.pill.active{color:#fff;box-shadow:none}
 .pill.lo.active{background:var(--lo)}.pill.base.active{background:var(--base)}.pill.hi.active{background:var(--hi)}
 
 /* ── Tier nav (sticky) ──────────────────────────────────────────── */
@@ -70,63 +70,65 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 /* ── Section containers ─────────────────────────────────────────── */
 .section{padding:24px 28px;border-bottom:1px solid var(--border)}
 .section:last-child{border-bottom:none}
-.sec-head{font:700 11px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t3);margin-bottom:16px}
-.sec-desc{font:400 12px/1.7 var(--sans);color:var(--t2);margin-top:10px;max-width:560px}
+.sec-head{font:600 9px var(--sans);text-transform:uppercase;letter-spacing:3px;color:var(--t3);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.sec-desc{font:400 12px/1.7 var(--sans);color:var(--t2);margin-top:12px;max-width:560px}
 
 /* ── Charts side by side ────────────────────────────────────────── */
-.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.chart-box{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:16px}
-.chart-title{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:10px}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.chart-box{background:var(--bg);padding:16px}
+.chart-title{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t3);margin-bottom:12px}
 
 /* ── Metric rows ────────────────────────────────────────────────── */
-.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.m-card{background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:14px 16px}
-.m-val{font:700 20px var(--mono);letter-spacing:-.5px;margin-bottom:2px}
-.m-lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--t3)}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.m-card{background:var(--bg);padding:16px 18px}
+.m-val{font:700 20px var(--mono);letter-spacing:-.5px;margin-bottom:4px}
+.m-lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--t3)}
 
 /* ── Pro forma table ────────────────────────────────────────────── */
 .pf-table{width:100%;border-collapse:collapse}
-.pf-table td{padding:8px 0;border-bottom:1px solid var(--border);font:400 12px var(--sans);color:var(--t2);vertical-align:top}
+.pf-table td{padding:9px 0;border-bottom:1px solid var(--border);font:400 12px var(--sans);color:var(--t2);vertical-align:top}
 .pf-table td:last-child{text-align:right;font-family:var(--mono);font-weight:600;color:var(--text);font-size:13px;white-space:nowrap}
-.pf-table tr.total td{border-top:2px solid var(--text);border-bottom:none;padding-top:10px;font-weight:800;font-size:13px}
+.pf-table tr.total td{border-top:2px solid var(--text);border-bottom:none;padding-top:12px;font-weight:800;font-size:13px}
 .pf-table tr.total td:last-child{font-size:15px}
 .pf-table tr.highlight td{color:var(--lo);font-weight:600}
 .pf-table tr.highlight td:last-child{color:var(--lo);font-size:15px;font-weight:800}
 
 /* ── Narrative ──────────────────────────────────────────────────── */
-.narrative{font:400 13px/1.8 var(--sans);color:var(--t2);margin-top:6px}
+.narrative{font:400 13px/1.9 var(--sans);color:var(--t2);margin-top:8px}
 .narrative strong{color:var(--text);font-weight:700}
 
 /* ── Constraint timeline ────────────────────────────────────────── */
-.ct-group{margin-bottom:14px}
-.ct-head{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.5px;padding:6px 0;border-bottom:1px solid var(--border);margin-bottom:6px}
+.ct-group{margin-bottom:16px}
+.ct-head{font:600 9px var(--sans);text-transform:uppercase;letter-spacing:2px;padding:6px 0;border-bottom:1px solid var(--border);margin-bottom:8px}
 .ct-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;transition:opacity .2s}
-.ct-item.dim{opacity:.22}
-.ct-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.ct-item.dim{opacity:.2}
+.ct-dot{width:6px;height:6px;border-radius:50%;margin-top:5px;flex-shrink:0}
 .ct-text{font:400 12px/1.5 var(--sans);color:var(--t2)}
-.ct-sub{font:400 10px var(--sans);color:var(--t3);margin-top:1px}
+.ct-sub{font:400 10px var(--sans);color:var(--t3);margin-top:2px}
 
 /* ── Design intelligence cards ──────────────────────────────────── */
-.intel-divider{padding:28px 28px 12px;border-bottom:1px solid var(--border)}
-.intel-divider h2{font:800 16px var(--sans);letter-spacing:-.3px;margin-bottom:4px}
+.intel-divider{padding:32px 28px 16px;border-bottom:1px solid var(--border)}
+.intel-divider h2{font:800 14px var(--sans);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
 .intel-divider p{font:400 12px var(--sans);color:var(--t3)}
-.intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:0 28px 28px;margin-top:16px}
-.intel-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:box-shadow .2s}
-.intel-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);padding:1px 28px 28px;margin-top:0}
+.intel-card{background:var(--bg);overflow:hidden}
+.intel-card:hover{background:var(--s1)}
 .intel-card.full{grid-column:1/-1}
-.ic-head{padding:14px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.ic-icon{font-size:16px}
-.ic-title{font:700 12px var(--sans);letter-spacing:-.2px}
-.ic-body{padding:14px 16px}
-.ic-body p{font:400 12px/1.7 var(--sans);color:var(--t2);margin-bottom:8px}
+.ic-head{padding:12px 16px 11px;border-bottom:1px solid var(--border);background:var(--text);display:flex;align-items:center;gap:8px}
+.ic-icon{display:none}
+.ic-cat{font:700 8px var(--sans);text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,.5);flex-shrink:0}
+.ic-title{font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.5px;color:#fff}
+.ic-body{padding:16px}
+.ic-body p{font:400 12px/1.75 var(--sans);color:var(--t2);margin-bottom:8px}
 .ic-body p:last-child{margin-bottom:0}
-.ic-callout{background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:10px 12px;margin-top:10px}
-.ic-callout p{font:500 11px/1.6 var(--sans);color:#92400e;margin:0}
+.ic-callout{background:var(--s2);border-left:2px solid var(--text);padding:10px 12px;margin-top:12px}
+.ic-callout p{font:500 11px/1.6 var(--sans);color:var(--t2);margin:0}
 /* ── Assumption sliders ── */
-.assump-panel{border:1px solid var(--border);border-radius:8px;margin:0 20px 16px;overflow:hidden}
-.assump-head{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;background:var(--surface);user-select:none}
-.assump-head:hover{background:#f5f6fa}
-.assump-title{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--t2);flex-shrink:0}
+.assump-panel{border:1px solid var(--border);margin:0 20px 16px;overflow:hidden}
+.assump-head{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;background:var(--s1);user-select:none;border-bottom:1px solid transparent}
+.assump-head:hover{background:var(--s2)}
+.assump-panel.open .assump-head{border-bottom-color:var(--border)}
+.assump-title{font:600 9px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t2);flex-shrink:0}
 .assump-summary{font:400 11px var(--mono);color:var(--t3);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .assump-chev{font:10px sans-serif;color:var(--t3);flex-shrink:0;transition:transform .2s}
 .assump-body{padding:14px;border-top:1px solid var(--border);display:none}
@@ -179,7 +181,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
   <!-- Heritage flags — hard constraints, site-specific, ALL scenarios -->
   <div style="background:#fffbeb;border-bottom:2px solid #f59e0b;padding:14px 28px">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <span style="font-size:16px">🏛️</span>
+      
       <span style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:#92400e">Heritage Setting — Hard Constraint · All Scenarios</span>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
@@ -200,7 +202,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
       </div>
     </div>
     <div style="margin-top:8px;font:400 11px var(--sans);color:#92400e;line-height:1.6">
-      ⚠️ A Heritage Impact Assessment is required at pre-application stage for all three scenarios. Historic England has grounds to object at any height if the scheme is found to cause harm to the setting of these assets — irrespective of Eastern Cluster designation.
+      A Heritage Impact Assessment is required at pre-application stage for all three scenarios. Historic England has grounds to object at any height if the scheme is found to cause harm to the setting of these assets — irrespective of Eastern Cluster designation.
     </div>
   </div>
 
@@ -210,7 +212,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
   <!-- ── Assumption sliders ── -->
   <div class="assump-panel">
     <div class="assump-head" onclick="toggleAssump(this)">
-      <span class="assump-title">⚙ Assumptions</span>
+      <span class="assump-title">Assumptions</span>
       <span class="assump-summary">ERV £<span id="lbl-erv">800</span>/m² · Yield <span id="lbl-niy">5.25</span>% · Cost £<span id="lbl-cost">5,000</span>/m²</span>
       <span class="assump-chev">▼</span>
     </div>
@@ -283,20 +285,20 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
   <div class="intel-grid">
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-icon">🏗️</span><span class="ic-title">Core Arrangement & Sizing</span></div>
+      <div class="ic-head"><span class="ic-cat">Structure</span><span class="ic-title">Core Arrangement</span></div>
       <div class="ic-body">
         <p>The core — lifts, stairs, risers, WCs — is the single largest non-lettable element. At low-rise (≤10F), a compact core with a single staircase and 2 lifts occupies ~18% of the plate. By 14F you need 4–6 lifts and CIBSE Guide D round-trip targets start biting. At 22F, a sky lobby at L12 with 8 lifts, 2 firefighter lifts, and 2 staircases pushes core to 25%+ of plate.</p>
         <p>On this site, the core is positioned <strong>NE</strong> to protect south and west lease spans — the premium faces. Every m² of core is a m² you can't let. At £800/m² ERV on a 5.25% yield, each extra m² of core costs <strong>~£15,200 in capital value</strong>.</p>
-        <div class="ic-callout"><p>📐 On this site: core grows from ~280m² (Low) to ~430m² (High) — a 150m² increase that erases ~£2.3M in GDV before you've added a single constraint.</p></div>
+        <div class="ic-callout"><p>On this site: core grows from ~280m² (Low) to ~430m² (High) — a 150m² increase that erases ~£2.3M in GDV before you've added a single constraint.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-icon">☀️</span><span class="ic-title">Rights of Light & BRE 209</span></div>
+      <div class="ic-head"><span class="ic-cat">Daylight</span><span class="ic-title">Rights of Light</span></div>
       <div class="ic-body">
         <p>Rights of light in England are a legal right (Prescription Act 1832) — not just a planning matter. An affected neighbour can seek an injunction to demolish if their light is materially reduced. BRE 209 assesses three metrics: <strong>Vertical Sky Component</strong> (target: 27%), <strong>Average Daylight Factor</strong>, and <strong>Annual Probable Sunlight Hours</strong>.</p>
         <p>At 10F this site has minimal impact — the street canyon is already established. At 14F, east-facing residential on Lime Street starts to be affected. At 22F, a <strong>full BRE assessment is mandatory</strong> and compensation under rights of light negotiation is likely — budget £500K–£1.5M depending on the number of affected windows.</p>
-        <div class="ic-callout"><p>☀️ Critical receptors: residential windows on Lime Street (E), and the Leadenhall Market roof glazing (S). Both constrain the south and east massing.</p></div>
+        <div class="ic-callout"><p>Critical receptors: residential windows on Lime Street (E), and the Leadenhall Market roof glazing (S). Both constrain the south and east massing.</p></div>
       </div>
     </div>
 
@@ -328,20 +330,20 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-icon">🌬️</span><span class="ic-title">Wind Microclimate</span></div>
+      <div class="ic-head"><span class="ic-cat">Environment</span><span class="ic-title">Wind Microclimate</span></div>
       <div class="ic-body">
         <p>Tall buildings create downdraught (Venturi effect) and corner acceleration. CIBSE AM14 defines comfort criteria for pedestrians: sitting, standing, walking. Above ~60m, a wind microclimate study is expected by City planners — above 80m it's mandatory.</p>
         <p>This site sits <strong>200m south of 22 Bishopsgate</strong> (278m). The prevailing SW wind creates a pressure differential on the east face. At 22F, mitigation is likely required: podium canopies, corner chamfers, tree planting in the public realm. Budget £200K–£400K for the study and mitigation design.</p>
-        <div class="ic-callout"><p>🌬️ The Low scenario avoids this entirely. Base triggers a desktop assessment. High requires a full boundary-layer wind tunnel or CFD study — 10–14 week programme.</p></div>
+        <div class="ic-callout"><p>The Low scenario avoids this entirely. Base triggers a desktop assessment. High requires a full boundary-layer wind tunnel or CFD study — 10–14 week programme.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-icon">🏛️</span><span class="ic-title">Structural Systems & Lease Spans</span></div>
+      <div class="ic-head"><span class="ic-cat">Structure</span><span class="ic-title">Structural Systems</span></div>
       <div class="ic-body">
         <p>Minimum 7m clear lease span on at least 2 faces of core to facade — the threshold for Grade A lettability. Below this, floor plates feel constrained and rents discount. Above 10m, column-free spans require transfer beams that push floor-to-floor height, increasing total building height without adding floors.</p>
         <p>At 10F (Low): simple RC flat slab, 250mm slab, 4.2m F-F height, comfortable 11m clear spans south and west. At 22F (High): the core expands, the tower footprint shrinks to 40% coverage — <strong>clear spans compress to ~7m</strong>, which is the minimum. Any further height and the plate starts failing the lease span test.</p>
-        <div class="ic-callout"><p>🏛️ The structural grid also influences facade design. Column spacing at 7.5m centres means the facade module is fixed — structural moves cascade into architectural expression.</p></div>
+        <div class="ic-callout"><p>The structural grid also influences facade design. Column spacing at 7.5m centres means the facade module is fixed — structural moves cascade into architectural expression.</p></div>
       </div>
     </div>
 
@@ -364,18 +366,18 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     </div>
 
     <div class="intel-card full" style="border:1px solid #fde68a;background:#fffdf5">
-      <div class="ic-head" style="background:#fffbeb;border-bottom:1px solid #fde68a"><span class="ic-icon">🏛️</span><span class="ic-title" style="color:#92400e">Heritage Impact — Setting of Listed Buildings & WHS</span></div>
+      <div class="ic-head" style="background:#fffbeb;border-bottom:1px solid #fde68a"><span class="ic-cat" style="color:rgba(255,255,255,.6)">Heritage</span><span class="ic-title">Setting of Listed Buildings &amp; WHS</span></div>
       <div class="ic-body">
         <p>Heritage impact operates under <strong>NPPF §§199–208</strong> and is separate from — and often more powerful than — planning policy. A finding of harm to the setting of a Grade I or Grade II* listed building is a statutory bar to approval unless demonstrably outweighed by public benefit. "Setting" extends well beyond the site boundary — it includes any land from which the heritage asset can be seen and experienced.</p>
         <p>On this site, three assets create overlapping setting zones: <strong>Lloyd's Building (Grade I)</strong> to the immediate east, <strong>Leadenhall Market (Grade II*)</strong> to the immediate south, and the <strong>Tower of London World Heritage Site</strong> 600m SE. The WHS carries additional weight — Historic England's <em>Setting of Heritage Assets</em> guidance (Historic England Advice Note 3) applies, and the Mayor of London's <em>London WHS Settings SPG</em> requires a separate Outstanding Universal Value assessment.</p>
         <p>The Liverpool Street precedent is instructive: multiple commercial tower proposals adjacent to the Grade I listed station were materially changed or refused on heritage setting grounds, despite being within designated tall building zones. Eastern Cluster designation does not override heritage harm findings — it simply establishes planning policy support for tall buildings in principle. A scheme that harms the setting of Lloyd's Building or Leadenhall Market can still be refused even within the Cluster boundary.</p>
         <p><strong>What this means in practice:</strong> A Heritage Impact Assessment (HIA) must be prepared by a qualified heritage consultant from RIBA Stage 2 onwards. The HIA must assess harm using the standard test: is there harm, what level of harm (less than substantial / substantial), and is it outweighed by public benefit? Historic England will be a statutory consultee at all three scenario heights. A scheme design that actively responds to the heritage context — orientation, materiality, visual relationship with Lloyd's and the Market — will perform significantly better in assessment than one that treats heritage as a planning hurdle.</p>
-        <div class="ic-callout" style="background:#fffbeb;border-color:#fde68a"><p>🏛️ On this site: the south and east faces are heritage-constrained at every scenario height. The massing setbacks shown (south face recedes at all scenarios, east steps back at Base and High) are the minimum response. A pre-app heritage scoping meeting with Historic England before any massing is fixed is strongly recommended.</p></div>
+        <div class="ic-callout" style="background:#fffbeb;border-color:#fde68a"><p>On this site: the south and east faces are heritage-constrained at every scenario height. The massing setbacks shown (south face recedes at all scenarios, east steps back at Base and High) are the minimum response. A pre-app heritage scoping meeting with Historic England before any massing is fixed is strongly recommended.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-icon">📐</span><span class="ic-title">Massing Setback Logic</span></div>
+      <div class="ic-head"><span class="ic-cat">Massing</span><span class="ic-title">Setback Logic</span></div>
       <div class="ic-body">
         <p>Setbacks on tall buildings serve multiple purposes simultaneously: planning context (responding to neighbouring buildings and conservation areas), daylight compliance, LVMF sightline management, wind mitigation, and structural expression.</p>
         <p>On this site, the <strong>primary setback faces south</strong> — responding to Leadenhall Market (Grade II* listed, 1881) whose north-facing glazed roof is the critical receptor. A secondary setback to the east reduces daylight impact on Lime Street residential. The north face holds — facing the existing Cluster where context buildings are taller. West face holds — no sensitive receptor identified.</p>
