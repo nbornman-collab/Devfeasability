@@ -324,18 +324,24 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 </div><!-- end .panel -->
 
 <script>
-const LAT=51.52034, LNG=-0.09234;
-const PLOT_AREA=9000;
+// Centroid updated: midpoint of traced site boundary
+// West = Silk St diagonal (~-0.0931), East = Milton St (~-0.0908)
+// North = Chiswell St (~51.5209), South = Silk St E-W (~51.5193)
+// Notch cut from NE corner (upper right) — L-shaped east elevation
+const LAT=51.52010, LNG=-0.09195;
+const PLOT_AREA=17500; // full campus ~17-20k sqm (Milton House + Shire House + curtilage)
 const EXISTING_EUV=95000000;
 
-// Corrected polygon — centroid confirmed at -0.09234, 51.52034 (OSM Nominatim)
+// Site polygon — traced from planning map + image analysis
+// Clockwise from NW, L-shaped with notch cut from NE corner
 const SITE_COORDS=[
-  [-0.09295, 51.52082],
-  [-0.09168, 51.52080],
-  [-0.09162, 51.51988],
-  [-0.09230, 51.51982],
-  [-0.09290, 51.51985],
-  [-0.09295, 51.52082]
+  [-0.09315, 51.52090],  // NW — Chiswell St / Silk St diagonal
+  [-0.09075, 51.52090],  // N boundary east — top before notch
+  [-0.09075, 51.52005],  // Notch step south (NE outer)
+  [-0.09190, 51.52005],  // Notch step west (NE inner)
+  [-0.09190, 51.51930],  // Notch continues south to SE
+  [-0.09315, 51.51930],  // SW corner — Silk St E-W
+  [-0.09315, 51.52090]   // Close — back to NW
 ];
 
 const GDV_OPTS=[
@@ -437,7 +443,7 @@ async function fetchApps(){
 async function init(){
   const cfg=await(await fetch('/api/config')).json();
   mapboxgl.accessToken=cfg.mapboxToken;
-  const map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:16,pitch:50,bearing:5,antialias:true});
+  const map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:15.5,pitch:50,bearing:10,antialias:true});
   map.addControl(new mapboxgl.NavigationControl(),'top-right');
   map.on('style.load',()=>{
     // ── Move 1: Mapbox 3D building extrusions (context) ──
