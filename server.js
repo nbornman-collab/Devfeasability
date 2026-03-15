@@ -574,6 +574,18 @@ app.get('/api/os-buildings', async (req, res) => {
         f.properties._dist = Math.sqrt(dLon*dLon + dLat*dLat);
         // Does this building contain the query point?
         f.properties._contains = pip(qLng, qLat, ring);
+        // Pass through OS height fields for 3D extrusion
+        // RelativeHeightMaximum = height above ground (metres)
+        // RelativeHeightMinimum = base above ground (0 for ground-level, >0 for elevated)
+        const p = f.properties;
+        f.properties._heightMax = p.RelativeHeightMaximum || p.relativeheightmaximum || p.heightMax || null;
+        f.properties._heightMin = p.RelativeHeightMinimum || p.relativeheightminimum || p.heightMin || 0;
+        // Estimated existing floors and GIA
+        if (f.properties._heightMax && f.properties._area) {
+          const floors = Math.round(f.properties._heightMax / 3.5);
+          f.properties._estFloors = floors;
+          f.properties._estGIA = Math.round(f.properties._area * floors);
+        }
       }
     });
 
@@ -594,6 +606,49 @@ app.get('/api/os-buildings', async (req, res) => {
     }
 
     res.json(fc);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── EPC API — floor area for any UK building (commercial + residential) ──
+// Requires EPC_EMAIL + EPC_API_KEY from epc.opendatacommunities.org (free)
+const EPC_EMAIL = process.env.EPC_EMAIL || '';
+const EPC_API_KEY = process.env.EPC_API_KEY || '';
+
+app.get('/api/epc', async (req, res) => {
+  const { address, postcode, uprn, type } = req.query;
+  if (!EPC_EMAIL || !EPC_API_KEY) return res.status(503).json({ error: 'EPC credentials not configured', hint: 'Set EPC_EMAIL and EPC_API_KEY' });
+
+  const auth = Buffer.from(`${EPC_EMAIL}:${EPC_API_KEY}`).toString('base64');
+  const endpoint = (type === 'domestic') ? 'domestic' : 'non-domestic';
+  let query = '';
+  if (uprn) query = `uprn=${uprn}`;
+  else if (postcode) query = `postcode=${encodeURIComponent(postcode)}&size=5`;
+  else if (address) query = `address=${encodeURIComponent(address)}&size=5`;
+  else return res.status(400).json({ error: 'address, postcode or uprn required' });
+
+  try {
+    const url = `https://epc.opendatacommunities.org/api/v1/${endpoint}/search?${query}`;
+    const r = await fetch(url, {
+      headers: { 'Authorization': `Basic ${auth}`, 'Accept': 'application/json', 'User-Agent': 'devfeasibility/1.0' },
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!r.ok) return res.status(r.status).json({ error: `EPC API ${r.status}` });
+    const data = await r.json();
+    // Return the most recent certificate (first result) with key fields
+    const rows = data.rows || [];
+    const results = rows.slice(0, 3).map(row => ({
+      address: row['address'],
+      postcode: row['postcode'],
+      uprn: row['uprn'],
+      floorArea: parseFloat(row['total-floor-area'] || row['floor-area'] || 0),
+      epcRating: row['current-energy-rating'],
+      lodgementDate: row['lodgement-date'],
+      propertyType: row['property-type'] || row['building-reference-number'],
+      floorAreaUnit: 'm²'
+    }));
+    res.json({ results, count: results.length });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
