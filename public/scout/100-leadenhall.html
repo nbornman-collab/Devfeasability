@@ -15,7 +15,9 @@
   --accent:#4f46e5;--green:#059669;--red:#dc2626;--amber:#d97706;
   --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
-html,body{min-height:100%;font-family:var(--sans);background:var(--surface);color:var(--text)}
+html,body{height:100%;font-family:var(--sans);background:var(--surface);color:var(--text);overflow:hidden}
+#map{position:fixed;top:0;left:0;width:50%;height:100%;z-index:1}
+.panel{position:fixed;top:0;right:0;width:50%;height:100%;overflow-y:auto;overflow-x:hidden;background:var(--surface);z-index:5}
 
 /* ── Tier nav ── */
 .tier-nav{display:flex;align-items:center;background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 24px}
@@ -51,10 +53,8 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
 .uplift-stat .uval.green{color:#34d399}
 .uplift-stat .uval.amber{color:#fbbf24}
 
-/* ── Layout ── */
-.body-grid{display:grid;grid-template-columns:1fr 340px;gap:0}
-.main-col{padding:24px 28px;display:flex;flex-direction:column;gap:20px}
-.side-col{background:white;border-left:1px solid var(--border);display:flex;flex-direction:column;min-height:600px}
+/* ── Content layout ── */
+.content{padding:20px 24px;display:flex;flex-direction:column;gap:18px}
 
 /* ── Tags ── */
 .tags-row{display:flex;gap:7px;flex-wrap:wrap;padding:14px 28px;background:white;border-bottom:1px solid var(--border)}
@@ -142,16 +142,16 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
 .skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:4px;height:14px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-@media(max-width:860px){
-  .body-grid{grid-template-columns:1fr}
-  .side-col{border-left:none;border-top:1px solid var(--border)}
-  .opp-hero{padding:20px 18px 0}
-  .main-col{padding:18px}
+@media(max-width:900px){
+  #map{width:100%;height:45%;position:fixed;top:0}
+  .panel{width:100%;height:55%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border)}
   .signal-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
+<div id="map"></div>
+<div class="panel">
 
 <!-- Tier nav -->
 <nav class="tier-nav">
@@ -221,13 +221,7 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
   <span class="tag grey" id="tag-heritage">Loading heritage…</span>
 </div>
 
-<div class="body-grid">
-
-  <!-- Main column -->
-  <div class="main-col">
-
-    <!-- Map -->
-    <div id="scout-map"></div>
+<div class="content">
 
     <!-- Market signals -->
     <div class="card">
@@ -363,23 +357,22 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--surface);colo
       </div>
     </div>
 
-  </div>
-
-  <!-- Side column — planning applications -->
-  <div class="side-col">
-    <div class="side-head">
-      <h2>Recent Planning Applications <span id="apps-count" style="font-weight:400;color:var(--text2)">within 300m</span></h2>
-    </div>
-    <div id="apps-list" style="flex:1;overflow-y:auto">
-      <div style="padding:20px;display:flex;flex-direction:column;gap:10px">
-        <div class="skeleton" style="width:80%"></div>
-        <div class="skeleton" style="width:60%"></div>
-        <div class="skeleton" style="width:75%"></div>
+    <!-- Planning applications (inline) -->
+    <div class="card">
+      <div class="card-head">
+        <h3>Recent Planning Applications <span id="apps-count" style="font-weight:400;color:var(--text3)">within 300m</span></h3>
+      </div>
+      <div id="apps-list">
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+          <div class="skeleton" style="width:80%"></div>
+          <div class="skeleton" style="width:60%"></div>
+          <div class="skeleton" style="width:75%"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
+</div><!-- end .content -->
+</div><!-- end .panel -->
 
 <script>
 const LAT = 51.5137673, LNG = -0.0801551;
@@ -460,8 +453,8 @@ const SITE_POLYGON=[[-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken=cfg.mapboxToken;
   const map=new mapboxgl.Map({
-    container:'scout-map',style:'mapbox://styles/mapbox/light-v11',
-    center:[LNG,LAT],zoom:16.2,interactive:true,attributionControl:false
+    container:'map',style:'mapbox://styles/mapbox/light-v11',
+    center:[LNG,LAT],zoom:16.2,pitch:45,bearing:5,interactive:true,attributionControl:false,antialias:true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
   map.on('load',()=>{
