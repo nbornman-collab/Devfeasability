@@ -392,33 +392,7 @@ app.get('/api/borough', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// EPC data from Open Data Communities
-app.get('/api/epc', async (req, res) => {
-  try {
-    const { postcode, address } = req.query;
-    if (!postcode && !address) return res.json({ certificates: [] });
-    // EPC API uses basic auth with empty username + API key, but open data endpoint is free
-    const params = new URLSearchParams({ size: '5' });
-    if (postcode) params.set('postcode', postcode.trim());
-    if (address) params.set('address', address.trim());
-    const url = `https://epc.opendatacommunities.org/api/v1/domestic/search?${params}`;
-    const r = await fetch(url, {
-      headers: { 'Accept': 'application/json', 'Authorization': 'Basic ' + Buffer.from('nbornman@gmail.com:e4446e7e0ddf7114800f23b27dbbd5e7ea7f0203').toString('base64') }
-    });
-    if (!r.ok) {
-      // Try non-domestic (commercial)
-      const url2 = `https://epc.opendatacommunities.org/api/v1/non-domestic/search?${params}`;
-      const r2 = await fetch(url2, {
-        headers: { 'Accept': 'application/json', 'Authorization': 'Basic ' + Buffer.from('nbornman@gmail.com:e4446e7e0ddf7114800f23b27dbbd5e7ea7f0203').toString('base64') }
-      });
-      if (!r2.ok) return res.json({ certificates: [] });
-      const data2 = await r2.json();
-      return res.json({ certificates: data2.rows || [], type: 'non-domestic' });
-    }
-    const data = await r.json();
-    res.json({ certificates: data.rows || [], type: 'domestic' });
-  } catch (e) { res.status(500).json({ error: e.message, certificates: [] }); }
-});
+// (old EPC handler removed — replaced by /api/epc below with correct credentials)
 
 // ── OS Places API — address → UPRN + precise inside-building point ──
 // This is the foundation for reliable polygon fetching at any UK address
