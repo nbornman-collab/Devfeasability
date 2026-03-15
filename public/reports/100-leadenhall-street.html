@@ -126,7 +126,20 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
 .policy-list li{padding:6px 0;border-bottom:1px solid #f3f4f6;font:400 10px var(--sans);color:var(--text2);display:flex;align-items:flex-start;gap:8px}
 .policy-list li::before{content:'→';color:var(--accent);font-weight:700;flex-shrink:0}
 
-@media print{body{background:white}.page{box-shadow:none;margin:0}.no-print{display:none!important}}
+@media print{
+  @page{size:A4 portrait;margin:0}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:white;padding:0;margin:0}
+  .page{box-shadow:none;margin:0;border-radius:0;width:210mm;min-height:297mm;
+    page-break-after:always;page-break-inside:avoid;break-after:page}
+  .page:last-child{page-break-after:auto;break-after:auto}
+  .no-print{display:none!important}
+  svg{overflow:visible}
+  /* Prevent SVGs from being cut mid-render */
+  .drawing-wrap{page-break-inside:avoid;break-inside:avoid}
+  /* Ensure background colours print */
+  .cover,.cover-top,.cover-bottom{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 @media screen{body{background:#cbd5e1;padding:20px}.page{margin:0 auto 20px;box-shadow:0 4px 30px rgba(0,0,0,.15);border-radius:4px}}
 /* Drawings page */
 .drawing-wrap{position:relative;border-radius:6px;overflow:hidden;background:#f0f1f5;line-height:0}
@@ -145,9 +158,27 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
 </head>
 <body>
 
-<div class="no-print" style="position:fixed;top:20px;right:20px;z-index:100;display:flex;gap:10px">
-  <button onclick="window.print()" style="padding:12px 28px;background:var(--accent);color:white;border:none;border-radius:8px;font:700 14px var(--sans);cursor:pointer;box-shadow:0 4px 12px rgba(79,70,229,.35)">⬇ Export PDF</button>
+<div class="no-print" style="position:fixed;top:20px;right:20px;z-index:100;display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+  <button id="print-btn" onclick="triggerPrint()" style="padding:10px 22px;background:var(--accent);color:white;border:none;border-radius:8px;font:700 13px var(--sans);cursor:pointer;box-shadow:0 4px 12px rgba(79,70,229,.35);display:flex;align-items:center;gap:8px">
+    <span>⬇</span><span id="print-btn-label">Export PDF</span>
+  </button>
+  <div style="font:400 9px var(--sans);color:#64748b;text-align:right;line-height:1.5">
+    File → Print → <strong>Save as PDF</strong><br>Paper: A4 · Layout: Portrait
+  </div>
 </div>
+<script>
+function triggerPrint(){
+  const btn=document.getElementById('print-btn');
+  const lbl=document.getElementById('print-btn-label');
+  lbl.textContent='Preparing…';
+  btn.disabled=true;
+  // Brief delay to let any async renders settle before print dialog
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>{ lbl.textContent='Export PDF'; btn.disabled=false; },1500);
+  },400);
+}
+</script>
 
 <!-- PAGE 1: COVER -->
 <div class="page cover">
@@ -1249,122 +1280,56 @@ function buildMassing3DCanvas(canvasId, opt){
 }
 
 
-// ── Programmatic core generator ──────────────────────────────────────────────
-// Derives core layout from building program. Returns { svgStr, coreWm, coreDm,
-// nLifts, nStairs, wcsEa, popPerFloor }.
-// nex/ney: NE corner of core in plan-SVG space. angleDeg: building axis rotation.
-// Core extends WEST and SOUTH from NE corner (origin NE = top-right of core box).
+// ── Core programme calculator ─────────────────────────────────────────────────
+// Derives lift/stair/WC counts from building programme.
+// Returns programme data + a simple dashed-zone SVG (indicative only at 1:500).
+// NE corner at (nex,ney), extends W and S. Rotated to building axis.
+// NOTE: Core location and shape require a site-specific deep-dive; the zone shown
+// here is indicative only — correctly sized (22% GIA), correctly positioned (NE),
+// correctly oriented (building axis), but internal layout is not modelled at this stage.
 function buildCoreDetailSVG({ gia, floors, heightM, sc, nex, ney, angleDeg }) {
-  const niaF   = gia * 0.78;               // NIA per floor
-  const popF   = Math.ceil(niaF / 8);      // occupancy @ 1/8m²
+  const niaF  = gia * 0.78;
+  const popF  = Math.ceil(niaF / 8);
   const totPop = popF * floors;
 
-  // Lifts: CIBSE Guide D simplified — 12% of pop in 5 min, 21-car @ 80% eff.
-  const rtSec  = Math.max(65, Math.min(145, 4.2 * floors));
-  const cap5   = (300 / rtSec) * 17;
-  const nL     = Math.max(4, Math.min(10, Math.ceil(totPop * 0.12 / cap5)));
-  const nS     = heightM > 18 ? 2 : 1;    // stairs (BSA 2022)
-  const wcsEa  = Math.max(2, Math.ceil(popF * 0.5 / 25)); // per gender BCO
+  // Lifts (CIBSE Guide D)
+  const rtSec = Math.max(65, Math.min(145, 4.2 * floors));
+  const cap5  = (300 / rtSec) * 17;
+  const nL    = Math.max(4, Math.min(10, Math.ceil(totPop * 0.12 / cap5)));
+  const nS    = heightM > 18 ? 2 : 1;
+  const wcsEa = Math.max(2, Math.ceil(popF * 0.5 / 25));
 
-  // Component dims (metres) — generous to reflect full programme inc. FFL
-  const STAIR_W = 1.8,  LIFT_W = 2.1,  SHAFT_D = 2.6;
-  const LOBBY_D = 4.0,  SVC_D  = 3.2;
-  const WC_W    = Math.max(3.2, wcsEa * 0.9 + 0.5);
+  // Core zone size (programmatic, from components — indicative)
+  const STAIR_W = 1.8, LIFT_W = 2.1, SHAFT_D = 2.6, LOBBY_D = 4.0, SVC_D = 3.2;
+  const WC_W = Math.max(3.2, wcsEa * 0.9 + 0.5);
+  const liftGrpW = nL * LIFT_W;
+  const innerW = Math.max(liftGrpW + 0.6, WC_W * 2 + 1.2);
+  const coreW = STAIR_W * (nS >= 2 ? 2 : 1) + innerW;
+  const coreD = SVC_D + SHAFT_D + LOBBY_D;
 
-  // Core width: stairs + inner (lifts ≥ 2×WC)
-  const liftGrpW  = nL * LIFT_W;
-  const innerW    = Math.max(liftGrpW + 0.6, WC_W * 2 + 1.2);
-  const coreW     = STAIR_W * (nS >= 2 ? 2 : 1) + innerW;
-  const coreD     = SVC_D + SHAFT_D + LOBBY_D;   // N→S: service | shafts | lobby
-
-  // ── Pixel coordinates (SVG: y ↓ = south) ──
-  const CW   = coreW  * sc,  CD   = coreD  * sc;
-  const SW   = STAIR_W * sc, IW   = innerW * sc;
-  const IX   = nS >= 2 ? SW : 0;            // inner zone starts at stair1 right
-  const S2X  = IX + IW;                     // stair2 left edge (if 2 stairs)
-  const svcY = 0,          svcH = SVC_D   * sc;  // north zone
-  const shY  = svcH,       shH  = SHAFT_D * sc;  // lift shafts
-  const lobY = svcH + shH, lobH = LOBBY_D * sc;  // south lobby
-
-  // ── Palette (monochrome, OS-style) ──
-  const G = {
-    core  : '#c8cad4',  shaft : '#8a8eb2',  lobby : '#e0e2ec',
-    stair : '#70748e',  wc    : '#aeb2c8',  riser : '#9298b4',
-    line  : '#1a1d2e',  txt   : '#1a1d2e'
-  };
+  const CW = coreW * sc, CD = coreD * sc;
   const $ = v => v.toFixed(1);
-  const T = (x, y, t, sz=4, w=600) =>
-    `<text x="${$(x)}" y="${$(y)}" text-anchor="middle" dominant-baseline="middle"` +
-    ` font-family="Inter,sans-serif" font-size="${sz}" font-weight="${w}" fill="${G.txt}">${t}</text>`;
-  const R = (x,y,w,h,f,sw=0.5) =>
-    `<rect x="${$(x)}" y="${$(y)}" width="${$(w)}" height="${$(h)}" fill="${f}" stroke="${G.line}" stroke-width="${sw}"/>`;
 
+  // ── Simple dashed zone — no internal layout at this scale ────────────────
   const out = [];
-  out.push(R(0, 0, CW, CD, G.core, 0)); // base (border drawn last)
-
-  // ── SERVICE ZONE (north, against building wall) ─────────────────────────
-  const wcBw = Math.min(WC_W * sc, IW * 0.38); // max 38% each
-  const risW = Math.max(0, IW - wcBw * 2);
-  // WC(M) left
-  out.push(R(IX, svcY, wcBw, svcH, G.wc));
-  if (svcH > 7) out.push(T(IX + wcBw/2, svcY + svcH/2, 'WC-M'));
-  // Risers centre
-  if (risW > 2) {
-    out.push(R(IX + wcBw, svcY, risW, svcH, G.riser));
-    if (risW * svcH > 30) out.push(T(IX + wcBw + risW/2, svcY + svcH/2, 'RISERS'));
+  // Light fill + dashed border = "indicative zone" reading
+  out.push(`<rect x="0" y="0" width="${$(CW)}" height="${$(CD)}"
+    fill="#dddfe8" fill-opacity="0.55"
+    stroke="#1a1d2e" stroke-width="0.9" stroke-dasharray="4,3" rx="1"/>`);
+  // 'CORE' label centred in zone
+  if (CW > 12 && CD > 8) {
+    out.push(`<text x="${$(CW/2)}" y="${$(CD/2)}"
+      text-anchor="middle" dominant-baseline="middle"
+      font-family="Inter,sans-serif" font-size="4.5" font-weight="700"
+      fill="#1a1d2e" opacity="0.7">CORE</text>`);
   }
-  // WC(F) right
-  out.push(R(IX + wcBw + risW, svcY, wcBw, svcH, G.wc));
-  if (svcH > 7) out.push(T(IX + wcBw + risW + wcBw/2, svcY + svcH/2, 'WC-F'));
-  // Zone border
-  out.push(R(IX, svcY, IW, svcH, 'none', 0.7).replace('fill="none"','fill="none"'));
 
-  // ── LIFT SHAFTS (middle zone) ────────────────────────────────────────────
-  const liftBankW = nL * LIFT_W * sc;
-  const liftOx = IX + (IW - liftBankW) / 2;
-  for (let i = 0; i < nL; i++) {
-    const lx = liftOx + i * LIFT_W * sc;
-    const lw = LIFT_W * sc - 0.8;
-    out.push(R(lx, shY, lw, shH, G.shaft, 0.4));
-    // Door gap symbol (thin white line at bottom = lobby side)
-    const cx = lx + lw/2, gW = lw * 0.5;
-    out.push(`<line x1="${$(cx-gW/2)}" y1="${$(shY+shH-0.5)}" x2="${$(cx+gW/2)}" y2="${$(shY+shH-0.5)}" stroke="white" stroke-width="1.2"/>`);
-  }
-  // Shaft zone border + label
-  out.push(R(IX, shY, IW, shH, 'none', 0.8).replace('fill="none"','fill="none"'));
-  if (shH > 6) out.push(T(IX + IW/2, shY + shH/2, `${nL} LIFTS`, 4.5));
-
-  // ── LIFT LOBBY (south, open to office) ──────────────────────────────────
-  out.push(R(IX, lobY, IW, lobH, G.lobby, 0.7));
-  if (lobH > 7) out.push(T(IX + IW/2, lobY + lobH/2, 'LOBBY', 4.5));
-
-  // ── STAIRS (full core depth, east + west) ────────────────────────────────
-  const drawStair = (sx) => {
-    out.push(R(sx, 0, SW, CD, G.stair, 0.6));
-    // Tread lines (plan stair symbol)
-    const nT = Math.max(3, Math.floor(CD / 6));
-    for (let i = 1; i < nT; i++) {
-      const sy = (CD / nT) * i;
-      out.push(`<line x1="${$(sx+SW*0.15)}" y1="${$(sy)}" x2="${$(sx+SW*0.85)}" y2="${$(sy)}" stroke="${G.line}" stroke-width="0.25"/>`);
-    }
-    // Direction arrow (south-pointing — egress toward lobby)
-    const ax = sx+SW/2, aTop = CD*0.3, aBot = CD*0.7;
-    out.push(`<line x1="${$(ax)}" y1="${$(aTop)}" x2="${$(ax)}" y2="${$(aBot)}" stroke="${G.line}" stroke-width="0.6"/>`);
-    out.push(`<polygon points="${$(ax)},${$(aBot)} ${$(ax-2)},${$(aBot-4)} ${$(ax+2)},${$(aBot-4)}" fill="${G.line}"/>`);
-    if (CD > 18) out.push(T(ax, CD*0.15, 'STAIR', 3.5, 500));
-  };
-  drawStair(0);
-  if (nS >= 2) drawStair(S2X);
-
-  // ── Outer border (on top of everything) ─────────────────────────────────
-  out.push(`<rect x="0" y="0" width="${$(CW)}" height="${$(CD)}" fill="none" stroke="${G.line}" stroke-width="1.4"/>`);
-
-  // ── Position: translate so NE corner (CW,0) → (nex,ney); rotate there ──
+  // Position: translate so NE corner (CW,0) → (nex,ney); rotate around NE corner
   const tx = nex - CW, ty = ney;
   return {
-    svgStr  : `<g transform="translate(${$(tx)},${$(ty)}) rotate(${$(angleDeg)},${$(CW)},0)">${out.join('')}</g>`,
-    coreWm  : coreW, coreDm: coreD,
-    nLifts  : nL, nStairs: nS, wcsEa, popPerFloor: popF
+    svgStr    : `<g transform="translate(${$(tx)},${$(ty)}) rotate(${$(angleDeg)},${$(CW)},0)">${out.join('')}</g>`,
+    coreWm    : coreW, coreDm: coreD,
+    nLifts    : nL, nStairs: nS, wcsEa, popPerFloor: popF
   };
 }
 
