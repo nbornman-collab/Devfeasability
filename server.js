@@ -420,6 +420,45 @@ app.get('/api/epc', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message, certificates: [] }); }
 });
 
+// ── OS Places API — address → UPRN + precise inside-building point ──
+// This is the foundation for reliable polygon fetching at any UK address
+app.get('/api/os-places', async (req, res) => {
+  try {
+    const q = req.query.q;
+    if (!q) return res.status(400).json({ error: 'q required' });
+    if (!OS_API_KEY) return res.status(503).json({ error: 'OS_API_KEY not configured' });
+
+    const url = `https://api.os.uk/search/places/v1/find` +
+      `?query=${encodeURIComponent(q)}&maxresults=3&key=${OS_API_KEY}`;
+
+    const r = await fetch(url, {
+      headers: { 'Accept': 'application/json', 'User-Agent': 'devfeasibility/1.0' },
+      signal: AbortSignal.timeout(10000)
+    });
+    if (!r.ok) {
+      const t = await r.text();
+      return res.status(r.status).json({ error: `OS Places ${r.status}`, detail: t.substring(0, 200) });
+    }
+
+    const data = await r.json();
+    const results = (data.results || []).map(item => {
+      const d = item.DPA || item.LPI || {};
+      return {
+        uprn: d.UPRN,
+        address: d.ADDRESS || d.LPI_KEY,
+        lat: parseFloat(d.LAT || d.LATITUDE || 0),
+        lng: parseFloat(d.LNG || d.LONGITUDE || d.LONG || 0),
+        postcode: d.POSTCODE,
+        classCode: d.CLASSIFICATION_CODE
+      };
+    }).filter(r => r.lat && r.lng);
+
+    res.json({ results, count: results.length });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // BNG (OSGB36 EPSG:27700) → WGS84 lon/lat converter
 // Accurate to ~5m — sufficient for site boundary display
 function bngToWgs84(E, N) {
@@ -469,11 +508,16 @@ app.get('/api/os-buildings', async (req, res) => {
     if (!lat || !lng) return res.status(400).json({ error: 'lat/lng required' });
     if (!OS_API_KEY) return res.status(503).json({ error: 'OS_API_KEY not configured' });
 
-    const buf = parseFloat(req.query.buf || '0.001'); // ~100m default
-    const minLon = (parseFloat(lng) - buf).toFixed(6);
-    const minLat = (parseFloat(lat) - buf).toFixed(6);
-    const maxLon = (parseFloat(lng) + buf).toFixed(6);
-    const maxLat = (parseFloat(lat) + buf).toFixed(6);
+    // iLat/iLng = precise inside-building point from OS Places API
+    // When provided: use tiny bbox (guaranteed to hit only the containing building)
+    // When absent: fall back to rough centroid with larger buf
+    const iLat = req.query.iLat ? parseFloat(req.query.iLat) : parseFloat(lat);
+    const iLng = req.query.iLng ? parseFloat(req.query.iLng) : parseFloat(lng);
+    const buf = req.query.iLat ? 0.0001 : parseFloat(req.query.buf || '0.001'); // 7m if precise, ~100m fallback
+    const minLon = (iLng - buf).toFixed(6);
+    const minLat = (iLat - buf).toFixed(6);
+    const maxLon = (iLng + buf).toFixed(6);
+    const maxLat = (iLat + buf).toFixed(6);
 
     // OS NGD Features API — bld-fts-buildingpart collection
     // CRS84 = WGS84 lon/lat (GeoJSON standard). bbox-crs tells API our bbox is also in CRS84.

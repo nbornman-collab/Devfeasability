@@ -376,6 +376,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <script>
 const LAT = 51.5137673, LNG = -0.0801551;
+const ADDRESS = '100 Leadenhall Street, London EC3A 3BP';
 const PLOT_AREA = 1551;
 const EXISTING_EUV = 38000000;
 
@@ -470,25 +471,35 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
       }
     });
 
-    // ── Site polygon (hardcoded from OS-calibrated OSM) ──
-    map.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_POLYGON]}}});
+    // ── Site polygon — starts empty, OS Places+NGD fills it ──
+    map.addSource('site',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
     map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#4f46e5','fill-opacity':0.18}});
     map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#4f46e5','line-width':2.5}});
     map.addLayer({id:'site-extrude',type:'fill-extrusion',source:'site',paint:{
       'fill-extrusion-color':'#4f46e5','fill-extrusion-height':8,
       'fill-extrusion-base':0,'fill-extrusion-opacity':0.25}});
 
-    // ── Move 3: HMLR INSPIRE title boundaries ──
-    fetch(`/api/plot-boundary?lat=${LAT}&lng=${LNG}`)
-      .then(r=>r.json())
-      .then(fc=>{
-        if(!fc.features||!fc.features.length) return;
-        if(!map.getSource('hmlr')) map.addSource('hmlr',{type:'geojson',data:fc});
-        map.addLayer({id:'hmlr-fill',type:'fill',source:'hmlr',paint:{'fill-color':'#7c3aed','fill-opacity':0.06}});
-        map.addLayer({id:'hmlr-line',type:'line',source:'hmlr',paint:{
-          'line-color':'#7c3aed','line-width':1.5,
-          'line-dasharray':[3,2],'line-opacity':0.7}});
-      }).catch(()=>{/* HMLR unavailable — hardcoded polygon remains */});
+    // ── Two-step OS polygon: Places → NGD ──
+    (async()=>{
+      try{
+        let iLat=LAT, iLng=LNG;
+        const places=await(await fetch(`/api/os-places?q=${encodeURIComponent(ADDRESS)}`)).json();
+        if(places.results&&places.results.length){
+          const best=places.results[0];
+          iLat=best.lat; iLng=best.lng;
+          console.log('OS Places:',best.address,'→',iLat,iLng,'UPRN:',best.uprn);
+        }
+        const fc=await(await fetch(`/api/os-buildings?lat=${LAT}&lng=${LNG}&iLat=${iLat}&iLng=${iLng}`)).json();
+        if(!fc.features||!fc.features.length){
+          const fc2=await(await fetch(`/api/os-buildings?lat=${iLat}&lng=${iLng}&buf=0.0006`)).json();
+          if(fc2.features&&fc2.features.length) map.getSource('site').setData(fc2);
+          return;
+        }
+        console.log('OS NGD 100LH:',fc.features.length,'parts',
+          fc.features.map(f=>`${f.properties._area?.toFixed(0)}m²`).join(', '));
+        map.getSource('site').setData(fc);
+      }catch(e){console.warn('OS pipeline 100LH:',e.message);}
+    })();
   });
 });
 

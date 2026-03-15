@@ -324,11 +324,8 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 </div><!-- end .panel -->
 
 <script>
-// Centroid updated: midpoint of traced site boundary
-// West = Silk St diagonal (~-0.0931), East = Milton St (~-0.0908)
-// North = Chiswell St (~51.5209), South = Silk St E-W (~51.5193)
-// Notch cut from NE corner (upper right) — L-shaped east elevation
 const LAT=51.52010, LNG=-0.09195;
+const ADDRESS='1 Silk Street, London EC2Y 8HQ';
 const PLOT_AREA=17500; // full campus ~17-20k sqm (Milton House + Shire House + curtilage)
 const EXISTING_EUV=95000000;
 
@@ -467,22 +464,32 @@ async function init(){
       'fill-extrusion-color':'#4f46e5','fill-extrusion-height':32,
       'fill-extrusion-base':0,'fill-extrusion-opacity':.2}});
 
-    // ── OS NGD Features API — real building footprints ──
-    // buf=0.0008 ≈ 55m lon / 90m lat — tight enough to stay on the Linklaters campus
-    fetch(`/api/os-buildings?lat=${LAT}&lng=${LNG}&buf=0.0008`)
-      .then(r=>r.json())
-      .then(fc=>{
-        if(!fc.features||!fc.features.length){console.warn('OS API: no buildings returned');return;}
-        console.log('OS buildings in tight bbox:',fc.features.length,'features');
-
-        // Show ALL buildings in the tight bbox as the campus boundary
-        // Linklaters = 2 OS building parts — render both together
-        console.log('OS campus buildings:',fc.features.length,
+    // ── Two-step OS polygon: Places → precise inside-building point → NGD footprint ──
+    (async()=>{
+      try{
+        let iLat=LAT, iLng=LNG;
+        // Step 1: OS Places — resolve address to precise point inside building
+        const places=await(await fetch(`/api/os-places?q=${encodeURIComponent(ADDRESS)}`)).json();
+        if(places.results&&places.results.length){
+          const best=places.results[0];
+          iLat=best.lat; iLng=best.lng;
+          console.log('OS Places:',best.address,'→',iLat,iLng,'UPRN:',best.uprn);
+        } else {
+          console.warn('OS Places: no result, using fallback centroid');
+        }
+        // Step 2: OS NGD — tiny 7m bbox around inside-building point
+        const fc=await(await fetch(`/api/os-buildings?lat=${LAT}&lng=${LNG}&iLat=${iLat}&iLng=${iLng}`)).json();
+        if(!fc.features||!fc.features.length){
+          console.warn('OS NGD: nothing at precise point, widening to 80m');
+          const fc2=await(await fetch(`/api/os-buildings?lat=${iLat}&lng=${iLng}&buf=0.0008`)).json();
+          if(fc2.features&&fc2.features.length) map.getSource('site').setData(fc2);
+          return;
+        }
+        console.log('OS NGD footprint:',fc.features.length,'parts',
           fc.features.map(f=>`${f.properties._area?.toFixed(0)}m²`).join(', '));
-
-        // Set all returned buildings as the site source — no filtering
         map.getSource('site').setData(fc);
-      }).catch(e=>console.warn('OS API error:',e.message));
+      }catch(e){console.warn('OS pipeline:',e.message);}
+    })();
   });
 }
 init();
