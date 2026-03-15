@@ -714,20 +714,20 @@ async function buildGroundFloorPlan(){
   // Existing building slightly smaller (shows current 6-storey footprint, realistic setback)
   const existPts=p.map(c=>[cLon+(c[0]-cLon)*0.94,cLat+(c[1]-cLat)*0.94]).map(c=>px(c[0],c[1]).join(',')).join(' ');
 
-  // Core: 22% GIA, NE-pinned to actual NE polygon vertex (not bounding-box corner)
-  const coreGIA=D.plotArea*0.80*0.22;
-  const elong=hM>=wM?hM/wM:wM/hM;
-  const aspect=Math.min(Math.max(elong*0.85,1.2),2.4);
-  const cw=Math.sqrt(coreGIA/aspect)*sc, ch=cw*aspect;
-  // Find true NE vertex: maximise (lon_normalised + lat_normalised)
+  // Core: NE-pinned, axis-rotated, programmatically derived
   const lonRange=lonMax-lonMin, latRange=latMax-latMin;
-  let _neScore=-Infinity, neVtx=p[0];
-  p.forEach(c=>{ const s=(c[0]-lonMin)/lonRange+(c[1]-latMin)/latRange; if(s>_neScore){_neScore=s;neVtx=c;} });
-  // Inner face of proposed building at NE vertex (99% scale inward)
-  const neInnerLon=cLon+(neVtx[0]-cLon)*0.72;
-  const neInnerLat=cLat+(neVtx[1]-cLat)*0.99;
-  const [coreNEx,coreNEy]=px(neInnerLon,neInnerLat);
-  // Core rect: top-right at NE corner, extends W and S (no rotation — axisAngle=90, rotate=0°)
+  let _neScore=-Infinity, neVtx=p[0], neIdx_g=0;
+  p.forEach((c,i)=>{ const s=(c[0]-lonMin)/lonRange+(c[1]-latMin)/latRange; if(s>_neScore){_neScore=s;neVtx=c;neIdx_g=i;} });
+  const facadeM_g=1.5;
+  const [coreNEx,coreNEy]=px(neVtx[0]-facadeM_g/M_PER_LNG, neVtx[1]-facadeM_g/M_PER_LAT);
+  const nxtV=p[(neIdx_g+1)%p.length];
+  const dxM_g=(nxtV[0]-neVtx[0])*M_PER_LNG, dyM_g=-(nxtV[1]-neVtx[1])*M_PER_LAT;
+  const axisAngleDeg_g=Math.atan2(dxM_g,dyM_g)*180/Math.PI;
+  // Programmatic core (uses D.potentialHeight = max option height for main plan)
+  const coreResult_g = buildCoreDetailSVG({
+    gia: D.plotArea, floors: 22, heightM: D.potentialHeight || 92,
+    sc, nex: coreNEx, ney: coreNEy, angleDeg: axisAngleDeg_g
+  });
 
   // ── Fetch OSM data ────────────────────────────────────────────────────────
   const pad=0.002; // ~160m
@@ -876,10 +876,8 @@ async function buildGroundFloorPlan(){
   out.push(`<polygon points="${bldgPts}"
     fill="${C.bldg}" stroke="${C.core}" stroke-width="1.8"/>`);
 
-  // ⑨ Core — NE-pinned (top-right at NE corner, extends W and S)
-  out.push(`<rect x="${(coreNEx-cw).toFixed(1)}" y="${coreNEy.toFixed(1)}"
-    width="${cw.toFixed(1)}" height="${ch.toFixed(1)}"
-    fill="${C.coreF}" stroke="${C.core}" stroke-width="0.8" rx="1"/>`);
+  // ⑨ Core — programmatic (lifts, stairs, WC, risers), NE-pinned, axis-rotated
+  out.push(coreResult_g.svgStr);
 
   // ⑩ Site boundary — bold dashed (red-line equivalent)
   out.push(`<polygon points="${sitePts}"
@@ -901,10 +899,12 @@ async function buildGroundFloorPlan(){
     font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white">A</text>`);
 
   // ⑬ Core annotation (left of core mass)
-  out.push(`<text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+6).toFixed(1)}"
+  const coreLblX = coreNEx - coreResult_g.coreWm * sc - 4;
+  const coreLblY = coreNEy + coreResult_g.coreDm * sc * 0.5;
+  out.push(`<text x="${coreLblX.toFixed(1)}" y="${(coreLblY-4).toFixed(1)}"
     text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">CORE</text>
-  <text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+13).toFixed(1)}"
-    text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">${Math.round(coreGIA)}m²</text>`);
+  <text x="${coreLblX.toFixed(1)}" y="${(coreLblY+4).toFixed(1)}"
+    text-anchor="end" font-family="JetBrains Mono,monospace" font-size="4" fill="${C.dim}">${coreResult_g.nLifts} lifts · ${coreResult_g.nStairs} stairs</text>`);
 
   // ⑭ Road name labels — major named roads only (primary/secondary/tertiary)
   // Minor alleys, footways, service roads omitted at this scale
@@ -1209,8 +1209,8 @@ function buildMassingIsoSVG(svgId, opt){
   // Sky lobby band (Option C)
   if(propH>=85&&podH<=20){
     const skH=existH+12*4.2;
-    out.push(face([isoC(0,skH-0.8,towerD),isoC(towerW,skH-0.8,towerD),isoC(towerW,skH+0.8,towerD),isoC(0,skH+0.8,towerD)],'#2a2d3e',1.0));
-    out.push(face([isoC(towerW,skH-0.8,0),isoC(towerW,skH-0.8,towerD),isoC(towerW,skH+0.8,towerD),isoC(towerW,skH+0.8,0)],'#2a2d3e',1.0));
+    out.push(face([isoC(0,skH-0.8,towerD),isoC(towerW,skH-0.8,towerD),isoC(towerW,skH+0.8,towerD),isoC(0,skH+0.8,towerD)],'#6a8a6a',0.5));
+    out.push(face([isoC(towerW,skH-0.8,0),isoC(towerW,skH-0.8,towerD),isoC(towerW,skH+0.8,towerD),isoC(towerW,skH+0.8,0)],'#5a7a5a',0.5));
   }
   // Floor plates on tower
   for(let h=4.2;h<propH-towerBase+0.1;h+=4.2){
@@ -1237,7 +1237,127 @@ function buildMassing3DCanvas(canvasId, opt){
 }
 
 
-function buildGFPlanStatic(svgId='gf-plan-static'){
+// ── Programmatic core generator ──────────────────────────────────────────────
+// Derives core layout from building program. Returns { svgStr, coreWm, coreDm,
+// nLifts, nStairs, wcsEa, popPerFloor }.
+// nex/ney: NE corner of core in plan-SVG space. angleDeg: building axis rotation.
+// Core extends WEST and SOUTH from NE corner (origin NE = top-right of core box).
+function buildCoreDetailSVG({ gia, floors, heightM, sc, nex, ney, angleDeg }) {
+  const niaF   = gia * 0.78;               // NIA per floor
+  const popF   = Math.ceil(niaF / 8);      // occupancy @ 1/8m²
+  const totPop = popF * floors;
+
+  // Lifts: CIBSE Guide D simplified — 12% of pop in 5 min, 21-car @ 80% eff.
+  const rtSec  = Math.max(65, Math.min(145, 4.2 * floors));
+  const cap5   = (300 / rtSec) * 17;
+  const nL     = Math.max(4, Math.min(10, Math.ceil(totPop * 0.12 / cap5)));
+  const nS     = heightM > 18 ? 2 : 1;    // stairs (BSA 2022)
+  const wcsEa  = Math.max(2, Math.ceil(popF * 0.5 / 25)); // per gender BCO
+
+  // Component dims (metres) — generous to reflect full programme inc. FFL
+  const STAIR_W = 1.8,  LIFT_W = 2.1,  SHAFT_D = 2.6;
+  const LOBBY_D = 4.0,  SVC_D  = 3.2;
+  const WC_W    = Math.max(3.2, wcsEa * 0.9 + 0.5);
+
+  // Core width: stairs + inner (lifts ≥ 2×WC)
+  const liftGrpW  = nL * LIFT_W;
+  const innerW    = Math.max(liftGrpW + 0.6, WC_W * 2 + 1.2);
+  const coreW     = STAIR_W * (nS >= 2 ? 2 : 1) + innerW;
+  const coreD     = SVC_D + SHAFT_D + LOBBY_D;   // N→S: service | shafts | lobby
+
+  // ── Pixel coordinates (SVG: y ↓ = south) ──
+  const CW   = coreW  * sc,  CD   = coreD  * sc;
+  const SW   = STAIR_W * sc, IW   = innerW * sc;
+  const IX   = nS >= 2 ? SW : 0;            // inner zone starts at stair1 right
+  const S2X  = IX + IW;                     // stair2 left edge (if 2 stairs)
+  const svcY = 0,          svcH = SVC_D   * sc;  // north zone
+  const shY  = svcH,       shH  = SHAFT_D * sc;  // lift shafts
+  const lobY = svcH + shH, lobH = LOBBY_D * sc;  // south lobby
+
+  // ── Palette (monochrome, OS-style) ──
+  const G = {
+    core  : '#c8cad4',  shaft : '#8a8eb2',  lobby : '#e0e2ec',
+    stair : '#70748e',  wc    : '#aeb2c8',  riser : '#9298b4',
+    line  : '#1a1d2e',  txt   : '#1a1d2e'
+  };
+  const $ = v => v.toFixed(1);
+  const T = (x, y, t, sz=4, w=600) =>
+    `<text x="${$(x)}" y="${$(y)}" text-anchor="middle" dominant-baseline="middle"` +
+    ` font-family="Inter,sans-serif" font-size="${sz}" font-weight="${w}" fill="${G.txt}">${t}</text>`;
+  const R = (x,y,w,h,f,sw=0.5) =>
+    `<rect x="${$(x)}" y="${$(y)}" width="${$(w)}" height="${$(h)}" fill="${f}" stroke="${G.line}" stroke-width="${sw}"/>`;
+
+  const out = [];
+  out.push(R(0, 0, CW, CD, G.core, 0)); // base (border drawn last)
+
+  // ── SERVICE ZONE (north, against building wall) ─────────────────────────
+  const wcBw = Math.min(WC_W * sc, IW * 0.38); // max 38% each
+  const risW = Math.max(0, IW - wcBw * 2);
+  // WC(M) left
+  out.push(R(IX, svcY, wcBw, svcH, G.wc));
+  if (svcH > 7) out.push(T(IX + wcBw/2, svcY + svcH/2, 'WC-M'));
+  // Risers centre
+  if (risW > 2) {
+    out.push(R(IX + wcBw, svcY, risW, svcH, G.riser));
+    if (risW * svcH > 30) out.push(T(IX + wcBw + risW/2, svcY + svcH/2, 'RISERS'));
+  }
+  // WC(F) right
+  out.push(R(IX + wcBw + risW, svcY, wcBw, svcH, G.wc));
+  if (svcH > 7) out.push(T(IX + wcBw + risW + wcBw/2, svcY + svcH/2, 'WC-F'));
+  // Zone border
+  out.push(R(IX, svcY, IW, svcH, 'none', 0.7).replace('fill="none"','fill="none"'));
+
+  // ── LIFT SHAFTS (middle zone) ────────────────────────────────────────────
+  const liftBankW = nL * LIFT_W * sc;
+  const liftOx = IX + (IW - liftBankW) / 2;
+  for (let i = 0; i < nL; i++) {
+    const lx = liftOx + i * LIFT_W * sc;
+    const lw = LIFT_W * sc - 0.8;
+    out.push(R(lx, shY, lw, shH, G.shaft, 0.4));
+    // Door gap symbol (thin white line at bottom = lobby side)
+    const cx = lx + lw/2, gW = lw * 0.5;
+    out.push(`<line x1="${$(cx-gW/2)}" y1="${$(shY+shH-0.5)}" x2="${$(cx+gW/2)}" y2="${$(shY+shH-0.5)}" stroke="white" stroke-width="1.2"/>`);
+  }
+  // Shaft zone border + label
+  out.push(R(IX, shY, IW, shH, 'none', 0.8).replace('fill="none"','fill="none"'));
+  if (shH > 6) out.push(T(IX + IW/2, shY + shH/2, `${nL} LIFTS`, 4.5));
+
+  // ── LIFT LOBBY (south, open to office) ──────────────────────────────────
+  out.push(R(IX, lobY, IW, lobH, G.lobby, 0.7));
+  if (lobH > 7) out.push(T(IX + IW/2, lobY + lobH/2, 'LOBBY', 4.5));
+
+  // ── STAIRS (full core depth, east + west) ────────────────────────────────
+  const drawStair = (sx) => {
+    out.push(R(sx, 0, SW, CD, G.stair, 0.6));
+    // Tread lines (plan stair symbol)
+    const nT = Math.max(3, Math.floor(CD / 6));
+    for (let i = 1; i < nT; i++) {
+      const sy = (CD / nT) * i;
+      out.push(`<line x1="${$(sx+SW*0.15)}" y1="${$(sy)}" x2="${$(sx+SW*0.85)}" y2="${$(sy)}" stroke="${G.line}" stroke-width="0.25"/>`);
+    }
+    // Direction arrow (south-pointing — egress toward lobby)
+    const ax = sx+SW/2, aTop = CD*0.3, aBot = CD*0.7;
+    out.push(`<line x1="${$(ax)}" y1="${$(aTop)}" x2="${$(ax)}" y2="${$(aBot)}" stroke="${G.line}" stroke-width="0.6"/>`);
+    out.push(`<polygon points="${$(ax)},${$(aBot)} ${$(ax-2)},${$(aBot-4)} ${$(ax+2)},${$(aBot-4)}" fill="${G.line}"/>`);
+    if (CD > 18) out.push(T(ax, CD*0.15, 'STAIR', 3.5, 500));
+  };
+  drawStair(0);
+  if (nS >= 2) drawStair(S2X);
+
+  // ── Outer border (on top of everything) ─────────────────────────────────
+  out.push(`<rect x="0" y="0" width="${$(CW)}" height="${$(CD)}" fill="none" stroke="${G.line}" stroke-width="1.4"/>`);
+
+  // ── Position: translate so NE corner (CW,0) → (nex,ney); rotate there ──
+  const tx = nex - CW, ty = ney;
+  return {
+    svgStr  : `<g transform="translate(${$(tx)},${$(ty)}) rotate(${$(angleDeg)},${$(CW)},0)">${out.join('')}</g>`,
+    coreWm  : coreW, coreDm: coreD,
+    nLifts  : nL, nStairs: nS, wcsEa, popPerFloor: popF
+  };
+}
+
+
+function buildGFPlanStatic(svgId='gf-plan-static', optData=null){
   const svg=document.getElementById(svgId);
   if(!svg) return;
   const VW=340, VH=300, p=D.polygon;
@@ -1261,39 +1381,44 @@ function buildGFPlanStatic(svgId='gf-plan-static'){
   const [siteRightX]=px(lonMax,cLat);
   const [ccx,ccy]=px(cLon,cLat);
 
-  // Core: NE-pinned, 22% GIA
-  const coreGIA=D.plotArea*0.80*0.22;
-  const elong=hM>=wM?hM/wM:wM/hM;
-  const aspect=Math.min(Math.max(elong*0.85,1.2),2.4);
-  const cw=Math.sqrt(coreGIA/aspect)*sc, ch=cw*aspect;
+  // Core position + building axis angle
   const lonRange=lonMax-lonMin, latRange=latMax-latMin;
-  let _s=-Infinity, neVtx=p[0];
-  p.forEach(c=>{const s=(c[0]-lonMin)/lonRange+(c[1]-latMin)/latRange;if(s>_s){_s=s;neVtx=c;}});
-  // 0.72 factor: polygon has east-side notch — 0.99 pushes core through the wall
-  // 0.72 places core safely inside across full core height while remaining clearly NE
-  const [coreNEx,coreNEy]=px(cLon+(neVtx[0]-cLon)*0.72,cLat+(neVtx[1]-cLat)*0.72);
+  let _s=-Infinity, neVtx=p[0], neIdx=0;
+  p.forEach((c,i)=>{const s=(c[0]-lonMin)/lonRange+(c[1]-latMin)/latRange;if(s>_s){_s=s;neVtx=c;neIdx=i;}});
+  const facadeM=1.5;
+  const [coreNEx,coreNEy]=px(neVtx[0]-facadeM/M_PER_LNG, neVtx[1]-facadeM/M_PER_LAT);
+  const nextVtx=p[(neIdx+1)%p.length];
+  const dxM=(nextVtx[0]-neVtx[0])*M_PER_LNG, dyM=-(nextVtx[1]-neVtx[1])*M_PER_LAT;
+  const axisAngleDeg=Math.atan2(dxM,dyM)*180/Math.PI;
 
-  const stN=18*sc, stE=12*sc, stS=10*sc, stW=10*sc;
+  // Generate programmatic core
+  const optFloors  = optData ? optData.floors : 22;
+  const optHeightM = optData ? optData.height : D.potentialHeight;
+  const coreResult = buildCoreDetailSVG({
+    gia: D.plotArea, floors: optFloors, heightM: optHeightM,
+    sc, nex: coreNEx, ney: coreNEy, angleDeg: axisAngleDeg
+  });
+  const { nLifts, nStairs, popPerFloor } = coreResult;
+
+  const stN=18*sc, stE=12*sc;
   const sitePts=p.map(c=>px(c[0],c[1]).join(',')).join(' ');
   const bldgPts=p.map(c=>[cLon+(c[0]-cLon)*0.99,cLat+(c[1]-cLat)*0.99]).map(c=>px(c[0],c[1]).join(',')).join(' ');
   const scBar=20*sc;
+  const C={site:'#f5f5f3',bldg:'#fff',core:'#1a1d2e',str:'#585b6e',dim:'#1a1d2e'};
 
-  const C={site:'#f0f1f3',bldg:'#fff',core:'#1a1d2e',coreF:'#c8cad4',str:'#585b6e',dim:'#1a1d2e'};
-
-  // Context building blocks (simplified — surrounding urban fabric)
-  const streetPx=12*sc; // ~12m street width in pixels
-  const ctxFill='#e8e9ec';
-  // N, S, E, W context rectangles inset from SVG edge to street edge
-  const ctxN=`<rect x="0" y="0" width="${VW}" height="${Math.max(1,siteTopY-streetPx).toFixed(1)}" fill="${ctxFill}"/>`;
-  const ctxS=`<rect x="0" y="${Math.min(VH-1,siteBotY+streetPx).toFixed(1)}" width="${VW}" height="${VH}" fill="${ctxFill}"/>`;
-  const ctxW=`<rect x="0" y="${Math.max(0,siteTopY-streetPx).toFixed(1)}" width="${Math.max(1,siteLeftX-streetPx).toFixed(1)}" height="${(siteBotY+streetPx-(siteTopY-streetPx)).toFixed(1)}" fill="${ctxFill}"/>`;
-  const ctxE=`<rect x="${Math.min(VW-1,siteRightX+streetPx).toFixed(1)}" y="${Math.max(0,siteTopY-streetPx).toFixed(1)}" width="${VW}" height="${(siteBotY+streetPx-(siteTopY-streetPx)).toFixed(1)}" fill="${ctxFill}"/>`;
+  // Core programme legend (bottom annotation strip)
+  const legY = VH - annotH + 5;
+  const legItems = [
+    `${nLifts} lifts`,
+    `${nStairs} stairs`,
+    `${popPerFloor} occ/flr`
+  ].map((t,i) => `<text x="${20 + i*58}" y="${legY+8}" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">${t}</text>`).join('');
 
   svg.innerHTML=`
-    ${ctxN}${ctxS}${ctxW}${ctxE}
+    <rect width="${VW}" height="${VH}" fill="white"/>
     <polygon points="${sitePts}" fill="${C.site}" stroke="#bfc0c8" stroke-width="0.5"/>
     <polygon points="${bldgPts}" fill="${C.bldg}" stroke="${C.core}" stroke-width="1.6"/>
-    <rect x="${(coreNEx-cw).toFixed(1)}" y="${coreNEy.toFixed(1)}" width="${cw.toFixed(1)}" height="${ch.toFixed(1)}" fill="${C.coreF}" stroke="${C.core}" stroke-width="0.8" rx="1"/>
+    ${coreResult.svgStr}
     <polygon points="${sitePts}" fill="none" stroke="${C.core}" stroke-width="0.8" stroke-dasharray="4,2"/>
     <!-- Street labels -->
     <text x="${(siteLeftX+siteRightX)/2}" y="${siteTopY-stN*0.5}"
@@ -1302,21 +1427,21 @@ function buildGFPlanStatic(svgId='gf-plan-static'){
     <text x="${siteRightX+stE*0.5}" y="${(siteTopY+siteBotY)/2}"
       text-anchor="middle" font-family="Inter,sans-serif" font-size="4.5" font-weight="600" fill="${C.str}"
       transform="rotate(-90,${siteRightX+stE*0.5},${(siteTopY+siteBotY)/2})">LIME ST</text>
-    <!-- Core label -->
-    <text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+6).toFixed(1)}" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">CORE</text>
-    <text x="${(coreNEx-cw-3).toFixed(1)}" y="${(coreNEy+13).toFixed(1)}" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="5" fill="${C.dim}">${Math.round(coreGIA)}m²</text>
-    <!-- Section cut line removed per design review -->
+    <!-- Core programme strip -->
+    <line x1="8" y1="${legY}" x2="${VW-8}" y2="${legY}" stroke="#d0d2dc" stroke-width="0.5"/>
+    <text x="8" y="${legY+8}" font-family="Inter,sans-serif" font-size="5" font-weight="700" fill="${C.dim}">CORE PROGRAMME:</text>
+    ${legItems}
     <!-- North arrow -->
-    <g transform="translate(${VW-14},${VH-annotH+14})">
-      <line x1="0" y1="8" x2="0" y2="-8" stroke="${C.dim}" stroke-width="1.5"/>
-      <polygon points="0,-8 -2.5,-1 2.5,-1" fill="${C.dim}"/>
-      <text x="0" y="15" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="${C.dim}">N</text>
+    <g transform="translate(${VW-14},${legY+14})">
+      <line x1="0" y1="6" x2="0" y2="-6" stroke="${C.dim}" stroke-width="1.5"/>
+      <polygon points="0,-6 -2,-1 2,-1" fill="${C.dim}"/>
+      <text x="0" y="12" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="${C.dim}">N</text>
     </g>
     <!-- Scale bar -->
-    <line x1="8" y1="${VH-8}" x2="${8+scBar}" y2="${VH-8}" stroke="${C.dim}" stroke-width="1.8"/>
-    <line x1="8" y1="${VH-11}" x2="8" y2="${VH-5}" stroke="${C.dim}" stroke-width="1.5"/>
-    <line x1="${8+scBar}" y1="${VH-11}" x2="${8+scBar}" y2="${VH-5}" stroke="${C.dim}" stroke-width="1.5"/>
-    <text x="${8+scBar/2}" y="${VH-13}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="600" fill="${C.dim}">20m</text>
+    <line x1="8" y1="${VH-5}" x2="${8+scBar}" y2="${VH-5}" stroke="${C.dim}" stroke-width="1.8"/>
+    <line x1="8" y1="${VH-8}" x2="8" y2="${VH-2}" stroke="${C.dim}" stroke-width="1.5"/>
+    <line x1="${8+scBar}" y1="${VH-8}" x2="${8+scBar}" y2="${VH-2}" stroke="${C.dim}" stroke-width="1.5"/>
+    <text x="${8+scBar/2}" y="${VH-10}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" font-weight="600" fill="${C.dim}">20m</text>
   `;
 }
 
@@ -1337,9 +1462,9 @@ buildGroundFloorPlan().catch(console.error);
 buildMassingSectionSVG();
 fetch('/api/config').then(r=>r.json()).then(cfg=>buildContextMap(cfg.mapboxToken)).catch(()=>buildContextMap(null));
 const [optA,optB,optC] = REPORT_OPTS;
-buildGFPlanStatic('gfp-opt-a'); buildMassingSectionSVG('sec-opt-a',42,optA);
-buildGFPlanStatic('gfp-opt-b'); buildMassingSectionSVG('sec-opt-b',60,optB);
-buildGFPlanStatic('gfp-opt-c'); buildMassingSectionSVG('sec-opt-c',92,optC);
+buildGFPlanStatic('gfp-opt-a', optA); buildMassingSectionSVG('sec-opt-a',42,optA);
+buildGFPlanStatic('gfp-opt-b', optB); buildMassingSectionSVG('sec-opt-b',60,optB);
+buildGFPlanStatic('gfp-opt-c', optC); buildMassingSectionSVG('sec-opt-c',92,optC);
 
 // 3D isometric — pure SVG, no Three.js dependency
 buildMassingIsoSVG('massing-3d-canvas', REPORT_OPTS[1]);
