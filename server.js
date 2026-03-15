@@ -135,12 +135,14 @@ app.get('/api/plot-boundary', async (req, res) => {
     const maxLon = (parseFloat(lng) + buf).toFixed(6);
     const maxLat = (parseFloat(lat) + buf).toFixed(6);
 
-    const url = `https://inspire.landregistry.gov.uk/inspire/wfs` +
-      `?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature` +
-      `&typeNames=inspire:RegisteredPoleland` +
-      `&COUNT=20` +
-      `&SRSNAME=urn:ogc:def:crs:EPSG::4326` +
-      `&BBOX=${minLon},${minLat},${maxLon},${maxLat},urn:ogc:def:crs:EPSG::4326`;
+    // WFS 1.1.0 format — confirmed working with HMLR INSPIRE
+    // BBOX order for EPSG:4326: minLat,minLon,maxLat,maxLon
+    const url = `https://inspire.landregistry.gov.uk/inspire/ows` +
+      `?service=WFS&version=1.1.0&request=GetFeature` +
+      `&typeName=inspire:RegisteredPoleland` +
+      `&maxFeatures=20` +
+      `&srsName=EPSG:4326` +
+      `&bbox=${minLat},${minLon},${maxLat},${maxLon},EPSG:4326`;
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
@@ -426,7 +428,7 @@ app.get('/api/plot-boundary-debug', async (req, res) => {
     const minLat = (parseFloat(lat) - buf).toFixed(6);
     const maxLon = (parseFloat(lng) + buf).toFixed(6);
     const maxLat = (parseFloat(lat) + buf).toFixed(6);
-    const url = `https://inspire.landregistry.gov.uk/inspire/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&typeNames=inspire:RegisteredPoleland&COUNT=5&SRSNAME=urn:ogc:def:crs:EPSG::4326&BBOX=${minLon},${minLat},${maxLon},${maxLat},urn:ogc:def:crs:EPSG::4326`;
+    const url = `https://inspire.landregistry.gov.uk/inspire/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=inspire:RegisteredPoleland&maxFeatures=5&srsName=EPSG:4326&bbox=${minLat},${minLon},${maxLat},${maxLon},EPSG:4326`;
     const r = await fetch(url, { headers: { 'User-Agent': 'devfeasibility/1.0' }, signal: AbortSignal.timeout(15000) });
     const text = await r.text();
     res.set('Content-Type', 'text/plain').send(text.substring(0, 4000));
