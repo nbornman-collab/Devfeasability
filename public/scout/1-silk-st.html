@@ -486,11 +486,7 @@ async function init(){
         map.addLayer({id:'os-bld-line',type:'line',source:'os-blds',paint:{
           'line-color':'#4f46e5','line-width':1,'line-opacity':0.4}});
 
-        // Fly to actual building centroid
-        const coords=site.geometry.coordinates[0];
-        const cLon=coords.reduce((s,c)=>s+c[0],0)/coords.length;
-        const cLat=coords.reduce((s,c)=>s+c[1],0)/coords.length;
-        map.flyTo({center:[cLon,cLat],zoom:15.8,speed:0.8});
+        // No flyTo — map already centred correctly at load
       }).catch(e=>console.warn('OS API error:',e.message));
   });
 }
