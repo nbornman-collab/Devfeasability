@@ -417,6 +417,22 @@ app.get('/api/epc', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message, certificates: [] }); }
 });
 
+// Debug — raw HMLR response (remove after fixing parser)
+app.get('/api/plot-boundary-debug', async (req, res) => {
+  try {
+    const { lat, lng } = req.query;
+    const buf = 0.0015;
+    const minLon = (parseFloat(lng) - buf).toFixed(6);
+    const minLat = (parseFloat(lat) - buf).toFixed(6);
+    const maxLon = (parseFloat(lng) + buf).toFixed(6);
+    const maxLat = (parseFloat(lat) + buf).toFixed(6);
+    const url = `https://inspire.landregistry.gov.uk/inspire/wfs?SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&typeNames=inspire:RegisteredPoleland&COUNT=5&SRSNAME=urn:ogc:def:crs:EPSG::4326&BBOX=${minLon},${minLat},${maxLon},${maxLat},urn:ogc:def:crs:EPSG::4326`;
+    const r = await fetch(url, { headers: { 'User-Agent': 'devfeasibility/1.0' }, signal: AbortSignal.timeout(15000) });
+    const text = await r.text();
+    res.set('Content-Type', 'text/plain').send(text.substring(0, 4000));
+  } catch (e) { res.status(500).send(e.message); }
+});
+
 app.get('/api/version', (req, res) => {
   res.json({ version: '4.3.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
 });
