@@ -169,11 +169,16 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <div class="panel">
   <div id="boundary-status"></div>
-  <div id="title-input-panel" style="display:none;padding:10px 16px;background:#f8f9fb;border-bottom:1px solid #e2e5ec">
-    <div style="font:600 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#7a7f96;margin-bottom:6px">No title found at tap — enter HMLR title number directly</div>
+  <div id="title-input-panel" style="display:none;padding:10px 16px;background:#fffbeb;border-bottom:2px solid #fde68a">
+    <div style="font:600 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#92400e;margin-bottom:4px">Enter your HMLR Title Number</div>
+    <div style="font:400 11px 'Inter',sans-serif;color:#78350f;margin-bottom:8px">
+      ⚠ The numbers on the map (e.g. 44760564) are <strong>parcel IDs — not title numbers</strong>.<br>
+      HMLR title numbers start with letters: <strong>NGL</strong>656467, <strong>TGL</strong>123, <strong>EGL</strong>456.<br>
+      Find yours free at <a href="https://search.land.registry.gov.uk" target="_blank" style="color:#0c0f1a">search.land.registry.gov.uk</a> (official register, £3).
+    </div>
     <div style="display:flex;gap:6px">
-      <input id="title-number-input" placeholder="e.g. NGL656467" style="flex:1;padding:7px 10px;font:500 13px 'Inter',sans-serif;border:1px solid #e2e5ec;border-radius:3px;outline:none">
-      <button onclick="lookupByTitle()" style="padding:7px 14px;font:600 11px 'Inter',sans-serif;background:#0c0f1a;color:#fff;border:none;border-radius:3px;cursor:pointer">Look up</button>
+      <input id="title-number-input" placeholder="e.g. NGL656467" style="flex:1;padding:8px 10px;font:600 13px 'Inter',sans-serif;border:1px solid #fde68a;border-radius:3px;outline:none;background:#fff;letter-spacing:.5px">
+      <button onclick="lookupByTitle()" style="padding:8px 16px;font:600 11px 'Inter',sans-serif;background:#0c0f1a;color:#fff;border:none;border-radius:3px;cursor:pointer">Look up</button>
     </div>
   </div>
 <nav class="tier-nav">
@@ -692,8 +697,9 @@ function toggleHMLR(){
   if(_selectMode){
     window._map1ss.setPaintProperty('hmlr-wms-layer','raster-opacity',0.7);
     btn.textContent='⬡ Parcels ON'; btn.className='on';
-    status.textContent='⬡ Click a land parcel to confirm or add to site boundary';
+    status.textContent='⬡ Tap a land parcel, or enter your HMLR title number below';
     status.style.display='block'; status.className='';
+    document.getElementById('title-input-panel').style.display='block';
     hint.textContent='Click anywhere on your site'; hint.style.display='block';
   } else {
     window._map1ss.setPaintProperty('hmlr-wms-layer','raster-opacity',0);
@@ -718,6 +724,7 @@ async function searchAddress(){
 
 async function lookupByTitle(){
   const titleNo = document.getElementById('title-number-input').value.trim().toUpperCase();
+  if(/^\d+$/.test(titleNo)){ alert('That looks like a parcel ID, not a title number.\nHMLR title numbers start with letters, e.g. NGL656467.'); return; }
   if(!titleNo) return;
   const wrap = document.getElementById('title-input-panel');
   wrap.querySelector('button').textContent = '…';
