@@ -456,8 +456,11 @@ async function searchAddress(){
   const data = await(await fetch(url)).json();
   const f = data.features?.[0];
   if(f){
-    _map.flyTo({center:f.center, zoom:16, pitch:30, bearing:0, duration:1200});
-    if(!_selectMode) toggleHMLR(); // auto-enable parcel overlay after search
+    _map.flyTo({center:f.center, zoom:18, pitch:0, bearing:0, duration:1400});
+    // Auto-enable parcels once map settles
+    _map.once('moveend', ()=>{
+      if(!_selectMode) toggleHMLR();
+    });
   }
 }
 
