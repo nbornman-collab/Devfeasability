@@ -591,6 +591,35 @@ async function loadAll(){
   buildFlags(flood,listedEls);
   buildHeights((ctx.status==='fulfilled'?ctx.value.elements:[])||[]);
   buildApps((apps.status==='fulfilled'?apps.value.results:[])||[]);
+
+  // EPC — existing floor area + capacity bar chart
+  if(epc.status==='fulfilled' && epc.value.results && epc.value.results.length){
+    const best = epc.value.results[0];
+    const gia = best.floorArea;
+    if(gia > 0){
+      const far = (gia / PLOT_AREA).toFixed(1);
+      const el = document.getElementById('epc-gia');
+      const farEl = document.getElementById('current-far');
+      if(el) el.textContent = gia.toLocaleString() + ' m²';
+      if(farEl) farEl.textContent = far + '×';
+      const bars_svg = document.getElementById('capacity-bars');
+      if(bars_svg){
+        const SCENARIOS_BAR = [
+          {label:'Existing', gia:gia,   col:'#d0d2da'},
+          {label:'Low',      gia:20000, col:'#6b7280'},
+          {label:'Base',     gia:34000, col:'#374151'},
+          {label:'High',     gia:45000, col:'#111827'},
+        ];
+        const maxG = Math.max(...SCENARIOS_BAR.map(s=>s.gia));
+        const BW=220, BH=13, GAP=5, LW=44, TX=LW+4;
+        bars_svg.innerHTML = SCENARIOS_BAR.map((s,i)=>{
+          const y=i*(BH+GAP), bw=Math.round(s.gia/maxG*BW);
+          const lk=s.gia>=1000?(s.gia/1000).toFixed(0)+'k':s.gia;
+          return `<g><text x="0" y="${y+BH-2}" font-family="var(--sans)" font-size="8" font-weight="600" fill="#555">${s.label}</text><rect x="${TX}" y="${y}" width="${bw}" height="${BH}" fill="${s.col}" rx="1"/><text x="${TX+bw+4}" y="${y+BH-2}" font-family="var(--mono)" font-size="8" fill="#888">${lk} m²</text></g>`;
+        }).join('');
+      }
+    }
+  }
 }
 
 function buildFlags(flood,listedEls){
@@ -672,44 +701,8 @@ function buildApps(apps){
   }).join(''));
 }
 
-  // EPC — existing floor area
-  if(epc.status==='fulfilled' && epc.value.results && epc.value.results.length){
-    const best = epc.value.results[0];
-    const gia = best.floorArea;
-    if(gia > 0){
-      const far = (gia / PLOT_AREA).toFixed(1);
-      const el = document.getElementById('epc-gia');
-      const farEl = document.getElementById('current-far');
-      if(el) el.textContent = gia.toLocaleString() + ' m²';
-      if(farEl) farEl.textContent = far + '×';
-      // ── Before/after capacity bar chart ─────────────────────────────
-      const bars_svg = document.getElementById('capacity-bars');
-      if(bars_svg){
-        const SCENARIOS_BAR = [
-          {label:'Existing', gia:gia,   col:'#d0d2da'},
-          {label:'Low',      gia:20000, col:'#6b7280'},
-          {label:'Base',     gia:34000, col:'#374151'},
-          {label:'High',     gia:45000, col:'#111827'},
-        ];
-        const maxG = Math.max(...SCENARIOS_BAR.map(s=>s.gia));
-        const BW=220, BH=13, GAP=5, LW=44, TX=LW+4;
-        const rows = SCENARIOS_BAR.map((s,i)=>{
-          const y = i*(BH+GAP);
-          const bw = Math.round(s.gia/maxG*BW);
-          const label_k = s.gia>=1000?(s.gia/1000).toFixed(0)+'k':s.gia;
-          return `<g>
-            <text x="0" y="${y+BH-2}" font-family="var(--sans)" font-size="8" font-weight="600" fill="#555">${s.label}</text>
-            <rect x="${TX}" y="${y}" width="${bw}" height="${BH}" fill="${s.col}" rx="1"/>
-            <text x="${TX+bw+4}" y="${y+BH-2}" font-family="var(--mono)" font-size="8" fill="#888">${label_k} m²</text>
-          </g>`;
-        }).join('');
-        bars_svg.innerHTML = rows;
-      }
-    }
-  }
-}
-
 loadAll();
+
 </script>
 </body>
 </html>
