@@ -537,7 +537,7 @@ async function init(){
   window._map1ss = new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:15.5,pitch:50,bearing:10,antialias:true});
   const map = window._map1ss;
   map.addControl(new mapboxgl.NavigationControl(),'top-right');
-  map.once('load',()=>window.dispatchEvent(new Event('_map1ss_ready')));
+
   map.on('style.load',()=>{
     // ── Move 1: Mapbox 3D building extrusions (context) ──
     map.addLayer({
@@ -584,6 +584,32 @@ async function init(){
         }
       }catch(e){console.warn('PropertyData 1SS owner error:',e.message);}
     })();
+
+    // ── Click/tap to select parcel ────────────────────────────────────────
+    map.on('click', async e => {
+      if(!_selectMode) return;
+      const {lat,lng} = e.lngLat;
+      const hint = document.getElementById('click-hint');
+      hint.textContent = 'Looking up parcel…'; hint.style.display = 'block';
+      try{
+        const fc = await(await fetch(`/api/plot-boundary?lat=${lat.toFixed(6)}&lng=${lng.toFixed(6)}`)).json();
+        if(fc && fc.features && fc.features.length){
+          map.getSource('site').setData(fc);
+          const p = fc.features[0].properties;
+          const area = p.area_sqm ? `${p.area_sqm.toLocaleString()} m²` : '—';
+          const owner = p.owner || 'Unknown owner';
+          const status = document.getElementById('boundary-status');
+          status.textContent = `✓ ${owner} · ${area}`; status.style.display = 'block'; status.className = 'confirmed';
+          hint.style.display = 'none'; _confirmed = true;
+        } else {
+          hint.textContent = 'No title found here — try clicking centre of site';
+          setTimeout(()=>hint.style.display='none', 3000);
+        }
+      }catch(err){
+        hint.textContent = 'Lookup failed — try again';
+        setTimeout(()=>hint.style.display='none', 3000);
+      }
+    });
   });
 }
 // EPC floor area for 1SS
@@ -659,30 +685,6 @@ async function searchAddress(){
 
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('map-search').addEventListener('keydown',e=>{ if(e.key==='Enter') searchAddress(); });
-  // Click handler on map for parcel selection
-  window.addEventListener('_map1ss_ready',()=>{
-    window._map1ss.on('click',async e=>{
-      if(!_selectMode) return;
-      const {lat,lng}=e.lngLat;
-      const hint=document.getElementById('click-hint');
-      hint.textContent='Looking up parcel…'; hint.style.display='block';
-      try{
-        const fc=await(await fetch(`/api/plot-boundary?lat=${lat.toFixed(6)}&lng=${lng.toFixed(6)}`)).json();
-        if(fc&&fc.features&&fc.features.length){
-          window._map1ss.getSource('site').setData(fc);
-          const p=fc.features[0].properties;
-          const area=p.area_sqm?`${p.area_sqm.toLocaleString()} m²`:'—';
-          const owner=p.owner||'Unknown owner';
-          const status=document.getElementById('boundary-status');
-          status.textContent=`✓ ${owner} · ${area}`; status.style.display='block'; status.className='confirmed';
-          hint.style.display='none'; _confirmed=true;
-        } else {
-          hint.textContent='No title found here — try clicking centre of site';
-          setTimeout(()=>hint.style.display='none',3000);
-        }
-      }catch(err){ hint.textContent='Lookup failed — try again'; setTimeout(()=>hint.style.display='none',3000); }
-    });
-  });
 });
 
 init();
