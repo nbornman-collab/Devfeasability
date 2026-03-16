@@ -245,6 +245,14 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
             <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)">~22×</div>
             <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Achievable FAR — Eastern Cluster</div>
           </div>
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="site-area-display">—</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Site area — HMLR title</div>
+          </div>
+          <div style="background:#fff;padding:14px 16px;grid-column:span 1">
+            <div style="font:600 11px var(--sans);color:var(--text2);line-height:1.4" id="owner-display">—</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Registered freeholder</div>
+          </div>
         </div>
 
     <!-- Before/After capacity bar -->
@@ -408,7 +416,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 <script>
 const LAT = 51.5137673, LNG = -0.0801551;
 const ADDRESS = '100 Leadenhall Street, London EC3A 3BP';
-const PLOT_AREA = 1551;
+let PLOT_AREA = 1551; // updated live from PropertyData HMLR title
 const EXISTING_EUV = 38000000;
 
 const GDV_OPTS = [
@@ -510,26 +518,28 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
       'fill-extrusion-color':'#4f46e5','fill-extrusion-height':8,
       'fill-extrusion-base':0,'fill-extrusion-opacity':0.25}});
 
-    // ── Two-step OS polygon: Places → NGD ──
+    // ── PropertyData legal boundary ──
     (async()=>{
       try{
-        let iLat=LAT, iLng=LNG;
-        const places=await(await fetch(`/api/os-places?q=${encodeURIComponent(ADDRESS)}`)).json();
-        if(places.results&&places.results.length){
-          const best=places.results[0];
-          iLat=best.lat; iLng=best.lng;
-          console.log('OS Places:',best.address,'→',iLat,iLng,'UPRN:',best.uprn);
+        const pd=await(await fetch(`/api/plot-boundary?lat=${LAT}&lng=${LNG}&postcode=EC3A+3BP`)).json();
+        if(pd.features&&pd.features.length){
+          const f=pd.features[0];
+          // Draw legal boundary on map
+          if(f.geometry) map.getSource('site').setData({type:'FeatureCollection',features:[f]});
+          // Update site area + owner in Why This Site card
+          const p=f.properties;
+          if(p.area_sqm>0){
+            PLOT_AREA=p.area_sqm;
+            const el=document.getElementById('site-area-display');
+            if(el) el.textContent=p.area_sqm.toLocaleString()+' m²';
+          }
+          if(p.owner){
+            const oel=document.getElementById('owner-display');
+            if(oel) oel.textContent=p.owner+(p.leaseholds>0?` · ${p.leaseholds} leaseholds`:'');
+          }
+          console.log('PropertyData 100LH: title',p.title_number,'area',p.area_sqm,'m² owner:',p.owner);
         }
-        const fc=await(await fetch(`/api/os-buildings?lat=${LAT}&lng=${LNG}&iLat=${iLat}&iLng=${iLng}`)).json();
-        if(!fc.features||!fc.features.length){
-          const fc2=await(await fetch(`/api/os-buildings?lat=${iLat}&lng=${iLng}&buf=0.0006`)).json();
-          if(fc2.features&&fc2.features.length) map.getSource('site').setData(fc2);
-          return;
-        }
-        console.log('OS NGD 100LH:',fc.features.length,'parts',
-          fc.features.map(f=>`${f.properties._area?.toFixed(0)}m²`).join(', '));
-        map.getSource('site').setData(fc);
-      }catch(e){console.warn('OS pipeline 100LH:',e.message);}
+      }catch(e){console.warn('PropertyData boundary error:',e.message);}
     })();
   });
 });

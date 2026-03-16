@@ -78,98 +78,118 @@ app.get('/api/reverse', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ── INSPIRE / HMLR Plot Boundary ───────────────────────────────────────────
-// Load INSPIRE GeoJSON (City of London for now; add more boroughs as downloaded)
-const inspireData = (() => {
-  const fs = require('fs');
-  const files = ['data/inspire-city-of-london.geojson'];
-  const features = [];
-  for (const f of files) {
-    try {
-      const gj = JSON.parse(fs.readFileSync(path.join(__dirname, f)));
-      features.push(...gj.features);
-      console.log(`INSPIRE: loaded ${gj.features.length} parcels from ${f}`);
-    } catch (e) { console.warn('INSPIRE: could not load', f, e.message); }
-  }
-  return features;
-})();
+// ── PropertyData Plot Boundary ─────────────────────────────────────────────
+const PROPERTYDATA_KEY = process.env.PROPERTYDATA_KEY || 'ZUMC9NNHVH';
+const PD_BASE = 'https://api.propertydata.co.uk';
 
-function pointInRing(pt, ring) {
-  let inside = false;
-  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
-    if (((yi > pt[1]) !== (yj > pt[1])) && (pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi)) inside = !inside;
-  }
-  return inside;
+// In-memory cache: key = "lat,lng" or "postcode" → result (TTL 24h)
+const pdCache = new Map();
+const PD_TTL = 24 * 60 * 60 * 1000;
+
+async function pdGet(path) {
+  const sep = path.includes('?') ? '&' : '?';
+  const url = `${PD_BASE}${path}${sep}key=${PROPERTYDATA_KEY}`;
+  const r = await fetch(url);
+  return r.json();
 }
 
-function ringAreaSqm(ring, refLat) {
-  const mLng = 111320 * Math.cos(refLat * Math.PI / 180);
-  const mLat = 110540;
-  let a = 0;
-  for (let i = 0; i < ring.length - 1; i++) {
-    const x1 = ring[i][0] * mLng, y1 = ring[i][1] * mLat;
-    const x2 = ring[i+1][0] * mLng, y2 = ring[i+1][1] * mLat;
-    a += x1 * y2 - x2 * y1;
-  }
-  return Math.abs(a / 2);
+// Pick the best freehold title for a site:
+// Prefer closest to coords with most polygon points (real building) and >0 leaseholds
+function pickBestTitle(titles, lat, lng) {
+  if (!titles || !titles.length) return null;
+  const mLng = 111320 * Math.cos(lat * Math.PI / 180), mLat = 110540;
+  return titles.map(t => {
+    const p = t.polygons?.[0] || {};
+    const dx = ((p.lat || lat) - lat) * mLat;
+    const dy = ((p.lng || lng) - lng) * mLng;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    // Score: closeness × polygon complexity × has leaseholds
+    const score = (1 / (dist + 1)) * (p.num_points || 1) * (p.leaseholds > 0 ? 2 : 1);
+    return { ...t, _dist: dist, _score: score };
+  }).sort((a, b) => b._score - a._score)[0];
 }
 
-// GET /api/plot-boundary?lat=...&lng=... — returns GeoJSON feature(s) containing point
-app.get('/api/plot-boundary', (req, res) => {
+// GET /api/plot-boundary?lat=...&lng=...&postcode=...
+// Returns GeoJSON feature with legal boundary + ownership from PropertyData
+app.get('/api/plot-boundary', async (req, res) => {
   const lat = parseFloat(req.query.lat);
   const lng = parseFloat(req.query.lng);
+  const postcode = req.query.postcode || '';
   if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
 
-  const pt = [lng, lat];
-  const matches = [];
+  const cacheKey = `${lat.toFixed(5)},${lng.toFixed(5)}`;
+  const cached = pdCache.get(cacheKey);
+  if (cached && Date.now() - cached.ts < PD_TTL) return res.json(cached.data);
 
-  for (const f of inspireData) {
-    const coords = f.geometry.coordinates;
-    if (!pointInRing(pt, coords[0])) continue;
-    // Check holes
-    let inHole = false;
-    for (let h = 1; h < coords.length; h++) { if (pointInRing(pt, coords[h])) { inHole = true; break; } }
-    if (inHole) continue;
+  try {
+    // Step 1: find freeholds by coordinate, fall back to postcode
+    let fhData = null;
+    try {
+      const fh = await pdGet(`/freeholds?lat=${lat}&long=${lng}`);
+      if (fh.status === 'success' && fh.data?.length) fhData = fh.data;
+    } catch (_) {}
 
-    // Compute net area
-    let area = ringAreaSqm(coords[0], lat);
-    for (let h = 1; h < coords.length; h++) area -= ringAreaSqm(coords[h], lat);
+    if (!fhData && postcode) {
+      const fhpc = await pdGet(`/freeholds?postcode=${encodeURIComponent(postcode)}`);
+      if (fhpc.status === 'success' && fhpc.data?.length) fhData = fhpc.data;
+    }
 
-    matches.push({
+    if (!fhData || !fhData.length) {
+      return res.json({ status: 'no_data', source: 'propertydata', features: [] });
+    }
+
+    // Step 2: pick best title + fetch full detail
+    const best = pickBestTitle(fhData, lat, lng);
+    const titleNo = best.title_number;
+    const detail = await pdGet(`/title?title=${titleNo}`);
+
+    if (!detail.data) return res.json({ status: 'no_title', title_number: titleNo, features: [] });
+
+    const d = detail.data;
+    const poly = d.polygons?.[0];
+    const coords = poly?.coords || [];
+
+    // Convert plot_size (acres) → m²
+    const plotSizeAcres = parseFloat(d.plot_size || poly?.polygon_size || 0);
+    const areaSqm = Math.round(plotSizeAcres * 4047);
+
+    // Build GeoJSON polygon [lng, lat] pairs
+    const ring = coords.map(c => [c.lng, c.lat]);
+    if (ring.length > 0 && (ring[0][0] !== ring[ring.length-1][0] || ring[0][1] !== ring[ring.length-1][1])) {
+      ring.push(ring[0]); // close ring
+    }
+
+    const feature = {
       type: 'Feature',
       properties: {
-        inspire_id: f.properties.inspire_id,
-        area_sqm: Math.round(area),
-        source: 'HMLR INSPIRE',
-        licence: 'OGL — Crown copyright and database rights. HM Land Registry. OS 100026316.'
+        title_number: titleNo,
+        title_class: d.class || best.class,
+        area_sqm: areaSqm,
+        plot_size_acres: plotSizeAcres,
+        owner: d.ownership?.details?.owner || null,
+        owner_type: d.ownership?.details?.owner_type || null,
+        owner_address: d.ownership?.details?.owner_address || null,
+        date_registered: d.ownership?.details?.date_added || null,
+        leaseholds: d.leaseholds?.length || 0,
+        polygon_count: d.polygon_count || 1,
+        vertices: coords.length,
+        source: 'PropertyData / HMLR',
+        all_titles: fhData.length
       },
-      geometry: f.geometry
-    });
-  }
+      geometry: ring.length > 3 ? {
+        type: 'Polygon',
+        coordinates: [ring]
+      } : null
+    };
 
-  // Also support radius search: return all parcels whose centroid is within radius
-  const radius = parseFloat(req.query.radius || 0);
-  if (radius > 0 && matches.length === 0) {
-    const mLng = 111320 * Math.cos(lat * Math.PI / 180);
-    const mLat = 110540;
-    for (const f of inspireData) {
-      const ext = f.geometry.coordinates[0];
-      const cx = ext.reduce((s, p) => s + p[0], 0) / ext.length;
-      const cy = ext.reduce((s, p) => s + p[1], 0) / ext.length;
-      const dx = (cx - lng) * mLng, dy = (cy - lat) * mLat;
-      if (Math.sqrt(dx * dx + dy * dy) <= radius) {
-        let area = ringAreaSqm(ext, lat);
-        matches.push({
-          type: 'Feature',
-          properties: { inspire_id: f.properties.inspire_id, area_sqm: Math.round(area), source: 'HMLR INSPIRE (radius)' },
-          geometry: f.geometry
-        });
-      }
-    }
-  }
+    const result = { status: 'ok', source: 'propertydata', features: [feature] };
+    pdCache.set(cacheKey, { data: result, ts: Date.now() });
+    res.json(result);
 
-  res.json({ type: 'FeatureCollection', features: matches, count: matches.length });
+  } catch (e) {
+    console.error('plot-boundary error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
 });
 
 // Overpass API — building footprint + tags
