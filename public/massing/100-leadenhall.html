@@ -450,6 +450,10 @@ function calcScenarios(){
     s.tdc=Math.round(preFin+s.finance);
     s.profit=s.gdv-s.tdc;
     s.poc=(s.profit/s.tdc*100).toFixed(1);
+    // IRR on equity (leveraged, annualised single-period approximation)
+    const eq=s.tdc*(1-MARKET.ltc);
+    const prog=MARKET.progYrs[s.key];
+    s.irr=eq>0&&prog>0?((( eq+s.profit)/eq)**(1/prog)-1)*100:0;
     s.rlv=Math.round(s.gdv-s.tdc*(1+S.poc/100)); // Residual Land Value at target profit
     s.core=Math.round(s.gea*.22);
     s.lspan=s.key==='lo'?'~11m':s.key==='base'?'~9m':'~7m';
@@ -617,6 +621,7 @@ function render(){
       <tr><td>Finance · ${Math.round(MARKET.finRate*100)}% × ${Math.round(MARKET.ltc*100)}% LTC × ${(MARKET.progYrs[s.key]/2).toFixed(1)}yr avg</td><td>−£${(s.finance/1e6).toFixed(1)}M</td></tr>
       <tr class="total"><td>Total Development Cost</td><td>£${(s.tdc/1e6).toFixed(1)}M</td></tr>
       <tr><td style="padding-top:10px">GDV · ERV £${MARKET.erv[s.key]}/m² ÷ ${(MARKET.niy[s.key]*100).toFixed(2)}% NIY</td><td style="padding-top:10px;color:var(--lo)">£${(s.gdv/1e6).toFixed(1)}M</td></tr>
+      <tr><td>IRR on Equity</td><td style="color:var(--lo);font-weight:600">${s.irr!=null?s.irr.toFixed(1)+' p.a.':'-'}</td></tr>
       <tr class="total highlight"><td>Developer Profit</td><td>£${(s.profit/1e6).toFixed(1)}M</td></tr>
       <tr><td style="padding-top:10px;color:var(--t3)">Residual Land Value <span style="font-weight:400">(at ${S.poc}% target profit on cost)</span></td>
           <td style="padding-top:10px;font-weight:700;color:${s.rlv>0?'var(--lo)':'#dc2626'}">${s.rlv>0?'':'−'}£${Math.abs(s.rlv/1e6).toFixed(1)}M</td></tr>
@@ -679,6 +684,11 @@ function buildCurve(){
   // X labels
   const xLabels=[6,10,14,18,22,24].map(f=>`<text x="${tx(f).toFixed(1)}" y="${bY+14}" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="#bbb">${f}F</text>`).join('');
 
+  // Active scenario drop line
+  const actS=SCENARIOS[activeIdx];
+  const dlx=tx(actS.floors),dly=ty(parseFloat(actS.poc));
+  const dropLine=`<line x1="${dlx.toFixed(1)}" y1="${dly.toFixed(1)}" x2="${dlx.toFixed(1)}" y2="${bY.toFixed(1)}" stroke="${COLS[activeIdx]}" stroke-width="1.5" stroke-dasharray="3,2" opacity=".5"/>`;
+
   // Scenario dots
   const dots=SCENARIOS.map((s,i)=>{
     const cx=tx(s.floors),cy=ty(parseFloat(s.poc));
@@ -690,7 +700,7 @@ function buildCurve(){
   document.getElementById('return-curve').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
     ${yLines}
     <polyline points="${pts}" fill="none" stroke="#c0c5d4" stroke-width="2.5" stroke-linejoin="round"/>
-    ${dots}${xLabels}
+    ${dropLine}${dots}${xLabels}
     <text x="${lx}" y="${H-2}" font-family="var(--sans)" font-size="8" fill="#bbb">Floors →</text>
   </svg>`;
 }
@@ -698,15 +708,49 @@ function buildCurve(){
 // ══════════════════════════════════════════════════════════════════════════════
 // MAP
 // ══════════════════════════════════════════════════════════════════════════════
+// Sutherland-Hodgman polygon clipping — massing hard-constrained to site boundary
+function _shInside(p,a,b){return(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0])>=0}
+function _shIntersect(a,b,c,d){
+  const A1=b[1]-a[1],B1=a[0]-b[0],C1=A1*a[0]+B1*a[1];
+  const A2=d[1]-c[1],B2=c[0]-d[0],C2=A2*c[0]+B2*c[1];
+  const det=A1*B2-A2*B1;
+  return det===0?a:[(B2*C1-B1*C2)/det,(A1*C2-A2*C1)/det];
+}
+function clipToSite(pts,clip){
+  let out=[...pts];
+  const n=clip.length-1;
+  for(let i=0;i<n;i++){
+    if(!out.length)return out;
+    const inp=out; out=[];
+    const a=clip[i],b=clip[i+1];
+    for(let j=0;j<inp.length;j++){
+      const c=inp[j],d=inp[(j+1)%inp.length];
+      const ci=_shInside(c,a,b),di=_shInside(d,a,b);
+      if(ci){out.push(c);if(!di)out.push(_shIntersect(a,b,c,d));}
+      else if(di)out.push(_shIntersect(a,b,c,d));
+    }
+  }
+  if(out.length) out.push(out[0]);
+  return out;
+}
+function makeRect(cx,cy,areaSqm,aspect){
+  const LM=1/70750, LaM=1/111320;
+  const w=Math.sqrt(areaSqm*aspect), h=w/aspect;
+  const dLng=(w/2)*LM, dLat=(h/2)*LaM;
+  return [[cx-dLng,cy-dLat],[cx+dLng,cy-dLat],[cx+dLng,cy+dLat],[cx-dLng,cy+dLat],[cx-dLng,cy-dLat]];
+}
+
 function updateMap(idx){
   const s=SCENARIOS[idx],col=COLS[idx],m=window._map;
-  const cx=SITE_COORDS.reduce((a,c)=>a+c[0],0)/SITE_COORDS.length;
-  const cy=SITE_COORDS.reduce((a,c)=>a+c[1],0)/SITE_COORDS.length;
-  const shrink=f=>SITE_COORDS.map(c=>[cx+(c[0]-cx)*f,cy+(c[1]-cy)*f]);
+  const cx=CENTROID[0], cy=CENTROID[1];
   const empty={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,.0001],[.0001,.0001],[0,0]]]}};
-  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}});
-  const twrCoords=shrink(Math.sqrt(s.twrPct));
-  m.getSource('tower').setData(s.twrF>0?{type:'Feature',geometry:{type:'Polygon',coordinates:[twrCoords]}}:empty);
+  // Podium = full site at podium height (100LH: coverage 1.0 — whole site is podium)
+  const podRect=makeRect(cx,cy,PLOT_AREA*s.cov,1.2);
+  const podCoords=clipToSite(podRect.slice(0,-1),SITE_COORDS);
+  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[podCoords.length>2?podCoords:podRect]}});
+  const twrRect=makeRect(cx,cy,PLOT_AREA*s.twrPct,1.0);
+  const twrCoords=clipToSite(twrRect.slice(0,-1),SITE_COORDS);
+  m.getSource('tower').setData(s.twrF>0?{type:'Feature',geometry:{type:'Polygon',coordinates:[twrCoords.length>2?twrCoords:twrRect]}}:empty);
   m.setPaintProperty('podium-3d','fill-extrusion-color',col);
   m.setPaintProperty('podium-3d','fill-extrusion-height',s.podH);
   m.setPaintProperty('tower-3d','fill-extrusion-color',col);
