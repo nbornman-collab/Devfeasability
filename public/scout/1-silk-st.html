@@ -145,12 +145,29 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
   .panel{width:100%;height:55%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border)}
   .signal-grid{grid-template-columns:1fr 1fr}
 }
+/* ── Map search + HMLR controls ── */
+#map-search-wrap{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:6px;width:calc(100% - 80px);max-width:380px}
+#map-search{flex:1;padding:8px 12px;font:500 12px 'Inter',sans-serif;border:1px solid #e2e5ec;border-radius:3px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.12);outline:none}
+#search-btn{padding:8px 12px;font:600 11px 'Inter',sans-serif;background:#0c0f1a;color:#fff;border:none;border-radius:3px;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+#hmlr-toggle{position:absolute;bottom:10px;left:10px;z-index:20;padding:6px 11px;font:600 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;background:#fff;border:1px solid #e2e5ec;border-radius:3px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+#hmlr-toggle.on{background:#0c0f1a;color:#fff;border-color:#0c0f1a}
+#click-hint{position:absolute;bottom:40px;left:10px;right:10px;z-index:20;background:rgba(255,255,255,.95);border:1px solid #e2e5ec;border-radius:3px;padding:8px 12px;font:500 11px 'Inter',sans-serif;color:#3a3f52;display:none;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+#boundary-status{padding:6px 20px;font:500 11px 'Inter',sans-serif;color:#7a7f96;border-bottom:1px solid #e2e5ec;background:#f8f9fb;display:none}
+#boundary-status.confirmed{color:#059669;background:#f0fdf4;border-color:#bbf7d0}
 </style>
 </head>
 <body>
-<div id="map"></div>
+<div id="map">
+  <div id="map-search-wrap">
+    <input id="map-search" type="text" placeholder="Search address to navigate…" />
+    <button id="search-btn" onclick="searchAddress()">Go</button>
+  </div>
+  <button id="hmlr-toggle" onclick="toggleHMLR()">⬡ Show Parcels</button>
+  <div id="click-hint">Click anywhere on your site</div>
+</div>
 
 <div class="panel">
+  <div id="boundary-status"></div>
 <nav class="tier-nav">
   <a href="/t1/1-silk-st" class="tier-link active"><span class="tid">T1</span><span class="tname">Scout</span></a>
   <span class="tier-sep">·</span>
@@ -517,8 +534,10 @@ async function fetchApps(){
 async function init(){
   const cfg=await(await fetch('/api/config')).json();
   mapboxgl.accessToken=cfg.mapboxToken;
-  const map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:15.5,pitch:50,bearing:10,antialias:true});
+  window._map1ss = new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:[LNG,LAT],zoom:15.5,pitch:50,bearing:10,antialias:true});
+  const map = window._map1ss;
   map.addControl(new mapboxgl.NavigationControl(),'top-right');
+  map.once('load',()=>window.dispatchEvent(new Event('_map1ss_ready')));
   map.on('style.load',()=>{
     // ── Move 1: Mapbox 3D building extrusions (context) ──
     map.addLayer({
@@ -531,6 +550,10 @@ async function init(){
         'fill-extrusion-opacity':0.65
       }
     });
+
+    // ── HMLR INSPIRE WMS (cadastral parcel overlay) ──
+    map.addSource('hmlr-wms',{type:'raster',tiles:['https://inspire.landregistry.gov.uk/inspire/ows?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=inspire:CP.CadastralParcel&STYLES=&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=TRUE'],tileSize:256});
+    map.addLayer({id:'hmlr-wms-layer',type:'raster',source:'hmlr-wms',paint:{'raster-opacity':0}});
 
     // ── Site polygon — starts empty, OS NGD fills it ──
     const emptyGeo={type:'FeatureCollection',features:[]};
@@ -598,6 +621,69 @@ fetch('/api/epc?postcode=EC2Y+8HQ').then(r=>r.json()).then(data=>{
     }
   }
 }).catch(()=>{});
+
+// ── HMLR parcel select helpers ────────────────────────────────────────────
+let _selectMode=false, _confirmed=false;
+
+function toggleHMLR(){
+  _selectMode=!_selectMode;
+  const btn=document.getElementById('hmlr-toggle');
+  const status=document.getElementById('boundary-status');
+  const hint=document.getElementById('click-hint');
+  if(_selectMode){
+    window._map1ss.setPaintProperty('hmlr-wms-layer','raster-opacity',0.7);
+    btn.textContent='⬡ Parcels ON'; btn.className='on';
+    status.textContent='⬡ Click a land parcel to confirm or add to site boundary';
+    status.style.display='block'; status.className='';
+    hint.textContent='Click anywhere on your site'; hint.style.display='block';
+  } else {
+    window._map1ss.setPaintProperty('hmlr-wms-layer','raster-opacity',0);
+    btn.textContent='⬡ Show Parcels'; btn.className='';
+    if(!_confirmed) status.style.display='none';
+    hint.style.display='none';
+  }
+}
+
+async function searchAddress(){
+  const q=document.getElementById('map-search').value.trim();
+  if(!q) return;
+  const cfg=await(await fetch('/api/config')).json();
+  const url=`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?country=gb&proximity=${LNG},${LAT}&access_token=${cfg.mapboxToken}`;
+  const data=await(await fetch(url)).json();
+  const f=data.features?.[0];
+  if(f){
+    window._map1ss.flyTo({center:f.center,zoom:18,pitch:0,bearing:0,duration:1400});
+    window._map1ss.once('moveend',()=>{ if(!_selectMode) toggleHMLR(); });
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('map-search').addEventListener('keydown',e=>{ if(e.key==='Enter') searchAddress(); });
+  // Click handler on map for parcel selection
+  window.addEventListener('_map1ss_ready',()=>{
+    window._map1ss.on('click',async e=>{
+      if(!_selectMode) return;
+      const {lat,lng}=e.lngLat;
+      const hint=document.getElementById('click-hint');
+      hint.textContent='Looking up parcel…'; hint.style.display='block';
+      try{
+        const fc=await(await fetch(`/api/plot-boundary?lat=${lat.toFixed(6)}&lng=${lng.toFixed(6)}`)).json();
+        if(fc&&fc.features&&fc.features.length){
+          window._map1ss.getSource('site').setData(fc);
+          const p=fc.features[0].properties;
+          const area=p.area_sqm?`${p.area_sqm.toLocaleString()} m²`:'—';
+          const owner=p.owner||'Unknown owner';
+          const status=document.getElementById('boundary-status');
+          status.textContent=`✓ ${owner} · ${area}`; status.style.display='block'; status.className='confirmed';
+          hint.style.display='none'; _confirmed=true;
+        } else {
+          hint.textContent='No title found here — try clicking centre of site';
+          setTimeout(()=>hint.style.display='none',3000);
+        }
+      }catch(err){ hint.textContent='Lookup failed — try again'; setTimeout(()=>hint.style.display='none',3000); }
+    });
+  });
+});
 
 init();
 </script>
