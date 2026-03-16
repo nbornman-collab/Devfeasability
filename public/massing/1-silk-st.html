@@ -387,16 +387,14 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 // ══════════════════════════════════════════════════════════════════════════════
 // DATA — identical financial model
 // ══════════════════════════════════════════════════════════════════════════════
-// 1 Silk Street — L-shaped campus polygon (Milton House + Shire House)
-// Traced from planning map; matches confirmed T1 polygon
+// 1 Silk Street — site boundary (Moor Lane / Silk St / Milton St / Barbican podium)
+// Tight rectangle: ~128m E-W × ~88m N-S ≈ 11,000 sqm gross
 const SITE_COORDS=[
-  [-0.09315, 51.52090],
-  [-0.09075, 51.52090],
-  [-0.09075, 51.52005],
-  [-0.09190, 51.52005],
-  [-0.09190, 51.51930],
-  [-0.09315, 51.51930],
-  [-0.09315, 51.52090]
+  [-0.09285, 51.51968],
+  [-0.09105, 51.51968],
+  [-0.09105, 51.52048],
+  [-0.09285, 51.52048],
+  [-0.09285, 51.51968]
 ];
 const CENTROID=[-0.09195,51.52010];
 const LAT=51.52010, LNG=-0.09195;
@@ -701,15 +699,29 @@ function buildCurve(){
 // ══════════════════════════════════════════════════════════════════════════════
 // MAP
 // ══════════════════════════════════════════════════════════════════════════════
+// Build a correctly-sized rectangle centred on [cx,cy] for a given area (sqm) and aspect ratio
+function makeRect(cx,cy,areaSqm,aspect){
+  const LM=1/70750, LaM=1/111320; // lng metres, lat metres at ~51.5°
+  const w=Math.sqrt(areaSqm*aspect), h=w/aspect;
+  const dLng=(w/2)*LM, dLat=(h/2)*LaM;
+  return [[cx-dLng,cy-dLat],[cx+dLng,cy-dLat],[cx+dLng,cy+dLat],[cx-dLng,cy+dLat],[cx-dLng,cy-dLat]];
+}
+
 function updateMap(idx){
   const s=SCENARIOS[idx],col=COLS[idx],m=window._map;
-  const cx=SITE_COORDS.reduce((a,c)=>a+c[0],0)/SITE_COORDS.length;
-  const cy=SITE_COORDS.reduce((a,c)=>a+c[1],0)/SITE_COORDS.length;
-  const shrink=f=>SITE_COORDS.map(c=>[cx+(c[0]-cx)*f,cy+(c[1]-cy)*f]);
+  const cx=CENTROID[0], cy=CENTROID[1];
   const empty={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,.0001],[.0001,.0001],[0,0]]]}};
-  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}});
-  const twrCoords=shrink(Math.sqrt(s.twrPct));
+
+  // Podium: full-plate rectangle centred on site, sized by PLOT_AREA × coverage
+  const podAreaSqm = PLOT_AREA * s.cov;
+  const podCoords = makeRect(cx, cy - 0.00004, podAreaSqm, 1.4); // slight S offset; wider than tall
+  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[podCoords]}});
+
+  // Tower: slender rectangle offset slightly N of centre (away from Silk Street frontage)
+  const twrAreaSqm = PLOT_AREA * s.twrPct;
+  const twrCoords = makeRect(cx + 0.00005, cy + 0.00005, twrAreaSqm, 0.85); // taller than wide
   m.getSource('tower').setData(s.twrF>0?{type:'Feature',geometry:{type:'Polygon',coordinates:[twrCoords]}}:empty);
+
   m.setPaintProperty('podium-3d','fill-extrusion-color',col);
   m.setPaintProperty('podium-3d','fill-extrusion-height',s.podH);
   m.setPaintProperty('tower-3d','fill-extrusion-color',col);
