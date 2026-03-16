@@ -59,13 +59,15 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 
 /* ── Scenario tabs (sticky below tier nav) ──────────────────────── */
 .stabs{display:flex;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:40px;z-index:18}
-.stab{flex:1;padding:12px 8px;text-align:center;cursor:pointer;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;background:transparent;font-family:var(--sans);transition:all .15s}
-.stab .sn{display:block;font:700 13px var(--sans);color:var(--t3)}
-.stab .ss{display:block;font:500 10px var(--sans);color:var(--t3);margin-top:1px}
-.stab.active .sn{color:var(--text)}
-.stab.lo.active{border-bottom-color:var(--lo)}.stab.lo.active .sn{color:var(--lo)}
-.stab.base.active{border-bottom-color:var(--base)}.stab.base.active .sn{color:var(--base)}
-.stab.hi.active{border-bottom-color:var(--hi)}.stab.hi.active .sn{color:var(--hi)}
+.stab{flex:1;padding:13px 8px 11px;text-align:center;cursor:pointer;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;background:transparent;font-family:var(--sans);transition:all .15s}
+.stab .sn{display:block;font:700 14px var(--sans);color:var(--t2);transition:color .15s}
+.stab .ss{display:block;font:600 10px var(--mono);color:var(--t3);margin-top:2px;transition:color .15s}
+.stab.lo.active{background:rgba(5,150,105,.08);border-bottom-color:var(--lo)}
+.stab.lo.active .sn{color:var(--lo)}.stab.lo.active .ss{color:var(--lo);opacity:.7}
+.stab.base.active{background:rgba(79,70,229,.08);border-bottom-color:var(--base)}
+.stab.base.active .sn{color:var(--base)}.stab.base.active .ss{color:var(--base);opacity:.7}
+.stab.hi.active{background:rgba(217,119,6,.08);border-bottom-color:var(--hi)}
+.stab.hi.active .sn{color:var(--hi)}.stab.hi.active .ss{color:var(--hi);opacity:.7}
 
 /* ── Section containers ─────────────────────────────────────────── */
 .section{padding:24px 28px;border-bottom:1px solid var(--border)}
@@ -605,14 +607,14 @@ function render(){
   // Hero metrics
   document.getElementById('hero').innerHTML=`
     <div class="hero-card">
-      <div class="hero-val" style="color:${col}">£${Math.round(s.gdv/1e6)}M</div>
+      <div class="hero-val">£${Math.round(s.gdv/1e6)}M</div>
       <div class="hero-lbl">Gross Development Value</div>
       <div class="hero-delta up">↑ £${Math.round((s.gdv-EXISTING_EUV)/1e6)}M over EUV</div>
     </div>
     <div class="hero-card">
-      <div class="hero-val" style="color:var(--lo)">${s.poc}<span class="hero-unit">%</span></div>
+      <div class="hero-val" style="color:${parseFloat(s.poc)>=S.poc?'var(--lo)':'#dc2626'}">${s.poc}<span class="hero-unit">%</span></div>
       <div class="hero-lbl">Profit on Cost</div>
-      <div class="hero-delta ${parseFloat(s.poc)>25?'up':'dn'}">${parseFloat(s.poc)>25?'Above':'Below'} 25% hurdle</div>
+      <div class="hero-delta ${parseFloat(s.poc)>=S.poc?'up':'dn'}">${parseFloat(s.poc)>=S.poc?'▲ Hits '+S.poc+'% target':'✕ Below '+S.poc+'% target'}</div>
     </div>
     <div class="hero-card">
       <div class="hero-val">${(s.nia/1000).toFixed(1)}<span class="hero-unit">k m²</span></div>

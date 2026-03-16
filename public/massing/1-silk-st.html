@@ -59,13 +59,15 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 
 /* ── Scenario tabs (sticky below tier nav) ──────────────────────── */
 .stabs{display:flex;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:40px;z-index:18}
-.stab{flex:1;padding:12px 8px;text-align:center;cursor:pointer;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;background:transparent;font-family:var(--sans);transition:all .15s}
-.stab .sn{display:block;font:700 13px var(--sans);color:var(--t3)}
-.stab .ss{display:block;font:500 10px var(--sans);color:var(--t3);margin-top:1px}
-.stab.active .sn{color:var(--text)}
-.stab.lo.active{border-bottom-color:var(--lo)}.stab.lo.active .sn{color:var(--lo)}
-.stab.base.active{border-bottom-color:var(--base)}.stab.base.active .sn{color:var(--base)}
-.stab.hi.active{border-bottom-color:var(--hi)}.stab.hi.active .sn{color:var(--hi)}
+.stab{flex:1;padding:13px 8px 11px;text-align:center;cursor:pointer;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;background:transparent;font-family:var(--sans);transition:all .15s}
+.stab .sn{display:block;font:700 14px var(--sans);color:var(--t2);transition:color .15s}
+.stab .ss{display:block;font:600 10px var(--mono);color:var(--t3);margin-top:2px;transition:color .15s}
+.stab.lo.active{background:rgba(5,150,105,.08);border-bottom-color:var(--lo)}
+.stab.lo.active .sn{color:var(--lo)}.stab.lo.active .ss{color:var(--lo);opacity:.7}
+.stab.base.active{background:rgba(79,70,229,.08);border-bottom-color:var(--base)}
+.stab.base.active .sn{color:var(--base)}.stab.base.active .ss{color:var(--base);opacity:.7}
+.stab.hi.active{background:rgba(217,119,6,.08);border-bottom-color:var(--hi)}
+.stab.hi.active .sn{color:var(--hi)}.stab.hi.active .ss{color:var(--hi);opacity:.7}
 
 /* ── Section containers ─────────────────────────────────────────── */
 .section{padding:24px 28px;border-bottom:1px solid var(--border)}
@@ -430,7 +432,8 @@ const SITE_COORDS=[
   [-0.09247,51.52033],
   [-0.09249,51.52026]
 ];
-const CENTROID=[-0.09163, 51.52033];
+const CENTROID=[-0.09163, 51.52033]; // campus centroid (map centre)
+const MASSING_CX=-0.09120, MASSING_CY=51.51990; // actual 1 Silk St building footprint
 const LAT=51.52033, LNG=-0.09163;
 const PLOT_AREA=5709, FTF=4.0, EXISTING_HEIGHT=32;
 const EXISTING_EUV=150000000;
@@ -676,14 +679,14 @@ function render(){
   // Hero metrics
   document.getElementById('hero').innerHTML=`
     <div class="hero-card">
-      <div class="hero-val" style="color:${col}">£${Math.round(s.gdv/1e6)}M</div>
+      <div class="hero-val">£${Math.round(s.gdv/1e6)}M</div>
       <div class="hero-lbl">Gross Development Value</div>
       <div class="hero-delta up">↑ £${Math.round((s.gdv-EXISTING_EUV)/1e6)}M over EUV</div>
     </div>
     <div class="hero-card">
-      <div class="hero-val" style="color:var(--lo)">${s.poc}<span class="hero-unit">%</span></div>
+      <div class="hero-val" style="color:${parseFloat(s.poc)>=S.poc?'var(--lo)':'#dc2626'}">${s.poc}<span class="hero-unit">%</span></div>
       <div class="hero-lbl">Profit on Cost</div>
-      <div class="hero-delta ${parseFloat(s.poc)>25?'up':'dn'}">${parseFloat(s.poc)>25?'Above':'Below'} 25% hurdle</div>
+      <div class="hero-delta ${parseFloat(s.poc)>=S.poc?'up':'dn'}">${parseFloat(s.poc)>=S.poc?'▲ Hits '+S.poc+'% target':'✕ Below '+S.poc+'% target'}</div>
     </div>
     <div class="hero-card">
       <div class="hero-val">${(s.nia/1000).toFixed(1)}<span class="hero-unit">k m²</span></div>
@@ -871,9 +874,9 @@ function updateMap(idx){
   const ftf=3.5;
   for(let f=1;f<=30;f++) m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0);
 
-  // Green envelope above existing
-  const envCoords=bufferPoly(SITE_COORDS,0.000004);
-  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[envCoords]}});
+  // Massing: area-derived rectangle at actual building location (not campus centroid)
+  const envRect=makeRect(MASSING_CX,MASSING_CY,PLOT_AREA*s.cov,1.4);
+  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[envRect]}});
   m.setPaintProperty('podium-3d','fill-extrusion-color','#059669');
   m.setPaintProperty('podium-3d','fill-extrusion-height',targetH);
   m.setPaintProperty('podium-3d','fill-extrusion-base',EXISTING_HEIGHT);
@@ -884,11 +887,11 @@ function updateMap(idx){
   m.setPaintProperty('tower-3d','fill-extrusion-opacity',0);
   m.setPaintProperty('tower-edge','line-opacity',0);
 
-  // Floor lines in the additional zone only
+  // Floor lines in the additional zone
   const newFloors=Math.round((targetH-EXISTING_HEIGHT)/ftf);
   for(let f=1;f<=newFloors&&f<=30;f++){
     const h=EXISTING_HEIGHT+(f*ftf);
-    m.getSource('fl'+f).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000005)]}});
+    m.getSource('fl'+f).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[makeRect(MASSING_CX,MASSING_CY,PLOT_AREA*s.cov,1.4)]}});
     m.setPaintProperty('fl'+f,'fill-extrusion-color','#047857');
     m.setPaintProperty('fl'+f,'fill-extrusion-height',h+0.12);
     m.setPaintProperty('fl'+f,'fill-extrusion-base',h-0.12);
@@ -910,7 +913,7 @@ async function initMap(){
     m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-dasharray':[5,3],'line-opacity':0.8}});
 
     // Red translucent shell — outset ~0.4m, envelops the grey Mapbox mass, full height
-    m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}}});
+    m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[makeRect(MASSING_CX,MASSING_CY,PLOT_AREA,1.4)]}}});
     m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.32}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
 
