@@ -94,7 +94,17 @@ async function pdGet(path) {
 }
 
 // Pick the best freehold title for a site:
-// Prefer closest to coords with most polygon points (real building) and >0 leaseholds
+// Private company + leaseholds = development building
+// Government body (CoL/council) + 0 leaseholds = highway/public land (exclude)
+const GOV_OWNERS = ['MAYOR AND COMMONALTY', 'CITY OF LONDON', 'LONDON BOROUGH', 'COUNCIL', 'SECRETARY OF STATE', 'TRANSPORT FOR LONDON', 'NETWORK RAIL', 'HIGHWAYS ENGLAND'];
+function isGovOwner(title) {
+  // Use title class or known patterns — at freeholds stage we don't have owner name,
+  // so use leaseholds=0 + very high/low point count as highway proxy
+  const p = title.polygons?.[0] || {};
+  // Streets: many points (complex curve) but 0 leaseholds — penalise
+  return p.leaseholds === 0 && p.num_points > 80;
+}
+
 function pickBestTitle(titles, lat, lng) {
   if (!titles || !titles.length) return null;
   const mLng = 111320 * Math.cos(lat * Math.PI / 180), mLat = 110540;
@@ -103,8 +113,12 @@ function pickBestTitle(titles, lat, lng) {
     const dx = ((p.lat || lat) - lat) * mLat;
     const dy = ((p.lng || lng) - lng) * mLng;
     const dist = Math.sqrt(dx * dx + dy * dy);
-    // Score: closeness × polygon complexity × has leaseholds
-    const score = (1 / (dist + 1)) * (p.num_points || 1) * (p.leaseholds > 0 ? 2 : 1);
+    const leaseholds = p.leaseholds || 0;
+    // Penalise suspected highway titles (many points, 0 leaseholds)
+    const highwayPenalty = isGovOwner(t) ? 0.1 : 1;
+    // Reward leaseholds (occupied commercial buildings have tenants/floors)
+    const leaseholdBoost = leaseholds > 0 ? (1 + Math.log(leaseholds + 1)) : 0.5;
+    const score = (1 / (dist + 1)) * leaseholdBoost * highwayPenalty;
     return { ...t, _dist: dist, _score: score };
   }).sort((a, b) => b._score - a._score)[0];
 }
