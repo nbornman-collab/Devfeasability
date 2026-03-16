@@ -196,6 +196,34 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <div class="content">
 
+    <!-- Why This Site — seller motivation / underutilisation -->
+    <div class="card">
+      <div class="card-head"><h3>Why This Site</h3></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px">
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="epc-gia">—</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Existing GIA (EPC registered)</div>
+          </div>
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)">~75,000 m²</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Achievable GIA — tall tower scenario</div>
+          </div>
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="current-far">—</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Current plot ratio (FAR)</div>
+          </div>
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)">Vacating 2026</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Linklaters — new HQ in Southwark</div>
+          </div>
+        </div>
+        <div style="font:400 12px/1.75 var(--sans);color:var(--text2)">
+          Linklaters has vacated its Silk Street campus for a new HQ, leaving a large low-rise office complex on a site capable of supporting a significant tower. The campus — Milton House and Shire House — sits within the City fringe immediately adjacent to the Barbican Conservation Area. The combination of motivated vendor, large footprint, and established tall building precedent (Heron Tower 183m, 200 Aldersgate 100m) makes this a high-conviction opportunity. Constraint analysis at T2 is essential before any land bid.
+        </div>
+      </div>
+    </div>
+
     <!-- Market signals -->
     <div class="card">
       <div class="card-head"><h3>Market Signals — EC2Y · Barbican/Moorgate · 2025 Q4</h3></div>
@@ -505,6 +533,21 @@ async function init(){
     })();
   });
 }
+// EPC floor area for 1SS
+fetch('/api/epc?postcode=EC2Y+8HQ').then(r=>r.json()).then(data=>{
+  const results = data.results || [];
+  // Pick largest floor area result — covers the full campus
+  const best = results.sort((a,b)=>(b.floorArea||0)-(a.floorArea||0))[0];
+  if(best && best.floorArea > 0){
+    const gia = best.floorArea;
+    const far = (gia / PLOT_AREA).toFixed(1);
+    const el = document.getElementById('epc-gia');
+    const farEl = document.getElementById('current-far');
+    if(el) el.textContent = gia.toLocaleString() + ' m²';
+    if(farEl) farEl.textContent = far + '×';
+  }
+}).catch(()=>{});
+
 init();
 </script>
 </body>

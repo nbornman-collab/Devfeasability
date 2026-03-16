@@ -223,6 +223,34 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <div class="content">
 
+    <!-- Why This Site — seller motivation / underutilisation -->
+    <div class="card" id="why-card">
+      <div class="card-head"><h3>Why This Site</h3></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px">
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="epc-gia">—</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Existing GIA (EPC registered)</div>
+          </div>
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)" id="potential-gia">~34,000 m²</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Achievable NIA — Base scenario</div>
+          </div>
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="current-far">—</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Current plot ratio (FAR)</div>
+          </div>
+          <div style="background:#fff;padding:14px 16px">
+            <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)">~22×</div>
+            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Achievable FAR — Eastern Cluster</div>
+          </div>
+        </div>
+        <div style="font:400 12px/1.75 var(--sans);color:var(--text2)">
+          The existing building occupies a premium Eastern Cluster position at a fraction of its planning envelope. City of London policy actively encourages densification here — neighbouring consented schemes reach 22–50 storeys. The value gap between what sits on the site today and what planning policy permits is the opportunity. The constraint set is substantial (heritage, LVMF, BSA) but navigable — T2 maps exactly where on the risk/return curve each scenario sits.
+        </div>
+      </div>
+    </div>
+
     <!-- Market signals -->
     <div class="card">
       <div class="card-head"><h3>Market Signals — City of London · 2025 Q4</h3></div>
@@ -505,12 +533,13 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
 // ── All API calls ─────────────────────────────────────────────────────────────
 async function loadAll(){
-  const [flood,ptal,listed,apps,ctx]=await Promise.allSettled([
+  const [flood,ptal,listed,apps,ctx,epc]=await Promise.allSettled([
     fetch(`/api/flood-zone?lat=${LAT}&lng=${LNG}`).then(r=>r.json()),
     fetch(`/api/ptal?lat=${LAT}&lng=${LNG}`).then(r=>r.json()),
     fetch(`/api/listed-buildings?lat=${LAT}&lng=${LNG}&radius=200`).then(r=>r.json()),
     fetch(`/api/planning-apps?lat=${LAT}&lng=${LNG}&krad=0.3`).then(r=>r.json()),
     fetch(`/api/context-buildings?lat=${LAT}&lng=${LNG}&radius=300`).then(r=>r.json()),
+    fetch(`/api/epc?postcode=EC3A+3BP`).then(r=>r.json()),
   ]);
 
   // Flood
@@ -628,6 +657,20 @@ function buildApps(apps){
       </div>
     </div>`;
   }).join(''));
+}
+
+  // EPC — existing floor area
+  if(epc.status==='fulfilled' && epc.value.results && epc.value.results.length){
+    const best = epc.value.results[0];
+    const gia = best.floorArea;
+    if(gia > 0){
+      const far = (gia / PLOT_AREA).toFixed(1);
+      const el = document.getElementById('epc-gia');
+      const farEl = document.getElementById('current-far');
+      if(el) el.textContent = gia.toLocaleString() + ' m²';
+      if(farEl) farEl.textContent = far + '×';
+    }
+  }
 }
 
 loadAll();
