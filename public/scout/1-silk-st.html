@@ -164,17 +164,18 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
   </div>
   <button id="hmlr-toggle" onclick="toggleHMLR()">⬡ Show Parcels</button>
   <div id="click-hint">Click anywhere on your site</div>
-  <div id="title-input-wrap" style="display:none;position:absolute;bottom:50px;left:10px;right:10px;z-index:21;background:#fff;border:1px solid #e2e5ec;border-radius:3px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.12)">
-    <div style="font:600 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#7a7f96;margin-bottom:6px">Couldn't find via click — enter HMLR title number</div>
-    <div style="display:flex;gap:6px">
-      <input id="title-number-input" placeholder="e.g. NGL656467" style="flex:1;padding:7px 10px;font:500 12px 'Inter',sans-serif;border:1px solid #e2e5ec;border-radius:3px;outline:none">
-      <button onclick="lookupByTitle()" style="padding:7px 12px;font:600 11px 'Inter',sans-serif;background:#0c0f1a;color:#fff;border:none;border-radius:3px;cursor:pointer">Look up</button>
-    </div>
-  </div>
+
 </div>
 
 <div class="panel">
   <div id="boundary-status"></div>
+  <div id="title-input-panel" style="display:none;padding:10px 16px;background:#f8f9fb;border-bottom:1px solid #e2e5ec">
+    <div style="font:600 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#7a7f96;margin-bottom:6px">No title found at tap — enter HMLR title number directly</div>
+    <div style="display:flex;gap:6px">
+      <input id="title-number-input" placeholder="e.g. NGL656467" style="flex:1;padding:7px 10px;font:500 13px 'Inter',sans-serif;border:1px solid #e2e5ec;border-radius:3px;outline:none">
+      <button onclick="lookupByTitle()" style="padding:7px 14px;font:600 11px 'Inter',sans-serif;background:#0c0f1a;color:#fff;border:none;border-radius:3px;cursor:pointer">Look up</button>
+    </div>
+  </div>
 <nav class="tier-nav">
   <a href="/t1/1-silk-st" class="tier-link active"><span class="tid">T1</span><span class="tname">Scout</span></a>
   <span class="tier-sep">·</span>
@@ -611,28 +612,37 @@ async function init(){
       return true;
     }
 
-    // ── Click/tap to select parcel ────────────────────────────────────────
-    map.on('click', async e => {
+    // ── Click/tap to select parcel (touchend for mobile reliability) ─────
+    async function handleMapTap(lngLat){
       if(!_selectMode) return;
-      const {lat,lng} = e.lngLat;
+      const {lat,lng} = lngLat;
       const hint = document.getElementById('click-hint');
-      hint.textContent = 'Looking up parcel…'; hint.style.display = 'block';
+      hint.textContent = 'Looking up…'; hint.style.display = 'block';
       try{
         const fc = await(await fetch(`/api/plot-boundary?lat=${lat.toFixed(6)}&lng=${lng.toFixed(6)}`)).json();
         if(fc && fc.features && fc.features.length){
           const added = addParcel(fc.features[0]);
-          hint.textContent = added ? 'Parcel added — tap another to combine' : 'Already added';
-          hint.style.display = 'block';
+          hint.textContent = added ? '✓ Added — tap another to combine' : 'Already added';
           setTimeout(()=>hint.style.display='none', 2500);
+          document.getElementById('title-input-panel').style.display = 'none';
         } else {
           hint.style.display = 'none';
-          document.getElementById('title-input-wrap').style.display = 'block';
+          document.getElementById('title-input-panel').style.display = 'block';
         }
       }catch(err){
-        hint.textContent = 'Lookup failed — try again';
-        setTimeout(()=>hint.style.display='none', 3000);
+        hint.textContent = 'Error — try again'; setTimeout(()=>hint.style.display='none', 3000);
       }
-    });
+    }
+    map.on('click', e => handleMapTap(e.lngLat));
+    // touchend fallback for mobile (fires even with slight finger drift)
+    map.getCanvas().addEventListener('touchend', e => {
+      if(!_selectMode || e.touches.length > 0) return;
+      e.preventDefault();
+      const touch = e.changedTouches[0];
+      const rect = map.getCanvas().getBoundingClientRect();
+      const point = new mapboxgl.Point(touch.clientX - rect.left, touch.clientY - rect.top);
+      handleMapTap(map.unproject(point));
+    }, {passive:false});
   });
 }
 // EPC floor area for 1SS
@@ -709,7 +719,7 @@ async function searchAddress(){
 async function lookupByTitle(){
   const titleNo = document.getElementById('title-number-input').value.trim().toUpperCase();
   if(!titleNo) return;
-  const wrap = document.getElementById('title-input-wrap');
+  const wrap = document.getElementById('title-input-panel');
   wrap.querySelector('button').textContent = '…';
   try {
     const fc = await(await fetch(`/api/plot-boundary?title=${titleNo}`)).json();
