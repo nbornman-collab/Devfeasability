@@ -784,4 +784,65 @@ app.get('/api/version', (req, res) => {
   res.json({ version: '4.3.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
 });
 
+// ── Generate Render — Gemini 3 Pro image generation ────────────────────────
+const RENDER_PROMPT = `Transform the provided architectural massing image from an isometric parallel view into a 1-point perspective view while preserving the exact proportions and geometry of the buildings.
+
+Style: physical architectural study model.
+
+Context buildings: matte white foam architectural model with minimal detail.
+
+Proposed design: two-tone timber massing (light natural timber and slightly darker timber) with clear separation between the tones.
+
+Maintain all horizontal floor slab lines and massing articulation exactly as in the original.
+
+Lighting: soft studio lighting as if photographed in an architecture studio, subtle shadows, clean white background, highly controlled light.
+
+Material expression: smooth model materials, crisp edges, no realism beyond model scale.
+
+Camera: 35mm architectural photography perspective, eye-level 1-point perspective, mild depth but not exaggerated.
+
+Composition: centered architectural model photograph, neutral studio backdrop, minimal distraction.
+
+Important constraints:
+- do not change proportions
+- do not change massing geometry
+- only transform the projection from isometric to 1-point perspective
+- maintain the floor lines and volumes exactly
+- context remains white, proposal remains two-tone timber`;
+
+app.post('/api/generate-render', express.json({ limit: '10mb' }), async (req, res) => {
+  try {
+    const { imageBase64 } = req.body;
+    if (!imageBase64) return res.status(400).json({ error: 'imageBase64 required' });
+    const GEMINI_KEY = process.env.GEMINI_API_KEY;
+    if (!GEMINI_KEY) return res.status(500).json({ error: 'GEMINI_API_KEY not set' });
+
+    const body = JSON.stringify({
+      contents: [{
+        parts: [
+          { text: RENDER_PROMPT },
+          { inlineData: { mimeType: 'image/png', data: imageBase64.replace(/^data:image\/\w+;base64,/, '') } }
+        ]
+      }],
+      generationConfig: { responseModalities: ['image', 'text'] }
+    });
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image-preview:generateContent?key=${GEMINI_KEY}`,
+      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body }
+    );
+    const data = await response.json();
+    const parts = data.candidates?.[0]?.content?.parts || [];
+    const imgPart = parts.find(p => p.inlineData?.mimeType?.startsWith('image/'));
+    if (!imgPart) {
+      console.error('No image in Gemini response:', JSON.stringify(data).slice(0, 400));
+      return res.status(502).json({ error: 'No image returned', detail: data.error?.message });
+    }
+    res.json({ imageBase64: `data:${imgPart.inlineData.mimeType};base64,${imgPart.inlineData.data}` });
+  } catch (e) {
+    console.error('generate-render error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.listen(PORT, () => console.log(`DevFeasibility v4.3 (London) running on port ${PORT}`));

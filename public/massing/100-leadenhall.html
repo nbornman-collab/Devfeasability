@@ -167,6 +167,15 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 
 <div class="map-bar">
   <div class="logo">D&A <span>Studio</span></div>
+  <button id="render-btn" onclick="generateRender()" style="position:absolute;right:12px;top:8px;background:#0c0f1a;color:#fff;border:none;padding:7px 14px;font:600 11px var(--sans);cursor:pointer;border-radius:3px;display:flex;align-items:center;gap:6px;z-index:10">
+    <span id="render-icon">⬡</span> Generate Render
+  </button>
+</div>
+
+<!-- Render output panel -->
+<div id="render-panel" style="display:none;background:#f8f9fb;border-bottom:1px solid #e2e5ec;padding:16px 20px">
+  <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:2px;color:#7a7f96;margin-bottom:10px">AI Physical Model Render — Gemini 3 Pro</div>
+  <img id="render-img" style="width:100%;border:1px solid #e2e5ec;display:block" />
 </div>
 
 <div class="scenario-pills">
@@ -860,6 +869,38 @@ function shrinkPoly(coords,f){
   const cx=coords.reduce((s,c)=>s+c[0],0)/coords.length;
   const cy=coords.reduce((s,c)=>s+c[1],0)/coords.length;
   return coords.map(c=>[cx+(c[0]-cx)*f,cy+(c[1]-cy)*f]);
+}
+
+async function generateRender(){
+  const btn = document.getElementById('render-btn');
+  const icon = document.getElementById('render-icon');
+  const panel = document.getElementById('render-panel');
+  const img = document.getElementById('render-img');
+  btn.disabled = true;
+  icon.textContent = '⏳';
+  btn.querySelector('span').nextSibling.textContent = ' Generating…';
+  try {
+    const canvas = window._map.getCanvas();
+    const imageBase64 = canvas.toDataURL('image/png');
+    const res = await fetch('/api/generate-render', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64 })
+    });
+    const data = await res.json();
+    if (data.imageBase64) {
+      img.src = data.imageBase64;
+      panel.style.display = 'block';
+    } else {
+      alert('Render failed: ' + (data.error || 'unknown error'));
+    }
+  } catch(e) {
+    alert('Render error: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    icon.textContent = '⬡';
+    btn.childNodes[1].textContent = ' Generate Render';
+  }
 }
 
 async function initMap(){
