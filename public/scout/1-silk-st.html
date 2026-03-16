@@ -164,6 +164,13 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
   </div>
   <button id="hmlr-toggle" onclick="toggleHMLR()">⬡ Show Parcels</button>
   <div id="click-hint">Click anywhere on your site</div>
+  <div id="title-input-wrap" style="display:none;position:absolute;bottom:50px;left:10px;right:10px;z-index:21;background:#fff;border:1px solid #e2e5ec;border-radius:3px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.12)">
+    <div style="font:600 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#7a7f96;margin-bottom:6px">Couldn't find via click — enter HMLR title number</div>
+    <div style="display:flex;gap:6px">
+      <input id="title-number-input" placeholder="e.g. NGL656467" style="flex:1;padding:7px 10px;font:500 12px 'Inter',sans-serif;border:1px solid #e2e5ec;border-radius:3px;outline:none">
+      <button onclick="lookupByTitle()" style="padding:7px 12px;font:600 11px 'Inter',sans-serif;background:#0c0f1a;color:#fff;border:none;border-radius:3px;cursor:pointer">Look up</button>
+    </div>
+  </div>
 </div>
 
 <div class="panel">
@@ -602,8 +609,8 @@ async function init(){
           status.textContent = `✓ ${owner} · ${area}`; status.style.display = 'block'; status.className = 'confirmed';
           hint.style.display = 'none'; _confirmed = true;
         } else {
-          hint.textContent = 'No title found here — try clicking centre of site';
-          setTimeout(()=>hint.style.display='none', 3000);
+          hint.style.display = 'none';
+          document.getElementById('title-input-wrap').style.display = 'block';
         }
       }catch(err){
         hint.textContent = 'Lookup failed — try again';
@@ -683,8 +690,39 @@ async function searchAddress(){
   }
 }
 
+async function lookupByTitle(){
+  const titleNo = document.getElementById('title-number-input').value.trim().toUpperCase();
+  if(!titleNo) return;
+  const wrap = document.getElementById('title-input-wrap');
+  wrap.querySelector('button').textContent = '…';
+  try {
+    const fc = await(await fetch(`/api/plot-boundary?title=${titleNo}`)).json();
+    if(fc && fc.features && fc.features.length){
+      window._map1ss.getSource('site').setData(fc);
+      const p = fc.features[0].properties;
+      const area = p.area_sqm ? `${p.area_sqm.toLocaleString()} m²` : '—';
+      const owner = p.owner || 'Unknown owner';
+      const status = document.getElementById('boundary-status');
+      status.textContent = `✓ ${owner} · ${area}`; status.style.display = 'block'; status.className = 'confirmed';
+      wrap.style.display = 'none'; _confirmed = true;
+      if(fc.features[0].geometry) {
+        const coords = fc.features[0].geometry.coordinates[0];
+        const bounds = coords.reduce((b,c)=>b.extend(c), new mapboxgl.LngLatBounds(coords[0],coords[0]));
+        window._map1ss.fitBounds(bounds, {padding:40, duration:800});
+      }
+    } else {
+      wrap.querySelector('button').textContent = 'Not found';
+      setTimeout(()=>wrap.querySelector('button').textContent='Look up', 2000);
+    }
+  } catch(e) {
+    wrap.querySelector('button').textContent = 'Error';
+    setTimeout(()=>wrap.querySelector('button').textContent='Look up', 2000);
+  }
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('map-search').addEventListener('keydown',e=>{ if(e.key==='Enter') searchAddress(); });
+  document.getElementById('title-number-input')?.addEventListener('keydown',e=>{ if(e.key==='Enter') lookupByTitle(); });
 });
 
 init();
