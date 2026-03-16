@@ -256,6 +256,9 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     <div class="pstrip-col" id="ps-2"></div>
   </div>
 
+  <!-- ── Development Appraisal (inline, updates with sliders) ── -->
+  <div id="proforma-inline" style="margin:0 20px 16px"></div>
+
   <!-- Scenario tabs -->
   <div class="stabs">
     <button class="stab lo active" onclick="go(0)"><span class="sn">Low</span><span class="ss">10F · 40m</span></button>
@@ -715,7 +718,7 @@ function render(){
     </div>`;
 
   // Pro forma
-  document.getElementById('proforma-section').innerHTML=`
+  const pfHTML=`
     <div class="sec-head">Development Appraisal</div>
     <table class="pf-table">
       <tr><td>Construction · ${fmt(s.gea)} m² × £${(MARKET.costGsm[s.key]/1000).toFixed(1)}k</td><td>−£${(s.constCost/1e6).toFixed(1)}M</td></tr>
@@ -731,6 +734,8 @@ function render(){
       <tr><td style="padding-top:10px;color:var(--t3)">Residual Land Value <span style="font-weight:400">(at ${S.poc}% target profit on cost)</span></td>
           <td style="padding-top:10px;font-weight:700;color:${s.rlv>0?'var(--lo)':'#dc2626'}">${s.rlv>0?'':'−'}£${Math.abs(s.rlv/1e6).toFixed(1)}M</td></tr>
     </table>`;
+  document.getElementById('proforma-inline').innerHTML=pfHTML;
+  document.getElementById('proforma-section').innerHTML=pfHTML;
 
   // Constraints
   const mkG=(items,head,trigger,dotCol)=>{
