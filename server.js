@@ -780,6 +780,36 @@ app.get('/api/plot-boundary-debug', async (req, res) => {
   } catch (e) { res.status(500).send(e.message); }
 });
 
+// ── HMLR INSPIRE WMS proxy (CORS bypass) ─────────────────────────────────
+// Converts XYZ tile coords → EPSG:3857 bbox → fetches HMLR WMS → returns PNG
+app.get('/api/hmlr-tile/:z/:x/:y', async (req, res) => {
+  const { z, x, y } = req.params;
+  const n = Math.pow(2, parseInt(z));
+  const R = 6378137;
+  const xMin = (parseInt(x) / n) * 2 * Math.PI * R - Math.PI * R;
+  const xMax = ((parseInt(x) + 1) / n) * 2 * Math.PI * R - Math.PI * R;
+  const yMax = Math.atan(Math.sinh(Math.PI * (1 - 2 * parseInt(y) / n))) * 180 / Math.PI;
+  const yMin = Math.atan(Math.sinh(Math.PI * (1 - 2 * (parseInt(y) + 1) / n))) * 180 / Math.PI;
+  // Convert lat/lng y bounds to EPSG:3857 metres
+  const toMercY = lat => Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360)) * R;
+  const bbox = `${xMin.toFixed(2)},${toMercY(yMin).toFixed(2)},${xMax.toFixed(2)},${toMercY(yMax).toFixed(2)}`;
+  const params = new URLSearchParams({
+    SERVICE:'WMS', VERSION:'1.3.0', REQUEST:'GetMap',
+    LAYERS:'inspire:CP.CadastralParcel', STYLES:'',
+    CRS:'EPSG:3857', BBOX:bbox,
+    WIDTH:'256', HEIGHT:'256', FORMAT:'image/png', TRANSPARENT:'TRUE'
+  });
+  try {
+    const r = await fetch(`https://inspire.landregistry.gov.uk/inspire/ows?${params}`);
+    res.set('Content-Type', 'image/png');
+    res.set('Cache-Control', 'public, max-age=86400');
+    const buf = await r.arrayBuffer();
+    res.send(Buffer.from(buf));
+  } catch(e) {
+    res.status(502).send('WMS proxy error');
+  }
+});
+
 app.get('/api/version', (req, res) => {
   res.json({ version: '4.3.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
 });
