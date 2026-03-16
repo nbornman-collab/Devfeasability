@@ -799,10 +799,10 @@ async function initMap(){
     m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
     m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-dasharray':[5,3],'line-opacity':0.8}});
 
-    // Red roofline cap — marks existing building top
-    m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000002)]}}});
-    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#c0392b','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':Math.max(0,EXISTING_HEIGHT-0.5),'fill-extrusion-opacity':0.9}});
-    m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.9}});
+    // Red translucent shell — outset ~0.4m, envelops the grey Mapbox mass, full height
+    m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}}});
+    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.32}});
+    m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
 
     // Green additional envelope + floor lines
     m.addSource('podium',{type:'geojson',data:emptyPoly()});
