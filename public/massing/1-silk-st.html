@@ -387,10 +387,11 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 // ══════════════════════════════════════════════════════════════════════════════
 // DATA — identical financial model
 // ══════════════════════════════════════════════════════════════════════════════
-// 1 Silk Street — Linklaters campus (simplified polygon)
-const SITE_COORDS=[[-0.09280,51.52060],[-0.09120,51.52060],[-0.09100,51.52040],[-0.09090,51.51970],[-0.09110,51.51960],[-0.09290,51.51960],[-0.09300,51.52000],[-0.09280,51.52060]];
+// 1 Silk Street — polygon loaded dynamically via OS Places + NGD
+let SITE_COORDS=[[-0.09240,51.52050],[-0.09150,51.52050],[-0.09150,51.51970],[-0.09240,51.51970],[-0.09240,51.52050]]; // fallback bbox
 const CENTROID=[-0.09195,51.52010];
 const LAT=51.52010, LNG=-0.09195;
+const ADDRESS='1 Silk Street, London EC2Y 8HQ';
 const PLOT_AREA=9000, FTF=4.0;
 const EXISTING_EUV=150000000;
 const fmt=n=>(n??0).toLocaleString('en-GB');
@@ -710,9 +711,37 @@ function updateMap(idx){
   m.setPaintProperty('site-line','line-color',col);
 }
 
+async function loadSitePolygon(){
+  try {
+    const places = await (await fetch(`/api/os-places?q=${encodeURIComponent(ADDRESS)}`)).json();
+    const iLat = places.lat || LAT;
+    const iLng = places.lng || LNG;
+    const fc = await (await fetch(`/api/os-buildings?lat=${LAT}&lng=${LNG}&iLat=${iLat}&iLng=${iLng}`)).json();
+    let feat = null;
+    if (fc.features && fc.features.length) {
+      feat = fc.features.find(f => f.geometry.type === 'Polygon') || fc.features[0];
+    }
+    if (!feat) {
+      const fc2 = await (await fetch(`/api/os-buildings?lat=${iLat}&lng=${iLng}&buf=0.0008`)).json();
+      if (fc2.features && fc2.features.length) feat = fc2.features[0];
+    }
+    if (feat && feat.geometry && feat.geometry.coordinates) {
+      SITE_COORDS = feat.geometry.coordinates[0];
+      // Update map sources if map already loaded
+      const m = window._map;
+      if (m && m.getSource) {
+        const poly = {type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}};
+        if (m.getSource('site')) m.getSource('site').setData(poly);
+        updateMap(activeIdx);
+      }
+    }
+  } catch(e) { console.warn('OS polygon:', e.message); }
+}
+
 async function initMap(){
   const cfg=await(await fetch('/api/config')).json();
   mapboxgl.accessToken=cfg.mapboxToken;
+  loadSitePolygon(); // fire and forget — updates map when ready
   const m=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:CENTROID,zoom:17,pitch:50,bearing:-15,antialias:true});
   m.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
   window._map=m;
