@@ -49,6 +49,11 @@ app.get('/t1/:site', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'scout', `${req.params.site}.html`));
 });
 
+// Borough screener — /borough/:name → public/borough/:name.html
+app.get('/borough/:name', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'borough', `${req.params.name}.html`));
+});
+
 // Serve mapbox token
 app.get('/api/config', (req, res) => {
   res.json({ mapboxToken: MAPBOX_TOKEN });

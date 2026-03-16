@@ -382,7 +382,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 <script>
 const LAT=51.52033, LNG=-0.09163;
 const ADDRESS='1 Silk Street, London EC2Y 8HQ';
-const PLOT_AREA=17500; // full campus ~17-20k sqm (Milton House + Shire House + curtilage)
+const PLOT_AREA=10924; // full campus: 5 OS NGD buildings, computed from convex hull
 const EXISTING_EUV=95000000;
 
 // Site polygon — convex hull from OS NGD building footprints (Milton House + Shire House)
@@ -391,20 +391,21 @@ const SITE_COORDS=[
   [-0.09249,51.52026],
   [-0.09238,51.52013],
   [-0.09212,51.52007],
-  [-0.09133,51.51989],
   [-0.09114,51.51985],
   [-0.09109,51.5199],
   [-0.09098,51.52008],
+  [-0.09091,51.52021],
   [-0.0909,51.52022],
   [-0.09089,51.52024],
+  [-0.09083,51.52037],
   [-0.0908,51.52043],
-  [-0.09073,51.52061],
-  [-0.09099,51.52064],
-  [-0.09138,51.52068],
-  [-0.09168,51.52071],
-  [-0.09233,51.5207],
-  [-0.09236,51.52063],
-  [-0.09239,51.52055],
+  [-0.09078,51.52049],
+  [-0.09069,51.52072],
+  [-0.0911,51.52086],
+  [-0.09148,51.5209],
+  [-0.09155,51.52091],
+  [-0.09212,51.52089],
+  [-0.09229,51.52088],
   [-0.09247,51.52033],
   [-0.09249,51.52026]
 ];
