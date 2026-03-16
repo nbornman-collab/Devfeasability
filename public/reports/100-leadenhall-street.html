@@ -1056,140 +1056,122 @@ async function buildGroundFloorPlan(){
 function buildMassingSectionSVG(svgId='section-svg', propH=D.potentialHeight, opt=null){
   const svg=document.getElementById(svgId);
   if(!svg) return;
-  const VW=280;
-  const existH=D.heightM;
-  // Fixed absolute scale — 3.5 px per metre
-  const scH=3.5;
-  const gndPad=28, topPad=36;
-  // VH: always tall enough to show Lloyd's (95m) fully so skyline reads correctly
-  const frameH=Math.max(propH,95);
+
+  // ── Layout constants ──────────────────────────────────────────────────────
+  const VW=340;
+  const scH=3.5;                     // px per metre (fixed vertical scale)
+  const gndPad=28, topPad=20;
+  const LEADERS=[                    // right-side height datums — nearest first
+    {h:95,  label:"Lloyd's Bldg",  sub:'Grade I · 0.1km E'},
+    {h:179, label:'30 St Mary Axe',sub:'Gherkin · 0.5km NE'},
+    {h:224, label:'Cheesegrater',  sub:'0.3km N'},
+    {h:278, label:'22 Bishopsgate',sub:'0.4km N'},
+    {h:290, label:'1 Undershaft',  sub:'u/c · 0.5km N'},
+  ];
+  const frameH=Math.max(propH, LEADERS[LEADERS.length-1].h);
   const VH=Math.round(frameH*scH + gndPad + topPad);
   svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
   const groundY=VH-gndPad;
-  // Stepped setback: east face recedes by sbE above podH
-  const podH = opt ? opt.podiumHeight : existH;
-  const sbEm = opt ? opt.setbackM * 0.6 : 0;
   const hy=h=>groundY-h*scH;
+
+  // ── Geometry ──────────────────────────────────────────────────────────────
+  const existH=D.heightM;
+  const podH=opt?opt.podiumHeight:existH;
+  const sbEm=opt?opt.setbackM*0.6:0;
   const siteWm=Math.sqrt(D.plotArea*1.1);
-  const scW=VW*0.36/siteWm;
-  // Main building shifted right (cx=190) to free left side for city cluster skyline
-  const cx=190, sitePxW=siteWm*scW;
-  // City Cluster context buildings — W side of section, left→right = tallest→shortest
-  const CTX=[
-    {label:'22 Bishopsgate',h:278,x:8, w:22},
-    {label:'Cheesegrater', h:224,x:36,w:22},
-    {label:"Lloyd's",      h:95, x:64,w:22},
-  ];
-  // Zigzag break mark (shows building continues above frame)
-  const zigzag=(x,y,w)=>{
-    const seg=4,n=Math.floor(w/seg);
-    let pts=`${x.toFixed(1)},${y.toFixed(1)}`;
-    for(let i=0;i<n;i++) pts+=` ${(x+(i+0.5)*seg).toFixed(1)},${(y-3).toFixed(1)} ${(x+(i+1)*seg).toFixed(1)},${y.toFixed(1)}`;
-    return `<polyline points="${pts}" fill="none" stroke="#888" stroke-width="0.8"/>`;
-  };
-  // Build SVG for each city cluster building
-  const ctxSVG=CTX.map(b=>{
-    const visH=Math.min(b.h,frameH);
-    const cropped=b.h>frameH;
-    const topY=hy(visH);
-    const rect=`<rect x="${b.x}" y="${topY.toFixed(1)}" width="${b.w}" height="${(visH*scH).toFixed(1)}" fill="#eeeff2" stroke="#444" stroke-width="1.2"/>`;
-    const brk=cropped?zigzag(b.x,topY-1,b.w):'';
-    const htY=cropped?topY-9:topY-3;
-    const lbl=`<text x="${(b.x+b.w/2).toFixed(1)}" y="${htY.toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="5.5" fill="#444">${b.h}m</text>`
-             +`<text x="${(b.x+b.w/2).toFixed(1)}" y="${(htY-7).toFixed(1)}" text-anchor="middle" font-family="Inter,sans-serif" font-size="4.5" fill="#888">${b.label}</text>`;
-    return rect+brk+lbl;
-  }).join('');
-  // Right context building (generic neighbour, east of site)
-  const ctxRGap=12*scW, ctxRw=20*scW;
-  const ctxRH=Math.round(existH*1.2);
-  const ctxRx=cx+sitePxW/2+ctxRGap;
-  const dayX2=ctxRx-(ctxRH*scH)/Math.tan(25*Math.PI/180);
-  // Gap fills (street/air between buildings)
-  const lloydRx=CTX[2].x+CTX[2].w; // right edge of Lloyd's = 86
-  const gapToMain=cx-sitePxW/2-lloydRx;
-  // Floor plates (white 0.5px) — both zones
-  const floorPts=[];
-  for(let h=4.2;h<propH;h+=4.2) floorPts.push(h);
-  const flrLines=floorPts.map(h=>{
+  const scW=VW*0.28/siteWm;        // slightly narrower — room for leaders
+  const cx=120;                     // shifted left; leader zone on right
+  const sitePxW=siteWm*scW;
+
+  // ── Immediate context: Lloyd's (right, ~30m gap) ──────────────────────────
+  const ctxGap=20, ctxW=16;
+  const lloydH=95;
+  const lloydX=cx+sitePxW/2+ctxGap;
+  const lloydTop=hy(lloydH);
+
+  // ── Floor plates ──────────────────────────────────────────────────────────
+  const flrLines=[];
+  for(let h=4.2;h<propH;h+=4.2){
     const fy=hy(h);
-    return fy>hy(propH)+1?`<line x1="${(cx-sitePxW/2+1).toFixed(1)}" y1="${fy.toFixed(1)}" x2="${(cx+sitePxW/2-1).toFixed(1)}" y2="${fy.toFixed(1)}" stroke="white" stroke-width="0.5" opacity="0.6"/>`:''
+    if(fy>hy(propH)+1)
+      flrLines.push(`<line x1="${(cx-sitePxW/2+1).toFixed(1)}" y1="${fy.toFixed(1)}" x2="${(cx+sitePxW/2-1).toFixed(1)}" y2="${fy.toFixed(1)}" stroke="white" stroke-width="0.5" opacity="0.6"/>`);
+  }
+
+  // ── Stepped massing paths ─────────────────────────────────────────────────
+  const sbEpx=sbEm*scW;
+  const towerPxW=sitePxW-sbEpx;
+  const stepH=Math.max(podH,existH);
+  const bL=cx-sitePxW/2, bR=cx+sitePxW/2, tR=bL+towerPxW;
+  const podZone=podH>existH
+    ?`<rect x="${bL.toFixed(1)}" y="${hy(podH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${((podH-existH)*scH).toFixed(1)}" fill="#8ab08a"/>`:'';
+  const towerPath=`M${bL.toFixed(1)},${hy(propH).toFixed(1)} L${tR.toFixed(1)},${hy(propH).toFixed(1)} L${tR.toFixed(1)},${hy(stepH).toFixed(1)} L${bR.toFixed(1)},${hy(stepH).toFixed(1)} L${bR.toFixed(1)},${hy(existH).toFixed(1)} L${bL.toFixed(1)},${hy(existH).toFixed(1)} Z`;
+  const outline=sbEpx>1
+    ?`<path d="M${bL.toFixed(1)},${groundY} L${bR.toFixed(1)},${groundY} L${bR.toFixed(1)},${hy(stepH).toFixed(1)} L${tR.toFixed(1)},${hy(stepH).toFixed(1)} L${tR.toFixed(1)},${hy(propH).toFixed(1)} L${bL.toFixed(1)},${hy(propH).toFixed(1)} Z" fill="none" stroke="#1a1d2e" stroke-width="1.2"/>`
+    :`<rect x="${bL.toFixed(1)}" y="${hy(propH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(propH*scH).toFixed(1)}" fill="none" stroke="#1a1d2e" stroke-width="1.2"/>`;
+
+  // ── Height leaders (right zone) ───────────────────────────────────────────
+  const ldrX0=lloydX+ctxW+14;  // leader line start x (just right of Lloyd's)
+  const ldrX1=VW-4;            // leader line end x
+  const leaderSVG=LEADERS.map(({h,label,sub})=>{
+    if(h>frameH) return '';
+    const y=hy(h).toFixed(1);
+    const isAboveFrame=h>propH;
+    const lineCol=h<=propH?'#d0d3db':'#e8eaee';
+    // dashed datum across full section
+    const datum=`<line x1="0" y1="${y}" x2="${ldrX0}" y2="${y}" stroke="${lineCol}" stroke-width="0.6" stroke-dasharray="3,3"/>`;
+    // leader stub + label
+    const stub=`<line x1="${ldrX0}" y1="${y}" x2="${ldrX1}" y2="${y}" stroke="#bbb" stroke-width="0.8"/>`;
+    const dot=`<circle cx="${ldrX0}" cy="${y}" r="1.5" fill="#999"/>`;
+    const lbl=`<text x="${(ldrX0+4).toFixed(1)}" y="${(parseFloat(y)-2).toFixed(1)}" font-family="JetBrains Mono,monospace" font-size="5.5" font-weight="700" fill="#555">${h}m  ${label}</text>`;
+    const sublbl=`<text x="${(ldrX0+4).toFixed(1)}" y="${(parseFloat(y)+5).toFixed(1)}" font-family="Inter,sans-serif" font-size="4.5" fill="#aaa">${sub}</text>`;
+    return datum+stub+dot+lbl+sublbl;
   }).join('');
-  const scBar20=20*scW, sbX=110, sbY=groundY+17;
+
+  // ── Scale bar ─────────────────────────────────────────────────────────────
+  const scBar20=20*scW, sbX=8, sbY=groundY+17;
 
   svg.innerHTML=`
     <rect width="${VW}" height="${VH}" fill="white"/>
     <rect x="0" y="${groundY}" width="${VW}" height="${VH-groundY}" fill="#c8c9ce"/>
-    <!-- Street gap: Lloyd's right edge → main building left edge -->
-    <rect x="${lloydRx}" y="0" width="${gapToMain.toFixed(1)}" height="${VH}" fill="#e4e5e9"/>
-    <!-- Street gap: main building right → right context -->
-    <rect x="${(cx+sitePxW/2).toFixed(1)}" y="0" width="${ctxRGap.toFixed(1)}" height="${VH}" fill="#e4e5e9"/>
-    <!-- City Cluster skyline (W) — Lloyd's, Cheesegrater, 22 Bishopsgate -->
-    ${ctxSVG}
-    <!-- Right context building (generic neighbour, E) -->
-    <rect x="${ctxRx.toFixed(1)}" y="${hy(ctxRH).toFixed(1)}" width="${ctxRw.toFixed(1)}" height="${(ctxRH*scH).toFixed(1)}" fill="#eeeff2" stroke="#444" stroke-width="1.6"/>
-    <text x="${(ctxRx+ctxRw/2).toFixed(1)}" y="${(hy(ctxRH)-3).toFixed(1)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#555">${ctxRH}m</text>
-    <!-- 25° daylight angle from right context -->
-    <line x1="${ctxRx.toFixed(1)}" y1="${hy(ctxRH).toFixed(1)}" x2="${dayX2.toFixed(1)}" y2="${groundY}" stroke="#999" stroke-width="0.8" stroke-dasharray="3,2"/>
-    <text x="${((ctxRx+dayX2)/2-4).toFixed(1)}" y="${(hy(ctxRH/2)+2).toFixed(1)}" font-family="Inter,sans-serif" font-size="5.5" fill="#999">25°</text>
-    <!-- Zone 1: EXISTING (0→existH) — light grey -->
-    <rect x="${(cx-sitePxW/2).toFixed(1)}" y="${hy(existH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(existH*scH).toFixed(1)}" fill="#d0d2da"/>
-    <!-- Zone 2: NEW BUILD stepped profile -->
-    ${(()=>{
-      const sbEpx = sbEm * scW;
-      const towerPxW = sitePxW - sbEpx;
-      const stepH = Math.max(podH, existH); // step level in section
-      const stepPx = hy(stepH);
-      const bL = cx - sitePxW/2; // building left (west)
-      const bR = bL + sitePxW;   // building right (east) — full width
-      const tR = bL + towerPxW;  // tower right (east, set back)
-      // Podium zone (existH→stepH if above)
-      const podZone = podH > existH
-        ? `<rect x="${bL.toFixed(1)}" y="${hy(podH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${((podH-existH)*scH).toFixed(1)}" fill="#8ab08a"/>` : '';
-      // Tower zone using L-shaped path: west+north face holds, east face steps in
-      const towerPath = `M${bL.toFixed(1)},${hy(propH).toFixed(1)} L${tR.toFixed(1)},${hy(propH).toFixed(1)} L${tR.toFixed(1)},${stepPx.toFixed(1)} L${bR.toFixed(1)},${stepPx.toFixed(1)} L${bR.toFixed(1)},${hy(stepH).toFixed(1)} L${bL.toFixed(1)},${hy(stepH).toFixed(1)} Z`;
-      const sbAnnot = sbEpx > 1 ? `
-        <line x1="${tR.toFixed(1)}" y1="${hy(stepH-2).toFixed(1)}" x2="${bR.toFixed(1)}" y2="${hy(stepH-2).toFixed(1)}" stroke="#888" stroke-width="0.5"/>
-        <text x="${((tR+bR)/2).toFixed(1)}" y="${hy(stepH-2)-3}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="4.5" fill="#888">${(sbEm).toFixed(1)}m</text>` : '';
-      return podZone + `<path d="${towerPath}" fill="#8ab08a"/>` + sbAnnot;
-    })()}
+
+    <!-- Height leader datums -->
+    ${leaderSVG}
+
+    <!-- Existing building (grey) -->
+    <rect x="${bL.toFixed(1)}" y="${hy(existH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(existH*scH).toFixed(1)}" fill="#d0d2da"/>
+    <!-- New build zone -->
+    ${podZone}
+    <path d="${towerPath}" fill="#8ab08a"/>
     <!-- Floor plates -->
-    ${flrLines}
-    <!-- Datum at existH -->
-    <line x1="${(cx-sitePxW/2-4).toFixed(1)}" y1="${hy(existH).toFixed(1)}" x2="${(cx+sitePxW/2+4).toFixed(1)}" y2="${hy(existH).toFixed(1)}" stroke="white" stroke-width="1" stroke-dasharray="4,2" opacity="0.8"/>
-    <!-- Zone labels -->
-    <text x="${cx}" y="${(hy(existH/2)).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="#555">EXISTING</text>
-    <text x="${(cx-sitePxW/4).toFixed(1)}" y="${(hy(existH+(propH-existH)/2)).toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white" opacity="0.9">NEW BUILD</text>
-    <!-- Building outline (L-shape for stepped massing) -->
-    ${(()=>{
-      const sbEpx = sbEm * scW;
-      const towerPxW = sitePxW - sbEpx;
-      const stepH = Math.max(podH, existH);
-      const bL = cx - sitePxW/2;
-      const bR = bL + sitePxW;
-      const tR = bL + towerPxW;
-      if(sbEpx<1) return `<rect x="${bL.toFixed(1)}" y="${hy(propH).toFixed(1)}" width="${sitePxW.toFixed(1)}" height="${(propH*scH).toFixed(1)}" fill="none" stroke="#1a1d2e" stroke-width="1.2"/>`;
-      const p=`M${bL.toFixed(1)},${groundY} L${bR.toFixed(1)},${groundY} L${bR.toFixed(1)},${hy(stepH).toFixed(1)} L${tR.toFixed(1)},${hy(stepH).toFixed(1)} L${tR.toFixed(1)},${hy(propH).toFixed(1)} L${bL.toFixed(1)},${hy(propH).toFixed(1)} Z`;
-      return `<path d="${p}" fill="none" stroke="#1a1d2e" stroke-width="1.2"/>`;
-    })()}
+    ${flrLines.join('')}
+    <!-- Building outline -->
+    ${outline}
+
+    <!-- Immediate context: Lloyd's -->
+    <rect x="${lloydX.toFixed(1)}" y="${lloydTop.toFixed(1)}" width="${ctxW}" height="${(lloydH*scH).toFixed(1)}" fill="#e8e9ee" stroke="#888" stroke-width="0.8"/>
+    <text x="${(lloydX+ctxW/2).toFixed(1)}" y="${(lloydTop-5).toFixed(1)}" text-anchor="middle" font-family="Inter,sans-serif" font-size="4.5" fill="#888">Lloyd's</text>
+
     <!-- Ground line -->
     <line x1="0" y1="${groundY}" x2="${VW}" y2="${groundY}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <text x="5" y="${groundY-3}" font-family="Inter,sans-serif" font-size="5.5" fill="#666" font-weight="600">GL</text>
-    <!-- Height annotations -->
-    <line x1="${(cx+sitePxW/2+3).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(cx+sitePxW/2+3).toFixed(1)}" y2="${groundY}" stroke="#1a1d2e" stroke-width="0.6"/>
-    <line x1="${(cx+sitePxW/2).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(cx+sitePxW/2+8).toFixed(1)}" y2="${hy(propH).toFixed(1)}" stroke="#1a1d2e" stroke-width="0.6"/>
-    <line x1="${(cx+sitePxW/2).toFixed(1)}" y1="${groundY}" x2="${(cx+sitePxW/2+8).toFixed(1)}" y2="${groundY}" stroke="#1a1d2e" stroke-width="0.6"/>
-    <text x="${(cx+sitePxW/2+6).toFixed(1)}" y="${hy(propH/2).toFixed(1)}" dominant-baseline="middle" font-family="JetBrains Mono,monospace" font-size="7" fill="#1a1d2e" font-weight="700">+${propH}m</text>
-    <line x1="${(cx-sitePxW/2-3).toFixed(1)}" y1="${hy(existH).toFixed(1)}" x2="${(cx-sitePxW/2-3).toFixed(1)}" y2="${groundY}" stroke="#666" stroke-width="0.6" stroke-dasharray="2,2"/>
-    <text x="${(cx-sitePxW/2-5).toFixed(1)}" y="${hy(existH/2).toFixed(1)}" dominant-baseline="middle" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="6" fill="#666">${existH}m</text>
+    <text x="5" y="${(groundY-4)}" font-family="Inter,sans-serif" font-size="5.5" fill="#666" font-weight="600">GL</text>
+
+    <!-- Proposed height annotation (left spine) -->
+    <line x1="${(bL-4).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(bL-4).toFixed(1)}" y2="${groundY}" stroke="#1a1d2e" stroke-width="0.6"/>
+    <line x1="${(bL-8).toFixed(1)}" y1="${hy(propH).toFixed(1)}" x2="${(bL).toFixed(1)}" y2="${hy(propH).toFixed(1)}" stroke="#1a1d2e" stroke-width="0.6"/>
+    <line x1="${(bL-8).toFixed(1)}" y1="${groundY}" x2="${(bL).toFixed(1)}" y2="${groundY}" stroke="#1a1d2e" stroke-width="0.6"/>
+    <text x="${(bL-6).toFixed(1)}" y="${hy(propH/2).toFixed(1)}" dominant-baseline="middle" text-anchor="end" transform="rotate(-90,${(bL-6).toFixed(1)},${hy(propH/2).toFixed(1)})" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" fill="#1a1d2e">+${propH}m</text>
+
     <!-- W / E labels -->
-    <text x="6" y="${(groundY-5).toFixed(1)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#333">W</text>
-    <text x="${VW-10}" y="${(groundY-5).toFixed(1)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#333">E</text>
+    <text x="5" y="${(groundY-14)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#555">W</text>
+    <text x="${(lloydX+ctxW+4).toFixed(1)}" y="${(groundY-14)}" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="#555">E</text>
+
     <!-- Scale bar -->
-    <line x1="${sbX.toFixed(1)}" y1="${sbY}" x2="${(sbX+scBar20).toFixed(1)}" y2="${sbY}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <line x1="${sbX.toFixed(1)}" y1="${sbY-3}" x2="${sbX.toFixed(1)}" y2="${sbY+3}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <line x1="${(sbX+scBar20).toFixed(1)}" y1="${sbY-3}" x2="${(sbX+scBar20).toFixed(1)}" y2="${sbY+3}" stroke="#1a1d2e" stroke-width="1.5"/>
-    <text x="${(sbX+scBar20/2).toFixed(1)}" y="${sbY+8}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">20m</text>
-    <text x="${cx}" y="${VH-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" letter-spacing="0.8" fill="#666">SECTION A–A  ·  LOOKING NORTH  ·  scale 1:350 approx</text>
+    <line x1="${sbX}" y1="${sbY}" x2="${(sbX+scBar20).toFixed(1)}" y2="${sbY}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <line x1="${sbX}" y1="${(sbY-3)}" x2="${sbX}" y2="${(sbY+3)}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <line x1="${(sbX+scBar20).toFixed(1)}" y1="${(sbY-3)}" x2="${(sbX+scBar20).toFixed(1)}" y2="${(sbY+3)}" stroke="#1a1d2e" stroke-width="1.5"/>
+    <text x="${(sbX+scBar20/2).toFixed(1)}" y="${(sbY+8)}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" fill="#1a1d2e">20m</text>
+
+    <text x="${cx}" y="${VH-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" letter-spacing="0.8" fill="#666">SECTION A–A  ·  LOOKING NORTH  ·  1:350 approx</text>
   `;
 }
 
