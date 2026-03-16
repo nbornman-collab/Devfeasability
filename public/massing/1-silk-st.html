@@ -313,7 +313,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     <div class="intel-card">
       <div class="ic-head"><span class="ic-cat">Cost</span><span class="ic-title">Construction Cost Escalation</span></div>
       <div class="ic-body">
-        <p>Construction costs don't scale linearly. At 10F (Low): standard RC frame, tower crane, conventional formwork — <strong>£4,200/m²</strong>. At 18F (Base): climbing formwork, deeper piles, more complex facade logistics — <strong>£5,200/m²</strong>. At 32F (High): jump-form systems, higher-grade concrete (C60+), complex curtain walling at height — <strong>£6,500/m²</strong>.</p>
+        <p>Construction costs don't scale linearly. At 10F (Low): standard RC frame, tower crane, conventional formwork — <strong>£4,200/m²</strong>. At 18F (Base): climbing formwork, deeper piles, more complex facade logistics — <strong>£5,200/m²</strong>. At 30F (High): jump-form systems, higher-grade concrete (C60+), complex curtain walling at height — <strong>£6,500/m²</strong>.</p>
         <p>The programme extension is critical on a campus this size. Demolition alone takes 12–18 months (asbestos surveys, Barbican vibration monitoring). A 10F scheme takes ~2.5 years post-demo. A 32F tower takes 5 years. The extra 30 months of development finance on a £200M+ construction cost adds <strong>~£12M</strong> in interest.</p>
         <div class="ic-callout"><p>£4,200 → £6,500/m² is a 55% cost premium. But the ERV per m² NIA rises only ~23% (£620 → £760). That divergence is why the margin curve bends hard above ~20F.</p></div>
       </div>
@@ -648,7 +648,7 @@ function render(){
     <div class="sec-head">Constraint Progression</div>
     ${mkG(C_ALWAYS,'Present in all scenarios',0,'var(--t3)')}
     ${mkG(C_BASE,'Triggers at Base · 18F / 72m',1,'var(--base)')}
-    ${mkG(C_HIGH,'Triggers at High · 32F / 128m',2,'var(--hi)')}`;
+    ${mkG(C_HIGH,'Triggers at High · 30F / 123m',2,'var(--hi)')}`;
 
   // Narrative
   document.getElementById('narrative-section').innerHTML=`
