@@ -541,24 +541,25 @@ async function init(){
       'fill-extrusion-color':'#4f46e5','fill-extrusion-height':32,
       'fill-extrusion-base':0,'fill-extrusion-opacity':.2}});
 
-    // ── PropertyData legal boundary ──
-    // 1SS is a multi-title campus; PropertyData gives closest single freehold.
-    // Site area stays at user-confirmed 5,709 m². Owner shown for intel.
+    // ── 1SS: draw full campus hull from SITE_COORDS; owner from PropertyData ──
+    // Campus spans multiple HMLR titles — use confirmed polygon, not single parcel
+    (()=>{
+      const ring=[...SITE_COORDS, SITE_COORDS[0]]; // close ring
+      map.getSource('site').setData({
+        type:'FeatureCollection',
+        features:[{type:'Feature',geometry:{type:'Polygon',coordinates:[ring]},properties:{}}]
+      });
+    })();
     (async()=>{
       try{
         const pd=await(await fetch(`/api/plot-boundary?lat=${LAT}&lng=${LNG}&postcode=EC2Y+8HQ`)).json();
         if(pd.features&&pd.features.length){
-          const f=pd.features[0];
-          if(f.geometry) map.getSource('site').setData({type:'FeatureCollection',features:[f]});
-          const p=f.properties;
-          // For 1SS keep confirmed 5709 m² — campus spans multiple titles
+          const p=pd.features[0].properties;
           const oel=document.getElementById('owner-display');
           if(oel&&p.owner) oel.textContent=p.owner+(p.leaseholds>0?` · ${p.leaseholds} leaseholds`:'');
-          const sael=document.getElementById('site-area-display');
-          if(sael) sael.textContent='5,709 m² (campus)';
-          console.log('PropertyData 1SS: title',p.title_number,'single parcel',p.area_sqm,'m² owner:',p.owner);
+          console.log('PropertyData 1SS: title',p.title_number,'owner:',p.owner);
         }
-      }catch(e){console.warn('PropertyData boundary error:',e.message);}
+      }catch(e){console.warn('PropertyData 1SS owner error:',e.message);}
     })();
   });
 }
