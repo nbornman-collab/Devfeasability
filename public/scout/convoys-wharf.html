@@ -112,8 +112,16 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 </nav>
 
 <div class="layout">
-  <div id="map"></div>
+  <div id="map">
+    <div id="map-search-wrap">
+      <input id="map-search" type="text" placeholder="Search address to navigate…" />
+      <button id="search-btn" onclick="searchAddress()">Go</button>
+    </div>
+    <button id="hmlr-toggle" onclick="toggleHMLR()">⬡ Show Parcels</button>
+    <div id="click-hint">Click anywhere on your site</div>
+  </div>
   <div class="panel">
+    <div id="boundary-status">
 
     <!-- Site header -->
     <div class="opp-header">
@@ -328,35 +336,135 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   </div><!-- /panel -->
 </div>
 
+<style>
+/* ── Map search + HMLR overlay controls ── */
+#map-search-wrap{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:6px;width:calc(100% - 80px);max-width:380px}
+#map-search{flex:1;padding:8px 12px;font:500 12px var(--sans);border:1px solid var(--border);border-radius:3px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.12);outline:none}
+#search-btn{padding:8px 12px;font:600 11px var(--sans);background:#0c0f1a;color:#fff;border:none;border-radius:3px;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+#hmlr-toggle{position:absolute;bottom:10px;left:10px;z-index:20;padding:6px 11px;font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1px;background:#fff;border:1px solid var(--border);border-radius:3px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+#hmlr-toggle.on{background:#0c0f1a;color:#fff;border-color:#0c0f1a}
+#click-hint{position:absolute;bottom:40px;left:10px;right:10px;z-index:20;background:rgba(255,255,255,.95);border:1px solid var(--border);border-radius:3px;padding:8px 12px;font:500 11px var(--sans);color:var(--text2);display:none;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+#boundary-status{padding:6px 20px;font:500 11px var(--sans);color:var(--text3);border-bottom:1px solid var(--border);background:var(--s1);display:none}
+#boundary-status.confirmed{color:#059669;background:#f0fdf4;border-color:#bbf7d0}
+</style>
+
+<div id="boundary-status">⬡ Click a land parcel on the map to confirm the site boundary</div>
+
 <script>
-// Convoys Wharf centroid — OS-confirmed from planning docs (SE8 3JH, Deptford Strand)
-// No polygon drawn until HMLR title confirmed. Site boundary = user-draw or title lookup only.
 const CENTROID = [-0.0262, 51.4843];
+let _map, _selectMode = false, _confirmed = false;
 
 async function initMap(){
   const cfg = await(await fetch('/api/config')).json();
   mapboxgl.accessToken = cfg.mapboxToken;
-  const m = new mapboxgl.Map({
+  _map = new mapboxgl.Map({
     container:'map',
     style:'mapbox://styles/mapbox/light-v11',
-    center: CENTROID, zoom:15.0, pitch:45, bearing:-10,
+    center: CENTROID, zoom:15.0, pitch:30, bearing:0,
     interactive:true, attributionControl:false, antialias:true
   });
-  m.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
-  m.on('style.load',()=>{
-    m.addLayer({
+  _map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-right');
+
+  _map.on('style.load',()=>{
+    // Context 3D buildings
+    _map.addLayer({
       id:'ctx-3d',source:'composite','source-layer':'building',
       filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
-      paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],
-        'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],
-        'fill-extrusion-opacity':0.5,'fill-extrusion-vertical-gradient':true}
+      paint:{'fill-extrusion-color':'#d4d6dc','fill-extrusion-height':['get','height'],
+        'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.5}
     });
+
+    // HMLR INSPIRE WMS overlay (cadastral parcels) — initially hidden
+    _map.addSource('hmlr-wms',{
+      type:'raster',
+      tiles:['https://inspire.landregistry.gov.uk/inspire/ows?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&LAYERS=inspire:CP.CadastralParcel&STYLES=&CRS=EPSG:3857&BBOX={bbox-epsg-3857}&WIDTH=256&HEIGHT=256&FORMAT=image/png&TRANSPARENT=TRUE'],
+      tileSize:256
+    });
+    _map.addLayer({id:'hmlr-wms-layer',type:'raster',source:'hmlr-wms',paint:{'raster-opacity':0}});
+
+    // Confirmed boundary layer
+    _map.addSource('boundary',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+    _map.addLayer({id:'boundary-fill',type:'fill',source:'boundary',paint:{'fill-color':'#4f46e5','fill-opacity':0.12}});
+    _map.addLayer({id:'boundary-line',type:'line',source:'boundary',paint:{'line-color':'#4f46e5','line-width':2.5,'line-dasharray':[5,3]}});
   });
-  // Marker only — no estimated polygon
+
+  // Drop marker at centroid
   const el = document.createElement('div');
-  el.style.cssText='width:14px;height:14px;border-radius:50%;background:#4f46e5;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)';
-  new mapboxgl.Marker({element:el}).setLngLat(CENTROID).addTo(m);
+  el.style.cssText='width:12px;height:12px;border-radius:50%;background:#4f46e5;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)';
+  new mapboxgl.Marker({element:el}).setLngLat(CENTROID).addTo(_map);
+
+  // Click handler — fire PropertyData lookup at exact click point
+  _map.on('click', async e => {
+    if (!_selectMode) return;
+    const {lat, lng} = e.lngLat;
+    showHint('Looking up parcel…');
+    try {
+      const fc = await(await fetch(`/api/plot-boundary?lat=${lat.toFixed(6)}&lng=${lng.toFixed(6)}`)).json();
+      if (fc && fc.features && fc.features.length) {
+        _map.getSource('boundary').setData(fc);
+        const p = fc.features[0].properties;
+        const area = p.area_sqm ? `${p.area_sqm.toLocaleString()} m²` : '—';
+        const owner = p.owner || 'Unknown owner';
+        confirmBoundary(`✓ ${owner} · ${area}`);
+      } else {
+        showHint('No registered title found here — try clicking the centre of the site');
+      }
+    } catch(err) {
+      showHint('Lookup failed — try again');
+    }
+  });
 }
+
+function showHint(msg){
+  const h = document.getElementById('click-hint');
+  h.textContent = msg; h.style.display = 'block';
+  clearTimeout(window._hintTimer);
+  window._hintTimer = setTimeout(()=> h.style.display='none', 4000);
+}
+
+function confirmBoundary(msg){
+  const s = document.getElementById('boundary-status');
+  s.textContent = msg; s.style.display = 'block'; s.className = 'confirmed';
+  document.getElementById('click-hint').style.display = 'none';
+  _confirmed = true;
+}
+
+function toggleHMLR(){
+  _selectMode = !_selectMode;
+  const btn = document.getElementById('hmlr-toggle');
+  const status = document.getElementById('boundary-status');
+  if(_selectMode){
+    _map.setPaintProperty('hmlr-wms-layer','raster-opacity',0.7);
+    btn.textContent = '⬡ Parcels ON'; btn.className = 'on';
+    status.textContent = '⬡ Click a land parcel to confirm the site boundary';
+    status.style.display = 'block'; status.className = '';
+    document.getElementById('click-hint').style.display = 'block';
+    document.getElementById('click-hint').textContent = 'Click anywhere on your site';
+  } else {
+    _map.setPaintProperty('hmlr-wms-layer','raster-opacity',0);
+    btn.textContent = '⬡ Show Parcels'; btn.className = '';
+    if(!_confirmed) status.style.display = 'none';
+    document.getElementById('click-hint').style.display = 'none';
+  }
+}
+
+async function searchAddress(){
+  const q = document.getElementById('map-search').value.trim();
+  if(!q) return;
+  const cfg = await(await fetch('/api/config')).json();
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?country=gb&proximity=-0.0262,51.4843&access_token=${cfg.mapboxToken}`;
+  const data = await(await fetch(url)).json();
+  const f = data.features?.[0];
+  if(f){
+    _map.flyTo({center:f.center, zoom:16, pitch:30, bearing:0, duration:1200});
+    if(!_selectMode) toggleHMLR(); // auto-enable parcel overlay after search
+  }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('map-search').addEventListener('keydown', e=>{ if(e.key==='Enter') searchAddress(); });
+});
+
 initMap();
 </script>
 </body>
