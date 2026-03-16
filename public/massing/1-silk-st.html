@@ -123,6 +123,16 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .ic-body p:last-child{margin-bottom:0}
 .ic-callout{background:var(--s2);border-left:2px solid var(--text);padding:10px 12px;margin-top:12px}
 .ic-callout p{font:500 11px/1.6 var(--sans);color:var(--t2);margin:0}
+/* ── Profit live strip ── */
+.profit-strip{display:grid;grid-template-columns:1fr 1fr 1fr;border-left:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border);margin:0 20px 16px;background:var(--bg)}
+.pstrip-col{padding:12px 14px 10px;border-right:1px solid var(--border)}
+.pstrip-col:last-child{border-right:none}
+.pstrip-scen{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);margin-bottom:6px}
+.pstrip-poc{font:800 22px var(--mono);letter-spacing:-1px;line-height:1}
+.pstrip-abs{font:500 10px var(--mono);color:var(--t3);margin-top:3px}
+.pstrip-flag{font:600 9px var(--sans);margin-top:3px}
+.pstrip-flag.ok{color:var(--lo)}.pstrip-flag.warn{color:#dc2626}
+
 /* ── Assumption sliders ── */
 .assump-panel{border:1px solid var(--border);margin:0 20px 16px;overflow:hidden}
 .assump-head{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;background:var(--s1);user-select:none;border-bottom:1px solid transparent}
@@ -237,6 +247,13 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
         <button onclick="resetAssump()" style="font:500 11px var(--sans);color:var(--t3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset defaults</button>
       </div>
     </div>
+  </div>
+
+  <!-- ── Live profit strip ── -->
+  <div class="profit-strip" id="profit-strip">
+    <div class="pstrip-col" id="ps-0"></div>
+    <div class="pstrip-col" id="ps-1"></div>
+    <div class="pstrip-col" id="ps-2"></div>
   </div>
 
   <!-- Scenario tabs -->
@@ -636,7 +653,21 @@ function buildHeightCtx(){
   el.innerHTML=`<rect width="${W}" height="${H}" fill="white"/>${datumSVG}${barSVG}${xLabels}${gl}`;
 }
 
+const SCEN_LABELS=['Low · 10F','Base · 18F','High · 30F'];
+function renderProfitStrip(){
+  SCENARIOS.forEach((s,i)=>{
+    const poc=parseFloat(s.poc);
+    const ok=poc>=S.poc;
+    document.getElementById('ps-'+i).innerHTML=`
+      <div class="pstrip-scen">${SCEN_LABELS[i]}</div>
+      <div class="pstrip-poc" style="color:${ok?'var(--lo)':'#dc2626'}">${s.poc}<span style="font:600 12px var(--mono);letter-spacing:0">%</span></div>
+      <div class="pstrip-abs">£${Math.round(s.profit/1e6)}M profit</div>
+      <div class="pstrip-flag ${ok?'ok':'warn'}">${ok?'▲ Hits target':'✕ Below '+S.poc+'%'}</div>`;
+  });
+}
+
 function render(){
+  renderProfitStrip();
   const s=SCENARIOS[activeIdx], col=COLS[activeIdx];
 
   // Hero metrics
