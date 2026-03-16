@@ -248,7 +248,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 
   <!-- Charts -->
   <div class="section">
-    <div class="chart-row">
+    <div class="chart-row" style="grid-template-columns:1fr 1fr 1fr">
       <div class="chart-box">
         <div class="chart-title">GEA / NIA Efficiency</div>
         <div id="vert-bars"></div>
@@ -256,6 +256,10 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
       <div class="chart-box">
         <div class="chart-title">Return Curve — Margin % vs Height</div>
         <div id="return-curve"></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-title">Height Context</div>
+        <svg id="height-ctx" viewBox="0 0 120 200" style="width:100%;height:auto;display:block"></svg>
       </div>
     </div>
     <div class="sec-desc">Coloured bars = lettable NIA. Grey = core, structure, compliance. Each 1% efficiency drop on this site ≈ <strong>£5.2M GDV lost</strong>. The return curve shows where margin peaks — and where additional floors start costing more than they earn.</div>
@@ -576,6 +580,62 @@ function go(idx){
   if(window._map) updateMap(idx);
 }
 
+
+// ── Height context SVG (1SS-specific: Barbican datum) ─────────────────────
+function buildHeightCtx(){
+  const el = document.getElementById('height-ctx');
+  if(!el) return;
+  const W=120, H=200, scH=H/320, PAD=4, LX=28, barW=14, gap=6;
+  const hy = h => H - PAD - h*scH;
+  const REFS = [
+    {h:40,  label:'Low',     col:null},   // scenario heights — filled from SCENARIOS
+    {h:72,  label:'Base',    col:null},
+    {h:123, label:'High',    col:null},
+    {h:123, label:'Cromwell',col:'#d0d2da', note:'Barbican'},
+    {h:126, label:'Shakespeare',col:'#e0e1e5', note:''},
+    {h:128, label:'Lauderdale', col:'#e8e9ee', note:''},
+    {h:183, label:'Heron Twr', col:'#e8e9ee', note:'0.5km NE'},
+  ];
+  const s=SCENARIOS[activeIdx];
+  const propH=s.floors===10?40:s.floors===18?72:123;
+  const colMap={10:COLS[0],18:COLS[1],30:COLS[2]};
+  // Draw bars
+  const bars = [
+    // Proposed
+    {h:propH, x:LX, w:barW, col:COLS[activeIdx], label:propH+'m'},
+    // Cromwell Tower datum
+    {h:123,   x:LX+barW+gap, w:10, col:'#d4d6de', label:''},
+    // Heron Tower
+    {h:183,   x:LX+barW+gap+10+gap, w:10, col:'#e4e5ea', label:''},
+  ];
+  // Datum lines (Barbican towers)
+  const datums = [
+    {h:123, label:'Barbican 123m', col:'#bbb'},
+    {h:183, label:'Heron 183m',    col:'#ccc'},
+  ];
+  const datumSVG = datums.map(d=>{
+    const y=hy(d.h);
+    if(y<0||y>H) return '';
+    return `<line x1="0" y1="${y.toFixed(1)}" x2="${W}" y2="${y.toFixed(1)}" stroke="${d.col}" stroke-width="0.7" stroke-dasharray="3,2"/>
+    <text x="${W-2}" y="${(y-2).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="6" fill="${d.col}">${d.label}</text>`;
+  }).join('');
+  const barSVG = bars.map(b=>{
+    const y=hy(b.h);
+    const bh=b.h*scH;
+    return `<rect x="${b.x}" y="${y.toFixed(1)}" width="${b.w}" height="${bh.toFixed(1)}" fill="${b.col}"/>
+    ${b.label?`<text x="${(b.x+b.w/2).toFixed(1)}" y="${(y-3).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="6.5" font-weight="700" fill="${COLS[activeIdx]}">${b.label}</text>`:''}`;
+  }).join('');
+  // X labels
+  const xLabels = [
+    {x:LX+barW/2,    label:'Proposed'},
+    {x:LX+barW+gap+5,label:'Cromwell'},
+    {x:LX+barW+gap+10+gap+5,label:'Heron'},
+  ].map(({x,label})=>`<text x="${x}" y="${H-1}" text-anchor="middle" font-family="var(--sans)" font-size="5.5" fill="#aaa">${label}</text>`).join('');
+  // Ground line
+  const gl=`<line x1="0" y1="${H-PAD}" x2="${W}" y2="${H-PAD}" stroke="#1a1d2e" stroke-width="1"/>`;
+  el.innerHTML=`<rect width="${W}" height="${H}" fill="white"/>${datumSVG}${barSVG}${xLabels}${gl}`;
+}
+
 function render(){
   const s=SCENARIOS[activeIdx], col=COLS[activeIdx];
 
@@ -607,6 +667,9 @@ function render(){
 
   // Return curve
   buildCurve();
+
+  // Height context
+  buildHeightCtx();
 
   // Metrics detail
   document.getElementById('metrics-section').innerHTML=`

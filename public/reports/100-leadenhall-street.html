@@ -528,6 +528,63 @@ function triggerPrint(){
 
 
 <!-- ═══════════════════════════════════════════════════════════════════════════
+     ASSESSMENT SUMMARY & RECOMMENDATION
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<div class="page" id="page-exec">
+  <div style="padding:32px 44px 48px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;padding-bottom:10px;border-bottom:2.5px solid #1a1d2e;margin-bottom:24px">
+      <div style="font:800 10px var(--sans);text-transform:uppercase;letter-spacing:2.5px;color:#1a1d2e">04 — Assessment Summary</div>
+      <div style="font:500 8px var(--mono);color:var(--text3)">DA-EC3A3BP-X7F2K</div>
+    </div>
+
+    <!-- Comparison table -->
+    <table id="exec-table" style="width:100%;border-collapse:collapse;margin-bottom:22px;font-family:var(--mono);font-size:9px">
+      <thead>
+        <tr style="border-bottom:1.5px solid #1a1d2e">
+          <th style="text-align:left;padding:6px 8px 8px;font-size:7px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700">Metric</th>
+          <th style="text-align:right;padding:6px 8px 8px;font-size:7px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;color:#4a8c5c">Option A · 10F</th>
+          <th style="text-align:right;padding:6px 8px 8px;font-size:7px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;color:#2563eb">Option B · 14F ★</th>
+          <th style="text-align:right;padding:6px 8px 8px;font-size:7px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;color:#9333ea">Option C · 22F</th>
+        </tr>
+      </thead>
+      <tbody id="exec-tbody">
+        <tr><td colspan="4" style="padding:10px;color:#999;font-size:8px">Computing…</td></tr>
+      </tbody>
+    </table>
+
+    <!-- Recommendation verdict box -->
+    <div style="background:#1a1d2e;color:#fff;padding:16px 20px;margin-bottom:20px">
+      <div style="font:800 9px var(--sans);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;opacity:.6">Architect's Assessment</div>
+      <div style="font:700 13px var(--sans);margin-bottom:8px">Option B is the recommended development scenario.</div>
+      <div style="font:400 9px/1.7 var(--sans);opacity:.85">
+        At 14 floors and 60m, Option B sits at the inflection point of the return curve — where margin efficiency peaks before the BSA Higher-Risk Building cost premium at 50m begins to erode returns. The 3-year programme is manageable within a standard development finance structure at 60% LTC. Heritage risk is substantially lower than Option C: the scheme is below the LVMF Strategic View trigger heights for the Tower of London and does not materially affect Lloyd's setting. Option A achieves better margin % but leaves significant value unrealised given the site's cluster position. Option C maximises absolute GDV but the 4-year programme, elevated construction cost, and heritage scrutiny make it the highest-risk path — viable only with exceptional design quality and a pre-agreed planning position.
+      </div>
+    </div>
+
+    <!-- Risk flags per option -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);font-family:var(--sans);font-size:8px;line-height:1.5;margin-bottom:20px">
+      <div style="background:#fff;padding:12px 14px">
+        <div style="font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#4a8c5c;margin-bottom:6px;font-size:7px">Option A · Conservative</div>
+        <div style="color:#555">✓ Lowest planning risk<br>✓ Single staircase (sub-50m)<br>✓ 2.5yr programme, low finance drag<br>⚠ BSA registered building (18m+)<br>⚠ LVMF assessment still required<br>✗ Underutilises cluster position</div>
+      </div>
+      <div style="background:#fff;padding:12px 14px">
+        <div style="font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#2563eb;margin-bottom:6px;font-size:7px">Option B · Recommended ★</div>
+        <div style="color:#555">✓ Margin efficiency peak<br>✓ Fits established cluster precedent<br>✓ Heritage impact manageable<br>⚠ BSA Higher-Risk Building (50m+)<br>⚠ Mandatory 2nd staircase<br>⚠ Daylight/sunlight report required</div>
+      </div>
+      <div style="background:#fff;padding:12px 14px">
+        <div style="font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9333ea;margin-bottom:6px;font-size:7px">Option C · Aspirational</div>
+        <div style="color:#555">✓ Highest absolute GDV<br>⚠ Margin % lowest of three<br>⚠ 4yr programme, high finance cost<br>✗ LVMF full assessment mandatory<br>✗ Heritage scrutiny at this height<br>✗ Wind study + aviation lighting req.</div>
+      </div>
+    </div>
+
+    <div style="font:400 8px/1.6 var(--sans);color:var(--text3);border-top:1px solid var(--border);padding-top:10px">
+      <strong>Note:</strong> This assessment is indicative only. Financial projections use City of London benchmark rates; actual outcomes will depend on detailed design, planning negotiations, market conditions at the time of development, and site-specific due diligence. A formal development appraisal by a qualified RICS surveyor is required before any investment decision.
+    </div>
+  </div>
+  <div class="page-footer"><div class="logo">D&A <span>Studio</span></div><span>Assessment Summary</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
      OPTION A — 10 FLOORS / 42m
      ═══════════════════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-opt-a">
@@ -1505,7 +1562,11 @@ const EXISTING_EUV = 38000000;   // £38M — existing use value
     const uplift   = profit - EXISTING_EUV;
 
     // Store on opt for use elsewhere (Sprint 2 sliders)
+    const eq = tdc * (1 - MARKET.ltc);
+    const prog = MARKET.progYrs[opt.key];
+    const irr = eq > 0 && prog > 0 ? ((eq + profit) / eq) ** (1 / prog) - 1 : 0;
     opt._nia = totalNIA; opt._gdv = gdv; opt._profit = profit; opt._uplift = uplift;
+    opt._tdc = tdc; opt._poc = (profit/tdc*100); opt._irr = irr * 100;
 
     // Update metric cards
     const set = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
@@ -1513,6 +1574,30 @@ const EXISTING_EUV = 38000000;   // £38M — existing use value
     set(`m-${opt.key}-gdv`,    '£' + Math.round(gdv/1e6) + 'M');
     set(`m-${opt.key}-uplift`, fmt(uplift));
   });
+})();
+
+
+// ── Exec summary table population ────────────────────────────────────────────
+(function populateExecTable(){
+  const rows = [
+    ['Net Internal Area (NIA)', o => (o._nia/1000).toFixed(1)+'k m²'],
+    ['Gross Development Value', o => '£'+Math.round(o._gdv/1e6)+'M'],
+    ['Total Development Cost',  o => '£'+Math.round(o._tdc/1e6)+'M'],
+    ['Developer Profit',        o => '£'+Math.round(o._profit/1e6)+'M'],
+    ['Profit on Cost',          o => o._poc.toFixed(1)+'%'],
+    ['IRR on Equity (p.a.)',    o => o._irr.toFixed(1)+'%'],
+    ['Programme',               o => ({a:'2.5 yrs',b:'3.0 yrs',c:'4.0 yrs'})[o.key]],
+    ['Uplift over EUV',         o => (o._uplift>=0?'+':'')+' £'+Math.round(o._uplift/1e6)+'M'],
+  ];
+  const cols = ['#4a8c5c','#2563eb','#9333ea'];
+  const [oA,oB,oC] = REPORT_OPTS;
+  const tbody = document.getElementById('exec-tbody');
+  if(!tbody) return;
+  tbody.innerHTML = rows.map(([label,fn],ri)=>`
+    <tr style="border-bottom:1px solid #f0f0f0;background:${ri%2?'#fafbfc':'#fff'}">
+      <td style="padding:5px 8px;color:#555;font-family:var(--sans);font-size:8px">${label}</td>
+      ${[oA,oB,oC].map((o,ci)=>`<td style="padding:5px 8px;text-align:right;font-weight:${ci===1?700:500};color:${cols[ci]}">${fn(o)}</td>`).join('')}
+    </tr>`).join('');
 })();
 
 // ── Init ─────────────────────────────────────────────────────────────────────

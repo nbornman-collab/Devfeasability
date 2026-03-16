@@ -246,6 +246,12 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
             <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Achievable FAR — Eastern Cluster</div>
           </div>
         </div>
+
+    <!-- Before/After capacity bar -->
+    <div style="margin-top:16px">
+      <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:8px">GIA Capacity — Existing vs Scenarios</div>
+      <svg id="capacity-bars" viewBox="0 0 280 80" style="width:100%;height:auto;display:block"></svg>
+    </div>
         <div style="font:400 12px/1.75 var(--sans);color:var(--text2)">
           The existing building occupies a premium Eastern Cluster position at a fraction of its planning envelope. City of London policy actively encourages densification here — neighbouring consented schemes reach 22–50 storeys. The value gap between what sits on the site today and what planning policy permits is the opportunity. The constraint set is substantial (heritage, LVMF, BSA) but navigable — T2 maps exactly where on the risk/return curve each scenario sits.
         </div>
@@ -666,6 +672,29 @@ function buildApps(apps){
       const farEl = document.getElementById('current-far');
       if(el) el.textContent = gia.toLocaleString() + ' m²';
       if(farEl) farEl.textContent = far + '×';
+      // ── Before/after capacity bar chart ─────────────────────────────
+      const bars_svg = document.getElementById('capacity-bars');
+      if(bars_svg){
+        const SCENARIOS_BAR = [
+          {label:'Existing', gia:gia,   col:'#d0d2da'},
+          {label:'Low',      gia:20000, col:'#6b7280'},
+          {label:'Base',     gia:34000, col:'#374151'},
+          {label:'High',     gia:45000, col:'#111827'},
+        ];
+        const maxG = Math.max(...SCENARIOS_BAR.map(s=>s.gia));
+        const BW=220, BH=13, GAP=5, LW=44, TX=LW+4;
+        const rows = SCENARIOS_BAR.map((s,i)=>{
+          const y = i*(BH+GAP);
+          const bw = Math.round(s.gia/maxG*BW);
+          const label_k = s.gia>=1000?(s.gia/1000).toFixed(0)+'k':s.gia;
+          return `<g>
+            <text x="0" y="${y+BH-2}" font-family="var(--sans)" font-size="8" font-weight="600" fill="#555">${s.label}</text>
+            <rect x="${TX}" y="${y}" width="${bw}" height="${BH}" fill="${s.col}" rx="1"/>
+            <text x="${TX+bw+4}" y="${y+BH-2}" font-family="var(--mono)" font-size="8" fill="#888">${label_k} m²</text>
+          </g>`;
+        }).join('');
+        bars_svg.innerHTML = rows;
+      }
     }
   }
 }
