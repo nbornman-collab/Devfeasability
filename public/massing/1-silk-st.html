@@ -817,69 +817,87 @@ function makeRect(cx,cy,areaSqm,aspect){
   return [[cx-dLng,cy-dLat],[cx+dLng,cy-dLat],[cx+dLng,cy+dLat],[cx-dLng,cy+dLat],[cx-dLng,cy-dLat]];
 }
 
-function updateMap(idx){
-  const s=SCENARIOS[idx],col=COLS[idx],m=window._map;
-  const cx=CENTROID[0], cy=CENTROID[1];
-  const empty={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,.0001],[.0001,.0001],[0,0]]]}};
-
-  // Single clean block — full height, no podium/tower split in 3D
-  const massAreaSqm = PLOT_AREA * s.cov;
-  const massRect = makeRect(cx, cy, massAreaSqm, 1.4);
-  const massCoords = clipToSite(massRect.slice(0,-1), SITE_COORDS);
-  const massData = {type:'Feature',geometry:{type:'Polygon',coordinates:[massCoords.length>2?massCoords:massRect]}};
-  m.getSource('podium').setData(massData);
-  m.getSource('tower').setData(empty); // hidden
-  const fullH = s.floors===10?40:s.floors===18?72:123;
-  m.setPaintProperty('podium-3d','fill-extrusion-color',col);
-  m.setPaintProperty('podium-3d','fill-extrusion-height',fullH);
-  m.setPaintProperty('podium-3d','fill-extrusion-base',0);
-  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.7);
-  m.setPaintProperty('tower-3d','fill-extrusion-opacity',0); // hidden
-  m.setPaintProperty('site-line','line-color',col);
+function emptyPoly(){return {type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,0.0001],[0.0001,0.0001],[0,0]]]}};}
+function bufferPoly(coords,dist){
+  const cx=coords.reduce((s,c)=>s+c[0],0)/coords.length;
+  const cy=coords.reduce((s,c)=>s+c[1],0)/coords.length;
+  return coords.map(c=>{const dx=c[0]-cx,dy=c[1]-cy,l=Math.sqrt(dx*dx+dy*dy)||1e-9;return[c[0]+dx/l*dist,c[1]+dy/l*dist];});
+}
+function shrinkPoly(coords,f){
+  const cx=coords.reduce((s,c)=>s+c[0],0)/coords.length;
+  const cy=coords.reduce((s,c)=>s+c[1],0)/coords.length;
+  return coords.map(c=>[cx+(c[0]-cx)*f,cy+(c[1]-cy)*f]);
 }
 
+function updateMap(idx){
+  const s=SCENARIOS[idx],m=window._map;
+  const col='#059669', edgeCol='#34d399', FTF=3.5;
+  for(let f=1;f<=30;f++) m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0);
+
+  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
+  m.setPaintProperty('podium-3d','fill-extrusion-color',col);
+  m.setPaintProperty('podium-3d','fill-extrusion-height',s.podH);
+  m.setPaintProperty('podium-3d','fill-extrusion-base',0);
+  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.65);
+  m.setPaintProperty('podium-edge','line-color',edgeCol);
+  m.setPaintProperty('podium-edge','line-opacity',0.8);
+
+  const tScale=Math.sqrt(s.twrPct);
+  const tCoords=shrinkPoly(SITE_COORDS,tScale);
+  m.getSource('tower').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[tCoords]}});
+  m.setPaintProperty('tower-3d','fill-extrusion-color',col);
+  m.setPaintProperty('tower-3d','fill-extrusion-height',s.floors===10?40:s.floors===18?72:123);
+  m.setPaintProperty('tower-3d','fill-extrusion-base',s.podH);
+  m.setPaintProperty('tower-3d','fill-extrusion-opacity',s.twrF>0?0.55:0);
+  m.setPaintProperty('tower-edge','line-color',edgeCol);
+  m.setPaintProperty('tower-edge','line-opacity',s.twrF>0?0.8:0);
+
+  let fi=1;
+  for(let f=1;f<=s.podF&&fi<=30;f++,fi++){
+    const h=f*FTF;
+    m.getSource('fl'+fi).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000005)]}});
+    m.setPaintProperty('fl'+fi,'fill-extrusion-color','#fff');
+    m.setPaintProperty('fl'+fi,'fill-extrusion-height',h+0.15);
+    m.setPaintProperty('fl'+fi,'fill-extrusion-base',h-0.15);
+    m.setPaintProperty('fl'+fi,'fill-extrusion-opacity',0.5);
+  }
+  for(let f=1;f<=s.twrF&&fi<=30;f++,fi++){
+    const h=s.podH+f*FTF;
+    m.getSource('fl'+fi).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[shrinkPoly(SITE_COORDS,tScale)]}});
+    m.setPaintProperty('fl'+fi,'fill-extrusion-color','#fff');
+    m.setPaintProperty('fl'+fi,'fill-extrusion-height',h+0.15);
+    m.setPaintProperty('fl'+fi,'fill-extrusion-base',h-0.15);
+    m.setPaintProperty('fl'+fi,'fill-extrusion-opacity',0.4);
+  }
+}
 
 async function initMap(){
   const cfg=await(await fetch('/api/config')).json();
   mapboxgl.accessToken=cfg.mapboxToken;
-  const m=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:CENTROID,zoom:17,pitch:50,bearing:-15,antialias:true});
+  const m=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/dark-v11',center:CENTROID,zoom:16.5,pitch:45,bearing:-10,antialias:true});
   m.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
   window._map=m;
   m.on('style.load',()=>{
-    const e={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,.0001],[.0001,.0001],[0,0]]]}};
-
-    // ── Move 1: Mapbox 3D context buildings ──
-    m.addLayer({
-      id:'buildings-3d',source:'composite','source-layer':'building',
-      filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
-      paint:{
-        'fill-extrusion-color':'#d0d3db',
-        'fill-extrusion-height':['interpolate',['linear'],['zoom'],14,0,14.5,['get','height']],
-        'fill-extrusion-base':['interpolate',['linear'],['zoom'],14,0,14.5,['get','min_height']],
-        'fill-extrusion-opacity':0.6
-      }
-    });
-
     m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
-    m.addSource('podium',{type:'geojson',data:e});
-    m.addSource('tower',{type:'geojson',data:e});
-    m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#059669','line-width':2.5,'line-dasharray':[4,2],'line-opacity':.8}});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':25,'fill-extrusion-base':0,'fill-extrusion-opacity':.7}});
-    m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':.6}});
+    m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':2,'line-opacity':0.9,'line-dasharray':[4,2]}});
+    m.addLayer({id:'site-glow',type:'line',source:'site',paint:{'line-color':'#818cf8','line-width':8,'line-opacity':0.15,'line-blur':4}});
 
-    // ── Move 3: HMLR title overlay ──
-    fetch(`/api/plot-boundary?lat=${LAT}&lng=${LNG}`)
-      .then(r=>r.json())
-      .then(fc=>{
-        if(!fc.features||!fc.features.length) return;
-        if(!m.getSource('hmlr')) m.addSource('hmlr',{type:'geojson',data:fc});
-        m.addLayer({id:'hmlr-line',type:'line',source:'hmlr',paint:{
-          'line-color':'#059669','line-width':1.5,'line-dasharray':[3,2],'line-opacity':0.5}});
-      }).catch(()=>{});
+    m.addSource('podium',{type:'geojson',data:emptyPoly()});
+    m.addSource('tower',{type:'geojson',data:emptyPoly()});
+    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':25,'fill-extrusion-base':0,'fill-extrusion-opacity':0.65}});
+    m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':40,'fill-extrusion-base':16,'fill-extrusion-opacity':0.55}});
+    m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0.8}});
+    m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0.8}});
 
+    for(let f=1;f<=30;f++){
+      m.addSource('fl'+f,{type:'geojson',data:emptyPoly()});
+      m.addLayer({id:'fl'+f,type:'fill-extrusion',source:'fl'+f,paint:{'fill-extrusion-color':'#fff','fill-extrusion-height':0,'fill-extrusion-base':0,'fill-extrusion-opacity':0}});
+    }
     updateMap(0);
   });
 }
+
+
 
 render();
 initMap();
