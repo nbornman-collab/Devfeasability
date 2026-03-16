@@ -78,6 +78,100 @@ app.get('/api/reverse', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// ── INSPIRE / HMLR Plot Boundary ───────────────────────────────────────────
+// Load INSPIRE GeoJSON (City of London for now; add more boroughs as downloaded)
+const inspireData = (() => {
+  const fs = require('fs');
+  const files = ['data/inspire-city-of-london.geojson'];
+  const features = [];
+  for (const f of files) {
+    try {
+      const gj = JSON.parse(fs.readFileSync(path.join(__dirname, f)));
+      features.push(...gj.features);
+      console.log(`INSPIRE: loaded ${gj.features.length} parcels from ${f}`);
+    } catch (e) { console.warn('INSPIRE: could not load', f, e.message); }
+  }
+  return features;
+})();
+
+function pointInRing(pt, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+    if (((yi > pt[1]) !== (yj > pt[1])) && (pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi)) inside = !inside;
+  }
+  return inside;
+}
+
+function ringAreaSqm(ring, refLat) {
+  const mLng = 111320 * Math.cos(refLat * Math.PI / 180);
+  const mLat = 110540;
+  let a = 0;
+  for (let i = 0; i < ring.length - 1; i++) {
+    const x1 = ring[i][0] * mLng, y1 = ring[i][1] * mLat;
+    const x2 = ring[i+1][0] * mLng, y2 = ring[i+1][1] * mLat;
+    a += x1 * y2 - x2 * y1;
+  }
+  return Math.abs(a / 2);
+}
+
+// GET /api/plot-boundary?lat=...&lng=... — returns GeoJSON feature(s) containing point
+app.get('/api/plot-boundary', (req, res) => {
+  const lat = parseFloat(req.query.lat);
+  const lng = parseFloat(req.query.lng);
+  if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
+
+  const pt = [lng, lat];
+  const matches = [];
+
+  for (const f of inspireData) {
+    const coords = f.geometry.coordinates;
+    if (!pointInRing(pt, coords[0])) continue;
+    // Check holes
+    let inHole = false;
+    for (let h = 1; h < coords.length; h++) { if (pointInRing(pt, coords[h])) { inHole = true; break; } }
+    if (inHole) continue;
+
+    // Compute net area
+    let area = ringAreaSqm(coords[0], lat);
+    for (let h = 1; h < coords.length; h++) area -= ringAreaSqm(coords[h], lat);
+
+    matches.push({
+      type: 'Feature',
+      properties: {
+        inspire_id: f.properties.inspire_id,
+        area_sqm: Math.round(area),
+        source: 'HMLR INSPIRE',
+        licence: 'OGL — Crown copyright and database rights. HM Land Registry. OS 100026316.'
+      },
+      geometry: f.geometry
+    });
+  }
+
+  // Also support radius search: return all parcels whose centroid is within radius
+  const radius = parseFloat(req.query.radius || 0);
+  if (radius > 0 && matches.length === 0) {
+    const mLng = 111320 * Math.cos(lat * Math.PI / 180);
+    const mLat = 110540;
+    for (const f of inspireData) {
+      const ext = f.geometry.coordinates[0];
+      const cx = ext.reduce((s, p) => s + p[0], 0) / ext.length;
+      const cy = ext.reduce((s, p) => s + p[1], 0) / ext.length;
+      const dx = (cx - lng) * mLng, dy = (cy - lat) * mLat;
+      if (Math.sqrt(dx * dx + dy * dy) <= radius) {
+        let area = ringAreaSqm(ext, lat);
+        matches.push({
+          type: 'Feature',
+          properties: { inspire_id: f.properties.inspire_id, area_sqm: Math.round(area), source: 'HMLR INSPIRE (radius)' },
+          geometry: f.geometry
+        });
+      }
+    }
+  }
+
+  res.json({ type: 'FeatureCollection', features: matches, count: matches.length });
+});
+
 // Overpass API — building footprint + tags
 app.get('/api/building', async (req, res) => {
   try {
