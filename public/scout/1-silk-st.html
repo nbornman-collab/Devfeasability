@@ -592,6 +592,25 @@ async function init(){
       }catch(e){console.warn('PropertyData 1SS owner error:',e.message);}
     })();
 
+    // ── Multi-parcel accumulator ─────────────────────────────────────────
+    const _parcels = []; // [{feature, area_sqm, owner, title}]
+    function addParcel(feature){
+      const p = feature.properties;
+      // Avoid duplicates
+      if(_parcels.find(x=>x.title===p.title_number)) return false;
+      _parcels.push({feature, area_sqm:p.area_sqm||0, owner:p.owner||'', title:p.title_number||''});
+      // Render all accumulated parcels
+      map.getSource('site').setData({type:'FeatureCollection',features:_parcels.map(x=>x.feature)});
+      const totalArea = _parcels.reduce((s,x)=>s+x.area_sqm,0);
+      const owners = [...new Set(_parcels.map(x=>x.owner))].join(' + ');
+      const status = document.getElementById('boundary-status');
+      const count = _parcels.length>1 ? ` · ${_parcels.length} parcels` : '';
+      status.textContent = `✓ ${owners}${count} · ${totalArea.toLocaleString()} m²`;
+      status.style.display='block'; status.className='confirmed';
+      _confirmed = true;
+      return true;
+    }
+
     // ── Click/tap to select parcel ────────────────────────────────────────
     map.on('click', async e => {
       if(!_selectMode) return;
@@ -601,13 +620,10 @@ async function init(){
       try{
         const fc = await(await fetch(`/api/plot-boundary?lat=${lat.toFixed(6)}&lng=${lng.toFixed(6)}`)).json();
         if(fc && fc.features && fc.features.length){
-          map.getSource('site').setData(fc);
-          const p = fc.features[0].properties;
-          const area = p.area_sqm ? `${p.area_sqm.toLocaleString()} m²` : '—';
-          const owner = p.owner || 'Unknown owner';
-          const status = document.getElementById('boundary-status');
-          status.textContent = `✓ ${owner} · ${area}`; status.style.display = 'block'; status.className = 'confirmed';
-          hint.style.display = 'none'; _confirmed = true;
+          const added = addParcel(fc.features[0]);
+          hint.textContent = added ? 'Parcel added — tap another to combine' : 'Already added';
+          hint.style.display = 'block';
+          setTimeout(()=>hint.style.display='none', 2500);
         } else {
           hint.style.display = 'none';
           document.getElementById('title-input-wrap').style.display = 'block';
@@ -698,13 +714,8 @@ async function lookupByTitle(){
   try {
     const fc = await(await fetch(`/api/plot-boundary?title=${titleNo}`)).json();
     if(fc && fc.features && fc.features.length){
-      window._map1ss.getSource('site').setData(fc);
-      const p = fc.features[0].properties;
-      const area = p.area_sqm ? `${p.area_sqm.toLocaleString()} m²` : '—';
-      const owner = p.owner || 'Unknown owner';
-      const status = document.getElementById('boundary-status');
-      status.textContent = `✓ ${owner} · ${area}`; status.style.display = 'block'; status.className = 'confirmed';
-      wrap.style.display = 'none'; _confirmed = true;
+      addParcel(fc.features[0]);
+      wrap.style.display = 'none';
       if(fc.features[0].geometry) {
         const coords = fc.features[0].geometry.coordinates[0];
         const bounds = coords.reduce((b,c)=>b.extend(c), new mapboxgl.LngLatBounds(coords[0],coords[0]));

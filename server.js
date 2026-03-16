@@ -131,15 +131,17 @@ app.get('/api/plot-boundary', async (req, res) => {
     const titleNo = req.query.title.trim().toUpperCase();
     try {
       const pd = await fetch(`https://api.propertydata.co.uk/title?key=${PROPERTYDATA_KEY}&title=${titleNo}`).then(r=>r.json());
-      if (!pd.data) return res.json({ type:'FeatureCollection', features:[] });
+      if (!pd.data || !pd.data.polygons?.length) return res.json({ type:'FeatureCollection', features:[] });
       const d = pd.data;
-      const coords = (d.polygon || []).map(p => [parseFloat(p.lng), parseFloat(p.lat)]);
+      const rawCoords = d.polygons[0].coords || [];
+      const coords = rawCoords.map(p => [parseFloat(p.lng), parseFloat(p.lat)]);
       if (coords.length < 3) return res.json({ type:'FeatureCollection', features:[] });
       coords.push(coords[0]);
+      const owner = d.ownership?.details?.owner || d.ownership?.details?.name || '';
       const areaSqm = d.plot_size ? Math.round(parseFloat(d.plot_size) * 4047) : 0;
       return res.json({ type:'FeatureCollection', features:[{ type:'Feature',
         geometry:{ type:'Polygon', coordinates:[coords] },
-        properties:{ title_number: titleNo, owner: d.proprietor_name || '', area_sqm: areaSqm, leaseholds: d.leaseholds || 0, source:'propertydata-direct' }
+        properties:{ title_number: titleNo, owner, area_sqm: areaSqm, leaseholds: d.leaseholds || 0, source:'propertydata-direct' }
       }]});
     } catch(e) {
       return res.status(500).json({ error: e.message });
