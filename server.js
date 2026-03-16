@@ -4,7 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN || '';
-const OS_API_KEY = process.env.OS_API_KEY || 'LX85JnG1cHTIXA5bpRGHJmA1QDrHHJWZ';
+const OS_API_KEY = process.env.OS_API_KEY; // set in Railway env vars
 
 // Simple in-memory cache for Overpass/external API responses (5 min TTL)
 const apiCache = new Map();
