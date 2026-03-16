@@ -711,29 +711,57 @@ function updateMap(idx){
   m.setPaintProperty('site-line','line-color',col);
 }
 
+// Simple convex hull (gift-wrapping) for combining multi-building campus footprints
+function convexHull(pts){
+  if(pts.length<3) return pts;
+  const cross=(O,A,B)=>(A[0]-O[0])*(B[1]-O[1])-(A[1]-O[1])*(B[0]-O[0]);
+  const sorted=[...pts].sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+  const lo=[],hi=[];
+  for(const p of sorted){
+    while(lo.length>=2&&cross(lo[lo.length-2],lo[lo.length-1],p)<=0) lo.pop();
+    lo.push(p);
+  }
+  for(const p of [...sorted].reverse()){
+    while(hi.length>=2&&cross(hi[hi.length-2],hi[hi.length-1],p)<=0) hi.pop();
+    hi.push(p);
+  }
+  hi.pop(); lo.pop();
+  const hull=[...lo,...hi];
+  hull.push(hull[0]); // close
+  return hull;
+}
+
 async function loadSitePolygon(){
   try {
     const places = await (await fetch(`/api/os-places?q=${encodeURIComponent(ADDRESS)}`)).json();
-    const iLat = places.lat || LAT;
-    const iLng = places.lng || LNG;
-    const fc = await (await fetch(`/api/os-buildings?lat=${LAT}&lng=${LNG}&iLat=${iLat}&iLng=${iLng}`)).json();
-    let feat = null;
-    if (fc.features && fc.features.length) {
-      feat = fc.features.find(f => f.geometry.type === 'Polygon') || fc.features[0];
-    }
-    if (!feat) {
-      const fc2 = await (await fetch(`/api/os-buildings?lat=${iLat}&lng=${iLng}&buf=0.0008`)).json();
-      if (fc2.features && fc2.features.length) feat = fc2.features[0];
-    }
-    if (feat && feat.geometry && feat.geometry.coordinates) {
-      SITE_COORDS = feat.geometry.coordinates[0];
-      // Update map sources if map already loaded
-      const m = window._map;
-      if (m && m.getSource) {
-        const poly = {type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}};
-        if (m.getSource('site')) m.getSource('site').setData(poly);
-        updateMap(activeIdx);
+    const iLat = (places.results && places.results[0] && places.results[0].lat) || LAT;
+    const iLng = (places.results && places.results[0] && places.results[0].lng) || LNG;
+    // Use 120m bbox to capture both Milton House + Shire House
+    const fc = await (await fetch(`/api/os-buildings?lat=${iLat}&lng=${iLng}&buf=0.0012`)).json();
+    if (!fc.features || !fc.features.length) return;
+    // Collect all polygon vertices from all campus buildings
+    // Filter to buildings within ~80m of centroid
+    const allPts = [];
+    fc.features.forEach(feat => {
+      if (!feat.geometry || feat.geometry.type !== 'Polygon') return;
+      const coords = feat.geometry.coordinates[0];
+      // Check centroid of this feature is close enough
+      const cx = coords.reduce((s,c)=>s+c[0],0)/coords.length;
+      const cy = coords.reduce((s,c)=>s+c[1],0)/coords.length;
+      const dLng = (cx - LNG) * 70000; // approx metres
+      const dLat = (cy - LAT) * 111000;
+      if (Math.sqrt(dLng*dLng + dLat*dLat) < 100) { // within 100m
+        coords.forEach(c => allPts.push(c));
       }
+    });
+    if (allPts.length < 3) return;
+    SITE_COORDS = convexHull(allPts);
+    // Update map if already loaded
+    const m = window._map;
+    if (m && m.getSource) {
+      const poly = {type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}};
+      if (m.getSource('site')) m.getSource('site').setData(poly);
+      updateMap(activeIdx);
     }
   } catch(e) { console.warn('OS polygon:', e.message); }
 }
