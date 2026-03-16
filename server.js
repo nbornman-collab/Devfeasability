@@ -810,7 +810,14 @@ Important constraints:
 - maintain the floor lines and volumes exactly
 - context remains white, proposal remains two-tone timber`;
 
+const renderCooldown = new Map(); // ip → last call timestamp
 app.post('/api/generate-render', express.json({ limit: '10mb' }), async (req, res) => {
+  const ip = req.ip || req.connection.remoteAddress;
+  const last = renderCooldown.get(ip) || 0;
+  if (Date.now() - last < 60000) {
+    return res.status(429).json({ error: `Cooldown active — wait ${Math.ceil((60000-(Date.now()-last))/1000)}s before generating again` });
+  }
+  renderCooldown.set(ip, Date.now());
   try {
     const { imageBase64 } = req.body;
     if (!imageBase64) return res.status(400).json({ error: 'imageBase64 required' });

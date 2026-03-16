@@ -596,6 +596,7 @@ const COLS = ['#059669','#4f46e5','#d97706'];
 
 function go(idx){
   activeIdx=idx;
+  window._activeScen=idx;
   document.querySelectorAll('.pill').forEach((b,i)=>b.classList.toggle('active',i===idx));
   document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',i===idx));
   render();
@@ -871,14 +872,24 @@ function shrinkPoly(coords,f){
   return coords.map(c=>[cx+(c[0]-cx)*f,cy+(c[1]-cy)*f]);
 }
 
+const _renderCache = {}; // keyed by scenario index
 async function generateRender(){
+  const scenIdx = window._activeScen ?? 0;
   const btn = document.getElementById('render-btn');
-  const icon = document.getElementById('render-icon');
   const panel = document.getElementById('render-panel');
   const img = document.getElementById('render-img');
+
+  // If cached, just show it
+  if (_renderCache[scenIdx]) {
+    img.src = _renderCache[scenIdx];
+    panel.style.display = 'block';
+    return;
+  }
+
+  if (!confirm('This calls the Gemini API and uses credits.\nGenerate physical model render?')) return;
+
   btn.disabled = true;
-  icon.textContent = '⏳';
-  btn.querySelector('span').nextSibling.textContent = ' Generating…';
+  btn.textContent = '⏳ Generating…';
   try {
     const canvas = window._map.getCanvas();
     const imageBase64 = canvas.toDataURL('image/png');
@@ -889,18 +900,20 @@ async function generateRender(){
     });
     const data = await res.json();
     if (data.imageBase64) {
+      _renderCache[scenIdx] = data.imageBase64;
       img.src = data.imageBase64;
       panel.style.display = 'block';
+      btn.textContent = '✓ View Render';
+      btn.disabled = false;
+      return;
     } else {
       alert('Render failed: ' + (data.error || 'unknown error'));
     }
   } catch(e) {
     alert('Render error: ' + e.message);
-  } finally {
-    btn.disabled = false;
-    icon.textContent = '⬡';
-    btn.childNodes[1].textContent = ' Generate Render';
   }
+  btn.disabled = false;
+  btn.textContent = '⬡ Generate Render';
 }
 
 async function initMap(){
