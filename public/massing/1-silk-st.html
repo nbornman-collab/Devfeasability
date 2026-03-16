@@ -822,24 +822,19 @@ function updateMap(idx){
   const cx=CENTROID[0], cy=CENTROID[1];
   const empty={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,.0001],[.0001,.0001],[0,0]]]}};
 
-  // Podium: correctly-sized rectangle clipped to site boundary
-  const podAreaSqm = PLOT_AREA * s.cov;
-  const podRect = makeRect(cx, cy - 0.00004, podAreaSqm, 1.4);
-  const podCoords = clipToSite(podRect.slice(0,-1), SITE_COORDS);
-  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[podCoords.length>2?podCoords:podRect]}});
-
-  // Tower: slender rectangle offset slightly N, clipped to site boundary
-  const twrAreaSqm = PLOT_AREA * s.twrPct;
-  const twrRect = makeRect(cx + 0.00005, cy + 0.00005, twrAreaSqm, 0.85);
-  const twrCoords = clipToSite(twrRect.slice(0,-1), SITE_COORDS);
-  m.getSource('tower').setData(s.twrF>0?{type:'Feature',geometry:{type:'Polygon',coordinates:[twrCoords.length>2?twrCoords:twrRect]}}:empty);
-
+  // Single clean block — full height, no podium/tower split in 3D
+  const massAreaSqm = PLOT_AREA * s.cov;
+  const massRect = makeRect(cx, cy, massAreaSqm, 1.4);
+  const massCoords = clipToSite(massRect.slice(0,-1), SITE_COORDS);
+  const massData = {type:'Feature',geometry:{type:'Polygon',coordinates:[massCoords.length>2?massCoords:massRect]}};
+  m.getSource('podium').setData(massData);
+  m.getSource('tower').setData(empty); // hidden
+  const fullH = s.floors===10?40:s.floors===18?72:123;
   m.setPaintProperty('podium-3d','fill-extrusion-color',col);
-  m.setPaintProperty('podium-3d','fill-extrusion-height',s.podH);
-  m.setPaintProperty('tower-3d','fill-extrusion-color',col);
-  m.setPaintProperty('tower-3d','fill-extrusion-height',s.floors===10?40:s.floors===18?72:123);
-  m.setPaintProperty('tower-3d','fill-extrusion-base',s.podH);
-  m.setPaintProperty('tower-3d','fill-extrusion-opacity',s.twrF>0?.6:0);
+  m.setPaintProperty('podium-3d','fill-extrusion-height',fullH);
+  m.setPaintProperty('podium-3d','fill-extrusion-base',0);
+  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.7);
+  m.setPaintProperty('tower-3d','fill-extrusion-opacity',0); // hidden
   m.setPaintProperty('site-line','line-color',col);
 }
 

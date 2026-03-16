@@ -744,19 +744,18 @@ function updateMap(idx){
   const s=SCENARIOS[idx],col=COLS[idx],m=window._map;
   const cx=CENTROID[0], cy=CENTROID[1];
   const empty={type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,.0001],[.0001,.0001],[0,0]]]}};
-  // Podium = full site at podium height (100LH: coverage 1.0 — whole site is podium)
-  const podRect=makeRect(cx,cy,PLOT_AREA*s.cov,1.2);
-  const podCoords=clipToSite(podRect.slice(0,-1),SITE_COORDS);
-  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[podCoords.length>2?podCoords:podRect]}});
-  const twrRect=makeRect(cx,cy,PLOT_AREA*s.twrPct,1.0);
-  const twrCoords=clipToSite(twrRect.slice(0,-1),SITE_COORDS);
-  m.getSource('tower').setData(s.twrF>0?{type:'Feature',geometry:{type:'Polygon',coordinates:[twrCoords.length>2?twrCoords:twrRect]}}:empty);
+  // Single clean block — full height, single rectangle. No stepped podium/tower split.
+  const massRect=makeRect(cx,cy,PLOT_AREA*s.cov,1.2);
+  const massCoords=clipToSite(massRect.slice(0,-1),SITE_COORDS);
+  const massData={type:'Feature',geometry:{type:'Polygon',coordinates:[massCoords.length>2?massCoords:massRect]}};
+  m.getSource('podium').setData(massData);
+  m.getSource('tower').setData(empty); // tower source unused — single block approach
+  const fullH=s.floors===10?42:s.floors===14?60:92;
   m.setPaintProperty('podium-3d','fill-extrusion-color',col);
-  m.setPaintProperty('podium-3d','fill-extrusion-height',s.podH);
-  m.setPaintProperty('tower-3d','fill-extrusion-color',col);
-  m.setPaintProperty('tower-3d','fill-extrusion-height',s.floors===10?42:s.floors===14?60:92);
-  m.setPaintProperty('tower-3d','fill-extrusion-base',s.podH);
-  m.setPaintProperty('tower-3d','fill-extrusion-opacity',s.twrF>0?.6:0);
+  m.setPaintProperty('podium-3d','fill-extrusion-height',fullH);
+  m.setPaintProperty('podium-3d','fill-extrusion-base',0);
+  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.7);
+  m.setPaintProperty('tower-3d','fill-extrusion-opacity',0); // hidden
   m.setPaintProperty('site-line','line-color',col);
 }
 
