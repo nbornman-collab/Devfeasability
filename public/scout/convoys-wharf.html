@@ -329,12 +329,14 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
-const LAT = 51.4856, LNG = -0.0272;
+const LAT = 51.4825, LNG = -0.0270;
+// 16.6ha = ~500m frontage × 332m deep. Thames bank N at ~51.484, S at ~51.481
+// Deptford station (51.4782) used as anchor. Polygon is architectural estimate — verify via HMLR.
 const SITE_COORDS = [
-  [-0.0315, 51.4840],[-0.0228, 51.4840],[-0.0228, 51.4872],
-  [-0.0315, 51.4872],[-0.0315, 51.4840]
+  [-0.0305, 51.4810],[-0.0235, 51.4810],[-0.0235, 51.4840],
+  [-0.0305, 51.4840],[-0.0305, 51.4810]
 ];
-const CENTROID = [-0.0272, 51.4856];
+const CENTROID = [-0.0270, 51.4825];
 
 async function initMap(){
   const cfg = await(await fetch('/api/config')).json();
@@ -342,7 +344,7 @@ async function initMap(){
   const m = new mapboxgl.Map({
     container:'map',
     style:'mapbox://styles/mapbox/light-v11',
-    center: CENTROID, zoom:14.5, pitch:45, bearing:10,
+    center: CENTROID, zoom:14.0, pitch:40, bearing:0,
     interactive:true, attributionControl:false, antialias:true
   });
   m.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
