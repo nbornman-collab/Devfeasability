@@ -40,8 +40,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/t2/:site', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'massing', `${req.params.site}.html`));
 });
+const T3_ALIASES = { '100-leadenhall': '100-leadenhall-street' };
 app.get('/t3/:site', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'reports', `${req.params.site}.html`));
+  const name = T3_ALIASES[req.params.site] || req.params.site;
+  res.sendFile(path.join(__dirname, 'public', 'reports', `${name}.html`));
 });
 app.get('/t1/:site', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'scout', `${req.params.site}.html`));
