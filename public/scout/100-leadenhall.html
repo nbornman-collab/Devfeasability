@@ -57,13 +57,9 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .content{padding:20px 24px;display:flex;flex-direction:column;gap:18px}
 
 /* ── Tags ── */
-.tags-row{display:flex;gap:7px;flex-wrap:wrap;padding:14px 28px;background:white;border-bottom:1px solid var(--border)}
-.tag{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:0;font:600 10px var(--sans);letter-spacing:.2px;border:1px solid}
-.tag.green{background:#f0fdf4;color:#166534;border-color:#bbf7d0}
-.tag.amber{background:#fffbeb;color:#92400e;border-color:#fde68a}
-.tag.blue{background:#eff6ff;color:#1e40af;border-color:#bfdbfe}
-.tag.purple{background:#f5f3ff;color:#4338ca;border-color:#c4b5fd}
-.tag.grey{background:var(--surface);color:var(--text2);border-color:var(--border)}
+.tags-row{display:flex;gap:6px;flex-wrap:wrap;padding:12px 28px;background:white;border-bottom:1px solid var(--border)}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;border:1px solid var(--border);background:#fff;color:var(--text2)}
+.tag.highlight{background:var(--text);color:#fff;border-color:var(--text)}
 
 /* ── Map ── */
 #scout-map{height:220px;border-radius:0;overflow:hidden;border:1px solid var(--border)}
@@ -97,11 +93,11 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 /* Flag rows */
 .flag-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05)}
 .flag-row:last-child{border-bottom:none}
-.flag-icon{width:22px;height:22px;border-radius:0;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
-.flag-icon.ok{background:#f0fdf4}
-.flag-icon.warn{background:#fffbeb}
-.flag-icon.risk{background:#fef2f2}
-.flag-icon.info{background:#eff6ff}
+.flag-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:2px;border:1px solid var(--border);background:#fff}
+.flag-icon.ok{color:#059669;border-color:#d1fae5}
+.flag-icon.warn{color:#d97706;border-color:#fde68a}
+.flag-icon.risk{color:#dc2626;border-color:#fecaca}
+.flag-icon.info{color:#4f46e5;border-color:#e0e7ff}
 .flag-title{font:600 11px var(--sans);color:var(--text);margin-bottom:2px}
 .flag-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5}
 
@@ -112,19 +108,24 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .hb-fill{height:100%;border-radius:0;transition:width .5s ease}
 .hb-val{font:600 9px var(--mono);color:var(--text3);width:34px;text-align:right}
 
-/* T2 unlock teaser */
-.unlock-card{background:white;border:1.5px solid #c4b5fd;border-radius:0;overflow:hidden}
-.unlock-head{background:linear-gradient(135deg,#f5f3ff,#ede9fe);padding:14px 18px;border-bottom:1px solid #c4b5fd}
-.unlock-head h3{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:#4338ca}
-.unlock-head p{font:400 11px var(--sans);color:#5b5299;margin-top:3px}
-.unlock-body{padding:16px 18px}
-.unlock-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.05)}
-.unlock-row:last-child{border-bottom:none}
-.unlock-icon{width:20px;height:20px;border-radius:0;background:#f5f3ff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
-.unlock-text{font:500 11px var(--sans);color:var(--text2)}
+/* T2 upgrade section */
+.upgrade-section{border:1px solid var(--border);overflow:hidden;margin-bottom:0}
+.upgrade-header{background:var(--text);padding:20px 22px}
+.upgrade-tier{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:3px;color:rgba(255,255,255,.45);margin-bottom:6px}
+.upgrade-title{font:700 15px var(--sans);color:#fff;letter-spacing:-.2px;line-height:1.3}
+.upgrade-sub{font:400 11px var(--sans);color:rgba(255,255,255,.6);margin-top:5px;line-height:1.6}
+.upgrade-scenarios{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)}
+.upgrade-scenario{background:#fff;padding:12px 14px}
+.upgrade-scenario-label{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:3px}
+.upgrade-scenario-val{font:700 14px var(--mono);letter-spacing:-.3px}
+.upgrade-scenario-sub{font:400 9px var(--sans);color:var(--text3);margin-top:1px}
+.upgrade-features{padding:16px 22px;border-top:1px solid var(--border)}
+.upgrade-feature{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);font:400 11px/1.5 var(--sans);color:var(--text2)}
+.upgrade-feature:last-child{border-bottom:none}
+.upgrade-feature-label{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text);flex-shrink:0;width:110px;padding-top:1px}
 .lock-blur{filter:blur(3px);user-select:none;pointer-events:none;opacity:.5;font:700 13px var(--mono);color:var(--text)}
-.unlock-cta{display:block;margin-top:14px;padding:11px;background:var(--accent);color:white;text-align:center;border-radius:0;font:700 12px var(--sans);text-decoration:none;transition:opacity .15s}
-.unlock-cta:hover{opacity:.9}
+.upgrade-cta{display:block;padding:13px 22px;background:var(--text);color:#fff;text-align:center;font:700 10px var(--sans);text-transform:uppercase;letter-spacing:2px;text-decoration:none;border-top:1px solid rgba(255,255,255,.1);transition:opacity .15s}
+.upgrade-cta:hover{opacity:.85}
 
 /* Planning apps */
 .side-head{padding:14px 18px;border-bottom:1px solid var(--border)}
@@ -134,10 +135,10 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .app-ref{font:600 9px var(--mono);color:var(--accent);margin-bottom:2px}
 .app-desc{font:400 10px var(--sans);color:var(--text2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .app-meta{font:400 9px var(--sans);color:var(--text3);margin-top:2px;display:flex;gap:6px;flex-wrap:wrap}
-.app-status{display:inline-block;padding:1px 6px;border-radius:0;font:600 8px var(--sans)}
-.app-status.approved{background:#f0fdf4;color:#166534}
-.app-status.refused{background:#fef2f2;color:#991b1b}
-.app-status.pending{background:#fffbeb;color:#92400e}
+.app-status{display:inline-block;padding:1px 7px;font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.5px;border:1px solid}
+.app-status.approved{background:#fff;color:#059669;border-color:#d1fae5}
+.app-status.refused{background:#fff;color:#dc2626;border-color:#fecaca}
+.app-status.pending{background:#fff;color:#d97706;border-color:#fde68a}
 
 .skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:0;height:14px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -214,11 +215,11 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <!-- Tags row -->
 <div class="tags-row">
-  <span class="tag purple">PTAL <span id="tag-ptal">6a — Excellent</span></span>
-  <span class="tag green" id="tag-flood">Flood Zone 1</span>
-  <span class="tag blue">Eastern Cluster — Tall Buildings Zone</span>
-  <span class="tag grey">City of London</span>
-  <span class="tag grey" id="tag-heritage">Loading heritage…</span>
+  <span class="tag">PTAL <span id="tag-ptal">6a</span></span>
+  <span class="tag" id="tag-flood">Flood Zone 1</span>
+  <span class="tag highlight">Eastern Cluster</span>
+  <span class="tag">City of London</span>
+  <span class="tag" id="tag-heritage">Heritage…</span>
 </div>
 
 <div class="content">
@@ -336,53 +337,49 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
       </div>
     </div>
 
-    <!-- T2 unlock teaser -->
-    <div class="unlock-card">
-      <div class="unlock-head">
-        <h3>Every site has a sweet spot. T2 finds it.</h3>
-        <p id="teaser-hook">On this site, choosing the wrong scenario costs up to <strong id="margin-delta" style="color:#4338ca">£—M</strong> in developer margin. T2 shows you exactly where the return curve peaks — and what each additional floor costs you.</p>
+    <!-- T2 upgrade -->
+    <div class="upgrade-section">
+      <div class="upgrade-header">
+        <div class="upgrade-tier">T2 Appraise</div>
+        <div class="upgrade-title">Three scenarios. Live assumptions. Return curve.</div>
+        <div class="upgrade-sub">T1 tells you the size of the prize. T2 tells you which scenario captures it — and what each additional floor actually costs.</div>
       </div>
-      <div class="unlock-body">
-
-        <!-- Blurred return curve teaser -->
-        <div style="position:relative;margin-bottom:16px;border-radius:0;overflow:hidden;border:1px solid #c4b5fd">
-          <svg id="teaser-curve" viewBox="0 0 280 80" style="width:100%;display:block;filter:blur(2.5px);opacity:.55"></svg>
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
-            <div style="font:700 11px 'Inter',sans-serif;color:#312e81">Return curve — locked</div>
-            <div style="font:400 9px 'Inter',sans-serif;color:#5b5299">Unlock T2 to see where this site peaks</div>
-          </div>
+      <div class="upgrade-scenarios">
+        <div class="upgrade-scenario">
+          <div class="upgrade-scenario-label">Low</div>
+          <div class="upgrade-scenario-val" style="color:#059669">10F · 42m</div>
+          <div class="upgrade-scenario-sub">Full street cornice</div>
         </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-          <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:0;padding:10px">
-            <div style="font:700 8px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#5b5299;margin-bottom:4px">What T1 tells you</div>
-            <div style="font:400 10px 'Inter',sans-serif;color:#4a506a;line-height:1.5">GDV range, uplift potential, planning context. The size of the prize.</div>
-          </div>
-          <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #a78bfa;border-radius:0;padding:10px">
-            <div style="font:700 8px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#4338ca;margin-bottom:4px">What T2 tells you</div>
-            <div style="font:400 10px 'Inter',sans-serif;color:#3730a3;line-height:1.5">Exactly where the sweet spot is. What each extra floor costs. Which scenario to build.</div>
-          </div>
+        <div class="upgrade-scenario" style="border-left:2px solid var(--text)">
+          <div class="upgrade-scenario-label">Base</div>
+          <div class="upgrade-scenario-val" style="color:#4f46e5">14F · 60m</div>
+          <div class="upgrade-scenario-sub">Stepped tower</div>
         </div>
-
-        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
-          <div style="display:flex;align-items:center;gap:8px;font:400 10px 'Inter',sans-serif;color:#4a506a">
-            <span style="color:#4f46e5;font-weight:700">→</span> Know the right height before you brief an architect
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font:400 10px 'Inter',sans-serif;color:#4a506a">
-            <span style="color:#4f46e5;font-weight:700">→</span> See exactly where construction cost, compliance and finance compound
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font:400 10px 'Inter',sans-serif;color:#4a506a">
-            <span style="color:#4f46e5;font-weight:700">→</span> Understand which constraint limits your scheme — and whether it's worth fighting
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;font:400 10px 'Inter',sans-serif;color:#4a506a">
-            <span style="color:#4f46e5;font-weight:700">→</span> Full pro forma: margin <span style="font-family:'JetBrains Mono',monospace;filter:blur(3px);letter-spacing:-1px">██–██%</span> · profit <span style="font-family:'JetBrains Mono',monospace;filter:blur(3px);letter-spacing:-1px">£██M</span>
-          </div>
+        <div class="upgrade-scenario">
+          <div class="upgrade-scenario-label">High</div>
+          <div class="upgrade-scenario-val" style="color:#d97706">22F · 92m</div>
+          <div class="upgrade-scenario-sub">Full Eastern Cluster</div>
         </div>
-
-        <a href="/t2/100-leadenhall" class="unlock-cta" style="font-size:13px;padding:13px">
-          Find the sweet spot → T2 Appraise
-        </a>
       </div>
+      <div class="upgrade-features">
+        <div class="upgrade-feature">
+          <span class="upgrade-feature-label">Return curve</span>
+          Where developer margin peaks across all scenarios — plotted live as you adjust assumptions
+        </div>
+        <div class="upgrade-feature">
+          <span class="upgrade-feature-label">Live sliders</span>
+          ERV, yield, build cost, S106, profit target — recalculate instantly on drag
+        </div>
+        <div class="upgrade-feature">
+          <span class="upgrade-feature-label">Full pro forma</span>
+          GDV, construction, CIL, fees, finance, and Residual Land Value per scenario
+        </div>
+        <div class="upgrade-feature">
+          <span class="upgrade-feature-label">Constraint map</span>
+          BSA flags, heritage requirements, LVMF, fire strategy — mapped to programme stage
+        </div>
+      </div>
+      <a href="/t2/100-leadenhall" class="upgrade-cta">Run T2 Appraisal →</a>
     </div>
 
     <!-- Planning applications (inline) -->
@@ -603,7 +600,7 @@ function buildFlags(flood,listedEls){
   const badge=document.getElementById('flags-badge');
   if(badge){
     badge.textContent=`${risks} Risk · ${warns} Advisory · ${oks} Clear`;
-    badge.style.cssText=`font:600 9px var(--mono);padding:2px 8px;border-radius:0;${risks>0?'background:#fef2f2;color:#991b1b':warns>0?'background:#fffbeb;color:#92400e':'background:#f0fdf4;color:#166534'}`;
+    badge.style.cssText=`font:600 9px var(--mono);padding:2px 8px;border:1px solid;${risks>0?'border-color:#fecaca;color:#dc2626':warns>0?'border-color:#fde68a;color:#d97706':'border-color:#d1fae5;color:#059669'};background:#fff`;
   }
 
   html('flags-body',flags.map(f=>`

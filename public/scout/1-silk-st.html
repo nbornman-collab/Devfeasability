@@ -109,14 +109,23 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 .hb-fill{height:100%;border-radius:0}
 .hb-val{font:600 9px var(--mono);color:var(--text3);width:34px;text-align:right}
 
-.unlock-card{background:#fff;border:1.5px solid #c4b5fd;border-radius:0;overflow:hidden}
-.unlock-head{background:linear-gradient(135deg,#f5f3ff,#ede9fe);padding:16px 18px;border-bottom:1px solid #c4b5fd}
-.unlock-head h3{font:700 15px var(--sans);letter-spacing:-.2px;margin-bottom:5px}
-.unlock-head p{font:400 11px var(--sans);color:#5b5299;line-height:1.6}
-.unlock-body{padding:16px 18px}
-.lock-blur{filter:blur(3px);font:700 13px var(--mono);color:var(--text)}
-.unlock-cta{display:block;margin-top:14px;padding:13px;background:var(--accent);color:#fff;text-align:center;border-radius:0;font:700 13px var(--sans);text-decoration:none;transition:opacity .15s}
-.unlock-cta:hover{opacity:.9}
+/* T2 upgrade */
+.upgrade-section{border:1px solid var(--border);overflow:hidden}
+.upgrade-header{background:var(--text);padding:20px 22px}
+.upgrade-tier{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:3px;color:rgba(255,255,255,.45);margin-bottom:6px}
+.upgrade-title{font:700 15px var(--sans);color:#fff;letter-spacing:-.2px;line-height:1.3}
+.upgrade-sub{font:400 11px var(--sans);color:rgba(255,255,255,.6);margin-top:5px;line-height:1.6}
+.upgrade-scenarios{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)}
+.upgrade-scenario{background:#fff;padding:12px 14px}
+.upgrade-scenario-label{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:3px}
+.upgrade-scenario-val{font:700 14px var(--mono);letter-spacing:-.3px}
+.upgrade-scenario-sub{font:400 9px var(--sans);color:var(--text3);margin-top:1px}
+.upgrade-features{padding:16px 22px;border-top:1px solid var(--border)}
+.upgrade-feature{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);font:400 11px/1.5 var(--sans);color:var(--text2)}
+.upgrade-feature:last-child{border-bottom:none}
+.upgrade-feature-label{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text);flex-shrink:0;width:110px;padding-top:1px}
+.upgrade-cta{display:block;padding:13px 22px;background:var(--text);color:#fff;text-align:center;font:700 10px var(--sans);text-transform:uppercase;letter-spacing:2px;text-decoration:none;transition:opacity .15s}
+.upgrade-cta:hover{opacity:.85}
 
 .side-head{padding:14px 18px;border-bottom:1px solid var(--border)}
 .side-head h2{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3)}
@@ -186,12 +195,12 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <!-- Tags — inside panel, after hero -->
 <div class="tags-row">
-  <div class="tag red">️ NOT Eastern Cluster</div>
-  <div class="tag amber">! Heritage Impact Assessment mandatory</div>
-  <div class="tag green">✓ PTAL 6a</div>
-  <div class="tag amber">! Barbican Estate Grade II* adjacent</div>
-  <div class="tag purple">📋 GLA referral >30m</div>
-  <div class="tag blue">🏢 Large City plot · 9,000 m²</div>
+  <span class="tag">PTAL 6a</span>
+  <span class="tag">Flood Zone 1</span>
+  <span class="tag highlight">Not Eastern Cluster</span>
+  <span class="tag">GLA Referral &gt;30m</span>
+  <span class="tag">Barbican Conservation Area</span>
+  <span class="tag">EC2Y · City Fringe</span>
 </div>
 
 <div class="content">
@@ -302,36 +311,49 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
     </div>
 
     <!-- T2 unlock teaser -->
-    <div class="unlock-card">
-      <div class="unlock-head">
-        <h3>Every site has a sweet spot. T2 finds it.</h3>
-        <p id="teaser-hook">On this site, the question isn't just financial — it's architectural. Which height actually wins planning, delivers the return, and earns its place next to one of London's most protected estates?</p>
+    <!-- T2 upgrade -->
+    <div class="upgrade-section">
+      <div class="upgrade-header">
+        <div class="upgrade-tier">T2 Appraise</div>
+        <div class="upgrade-title">Three scenarios. Live assumptions. Return curve.</div>
+        <div class="upgrade-sub">The question isn't whether to develop — it's which height wins planning, delivers the return, and earns its place next to the Barbican.</div>
       </div>
-      <div class="unlock-body">
-        <div style="position:relative;border-radius:0;overflow:hidden;border:1px solid #c4b5fd;margin-bottom:14px">
-          <svg id="teaser-curve" viewBox="0 0 280 80" style="width:100%;display:block;filter:blur(2.5px);opacity:.55"></svg>
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
-            <div style="font:700 11px var(--sans);color:#312e81">Return curve — locked</div>
-            <div style="font:400 10px var(--sans);color:var(--text3)">Unlock T2 to see where this site peaks</div>
-          </div>
+      <div class="upgrade-scenarios">
+        <div class="upgrade-scenario">
+          <div class="upgrade-scenario-label">Low</div>
+          <div class="upgrade-scenario-val" style="color:#059669">10F · 40m</div>
+          <div class="upgrade-scenario-sub">Below heritage trigger</div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
-          <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:0;padding:10px">
-            <div style="font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:#5b5299;margin-bottom:4px">What T1 tells you</div>
-            <div style="font:400 10px var(--sans);color:var(--text2);line-height:1.5">The site has potential. Heritage is the primary constraint. 21 Moorfields is the ceiling to argue from.</div>
-          </div>
-          <div style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #a78bfa;border-radius:0;padding:10px">
-            <div style="font:700 8px var(--sans);text-transform:uppercase;letter-spacing:1px;color:#4338ca;margin-bottom:4px">What T2 tells you</div>
-            <div style="font:400 10px var(--sans);color:#3730a3;line-height:1.5">Exactly which height maximises return — and whether the heritage fight at 18F is worth the margin you'll make back.</div>
-          </div>
+        <div class="upgrade-scenario" style="border-left:2px solid var(--text)">
+          <div class="upgrade-scenario-label">Base</div>
+          <div class="upgrade-scenario-val" style="color:#4f46e5">18F · 72m</div>
+          <div class="upgrade-scenario-sub">BSA tall building threshold</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
-          <div style="font:400 11px var(--sans);color:var(--text2);display:flex;align-items:center;gap:6px"><span style="color:var(--accent);font-weight:700">→</span> Know the right height before the Heritage Impact Assessment commits you to a massing</div>
-          <div style="font:400 11px var(--sans);color:var(--text2);display:flex;align-items:center;gap:6px"><span style="color:var(--accent);font-weight:700">→</span> See where BSA 50m threshold, heritage harm, and finance compound simultaneously</div>
-          <div style="font:400 11px var(--sans);color:var(--text2);display:flex;align-items:center;gap:6px"><span style="color:var(--accent);font-weight:700">→</span> Full pro forma: margin <span class="lock-blur">██–██%</span> · profit <span class="lock-blur">£██M</span></div>
+        <div class="upgrade-scenario">
+          <div class="upgrade-scenario-label">High</div>
+          <div class="upgrade-scenario-val" style="color:#d97706">32F · 128m</div>
+          <div class="upgrade-scenario-sub">21 Moorfields precedent</div>
         </div>
-        <a href="/t2/1-silk-st" class="unlock-cta">Find the sweet spot → T2 Appraise</a>
       </div>
+      <div class="upgrade-features">
+        <div class="upgrade-feature">
+          <span class="upgrade-feature-label">Return curve</span>
+          Where developer margin peaks across all scenarios — plotted live as you adjust assumptions
+        </div>
+        <div class="upgrade-feature">
+          <span class="upgrade-feature-label">Live sliders</span>
+          ERV, yield, build cost, S106, profit target — recalculate instantly on drag
+        </div>
+        <div class="upgrade-feature">
+          <span class="upgrade-feature-label">Full pro forma</span>
+          GDV, construction, CIL, fees, finance, and Residual Land Value per scenario
+        </div>
+        <div class="upgrade-feature">
+          <span class="upgrade-feature-label">Constraint map</span>
+          BSA flags, Barbican setting, GLA referral threshold — mapped to programme stage
+        </div>
+      </div>
+      <a href="/t2/1-silk-st" class="upgrade-cta">Run T2 Appraisal →</a>
     </div>
 
     <!-- Planning apps (inline, not side column) -->
