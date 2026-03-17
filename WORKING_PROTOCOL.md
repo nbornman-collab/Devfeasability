@@ -197,6 +197,19 @@ Before adding anything to a page: read its layout model first.
 
 ---
 
+## Protocol Updates
+
+If a rule isn't working, or a new failure pattern emerges that isn't covered:
+
+1. I flag it explicitly: "The protocol says X but it failed because Y — I think we need to update it. Here's what I'd propose."
+2. Nic approves the change
+3. I update the file, commit it, show exactly what changed
+4. No silent edits to this protocol. Ever.
+
+The protocol improves through use. If something keeps breaking despite the rules, that's a signal the rule is wrong or incomplete — not a reason to ignore it.
+
+---
+
 ## Sprint Process
 
 1. State the plan in plain language
