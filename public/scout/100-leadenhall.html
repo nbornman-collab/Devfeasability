@@ -182,10 +182,10 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
       <div class="opp-addr">100 Leadenhall Street</div>
       <div class="opp-sub">City of London · EC3A 3BP · 1,551 m² plot · Zone 1</div>
     </div>
-    <div class="opp-score-wrap">
-      <div class="opp-score-label">Opportunity Score</div>
-      <div><span class="opp-score">8.4</span><span class="opp-score-max">/10</span></div>
-      <div class="opp-score-badge">Strong opportunity</div>
+    
+      <div class="opp-score-label">Development Intelligence</div>
+      <div><span class="opp-score" id="hero-score">—</span><span class="opp-score-max">/100</span></div>
+      <div class="opp-score-badge" id="hero-score-badge">Scoring…</div>
     </div>
   </div>
   <!-- Uplift bar -->
@@ -395,6 +395,12 @@ const EXISTING_EUV = 38000000;
 
 // Render intelligence immediately
 document.getElementById('intelligence-mount').innerHTML = renderIntelligenceT1(SITE_INTELLIGENCE);
+(function(){
+  const score = computeSiteScore(SITE_INTELLIGENCE);
+  document.getElementById('hero-score').textContent = score;
+  const badge = document.getElementById('hero-score-badge');
+  badge.textContent = score >= 85 ? 'Top opportunity' : score >= 70 ? 'Strong opportunity' : score >= 55 ? 'Credible opportunity' : 'Due diligence required';
+})();
 
 const GDV_OPTS = [
   {floors:10,podF:6,twrF:4,twrPct:0.65,cov:1.0,nia:0.82,erv:770,niy:0.0475,rf:13,lt:120},

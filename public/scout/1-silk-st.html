@@ -200,10 +200,10 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
       <div class="opp-addr">1 Silk Street</div>
       <div class="opp-sub">City of London · EC2Y 8HQ · ~9,000 m² plot · PTAL 6a · Barbican Fringe</div>
     </div>
-    <div class="opp-score-wrap">
-      <div class="opp-score-label">Opportunity Score</div>
-      <div><span class="opp-score">7.1</span><span class="opp-score-max">/10</span></div>
-      <div class="opp-score-badge">Viable — heritage-constrained</div>
+    
+      <div class="opp-score-label">Development Intelligence</div>
+      <div><span class="opp-score" id="hero-score">—</span><span class="opp-score-max">/100</span></div>
+      <div class="opp-score-badge" id="hero-score-badge">Scoring…</div>
     </div>
   </div>
 
@@ -397,6 +397,12 @@ let PLOT_AREA=5709; // user-confirmed campus area; updated live from PropertyDat
 
 // Render intelligence immediately
 document.getElementById('intelligence-mount').innerHTML = renderIntelligenceT1(SITE_INTELLIGENCE);
+(function(){
+  const score = computeSiteScore(SITE_INTELLIGENCE);
+  document.getElementById('hero-score').textContent = score;
+  const badge = document.getElementById('hero-score-badge');
+  badge.textContent = score >= 85 ? 'Top opportunity' : score >= 70 ? 'Strong opportunity' : score >= 55 ? 'Credible opportunity' : 'Due diligence required';
+})();
 const EXISTING_EUV=95000000;
 
 // Site polygon — convex hull from OS NGD building footprints (Milton House + Shire House)

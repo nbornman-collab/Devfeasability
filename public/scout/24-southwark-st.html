@@ -182,10 +182,10 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
       <div class="opp-addr">24 Southwark Street</div>
       <div class="opp-sub">Southwark · SE1+0SW · 1,551 m² plot · Zone 1</div>
     </div>
-    <div class="opp-score-wrap">
-      <div class="opp-score-label">Opportunity Score</div>
-      <div><span class="opp-score">8.4</span><span class="opp-score-max">/10</span></div>
-      <div class="opp-score-badge">Strong opportunity</div>
+    
+      <div class="opp-score-label">Development Intelligence</div>
+      <div><span class="opp-score" id="hero-score">—</span><span class="opp-score-max">/100</span></div>
+      <div class="opp-score-badge" id="hero-score-badge">Scoring…</div>
     </div>
   </div>
   <!-- Uplift bar -->
@@ -195,7 +195,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
       <span>Potential GDV range</span>
     </div>
     <div class="uplift-track">
-      <div class="uplift-euv" style="width:22%">£38M EUV</div>
+      <div class="uplift-euv" style="width:18%">£22M EUV</div>
       <div class="uplift-gdv-range" id="gdv-bar" style="width:78%">up to £<span id="gdv-hi-val">—</span>M GDV</div>
     </div>
     <div class="uplift-stats">
@@ -395,6 +395,13 @@ const EXISTING_EUV = 22000000;
 
 // Render intelligence immediately
 document.getElementById('intelligence-mount').innerHTML = renderIntelligenceT1(SITE_INTELLIGENCE);
+// Populate hero score from intelligence — one definitive score
+(function(){
+  const score = computeSiteScore(SITE_INTELLIGENCE);
+  document.getElementById('hero-score').textContent = score;
+  const badge = document.getElementById('hero-score-badge');
+  badge.textContent = score >= 85 ? 'Top opportunity' : score >= 70 ? 'Strong opportunity' : score >= 55 ? 'Credible opportunity' : 'Due diligence required';
+})();
 
 const GDV_OPTS = [
   {floors:8,podF:5,twrF:3,twrPct:0.70,cov:1.0,nia:0.83,erv:650,niy:0.0525,rf:12,lt:120},
