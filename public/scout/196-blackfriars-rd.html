@@ -180,7 +180,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
   <div class="opp-hero-top">
     <div>
       <div class="opp-addr">196 Blackfriars Road</div>
-      <div class="opp-sub">Southwark · SE1 8NJ · 1,551 m² plot · Zone 1</div>
+      <div class="opp-sub">Southwark · SE1 8NJ · 583 m² plot · Residential</div>
     </div>
     
       <div class="opp-score-label">Development Intelligence</div>
@@ -408,8 +408,8 @@ const GDV_OPTS = [
   {floors:15,podF:0,twrF:15,twrPct:1.0,cov:0.75,nia:0.80,erv:9000,niy:0.045,rf:0,lt:1,resi:true},
 ];
 const KNOWN_HEIGHTS=[
-  {name:'22 Bishopsgate',h:278},{name:'Cheesegrater',h:224},{name:'NatWest Tower',h:183},
-  {name:'100 Bishopsgate',h:165},{name:'Scalpel',h:190},{name:"Lloyd's Building",h:88},
+  {name:'One Blackfriars',h:163},{name:'240 Blackfriars Rd',h:55},{name:'Blackfriars Circus',h:85},
+  {name:'18 Blackfriars Rd',h:95},{name:'Tate Modern',h:65},{name:'Sea Containers',h:38},
 ];
 
 function fmtM(v,decimals=0){const m=v/1e6;return '£'+(decimals?m.toFixed(decimals):Math.round(m))+'M';}
@@ -419,12 +419,15 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 
 // ── Compute GDV ──────────────────────────────────────────────────────────────
 (function(){
+  // ── RESIDENTIAL GDV model: sale price × NSA × blended affordable ──────────
+  const AFFORDABLE_FRAC = 0.35, AFFORDABLE_DISCOUNT = 0.70;
+  const BLENDED = 1 - AFFORDABLE_FRAC * (1 - AFFORDABLE_DISCOUNT); // ~0.895
+  const CIL_RATE = 190; // £/m² NSA (Southwark £130 + Mayor £60)
   const gdvs = GDV_OPTS.map(o=>{
-    const podGIA = PLOT_AREA * o.cov * o.podF;
-    const twrGIA = PLOT_AREA * o.twrPct * o.twrF;
-    const totalNIA = (podGIA + twrGIA) * o.nia;
-    const effErv = totalNIA * o.erv * (1 - o.rf / o.lt);
-    return {gdv: effErv / o.niy, nia: totalNIA};
+    const gea = PLOT_AREA * o.cov * o.twrF; // all residential floors
+    const nsa = gea * o.nia; // Net Saleable Area
+    const gdv = nsa * o.erv * BLENDED; // erv = sale price £/m²
+    return {gdv, nia: nsa};
   });
   const gdvHi  = Math.max(...gdvs.map(g=>g.gdv));
   const gdvLo  = Math.min(...gdvs.map(g=>g.gdv));
@@ -434,28 +437,29 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 
   set('gdv-hi-val', Math.round(gdvHi/1e6));
 
-  // Rough margin delta (highest vs lowest scenario profit)
+  // Residential profit estimate
   const margins = GDV_OPTS.map(o=>{
-    const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
-    const nia=(PLOT_AREA*o.cov*o.podF+PLOT_AREA*o.twrPct*o.twrF)*o.nia;
-    const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
-    const cc=gea*5000; // rough avg cost
-    const tdc=cc*(1+0.13+0.075)+nia*200+gdv*0.15*0.1+2750000;
-    return gdv-tdc;
+    const gea = PLOT_AREA * o.cov * o.twrF;
+    const nsa = gea * o.nia;
+    const gdv = nsa * o.erv * BLENDED;
+    const cc = gea * 4000; // £4,000/m² build cost
+    const cil = nsa * CIL_RATE;
+    const tdc = cc * 1.18 + cil + gdv * 0.06 + 1500000; // professional fees, finance, land
+    return gdv - tdc;
   });
   const mDelta=Math.round(Math.abs(Math.max(...margins)-Math.min(...margins))/1e6);
   set('margin-delta','£'+mDelta+'M');
 
-  // Blurred teaser curve SVG
+  // Return curve SVG
   const W=280,H=80,pts=GDV_OPTS.map((o,i)=>{
     const x=20+i*(W-40)/2;
-    const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
-    const nia=gea*o.nia;
-    const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
-    const cc=gea*(3800+i*1200);
-    const tdc=cc*(1.2)+nia*200+gdv*0.015+2750000;
+    const gea = PLOT_AREA * o.cov * o.twrF;
+    const nsa = gea * o.nia;
+    const gdv = nsa * o.erv * BLENDED;
+    const cc = gea * (3800+i*400);
+    const tdc = cc*1.18 + nsa*CIL_RATE + gdv*0.06 + 1500000;
     const poc=(gdv-tdc)/tdc*100;
-    const y=H-10-(poc-20)/(50-20)*(H-20);
+    const y=H-10-(poc-15)/(45-15)*(H-20);
     return `${x},${Math.max(5,Math.min(H-10,y)).toFixed(0)}`;
   }).join(' ');
   const tsvg=document.getElementById('teaser-curve');
