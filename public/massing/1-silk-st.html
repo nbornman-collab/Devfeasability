@@ -446,7 +446,7 @@ const CENTROID=[-0.09163, 51.52033]; // campus centroid (map centre)
 const MASSING_CX=-0.09120, MASSING_CY=51.51990; // actual 1 Silk St building footprint
 const LAT=51.52033, LNG=-0.09163;
 const PLOT_AREA=5709, FTF=4.0;
-let EXISTING_HEIGHT=32; // overwritten by OS NGD on load
+let EXISTING_HEIGHT=30.0; // 1SS confirmed (OS NGD fallback)
 const EXISTING_EUV=150000000;
 const fmt=n=>(n??0).toLocaleString('en-GB');
 
@@ -958,7 +958,7 @@ async function initMap(){
 
     // Red translucent shell — OS NGD real footprint (falls back to makeRect)
     m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[makeRect(MASSING_CX,MASSING_CY,PLOT_AREA*0.4,1.4)]}}});
-    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.32}});
+    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.5}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
     fetch(`/api/building-data?lat=${LAT}&lng=${LNG}`).then(r=>r.json()).then(bd=>{
@@ -976,7 +976,7 @@ async function initMap(){
 
     m.addSource('podium',{type:'geojson',data:emptyPoly()});
     m.addSource('tower',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':40,'fill-extrusion-base':EXISTING_HEIGHT,'fill-extrusion-opacity':0.38}});
+    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':40,'fill-extrusion-base':EXISTING_HEIGHT,'fill-extrusion-opacity':0.62}});
     m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':40,'fill-extrusion-base':32,'fill-extrusion-opacity':0}});
     m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#047857','line-width':2,'line-opacity':0.85}});
     m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0}});

@@ -441,7 +441,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 const SITE_COORDS=[[-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,51.51396],[-0.0799754,51.5136468],[-0.079809,51.5136257],[-0.0798425,51.5135377],[-0.0798828,51.513445],[-0.0804144,51.5135131],[-0.0803568,51.5136783],[-0.0802864,51.5136687],[-0.0802571,51.5137575],[-0.080298,51.5137608],[-0.0802591,51.5138813],[-0.0803085,51.5138886],[-0.0803056,51.5138968],[-0.0802763,51.5140146]];
 const CENTROID=[-0.0801551,51.5137673];
 const PLOT_AREA=1551, FTF=4.2;
-let EXISTING_HEIGHT=25; // overwritten by OS NGD on load
+let EXISTING_HEIGHT=28.6; // 100LH confirmed (OS NGD fallback)
 const EXISTING_EUV=38000000;
 const fmt=n=>(n??0).toLocaleString('en-GB');
 
@@ -836,7 +836,7 @@ function makeRect(cx,cy,areaSqm,aspect){
 
 function updateMap(idx){
   const s=SCENARIOS[idx],m=window._map;
-  const targetH=s.floors===10?42:s.floors===14?60:92;
+  const targetH=Math.round(s.floors * FTF);
   const ftf=3.5;
   // Clear all floor lines
   for(let f=1;f<=30;f++) m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0);
@@ -847,7 +847,7 @@ function updateMap(idx){
   m.setPaintProperty('podium-3d','fill-extrusion-color','#059669');
   m.setPaintProperty('podium-3d','fill-extrusion-height',targetH);
   m.setPaintProperty('podium-3d','fill-extrusion-base',EXISTING_HEIGHT);
-  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.38);
+  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.62);
   m.setPaintProperty('podium-edge','line-color','#047857');
   m.setPaintProperty('podium-edge','line-opacity',0.85);
   m.getSource('tower').setData(emptyPoly());
@@ -939,7 +939,7 @@ async function initMap(){
 
     // Red translucent shell — OS NGD real footprint polygon (falls back to SITE_COORDS)
     m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}}});
-    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.32}});
+    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.5}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
     fetch(`/api/building-data?lat=${LAT}&lng=${LNG}`).then(r=>r.json()).then(bd=>{
@@ -950,6 +950,7 @@ async function initMap(){
       const osCoords = bd.polygon.coordinates[0];
       m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(osCoords,0.000003)]}});
       m.setPaintProperty('existing-cap','fill-extrusion-height',bd.height);
+      m.setPaintProperty('existing-cap','fill-extrusion-opacity',0.5);
       // Re-run map update with corrected height
       updateMap(window._activeIdx||0);
       console.log('OS NGD 100LH: height='+bd.height+'m footprint='+bd.footprint_area+'m²');
@@ -958,7 +959,7 @@ async function initMap(){
     // Green additional envelope + floor lines
     m.addSource('podium',{type:'geojson',data:emptyPoly()});
     m.addSource('tower',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':EXISTING_HEIGHT,'fill-extrusion-opacity':0.38}});
+    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':EXISTING_HEIGHT,'fill-extrusion-opacity':0.62}});
     m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0}});
     m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#047857','line-width':2,'line-opacity':0.85}});
     m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0}});
