@@ -136,12 +136,61 @@ When building against an external API:
 
 ---
 
+## The Two Non-Negotiable Steps
+
+These run on every task. No exceptions. No matter how small.
+
+---
+
+### Step 1 — Before touching any file
+
+State in the chat:
+
+```
+ABOUT TO CHANGE: [specific change] in [filename]
+DEPENDS ON THIS: [other files/pages that use what I'm changing]
+WILL NOT TOUCH: [confirmed values, locked behaviour]
+RISK: [honest — what could break]
+```
+
+If I cannot answer all four lines, I read the file first until I can.
+
+---
+
+### Step 2 — After every commit, before saying anything is done
+
+Run live verification against https://web-production-9d1a0.up.railway.app and post:
+
+```
+POST-COMMIT VERIFICATION — [commit hash]
+1. Homepage loads: [pass/fail]
+2. T0 Borough screener loads, shows sites: [pass/fail]
+3. T1 [site] loads, map renders, score shows: [pass/fail]
+4. T2 [site] loads, map renders, massing appears on scenario change: [pass/fail]
+5. T3 loads, financials show non-zero numbers: [pass/fail]
+6. Files touched: [list]
+7. Files NOT touched but depend on what I changed: [list]
+8. Anything uncertain: [honest answer]
+```
+
+All pass → commit stands. I say "done."
+Any fail → I fix it and re-run. I do not say "done" until all pass.
+I never say "pushed" or "done" without running this. Ever.
+
+---
+
+### What Nic does
+
+Nothing mid-task. No babysitting.
+If something looks wrong days later — send me the commit hash. I trace it.
+
+---
+
 ## Before Any Code Change
 
 1. **Read the file** — grep or read the relevant section. Understand what's already there.
 2. **State the plan** — 3–5 bullet points: what I'll change, what I won't touch, known risks.
-3. **Wait for a nod** on anything that touches layout, map code, or site data.
-4. **Do exactly what was asked** — no silent softening.
+3. **Do exactly what was asked** — no silent softening.
 
 ---
 
