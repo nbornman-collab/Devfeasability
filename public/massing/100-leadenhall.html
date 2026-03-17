@@ -435,7 +435,8 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 // ══════════════════════════════════════════════════════════════════════════════
 const SITE_COORDS=[[-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,51.51396],[-0.0799754,51.5136468],[-0.079809,51.5136257],[-0.0798425,51.5135377],[-0.0798828,51.513445],[-0.0804144,51.5135131],[-0.0803568,51.5136783],[-0.0802864,51.5136687],[-0.0802571,51.5137575],[-0.080298,51.5137608],[-0.0802591,51.5138813],[-0.0803085,51.5138886],[-0.0803056,51.5138968],[-0.0802763,51.5140146]];
 const CENTROID=[-0.0801551,51.5137673];
-const PLOT_AREA=1551, FTF=4.2, EXISTING_HEIGHT=25;
+const PLOT_AREA=1551, FTF=4.2;
+let EXISTING_HEIGHT=25; // overwritten by OS NGD on load
 const EXISTING_EUV=38000000;
 const fmt=n=>(n??0).toLocaleString('en-GB');
 
@@ -931,10 +932,23 @@ async function initMap(){
     m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
     m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-dasharray':[5,3],'line-opacity':0.8}});
 
-    // Red translucent shell — outset ~0.4m, envelops the grey Mapbox mass, full height
+    // Red translucent shell — OS NGD real footprint polygon (falls back to SITE_COORDS)
     m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}}});
     m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.32}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
+    // Load real OS NGD building data
+    fetch(`/api/building-data?lat=${LAT}&lng=${LNG}`).then(r=>r.json()).then(bd=>{
+      if(!bd.found) return;
+      window._existingH = bd.height;
+      EXISTING_HEIGHT = bd.height;
+      // Replace red shell with actual OS NGD footprint (slight outset)
+      const osCoords = bd.polygon.coordinates[0];
+      m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(osCoords,0.000003)]}});
+      m.setPaintProperty('existing-cap','fill-extrusion-height',bd.height);
+      // Re-run map update with corrected height
+      updateMap(window._activeIdx||0);
+      console.log('OS NGD 100LH: height='+bd.height+'m footprint='+bd.footprint_area+'m²');
+    }).catch(()=>{});
 
     // Green additional envelope + floor lines
     m.addSource('podium',{type:'geojson',data:emptyPoly()});

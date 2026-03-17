@@ -836,6 +836,42 @@ app.get('/api/version', (req, res) => {
   res.json({ version: '4.3.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
 });
 
+// ── Building data from OS NGD — real footprint polygon + height ───────────
+const buildingDataCache = new Map();
+app.get('/api/building-data', async (req, res) => {
+  const lat = parseFloat(req.query.lat);
+  const lng = parseFloat(req.query.lng);
+  if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
+  const cacheKey = `${lat.toFixed(4)},${lng.toFixed(4)}`;
+  if (buildingDataCache.has(cacheKey)) return res.json(buildingDataCache.get(cacheKey));
+  try {
+    const d = 0.0007;
+    const bbox = [lng-d, lat-d, lng+d, lat+d].join(',');
+    const url = `https://api.os.uk/features/ngd/ofa/v1/collections/bld-fts-buildingpart/items?bbox=${bbox}&key=${OS_API_KEY}&limit=20`;
+    const data = await fetch(url).then(r => r.json());
+    const features = (data.features || []).filter(f => (f.properties.geometry_area || 0) > 50);
+    if (!features.length) return res.json({ found: false });
+    // Pick largest footprint
+    const main = features.sort((a, b) => (b.properties.geometry_area || 0) - (a.properties.geometry_area || 0))[0];
+    const p = main.properties;
+    const coords = main.geometry.coordinates[0];
+    const cx = coords.reduce((s, c) => s + c[0], 0) / coords.length;
+    const cy = coords.reduce((s, c) => s + c[1], 0) / coords.length;
+    const result = {
+      found: true,
+      height: parseFloat(p.relativeheightmaximum) || 0,
+      footprint_area: Math.round(p.geometry_area || 0),
+      centroid: [parseFloat(cx.toFixed(6)), parseFloat(cy.toFixed(6))],
+      polygon: main.geometry
+    };
+    buildingDataCache.set(cacheKey, result);
+    res.json(result);
+  } catch(e) {
+    console.error('building-data error:', e.message);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // ── Generate Render — Gemini 3 Pro image generation ────────────────────────
 const RENDER_PROMPT = `Transform the provided architectural massing image from an isometric parallel view into a 1-point perspective view while preserving the exact proportions and geometry of the buildings.
 
