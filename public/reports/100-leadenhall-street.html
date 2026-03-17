@@ -129,16 +129,50 @@ html,body{font-family:var(--sans);color:var(--text);background:white;-webkit-pri
 @media print{
   @page{size:A4 portrait;margin:0}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  body{background:white;padding:0;margin:0}
+  body{background:white;padding:0;margin:0;font-size:13px}
   .page{box-shadow:none;margin:0;border-radius:0;width:210mm;min-height:297mm;
     page-break-after:always;page-break-inside:avoid;break-after:page}
   .page:last-child{page-break-after:auto;break-after:auto}
   .no-print{display:none!important}
   svg{overflow:visible}
-  /* Prevent SVGs from being cut mid-render */
   .drawing-wrap{page-break-inside:avoid;break-inside:avoid}
-  /* Ensure background colours print */
   .cover,.cover-top,.cover-bottom{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  /* ── Print font size overrides — minimum 10px for labels, 12px for body ── */
+  .metric .label{font-size:10px!important}
+  .metric .value{font-size:22px!important}
+  .hero-metric .label{font-size:10px!important}
+  .hero-metric .value{font-size:30px!important}
+  .section-title{font-size:12px!important}
+  .page-title{font-size:13px!important}
+  .narrative{font-size:12px!important;line-height:1.9!important}
+  .brief{font-size:12px!important;line-height:1.8!important}
+  .proforma{font-size:12px!important}
+  .proforma th{font-size:10px!important}
+  .proforma td{font-size:12px!important}
+  .proforma td:last-child{font-size:12px!important}
+  .proforma tr.total td{font-size:13px!important}
+  .proforma tr.total td:last-child{font-size:14px!important}
+  .flag{font-size:10px!important}
+  .bar-label{font-size:11px!important}
+  .bar-fill{font-size:10px!important}
+  .policy-list li{font-size:11px!important}
+  .station-card .name{font-size:11px!important}
+  .station-card .info{font-size:10px!important}
+  .station-card .dist{font-size:10px!important}
+  .prec-card .addr{font-size:11px!important}
+  .prec-card .detail{font-size:10px!important}
+  .prec-card .status{font-size:9px!important}
+  .drawing-label{font-size:10px!important}
+  .drawing-caption{font-size:10px!important}
+  .adj-item strong{font-size:12px!important}
+  .adj-item span{font-size:11px!important}
+  .page-footer{font-size:9px!important}
+  .disclaimer{font-size:9px!important}
+  .cover-cell dt{font-size:9px!important}
+  .cover-cell dd{font-size:14px!important}
+  .cover-address{font-size:42px!important}
+  .cover-sub{font-size:18px!important}
 }
 @media screen{body{background:#cbd5e1;padding:20px}.page{margin:0 auto 20px;box-shadow:0 4px 30px rgba(0,0,0,.15);border-radius:4px}}
 /* Drawings page */
