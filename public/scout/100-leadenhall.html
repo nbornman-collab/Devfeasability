@@ -467,6 +467,7 @@ const EXISTING_EUV = 38000000;
   });
   const mount = document.getElementById('intelligence-mount');
   if(mount) mount.innerHTML = '<div class="int-compact">'+rows.join('')+'</div>';
+  } catch(e) { console.error('Intelligence render failed:', e); }
 })();
 
 const GDV_OPTS = [
@@ -559,9 +560,6 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
       'fill-extrusion-color':'#1d4ed8','fill-extrusion-height':10,
       'fill-extrusion-base':0,'fill-extrusion-opacity':0.22}});
 
-    // HMLR WMS overlay
-    map.addSource('hmlr-wms',{type:'raster',tiles:[`/api/hmlr-tile/{z}/{x}/{y}`],tileSize:256,attribution:'© HMLR'});
-    map.addLayer({id:'hmlr-wms-layer',type:'raster',source:'hmlr-wms',paint:{'raster-opacity':0.55}},'buildings-3d');
 
     // PropertyData legal boundary
     (async()=>{
