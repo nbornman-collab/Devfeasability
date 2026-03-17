@@ -111,18 +111,32 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 <script>
 // Scoring: utilisation ratio × PTAL weight × size sweet spot × availability multiplier
+// ── One definitive scoring system — same 6 factors as SITE_INTELLIGENCE ──────
+// Available Sky (×2.5), Rent Headroom (×2.0), Planning Tailwind (×2.0),
+// Heritage Shadow (×1.5), Title Stack (×1.5), Station Gravity (×0.5)
 function computeScore(s){
-  // Utilisation gap (0-10)
-  const util = (s.potentialFloors - s.floors) / s.potentialFloors * 10;
-  // Plot area sweet spot: 300-3000m² = full, 3-7k = 0.8, 7k+ = 0.5 (institutional)
-  const sizeW = s.plotSqm < 3000 ? 1.0 : s.plotSqm < 7000 ? 0.8 : 0.5;
-  // Type bonus
-  const typeW = {Industrial:1.15, Warehouse:1.15, Office:1.1, Commercial:1.0, Retail:0.85}[s.type] || 1.0;
-  // Availability: known active masterplan = 0.45 (opportunity exists but not free market)
-  const availW = s.activeMasterplan ? 0.45 : 1.0;
-  // PTAL proxy by area
-  const ptalW = {Bankside:1.2,'Elephant & Castle':1.15,Southwark:1.1,Borough:1.1,'Canada Water':1.0,Rotherhithe:0.9,Peckham:0.85}[s.area] || 1.0;
-  return Math.min(10, Math.round(util * sizeW * typeW * availW * ptalW * 10)/10);
+  // Available Sky: how much of the precedent envelope is unused?
+  const skyRatio = Math.max(0, (s.potentialFloors - s.floors) / s.potentialFloors);
+  const sky = Math.min(10, skyRatio * 12); // 0-10
+
+  // Rent Headroom: type proxy for value gap (industrial/warehouse = highest conversion upside)
+  const rentGap = {Industrial:9,Warehouse:8.5,Office:7,Commercial:6.5,Retail:5.5}[s.type] || 6;
+
+  // Planning Tailwind: area momentum + masterplan penalty
+  const areaMom = {Bankside:9,'Elephant & Castle':8.5,Southwark:8,Borough:8,'Canada Water':7.5,Rotherhithe:6.5,Peckham:7}[s.area] || 7;
+  const momentum = s.activeMasterplan ? areaMom * 0.5 : areaMom; // active masterplan = constrained not free market
+
+  // Heritage Shadow: default moderate, sites can override via s.heritagePenalty (0=none, 10=severe)
+  const heritage = 10 - (s.heritagePenalty || 2);
+
+  // Title Stack: plot size proxy — smaller = likely single title, cleaner
+  const titleScore = s.plotSqm < 2000 ? 9 : s.plotSqm < 5000 ? 7.5 : s.plotSqm < 15000 ? 6 : 4;
+
+  // Station Gravity: PTAL proxy by area
+  const ptalScore = {Bankside:10,'Elephant & Castle':9.5,Southwark:9.5,Borough:9,'Canada Water':8,Rotherhithe:7,Peckham:7.5}[s.area] || 8;
+
+  const weighted = sky*2.5 + rentGap*2.0 + momentum*2.0 + heritage*1.5 + titleScore*1.5 + ptalScore*0.5;
+  return Math.round(weighted) / 10; // out of 10 to match existing display
 }
 
 const SITES = [
