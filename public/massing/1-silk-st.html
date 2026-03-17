@@ -923,7 +923,7 @@ function updateMap(idx){
   m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[envRect]}});
   m.setPaintProperty('podium-3d','fill-extrusion-color','#059669');
   m.setPaintProperty('podium-3d','fill-extrusion-height',targetH);
-  m.setPaintProperty('podium-3d','fill-extrusion-base',EXISTING_HEIGHT);
+  m.setPaintProperty('podium-3d','fill-extrusion-base',0);
   m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.38);
   m.setPaintProperty('podium-edge','line-color','#047857');
   m.setPaintProperty('podium-edge','line-opacity',0.85);
@@ -958,7 +958,7 @@ async function initMap(){
 
     // Red translucent shell — OS NGD real footprint (falls back to makeRect)
     m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[makeRect(MASSING_CX,MASSING_CY,PLOT_AREA*0.4,1.4)]}}});
-    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.5}});
+    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.3}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
     fetch(`/api/building-data?lat=${LAT}&lng=${LNG}`).then(r=>r.json()).then(bd=>{
@@ -985,6 +985,8 @@ async function initMap(){
       m.addSource('fl'+f,{type:'geojson',data:emptyPoly()});
       m.addLayer({id:'fl'+f,type:'fill-extrusion',source:'fl'+f,paint:{'fill-extrusion-color':'#047857','fill-extrusion-height':0,'fill-extrusion-base':0,'fill-extrusion-opacity':0}});
     }
+    m.moveLayer('podium-3d');
+    m.moveLayer('podium-edge');
     updateMap(0);
   });
 }

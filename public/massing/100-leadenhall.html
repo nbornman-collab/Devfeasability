@@ -846,7 +846,7 @@ function updateMap(idx){
   m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[envCoords]}});
   m.setPaintProperty('podium-3d','fill-extrusion-color','#059669');
   m.setPaintProperty('podium-3d','fill-extrusion-height',targetH);
-  m.setPaintProperty('podium-3d','fill-extrusion-base',EXISTING_HEIGHT);
+  m.setPaintProperty('podium-3d','fill-extrusion-base',0);
   m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.62);
   m.setPaintProperty('podium-edge','line-color','#047857');
   m.setPaintProperty('podium-edge','line-opacity',0.85);
@@ -939,7 +939,7 @@ async function initMap(){
 
     // Red translucent shell — OS NGD real footprint polygon (falls back to SITE_COORDS)
     m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}}});
-    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.5}});
+    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.3}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
     fetch(`/api/building-data?lat=${LAT}&lng=${LNG}`).then(r=>r.json()).then(bd=>{
@@ -959,7 +959,7 @@ async function initMap(){
     // Green additional envelope + floor lines
     m.addSource('podium',{type:'geojson',data:emptyPoly()});
     m.addSource('tower',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':EXISTING_HEIGHT,'fill-extrusion-opacity':0.62}});
+    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':0.62}});
     m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0}});
     m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#047857','line-width':2,'line-opacity':0.85}});
     m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0}});
@@ -968,6 +968,8 @@ async function initMap(){
       m.addSource('fl'+f,{type:'geojson',data:emptyPoly()});
       m.addLayer({id:'fl'+f,type:'fill-extrusion',source:'fl'+f,paint:{'fill-extrusion-color':'#047857','fill-extrusion-height':0,'fill-extrusion-base':0,'fill-extrusion-opacity':0}});
     }
+    m.moveLayer('podium-3d');
+    m.moveLayer('podium-edge');
     updateMap(0);
   });
 }
