@@ -100,11 +100,11 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   <div class="list-panel">
     <div class="header">
       <h1>T0 Borough · Southwark</h1>
-      <div class="sub">AI-powered development intelligence — 2,815 buildings analysed</div>
+      <div class="sub">Development intelligence — verified sites only. More being added.</div>
       <div class="stats">
-        <div class="stat-box"><div class="num">316K</div><div class="label">sqm potential</div></div>
-        <div class="stat-box"><div class="num">&pound;2.8B</div><div class="label">combined GDV</div></div>
-        <div class="stat-box"><div class="num">3,860</div><div class="label">homes (resi)</div></div>
+        <div class="stat-box"><div class="num">2</div><div class="label">verified sites</div></div>
+        <div class="stat-box"><div class="num">&pound;146M</div><div class="label">combined GDV</div></div>
+        <div class="stat-box"><div class="num">80</div><div class="label">homes (resi)</div></div>
       </div>
     </div>
     <div id="site-list"></div>
@@ -157,17 +157,17 @@ function computeScore(s){
   return Math.round(weighted * mult) / 10;
 }
 
+// VERIFIED SITES ONLY — each entry confirmed against HMLR + EPC + PropertyData
+// Do not add any site without all three sources corroborating address, ownership, area, and use class.
+// Removed (2026-03-17): Surrey Quays (active BL masterplan), Tesco Canada Water (active BL masterplan),
+// Lavington St (Timber Square — already built), 53 Loman St (fabricated), 133 Copeland Rd (unverified),
+// 200 Great Dover St (unverified), 112a Warner Rd (unverified), 207 Union St (unverified),
+// Ministry of Sound (live business, speculative).
 const SITES = [
-  {rank:1, name:"Surrey Quays Shopping Centre", activeMasterplan:true, address:"Redroff Road", area:"Rotherhithe", type:"Retail", lat:51.4975, lng:-0.0485, floors:2, potentialFloors:12, plotSqm:15846, remainingSqm:158460, gdv:1449800000, marginPct:56, units:2264, note:"Major regeneration site. British Land masterplan in progress. Mixed-use town centre with residential, retail, leisure, and workspace."},
-  {rank:2, name:"Tesco Extra", activeMasterplan:true, address:"1 Redriff Road", area:"Canada Water", type:"Retail", lat:51.4985, lng:-0.0475, floors:1, potentialFloors:10, plotSqm:10164, remainingSqm:91476, gdv:837000000, marginPct:56, units:1307, note:"Single-storey big box on prime Canada Water frontage. Massive over-site development potential. Adjacent to Canada Water masterplan."},
-  {rank:3, name:"Lavington Street Office", address:"Lavington Street", area:"Bankside", type:"Office", lat:51.5045, lng:-0.0990, floors:5, potentialFloors:12, plotSqm:2357, remainingSqm:16499, gdv:133200000, marginPct:49, units:0, note:"Low-rise office in Bankside surrounded by 10-15F schemes. Walking distance to Tate Modern, Borough Market. Clear upward extension potential."},
-  {rank:4, name:"24 Southwark Street", address:"24 Southwark Street", area:"Bankside", type:"Office", lat:51.5048, lng:-0.0940, floors:4, potentialFloors:12, plotSqm:1605, remainingSqm:12840, gdv:103700000, marginPct:49, units:0, note:"4-storey office on a street with 8-12F buildings either side. Prime Bankside location. Comprehensive redevelopment or upward extension."},
-  {rank:5, name:"133 Copeland Road", address:"133 Copeland Road", area:"Peckham", type:"Industrial", lat:51.4685, lng:-0.0655, floors:1, potentialFloors:8, plotSqm:957, remainingSqm:6699, gdv:61300000, marginPct:55, units:96, note:"Single-storey industrial unit in Peckham's creative quarter. Residential conversion or mixed-use redevelopment. Growing area values."},
-  {rank:6, name:"53 Loman Street", address:"53 Loman Street", area:"Southwark", type:"Office", lat:51.5010, lng:-0.1010, floors:3, potentialFloors:10, plotSqm:926, remainingSqm:6482, gdv:52300000, marginPct:49, units:0, note:"3-storey office near The Cut and Young Vic. Enterprise Quarter location. Significant height upside from nearby approved schemes."},
-  {rank:7, name:"200 Great Dover Street", address:"200 Great Dover Street", area:"Borough", type:"Office", lat:51.4945, lng:-0.0870, floors:4, potentialFloors:10, plotSqm:793, remainingSqm:4758, gdv:38400000, marginPct:48, units:0, note:"Low-rise office in Borough. Elephant & Castle Opportunity Area proximity. PTAL 6. Multiple tall building precedents within 500m."},
-  {rank:8, name:"112a Warner Road", address:"112a Warner Road", area:"Peckham", type:"Warehouse", lat:51.4680, lng:-0.0620, floors:2, potentialFloors:8, plotSqm:678, remainingSqm:4068, gdv:37200000, marginPct:54, units:58, note:"2-storey warehouse in Peckham. Industrial to residential conversion potential. Peckham Rye station nearby. Growing residential values."},
-  {rank:9, name:"207 Union Street", address:"207 Union Street", area:"Southwark", type:"Office", lat:51.5015, lng:-0.0985, floors:4, potentialFloors:10, plotSqm:907, remainingSqm:5442, gdv:43900000, marginPct:48, units:0, note:"4-storey office on Union Street. Central Southwark location between Waterloo and Borough. Mixed-use intensification candidate."},
-  {rank:10, name:"Ministry of Sound", address:"103 Gaunt Street", area:"Elephant & Castle", type:"Commercial", lat:51.4940, lng:-0.0990, floors:1, potentialFloors:15, plotSqm:677, remainingSqm:9478, gdv:76500000, marginPct:51, units:135, note:"Iconic nightclub site in Elephant & Castle Opportunity Area. 15F+ precedent all around. Politically sensitive but extraordinary GDV potential."},
+  // VERIFIED: HMLR TGL221350 | Owner: RREEF Bankside II Limited | EPC: commercial 1,550m² | PropertyData: confirmed
+  {rank:1, name:"24 Southwark Street", address:"24 Southwark Street", area:"Bankside", type:"Office", lat:51.5048, lng:-0.0940, floors:4, potentialFloors:12, plotSqm:1550, remainingSqm:12400, gdv:103700000, marginPct:49, units:0, note:"4-storey office on a street with 8-12F buildings either side. Prime Bankside location, PTAL 6b. Comprehensive redevelopment or upward extension."},
+  // VERIFIED: HMLR SGL322825 | Owner: Barts Charity | EPC: 583m² | Blackfriars Opportunity Area
+  {rank:2, name:"196 Blackfriars Road", address:"196 Blackfriars Road", area:"Blackfriars", type:"Residential", lat:51.5005, lng:-0.1042, floors:3, potentialFloors:15, plotSqm:583, remainingSqm:5247, gdv:42000000, marginPct:20, units:80, note:"3-storey building in Blackfriars Opportunity Area. Southwark policy supports tall residential at this location. One Blackfriars (50F) and 240 Blackfriars (16F) establish height precedent within 300m."},
 ];
 
 

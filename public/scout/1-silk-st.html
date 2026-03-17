@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>100 Leadenhall Street — T1 Scout</title>
+<title>1 Silk Street — T1 Scout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -640,7 +640,7 @@ async function loadAll(){
       set('epc-gia',gia.toLocaleString()+' m²');set('current-far',far+'×');
       const bars_svg=document.getElementById('capacity-bars');
       if(bars_svg){
-        const SB=[{label:'Existing',gia,col:'#d0d2da'},{label:'Low',gia:28000,col:'#93c5fd'},{label:'Base',gia:55000,col:'#3b82f6'},{label:'High',gia:95000,col:'#1d4ed8'}];
+        const SB=[{label:'Existing',gia,col:'#d0d2da'},{label:'Low',gia:50239,col:'#93c5fd'},{label:'Base',gia:74788,col:'#3b82f6'},{label:'High',gia:104475,col:'#1d4ed8'}];
         const maxG=Math.max(...SB.map(s=>s.gia));
         const BW=220,BH=11,GAP=6,LW=44,TX=LW+4;
         bars_svg.innerHTML=SB.map((s,i)=>{
