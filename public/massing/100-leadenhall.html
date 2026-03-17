@@ -847,7 +847,7 @@ function updateMap(idx){
   m.setPaintProperty('podium-3d','fill-extrusion-color','#059669');
   m.setPaintProperty('podium-3d','fill-extrusion-height',targetH);
   m.setPaintProperty('podium-3d','fill-extrusion-base',0);
-  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.62);
+  m.setPaintProperty('podium-3d','fill-extrusion-opacity',1.0);
   m.setPaintProperty('podium-edge','line-color','#047857');
   m.setPaintProperty('podium-edge','line-opacity',0.85);
   m.getSource('tower').setData(emptyPoly());
@@ -859,10 +859,10 @@ function updateMap(idx){
   for(let f=1;f<=newFloors&&f<=30;f++){
     const h=EXISTING_HEIGHT+(f*ftf);
     m.getSource('fl'+f).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000005)]}});
-    m.setPaintProperty('fl'+f,'fill-extrusion-color','#047857');
+    m.setPaintProperty('fl'+f,'fill-extrusion-color','#ffffff');
     m.setPaintProperty('fl'+f,'fill-extrusion-height',h+0.12);
     m.setPaintProperty('fl'+f,'fill-extrusion-base',h-0.12);
-    m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0.5);
+    m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0.9);
   }
 }
 
@@ -931,7 +931,7 @@ async function initMap(){
   m.on('style.load',()=>{
     // Context buildings — soft grey
     m.addLayer({id:'ctx-3d',source:'composite','source-layer':'building',filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
-      paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.5,'fill-extrusion-vertical-gradient':true}});
+      paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.2,'fill-extrusion-vertical-gradient':false}});
 
     // Site boundary
     m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
@@ -939,7 +939,7 @@ async function initMap(){
 
     // Red translucent shell — OS NGD real footprint polygon (falls back to SITE_COORDS)
     m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}}});
-    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.3}});
+    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.15}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
     fetch(`/api/building-data?lat=${LAT}&lng=${LNG}`).then(r=>r.json()).then(bd=>{
@@ -959,7 +959,7 @@ async function initMap(){
     // Green additional envelope + floor lines
     m.addSource('podium',{type:'geojson',data:emptyPoly()});
     m.addSource('tower',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':0.62}});
+    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':1.0}});
     m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0}});
     m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#047857','line-width':2,'line-opacity':0.85}});
     m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0}});
