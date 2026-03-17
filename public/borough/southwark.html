@@ -61,6 +61,12 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .capacity-bar .potential{height:100%;background:var(--green);float:left}
 
 .site-card .note{font:400 12px var(--sans);color:var(--text2);line-height:1.5}
+/* Constraint badges */
+.constraint-flags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.cflag{display:inline-flex;align-items:center;gap:4px;font:600 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;padding:3px 7px;border-radius:3px;white-space:nowrap}
+.cflag.hard{color:#b91c1c;background:#fef2f2;border:1px solid #fecaca}
+.cflag.soft{color:#92400e;background:#fffbeb;border:1px solid #fde68a}
+.cflag.info{color:#1e40af;background:#eff6ff;border:1px solid #bfdbfe}
 .site-card .note strong{color:var(--text);font-weight:600}
 
 /* Footer */
@@ -102,7 +108,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
       </div>
     </div>
     <div id="site-list"></div>
-    <div class="footer">
+    <div class="footer" id="footer">
       <strong>Methodology:</strong> OpenStreetMap building data cross-referenced with Southwark Plan 2022 policies, TfL PTAL scores, Environment Agency flood data, and conservation area boundaries. Council estates excluded. GDV assumes policy-compliant heights; real schemes typically 40-70% of headline figures after setbacks, affordable, and servicing.<br><br>
       <a href="/">&#8592; Back to DevFeasibility</a> &middot; Generated March 2026 &middot; Engine: london-planning-v2
     </div>
@@ -152,6 +158,46 @@ const SITES = [
   {rank:10, name:"Ministry of Sound", address:"103 Gaunt Street", area:"Elephant & Castle", type:"Commercial", lat:51.4940, lng:-0.0990, floors:1, potentialFloors:15, plotSqm:677, remainingSqm:9478, gdv:76500000, marginPct:51, units:135, note:"Iconic nightclub site in Elephant & Castle Opportunity Area. 15F+ precedent all around. Politically sensitive but extraordinary GDV potential."},
 ];
 
+
+// ── Constraint flag detection ───────────────────────────────────────────────
+const ANCHOR_PATTERNS = [
+  /tesco/i, /sainsbury/i, /waitrose/i, /morrison/i, /aldi/i, /lidl/i, /asda/i,
+  /shopping.cent/i, /shopping.mall/i, /retail.park/i, /supermarket/i,
+  /westfield/i, /centre point/i
+];
+const RECENT_CUTOFF = 2015;
+const CONSENT_PATTERNS = [/planning.granted/i, /consent/i, /approved/i];
+
+function getConstraintFlags(s) {
+  const flags = [];
+  const nameAddr = (s.name + ' ' + (s.address||'')).toLowerCase();
+  if (ANCHOR_PATTERNS.some(p => p.test(nameAddr))) {
+    flags.push({cls:'hard', icon:'🏬', label:'Anchor Tenant'});
+  }
+  if (s.yearBuilt && s.yearBuilt >= RECENT_CUTOFF) {
+    flags.push({cls:'soft', icon:'⚠️', label:'Recently Built'});
+  }
+  if (s.hasConsent) {
+    flags.push({cls:'hard', icon:'🚫', label:'Active Consent'});
+  }
+  if (s.listed) {
+    flags.push({cls:'hard', icon:'🏛', label:'Listed Building'});
+  }
+  if (s.floodZone === 3) {
+    flags.push({cls:'soft', icon:'🌊', label:'Flood Zone 3'});
+  }
+  if (s.multiTitle) {
+    flags.push({cls:'info', icon:'📋', label:'Multi-Title'});
+  }
+  return flags;
+}
+
+function renderConstraintFlags(flags) {
+  if (!flags.length) return '';
+  const html = flags.map(f => `<span class="cflag ${f.cls}">${f.icon} ${f.label}</span>`).join('');
+  return `<div class="constraint-flags">${html}</div>`;
+}
+
 // Compute and assign scores, then re-sort
 SITES.forEach(s => { s.score = computeScore(s); });
 SITES.sort((a,b) => b.score - a.score);
@@ -170,6 +216,7 @@ SITES.forEach(s => {
   const card = document.createElement('div');
   card.className = 'site-card';
   card.dataset.rank = s.rank;
+  const cflags = getConstraintFlags(s);
   card.innerHTML = `
     <div class="rank">#${s.rank} &middot; ${s.type} &middot; <span style="color:var(--accent)">${s.score}/10</span></div>
     <div class="name">${s.name}</div>
@@ -182,6 +229,7 @@ SITES.forEach(s => {
       <div class="metric"><div class="val">${s.marginPct}%</div><div class="lbl">Margin</div></div>
     </div>
     <div class="note">${s.note}</div>
+    ${renderConstraintFlags(cflags)}
   `;
   card.onclick = () => flyToSite(s);
   listEl.appendChild(card);

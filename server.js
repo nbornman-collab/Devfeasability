@@ -54,6 +54,10 @@ app.get('/borough/:name', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'borough', `${req.params.name}.html`));
 });
 
+app.get('/methodology', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'methodology.html'));
+});
+
 // Serve mapbox token
 app.get('/api/config', (req, res) => {
   res.json({ mapboxToken: MAPBOX_TOKEN });
