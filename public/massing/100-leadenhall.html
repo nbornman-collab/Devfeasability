@@ -161,6 +161,8 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
   .chart-row,.intel-grid,.metric-grid{grid-template-columns:1fr}
 }
 </style>
+<script src="/lib/site-intelligence.js"></script>
+<script src="/lib/intelligence-100lh.js"></script>
 </head>
 <body>
 <div id="map"></div>
@@ -198,6 +200,9 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     <div class="site-addr">100 Leadenhall Street</div>
     <div class="site-sub">City of London · EC3A 3BP · 1,551 m² site · PTAL 6a · Eastern Cluster</div>
   </div>
+
+  <!-- Development Intelligence strip -->
+  <div id="t2-intelligence" style="padding:12px 20px;border-bottom:1px solid var(--border)"></div>
 
   <!-- Heritage flags — hard constraints, site-specific, ALL scenarios -->
   <div style="background:#fffbeb;border-bottom:2px solid #f59e0b;padding:14px 28px">
@@ -968,6 +973,8 @@ async function initMap(){
 
 render();
 initMap();
+// Intelligence strip
+document.getElementById('t2-intelligence').innerHTML = renderIntelligenceT2(SITE_INTELLIGENCE);
 </script>
 </body>
 </html>

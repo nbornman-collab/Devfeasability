@@ -155,6 +155,8 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 #boundary-status{padding:6px 20px;font:500 11px 'Inter',sans-serif;color:#7a7f96;border-bottom:1px solid #e2e5ec;background:#f8f9fb;display:none}
 #boundary-status.confirmed{color:#059669;background:#f0fdf4;border-color:#bbf7d0}
 </style>
+<script src="/lib/site-intelligence.js"></script>
+<script src="/lib/intelligence-1ss.js"></script>
 </head>
 <body>
 <div id="map">
@@ -235,45 +237,16 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <div class="content">
 
-    <!-- Why This Site — seller motivation / underutilisation -->
-    <div class="card">
-      <div class="card-head"><h3>Why This Site</h3></div>
+    <!-- Development Intelligence -->
+    <div class="card" id="intelligence-card">
+      <div class="card-head"><h3>Development Intelligence</h3></div>
       <div class="card-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px">
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="epc-gia">—</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Existing GIA (EPC registered)</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)">~75,000 m²</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Achievable GIA — tall tower scenario</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="current-far">—</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Current plot ratio (FAR)</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)">Vacating 2026</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Linklaters — new HQ in Southwark</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="site-area-display">5,709 m²</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Site area — confirmed</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:600 11px var(--sans);color:var(--text2);line-height:1.4" id="owner-display">—</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Registered freeholder</div>
-          </div>
-        </div>
+        <div id="intelligence-mount"></div>
     <!-- Before/After capacity bar -->
     <div style="margin-top:16px">
       <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:8px">GIA Capacity — Existing vs Scenarios</div>
       <svg id="capacity-bars" viewBox="0 0 280 78" style="width:100%;height:auto;display:block"></svg>
     </div>
-
-        <div style="font:400 12px/1.75 var(--sans);color:var(--text2)">
-          Linklaters has vacated its Silk Street campus for a new HQ, leaving a large low-rise office complex on a site capable of supporting a significant tower. The campus — Milton House and Shire House — sits within the City fringe immediately adjacent to the Barbican Conservation Area. The combination of motivated vendor, large footprint, and established tall building precedent (Heron Tower 183m, 200 Aldersgate 100m) makes this a high-conviction opportunity. Constraint analysis at T2 is essential before any land bid.
-        </div>
       </div>
     </div>
 
@@ -421,6 +394,9 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 const LAT=51.52033, LNG=-0.09163;
 const ADDRESS='1 Silk Street, London EC2Y 8HQ';
 let PLOT_AREA=5709; // user-confirmed campus area; updated live from PropertyData if available
+
+// Render intelligence immediately
+document.getElementById('intelligence-mount').innerHTML = renderIntelligenceT1(SITE_INTELLIGENCE);
 const EXISTING_EUV=95000000;
 
 // Site polygon — convex hull from OS NGD building footprints (Milton House + Shire House)

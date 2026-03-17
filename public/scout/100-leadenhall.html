@@ -149,6 +149,8 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
   .signal-grid{grid-template-columns:1fr 1fr}
 }
 </style>
+<script src="/lib/site-intelligence.js"></script>
+<script src="/lib/intelligence-100lh.js"></script>
 </head>
 <body>
 <div id="map"></div>
@@ -224,45 +226,17 @@ html,body{height:100%;font-family:var(--sans);background:var(--surface);color:va
 
 <div class="content">
 
-    <!-- Why This Site — seller motivation / underutilisation -->
-    <div class="card" id="why-card">
-      <div class="card-head"><h3>Why This Site</h3></div>
+    <!-- Development Intelligence -->
+    <div class="card" id="intelligence-card">
+      <div class="card-head"><h3>Development Intelligence</h3></div>
       <div class="card-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:16px">
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="epc-gia">—</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Existing GIA (EPC registered)</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)" id="potential-gia">~34,000 m²</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Achievable NIA — Base scenario</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="current-far">—</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Current plot ratio (FAR)</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px;color:var(--accent)">~22×</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Achievable FAR — Eastern Cluster</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px">
-            <div style="font:700 18px var(--mono);letter-spacing:-.5px" id="site-area-display">—</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Site area — HMLR title</div>
-          </div>
-          <div style="background:#fff;padding:14px 16px;grid-column:span 1">
-            <div style="font:600 11px var(--sans);color:var(--text2);line-height:1.4" id="owner-display">—</div>
-            <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-top:3px">Registered freeholder</div>
-          </div>
-        </div>
+        <div id="intelligence-mount"></div>
 
     <!-- Before/After capacity bar -->
     <div style="margin-top:16px">
       <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:8px">GIA Capacity — Existing vs Scenarios</div>
       <svg id="capacity-bars" viewBox="0 0 280 80" style="width:100%;height:auto;display:block"></svg>
     </div>
-        <div style="font:400 12px/1.75 var(--sans);color:var(--text2)">
-          The existing building occupies a premium Eastern Cluster position at a fraction of its planning envelope. City of London policy actively encourages densification here — neighbouring consented schemes reach 22–50 storeys. The value gap between what sits on the site today and what planning policy permits is the opportunity. The constraint set is substantial (heritage, LVMF, BSA) but navigable — T2 maps exactly where on the risk/return curve each scenario sits.
-        </div>
       </div>
     </div>
 
@@ -418,6 +392,9 @@ const LAT = 51.5137673, LNG = -0.0801551;
 const ADDRESS = '100 Leadenhall Street, London EC3A 3BP';
 let PLOT_AREA = 1551; // updated live from PropertyData HMLR title
 const EXISTING_EUV = 38000000;
+
+// Render intelligence immediately
+document.getElementById('intelligence-mount').innerHTML = renderIntelligenceT1(SITE_INTELLIGENCE);
 
 const GDV_OPTS = [
   {floors:10,podF:6,twrF:4,twrPct:0.65,cov:1.0,nia:0.82,erv:770,niy:0.0475,rf:13,lt:120},

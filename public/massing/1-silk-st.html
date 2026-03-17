@@ -161,6 +161,8 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
   .chart-row,.intel-grid,.metric-grid{grid-template-columns:1fr}
 }
 </style>
+<script src="/lib/site-intelligence.js"></script>
+<script src="/lib/intelligence-1ss.js"></script>
 </head>
 <body>
 <div id="map"></div>
@@ -189,6 +191,9 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     <div class="site-addr">1 Silk Street</div>
     <div class="site-sub">City of London · EC2Y 8HQ · ~9,000 m² site · PTAL 6a · Barbican Fringe</div>
   </div>
+
+  <!-- Development Intelligence strip -->
+  <div id="t2-intelligence" style="padding:12px 20px;border-bottom:1px solid var(--border)"></div>
 
   <!-- Heritage flags — hard constraints, site-specific, ALL scenarios -->
   <div style="background:var(--s2);border-bottom:2px solid var(--text);padding:14px 28px">
@@ -988,6 +993,8 @@ async function initMap(){
 
 render();
 initMap();
+// Intelligence strip
+document.getElementById('t2-intelligence').innerHTML = renderIntelligenceT2(SITE_INTELLIGENCE);
 </script>
 </body>
 </html>
