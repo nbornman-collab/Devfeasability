@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T2 Appraise — 1 Silk Street</title>
+<title>T2 Appraise — 24 Southwark Street</title>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -162,63 +162,72 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 }
 </style>
 <script src="/lib/site-intelligence.js"></script>
-<script src="/lib/intelligence-1ss.js"></script>
+<script src="/lib/intelligence-100lh.js"></script>
 </head>
 <body>
 <div id="map"></div>
 
 <div class="map-bar">
   <div class="logo">D&A <span>Studio</span></div>
+  <button id="render-btn" onclick="generateRender()" style="position:absolute;right:12px;top:8px;background:#0c0f1a;color:#fff;border:none;padding:7px 14px;font:600 11px var(--sans);cursor:pointer;border-radius:3px;display:flex;align-items:center;gap:6px;z-index:10">
+    <span id="render-icon">⬡</span> Generate Render
+  </button>
+</div>
+
+<!-- Render output panel -->
+<div id="render-panel" style="display:none;background:#f8f9fb;border-bottom:1px solid #e2e5ec;padding:16px 20px">
+  <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:2px;color:#7a7f96;margin-bottom:10px">AI Physical Model Render — Gemini 3 Pro</div>
+  <img id="render-img" style="width:100%;border:1px solid #e2e5ec;display:block" />
 </div>
 
 <div class="scenario-pills">
-  <button class="pill lo active" onclick="go(0)">Low<span class="pf">10F · 40m</span></button>
-  <button class="pill base" onclick="go(1)">Base<span class="pf">18F · 72m</span></button>
-  <button class="pill hi" onclick="go(2)">High<span class="pf">30F · 123m</span></button>
+  <button class="pill lo active" onclick="go(0)">Low<span class="pf">10F · 42m</span></button>
+  <button class="pill base" onclick="go(1)">Base<span class="pf">14F · 60m</span></button>
+  <button class="pill hi" onclick="go(2)">High<span class="pf">22F · 92m</span></button>
 </div>
 
 <div class="panel">
   <!-- Tier nav -->
   <nav class="tier-nav">
-    <a href="/t1/1-silk-st" class="tier-link"><span class="tid">T1</span><span class="tn">Scout</span></a>
-    <a href="/t2/1-silk-st" class="tier-link active" style="margin-left:8px"><span class="tid">T2</span><span class="tn">Appraise</span></a>
-    <a href="/t3/1-silk-st" class="tier-link" style="margin-left:8px"><span class="tid">T3</span><span class="tn">Present</span></a>
+    <a href="/t1/24-southwark-st" class="tier-link"><span class="tid">T1</span><span class="tn">Scout</span></a>
+    <a href="/t2/24-southwark-st" class="tier-link active" style="margin-left:8px"><span class="tid">T2</span><span class="tn">Appraise</span></a>
+    <a class="tier-link locked" style="margin-left:8px"><span class="tid">T3</span><span class="tn">Present</span></a>
     <a class="tier-link locked" style="margin-left:8px"><span class="tid">T4</span><span class="tn">Commission</span></a>
   </nav>
 
   <!-- Site header -->
   <div class="site-hdr">
-    <div class="site-addr">1 Silk Street</div>
-    <div class="site-sub">City of London · EC2Y 8HQ · ~9,000 m² site · PTAL 6a · Barbican Fringe</div>
+    <div class="site-addr">24 Southwark Street</div>
+    <div class="site-sub">London Borough of Southwark · SE1 0SW · 1,550 m² site · PTAL 6b · Bankside CAZ</div>
   </div>
 
   <!-- Development Intelligence strip -->
   <div id="t2-intelligence" style="padding:12px 20px;border-bottom:1px solid var(--border)"></div>
 
-  <!-- Heritage flags — hard constraints, site-specific, ALL scenarios -->
-  <div style="background:var(--s2);border-bottom:2px solid var(--text);padding:14px 28px">
+  <!-- Heritage flags — site-specific, ALL scenarios -->
+  <div style="background:#f0fdf4;border-bottom:2px solid #86efac;padding:14px 28px">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <span style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text)">Heritage Setting — Hard Constraint · All Scenarios</span>
+      <span style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:#14532d">Heritage Setting — Low Constraint · All Scenarios</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)">
-      <div style="background:#fff;padding:12px 14px">
-        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">Barbican Estate</div>
-        <div style="font:600 9px var(--sans);color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Grade II* Listed · Immediately North</div>
-        <div style="font:400 10px var(--sans);color:var(--t2);line-height:1.5">1,750-unit residential estate. 3 towers (Cromwell, Shakespeare, Lauderdale) at 123m. Listed status protects the estate as a composition — any scheme visible from within the estate affects its setting.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
+        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">Tate Modern</div>
+        <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Grade II* · 220m West</div>
+        <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">Setting primarily defined by Thames frontage and Millennium Bridge axis — not Southwark Street. Low impact at 8–12F.</div>
       </div>
-      <div style="background:#fff;padding:12px 14px">
-        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">St Giles Cripplegate</div>
-        <div style="font:600 9px var(--sans);color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Grade I Listed · 80m North</div>
-        <div style="font:400 10px var(--sans);color:var(--t2);line-height:1.5">Medieval parish church. Grade I = highest protection. Relationship with Barbican lakeside setting is specifically noted in conservation area appraisal.</div>
+      <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
+        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">Borough Market CA</div>
+        <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">400m South-East</div>
+        <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">Conservation Area boundary does not extend to this site. No Article 4 Directions apply. Standard use class applies.</div>
       </div>
-      <div style="background:#fff;padding:12px 14px">
-        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">Museum of London / London Wall</div>
-        <div style="font:600 9px var(--sans);color:var(--t2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Conservation Area · Immediately West</div>
-        <div style="font:400 10px var(--sans);color:var(--t2);line-height:1.5">Roman and medieval city wall scheduled monument runs through the site perimeter. Any excavation triggers MOLA archaeological assessment.</div>
+      <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
+        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">No LVMF Constraint</div>
+        <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Protected Views — Clear</div>
+        <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">No LVMF protected views cross this site at 8–12F. Strategic sightlines compliance is not a constraint here.</div>
       </div>
     </div>
-    <div style="margin-top:10px;font:400 11px var(--sans);color:var(--t2);line-height:1.6">
-      This site is NOT within the Eastern Cluster — tall building policy support does not apply. Any height above the existing campus must be justified on its own merits through the Heritage Impact Assessment. The Barbican Conservation Area boundary runs along the northern edge of the site. Historic England will be a statutory consultee at all scenario heights.
+    <div style="margin-top:8px;font:400 11px var(--sans);color:#166534;line-height:1.6">
+      Heritage Impact Assessment is standard procedure from RIBA Stage 2. The assessment burden at this location is materially lower than EC2/EC3 comparables. Tate Modern setting and Southwark streetscape are the primary considerations — both manageable at the proposed heights.
     </div>
   </div>
 
@@ -229,23 +238,23 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
   <div class="assump-panel">
     <div class="assump-head" onclick="toggleAssump(this)">
       <span class="assump-title">Assumptions</span>
-      <span class="assump-summary">ERV £<span id="lbl-erv">700</span>/m² · Yield <span id="lbl-niy">5.30</span>% · Cost £<span id="lbl-cost">5,200</span>/m²</span>
+      <span class="assump-summary">ERV £<span id="lbl-erv">800</span>/m² · Yield <span id="lbl-niy">5.25</span>% · Cost £<span id="lbl-cost">5,000</span>/m²</span>
       <span class="assump-chev">▼</span>
     </div>
     <div class="assump-body" id="assump-body" style="display:block">
       <div class="slider-grid">
-        <div class="srow"><div class="smeta"><span class="slbl">ERV</span><span class="sval" id="sv-erv">£700/m²</span></div>
-          <input type="range" class="srange" id="sl-erv" min="400" max="1000" step="25" value="700" oninput="onSlider('erv',+this.value)">
+        <div class="srow"><div class="smeta"><span class="slbl">ERV</span><span class="sval" id="sv-erv">£800/m²</span></div>
+          <input type="range" class="srange" id="sl-erv" min="500" max="1200" step="25" value="800" oninput="onSlider('erv',+this.value)">
           <div class="sbounds"><span>£500</span><span>£1,200</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">Net Yield</span><span class="sval" id="sv-niy">5.30%</span></div>
-          <input type="range" class="srange" id="sl-niy" min="3.5" max="7.5" step="0.25" value="5.30" oninput="onSlider('niy',+this.value)">
+        <div class="srow"><div class="smeta"><span class="slbl">Net Yield</span><span class="sval" id="sv-niy">5.25%</span></div>
+          <input type="range" class="srange" id="sl-niy" min="3.5" max="7.5" step="0.25" value="5.25" oninput="onSlider('niy',+this.value)">
           <div class="sbounds"><span>3.5%</span><span>7.5%</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">Build Cost (base)</span><span class="sval" id="sv-cost">£5,200/m²</span></div>
-          <input type="range" class="srange" id="sl-cost" min="3000" max="8000" step="100" value="5200" oninput="onSlider('cost',+this.value)">
+        <div class="srow"><div class="smeta"><span class="slbl">Build Cost (base)</span><span class="sval" id="sv-cost">£5,000/m²</span></div>
+          <input type="range" class="srange" id="sl-cost" min="3000" max="8000" step="100" value="5000" oninput="onSlider('cost',+this.value)">
           <div class="sbounds"><span>£3k</span><span>£8k</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">S106</span><span class="sval" id="sv-s106">£2,000k</span></div>
-          <input type="range" class="srange" id="sl-s106" min="0" max="5000" step="100" value="2000" oninput="onSlider('s106',+this.value)">
-          <div class="sbounds"><span>£0</span><span>£5M</span></div></div>
+        <div class="srow"><div class="smeta"><span class="slbl">S106</span><span class="sval" id="sv-s106">£750k</span></div>
+          <input type="range" class="srange" id="sl-s106" min="0" max="3000" step="50" value="750" oninput="onSlider('s106',+this.value)">
+          <div class="sbounds"><span>£0</span><span>£3M</span></div></div>
         <div class="srow"><div class="smeta"><span class="slbl">Target Profit</span><span class="sval" id="sv-poc">20%</span></div>
           <input type="range" class="srange" id="sl-poc" min="10" max="30" step="1" value="20" oninput="onSlider('poc',+this.value)">
           <div class="sbounds"><span>10%</span><span>30%</span></div></div>
@@ -268,14 +277,14 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 
   <!-- Scenario tabs -->
   <div class="stabs">
-    <button class="stab lo active" onclick="go(0)"><span class="sn">Low</span><span class="ss">10F · 40m</span></button>
-    <button class="stab base" onclick="go(1)"><span class="sn">Base</span><span class="ss">18F · 72m</span></button>
-    <button class="stab hi" onclick="go(2)"><span class="sn">High</span><span class="ss">30F · 123m</span></button>
+    <button class="stab lo active" onclick="go(0)"><span class="sn">Low</span><span class="ss">10F · 42m</span></button>
+    <button class="stab base" onclick="go(1)"><span class="sn">Base</span><span class="ss">14F · 60m</span></button>
+    <button class="stab hi" onclick="go(2)"><span class="sn">High</span><span class="ss">22F · 92m</span></button>
   </div>
 
   <!-- Charts -->
   <div class="section">
-    <div class="chart-row" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="chart-row">
       <div class="chart-box">
         <div class="chart-title">GEA / NIA Efficiency</div>
         <div id="vert-bars"></div>
@@ -288,11 +297,6 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
         <div class="chart-title">Absolute Profit £M vs Height</div>
         <div id="profit-curve"></div>
       </div>
-    </div>
-    <!-- Height context moved below charts -->
-    <div style="padding:16px 0 0;border-top:1px solid var(--border);margin-top:1px">
-      <div class="chart-title" style="padding:0 16px">Height Context</div>
-      <svg id="height-ctx" viewBox="0 0 360 200" style="width:100%;height:auto;display:block;padding:0 16px;box-sizing:border-box"></svg>
     </div>
     <div class="sec-desc">Coloured bars = lettable NIA. Grey = core, structure, compliance. The margin curve shows where PoC% peaks. The profit curve shows where absolute £M peaks — developers push toward this, not the margin peak.</div>
   </div>
@@ -322,92 +326,101 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     <div class="intel-card">
       <div class="ic-head"><span class="ic-cat">Structure</span><span class="ic-title">Core Arrangement</span></div>
       <div class="ic-body">
-        <p>On a campus site this size, the core configuration is driven by tower floor plate area rather than total site coverage. At 10F (Low), a compact core with a single staircase and 2 lifts occupies ~18% of a 2,250 m² plate — well within Grade A standards. By 18F (Base), you need 4–6 lifts, a mandatory 2nd staircase (BSA >50m), and the core grows to ~22% of plate. At 30F (High), a sky lobby at L15 with 8 lifts, 2 firefighter lifts, and 2 staircases pushes core to 24%+ of a 1,620 m² plate.</p>
-        <p>On this site, the core should be positioned to protect <strong>south-facing lease spans</strong> — the premium orientation overlooking the Barbican lakeside and gardens. Every m² of core is a m² you can't let. At £700/m² ERV on a 5.3% yield, each extra m² of core costs <strong>~£13,200 in capital value</strong>.</p>
-        <div class="ic-callout"><p>On this site: core grows from ~400m² (Low) to ~520m² (High) — a 120m² increase across a larger plate, but the NIA impact is compounded by 27 tower floors at High vs 6 at Low.</p></div>
+        <p>The core — lifts, stairs, risers, WCs — is the single largest non-lettable element. At low-rise (≤10F), a compact core with a single staircase and 2 lifts occupies ~18% of the plate. By 14F you need 4–6 lifts and CIBSE Guide D round-trip targets start biting. At 22F, a sky lobby at L12 with 8 lifts, 2 firefighter lifts, and 2 staircases pushes core to 25%+ of plate.</p>
+        <p>On this site, the core is positioned <strong>NE</strong> to protect south and west lease spans — the premium faces. Every m² of core is a m² you can't let. At £800/m² ERV on a 5.25% yield, each extra m² of core costs <strong>~£15,200 in capital value</strong>.</p>
+        <div class="ic-callout"><p>On this site: core grows from ~280m² (Low) to ~430m² (High) — a 150m² increase that erases ~£2.3M in GDV before you've added a single constraint.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-cat">Daylight</span><span class="ic-title">Rights of Light — Barbican Residents</span></div>
+      <div class="ic-head"><span class="ic-cat">Daylight</span><span class="ic-title">Rights of Light</span></div>
       <div class="ic-body">
-        <p>The critical daylight receptors here are fundamentally different from the Eastern Cluster. The Barbican Estate — 1,750 flats in Cromwell, Shakespeare, and Lauderdale towers plus the terrace blocks — sits immediately north. These are <strong>residential windows</strong> with full rights of light protection under the Prescription Act 1832.</p>
-        <p>At 10F (40m), the impact is minimal — the site sits below the Barbican podium datum. At 18F (72m), south-facing Barbican flats begin to lose Vertical Sky Component. At 30F (123m), a <strong>full BRE 209 assessment is mandatory</strong> and rights-of-light compensation is highly likely — budget £1M–£3M given the number of affected residential windows.</p>
-        <div class="ic-callout"><p>Critical receptors: south-facing Barbican residential windows (N), Willoughby House terrace (NE), and the Barbican Centre itself (NW). The north face is the constrained massing face on this site.</p></div>
+        <p>Rights of light in England are a legal right (Prescription Act 1832) — not just a planning matter. An affected neighbour can seek an injunction to demolish if their light is materially reduced. BRE 209 assesses three metrics: <strong>Vertical Sky Component</strong> (target: 27%), <strong>Average Daylight Factor</strong>, and <strong>Annual Probable Sunlight Hours</strong>.</p>
+        <p>At 8F this site has minimal daylight impact — matching the existing street section. At 10–12F, south-facing residential on Southwark Street upper floors requires assessment. A <strong>BRE daylight/sunlight report</strong> is standard from Stage 2. Rights of light negotiation budget: £200K–£600K depending on affected windows.</p>
+        <div class="ic-callout"><p>Critical receptors: Tate Modern (220m W, Grade II*) and residential amenity in Southwark Street residential upper floors. Neither constrains massing at 8–12F. Heritage setting assessment standard but not blocking.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-cat">Regulation</span><span class="ic-title">Building Safety Act</span></div>
+      <div class="ic-head"><span class="ic-icon">👁️</span><span class="ic-title">LVMF Protected Views</span></div>
       <div class="ic-body">
-        <p>The BSA 2022 creates hard thresholds. Above <strong>18m</strong>: the building is registered, an Accountable Person is appointed. Above <strong>50m</strong>: Higher Risk Building — mandatory 2nd staircase (simultaneous evacuation), firefighter lifts, BSR gateway approvals at planning, pre-construction, and pre-occupation.</p>
-        <p>All three scenarios exceed 18m. The Low scenario (40m) stays below 50m — <strong>single staircase permissible</strong>, which is a significant cost and efficiency advantage. The Base scenario (72m) triggers the full HRB regime. The High scenario (123m) adds aviation lighting and specialist fire engineering.</p>
-        <div class="ic-callout"><p>The 50m threshold is the single most significant cost trigger. The 2nd staircase costs ~£1.6M and consumes ~40m² per upper floor. Over 13 tower floors (Base), that's 520m² of lost NIA — roughly £6.8M in capital value.</p></div>
+        <p>The London View Management Framework (LVMF 2012) protects 27 strategic views. No protected views cross this Bankside CAZ site at 8–12F. The site does not sit within any LVMF assessment corridor at the proposed heights — a material advantage over EC2/EC3 comparables.</p>
+        <p>At 10–14F, this site sits well below the threshold and a <strong>precautionary review</strong> suffices. At 22F, the building enters the background consultation zone — a full 3D verified view assessment is required, submitted to the GLA. This adds 6–12 weeks to the planning timeline and can result in a height cap if the proposal breaches the viewing corridor.</p>
+        <div class="ic-callout"><p>👁️ The Cluster's existing skyline (22 Bishopsgate at 278m, Cheesegrater at 224m) provides some cover — but at 92m on a site this far south in the Cluster, the LVMF geometry is tight.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-cat">Cost</span><span class="ic-title">Construction Cost Escalation</span></div>
+      <div class="ic-head"><span class="ic-icon">🔥</span><span class="ic-title">Building Safety Act — Compliance Cascade</span></div>
       <div class="ic-body">
-        <p>Construction costs don't scale linearly. At 10F (Low): standard RC frame, tower crane, conventional formwork — <strong>£4,200/m²</strong>. At 18F (Base): climbing formwork, deeper piles, more complex facade logistics — <strong>£5,200/m²</strong>. At 30F (High): jump-form systems, higher-grade concrete (C60+), complex curtain walling at height — <strong>£6,500/m²</strong>.</p>
-        <p>The programme extension is critical on a campus this size. Demolition alone takes 12–18 months (asbestos surveys, Barbican vibration monitoring). A 10F scheme takes ~2.5 years post-demo. A 32F tower takes 5 years. The extra 30 months of development finance on a £200M+ construction cost adds <strong>~£12M</strong> in interest.</p>
-        <div class="ic-callout"><p>£4,200 → £6,500/m² is a 55% cost premium. But the ERV per m² NIA rises only ~23% (£620 → £760). That divergence is why the margin curve bends hard above ~20F.</p></div>
+        <p>The BSA 2022 creates hard thresholds. Above <strong>18m</strong>: the building is registered, an Accountable Person is appointed, and a Safety Case File is maintained for the building's life. Above <strong>50m</strong>: it becomes a Higher Risk Building — mandatory second staircase (simultaneous evacuation), firefighter lifts, gateway approvals at planning, pre-construction, and pre-occupation.</p>
+        <p>The 2nd staircase costs <strong>~£1.4M</strong> and consumes <strong>~40m² per floor</strong> of lettable area. Over 8 tower floors (Base scenario), that's 320m² of lost NIA — roughly <strong>£4.9M in capital value</strong>.</p>
+        <div class="ic-callout"><p>🔥 The 50m threshold is the single most significant cost trigger on this site. It's why the return curve peaks at ~12–14F rather than continuing to rise.</p></div>
+      </div>
+    </div>
+
+    <div class="intel-card">
+      <div class="ic-head"><span class="ic-icon">📈</span><span class="ic-title">Construction Cost Escalation</span></div>
+      <div class="ic-body">
+        <p>Construction costs don't scale linearly. Below 10F: standard RC frame, tower crane, conventional formwork — <strong>£4,100/m²</strong>. At 14F: climbing formwork, deeper piles, more complex facade logistics — <strong>£5,000/m²</strong>. At 22F: jump-form systems, higher-grade concrete (C60+), complex curtain walling at height, wind-design steel — <strong>£6,250/m²</strong>.</p>
+        <p>The programme extension matters as much as the build cost. A 10F building takes ~2.5 years. A 22F tower takes 4 years. That extra 18 months of development finance at 7.5% on a £35M construction cost adds <strong>~£2.0M</strong> in interest alone — money that comes straight off the developer's margin.</p>
+        <div class="ic-callout"><p>📈 £4,100 → £6,250/m² is a 52% cost premium. But the GDV per m² NIA rises only ~13% (£750 → £850 ERV). That divergence is why the margin curve bends.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
       <div class="ic-head"><span class="ic-cat">Environment</span><span class="ic-title">Wind Microclimate</span></div>
       <div class="ic-body">
-        <p>This site is exposed to the prevailing SW wind along the Moor Lane corridor. The Barbican podium-and-tower typology creates complex turbulence patterns at ground level. CIBSE AM14 defines comfort criteria for pedestrians: sitting, standing, walking.</p>
-        <p>At 10F (40m), the scheme sits within the surrounding built context — wind impact is modest. At 18F (72m), downdraught on the south elevation (Silk Street) becomes a concern for pedestrian comfort. At 30F (123m), <strong>full wind tunnel or CFD study is mandatory</strong> — the building would be the tallest structure in its immediate context and the Barbican's open lakeside creates a fetch that accelerates ground-level winds.</p>
-        <div class="ic-callout"><p>Mitigation at the High scenario: podium canopies on Silk Street, corner chamfers above L20, and tree planting along Moor Lane. Budget £300K–£500K for study and mitigation design.</p></div>
+        <p>Tall buildings create downdraught (Venturi effect) and corner acceleration. CIBSE AM14 defines comfort criteria for pedestrians: sitting, standing, walking. Above ~60m, a wind microclimate study is expected by City planners — above 80m it's mandatory.</p>
+        <p>This site sits <strong>200m south of 22 Bishopsgate</strong> (278m). The prevailing SW wind creates a pressure differential on the east face. At 22F, mitigation is likely required: podium canopies, corner chamfers, tree planting in the public realm. Budget £200K–£400K for the study and mitigation design.</p>
+        <div class="ic-callout"><p>The Low scenario avoids this entirely. Base triggers a desktop assessment. High requires a full boundary-layer wind tunnel or CFD study — 10–14 week programme.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-cat">Structure</span><span class="ic-title">Structural Systems &amp; Lease Spans</span></div>
+      <div class="ic-head"><span class="ic-cat">Structure</span><span class="ic-title">Structural Systems</span></div>
       <div class="ic-body">
-        <p>Minimum 7m clear lease span on at least 2 faces of core to facade — the threshold for Grade A lettability. The tower plate at Low (2,250 m², 25% coverage) delivers comfortable 10m+ clear spans on all faces. At Base (2,000 m², 22% coverage), clear spans are ~9m — still strong. At High (1,620 m², 18% coverage), the slender plate compresses spans to ~7.5m — viable but tight.</p>
-        <p>The podium floors (4,500 m² at 50% coverage) are generous at all scenarios — clear spans of 12m+ with a regular structural grid. The campus arrangement allows natural light from multiple facades, which is a lettability advantage over deep single-building plates.</p>
-        <div class="ic-callout"><p>The structural transfer from podium to tower at L4/L5 is a key design move. Column offsets require transfer beams that add cost (~£1.5M) and programme (4–6 weeks).</p></div>
+        <p>Minimum 7m clear lease span on at least 2 faces of core to facade — the threshold for Grade A lettability. Below this, floor plates feel constrained and rents discount. Above 10m, column-free spans require transfer beams that push floor-to-floor height, increasing total building height without adding floors.</p>
+        <p>At 10F (Low): simple RC flat slab, 250mm slab, 4.2m F-F height, comfortable 11m clear spans south and west. At 22F (High): the core expands, the tower footprint shrinks to 40% coverage — <strong>clear spans compress to ~7m</strong>, which is the minimum. Any further height and the plate starts failing the lease span test.</p>
+        <div class="ic-callout"><p>The structural grid also influences facade design. Column spacing at 7.5m centres means the facade module is fixed — structural moves cascade into architectural expression.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-cat">Finance</span><span class="ic-title">Programme &amp; Finance Compounding</span></div>
+      <div class="ic-head"><span class="ic-icon">💷</span><span class="ic-title">Programme & Finance Compounding</span></div>
       <div class="ic-body">
-        <p>Development finance is typically interest-only during construction. On a £160M build (Base) with 60% LTC at 7.5%, the effective annual interest (accounting for staged drawdown) is ~£3.6M. But finance cost compounds with programme extension.</p>
-        <p>A 6-month delay on a campus demolition and rebuild — not unusual when working adjacent to a listed estate with vibration restrictions — adds <strong>~£1.8M</strong> in interest plus holding costs. The Barbican Estate management company will impose strict construction management conditions: limited working hours, vibration monitoring, dust suppression. These add ~10% to programme duration.</p>
-        <div class="ic-callout"><p>Low scenario: ~£3.5M finance cost. High scenario: ~£16M. The £12.5M difference is time-cost — a 5-year programme vs 2.5 years.</p></div>
+        <p>Development finance is typically interest-only during construction, drawn against the facility as the build progresses. On a £35M build with 60% LTC at 7.5%, the effective annual interest (accounting for staged drawdown) is ~£780K. But finance cost compounds with programme extension.</p>
+        <p>A 6-month delay — not unusual in tower construction — adds <strong>~£650K</strong> in interest plus holding costs. This is why programme risk is the most underestimated variable in tall building feasibility: the margin looks healthy at appraisal, but a single winter of bad weather or a cladding procurement delay can erode 2–3% of profit on cost.</p>
+        <div class="ic-callout"><p>💷 Low scenario: £1.7M finance cost. High scenario: £5.2M. The £3.5M difference is pure time-cost — building the same NIA, just taking longer to do it.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
-      <div class="ic-head"><span class="ic-cat">Planning</span><span class="ic-title">Planning Policy — NOT Eastern Cluster</span></div>
+      <div class="ic-head"><span class="ic-icon">📋</span><span class="ic-title">Planning Policy — City Local Plan</span></div>
       <div class="ic-body">
-        <p>This site sits <strong>outside the Eastern Cluster Policy Area</strong>. There is no presumption in favour of tall buildings here. The City of London Local Plan 2036 requires proposals for tall buildings outside designated clusters to demonstrate that the height is <strong>justified by the site's specific circumstances</strong> — not simply by commercial optimisation.</p>
-        <p>The relevant precedent is <strong>21 Moorfields</strong> (81m, 2022, Land Securities) — the most recent tall building approved in this immediate area. Its planning committee report specifically addressed the heritage impact on the Barbican Estate and was approved on the basis of design quality, public realm contribution, and the specific opportunity presented by the Crossrail station box.</p>
-        <div class="ic-callout"><p>At 10F (40m), standard planning with GLA referral. At 18F (72m), expect PPA + design review panel. At 30F (123m), expect Secretary of State call-in risk and a 24-month+ planning timeline.</p></div>
+        <p>The London Borough of Southwark's <strong>Core Strategy</strong> designates this area within the Bankside Central Activities Zone. Policy SP1 supports office intensification. No tall buildings policy applies at 8–12F — schemes above surroundings require design justification in the D&A Statement but do not trigger a separate tall buildings assessment.</p>
+        <p>However, "encouraged" ≠ "automatic". Key requirements: <strong>exceptional architectural quality</strong>, active ground floor uses, public realm contribution, and demonstration that the height is the result of a design-led process (not just commercial optimisation). The higher the building, the higher the design bar.</p>
+        <div class="ic-callout"><p>📋 At 10F, you're below the Cluster's radar — standard planning. At 22F, expect a Planning Performance Agreement (PPA), design review panel, and potentially a call-in by the Secretary of State.</p></div>
       </div>
     </div>
 
-    <div class="intel-card full">
-      <div class="ic-head"><span class="ic-cat">Heritage</span><span class="ic-title">Setting of the Barbican Estate &amp; St Giles Cripplegate</span></div>
+    <div class="intel-card full" style="border:1px solid #fde68a;background:#fffdf5">
+      <div class="ic-head" style="background:#fffbeb;border-bottom:1px solid #fde68a"><span class="ic-cat" style="color:rgba(255,255,255,.6)">Heritage</span><span class="ic-title">Setting of Listed Buildings &amp; WHS</span></div>
       <div class="ic-body">
-        <p>Heritage impact operates under <strong>NPPF §§199–208</strong>. A finding of harm to the setting of a Grade I or Grade II* listed building is a statutory bar to approval unless demonstrably outweighed by public benefit. "Setting" includes any land from which the heritage asset can be seen and experienced — and the Barbican Estate is experienced as a complete designed composition.</p>
-        <p>Three assets create overlapping setting zones: the <strong>Barbican Estate (Grade II*)</strong> immediately north — a brutalist masterpiece by Chamberlin, Powell & Bon, listed in its entirety including the lakeside, podium walkways, and tower-and-terrace composition. <strong>St Giles Cripplegate (Grade I)</strong> 80m north — a medieval parish church whose relationship with the Barbican lakeside is specifically noted in the conservation area appraisal. And the <strong>London Wall / Cripplegate Roman Fort</strong> — a scheduled ancient monument whose archaeological interest extends across the site perimeter.</p>
-        <p>The Barbican is a special case in heritage terms. Unlike a single listed building where the setting assessment is relatively bounded, the Barbican is a <strong>designed landscape</strong> — the towers, terraces, lake, and gardens form an intentional composition. A new tower visible from within this composition affects the setting not of one asset but of the entire ensemble. Historic England has consistently taken a protective stance on proposals affecting the Barbican setting.</p>
-        <p><strong>What this means in practice:</strong> A Heritage Impact Assessment (HIA) must address the composite setting, not just individual sightlines. The north face of any scheme is the heritage-critical elevation. A scheme that actively responds to the Barbican's architectural language — material palette, horizontal datum lines, visual permeability at podium level — will perform better than one that contrasts with it. Pre-application engagement with Historic England is essential before any massing is fixed.</p>
-        <div class="ic-callout"><p>On this site: the north face is heritage-constrained at every scenario height. Tower setback from the Barbican boundary should increase with height. The relationship between any new tower and the existing Barbican towers (Cromwell, Shakespeare, Lauderdale at 123m) is the critical visual test — a scheme at 123m (High) would read as a peer to these towers, which is both the opportunity and the risk.</p></div>
+        <p>Heritage impact operates under <strong>NPPF §§199–208</strong>. At this Bankside CAZ location, the heritage profile is significantly cleaner than EC2/EC3 comparables. The nearest Grade II* asset is <strong>Tate Modern</strong> at 220m west — its setting is predominantly defined by the Millennium Bridge axis and the Thames frontage, not Southwark Street. A visual impact assessment is standard procedure but is unlikely to constrain height at 8–12F.</p>
+        <p><strong>Borough Market</strong> lies 400m SE within the Borough Market Conservation Area, but this designation does not extend to 24 Southwark Street. No LVMF protected views cross this site at the proposed heights. The site is not within any Conservation Area and has no Article 4 Directions that would restrict the proposed use class.</p>
+        <p><strong>What this means in practice:</strong> A Heritage Impact Assessment (HIA) is standard procedure and should be prepared from RIBA Stage 2. The assessment burden is materially lower than an EC3 scheme — Historic England is unlikely to object and the design quality bar for heritage approval is moderate. A D&A Statement addressing Tate Modern setting and Southwark streetscape will be sufficient for all three scenarios.</p>
+        <div class="ic-callout" style="background:#fffbeb;border-color:#fde68a"><p>On this site: the south and east faces are heritage-constrained at every scenario height. The massing setbacks shown (south face recedes at all scenarios, east steps back at Base and High) are the minimum response. A pre-app heritage scoping meeting with Historic England before any massing is fixed is strongly recommended.</p></div>
       </div>
     </div>
 
     <div class="intel-card">
       <div class="ic-head"><span class="ic-cat">Massing</span><span class="ic-title">Setback Logic</span></div>
       <div class="ic-body">
-        <p>On this site, the <strong>primary setback faces north</strong> — responding to the Barbican Estate. The podium should hold the Silk Street building line (south) to maintain the campus character and street enclosure. The tower should step back from the north edge as it rises, increasing the gap between the new massing and the Barbican terrace blocks.</p>
-        <p>Tower coverage: Low 25%, Base 22%, High 18% of site area. The reduction in coverage at height is not just aesthetic — it responds directly to daylight impact on Barbican residential windows and reduces wind acceleration at the Barbican podium level. These are calibrated feasibility estimates. A pre-application submission would derive exact setback depths from <strong>BRE 209 shadow path analysis</strong> and <strong>heritage setting assessment geometry</strong>.</p>
-        <div class="ic-callout"><p>Principle: the primary receptor face (north/Barbican) recedes, all others hold unless there's a named reason. The south face (Silk Street) holds to maintain the street wall. East and west faces hold — Moor Lane and Fore Street are commercial corridors.</p></div>
+        <p>Setbacks on tall buildings serve multiple purposes simultaneously: planning context (responding to neighbouring buildings and conservation areas), daylight compliance, LVMF sightline management, wind mitigation, and structural expression.</p>
+        <p>On this site, the <strong>primary setback consideration faces west</strong> — responding to Tate Modern sightlines at 220m. South face holds to the Southwark Street building line. North and east faces are unconstrained. The setback calculus is significantly simpler than an EC3 equivalent — no heritage sightlines require recession and no mandatory setback is needed at 8–12F.</p>
+        <p>Current coverage factors: Low 65%, Base 55%, High 40% of site area. These are calibrated feasibility estimates. A pre-application submission would derive exact setback depths from <strong>BRE 209 shadow path analysis</strong>, <strong>right-to-light 50/50 line geometry</strong>, and <strong>LVMF corridor modelling</strong>.</p>
+        <div class="ic-callout"><p>📐 Principle: the primary receptor face recedes, all others hold unless there's a named planning or environmental reason. Steps need a structural or contextual hook — they're not arbitrary.</p></div>
       </div>
     </div>
 
@@ -415,61 +428,49 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 
   <!-- Footer -->
   <div style="padding:32px 28px;text-align:center;border-top:1px solid var(--border)">
-    <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t3)">T2 Appraise · 1 Silk Street · D&A Studio</div>
+    <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t3)">T2 Appraise · 24 Southwark Street · D&A Studio</div>
   </div>
 </div>
 
 <script>
-// 1 Silk Street — convex hull from OS NGD building footprints (3 main buildings)
-const SITE_COORDS=[
-  [-0.09249,51.52026],
-  [-0.09238,51.52013],
-  [-0.09212,51.52007],
-  [-0.09133,51.51989],
-  [-0.09114,51.51985],
-  [-0.09109,51.5199],
-  [-0.09098,51.52008],
-  [-0.0909,51.52022],
-  [-0.09089,51.52024],
-  [-0.0908,51.52043],
-  [-0.09073,51.52061],
-  [-0.09099,51.52064],
-  [-0.09138,51.52068],
-  [-0.09168,51.52071],
-  [-0.09233,51.5207],
-  [-0.09236,51.52063],
-  [-0.09239,51.52055],
-  [-0.09247,51.52033],
-  [-0.09249,51.52026]
-];
-const CENTROID=[-0.09163, 51.52033]; // campus centroid (map centre)
-const MASSING_CX=-0.09120, MASSING_CY=51.51990; // actual 1 Silk St building footprint
-const LAT=51.52033, LNG=-0.09163;
-const PLOT_AREA=5709, FTF=4.0;
-let EXISTING_HEIGHT=30.0; // 1SS confirmed (OS NGD fallback)
-const EXISTING_EUV=95000000;
+// ══════════════════════════════════════════════════════════════════════════════
+// DATA — identical financial model
+// ══════════════════════════════════════════════════════════════════════════════
+// PLACEHOLDER: SITE_COORDS is a makeRect approximation — replace with actual HMLR polygon for TGL221350 when fetched from INSPIRE WFS
+// Owner: RREEF Bankside II Limited | Title: TGL221350 | EPC-confirmed GIA: 1,550m²
+function _makeRectEarly(cx,cy,areaSqm,aspect){
+  const LM=1/70750,LaM=1/111320;
+  const w=Math.sqrt(areaSqm*aspect),h=w/aspect;
+  const dLng=(w/2)*LM,dLat=(h/2)*LaM;
+  return [[cx-dLng,cy-dLat],[cx+dLng,cy-dLat],[cx+dLng,cy+dLat],[cx-dLng,cy+dLat],[cx-dLng,cy-dLat]];
+}
+const CENTROID=[-0.0940,51.5048];
+const PLOT_AREA=1550, FTF=4.2;
+let EXISTING_HEIGHT=24.8; // 24SS confirmed (EPC/HMLR)
+const EXISTING_EUV=22000000;
+const SITE_COORDS=_makeRectEarly(CENTROID[0],CENTROID[1],PLOT_AREA,1.2); // PLACEHOLDER
 const fmt=n=>(n??0).toLocaleString('en-GB');
 
 const MARKET={
-  erv:{lo:620,base:700,hi:760},
-  niy:{lo:0.0575,base:0.053,hi:0.050},
-  costGsm:{lo:4200,base:5200,hi:6500},
-  progYrs:{lo:2.5,base:3.5,hi:5.0},
-  cilNia:200,s106:2000000,demo:5000000,
-  fees:0.13,contg:0.075,finRate:0.075,ltc:0.60,rfMo:13,ltMo:120,
+  erv:{lo:615,base:700,hi:775},
+  niy:{lo:0.055,base:0.0525,hi:0.0475},
+  costGsm:{lo:3600,base:4200,hi:5200},
+  progYrs:{lo:2.0,base:2.5,hi:3.0},
+  cilNia:200,s106:500000,demo:1500000,
+  fees:0.13,contg:0.075,finRate:0.075,ltc:0.60,rfMo:12,ltMo:120,
 };
 
 const SCENARIOS=[
-  {key:'lo',label:'Low',floors:10,podF:4,podH:16,twrF:6,twrPct:0.25,cov:0.50,eff:0.82,
-   narrative:'4F podium at 50% site coverage preserving ground-level public realm and the Silk Street axis. 6F tower above at 25% footprint — a 2,250 m² plate, appropriate for this location. Total height 40m: <strong>above BSA 18m registration</strong> but below 50m Higher Risk threshold. <strong>Single staircase</strong> permissible. GLA referral triggered (>30m) but at this scale the referral is straightforward. Barbican setting impact is minimal — the massing reads as a mid-scale campus building, compatible with the surrounding Barbican podium datum. <strong>Best margin efficiency</strong> of the three scenarios.'},
-  {key:'base',label:'Base',floors:18,podF:5,podH:20,twrF:13,twrPct:0.22,cov:0.50,eff:0.79,
-   narrative:'5F podium establishes a generous campus base with active frontages on Silk Street and Moor Lane. 13F tower at 22% footprint — a ~2,000 m² Grade A plate. Height 72m: <strong>BSA Higher Risk Building</strong> triggers mandatory 2nd staircase, firefighter lifts, and BSR gateway approvals. Heritage Impact Assessment must address Barbican Estate setting and views from St Giles churchyard. The 21 Moorfields precedent (81m, 2022) provides the strongest comparable. This is where <strong>absolute profit peaks</strong> — but the constraint burden is significantly higher than Low.'},
-  {key:'hi',label:'High',floors:30,podF:5,podH:20,twrF:25,twrPct:0.20,cov:0.50,eff:0.76,
-   narrative:'5F podium + 25F tower at 20% footprint (~1,800 m² plate). Height 123m — <strong>matching Cromwell Tower</strong>, the architectural height datum of the Barbican Estate. This is the design logic: a new tower reading as a peer to the Barbican towers, not an imposition above them. Full LVMF assessment, wind tunnel study, aviation lighting all mandatory. Heritage impact on the Barbican composition is the <strong>dominant planning risk</strong> — but the 123m Cromwell Tower datum provides the strongest available precedent. Construction at £6,500/m² with a 5-year programme. Absolute GDV is highest but <strong>margin % is the lowest</strong> and planning outcome is the most uncertain.'},
+  {key:'lo',label:'Low',floors:8,podF:5,podH:21,twrF:3,twrPct:0.70,cov:1.0,eff:0.83,
+   narrative:'Full plate to 5F matching the Bankside commercial cornice. Tower steps back above L5, 70% coverage. <strong>Single staircase</strong> compliant sub-18m tower element. Lowest programme risk — 2 year build. No tall buildings assessment required at this height. <strong>Best margin efficiency</strong> — the return curve peaks near 8-9F in the Bankside CAZ.'},
+  {key:'base',label:'Base',floors:10,podF:5,podH:21,twrF:5,twrPct:0.65,cov:1.0,eff:0.81,
+   narrative:'5F podium holds Bankside street cornice. Tower adds 5F at 65% coverage above. Pre-app views assessment required re <strong>Tate Modern sightlines</strong> (220m W). <strong>Single staircase</strong> compliant throughout (sub-18m tower, overall sub-50m). Strong precedent at this height on Southwark Street. <strong>Absolute profit peaks near this scenario.</strong>'},
+  {key:'hi',label:'High',floors:12,podF:4,podH:17,twrF:8,twrPct:0.60,cov:1.0,eff:0.79,
+   narrative:'Lower 4F podium activates public realm at ground. 8F tower at 60% coverage — maximum height for this Bankside CAZ position without a tall buildings policy trigger. LVMF assessment required. Southwark Core Strategy requires design justification above surroundings. Highest GDV but <strong>margin % falls</strong> as construction cost and programme compound.'},
 ];
 
 // ── Live assumption overrides ──────────────────────────────────────────────
-const DEFS={erv:700,niy:5.30,cost:5200,s106:2000,poc:20}; // s106 in £k, poc = target profit %
+const DEFS={erv:700,niy:5.25,cost:4200,s106:500,poc:20}; // s106 in £k, poc = target profit %
 let S={...DEFS};
 
 function calcScenarios(){
@@ -511,22 +512,22 @@ let CURVE=[];
 function buildCurveData(){
   CURVE=[];
   const ervBase=S.erv, niyBase=S.niy/100, costBase=S.cost;
-  for(let f=6;f<=36;f++){
-    const podF=Math.min(f,5),twrF=Math.max(0,f-podF);
-    const twrPct=0.28-(f-6)/(36-6)*0.12; // tower footprint shrinks as it rises
-    const eff=0.84-(f-6)/(36-6)*0.10;
-    const erv=ervBase*(0.88+(f-6)/(36-6)*0.20);
-    const niy=niyBase+0.005-(f-6)/(36-6)*0.010;
-    const cost=costBase*(0.80+(f-6)/(36-6)*0.50);
-    const prog=2.0+(f-6)/(36-6)*3.5;
-    const gea=PLOT_AREA*0.50*podF+PLOT_AREA*twrPct*twrF;
+  for(let f=4;f<=16;f++){
+    const podF=Math.min(f,6),twrF=Math.max(0,f-podF);
+    const twrPct=1.0-(f-4)/(16-4)*.45;
+    const eff=.85-(f-4)/(16-4)*.07;
+    const erv=ervBase*(.925+(f-4)/(16-4)*.12);
+    const niy=niyBase+.003-(f-4)/(16-4)*.005;
+    const cost=costBase*(.80+(f-4)/(16-4)*.45);
+    const prog=1.5+(f-4)/(16-4)*2.0;
+    const gea=PLOT_AREA*1.0*podF+PLOT_AREA*twrPct*twrF;
     const nia=gea*eff;
     const grossErv=nia*erv;
     const effErv=grossErv*(1-13/120);
     const gdv=effErv/niy;
     const cc=gea*cost;
-    const preFin=cc*(1+0.13+0.075)+nia*200+grossErv*0.15+MARKET.s106+MARKET.demo;
-    const fin=preFin*0.60*0.075*(prog/2);
+    const preFin=cc*(1+.13+.075)+nia*200+grossErv*.15+MARKET.s106+MARKET.demo;
+    const fin=preFin*.60*.075*(prog/2);
     const tdc=preFin+fin;
     const poc=(gdv-tdc)/tdc*100;
     const profit=gdv-tdc;
@@ -581,25 +582,22 @@ function toggleAssump(el){
 }
 
 const C_ALWAYS=[
-  {t:'BSA 2022 — Registered Building above 18m',n:'Applies all scenarios (all exceed 18m)'},
-  {t:'GLA referral — all scenarios exceed 30m',n:'Stage 1 & 2 Mayor referral required'},
-  {t:'Heritage Impact Assessment — Barbican Estate setting',n:'Statutory consultee: Historic England'},
-  {t:'Archaeological assessment — Roman/medieval wall',n:'Scheduled monument — MOLA engagement required'},
+  {t:'BSA 2022 — Registered Building above 18m',n:'Applies all scenarios'},
+  {t:'LVMF precautionary review — St Paul\'s sightlines',n:'Required for any new commercial building here'},
   {t:'Structural peer review — independent engineer',n:'Good practice, expected by City planners'},
 ];
 const C_BASE=[
   {t:'Mandatory 2nd staircase — BSA Higher Risk Building (>50m)',n:'~40m² NIA cost per upper floor'},
-  {t:'BSR gateway approvals — planning, pre-construction, pre-occupation',n:'Building Safety Regulator regime'},
-  {t:'Daylight & sunlight study — BRE 209',n:'Barbican residential windows are the primary receptor'},
+  {t:'6 passenger lifts — CIBSE Guide D 80% handling capacity',n:'Round-trip target breached at 4 lifts above 14F'},
+  {t:'Daylight & sunlight study — BRE 209',n:'Adjacent property impact assessment from 14F+'},
   {t:'Fire engineer — simultaneous evacuation strategy',n:'Mandatory for HRB; phased → simultaneous'},
-  {t:'Heritage setting — views from St Giles churchyard',n:'Grade I church, 80m north'},
 ];
 const C_HIGH=[
-  {t:'LVMF background assessment — Parliament Hill views',n:'Full 3D verified view assessment'},
-  {t:'Wind microclimate study — CIBSE AM14',n:'Pedestrian comfort at Silk St / Moor Lane'},
-  {t:'Aviation lighting — CAA notification',n:'Required above 90m in central London'},
-  {t:'Full BRE daylight/sunlight — Barbican towers',n:'123m Cromwell/Shakespeare/Lauderdale towers'},
-  {t:'Wind tunnel or CFD study — 10–14 week programme',n:'Mandatory at this height in this location'},
+  {t:'LVMF Strategic View Assessment — mandatory',n:'Full 3D St Paul\'s view corridor model'},
+  {t:'Wind microclimate study — CIBSE AM14',n:'Pedestrian comfort + mitigation works'},
+  {t:'GLA referral — exceeds 30m EIA threshold',n:'Stage 1 & 2 Mayor referral required'},
+  {t:'Building Assessment Certificate — BSR 2023',n:'New regulatory regime for 18m+ buildings'},
+  {t:'Sky lobby structural transfer — L12',n:'Transfer structure cost + programme impact'},
 ];
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -610,69 +608,14 @@ const COLS = ['#059669','#4f46e5','#d97706'];
 
 function go(idx){
   activeIdx=idx;
+  window._activeScen=idx;
   document.querySelectorAll('.pill').forEach((b,i)=>b.classList.toggle('active',i===idx));
   document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('active',i===idx));
   render();
   if(window._map) updateMap(idx);
 }
 
-
-// ── Height context SVG (1SS-specific: Barbican datum) ─────────────────────
-function buildHeightCtx(){
-  const el = document.getElementById('height-ctx');
-  if(!el) return;
-  const W=120, H=200, scH=H/320, PAD=4, LX=28, barW=14, gap=6;
-  const hy = h => H - PAD - h*scH;
-  const REFS = [
-    {h:40,  label:'Low',     col:null},   // scenario heights — filled from SCENARIOS
-    {h:72,  label:'Base',    col:null},
-    {h:123, label:'High',    col:null},
-    {h:123, label:'Cromwell',col:'#d0d2da', note:'Barbican'},
-    {h:126, label:'Shakespeare',col:'#e0e1e5', note:''},
-    {h:128, label:'Lauderdale', col:'#e8e9ee', note:''},
-    {h:183, label:'Heron Twr', col:'#e8e9ee', note:'0.5km NE'},
-  ];
-  const s=SCENARIOS[activeIdx];
-  const propH=s.floors===10?40:s.floors===18?72:123;
-  const colMap={10:COLS[0],18:COLS[1],30:COLS[2]};
-  // Draw bars
-  const bars = [
-    // Proposed
-    {h:propH, x:LX, w:barW, col:COLS[activeIdx], label:propH+'m'},
-    // Cromwell Tower datum
-    {h:123,   x:LX+barW+gap, w:10, col:'#d4d6de', label:''},
-    // Heron Tower
-    {h:183,   x:LX+barW+gap+10+gap, w:10, col:'#e4e5ea', label:''},
-  ];
-  // Datum lines (Barbican towers)
-  const datums = [
-    {h:123, label:'Barbican 123m', col:'#bbb'},
-    {h:183, label:'Heron 183m',    col:'#ccc'},
-  ];
-  const datumSVG = datums.map(d=>{
-    const y=hy(d.h);
-    if(y<0||y>H) return '';
-    return `<line x1="0" y1="${y.toFixed(1)}" x2="${W}" y2="${y.toFixed(1)}" stroke="${d.col}" stroke-width="0.7" stroke-dasharray="3,2"/>
-    <text x="${W-2}" y="${(y-2).toFixed(1)}" text-anchor="end" font-family="var(--mono)" font-size="6" fill="${d.col}">${d.label}</text>`;
-  }).join('');
-  const barSVG = bars.map(b=>{
-    const y=hy(b.h);
-    const bh=b.h*scH;
-    return `<rect x="${b.x}" y="${y.toFixed(1)}" width="${b.w}" height="${bh.toFixed(1)}" fill="${b.col}"/>
-    ${b.label?`<text x="${(b.x+b.w/2).toFixed(1)}" y="${(y-3).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="6.5" font-weight="700" fill="${COLS[activeIdx]}">${b.label}</text>`:''}`;
-  }).join('');
-  // X labels
-  const xLabels = [
-    {x:LX+barW/2,    label:'Proposed'},
-    {x:LX+barW+gap+5,label:'Cromwell'},
-    {x:LX+barW+gap+10+gap+5,label:'Heron'},
-  ].map(({x,label})=>`<text x="${x}" y="${H-1}" text-anchor="middle" font-family="var(--sans)" font-size="5.5" fill="#aaa">${label}</text>`).join('');
-  // Ground line
-  const gl=`<line x1="0" y1="${H-PAD}" x2="${W}" y2="${H-PAD}" stroke="#1a1d2e" stroke-width="1"/>`;
-  el.innerHTML=`<rect width="${W}" height="${H}" fill="white"/>${datumSVG}${barSVG}${xLabels}${gl}`;
-}
-
-const SCEN_LABELS=['Low · 10F','Base · 18F','High · 30F'];
+const SCEN_LABELS=['Low · 10F','Base · 14F','High · 22F'];
 function renderProfitStrip(){
   SCENARIOS.forEach((s,i)=>{
     const poc=parseFloat(s.poc);
@@ -718,9 +661,6 @@ function render(){
   // Return curve
   buildCurve();
 
-  // Height context
-  buildHeightCtx();
-
   // Metrics detail
   document.getElementById('metrics-section').innerHTML=`
     <div class="sec-head">Massing & Efficiency</div>
@@ -762,8 +702,8 @@ function render(){
   document.getElementById('constraints-section').innerHTML=`
     <div class="sec-head">Constraint Progression</div>
     ${mkG(C_ALWAYS,'Present in all scenarios',0,'var(--t3)')}
-    ${mkG(C_BASE,'Triggers at Base · 18F / 72m',1,'var(--base)')}
-    ${mkG(C_HIGH,'Triggers at High · 30F / 123m',2,'var(--hi)')}`;
+    ${mkG(C_BASE,'Triggers at Base · 14F / 50m+',1,'var(--base)')}
+    ${mkG(C_HIGH,'Triggers at High · 22F',2,'var(--hi)')}`;
 
   // Narrative
   document.getElementById('narrative-section').innerHTML=`
@@ -799,7 +739,7 @@ function buildBars(){
 function buildCurve(){
   const W=240,H=200,lx=32,ry=12,bY=H-24,cH=bY-ry;
   const maxPoc=Math.max(...CURVE.map(c=>c.poc))+3,minPoc=Math.min(...CURVE.map(c=>c.poc))-3;
-  const minF=6,maxF=36;
+  const minF=4,maxF=16;
   const tx=f=>lx+(f-minF)/(maxF-minF)*(W-lx-10);
   const ty=p=>ry+(maxPoc-p)/(maxPoc-minPoc)*cH;
   const pts=CURVE.map(c=>`${tx(c.f).toFixed(1)},${ty(c.poc).toFixed(1)}`).join(' ');
@@ -808,7 +748,7 @@ function buildCurve(){
   const yLines=[25,30,35,40,45,50].map(p=>{const y=ty(p);return(y<ry||y>bY)?'':`<line x1="${lx}" y1="${y.toFixed(1)}" x2="${W-6}" y2="${y.toFixed(1)}" stroke="#eef0f4" stroke-width=".7"/><text x="${lx-4}" y="${y.toFixed(1)}" text-anchor="end" dominant-baseline="middle" font-family="var(--mono)" font-size="9" fill="#bbb">${p}%</text>`;}).join('');
 
   // X labels
-  const xLabels=[6,10,14,18,22,26,30,34].map(f=>`<text x="${tx(f).toFixed(1)}" y="${bY+14}" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="#bbb">${f}F</text>`).join('');
+  const xLabels=[4,6,8,10,12,14,16].map(f=>`<text x="${tx(f).toFixed(1)}" y="${bY+14}" text-anchor="middle" font-family="var(--mono)" font-size="8" fill="#bbb">${f}F</text>`).join('');
 
   // Active scenario drop line
   const actS=SCENARIOS[activeIdx];
@@ -836,15 +776,20 @@ function buildCurve(){
   const tpy=p=>ry+(maxPr-p)/(maxPr-minPr)*cH;
   const prPts=CURVE.map(c=>`${tx(c.f).toFixed(1)},${tpy(c.profit).toFixed(1)}`).join(' ');
 
-  const prGridVals=[0,50,100,150,200,250,300].filter(v=>v<=maxPr*1.05);
+  // Y grid £M
+  const prGridVals=[0,20,40,60,80,100].filter(v=>v<=maxPr*1.05);
   const prYLines=prGridVals.map(v=>{const y=tpy(v);return(y<ry||y>bY)?'':`<line x1="${lx}" y1="${y.toFixed(1)}" x2="${W-6}" y2="${y.toFixed(1)}" stroke="#eef0f4" stroke-width=".7"/><text x="${lx-4}" y="${y.toFixed(1)}" text-anchor="end" dominant-baseline="middle" font-family="var(--mono)" font-size="9" fill="#bbb">£${v}M</text>`;}).join('');
 
+  // Peak profit marker
   const peakPr=CURVE.reduce((a,b)=>b.profit>a.profit?b:a);
   const pkx=tx(peakPr.f),pky=tpy(peakPr.profit);
   const peakMark=`<circle cx="${pkx.toFixed(1)}" cy="${pky.toFixed(1)}" r="5" fill="none" stroke="#059669" stroke-width="1.5" stroke-dasharray="2,1"/>
     <text x="${pkx.toFixed(1)}" y="${(pky-10).toFixed(1)}" text-anchor="middle" font-family="var(--mono)" font-size="10" font-weight="700" fill="#059669">${peakPr.f}F peak</text>`;
 
-  const dropLine2=`<line x1="${tx(actS.floors).toFixed(1)}" y1="${tpy(actS.profit).toFixed(1)}" x2="${tx(actS.floors).toFixed(1)}" y2="${bY.toFixed(1)}" stroke="${COLS[activeIdx]}" stroke-width="1.5" stroke-dasharray="3,2" opacity=".5"/>`;
+  // Active scenario drop + dots
+  const dlx2=tx(actS.floors),dly2=tpy(actS.profit!=null?actS.profit:parseFloat(actS.poc));
+  const actProfit=SCENARIOS[activeIdx].profit;
+  const dropLine2=`<line x1="${dlx2.toFixed(1)}" y1="${tpy(actProfit).toFixed(1)}" x2="${dlx2.toFixed(1)}" y2="${bY.toFixed(1)}" stroke="${COLS[activeIdx]}" stroke-width="1.5" stroke-dasharray="3,2" opacity=".5"/>`;
   const prDots=SCENARIOS.map((s,i)=>{
     const cx=tx(s.floors),cy=tpy(s.profit);
     const isAct=i===activeIdx;
@@ -863,8 +808,7 @@ function buildCurve(){
 // ══════════════════════════════════════════════════════════════════════════════
 // MAP
 // ══════════════════════════════════════════════════════════════════════════════
-// Sutherland-Hodgman polygon clipping — clips subject polygon to convex clip polygon
-// Ensures massing never escapes the site boundary
+// Sutherland-Hodgman polygon clipping — massing hard-constrained to site boundary
 function _shInside(p,a,b){return(b[0]-a[0])*(p[1]-a[1])-(b[1]-a[1])*(p[0]-a[0])>=0}
 function _shIntersect(a,b,c,d){
   const A1=b[1]-a[1],B1=a[0]-b[0],C1=A1*a[0]+B1*a[1];
@@ -886,16 +830,46 @@ function clipToSite(pts,clip){
       else if(di)out.push(_shIntersect(a,b,c,d));
     }
   }
-  if(out.length) out.push(out[0]); // close
+  if(out.length) out.push(out[0]);
   return out;
 }
-
-// Build a correctly-sized rectangle centred on [cx,cy] for a given area (sqm) and aspect ratio
 function makeRect(cx,cy,areaSqm,aspect){
-  const LM=1/70750, LaM=1/111320; // lng metres, lat metres at ~51.5°
+  const LM=1/70750, LaM=1/111320;
   const w=Math.sqrt(areaSqm*aspect), h=w/aspect;
   const dLng=(w/2)*LM, dLat=(h/2)*LaM;
   return [[cx-dLng,cy-dLat],[cx+dLng,cy-dLat],[cx+dLng,cy+dLat],[cx-dLng,cy+dLat],[cx-dLng,cy-dLat]];
+}
+
+function updateMap(idx){
+  const s=SCENARIOS[idx],m=window._map;
+  const targetH=Math.round(s.floors * FTF);
+  const ftf=3.5;
+  // Clear all floor lines
+  for(let f=1;f<=30;f++) m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0);
+
+  // Green envelope = additional height ABOVE existing (base=existing roof, top=target)
+  const envCoords=bufferPoly(SITE_COORDS,0.000004);
+  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[envCoords]}});
+  m.setPaintProperty('podium-3d','fill-extrusion-color','#059669');
+  m.setPaintProperty('podium-3d','fill-extrusion-height',targetH);
+  m.setPaintProperty('podium-3d','fill-extrusion-base',0);
+  m.setPaintProperty('podium-3d','fill-extrusion-opacity',1.0);
+  m.setPaintProperty('podium-edge','line-color','#047857');
+  m.setPaintProperty('podium-edge','line-opacity',0.85);
+  m.getSource('tower').setData(emptyPoly());
+  m.setPaintProperty('tower-3d','fill-extrusion-opacity',0);
+  m.setPaintProperty('tower-edge','line-opacity',0);
+
+  // Floor lines — only in the green additional zone
+  const newFloors=Math.round((targetH-EXISTING_HEIGHT)/ftf);
+  for(let f=1;f<=newFloors&&f<=30;f++){
+    const h=EXISTING_HEIGHT+(f*ftf);
+    m.getSource('fl'+f).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000005)]}});
+    m.setPaintProperty('fl'+f,'fill-extrusion-color','#ffffff');
+    m.setPaintProperty('fl'+f,'fill-extrusion-height',h+0.12);
+    m.setPaintProperty('fl'+f,'fill-extrusion-base',h-0.12);
+    m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0.9);
+  }
 }
 
 function emptyPoly(){return {type:'Feature',geometry:{type:'Polygon',coordinates:[[[0,0],[0,0.0001],[0.0001,0.0001],[0,0]]]}};}
@@ -910,74 +884,89 @@ function shrinkPoly(coords,f){
   return coords.map(c=>[cx+(c[0]-cx)*f,cy+(c[1]-cy)*f]);
 }
 
-function updateMap(idx){
-  const s=SCENARIOS[idx],m=window._map;
-  const targetH=s.floors===10?40:s.floors===18?72:123;
-  const ftf=3.5;
-  for(let f=1;f<=30;f++) m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0);
+const _renderCache = {}; // keyed by scenario index
+async function generateRender(){
+  const scenIdx = window._activeScen ?? 0;
+  const btn = document.getElementById('render-btn');
+  const panel = document.getElementById('render-panel');
+  const img = document.getElementById('render-img');
 
-  // Massing: use OS NGD centroid if available, else fallback to MASSING_CX/CY
-  const _cx=(window._osCentroid||[MASSING_CX,MASSING_CY])[0];
-  const _cy=(window._osCentroid||[MASSING_CX,MASSING_CY])[1];
-  const envRect=makeRect(_cx,_cy,PLOT_AREA*s.cov,1.4);
-  m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[envRect]}});
-  m.setPaintProperty('podium-3d','fill-extrusion-color','#059669');
-  m.setPaintProperty('podium-3d','fill-extrusion-height',targetH);
-  m.setPaintProperty('podium-3d','fill-extrusion-base',0);
-  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.38);
-  m.setPaintProperty('podium-edge','line-color','#047857');
-  m.setPaintProperty('podium-edge','line-opacity',0.85);
-  m.getSource('tower').setData(emptyPoly());
-  m.setPaintProperty('tower-3d','fill-extrusion-opacity',0);
-  m.setPaintProperty('tower-edge','line-opacity',0);
-
-  // Floor lines in the additional zone
-  const newFloors=Math.round((targetH-EXISTING_HEIGHT)/ftf);
-  for(let f=1;f<=newFloors&&f<=30;f++){
-    const h=EXISTING_HEIGHT+(f*ftf);
-    m.getSource('fl'+f).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[makeRect(_cx,_cy,PLOT_AREA*s.cov,1.4)]}});
-    m.setPaintProperty('fl'+f,'fill-extrusion-color','#ffffff');
-    m.setPaintProperty('fl'+f,'fill-extrusion-height',h+0.12);
-    m.setPaintProperty('fl'+f,'fill-extrusion-base',h-0.12);
-    m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0.9);
+  // If cached, just show it
+  if (_renderCache[scenIdx]) {
+    img.src = _renderCache[scenIdx];
+    panel.style.display = 'block';
+    return;
   }
+
+  if (!confirm('This calls the Gemini API and uses credits.\nGenerate physical model render?')) return;
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Generating…';
+  try {
+    const canvas = window._map.getCanvas();
+    const imageBase64 = canvas.toDataURL('image/png');
+    const res = await fetch('/api/generate-render', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ imageBase64 })
+    });
+    const data = await res.json();
+    if (data.imageBase64) {
+      _renderCache[scenIdx] = data.imageBase64;
+      img.src = data.imageBase64;
+      panel.style.display = 'block';
+      btn.textContent = '✓ View Render';
+      btn.disabled = false;
+      return;
+    } else {
+      alert('Render failed: ' + (data.error || 'unknown error'));
+    }
+  } catch(e) {
+    alert('Render error: ' + e.message);
+  }
+  btn.disabled = false;
+  btn.textContent = '⬡ Generate Render';
 }
 
 async function initMap(){
   const cfg=await(await fetch('/api/config')).json();
   mapboxgl.accessToken=cfg.mapboxToken;
-  const m=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:CENTROID,zoom:16.5,pitch:50,bearing:-15,antialias:true});
+  const m=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:CENTROID,zoom:17.0,pitch:55,bearing:5,antialias:true});
   m.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
   window._map=m;
   m.on('style.load',()=>{
+    // Context buildings — soft grey
     m.addLayer({id:'ctx-3d',source:'composite','source-layer':'building',filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
       paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':1.0,'fill-extrusion-vertical-gradient':false}});
 
+    // Site boundary
     m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
     m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-dasharray':[5,3],'line-opacity':0.8}});
 
-    // Red translucent shell — OS NGD real footprint (falls back to makeRect)
-    m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[makeRect(MASSING_CX,MASSING_CY,PLOT_AREA*0.4,1.4)]}}});
+    // Red translucent shell — OS NGD real footprint polygon (falls back to SITE_COORDS)
+    m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}}});
     m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.0}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
-    fetch(`/api/building-data?lat= 51.52033&lng=-0.09163`).then(r=>r.json()).then(bd=>{
+    fetch(`/api/building-data?lat=51.5048&lng=-0.0940`).then(r=>r.json()).then(bd=>{
       if(!bd.found) return;
+      window._existingH = bd.height;
       EXISTING_HEIGHT = bd.height;
-      // Replace red shell with actual OS NGD footprint
+      // Replace red shell with actual OS NGD footprint (slight outset)
       const osCoords = bd.polygon.coordinates[0];
       m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(osCoords,0.000003)]}});
       m.setPaintProperty('existing-cap','fill-extrusion-height',bd.height);
-      // Update massing centroid to actual building centroid
-      window._osCentroid = bd.centroid;
+      m.setPaintProperty('existing-cap','fill-extrusion-opacity',0.5);
+      // Re-run map update with corrected height
       updateMap(window._activeIdx||0);
-      console.log('OS NGD 1SS: height='+bd.height+'m footprint='+bd.footprint_area+'m² centroid='+bd.centroid);
+      console.log('OS NGD 24SS: height='+bd.height+'m footprint='+bd.footprint_area+'m²');
     }).catch(()=>{});
 
+    // Green additional envelope + floor lines
     m.addSource('podium',{type:'geojson',data:emptyPoly()});
     m.addSource('tower',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':40,'fill-extrusion-base':EXISTING_HEIGHT,'fill-extrusion-opacity':0.62}});
-    m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':40,'fill-extrusion-base':32,'fill-extrusion-opacity':0}});
+    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':1.0}});
+    m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0}});
     m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#047857','line-width':2,'line-opacity':0.85}});
     m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0}});
 
@@ -990,8 +979,6 @@ async function initMap(){
     updateMap(0);
   });
 }
-
-
 
 render();
 initMap();
