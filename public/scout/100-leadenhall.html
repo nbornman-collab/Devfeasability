@@ -91,17 +91,17 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 }
 .r-tile:last-child{border-right:none}
 .r-tile-lbl{
-  font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.8px;
-  color:var(--text4);margin-bottom:3px;
+  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.4px;
+  color:var(--text3);margin-bottom:4px;
 }
 .r-tile-val{
-  font:500 22px var(--mono);color:var(--text);line-height:1;
+  font:600 24px var(--mono);color:var(--text);line-height:1;
   letter-spacing:-0.5px;
 }
 .r-tile-val.blue{color:var(--blue)}
 .r-tile-val.orange{color:var(--orange)}
 .r-tile-val.green{color:var(--green)}
-.r-tile-sub{font:400 10px var(--sans);color:var(--text3);margin-top:3px}
+.r-tile-sub{font:400 11px var(--sans);color:var(--text3);margin-top:4px}
 
 /* ── Right panel ─────────────────────────── */
 #right-panel{
@@ -127,16 +127,16 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   color:var(--blue);background:var(--blue-lt);
   padding:3px 8px;border-radius:3px;margin-bottom:10px;
 }
-.rp-name{font:700 18px var(--sans);color:var(--text);line-height:1.2;margin-bottom:3px}
-.rp-addr{font:400 11px var(--sans);color:var(--text3)}
+.rp-name{font:700 20px var(--sans);color:var(--text);line-height:1.2;margin-bottom:4px}
+.rp-addr{font:400 12px var(--sans);color:var(--text3)}
 .rp-score-row{
   display:flex;align-items:baseline;gap:6px;margin-top:12px;
 }
-.rp-score-num{font:700 36px var(--mono);color:var(--text);letter-spacing:-1px;line-height:1}
+.rp-score-num{font:700 40px var(--mono);color:var(--text);letter-spacing:-1px;line-height:1}
 .rp-score-denom{font:400 14px var(--mono);color:var(--text4)}
 .rp-score-badge{
   font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;
-  color:var(--blue);background:var(--blue-lt);padding:2px 8px;border-radius:3px;
+  color:var(--text2);background:rgba(0,0,0,0.06);padding:3px 10px;border-radius:3px;
 }
 
 /* Panel section */
@@ -145,7 +145,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   padding:12px 20px 10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;
 }
 .rp-section-hd h3{
-  font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);
+  font:600 11px var(--sans);text-transform:uppercase;letter-spacing:1.4px;color:var(--text2);
 }
 .rp-section-hd .rp-badge{
   font:500 9px var(--mono);color:var(--text3);background:rgba(0,0,0,0.05);
@@ -155,11 +155,9 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 
 /* Stats row */
 .rp-stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
-.rp-stat .sv{font:600 15px var(--mono);color:var(--text);letter-spacing:-0.3px}
-.rp-stat .sl{font:400 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-top:2px}
-.rp-stat .sv.blue{color:var(--blue)}
-.rp-stat .sv.orange{color:var(--orange)}
-.rp-stat .sv.green{color:var(--green)}
+.rp-stat .sv{font:600 16px var(--mono);color:var(--text);letter-spacing:-0.3px}
+.rp-stat .sl{font:500 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);margin-top:3px}
+/* stat values: black by default — colour only where meaningful */
 
 /* Flag rows */
 .flag-row{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
@@ -173,15 +171,15 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 .flag-sym.warn{background:#fef3c7;color:#d97706}
 .flag-sym.risk{background:#fee2e2;color:#dc2626}
 .flag-sym.info{background:#eff6ff;color:#2563eb}
-.flag-title{font:600 11px var(--sans);color:var(--text);line-height:1.3}
-.flag-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5;margin-top:2px}
+.flag-title{font:600 12px var(--sans);color:var(--text);line-height:1.3}
+.flag-desc{font:400 11px var(--sans);color:var(--text3);line-height:1.55;margin-top:3px}
 
 /* Height bars */
 .hb-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.hb-label{font:400 9px var(--sans);color:var(--text3);width:90px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-label{font:400 10px var(--sans);color:var(--text2);width:90px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hb-track{flex:1;height:6px;background:rgba(0,0,0,0.06);border-radius:2px;overflow:hidden}
 .hb-fill{height:100%;border-radius:2px;transition:width .4s ease}
-.hb-val{font:500 10px var(--mono);color:var(--text2);width:34px;text-align:right;flex-shrink:0}
+.hb-val{font:600 11px var(--mono);color:var(--text);width:36px;text-align:right;flex-shrink:0}
 
 /* Planning apps */
 .app-item{padding:10px 0;border-bottom:1px solid var(--border)}
@@ -191,8 +189,8 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 .app-status.approved{background:#dcfce7;color:#16a34a}
 .app-status.refused{background:#fee2e2;color:#dc2626}
 .app-status.pending{background:#fef3c7;color:#d97706}
-.app-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5}
-.app-meta{font:400 9px var(--sans);color:var(--text4);margin-top:3px;display:flex;gap:10px}
+.app-desc{font:400 11px var(--sans);color:var(--text3);line-height:1.55}
+.app-meta{font:400 10px var(--sans);color:var(--text4);margin-top:3px;display:flex;gap:10px}
 
 /* Capacity bars */
 .cap-wrap{margin-top:6px}
@@ -290,7 +288,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   </div>
   <div class="r-tile">
     <div class="r-tile-lbl">Dev Intelligence</div>
-    <div class="r-tile-val blue" id="hero-score">—</div>
+    <div class="r-tile-val" id="hero-score">—</div>
     <div class="r-tile-sub" id="hero-score-badge">—</div>
   </div>
   <div class="r-tile">
@@ -300,7 +298,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   </div>
   <div class="r-tile">
     <div class="r-tile-lbl">Uplift on EUV</div>
-    <div class="r-tile-val orange" id="uplift-max">—</div>
+    <div class="r-tile-val" id="uplift-max">—</div>
     <div class="r-tile-sub" id="uplift-mult">—× value multiplier</div>
   </div>
   <div class="r-tile">
@@ -315,7 +313,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   </div>
   <div class="r-tile">
     <div class="r-tile-lbl">Margin range</div>
-    <div class="r-tile-val green" id="margin-delta">—</div>
+    <div class="r-tile-val" id="margin-delta">—</div>
     <div class="r-tile-sub">Low → High spread</div>
   </div>
 </div>
