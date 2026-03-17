@@ -35,26 +35,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Tier routes: /t1/:site, /t2/:site, /t3/:site ──────────────────────────
 // T1 Scout  — site overview (placeholder until built)
-// T2 Appraise — massing tool
-// T3 Present  — full PDF report
-app.get('/t2/:site', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'massing', `${req.params.site}.html`));
-});
 // Removed sites — redirect to homepage (100LH planning granted Jan 2025; 1SS unverified)
 const REMOVED_SITES = ['100-leadenhall', '1-silk-st'];
-app.get('/t1/:site', (req, res, next) => {
-  if (REMOVED_SITES.includes(req.params.site)) return res.redirect('/');
-  next();
-});
-app.get('/t2/:site', (req, res, next) => {
-  if (REMOVED_SITES.includes(req.params.site)) return res.redirect('/');
-  next();
-});
-app.get('/t3/:site', (req, res, next) => {
-  if (REMOVED_SITES.includes(req.params.site)) return res.redirect('/');
+app.use(['/t1/:site', '/t2/:site', '/t3/:site'], (req, res, next) => {
+  const site = req.params.site;
+  if (REMOVED_SITES.includes(site)) return res.redirect('/');
   next();
 });
 
+// T2 Appraise — massing tool
+app.get('/t2/:site', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'massing', `${req.params.site}.html`));
+});
+// T3 Present — full PDF report
 app.get('/t3/:site', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'reports', `${req.params.site}.html`));
 });
