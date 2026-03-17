@@ -951,14 +951,14 @@ async function initMap(){
   window._map=m;
   m.on('style.load',()=>{
     m.addLayer({id:'ctx-3d',source:'composite','source-layer':'building',filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
-      paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.2,'fill-extrusion-vertical-gradient':false}});
+      paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':1.0,'fill-extrusion-vertical-gradient':false}});
 
     m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
     m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-dasharray':[5,3],'line-opacity':0.8}});
 
     // Red translucent shell — OS NGD real footprint (falls back to makeRect)
     m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[makeRect(MASSING_CX,MASSING_CY,PLOT_AREA*0.4,1.4)]}}});
-    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.15}});
+    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.0}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
     fetch(`/api/building-data?lat=${LAT}&lng=${LNG}`).then(r=>r.json()).then(bd=>{
