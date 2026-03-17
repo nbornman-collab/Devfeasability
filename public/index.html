@@ -223,6 +223,38 @@ footer a:hover{color:var(--text3)}
   nav{padding:0 20px}
   .section{padding:48px 20px}
 }
+
+/* ── Site matrix ─────────────────────────────────────────────────── */
+.site-matrix{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:28px}
+.sm-header{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--surface2);border-bottom:1px solid var(--border);padding:10px 20px;gap:0}
+.sm-col-site{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text4)}
+.sm-col-tier{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text4);text-align:center}
+.sm-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);align-items:stretch;min-height:72px}
+.sm-row:last-child{border-bottom:none}
+.sm-row-add{min-height:44px;background:var(--surface2)}
+.sm-col-site{padding:16px 20px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.sm-site-score{font:700 22px var(--mono);color:var(--text);letter-spacing:-1px;line-height:1}
+.sm-site-score span{font:400 12px var(--mono);color:var(--text4)}
+.sm-site-name{font:600 13px var(--sans);color:var(--text);margin-top:4px;letter-spacing:-0.2px}
+.sm-site-meta{font:400 11px var(--sans);color:var(--text3)}
+.sm-tier{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 8px;border-left:1px solid var(--border);text-decoration:none;transition:background .15s}
+.sm-tier-label{font:500 11px var(--sans);text-align:center}
+.sm-tier-arrow{font:600 13px var(--sans)}
+.sm-tier-live{cursor:pointer}
+.sm-tier-live:hover{background:var(--surface2)}
+.sm-t0{color:var(--text3)}.sm-t0:hover .sm-tier-label{color:var(--text)}
+.sm-t1 .sm-tier-label{color:var(--blue)}.sm-t1 .sm-tier-arrow{color:var(--blue)}
+.sm-t1:hover{background:#eff6ff}
+.sm-t2 .sm-tier-label{color:#7c3aed}.sm-t2 .sm-tier-arrow{color:#7c3aed}
+.sm-t2:hover{background:#f5f3ff}
+.sm-tier-locked{color:var(--text4);cursor:default;opacity:.4}
+.sm-tier-locked .sm-tier-label{font:400 11px var(--sans)}
+.sm-tier-empty{border-left:1px solid var(--border)}
+@media(max-width:768px){
+  .sm-header,.sm-row{grid-template-columns:1fr}
+  .sm-header .sm-col-tier,.sm-tier-empty{display:none}
+  .sm-tier{border-left:none;border-top:1px solid var(--border);flex-direction:row;justify-content:space-between;padding:10px 20px}
+}
 </style>
 </head>
 <body>
@@ -355,36 +387,77 @@ footer a:hover{color:var(--text3)}
   <!-- Demo sites -->
   <section class="section reveal">
     <div class="section-inner">
-      <div class="section-label">Live appraisals</div>
-      <div class="section-title">Two verified sites, fully scored</div>
-      <p class="section-sub">Commercial and residential. Each site verified against HMLR, EPC, and PropertyData. More being added.</p>
-      <div class="sites-grid">
+      <div class="section-label">Site pipeline</div>
+      <div class="section-title">All sites. All tiers. One place.</div>
+      <p class="section-sub">Every verified site with its full tier availability. Each site confirmed against HMLR, EPC, and PropertyData before it appears here.</p>
 
+      <div class="site-matrix">
+        <!-- Header -->
+        <div class="sm-header">
+          <div class="sm-col-site">Site</div>
+          <div class="sm-col-tier">T0 · Borough</div>
+          <div class="sm-col-tier">T1 · Scout</div>
+          <div class="sm-col-tier">T2 · Appraise</div>
+          <div class="sm-col-tier">T3 · Present</div>
+        </div>
 
-        <a href="/t1/24-southwark-st" class="site-card">
-          <div class="site-card-chip" style="background:#fafaf9">
-            <span class="site-card-chip-text" style="color:rgba(120,113,108,0.2)">24SS</span>
+        <!-- 24 Southwark Street -->
+        <div class="sm-row">
+          <div class="sm-col-site">
+            <div class="sm-site-score">71<span>/100</span></div>
+            <div class="sm-site-name">24 Southwark Street</div>
+            <div class="sm-site-meta">SE1 0SW · 1,550 m² · Commercial · PTAL 6b</div>
           </div>
-          <div class="site-card-body">
-            <div class="site-card-borough">Southwark</div>
-            <div class="site-card-name">24 Southwark Street</div>
-            <div class="site-card-addr">SE1 0SW · 1,550 m²</div>
-            <div class="site-card-score-row"><span class="site-card-score">71</span><span class="site-card-score-denom">/100</span></div>
-            <div class="site-card-tags"><span class="site-tag blue">Commercial</span><span class="site-tag">PTAL 6b</span><span class="site-tag">Bankside</span></div>
+          <a href="/borough/southwark" class="sm-tier sm-tier-live sm-t0">
+            <span class="sm-tier-label">Southwark</span>
+            <span class="sm-tier-arrow">→</span>
+          </a>
+          <a href="/t1/24-southwark-st" class="sm-tier sm-tier-live sm-t1">
+            <span class="sm-tier-label">Full analysis</span>
+            <span class="sm-tier-arrow">→</span>
+          </a>
+          <a href="/t2/24-southwark-st" class="sm-tier sm-tier-live sm-t2">
+            <span class="sm-tier-label">3 scenarios</span>
+            <span class="sm-tier-arrow">→</span>
+          </a>
+          <div class="sm-tier sm-tier-locked">
+            <span class="sm-tier-label">Coming</span>
           </div>
-        </a>
-        <a href="/t1/196-blackfriars-rd" class="site-card">
-          <div class="site-card-chip" style="background:#fff7ed">
-            <span class="site-card-chip-text" style="color:rgba(234,88,12,0.18)">196BR</span>
+        </div>
+
+        <!-- 196 Blackfriars Road -->
+        <div class="sm-row">
+          <div class="sm-col-site">
+            <div class="sm-site-score">91<span>/100</span></div>
+            <div class="sm-site-name">196 Blackfriars Road</div>
+            <div class="sm-site-meta">SE1 8NJ · 583 m² · Residential · PTAL 6a</div>
           </div>
-          <div class="site-card-body">
-            <div class="site-card-borough">Southwark</div>
-            <div class="site-card-name">196 Blackfriars Road</div>
-            <div class="site-card-addr">SE1 8NJ · 583 m²</div>
-            <div class="site-card-score-row"><span class="site-card-score">91</span><span class="site-card-score-denom">/100</span></div>
-            <div class="site-card-tags"><span class="site-tag orange">Residential</span><span class="site-tag">PTAL 6a</span><span class="site-tag">Blackfriars OA</span></div>
+          <a href="/borough/southwark" class="sm-tier sm-tier-live sm-t0">
+            <span class="sm-tier-label">Southwark</span>
+            <span class="sm-tier-arrow">→</span>
+          </a>
+          <a href="/t1/196-blackfriars-rd" class="sm-tier sm-tier-live sm-t1">
+            <span class="sm-tier-label">Full analysis</span>
+            <span class="sm-tier-arrow">→</span>
+          </a>
+          <div class="sm-tier sm-tier-locked">
+            <span class="sm-tier-label">Coming</span>
           </div>
-        </a>
+          <div class="sm-tier sm-tier-locked">
+            <span class="sm-tier-label">Coming</span>
+          </div>
+        </div>
+
+        <!-- Add more row -->
+        <div class="sm-row sm-row-add">
+          <div class="sm-col-site" style="color:var(--text4);font:400 12px var(--sans)">
+            + More sites being verified and added
+          </div>
+          <div class="sm-tier sm-tier-empty"></div>
+          <div class="sm-tier sm-tier-empty"></div>
+          <div class="sm-tier sm-tier-empty"></div>
+          <div class="sm-tier sm-tier-empty"></div>
+        </div>
       </div>
     </div>
   </section>
