@@ -142,7 +142,19 @@ function computeScore(s){
   const ptalScore = {Bankside:10,'Elephant & Castle':9.5,Southwark:9.5,Borough:9,'Canada Water':8,Rotherhithe:7,Peckham:7.5}[s.area] || 8;
 
   const weighted = sky*2.5 + rentGap*2.0 + momentum*2.0 + heritage*1.5 + titleScore*1.5 + ptalScore*0.5;
-  return Math.round(weighted) / 10; // out of 10 to match existing display
+
+  // Constraint penalties — hard flags tank score 65%, soft flags 30%
+  const nameAddr = (s.name + ' ' + (s.address||'')).toLowerCase();
+  const ANCHORS = [/tesco/i,/sainsbury/i,/waitrose/i,/morrison/i,/aldi/i,/lidl/i,/asda/i,/shopping.cent/i,/shopping.mall/i,/retail.park/i,/supermarket/i,/westfield/i];
+  let mult = 1.0;
+  if (ANCHORS.some(p => p.test(nameAddr)))        mult *= 0.35; // anchor tenant — near impossible possession
+  if (s.hasConsent)                                mult *= 0.25; // live planning consent
+  if (s.listed)                                    mult *= 0.30; // listed building
+  if (s.yearBuilt && s.yearBuilt >= 2015)          mult *= 0.55; // recently built
+  if (s.floodZone === 3)                           mult *= 0.70; // flood zone 3
+  if (s.activeMasterplan && mult === 1.0)          mult *= 0.80; // in-progress masterplan = constrained market
+
+  return Math.round(weighted * mult) / 10;
 }
 
 const SITES = [
