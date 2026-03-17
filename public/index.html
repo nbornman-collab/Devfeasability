@@ -62,7 +62,7 @@ nav{
 .hero-overlay{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
-    linear-gradient(to bottom, rgba(8,10,18,0.55) 0%, rgba(8,10,18,0.05) 30%, rgba(8,10,18,0.2) 55%, rgba(8,10,18,0.92) 100%);
+    linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.88) 100%);
 }
 
 /* Hero copy */
@@ -456,7 +456,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
   const map = new mapboxgl.Map({
     container: 'hero-map',
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/satellite-v9',
     center: [-0.0820, 51.5138],
     zoom: 14.8,
     pitch: 68,
@@ -467,28 +467,6 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   });
 
   map.on('load', () => {
-    // 3D buildings — muted dark, slightly lighter than background
-    map.addLayer({
-      id: 'buildings-3d',
-      source: 'composite',
-      'source-layer': 'building',
-      filter: ['==', 'extrude', 'true'],
-      type: 'fill-extrusion',
-      minzoom: 12,
-      paint: {
-        'fill-extrusion-color': [
-          'interpolate', ['linear'], ['get', 'height'],
-          0,   '#1a2035',
-          50,  '#1e2845',
-          100, '#22305a',
-          200, '#263870',
-        ],
-        'fill-extrusion-height':  ['interpolate',['linear'],['zoom'],13,0,13.5,['get','height']],
-        'fill-extrusion-base':    ['interpolate',['linear'],['zoom'],13,0,13.5,['get','min_height']],
-        'fill-extrusion-opacity': 0.95,
-      }
-    });
-
     // Slow rotation — 0.007° per frame ≈ 0.42°/s ≈ one full rotation ~14 min
     let bearing = -20;
     let lastTime = 0;
