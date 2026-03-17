@@ -2,1586 +2,475 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DevFeasibility — London Development Analysis</title>
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D/A — Development Intelligence for London</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f6f8;--surface:#ffffff;--surface2:#f0f1f4;--border:#e0e2e8;
-  --text:#1a1d2e;--text2:#4a4e6a;--text3:#8b8fa8;
-  --accent:#4f46e5;--accent2:#6366f1;--accent-glow:rgba(79,70,229,.08);
-  --green:#059669;--green-glow:rgba(5,150,105,.08);
-  --amber:#d97706;--red:#dc2626;
-  --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
+  --sans:'Inter',sans-serif;
+  --mono:'DM Mono',monospace;
+  --blue:#1d4ed8;
+  --blue-lt:#eff6ff;
+  --orange:#ea580c;
+  --text:#0f172a;
+  --text2:#374151;
+  --text3:#6b7280;
+  --text4:#9ca3af;
+  --border:#e5e7eb;
+  --surface:#fff;
+  --surface2:#f9fafb;
 }
-html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text);overflow:hidden}
-#map{position:absolute;top:0;left:0;right:0;bottom:0}
+html,body{min-height:100%;font-family:var(--sans);color:var(--text);background:var(--surface)}
 
-/* Search bar */
-.search-wrap{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10;width:min(520px,calc(100vw - 32px))}
-.search-wrap input{
-  width:100%;padding:14px 20px 14px 44px;border:1px solid var(--border);border-radius:14px;
-  background:rgba(255,255,255,.95);backdrop-filter:blur(24px);color:var(--text);font:400 15px var(--sans);
-  outline:none;transition:border-color .2s,box-shadow .2s;box-shadow:0 2px 12px rgba(0,0,0,.08);
+/* ── Nav ─────────────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:52px;
 }
-.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow),0 2px 12px rgba(0,0,0,.08)}
-.search-wrap input::placeholder{color:var(--text3)}
-.search-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none}
-.search-results{
-  position:absolute;top:calc(100% + 4px);left:0;right:0;background:rgba(255,255,255,.98);
-  backdrop-filter:blur(24px);border:1px solid var(--border);border-radius:14px;overflow:hidden;
-  max-height:260px;overflow-y:auto;display:none;box-shadow:0 4px 20px rgba(0,0,0,.1);
+.nav-logo{
+  font:800 18px var(--sans);letter-spacing:-0.5px;color:var(--text);
+  text-decoration:none;display:flex;align-items:center;gap:2px;
 }
-.search-results.show{display:block}
-.search-results div{padding:12px 20px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--border);transition:background .15s;color:var(--text2)}
-.search-results div:last-child{border-bottom:none}
-.search-results div:hover{background:var(--accent-glow);color:var(--text)}
-
-/* Panel */
-.panel{
-  position:fixed;top:0;right:0;width:min(640px, 33vw);height:100%;background:rgba(255,255,255,.97);
-  backdrop-filter:blur(28px);border-left:1px solid var(--border);z-index:5;
-  transform:translateX(0);transition:transform .35s cubic-bezier(.4,0,.2,1);
-  overflow-y:auto;overflow-x:hidden;box-shadow:-4px 0 24px rgba(0,0,0,.06);
+.nav-logo .slash{color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-link{
+  font:500 11px var(--sans);text-transform:uppercase;letter-spacing:1.4px;
+  color:var(--text3);text-decoration:none;padding:6px 10px;border-radius:4px;
+  transition:all .15s;
 }
-.panel.collapsed{transform:translateX(100%)}
-.panel-toggle{
-  position:fixed;right:min(640px, 33vw);top:50%;transform:translateY(-50%);z-index:6;
-  width:28px;height:56px;background:rgba(255,255,255,.95);border:1px solid var(--border);
-  border-right:none;border-radius:8px 0 0 8px;cursor:pointer;display:flex;align-items:center;
-  justify-content:center;color:var(--text2);transition:right .35s cubic-bezier(.4,0,.2,1),background .2s;
-  box-shadow:-2px 0 8px rgba(0,0,0,.06);
+.nav-link:hover{color:var(--text);background:var(--surface2)}
+.nav-link.active{color:var(--blue);background:var(--blue-lt)}
+.nav-cta{
+  font:600 11px var(--sans);color:#fff;background:var(--blue);
+  padding:7px 16px;border-radius:5px;text-decoration:none;
+  transition:background .15s;
 }
-.panel.collapsed~.panel-toggle{right:0}
-.panel-toggle:hover{background:var(--surface2);color:var(--text)}
-.panel-toggle svg{transition:transform .3s}
-.panel.collapsed~.panel-toggle svg{transform:rotate(180deg)}
+.nav-cta:hover{background:#1e40af}
 
-/* Panel content */
-.panel-header{padding:24px 24px 16px;border-bottom:1px solid var(--border)}
-.panel-header h1{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);margin-bottom:6px}
-.panel-header .address{font-size:21px;font-weight:700;line-height:1.3;color:var(--text)}
-.panel-header .subtitle{font-size:13px;color:var(--text2);margin-top:6px}
-.streetview-wrap{position:relative;width:100%;aspect-ratio:16/9;background:var(--surface2);border-bottom:1px solid var(--border);overflow:hidden;display:none}
-.streetview-wrap iframe{width:100%;height:100%;border:none}
-.streetview-wrap .sv-label{position:absolute;bottom:8px;left:10px;font:500 10px var(--sans);color:white;background:rgba(0,0,0,.5);padding:2px 8px;border-radius:4px;pointer-events:none;z-index:1}
-
-.section{padding:20px 24px;border-bottom:1px solid var(--border)}
-.section-title{
-  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--text2);margin-bottom:16px;display:flex;align-items:center;gap:8px
+/* ── Hero ────────────────────────────────── */
+.hero{
+  padding:96px 32px 80px;max-width:1100px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;
 }
-.section-title svg{width:14px;height:14px;opacity:.7}
-
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
-.stat-label{font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.8px;font-weight:600}
-.stat-value{font:600 17px var(--mono);color:var(--text)}
-.stat-value.accent{color:var(--accent2)}
-.stat-value.green{color:var(--green)}
-.stat-value.amber{color:var(--amber)}
-.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
-.stat.full{grid-column:1/-1}
-.stat.highlight{border-color:var(--accent);background:var(--accent-glow)}
-.stat.highlight-green{border-color:var(--green);background:var(--green-glow)}
-
-/* Utilization bar */
-.util-bar-wrap{margin-top:14px}
-.util-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;font-weight:500}
-.util-bar{height:10px;background:var(--surface);border-radius:5px;overflow:hidden;position:relative}
-.util-bar-fill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.4,0,.2,1)}
-
-/* Power bars */
-.power-bar-wrap{margin-bottom:14px}
-.power-bar-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-.power-bar-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text3)}
-.power-bar-values{font:600 13px var(--mono);color:var(--text)}
-.power-bar-values .current{color:var(--text3)}
-.power-bar-values .potential{color:var(--green)}
-.power-bar{height:14px;background:#e8e9ee;border-radius:7px;overflow:hidden;position:relative;display:flex}
-.power-bar .existing{height:100%;background:#9ca0b4;border-radius:7px 0 0 7px;transition:width .8s cubic-bezier(.4,0,.2,1)}
-.power-bar .added{height:100%;background:var(--accent);opacity:.7;transition:width .8s cubic-bezier(.4,0,.2,1)}
-.power-bar .pd-added{height:100%;background:var(--green);opacity:.6;transition:width .8s cubic-bezier(.4,0,.2,1)}
-.power-bar-legend{display:flex;gap:14px;margin-top:6px;font-size:10px;color:var(--text3)}
-.power-bar-legend span::before{content:'';display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
-.power-bar-legend .leg-existing::before{background:#8a8ea0}
-.power-bar-legend .leg-potential::before{background:var(--accent)}
-.power-bar-legend .leg-pd::before{background:var(--green)}
-
-/* Insight cards */
-.insight{margin-bottom:10px;padding:12px 14px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--border);font-size:12px;line-height:1.6;color:var(--text2)}
-.insight.critical{border-left-color:var(--red)}
-.insight.opportunity{border-left-color:var(--green)}
-.insight.caution{border-left-color:var(--amber)}
-.insight strong{color:var(--text);font-weight:600}
-.insight .insight-tag{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:2px 6px;border-radius:3px;margin-right:6px}
-.insight.critical .insight-tag{background:rgba(220,38,38,.1);color:var(--red)}
-.insight.opportunity .insight-tag{background:rgba(5,150,105,.1);color:var(--green)}
-.insight.caution .insight-tag{background:rgba(217,119,6,.1);color:var(--amber)}
-
-/* Prominent constraint flags */
-.constraint-flag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;margin:3px 4px 3px 0}
-.constraint-flag.red{background:rgba(220,38,38,.08);color:var(--red);border:1px solid rgba(220,38,38,.2)}
-.constraint-flag.amber{background:rgba(217,119,6,.08);color:var(--amber);border:1px solid rgba(217,119,6,.2)}
-.constraint-flag.green{background:rgba(5,150,105,.08);color:var(--green);border:1px solid rgba(5,150,105,.2)}
-
-/* Narrative */
-.narrative{font-size:14px;line-height:1.75;color:var(--text2)}
-.narrative strong{color:var(--text);font-weight:600}
-.narrative .highlight{color:var(--accent2);font-weight:600}
-.narrative .opportunity{
-  margin-top:14px;padding:14px 18px;background:rgba(79,70,229,.05);border-left:3px solid var(--accent);
-  border-radius:0 10px 10px 0;font-size:13px;line-height:1.7;color:var(--text2);
+.hero-left{}
+.hero-eyebrow{
+  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2px;
+  color:var(--text4);margin-bottom:20px;display:flex;align-items:center;gap:8px;
 }
-.narrative .opportunity strong{color:var(--text)}
-
-/* Financial table */
-.fin-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:center}
-.fin-row:last-child{border-bottom:none}
-.fin-row .label{color:var(--text2)}
-.fin-row .value{font:600 13px var(--mono);color:var(--text)}
-.fin-row.total{border-top:2px solid var(--border);margin-top:6px;padding-top:14px}
-.fin-row.total .label{font-weight:700;color:var(--text)}
-.fin-row.total .value{font-weight:700;color:var(--green);font-size:15px}
-
-/* PDR Tag */
-.pdr-tag{display:inline-block;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;margin:3px 4px 3px 0;letter-spacing:.3px}
-.pdr-tag.available{background:rgba(5,150,105,.08);color:var(--green);border:1px solid rgba(5,150,105,.2)}
-.pdr-tag.restricted{background:rgba(220,38,38,.08);color:var(--red);border:1px solid rgba(220,38,38,.2)}
-
-/* Notes */
-.note-item{font-size:12px;color:var(--text3);padding:4px 0;line-height:1.5}
-.note-item::before{content:'⚠ ';opacity:.6}
-
-/* Loading */
-.loading-overlay{
-  position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:100;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:opacity .6s;
+.hero-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--text4)}
+.hero-wordmark{
+  font:900 72px var(--sans);letter-spacing:-4px;line-height:1;
+  color:var(--text);margin-bottom:12px;
 }
-.loading-overlay.hide{opacity:0;pointer-events:none}
-.loader{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-overlay p{margin-top:16px;color:var(--text2);font-size:14px}
-
-/* Branding */
-.brand{position:fixed;bottom:16px;left:16px;z-index:4;font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px}
-.brand span{font-weight:700;color:var(--text2)}
-
-/* 3D Labels */
-.map-label{
-  position:absolute;pointer-events:none;z-index:3;
-  font:600 12px var(--mono);color:var(--text);
-  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
-  padding:5px 10px;border-radius:6px;border:1px solid var(--border);
-  white-space:nowrap;transform:translate(-50%,0);
-  transition:opacity .3s, top .15s ease-out, left .15s ease-out;
-  box-shadow:0 1px 6px rgba(0,0,0,.1);
+.hero-wordmark .slash{color:var(--blue)}
+.hero-tagline{
+  font:300 24px var(--sans);color:var(--text2);line-height:1.4;
+  letter-spacing:-0.3px;margin-bottom:14px;
 }
-.map-label.height-label{border-color:var(--green);color:var(--green);font-weight:700}
-.map-label.pd-label{border-color:#059669;color:#059669;font-size:11px}
-.map-label.existing-label{border-color:#c0392b;color:#c0392b}
-.map-label .leader{
-  position:absolute;pointer-events:none;
-  stroke-width:1;stroke:var(--border);fill:none;
-  overflow:visible;
+.hero-sub{
+  font:400 15px var(--sans);color:var(--text3);line-height:1.7;
+  margin-bottom:36px;max-width:440px;
 }
-.map-label .leader,.map-label .leader-dot{display:none}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{
+  font:600 13px var(--sans);color:#fff;background:var(--blue);
+  padding:12px 24px;border-radius:6px;text-decoration:none;
+  transition:background .15s;display:inline-flex;align-items:center;gap:6px;
+}
+.btn-primary:hover{background:#1e40af}
+.btn-secondary{
+  font:600 13px var(--sans);color:var(--text2);background:transparent;
+  border:1px solid var(--border);padding:12px 24px;border-radius:6px;
+  text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px;
+}
+.btn-secondary:hover{background:var(--surface2);border-color:var(--text4)}
 
-/* Responsive */
-@media(max-width:768px){
-  .panel{width:100%;border-left:none;border-top:1px solid var(--border);height:55%;top:auto;bottom:0;border-radius:20px 20px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
-  .panel.collapsed{transform:translateY(100%)}
-  .panel-toggle{right:auto;left:50%;transform:translateX(-50%);top:auto;bottom:55%;width:56px;height:28px;
-    border-radius:8px 8px 0 0;border:1px solid var(--border);border-bottom:none;box-shadow:0 -2px 8px rgba(0,0,0,.06)}
-  .panel.collapsed~.panel-toggle{bottom:0}
-  .panel-toggle svg{transform:rotate(90deg)}
-  .panel.collapsed~.panel-toggle svg{transform:rotate(-90deg)}
+/* Hero right — tier ladder preview */
+.hero-right{
+  background:var(--surface2);border:1px solid var(--border);border-radius:10px;
+  overflow:hidden;
+}
+.tier-preview-row{
+  display:flex;align-items:stretch;border-bottom:1px solid var(--border);
+  text-decoration:none;transition:background .15s;cursor:pointer;
+}
+.tier-preview-row:last-child{border-bottom:none}
+.tier-preview-row:hover{background:#fff}
+.tier-tag{
+  width:80px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  padding:20px 0;border-right:1px solid var(--border);
+}
+.tier-tag-inner{
+  font:700 11px var(--mono);text-transform:uppercase;letter-spacing:1.5px;
+  writing-mode:horizontal-tb;text-align:center;
+}
+.tier-tag-inner.t0{color:var(--text3)}
+.tier-tag-inner.t1{color:var(--text2)}
+.tier-tag-inner.t2{color:var(--blue)}
+.tier-tag-inner.t3{color:var(--orange)}
+.tier-preview-body{padding:16px 20px;flex:1}
+.tier-preview-name{font:700 14px var(--sans);color:var(--text);margin-bottom:4px}
+.tier-preview-desc{font:400 12px var(--sans);color:var(--text3);line-height:1.5}
+.tier-preview-badge{
+  font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.3px;
+  color:var(--text4);margin-top:6px;
+}
+.tier-preview-badge.free{color:#16a34a}
+.tier-preview-badge.paid{color:var(--blue)}
+
+/* ── Section ─────────────────────────────── */
+.section{padding:64px 32px;border-top:1px solid var(--border)}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{
+  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2px;
+  color:var(--text4);margin-bottom:10px;display:flex;align-items:center;gap:8px;
+}
+.section-label::before{content:'';display:block;width:20px;height:1px;background:var(--text4)}
+.section-title{font:700 28px var(--sans);color:var(--text);letter-spacing:-0.5px;margin-bottom:8px}
+.section-sub{font:400 15px var(--sans);color:var(--text3);line-height:1.7;max-width:560px;margin-bottom:40px}
+
+/* ── Tier cards ──────────────────────────── */
+.tier-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.tier-card{
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:24px;text-decoration:none;color:inherit;transition:all .15s;
+  display:flex;flex-direction:column;
+}
+.tier-card:hover{background:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.tier-card-num{font:700 11px var(--mono);text-transform:uppercase;letter-spacing:1.8px;color:var(--text4);margin-bottom:16px}
+.tier-card-num.t0{}
+.tier-card-num.t2{color:var(--blue)}
+.tier-card-num.t3{color:var(--orange)}
+.tier-card-name{font:700 18px var(--sans);color:var(--text);margin-bottom:6px;letter-spacing:-0.3px}
+.tier-card-desc{font:400 13px var(--sans);color:var(--text3);line-height:1.6;flex:1}
+.tier-card-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:20px;padding-top:16px;border-top:1px solid var(--border);
+}
+.tier-card-access{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.3px}
+.tier-card-access.free{color:#16a34a}
+.tier-card-access.paid{color:var(--blue)}
+.tier-card-arrow{color:var(--text4);font-size:14px}
+
+/* ── Demo sites ──────────────────────────── */
+.sites-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.site-card{
+  border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  text-decoration:none;color:inherit;transition:all .15s;display:flex;flex-direction:column;
+}
+.site-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.09);transform:translateY(-2px)}
+.site-card-map{
+  height:120px;background:var(--surface2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+}
+.site-card-map-label{
+  font:700 10px var(--mono);text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--text4);
+}
+.site-card-body{padding:16px}
+.site-card-borough{
+  font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--text4);margin-bottom:6px;
+}
+.site-card-name{font:700 15px var(--sans);color:var(--text);margin-bottom:4px;letter-spacing:-0.2px}
+.site-card-addr{font:400 11px var(--sans);color:var(--text3);margin-bottom:12px}
+.site-card-score-row{display:flex;align-items:baseline;gap:4px;margin-bottom:10px}
+.site-card-score{font:700 26px var(--mono);color:var(--text);letter-spacing:-1px}
+.site-card-score-denom{font:400 12px var(--mono);color:var(--text4)}
+.site-card-score-label{font:500 10px var(--sans);color:var(--text3);margin-left:4px}
+.site-card-tags{display:flex;gap:5px;flex-wrap:wrap}
+.site-tag{
+  font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;
+  padding:2px 7px;border-radius:3px;border:1px solid var(--border);color:var(--text3);
+}
+.site-tag.blue{background:var(--blue-lt);color:var(--blue);border-color:rgba(29,78,216,.15)}
+.site-tag.orange{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+
+/* ── How it works ────────────────────────── */
+.flow-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.flow-step{padding:28px 24px;border-right:1px solid var(--border);background:var(--surface)}
+.flow-step:last-child{border-right:none}
+.flow-step-num{font:700 32px var(--mono);color:var(--border);letter-spacing:-1px;margin-bottom:16px}
+.flow-step-title{font:700 15px var(--sans);color:var(--text);margin-bottom:8px}
+.flow-step-desc{font:400 13px var(--sans);color:var(--text3);line-height:1.6}
+.flow-arrow{display:flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* ── Footer ──────────────────────────────── */
+footer{
+  border-top:1px solid var(--border);padding:32px;
+  display:flex;align-items:center;justify-content:space-between;
+  font:400 12px var(--sans);color:var(--text4);
+}
+.footer-logo{font:700 14px var(--sans);color:var(--text);letter-spacing:-0.3px}
+.footer-logo .slash{color:var(--blue)}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding:48px 20px 40px}
+  .hero-right{display:none}
+  .hero-wordmark{font-size:56px}
+  .tier-grid,.sites-grid,.flow-grid{grid-template-columns:1fr 1fr}
+  .flow-step{border-bottom:1px solid var(--border)}
+  nav{padding:0 20px}
+  .section{padding:40px 20px}
 }
 </style>
 </head>
 <body>
-<div class="loading-overlay" id="loader"><div class="loader"></div><p>Loading DevFeasibility…</p></div>
 
-<div id="map"></div>
-
-<!-- 3D Map Labels Container -->
-<div id="map-labels"></div>
-<div id="map-legend" style="position:absolute;bottom:30px;left:12px;z-index:4;font:500 10px var(--mono);
-  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);padding:8px 12px;border-radius:8px;
-  border:1px solid var(--border);color:var(--text2);line-height:1.8;display:none;box-shadow:0 1px 6px rgba(0,0,0,.08)">
-  <div><span style="display:inline-block;width:18px;height:0;border-top:1.5px solid #6366f1;vertical-align:middle;margin-right:6px"></span>Building footprint</div>
-  <div><span style="display:inline-block;width:18px;height:0;border-top:1.2px dashed #b45309;vertical-align:middle;margin-right:6px"></span>Property line (est.)</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#c0392b;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Existing</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#059669;opacity:.5;vertical-align:middle;margin-right:6px;border-radius:2px"></span>Potential</div>
-  <div><span style="display:inline-block;width:10px;height:10px;background:#10b981;opacity:.5;vertical-align:middle;margin-right:6px;border-radius:2px"></span>PD (no planning)</div>
-</div>
-
-<div style="position:fixed;top:16px;right:16px;z-index:10;display:flex;gap:6px;align-items:center">
-  <a href="/t2/100-leadenhall" style="padding:10px 18px;background:#4f46e5;color:white;border-radius:8px;font:600 12px Inter,sans-serif;text-decoration:none;box-shadow:0 2px 12px rgba(79,70,229,.35);white-space:nowrap">T2 Appraise →</a>
-  <a href="/t3/100-leadenhall" style="padding:10px 18px;background:#f0f2f6;color:#4f46e5;border:1px solid #dde0ea;border-radius:8px;font:600 12px Inter,sans-serif;text-decoration:none;white-space:nowrap">T3 Present →</a>
-</div>
-
-<div class="search-wrap">
-  <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-  <input id="search" type="text" placeholder="Search London address…" autocomplete="off">
-  <div class="search-results" id="results"></div>
-</div>
-
-<div class="panel" id="panel">
-  <div class="panel-header">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h1>DevFeasibility</h1>
-      <button id="export-btn" onclick="exportPDF()" style="display:none;padding:5px 12px;background:var(--accent);color:white;border:none;border-radius:5px;font:600 10px var(--sans);cursor:pointer;letter-spacing:0.5px;text-transform:uppercase">📄 Export PDF</button>
-    </div>
-    <div class="address" id="p-address">—</div>
-    <div class="subtitle" id="p-subtitle"></div>
+<!-- ── Nav ───────────────────────────────────────────────────────── -->
+<nav>
+  <a href="/" class="nav-logo">D<span class="slash">/</span>A</a>
+  <div class="nav-links">
+    <a href="/borough/southwark" class="nav-link">T0 Borough</a>
+    <a href="/t1/100-leadenhall" class="nav-link">T1 Scout</a>
+    <a href="/t2/100-leadenhall" class="nav-link">T2 Appraise</a>
+    <a href="/t3/100-leadenhall" class="nav-link">T3 Present</a>
   </div>
-  <div class="streetview-wrap" id="sv-wrap">
-    <iframe id="sv-frame" allowfullscreen loading="lazy"></iframe>
-    <div class="sv-label">Street View</div>
+  <a href="/borough/southwark" class="nav-cta">Explore Southwark →</a>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Development Intelligence · London</div>
+    <div class="hero-wordmark">D<span class="slash">/</span>A</div>
+    <div class="hero-tagline">From borough<br>to blueprint.</div>
+    <p class="hero-sub">Four tiers of analysis — from wide-angle borough screening to investment-grade financial appraisal and professional presentation. Built for developers who need real answers fast.</p>
+    <div class="hero-actions">
+      <a href="/borough/southwark" class="btn-primary">Explore Southwark <span>→</span></a>
+      <a href="/t1/100-leadenhall" class="btn-secondary">View demo site</a>
+    </div>
   </div>
-  <div id="panel-body"><div class="section"><p class="narrative" style="color:var(--text3)">Search a London address to begin analysis</p></div></div>
-</div>
-<button class="panel-toggle" id="toggle" title="Toggle panel">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-</button>
 
-<div class="brand">
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-  <span>DevFeasibility</span> v4 London
-</div>
-
-<script src="london-planning-engine.js"></script>
-<script>
-let map, marker, currentLabels = [], siteExtraData = {};
-let currentReportData = null;
-
-function exportPDF(){
-  if(!currentReportData) return;
-  const dataStr = encodeURIComponent(JSON.stringify(currentReportData));
-  window.open(`/report.html?data=${dataStr}`, '_blank');
-}
-
-async function init(){
-  const cfg = await(await fetch('/api/config')).json();
-  mapboxgl.accessToken = cfg.mapboxToken;
-  map = new mapboxgl.Map({
-    container:'map',
-    style:'mapbox://styles/mapbox/light-v11',
-    center:[-0.08, 51.512],
-    zoom:14.5,
-    pitch:50,
-    bearing:-15,
-    antialias:true
-  });
-  map.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
-  map.on('error', e => { console.error('Map error:', e.error); document.getElementById('loader').classList.add('hide'); });
-  map.on('style.load',()=>{ try {
-    // Context buildings — soft grey, subservient to site massing
-    if(!map.getLayer('3d-buildings')){
-      map.addLayer({
-        id:'3d-buildings',type:'fill-extrusion',source:'composite','source-layer':'building',
-        minzoom:14,
-        paint:{
-          'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',30,'#c8cad2',80,'#bbbec8',150,'#b0b3be'],
-          'fill-extrusion-height':['get','height'],
-          'fill-extrusion-base':['get','min_height'],
-          'fill-extrusion-opacity':.45,
-          'fill-extrusion-vertical-gradient':true,
-        }
-      });
-    }
-    if(!map.getLayer('building-outlines')){
-      map.addLayer({
-        id:'building-outlines',type:'line',source:'composite','source-layer':'building',
-        minzoom:14,
-        paint:{'line-color':'rgba(160,165,185,0.2)','line-width':0.5}
-      });
-    }
-    // Street number labels on buildings at close zoom
-    if(!map.getLayer('building-numbers')){
-      map.addLayer({
-        id:'building-numbers',type:'symbol',source:'composite','source-layer':'housenum_label',
-        minzoom:17,
-        layout:{
-          'text-field':['get','house_num'],
-          'text-font':['DIN Pro Medium','Arial Unicode MS Regular'],
-          'text-size':['interpolate',['linear'],['zoom'],17,9,19,12],
-          'text-anchor':'center',
-          'text-allow-overlap':false,
-          'text-padding':2,
-        },
-        paint:{
-          'text-color':'#4a4e6a',
-          'text-halo-color':'rgba(255,255,255,0.9)',
-          'text-halo-width':1.5,
-          'text-opacity':['interpolate',['linear'],['zoom'],17,0.5,18,0.85],
-        }
-      });
-    }
-    } catch(e) { console.error('style.load error:', e); }
-    document.getElementById('loader').classList.add('hide');
-    document.getElementById('search').placeholder = 'Search any London address…';
-  });
-  map.on('move', updateLabelPositions);
-}
-
-// --- SEARCH ---
-function searchAddress(text){
-  document.getElementById('search').value = text;
-  fetch(`/api/geocode?text=${encodeURIComponent(text)}`)
-    .then(r=>r.json()).then(d=>{
-      if(d.features && d.features.length > 0) selectResult(d.features[0]);
-    });
-}
-
-let debounceTimer;
-document.getElementById('search').addEventListener('input',e=>{
-  clearTimeout(debounceTimer);
-  const q = e.target.value.trim();
-  if(q.length < 3){document.getElementById('results').classList.remove('show');return}
-  debounceTimer = setTimeout(()=>{
-    fetch(`/api/geocode?text=${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>{
-      const el = document.getElementById('results');
-      el.innerHTML = '';
-      if(d.features && d.features.length){
-        d.features.slice(0,5).forEach(f=>{
-          const div = document.createElement('div');
-          div.textContent = f.place_name;
-          div.onclick = ()=>{selectResult(f);el.classList.remove('show');document.getElementById('search').value=f.place_name};
-          el.appendChild(div);
-        });
-        el.classList.add('show');
-      } else el.classList.remove('show');
-    });
-  },300);
-});
-document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))document.getElementById('results').classList.remove('show')});
-
-// --- SELECT RESULT + FETCH ALL DATA ---
-async function selectResult(feature){
- try {
-  const [lng,lat] = feature.center || feature.geometry.coordinates;
-  map.flyTo({center:[lng,lat],zoom:16.5,pitch:55,bearing:-15,duration:2000});
-
-  if(marker) marker.remove();
-  const el = document.createElement('div');
-  el.style.cssText = 'width:16px;height:16px;background:#4f46e5;border:3px solid white;border-radius:50%;box-shadow:0 0 12px rgba(79,70,229,.4)';
-  marker = new mapboxgl.Marker({element:el}).setLngLat([lng,lat]).addTo(map);
-
-  const address = feature.place_name || feature.text || '';
-  let postcode = extractPostcode(address);
-
-  // Show loading state
-  document.getElementById('p-address').textContent = address.split(',')[0];
-  document.getElementById('p-subtitle').textContent = 'Loading…';
-  document.getElementById('panel-body').innerHTML = '<div class="section"><p class="narrative" style="color:var(--text3)">Fetching planning data…</p></div>';
-  document.getElementById('panel').classList.remove('collapsed');
-
-  // Load Google Street View immediately with geocode point (update after building data)
-  const svWrap = document.getElementById('sv-wrap');
-  const svFrame = document.getElementById('sv-frame');
-  const svOffsetLat = lat - 0.00015; // ~15m south toward main facade
-  svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${svOffsetLat},${lng}&cbp=12,0,,0,0&output=svembed&ie=UTF8&source=embed`;
-  svWrap.style.display = 'block';
-
-  // Parallel data fetches
-  // Timeout wrapper — prevents hanging if Overpass is slow
-  const fetchWithTimeout = (url, ms = 12000) => {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), ms);
-    return fetch(url, {signal: controller.signal})
-      .then(r => { clearTimeout(timeout); return r.json(); })
-      .catch(e => { clearTimeout(timeout); console.warn('fetchWithTimeout failed:', url, e.message); return { elements: [], error: e.message }; });
-  };
-
-  // Safety: if selectResult takes >20s, show error
-  const panelTimeout = setTimeout(() => {
-    const body = document.getElementById('panel-body');
-    if(body && body.innerHTML.includes('Fetching')){
-      body.innerHTML = '<div class="section"><p style="color:var(--red)">Data fetch timed out. Try searching again.</p></div>';
-    }
-  }, 20000);
-
-  // PHASE 1: Critical data only (3 fast calls — borough, building, ptal)
-  const [boroughRes, buildingRes, ptalRes] = await Promise.allSettled([
-    fetchWithTimeout(`/api/borough?lat=${lat}&lng=${lng}`, 8000),
-    fetchWithTimeout(`/api/building?lat=${lat}&lng=${lng}&radius=25&address=${encodeURIComponent(address.split(',')[0])}`, 12000),
-    fetchWithTimeout(`/api/ptal?lat=${lat}&lng=${lng}`, 8000),
-  ]);
-
-  clearTimeout(panelTimeout);
-  console.log('Phase 1 settled', {borough: boroughRes.status, building: buildingRes.status, ptal: ptalRes.status});
-  const boroughData = boroughRes.status === 'fulfilled' ? boroughRes.value : { borough: 'Unknown' };
-  if (!postcode && boroughData.postcode) postcode = boroughData.postcode;
-  const osmData = buildingRes.status === 'fulfilled' ? buildingRes.value : { elements: [] };
-  const ptalData = ptalRes.status === 'fulfilled' ? ptalRes.value : { ptal: null };
-
-  // PHASE 2: Secondary data (fire & forget — update panel when ready)
-  // These use Overpass and can be slow; don't block the main render
-  let floodData = { floodZone: null };
-  let conservationData = { elements: [] };
-  let listedData = { elements: [] };
-  // Start fetching in background
-  const phase2 = Promise.allSettled([
-    fetchWithTimeout(`/api/flood-zone?lat=${lat}&lng=${lng}`, 10000),
-    fetchWithTimeout(`/api/conservation-areas?lat=${lat}&lng=${lng}&radius=80`, 10000),
-    fetchWithTimeout(`/api/listed-buildings?lat=${lat}&lng=${lng}&radius=150`, 10000),
-  ]).then(([floodRes, conservationRes, listedRes]) => {
-    floodData = floodRes.status === 'fulfilled' ? floodRes.value : { floodZone: null };
-    conservationData = conservationRes.status === 'fulfilled' ? conservationRes.value : { elements: [] };
-    listedData = listedRes.status === 'fulfilled' ? listedRes.value : { elements: [] };
-    console.log('Phase 2 settled', {flood: floodRes.status, conservation: conservationRes.status, listed: listedRes.status});
-  });
-
-  // Parse building
-  let buildingData = null;
-  if(osmData.elements && osmData.elements.length > 0){
-    const building = osmData.elements.find(e => e.type === 'way' && e.tags);
-    if(building){
-      buildingData = {
-        name: building.tags.name || '',
-        levels: parseInt(building.tags['building:levels']) || null,
-        height: parseFloat(building.tags.height) || null,
-        use: building.tags['building'] || '',
-        architect: building.tags.architect || '',
-        startDate: building.tags.start_date || '',
-        nodes: osmData.elements.filter(e => e.type === 'node' && e.lat),
-        wayNodes: building.nodes || []
-      };
-    }
-  }
-
-  // Plot area
-  let plotArea = 0;
-  if(buildingData && buildingData.nodes.length > 0 && buildingData.wayNodes.length > 0){
-    const coords = buildingData.wayNodes.map(nid => buildingData.nodes.find(n => n.id === nid)).filter(Boolean);
-    if(coords.length >= 3) plotArea = calcPolygonArea(coords);
-  }
-
-  const osmUse = buildingData?.use || '';
-  const currentUse = guessUseClass(osmUse);
-  const buildingType = getBuildingTypeFromOSM(osmUse);
-  const isResidential = USE_CLASSES[currentUse]?.residential || false;
-  const ftf = isResidential ? 3.0 : 4.2;
-
-  // RE-CENTER on building polygon if we found one
-  if(buildingData && buildingData.wayNodes && buildingData.wayNodes.length >= 3){
-    const bldgCoords = buildingData.wayNodes
-      .map(nid => buildingData.nodes.find(n => n.id === nid))
-      .filter(Boolean)
-      .map(n => [n.lon, n.lat]);
-    if(bldgCoords.length >= 3){
-      const bldgCentroid = getCentroid(bldgCoords);
-      // If building is >30m from geocode point, fly to building instead
-      const dLat = (bldgCentroid[1] - lat) * 111000;
-      const dLng = (bldgCentroid[0] - lng) * 111000 * Math.cos(lat * Math.PI / 180);
-      const dist = Math.sqrt(dLat*dLat + dLng*dLng);
-      if(dist > 30){
-        console.log(`Building centroid ${dist.toFixed(0)}m from geocode point — re-centering map`);
-        map.flyTo({center:bldgCentroid, zoom:17, pitch:55, bearing:-15, duration:1500});
-        if(marker) marker.setLngLat(bldgCentroid);
-        // Update Street View to building centroid
-        const svOff = bldgCentroid[1] - 0.00015; // offset south = faces main facade
-        svFrame.src = `https://maps.google.com/maps?layer=c&cbll=${svOff},${bldgCentroid[0]}&cbp=12,0,,0,0&output=svembed&ie=UTF8&source=embed`;
-      }
-    }
-  }
-
-  // HEIGHT FIX: Query Mapbox 3D buildings layer for true height
-  // Deferred — we'll try to query after map settles, but use OSM data for now
-  // and update if Mapbox gives us better data
-  let mapboxHeight = null;
-  let mapboxMaxHeight = 0;
-  // Try querying now (may work if map tiles are loaded at this location)
-  const queryMapboxHeight = () => {
-    if(!map.getLayer('3d-buildings')) return null;
-    // Use building centroid if available, else geocode point
-    let qLng = lng, qLat = lat;
-    if(buildingData && buildingData.wayNodes && buildingData.wayNodes.length >= 3){
-      const bc = buildingData.wayNodes.map(nid => buildingData.nodes.find(n => n.id === nid)).filter(Boolean);
-      if(bc.length >= 3){ const c = getCentroid(bc.map(n => [n.lon, n.lat])); qLng = c[0]; qLat = c[1]; }
-    }
-    const point = map.project([qLng, qLat]);
-    const boxSize = 40; // pixels
-    const bbox = [[point.x - boxSize, point.y - boxSize], [point.x + boxSize, point.y + boxSize]];
-    const features = map.queryRenderedFeatures(bbox, { layers: ['3d-buildings'] });
-    if(features.length > 0){
-      const heights = features.map(f => f.properties.height || 0).filter(h => h > 0);
-      if(heights.length > 0){
-        const maxH = Math.max(...heights);
-        const distinctHeights = [...new Set(heights.map(h => Math.round(h)))].sort((a,b) => b - a);
-        if(distinctHeights.length > 1) console.log(`Multiple building heights at site: ${distinctHeights.join(', ')}m`);
-        return maxH;
-      }
-    }
-    return null;
-  };
-  mapboxHeight = queryMapboxHeight();
-  mapboxMaxHeight = mapboxHeight || 0;
-
-  // Use best available height: Mapbox > OSM height tag > OSM levels > default
-  const osmHeight = buildingData?.height;
-  const osmLevels = buildingData?.levels;
-  let heightM, floors;
-  if(mapboxHeight && mapboxHeight > 5){
-    heightM = mapboxHeight;
-    floors = Math.round(heightM / ftf);
-  } else if(osmHeight){
-    heightM = osmHeight;
-    floors = Math.round(heightM / ftf);
-  } else if(osmLevels){
-    floors = osmLevels;
-    heightM = floors * ftf;
-  } else {
-    floors = 2;
-    heightM = floors * ftf;
-  }
-
-  // ALREADY MAXIMISED check: if existing height >= typical approved, flag it
-  // (done after planning context is retrieved — see below)
-
-  // Fallback: estimate plot area from typical urban plot if no polygon
-  if(!plotArea || plotArea < 20) plotArea = 200; // conservative 200sqm default
-  const estimatedFloorArea = plotArea * floors * 0.85;
-
-  // Parse extra data
-  const conservationElements = conservationData.elements || [];
-  const inConservationArea = conservationElements.length > 0;
-  const conservationName = inConservationArea ? (conservationElements[0]?.tags?.name || 'Unnamed conservation area') : null;
-
-  const listedElements = (listedData.elements || []).filter(e => e.tags);
-  const nearbyListed = listedElements.map(e => ({
-    name: e.tags.name || 'Unnamed',
-    grade: e.tags.listed_status || e.tags['heritage:operator:ref'] || e.tags.heritage || '?',
-    heRef: e.tags.HE_ref || e.tags['ref:GB:nhle'] || ''
-  }));
-
-  const floodZone = floodData.floodZone || 1;
-  const ptal = ptalData.ptal;
-  const ptalBand = ptalData.ptalBand || (boroughData.zone <= 2 ? '4-6' : '2-3');
-  const nearestStations = ptalData.nearestStations || [];
-
-  // Store extra data for panel
-  siteExtraData = { floodZone, ptal, ptalBand, nearestStations, inConservationArea, conservationName, nearbyListed, postcode };
-
-  // Get planning context
-  const planning = getPlanningContext(boroughData.borough, {
-    lat, lng, plotArea, floorArea: estimatedFloorArea, floors,
-    currentUse, buildingType, ptalBand
-  });
-
-  // Check if already maximised
-  const typicalApproved = planning.typicalApprovedHeights || {low:10,mid:20,high:30};
-  const isMaximised = heightM >= typicalApproved.mid * 0.9; // within 10% of typical max
-  const heightSource = mapboxHeight ? 'mapbox-3d' : osmHeight ? 'osm-height' : osmLevels ? 'osm-levels' : 'default';
-
-  const siteInfo = { plotArea, floors, heightM, estimatedFloorArea, lat, lng, postcode, isResidential, currentUse, ftf,
-    buildingAge: buildingData?.startDate || null, buildingName: buildingData?.name || '',
-    isMaximised, heightSource, mapboxHeight: mapboxMaxHeight };
-
-  try {
-    renderPanel(planning, address, boroughData, buildingData, siteInfo);
-  } catch(e) {
-    console.error('renderPanel error:', e);
-    document.getElementById('panel-body').innerHTML = '<div class="section"><p style="color:var(--red)">Panel render error: ' + e.message + '</p></div>';
-  }
-
-  // ALWAYS render 3D — even if panel fails
-  try {
-    renderSite3D(lat, lng, buildingData, planning, siteInfo);
-  } catch(e) {
-    console.error('renderSite3D error:', e);
-  }
-
-  // Async data fetches (non-blocking — update panel when ready)
-  // Planning precedent
-  fetch(`/api/planning-apps?lat=${lat}&lng=${lng}&krad=0.3`).then(r=>r.json()).then(appData => {
-    if(appData.results && appData.results.length > 0){
-      siteExtraData.planningApps = appData.results;
-      renderPrecedentSection(appData.results, siteInfo, planning);
-    }
-  }).catch(()=>{});
-
-  // EPC
-  if(postcode){
-    fetch(`/api/epc?postcode=${encodeURIComponent(postcode)}`).then(r=>r.json()).then(epcData => {
-      if(epcData.certificates && epcData.certificates.length > 0){
-        siteExtraData.epc = epcData;
-        renderEPCSection(epcData, siteInfo);
-      }
-    }).catch(()=>{});
-  }
- } catch(err) {
-    console.error('selectResult fatal error:', err);
-    document.getElementById('panel-body').innerHTML = '<div class="section"><p style="color:var(--red)">Error loading site data: ' + err.message + '</p></div>';
-  }
-}
-
-// --- 3D RENDERING ---
-function renderSite3D(lat, lng, buildingData, planning, siteInfo){
-  console.log('renderSite3D called', {lat, lng, hasBuilding: !!buildingData, wayNodes: buildingData?.wayNodes?.length, floors: siteInfo?.floors, heightM: siteInfo?.heightM});
-  // Clean up all layers including dynamic floor lines
-  const layersToRemove = ['site-line','prop-line','current-3d','current-edge','potential-3d','potential-edge','pd-3d','pd-edge'];
-  for(let f = 1; f <= 30; f++) layersToRemove.push('floor-line-'+f);
-  layersToRemove.forEach(id=>{ if(map.getLayer(id)) map.removeLayer(id); });
-  const sourcesToRemove = ['site','prop-boundary','current-bldg','potential-bldg','pd-bldg'];
-  for(let f = 1; f <= 30; f++) sourcesToRemove.push('floor-line-'+f);
-  sourcesToRemove.forEach(id=>{ if(map.getSource(id)) map.removeSource(id); });
-  // Reset context building opacity
-  if(map.getLayer('3d-buildings')){
-    map.setPaintProperty('3d-buildings','fill-extrusion-opacity',0.45);
-  }
-  clearLabels();
-
-  if(!buildingData || !buildingData.wayNodes || buildingData.wayNodes.length < 3){
-    console.warn('renderSite3D: bail — no building polygon', {buildingData});
-    return;
-  }
-
-  const coords = buildingData.wayNodes
-    .map(nid => buildingData.nodes.find(n => n.id === nid))
-    .filter(Boolean)
-    .map(n => [n.lon, n.lat]);
-  if(coords.length < 3){ console.warn('renderSite3D: bail — coords < 3 after node lookup'); return; }
-  if(coords[0][0] !== coords[coords.length-1][0] || coords[0][1] !== coords[coords.length-1][1]) coords.push([...coords[0]]);
-
-  const siteGeoJSON = { type:'Feature', geometry:{type:'Polygon',coordinates:[coords]}, properties:{} };
-
-  // Buffer polygon outward ~2m for property boundary estimate
-  const propCoords = bufferPolygon(coords, 0.000018); // ~2m at London lat
-  const propGeoJSON = { type:'Feature', geometry:{type:'Polygon',coordinates:[propCoords]}, properties:{} };
-
-  // Property boundary — dashed line only, no fill
-  map.addSource('prop-boundary',{type:'geojson',data:propGeoJSON});
-  map.addLayer({id:'prop-line',type:'line',source:'prop-boundary',paint:{'line-color':'#b45309','line-width':1.2,'line-dasharray':[5,3],'line-opacity':0.6}});
-
-  // Building footprint — solid line only, no fill (avoids z-fighting)
-  map.addSource('site',{type:'geojson',data:siteGeoJSON});
-  map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-opacity':0.8}});
-
-  const currentHeight = siteInfo.heightM || 6.4;
-  const ftf = siteInfo.ftf || 3.2;
-  const typicalH = planning.typicalApprovedHeights || planning.typicalHeight || {low:10,mid:20,high:30};
-  const potentialHeightM = typicalH.mid || 20;
-
-  // Existing building — red translucent shell OUTSIDE the Mapbox grey mass
-  // Slightly outset so it envelops the context building beneath
-  const existingOutsetCoords = bufferPolygon(coords, 0.000004); // ~0.4m outset
-  const existingOutsetGeo = { type:'Feature', geometry:{type:'Polygon',coordinates:[existingOutsetCoords]}, properties:{} };
-  map.addSource('current-bldg',{type:'geojson',data:existingOutsetGeo});
-  map.addLayer({
-    id:'current-3d',type:'fill-extrusion',source:'current-bldg',
-    paint:{
-      'fill-extrusion-color':'#c0392b',
-      'fill-extrusion-height': currentHeight,
-      'fill-extrusion-base': 0,
-      'fill-extrusion-opacity': 0.35,
-    }
-  });
-  // Red outline at grade
-  map.addLayer({
-    id:'current-edge',type:'line',source:'site',
-    paint:{'line-color':'#c0392b','line-width':2.5,'line-opacity':0.9}
-  });
-  console.log('3D massing: existing shell added', {currentHeight, existingOutsetCoords: existingOutsetCoords.length});
-
-  // Potential additional envelope — rich green, translucent with floor lines
-  if(potentialHeightM > currentHeight){
-    map.addSource('potential-bldg',{type:'geojson',data:siteGeoJSON});
-    map.addLayer({
-      id:'potential-3d',type:'fill-extrusion',source:'potential-bldg',
-      paint:{
-        'fill-extrusion-color':'#059669',
-        'fill-extrusion-height':potentialHeightM,
-        'fill-extrusion-base':currentHeight,
-        'fill-extrusion-opacity':.32,
-        'fill-extrusion-vertical-gradient':false,
-      }
-    });
-    // Strong edge on potential
-    map.addLayer({
-      id:'potential-edge',type:'line',source:'potential-bldg',
-      paint:{'line-color':'#047857','line-width':2,'line-opacity':0.8}
-    });
-
-    // Floor lines in the green zone — thin slabs showing each new floor
-    const ftfVal = siteInfo.ftf || 3.0;
-    const newFloors = Math.floor((potentialHeightM - currentHeight) / ftfVal);
-    for(let f = 1; f <= newFloors; f++){
-      const floorH = currentHeight + (f * ftfVal);
-      const slabId = 'floor-line-' + f;
-      const slabCoords = bufferPolygon(coords, 0.000003); // slightly outside to show
-      const slabGeo = { type:'Feature', geometry:{type:'Polygon',coordinates:[slabCoords]}, properties:{} };
-      map.addSource(slabId, {type:'geojson', data:slabGeo});
-      map.addLayer({
-        id: slabId, type:'fill-extrusion', source: slabId,
-        paint:{
-          'fill-extrusion-color':'#047857',
-          'fill-extrusion-height': floorH + 0.12,
-          'fill-extrusion-base': floorH - 0.12,
-          'fill-extrusion-opacity': 0.5,
-        }
-      });
-    }
-  }
-
-  // PD upward extension massing
-  if(planning.pdMassingPotential && planning.pdMassingPotential.additionalHeightM > 0){
-    const pdTop = currentHeight + planning.pdMassingPotential.additionalHeightM;
-    if(pdTop <= potentialHeightM){
-      map.addSource('pd-bldg',{type:'geojson',data:siteGeoJSON});
-      map.addLayer({
-        id:'pd-3d',type:'fill-extrusion',source:'pd-bldg',
-        paint:{
-          'fill-extrusion-color':'#10b981',
-          'fill-extrusion-height':pdTop,
-          'fill-extrusion-base':currentHeight,
-          'fill-extrusion-opacity':.4,
-          'fill-extrusion-vertical-gradient':false,
-        }
-      });
-      map.addLayer({
-        id:'pd-edge',type:'line',source:'pd-bldg',
-        paint:{'line-color':'#059669','line-width':1.5,'line-opacity':0.7}
-      });
-    }
-  }
-
-  const centroid = getCentroid(coords);
-
-  // Keep context buildings visible but softer — they provide the existing mass
-  if(map.getLayer('3d-buildings')){
-    map.setPaintProperty('3d-buildings','fill-extrusion-opacity',
-      ['interpolate',['linear'],['zoom'],
-        14, 0.45,
-        16, 0.4,
-        18, 0.35
-      ]
-    );
-  }
-
-  // Labels — heights only, no capacity label (that's in the panel)
-  // Max height label anchored to TOP of potential massing volume
-  const potentialFloorCount = Math.round(potentialHeightM / (siteInfo.ftf || 3.0));
-  addLabel(centroid, potentialHeightM, `${Math.round(potentialHeightM)}m · ${potentialFloorCount}F max`, 'height-label', 'right');
-  // Existing label anchored to top of existing building
-  addLabel(centroid, currentHeight, `${Math.round(currentHeight)}m · ${siteInfo.floors}F existing`, 'existing-label', 'left');
-
-  if(planning.pdMassingPotential){
-    const pdH = currentHeight + planning.pdMassingPotential.additionalHeightM;
-    addLabel(centroid, pdH, `PD: +${planning.pdMassingPotential.additionalFloors}F (${Math.round(pdH)}m)`, 'pd-label', 'right');
-  }
-
-  // Resolve collisions after all labels placed
-  requestAnimationFrame(() => resolveCollisions());
-  document.getElementById('map-legend').style.display = 'block';
-}
-
-// --- POLYGON BUFFER (approximate property boundary) ---
-function bufferPolygon(coords, dist){
-  // Simple outward offset — expand each vertex away from centroid
-  const cx = coords.reduce((s,c)=>s+c[0],0) / coords.length;
-  const cy = coords.reduce((s,c)=>s+c[1],0) / coords.length;
-  return coords.map(c => {
-    const dx = c[0] - cx, dy = c[1] - cy;
-    const len = Math.sqrt(dx*dx + dy*dy) || 0.00001;
-    return [c[0] + (dx/len) * dist, c[1] + (dy/len) * dist];
-  });
-}
-
-// --- LABELS WITH LEADERS ---
-function addLabel(lngLat, heightM, text, className, side){
-  const div = document.createElement('div');
-  div.className = 'map-label ' + className;
-  div.textContent = text;
-  div.dataset.lng = lngLat[0];
-  div.dataset.lat = lngLat[1];
-  div.dataset.heightM = heightM;
-  div.dataset.anchorHeightM = heightM; // where the leader line points to
-  div.dataset.side = side || 'right';  // which side to offset label to
-  div.dataset.offsetX = 0;
-  div.dataset.offsetY = 0;
-  // Leader SVG
-  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-  svg.classList.add('leader');
-  svg.style.cssText = 'position:absolute;overflow:visible;width:1px;height:1px;left:0;top:0;z-index:-1';
-  const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-  line.setAttribute('x1','0'); line.setAttribute('y1','0');
-  line.setAttribute('x2','0'); line.setAttribute('y2','0');
-  svg.appendChild(line);
-  div.appendChild(svg);
-  // Anchor dot
-  const dot = document.createElement('div');
-  dot.classList.add('leader-dot');
-  div.appendChild(dot);
-  document.getElementById('map-labels').appendChild(div);
-  currentLabels.push(div);
-}
-
-function getAnchorPixel(div){
-  const lng = parseFloat(div.dataset.lng);
-  const lat = parseFloat(div.dataset.lat);
-  const heightM = parseFloat(div.dataset.anchorHeightM);
-  // Project ground point
-  const groundPt = map.project(new mapboxgl.LngLat(lng, lat));
-  // Use Mapbox's internal camera to convert meters to pixels at this zoom/pitch
-  // The mercatorZfromAltitude gives us the correct scale factor
-  const zoom = map.getZoom();
-  const pitch = map.getPitch() * Math.PI / 180;
-  const latRad = lat * Math.PI / 180;
-  // Pixels per meter at this zoom level (on the ground plane)
-  const scale = Math.pow(2, zoom) * 512 / (40075016.686 * Math.cos(latRad));
-  // In pitched view, vertical extrusions appear shorter by sin(pitch) 
-  // because we're looking at an angle
-  const heightPixels = heightM * scale * Math.sin(pitch);
-  return { x: groundPt.x, y: groundPt.y - heightPixels };
-}
-
-function positionLabel(div){
-  const anchor = getAnchorPixel(div);
-  const side = div.dataset.side;
-  const mapEl = document.getElementById('map');
-  const mapW = mapEl.offsetWidth;
-  const mapH = mapEl.offsetHeight;
-  const labelW = div.offsetWidth || 120;
-  const labelH = div.offsetHeight || 26;
-  const pad = 8; // viewport padding
-
-  // Tight offset — labels sit close to massing
-  const baseOffset = mapW < 500 ? 40 : 70;
-  const labelOffset = side === 'left' ? -baseOffset : baseOffset;
-  const ox = parseFloat(div.dataset.offsetX) || 0;
-  const oy = parseFloat(div.dataset.offsetY) || 0;
-  
-  let labelX = anchor.x + labelOffset + ox;
-  let labelY = anchor.y + oy;
-
-  // Viewport clamping — keep label fully on screen
-  if(side === 'left'){
-    // Label extends left from labelX by labelW
-    if(labelX - labelW < pad) labelX = pad + labelW;
-  } else {
-    // Label extends right from labelX by labelW
-    if(labelX + labelW > mapW - pad) labelX = mapW - pad - labelW;
-  }
-  // Vertical clamp
-  if(labelY - labelH/2 < pad) labelY = pad + labelH/2;
-  if(labelY + labelH/2 > mapH - pad) labelY = mapH - pad - labelH/2;
-
-  div.style.left = labelX + 'px';
-  div.style.top = (labelY - labelH/2) + 'px';
-  div.style.transform = side === 'left' ? 'translate(-100%,0)' : 'translate(0,0)';
-  
-  // Leader line from label edge to anchor dot
-  const svg = div.querySelector('.leader');
-  const line = svg?.querySelector('line');
-  if(line){
-    const labelEdgeX = side === 'left' ? 0 : 0;
-    const labelEdgeY = labelH / 2;
-    const anchorRelX = anchor.x - labelX + (side === 'left' ? div.offsetWidth : 0);
-    const anchorRelY = anchor.y - (labelY - labelH/2);
-    line.setAttribute('x1', labelEdgeX);
-    line.setAttribute('y1', labelEdgeY);
-    line.setAttribute('x2', anchorRelX);
-    line.setAttribute('y2', anchorRelY);
-    line.setAttribute('stroke-width', '1.5');
-    line.setAttribute('stroke-dasharray', '3,2');
-  }
-  // Dot at anchor
-  const dot = div.querySelector('.leader-dot');
-  if(dot){
-    const dotX = anchor.x - labelX - 3 + (side === 'left' ? div.offsetWidth : 0);
-    const dotY = anchor.y - (labelY - labelH/2) - 3;
-    dot.style.left = dotX + 'px';
-    dot.style.top = dotY + 'px';
-    dot.style.width = '6px';
-    dot.style.height = '6px';
-  }
-}
-
-function resolveCollisions(){
-  if(currentLabels.length < 2) return;
-  currentLabels.forEach(positionLabel);
-  const minGap = 12;
-  // Sort by screen Y position first
-  const sorted = [...currentLabels].sort((a,b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
-  for(let pass = 0; pass < 8; pass++){
-    let moved = false;
-    for(let i = 0; i < sorted.length; i++){
-      for(let j = i + 1; j < sorted.length; j++){
-        const aRect = sorted[i].getBoundingClientRect();
-        const bRect = sorted[j].getBoundingClientRect();
-        // Only check same-side labels for vertical collision
-        const sameSide = sorted[i].dataset.side === sorted[j].dataset.side;
-        if(!sameSide) continue;
-        if(aRect.left < bRect.right + minGap && aRect.right + minGap > bRect.left &&
-           aRect.top < bRect.bottom + minGap && aRect.bottom + minGap > bRect.top){
-          const shift = Math.ceil((aRect.bottom + minGap - bRect.top) / 2) + 6;
-          sorted[i].dataset.offsetY = (parseFloat(sorted[i].dataset.offsetY)||0) - shift;
-          sorted[j].dataset.offsetY = (parseFloat(sorted[j].dataset.offsetY)||0) + shift;
-          positionLabel(sorted[i]);
-          positionLabel(sorted[j]);
-          moved = true;
-        }
-      }
-    }
-    if(!moved) break;
-  }
-}
-
-function updateLabelPositions(){ 
-  currentLabels.forEach(d => { d.dataset.offsetX = 0; d.dataset.offsetY = 0; });
-  currentLabels.forEach(positionLabel);
-  resolveCollisions();
-}
-function clearLabels(){ currentLabels.forEach(div => div.remove()); currentLabels = []; }
-
-// --- POWER BARS ---
-function renderPowerBar(title, current, potential, pdAdded, unit, showLegend){
-  if(!potential || potential <= 0) return '';
-  const total = potential;
-  const existPct = Math.min(100, (current / total) * 100);
-  const addedPct = Math.min(100 - existPct, ((potential - current - (pdAdded||0)) / total) * 100);
-  const pdPct = pdAdded ? Math.min(100 - existPct, (pdAdded / total) * 100) : 0;
-  return `<div class="power-bar-wrap">
-    <div class="power-bar-header">
-      <span class="power-bar-title">${title}</span>
-      <span class="power-bar-values"><span class="current">${fmt(Math.round(current))}${unit}</span> → <span class="potential">${fmt(Math.round(potential))}${unit}</span></span>
-    </div>
-    <div class="power-bar">
-      <div class="existing" style="width:${existPct}%"></div>
-      ${pdPct > 0 ? `<div class="pd-added" style="width:${pdPct}%"></div>` : ''}
-      <div class="added" style="width:${Math.max(0,addedPct)}%"></div>
-    </div>
-    ${showLegend ? `<div class="power-bar-legend"><span class="leg-existing">Existing</span>${pdPct > 0 ? '<span class="leg-pd">PD Extension</span>' : ''}<span class="leg-potential">Planning Potential</span></div>` : ''}
-  </div>`;
-}
-
-// --- PANEL ---
-function renderPanel(planning, address, boroughData, buildingData, siteInfo){
-  const borough = planning.borough || boroughData.borough || 'Unknown';
-  const shortBorough = borough.replace('London Borough of ','').replace('City of ','').replace('Royal Borough of ','');
-  const fin = planning.financials || LONDON_FINANCIALS[2];
-  const plotArea = siteInfo.plotArea || 0;
-  const plotAreaSqft = plotArea * 10.764;
-  const floors = siteInfo.floors || 2;
-  const heightM = siteInfo.heightM || 6.4;
-  const existingFloorArea = siteInfo.estimatedFloorArea || 0;
-  const existingFloorAreaSqft = existingFloorArea * 10.764;
-  const isResi = siteInfo.isResidential;
-  const ftf = siteInfo.ftf || 3.2;
-
-  const pr = planning.plotRatio || {};
-  const remainingCapacity = pr.remainingCapacity || 0;
-  const remainingCapacitySqft = remainingCapacity * 10.764;
-  const potentialFloorArea = pr.potentialFloorArea || 0;
-  const utilPct = potentialFloorArea > 0 ? Math.min(100, (existingFloorArea / potentialFloorArea) * 100) : 0;
-
-  const typicalH = planning.typicalApprovedHeights || {low:10,mid:20,high:30};
-  const potentialFloors = Math.floor(typicalH.mid / ftf);
-
-  // Use-class-aware metrics
-  const unitEstimate = planning.unitEstimate;
-  const affordableUnits = planning.affordableUnits || 0;
-
-  // Financials — use correct rates based on use
-  const finRates = isResi ? { rent: fin.rentSqft, sale: fin.saleSqft } : { rent: fin.commercialRentSqft || fin.rentSqft, sale: fin.commercialSaleSqft || fin.saleSqft };
-  const constructionCostLow = remainingCapacitySqft * fin.costLow;
-  const constructionCostHigh = remainingCapacitySqft * fin.costHigh;
-  const landCost = plotAreaSqft * fin.landSqft;
-  const saleRevenue = remainingCapacitySqft * finRates.sale;
-  const annualRent = remainingCapacitySqft * finRates.rent;
-  const cilEstimate = planning.cilEstimate || 0;
-
-  let barColor = 'var(--green)';
-  if(utilPct > 55) barColor = 'var(--amber)';
-  if(utilPct > 80) barColor = 'var(--red)';
-
-  document.getElementById('p-address').textContent = address.split(',')[0];
-  document.getElementById('p-subtitle').textContent = `${shortBorough} · Zone ${planning.zone || '?'}${siteInfo.postcode ? ' · ' + siteInfo.postcode : ''}`;
-
-  // Extra data
-  const extra = siteExtraData;
-  const floodZone = extra.floodZone || 1;
-  const ptal = extra.ptal;
-  const inCA = extra.inConservationArea;
-  const caName = extra.conservationName;
-  const nearbyListed = extra.nearbyListed || [];
-  const stations = extra.nearestStations || [];
-
-  // Narrative
-  const narrative = generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remainingCapacity, remainingCapacitySqft, potentialFloors, extra);
-
-  // PDR
-  let pdrHtml = '';
-  if(planning.applicablePDR && planning.applicablePDR.length > 0){
-    pdrHtml = planning.applicablePDR.map(p => {
-      const blocked = planning.article4Active && p.from === 'E' && p.to === 'C3';
-      return `<div style="margin-bottom:10px">
-        <span class="pdr-tag ${blocked ? 'restricted' : 'available'}">${p.name}${blocked ? ' — ARTICLE 4' : ''}</span>
-        ${p.massingImpact ? `<div style="font-size:12px;color:var(--text2);margin-top:4px;line-height:1.5">${p.massingImpact}</div>` : ''}
-        <div style="font-size:11px;color:var(--text3);margin-top:3px">${p.notes}${p.maxFloorspace ? ` · Max ${p.maxFloorspace}sqm` : ''}</div>
-      </div>`;
-    }).join('');
-  } else {
-    pdrHtml = '<div style="font-size:12px;color:var(--text3)">No PDR routes from current use class</div>';
-  }
-
-  // PD massing
-  let pdMassingHtml = '';
-  if(planning.pdMassingPotential){
-    const pd = planning.pdMassingPotential;
-    pdMassingHtml = `<div class="stat full highlight-green" style="border-color:var(--green)">
-      <div class="stat-label">PD Massing Potential</div>
-      <div class="stat-value green">+${pd.additionalFloors} floors (${pd.additionalHeightM}m)</div>
-      <div class="stat-sub">${fmt(Math.round(pd.additionalAreaSqm))}sqm · ${pd.notes}</div>
-    </div>`;
-  }
-
-  // Constraints section
-  let constraintsHtml = '';
-  // Conservation
-  if(inCA){
-    constraintsHtml += `<div class="stat full" style="border-color:var(--amber)"><div class="stat-label">Conservation Area</div><div class="stat-value amber">${caName || 'Yes'}</div><div class="stat-sub">PDR restricted · Demolition requires consent · Design scrutiny heightened</div></div>`;
-  }
-  // Flood zone
-  if(floodZone > 1){
-    constraintsHtml += `<div class="stat"><div class="stat-label">Flood Zone</div><div class="stat-value ${floodZone >= 3 ? 'red' : 'amber'}">${floodZone}</div><div class="stat-sub">${floodZone >= 3 ? 'Sequential & Exception Test required' : 'Sequential Test may apply'}</div></div>`;
-  } else {
-    constraintsHtml += `<div class="stat"><div class="stat-label">Flood Zone</div><div class="stat-value green">1</div><div class="stat-sub">Low risk</div></div>`;
-  }
-  // PTAL
-  constraintsHtml += `<div class="stat"><div class="stat-label">PTAL Score</div><div class="stat-value ${ptal >= 4 ? 'green' : (ptal >= 2 ? '' : 'amber')}">${ptal !== null ? ptal + ' (' + (extra.ptalBand || '?') + ')' : 'Unknown'}</div><div class="stat-sub">${ptal >= 5 ? 'Excellent access' : ptal >= 3 ? 'Good access' : 'Moderate/poor access'}</div></div>`;
-  // LVMF
-  if(planning.lvmfExposure && planning.lvmfExposure !== 'none'){
-    constraintsHtml += `<div class="stat"><div class="stat-label">LVMF Exposure</div><div class="stat-value amber" style="font-size:13px;text-transform:capitalize">${planning.lvmfExposure}</div><div class="stat-sub">Protected vista check needed</div></div>`;
-  }
-  // Listed buildings nearby
-  if(nearbyListed.length > 0){
-    const grades = nearbyListed.map(l => l.grade).filter(Boolean);
-    constraintsHtml += `<div class="stat"><div class="stat-label">Listed Buildings</div><div class="stat-value amber">${nearbyListed.length} nearby</div><div class="stat-sub">${grades.length ? grades.join(', ') : 'Check setting impact'}</div></div>`;
-  }
-  // Article 4
-  if(planning.article4Active){
-    constraintsHtml += `<div class="stat full" style="border-color:var(--red)"><div class="stat-label">Article 4 Direction</div><div class="stat-value red" style="font-size:12px">${planning.article4Notes.join('; ')}</div></div>`;
-  }
-  // Tall building threshold
-  if(planning.tallBuildingThreshold){
-    constraintsHtml += `<div class="stat"><div class="stat-label">Tall Building</div><div class="stat-value">${planning.tallBuildingThreshold}m+</div><div class="stat-sub">Triggers assessment</div></div>`;
-  }
-
-  // Transport
-  let transportHtml = '';
-  if(stations.length > 0){
-    transportHtml = stations.slice(0,5).map(s =>
-      `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(42,45,66,.3);font-size:12px">
-        <span style="color:var(--text2)">${s.name}</span>
-        <span style="color:var(--text3);font-family:var(--mono)">${s.distance ? Math.round(s.distance) + 'm' : ''}</span>
-      </div>`
-    ).join('');
-  }
-
-  // Development potential — use-class aware
-  let devPotentialHtml = '';
-  if(isResi && unitEstimate){
-    devPotentialHtml = `
-      <div class="stat full highlight-green"><div class="stat-label">Remaining Capacity</div><div class="stat-value green">${fmt(Math.round(remainingCapacity))}sqm (${fmt(Math.round(remainingCapacitySqft))}sqft)</div></div>
-      <div class="stat"><div class="stat-label">Est. Units</div><div class="stat-value">${unitEstimate.total}</div><div class="stat-sub">at ~70sqm avg NIA</div></div>
-      <div class="stat"><div class="stat-label">Affordable (${Math.round(planning.affordableThreshold*100||35)}%)</div><div class="stat-value">${affordableUnits}</div><div class="stat-sub">${planning.affordableTarget || ''}</div></div>
-      <div class="stat"><div class="stat-label">Potential Height</div><div class="stat-value">${typicalH.mid}m</div><div class="stat-sub">~${potentialFloors} floors at ${ftf}m f/f</div></div>
-      <div class="stat"><div class="stat-label">Unit Mix</div><div class="stat-value" style="font-size:12px">${unitEstimate.byType ? Object.entries(unitEstimate.byType).map(([k,v])=>`${k}: ${v}`).join(' · ') : '—'}</div></div>
-      ${pdMassingHtml}`;
-  } else {
-    devPotentialHtml = `
-      <div class="stat full highlight-green"><div class="stat-label">Remaining GFA Capacity</div><div class="stat-value green">${fmt(Math.round(remainingCapacity))}sqm (${fmt(Math.round(remainingCapacitySqft))}sqft)</div></div>
-      <div class="stat"><div class="stat-label">Potential Height</div><div class="stat-value">${typicalH.mid}m</div><div class="stat-sub">~${potentialFloors} floors at ${ftf}m f/f</div></div>
-      <div class="stat"><div class="stat-label">Use Class</div><div class="stat-value">${planning.currentUse}</div><div class="stat-sub">${planning.useClassInfo?.name || ''}</div></div>
-      ${pdMassingHtml}`;
-  }
-
-  // Key policies
-  let policiesHtml = '';
-  if(planning.keyPolicies && planning.keyPolicies.length){
-    policiesHtml = planning.keyPolicies.map(p => `<div style="font-size:12px;color:var(--text2);padding:3px 0">📋 ${p}</div>`).join('');
-  }
-
-  // Opportunity areas
-  let oaHtml = '';
-  if(planning.opportunityAreas && planning.opportunityAreas.length){
-    oaHtml = `<div style="margin-top:8px;font-size:12px;color:var(--text2)">Nearby Opportunity Areas: <strong style="color:var(--text)">${planning.opportunityAreas.join(', ')}</strong></div>`;
-  }
-
-  // Notes
-  let notesHtml = '';
-  if(planning.notes && planning.notes.length){
-    notesHtml = planning.notes.map(n => `<div class="note-item">${n}</div>`).join('');
-  }
-
-  // POWER BARS
-  const pdArea = planning.pdMassingPotential?.additionalAreaSqm || 0;
-  const pdFloors = planning.pdMassingPotential?.additionalFloors || 0;
-  const pdHeightM = planning.pdMassingPotential?.additionalHeightM || 0;
-  const potentialArea = pr.potentialFloorArea || existingFloorArea;
-  const potentialHeightFull = typicalH.mid || 20;
-
-  const powerBarsHtml = `
-    ${renderPowerBar('Floor Area', existingFloorArea, potentialArea, pdArea, 'sqm', true)}
-    ${renderPowerBar('Height', heightM, potentialHeightFull, pdHeightM, 'm', false)}
-    ${renderPowerBar('Floors', floors, potentialFloors, pdFloors, 'F', false)}
-  `;
-
-  // ARCHITECT INSIGHTS
-  const insights = getArchitectInsights(planning, siteInfo, extra);
-  let insightsHtml = insights.map(i =>
-    `<div class="insight ${i.level}"><span class="insight-tag">${i.tag}</span>${i.text}</div>`
-  ).join('');
-
-  // CONSTRAINT FLAGS (prominent, not buried)
-  let flagsHtml = '';
-  if(inCA) flagsHtml += `<span class="constraint-flag red">🏛 Conservation Area</span>`;
-  if(floodZone >= 3) flagsHtml += `<span class="constraint-flag red">🌊 Flood Zone ${floodZone}</span>`;
-  else if(floodZone === 2) flagsHtml += `<span class="constraint-flag amber">🌊 Flood Zone 2</span>`;
-  else flagsHtml += `<span class="constraint-flag green">✓ Flood Zone 1</span>`;
-  if(nearbyListed.length > 0) flagsHtml += `<span class="constraint-flag amber">🏛 ${nearbyListed.length} Listed Building${nearbyListed.length>1?'s':''}</span>`;
-  if(planning.article4Active) flagsHtml += `<span class="constraint-flag red">⚠ Article 4</span>`;
-  if(planning.lvmfExposure === 'high' || planning.lvmfExposure === 'very high') flagsHtml += `<span class="constraint-flag amber">👁 LVMF Views</span>`;
-  flagsHtml += `<span class="constraint-flag ${ptal >= 4 ? 'green' : ptal >= 2 ? 'amber' : 'red'}">🚇 PTAL ${ptal !== null ? ptal : '?'}</span>`;
-
-  // Calculate margin for hero
-  const margin = saleRevenue - constructionCostHigh - landCost - cilEstimate;
-  const marginPct = saleRevenue > 0 ? (margin / saleRevenue * 100).toFixed(0) : '?';
-  const marginColor = margin / saleRevenue > 0.2 ? 'var(--green)' : margin / saleRevenue > 0.1 ? 'var(--amber)' : 'var(--red)';
-
-  // THE PHYSICAL OPPORTUNITY
-  const newFloors = Math.max(0, potentialFloors - floors);
-  const totalFloors = potentialFloors;
-  const newHeight = typicalH.mid || 20;
-  const pdFloors2 = planning.pdMassingPotential?.additionalFloors || 0;
-  const pdArea2 = planning.pdMassingPotential?.additionalAreaSqm || 0;
-  const siteWidth2 = plotArea > 0 ? Math.sqrt(plotArea * 0.6) : 0;
-  const footprint2 = plotArea * 0.7;
-  const corridorWidth = 1.8;
-  const unitDepth = siteWidth2 > 0 ? (siteWidth2 - corridorWidth) / 2 : 0;
-
-  // Layout type
-  let layoutType = 'single-aspect';
-  if (siteWidth2 >= 16) layoutType = 'central corridor, dual aspect';
-  else if (siteWidth2 >= 12) layoutType = 'central corridor, mixed aspect';
-  else if (siteWidth2 >= 8) layoutType = 'deck access or scissor section';
-
-  // Second staircase
-  const needsSecondStair = isResi && newHeight >= 18;
-  const stairNote = needsSecondStair ? 'Dual staircase required (>18m)' : newHeight >= 15 ? 'Single staircase (below 18m threshold)' : 'Single staircase';
-
-  // Unit mix text
-  let unitMixText = '';
-  if (isResi && unitEstimate?.byType) {
-    unitMixText = Object.entries(unitEstimate.byType).map(([k,v]) => v + 'x ' + k).join(', ');
-  }
-
-  // Development brief
-  const briefLines = [];
-  briefLines.push(totalFloors + '-storey ' + (isResi ? 'residential' : planning.currentUse || 'commercial') + ' building on ' + fmt(Math.round(plotArea)) + 'sqm site');
-  if (plotArea > 100) briefLines.push(layoutType + (unitDepth > 0 ? ' (' + Math.round(unitDepth) + 'm unit depth)' : ''));
-  briefLines.push(stairNote);
-  if (isResi && unitEstimate) briefLines.push(unitEstimate.total + ' units' + (affordableUnits > 0 ? ' (' + affordableUnits + ' affordable at ' + Math.round((planning.affordableThreshold||0.35)*100) + '%)' : ''));
-  if (isResi) briefLines.push('10% M4(3) wheelchair accessible');
-  if (extra.floodZone >= 3 || (!isResi && planning.zone <= 2)) briefLines.push('Active ground floor (' + fmt(Math.round(footprint2 * 0.85)) + 'sqm commercial)');
-
-  const opportunityHtml = `
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"></polygon></svg>The Opportunity</div>
-      <p style="font-size:14px;line-height:1.7;color:var(--text);margin:0 0 16px">
-        Add <strong>${newFloors} floors</strong> to the existing ${floors}F (${Math.round(heightM)}m) building, reaching <strong>${totalFloors}F / ${Math.round(newHeight)}m</strong>.
-        This creates <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> (${fmt(Math.round(remainingCapacitySqft))}sqft) of new ${isResi ? 'residential' : 'commercial'} space${isResi && unitEstimate ? ' &mdash; approximately <strong>' + unitEstimate.total + ' units</strong> across a mix of ' + unitMixText : ''}.
-        ${pdFloors2 > 0 ? '<br>PD route available for <strong>+' + pdFloors2 + ' floors</strong> (+' + fmt(Math.round(pdArea2)) + 'sqm) without planning consent.' : ''}
-      </p>
-      <div style="padding:14px 16px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--accent)">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--accent);margin-bottom:8px">Development Brief</div>
-        ${briefLines.map(l => '<div style="font-size:13px;color:var(--text);line-height:1.6;padding:2px 0">' + l + '</div>').join('')}
+  <div class="hero-right">
+    <a href="/borough/southwark" class="tier-preview-row">
+      <div class="tier-tag"><div class="tier-tag-inner t0">T0</div></div>
+      <div class="tier-preview-body">
+        <div class="tier-preview-name">Borough</div>
+        <div class="tier-preview-desc">Score and rank every site in a borough. Free top 3.</div>
+        <div class="tier-preview-badge free">Free</div>
       </div>
-    </div>
-  `;
-
-  document.getElementById('panel-body').innerHTML = `
-    <!-- 1. THE PUNCH -->
-    ${siteInfo.isMaximised ? '<div class="section" style="background:var(--surface2);padding:20px 24px 24px"><div style="padding:12px 16px;background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.15);border-radius:8px;margin-bottom:14px"><div style="font:600 13px var(--sans);color:var(--red);margin-bottom:4px">Site Already at Capacity</div><div style="font:400 12px var(--sans);color:var(--text2);line-height:1.5">This building is ' + Math.round(heightM) + 'm (' + floors + 'F) — already at or near the typical approved height for this area (' + (typicalH.mid) + 'm). Limited upward extension potential.' + (siteInfo.heightSource === "mapbox-3d" ? ' Height from Mapbox 3D data.' : '') + '</div></div><div style="font-size:13px;line-height:1.6;color:var(--text2)">' + floors + 'F ' + (planning.currentUse || "") + ' at ' + Math.round(heightM) + 'm. Typical approved height: ' + typicalH.mid + 'm.</div><div style="margin-top:10px;line-height:2">' + flagsHtml + '</div></div>' : '<div class="section" style="background:var(--surface2);padding:20px 24px 24px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px"><div style="text-align:center"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">' + (isResi ? "GDV" : "Capital Value") + '</div><div style="font:700 20px var(--mono);color:var(--green)">&pound;' + fmt(Math.round(saleRevenue / 1000000 * 10) / 10) + 'M</div></div><div style="text-align:center"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">Margin</div><div style="font:700 20px var(--mono);color:' + marginColor + '">' + marginPct + '%</div></div><div style="text-align:center"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px">Underbuilt</div><div style="font:700 20px var(--mono);color:var(--accent)">' + Math.round(100 - utilPct) + '%</div></div></div><div style="font-size:13px;line-height:1.6;color:var(--text2)">' + floors + 'F ' + (planning.currentUse || "") + ' on a site where <strong>' + potentialFloors + 'F</strong> is achievable. <strong>' + fmt(Math.round(remainingCapacity)) + 'sqm</strong> (' + fmt(Math.round(remainingCapacitySqft)) + 'sqft) underbuilt.' + (isResi && unitEstimate ? " ~<strong>" + unitEstimate.total + " units</strong> potential." : "") + '</div><div style="margin-top:10px;line-height:2">' + flagsHtml + '</div></div>'}
-
-    <!-- 2. THE OPPORTUNITY -->
-    ${siteInfo.isMaximised ? '' : opportunityHtml}
-
-    <!-- 3. THE DEAL -->
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="10"/></svg>Development Capacity</div>
-      ${powerBarsHtml}
-      <div class="stat-grid" style="margin-top:14px">
-        ${isResi && unitEstimate ? '<div class="stat"><div class="stat-label">Est. Units</div><div class="stat-value">' + unitEstimate.total + '</div><div class="stat-sub">' + (unitEstimate.byType ? Object.entries(unitEstimate.byType).map(([k,v])=>v+'x '+k).join(', ') : '') + '</div></div><div class="stat"><div class="stat-label">Affordable (' + Math.round((planning.affordableThreshold||0.35)*100) + '%)</div><div class="stat-value">' + affordableUnits + '</div><div class="stat-sub">' + (planning.affordableTarget || '') + '</div></div>' : '<div class="stat"><div class="stat-label">Use Class</div><div class="stat-value">' + planning.currentUse + '</div><div class="stat-sub">' + (planning.useClassInfo?.name || '') + '</div></div>'}
-        <div class="stat"><div class="stat-label">Max Height</div><div class="stat-value">${typicalH.mid}m</div><div class="stat-sub">~${potentialFloors}F at ${ftf}m f/f</div></div>
-        <div class="stat"><div class="stat-label">Plot Ratio</div><div class="stat-value">${pr.existing ? pr.existing.toFixed(1) : '—'} → ${pr.potential ? pr.potential.toFixed(1) : '—'}</div></div>
+    </a>
+    <a href="/t1/100-leadenhall" class="tier-preview-row">
+      <div class="tier-tag"><div class="tier-tag-inner t1">T1</div></div>
+      <div class="tier-preview-body">
+        <div class="tier-preview-name">Scout</div>
+        <div class="tier-preview-desc">Site-level development intelligence. Planning context, ownership, scores.</div>
+        <div class="tier-preview-badge free">Free</div>
       </div>
-      ${planning.pdMassingPotential ? '<div style="margin-top:12px;padding:10px 14px;background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.15);border-radius:8px"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--green);margin-bottom:4px">PD (No Planning Required)</div><div style="font:600 14px var(--mono);color:var(--green)">+' + planning.pdMassingPotential.additionalFloors + ' floors · +' + fmt(Math.round(planning.pdMassingPotential.additionalAreaSqm)) + 'sqm</div><div style="font-size:11px;color:var(--text3);margin-top:2px">' + planning.pdMassingPotential.notes + '</div></div>' : ''}
-    </div>
-
-    <!-- 3. THE MONEY -->
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Pro Forma</div>
-      <div class="fin-row"><span class="label">${isResi ? 'GDV (Sales)' : 'Capital Value'}</span><span class="value" style="color:var(--green);font-weight:700">&pound;${fmt(Math.round(saleRevenue))}</span></div>
-      <div class="fin-row"><span class="label">Land</span><span class="value">-&pound;${fmt(Math.round(landCost))}</span></div>
-      <div class="fin-row"><span class="label">Construction</span><span class="value">-&pound;${fmt(Math.round(constructionCostHigh))}</span></div>
-      ${cilEstimate > 0 ? '<div class="fin-row"><span class="label">CIL</span><span class="value">-&pound;' + fmt(Math.round(cilEstimate)) + '</span></div>' : ''}
-      <div class="fin-row total"><span class="label">Margin</span><span class="value" style="color:${marginColor}">&pound;${fmt(Math.round(margin))} (${marginPct}%)</span></div>
-      <div class="fin-row"><span class="label">Rental Income</span><span class="value">&pound;${fmt(Math.round(annualRent))}/yr</span></div>
-      <div class="fin-row"><span class="label">Yield</span><span class="value">${saleRevenue > 0 ? (annualRent / saleRevenue * 100).toFixed(1) : '?'}%</span></div>
-      <div class="insight ${margin / saleRevenue > 0.2 ? 'opportunity' : margin / saleRevenue > 0.1 ? 'caution' : 'critical'}" style="margin-top:12px">
-        <span class="insight-tag">Viability</span>
-        ${margin / saleRevenue > 0.2
-          ? '<strong>Strong.</strong> ' + marginPct + '% margin clears the 15-20% developer hurdle. Financeable.'
-          : margin / saleRevenue > 0.1
-          ? '<strong>Marginal.</strong> ' + marginPct + '% margin is tight. Sensitive to cost overruns.'
-          : '<strong>Challenging.</strong> ' + marginPct + '% below hurdle rate. Needs reduced affordable or higher density.'}
+    </a>
+    <a href="/t2/100-leadenhall" class="tier-preview-row">
+      <div class="tier-tag"><div class="tier-tag-inner t2">T2</div></div>
+      <div class="tier-preview-body">
+        <div class="tier-preview-name">Appraise</div>
+        <div class="tier-preview-desc">3D massing, full financial model, IRR, return curve, scenarios.</div>
+        <div class="tier-preview-badge paid">Paid</div>
       </div>
-    </div>
-
-    <!-- 4. PRECEDENT (async) -->
-    <div id="precedent-anchor"></div>
-
-    <!-- 5. CONSTRAINTS -->
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Constraints</div>
-      ${inCA ? '<div style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.6"><strong>' + (caName || 'Conservation Area') + '</strong> — demolition requires consent, PDR restricted</div>' : ''}
-      ${nearbyListed.length > 0 ? '<div style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.6">' + nearbyListed.length + ' listed building' + (nearbyListed.length>1?'s':'') + ' nearby: ' + nearbyListed.slice(0,3).map(l=>'<strong>'+l.name+'</strong>'+(l.grade?' ('+l.grade+')':'')).join(', ') + (nearbyListed.length > 3 ? ' +' + (nearbyListed.length-3) + ' more' : '') + '</div>' : ''}
-      <div class="stat-grid">
-        <div class="stat"><div class="stat-label">Flood Zone</div><div class="stat-value ${floodZone >= 3 ? 'red' : floodZone === 2 ? 'amber' : 'green'}">${floodZone}</div></div>
-        <div class="stat"><div class="stat-label">PTAL</div><div class="stat-value ${ptal >= 4 ? 'green' : ptal >= 2 ? '' : 'amber'}">${ptal !== null ? ptal : '?'}</div></div>
-        ${planning.tallBuildingThreshold ? '<div class="stat"><div class="stat-label">Tall Bldg</div><div class="stat-value">' + planning.tallBuildingThreshold + 'm</div></div>' : ''}
-        ${planning.lvmfExposure && planning.lvmfExposure !== 'none' ? '<div class="stat"><div class="stat-label">LVMF</div><div class="stat-value amber" style="text-transform:capitalize">' + planning.lvmfExposure + '</div></div>' : ''}
+    </a>
+    <a href="/t3/100-leadenhall" class="tier-preview-row">
+      <div class="tier-tag"><div class="tier-tag-inner t3">T3</div></div>
+      <div class="tier-preview-body">
+        <div class="tier-preview-name">Present</div>
+        <div class="tier-preview-desc">Investment-grade report with architectural conclusions and recommended option.</div>
+        <div class="tier-preview-badge paid">Paid</div>
       </div>
-    </div>
+    </a>
+  </div>
+</section>
 
-    <!-- 6. DESIGN INTELLIGENCE -->
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Design Intelligence</div>
-      ${insightsHtml}
-    </div>
+<!-- ── Tiers ──────────────────────────────────────────────────────── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">The tiers</div>
+    <div class="section-title">One platform, four depths of analysis</div>
+    <p class="section-sub">Start at borough scale. Drill down to the numbers. Every tier feeds the next.</p>
 
-    <!-- 7. EXISTING BUILDING -->
-    <div class="section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"/></svg>Existing Building</div>
-      <div class="stat-grid">
-        <div class="stat"><div class="stat-label">Plot</div><div class="stat-value">${fmt(Math.round(plotArea))}sqm</div></div>
-        <div class="stat"><div class="stat-label">Floor Area</div><div class="stat-value">${fmt(Math.round(existingFloorArea))}sqm</div></div>
-        <div class="stat"><div class="stat-label">Floors</div><div class="stat-value">${floors}</div></div>
-        <div class="stat"><div class="stat-label">Height</div><div class="stat-value">${Math.round(heightM)}m</div></div>
-      </div>
-    </div>
-
-    <!-- 8. EPC (async) -->
-    <div id="epc-anchor"></div>
-
-    <!-- 9. TRANSPORT -->
-    ${transportHtml ? '<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76a6 6 0 010 8.49m-8.48-.01a6 6 0 010-8.49"/></svg>Transport</div>' + transportHtml + '</div>' : ''}
-
-    ${notesHtml ? '<div class="section"><div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Notes</div>' + notesHtml + '</div>' : ''}
-  `;
-
-  // Populate report data for PDF export
-  currentReportData = {
-    address: address.split(',')[0],
-    borough: planning.borough || boroughData.borough,
-    postcode: siteInfo.postcode,
-    zone: planning.zone,
-    lat: siteInfo.lat, lng: siteInfo.lng,
-    floors, heightM, plotArea,
-    useClass: planning.currentUse || siteInfo.currentUse || 'Unknown',
-    potentialFloors, potentialHeight: potentialHeightFull,
-    existingArea: existingFloorArea, potentialArea: potentialFloorArea,
-    remainingCapacity, gdv: saleRevenue,
-    marginPct: marginPct !== '?' ? parseFloat(marginPct) : null,
-    underbuiltPct: 100 - utilPct,
-    newFloors: Math.max(0, potentialFloors - floors),
-    units: unitEstimate ? unitEstimate.total : null,
-    ptal: extra.ptal, floodZone: extra.floodZone,
-    isMaximised: siteInfo.isMaximised,
-    briefLines: briefLines || [],
-    flags: [],
-    proforma: [
-      {label: 'Additional Floor Area', value: fmt(Math.round(remainingCapacity)) + ' sqm (' + fmt(Math.round(remainingCapacitySqft)) + ' sqft)'},
-      {label: 'Construction Cost (high)', value: '£' + fmt(Math.round(constructionCostHigh))},
-      {label: 'Land Value Estimate', value: '£' + fmt(Math.round(landCost))},
-      {label: 'CIL Estimate', value: '£' + fmt(Math.round(cilEstimate))},
-      {label: 'Total Development Cost', value: '£' + fmt(Math.round(constructionCostHigh + landCost + cilEstimate))},
-      {label: isResi ? 'Gross Development Value' : 'Capital Value', value: '£' + fmt(Math.round(saleRevenue)), total: true},
-      {label: 'Development Margin', value: '£' + fmt(Math.round(margin)) + ' (' + marginPct + '%)', total: true},
-    ],
-    policyText: planning.keyPolicies ? planning.keyPolicies.map(p => '<strong>' + p + '</strong>').join(' · ') + '<br>' + (planning.heightStrategy || '') : null,
-    transportText: stations.length > 0 ? stations.map(s => '<strong>' + s.name + '</strong> (' + s.dist + ')').join(', ') + '<br>PTAL: ' + (extra.ptal || '?') : null,
-    heightContextText: `Existing building at <strong>${Math.round(heightM)}m</strong> (${floors}F). Borough typical approved height: <strong>${potentialHeightFull}m</strong> (low: ${typicalH.low}m, high: ${typicalH.high}m). Height source: ${siteInfo.heightSource || 'OSM'}.`,
-    // Polygon for site plan drawings in PDF
-    polygon: (buildingData && buildingData.wayNodes && buildingData.wayNodes.length >= 3)
-      ? buildingData.wayNodes.map(nid => buildingData.nodes.find(n => n.id === nid)).filter(Boolean).map(n => [n.lon, n.lat])
-      : null,
-  };
-  // Add constraint flags
-  if(inCA) currentReportData.flags.push({text: '🏛 Conservation Area' + (caName ? ': ' + caName : ''), color: 'red'});
-  if(floodZone >= 3) currentReportData.flags.push({text: '🌊 Flood Zone ' + floodZone, color: 'red'});
-  else if(floodZone === 2) currentReportData.flags.push({text: '🌊 Flood Zone 2', color: 'amber'});
-  else currentReportData.flags.push({text: '✓ Flood Zone 1', color: 'green'});
-  if(nearbyListed.length > 0) currentReportData.flags.push({text: '🏛 ' + nearbyListed.length + ' Listed Building' + (nearbyListed.length>1?'s':''), color: 'amber'});
-  currentReportData.flags.push({text: '🚇 PTAL ' + (ptal !== null ? ptal : '?'), color: ptal >= 4 ? 'green' : ptal >= 2 ? 'amber' : 'red'});
-
-  // Show export button
-  document.getElementById('export-btn').style.display = 'inline-block';
-}
-
-// --- NARRATIVE ---
-function generateNarrative(planning, siteInfo, buildingData, fin, utilPct, remainingCapacity, remainingCapacitySqft, potentialFloors, extra){
-  const plotArea = siteInfo.plotArea || 0;
-  const borough = planning.borough?.replace('London Borough of ','').replace('City of ','').replace('Royal Borough of ','') || 'this borough';
-  const floors = siteInfo.floors || 2;
-  const heightM = siteInfo.heightM || 6.4;
-  const existingArea = siteInfo.estimatedFloorArea || 0;
-  const isResi = siteInfo.isResidential;
-  const uc = planning.useClassInfo || {};
-
-  let html = `<p>A <strong>${fmt(Math.round(plotArea))}sqm</strong> (${fmt(Math.round(plotArea * 10.764))}sqft) site in <strong>${borough}</strong>`;
-  if(uc.name) html += `, currently <strong>Use Class ${planning.currentUse}</strong> (${uc.desc})`;
-  html += `. The existing structure is approximately <strong>${floors} floors</strong> (${Math.round(heightM)}m) with an estimated <strong>${fmt(Math.round(existingArea))}sqm</strong> GFA.</p>`;
-
-  // Constraints summary
-  let constraints = [];
-  if(extra.inConservationArea) constraints.push(`within <strong>${extra.conservationName || 'a conservation area'}</strong>`);
-  if(extra.floodZone > 1) constraints.push(`<strong>Flood Zone ${extra.floodZone}</strong>`);
-  if(extra.nearbyListed?.length > 0) constraints.push(`<strong>${extra.nearbyListed.length} listed building${extra.nearbyListed.length > 1 ? 's' : ''}</strong> nearby`);
-  if(planning.lvmfExposure === 'high' || planning.lvmfExposure === 'very high') constraints.push('within <strong>LVMF view corridors</strong>');
-  if(planning.article4Active) constraints.push('<strong>Article 4</strong> restrictions apply');
-
-  if(constraints.length > 0){
-    html += `<p style="margin-top:8px;color:var(--amber)">⚠ Key constraints: ${constraints.join(', ')}.</p>`;
-  }
-
-  // Opportunity
-  if(utilPct < 45){
-    html += `<div class="opportunity">🏗️ <strong>Significant opportunity.</strong> This site is utilising only <span class="highlight">${utilPct.toFixed(0)}%</span> of estimated plot ratio capacity. `;
-    html += `Approximately <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> of additional ${isResi ? 'residential' : 'commercial'} floor area may be achievable`;
-    if(planning.unitEstimate && isResi) html += ` — roughly <strong>${planning.unitEstimate.total} units</strong>`;
-    html += ` across up to <strong>${potentialFloors} floors</strong>.`;
-    if(planning.pdMassingPotential){
-      html += ` Under Permitted Development, <strong>+${planning.pdMassingPotential.additionalFloors} floors</strong> (${fmt(Math.round(planning.pdMassingPotential.additionalAreaSqm))}sqm) may be achievable without full planning permission.`;
-    }
-    html += `</div>`;
-  } else if(utilPct < 75){
-    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}%</span> utilisation, moderate remaining capacity of <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> ${isResi ? '(~' + (planning.unitEstimate?.total || '?') + ' units)' : 'GFA'}.</p>`;
-  } else {
-    html += `<p style="margin-top:8px">At <span class="highlight">${utilPct.toFixed(0)}%</span> utilisation, this site is near capacity. Limited additional potential of <strong>${fmt(Math.round(remainingCapacity))}sqm</strong> remains.</p>`;
-    if(planning.pdMassingPotential){
-      html += `<p style="margin-top:6px;font-size:13px;color:var(--green)">However, PD upward extension may allow <strong>+${planning.pdMassingPotential.additionalFloors} floors</strong> without planning permission.</p>`;
-    }
-  }
-
-  return html;
-}
-
-// --- UTILITIES ---
-function fmt(n){return Math.round(n).toLocaleString('en-GB')}
-
-// --- EPC / ADAPTIVE REUSE SECTION ---
-// --- PLANNING PRECEDENT SECTION ---
-function renderPrecedentSection(apps, siteInfo, planning){
-  if(!apps || !apps.length) return;
-
-  // Filter to meaningful applications (exclude discharge of conditions, minor amendments)
-  const meaningful = apps.filter(a => {
-    const desc = (a.description || '').toLowerCase();
-    const type = (a.type || '').toLowerCase();
-    return !type.includes('discharge') && !type.includes('condition') &&
-           !type.includes('amendment') && !type.includes('non-material') &&
-           !desc.includes('discharge of condition') && !desc.includes('variation of condition');
-  });
-
-  // Categorise
-  const approved = meaningful.filter(a => ['Permitted','Approved','Grant'].some(s => (a.status||'').includes(s) || (a.decision||'').includes(s)));
-  const refused = meaningful.filter(a => ['Refused','Refuse'].some(s => (a.status||'').includes(s) || (a.decision||'').includes(s)));
-  const major = meaningful.filter(a => a.size === 'Large' || a.size === 'Major');
-
-  // Stats
-  const totalMeaningful = meaningful.length;
-  const approvalRate = totalMeaningful > 0 ? Math.round((approved.length / totalMeaningful) * 100) : null;
-
-  // Extract height/floor info from descriptions where possible
-  const heightMentions = [];
-  meaningful.forEach(a => {
-    const desc = (a.description || '');
-    const storeyMatch = desc.match(/(\d+)[\s-]*(?:storey|story|floor)/i);
-    if(storeyMatch) heightMentions.push({ floors: parseInt(storeyMatch[1]), app: a });
-    const heightMatch = desc.match(/(\d+(?:\.\d+)?)\s*m(?:etre)?s?\s*(?:high|height|tall)/i);
-    if(heightMatch) heightMentions.push({ heightM: parseFloat(heightMatch[1]), app: a });
-  });
-
-  // Recent major schemes
-  const recentMajor = major.slice(0, 3);
-
-  // Build HTML
-  let html = `
-    <div class="section" id="precedent-section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Local Precedent (300m)</div>
-      <div class="stat-grid" style="margin-bottom:14px">
-        <div class="stat"><div class="stat-label">Applications</div><div class="stat-value">${totalMeaningful}</div><div class="stat-sub">within 300m</div></div>
-        <div class="stat ${approvalRate >= 70 ? 'highlight-green' : ''}"><div class="stat-label">Approval Rate</div><div class="stat-value ${approvalRate >= 70 ? 'green' : approvalRate >= 50 ? '' : 'red'}">${approvalRate !== null ? approvalRate + '%' : '?'}</div><div class="stat-sub">${approved.length} approved · ${refused.length} refused</div></div>
-        ${major.length > 0 ? `<div class="stat"><div class="stat-label">Major Schemes</div><div class="stat-value">${major.length}</div><div class="stat-sub">Large/major applications</div></div>` : ''}
-        ${heightMentions.length > 0 ? `<div class="stat"><div class="stat-label">Heights Approved</div><div class="stat-value">${heightMentions.map(h => h.floors ? h.floors+'F' : h.heightM+'m').join(', ')}</div><div class="stat-sub">from descriptions</div></div>` : ''}
-      </div>`;
-
-  // Precedent signal
-  const signal = approvalRate >= 75 ? 'opportunity' : approvalRate >= 50 ? 'caution' : 'critical';
-  const signalText = approvalRate >= 75
-    ? `Strong approval precedent — ${approvalRate}% of nearby applications approved. This area has an established pattern of planning consent. ${major.length > 0 ? `${major.length} major scheme${major.length>1?'s':''} approved nearby — demonstrates officer/committee appetite for significant development.` : ''}`
-    : approvalRate >= 50
-    ? `Mixed precedent — ${approvalRate}% approval rate. Some resistance to development in this area. Strong design narrative and pre-application engagement will be important.`
-    : `Challenging area — only ${approvalRate}% of applications approved. Expect scrutiny. Pre-app essential. Consider Design Review Panel early.`;
-
-  html += `<div class="insight ${signal}"><span class="insight-tag">Precedent Signal</span>${signalText}</div>`;
-
-  // Show recent notable applications
-  const notable = [...recentMajor, ...approved.filter(a => !recentMajor.includes(a)).slice(0, 2)].slice(0, 5);
-  if(notable.length > 0){
-    html += `<div style="margin-top:12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:8px">Recent Notable Applications</div>`;
-    notable.forEach(a => {
-      const statusColor = ['Permitted','Approved','Grant'].some(s => (a.status+' '+a.decision).includes(s)) ? 'green' : ['Refused'].some(s => (a.status+' '+a.decision).includes(s)) ? 'red' : '';
-      const desc = a.description.length > 150 ? a.description.substring(0, 150) + '…' : a.description;
-      html += `<div style="padding:10px 12px;background:var(--surface2);border-radius:8px;margin-bottom:8px;border:1px solid var(--border)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font:600 11px var(--mono);color:var(--accent)">${a.reference}</span>
-          <span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;
-            ${statusColor === 'green' ? 'background:rgba(5,150,105,.1);color:var(--green)' : statusColor === 'red' ? 'background:rgba(220,38,38,.1);color:var(--red)' : 'color:var(--text3)'}">${a.decision || a.status}</span>
+    <div class="tier-grid">
+      <a href="/borough/southwark" class="tier-card">
+        <div class="tier-card-num t0">T0 · Borough</div>
+        <div class="tier-card-name">Borough View</div>
+        <div class="tier-card-desc">Scan every development opportunity in a borough. Ranked by a 6-factor intelligence score — Available Sky, Rent Headroom, Planning Tailwind, Heritage Shadow, Title Stack, Station Gravity.</div>
+        <div class="tier-card-foot">
+          <span class="tier-card-access free">Free — Top 3</span>
+          <span class="tier-card-arrow">→</span>
         </div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:4px">${desc}</div>
-        <div style="font-size:10px;color:var(--text3)">${a.address} · ${a.decidedDate || a.startDate}${a.distance ? ' · '+a.distance+'m away' : ''}</div>
-        ${a.url ? `<a href="${a.url}" target="_blank" style="font-size:10px;color:var(--accent);text-decoration:none">View application →</a>` : ''}
-      </div>`;
-    });
-  }
-
-  html += `</div>`;
-
-  // Insert before the insights section
-  const anchor = document.getElementById('precedent-anchor');
-  if(anchor){
-    anchor.insertAdjacentHTML('afterend', html);
-  } else {
-    document.getElementById('panel-body').insertAdjacentHTML('beforeend', html);
-  }
-}
-
-function renderEPCSection(epcData, siteInfo){
-  const certs = epcData.certificates || [];
-  if(!certs.length) return;
-  // Use most recent certificate
-  const cert = certs.sort((a,b) => (b['lodgement-date']||'').localeCompare(a['lodgement-date']||''))[0];
-  const rating = cert['current-energy-rating'] || cert['asset-rating-band'] || '?';
-  const score = cert['current-energy-efficiency'] || cert['asset-rating'] || '?';
-  const potential = cert['potential-energy-rating'] || cert['new-build-benchmark'] || '?';
-  const potentialScore = cert['potential-energy-efficiency'] || '';
-  const lodgeDate = cert['lodgement-date'] || '?';
-  const floorArea = cert['total-floor-area'] || '?';
-  const builtForm = cert['built-form'] || cert['property-type'] || '?';
-  const wallDesc = cert['walls-description'] || cert['wall-type'] || '';
-  const roofDesc = cert['roof-description'] || cert['roof-type'] || '';
-  const windowDesc = cert['windows-description'] || cert['glazing-type'] || '';
-  const heatingDesc = cert['mainheat-description'] || cert['main-heating-fuel'] || '';
-  const co2 = cert['co2-emissions-current'] || '';
-  const co2Potential = cert['co2-emissions-potential'] || '';
-
-  // MEES compliance check (Minimum Energy Efficiency Standard)
-  const meesRisk = 'FG'.includes(rating) ? 'red' : 'DE'.includes(rating) ? 'amber' : 'green';
-  const meesText = 'FG'.includes(rating) 
-    ? `<strong>MEES non-compliant</strong> — rating ${rating} is below the E minimum for letting. Cannot be legally let without improvement.`
-    : 'DE'.includes(rating)
-    ? `Currently compliant (${rating}), but <strong>at risk when MEES tightens to C by 2027-2030</strong>. Upgrade needed.`
-    : `Compliant (${rating}). Well-positioned for future MEES tightening.`;
-
-  // Age/renovation estimate
-  const ageStr = siteInfo.buildingAge || '';
-  const ageNote = ageStr ? `Built/last recorded: <strong>${ageStr}</strong>.` : '';
-
-  // Facade performance inference
-  let facadeNote = '';
-  if(wallDesc.toLowerCase().includes('cavity') && !wallDesc.toLowerCase().includes('insul')){
-    facadeNote = 'Uninsulated cavity walls — <strong>retrofit candidate</strong> (cavity fill ~£8-15/sqm, or EWI ~£80-120/sqm).';
-  } else if(wallDesc.toLowerCase().includes('solid')){
-    facadeNote = 'Solid wall construction — <strong>internal or external insulation required</strong> (EWI £100-150/sqm, IWI £50-80/sqm). Conservation area may restrict EWI.';
-  } else if(wallDesc.toLowerCase().includes('insul')){
-    facadeNote = 'Walls already insulated — lower retrofit cost.';
-  }
-
-  let windowNote = '';
-  if(windowDesc.toLowerCase().includes('single')){
-    windowNote = 'Single glazing — <strong>full window replacement needed</strong> (~£400-800/window, or secondary glazing ~£200-400/window).';
-  } else if(windowDesc.toLowerCase().includes('double')){
-    windowNote = 'Double glazed. May need upgrading to triple for deep retrofit targets.';
-  }
-
-  const html = `
-    <div class="section" id="epc-section">
-      <div class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Adaptive Reuse & Energy</div>
-      <div style="display:flex;gap:12px;margin-bottom:12px;align-items:center">
-        <div style="font-size:32px;font-weight:800;padding:8px 16px;border-radius:10px;
-          background:${rating <= 'B' ? 'rgba(45,212,160,.15)' : rating <= 'D' ? 'rgba(245,183,49,.15)' : 'rgba(239,100,97,.15)'};
-          color:${rating <= 'B' ? 'var(--green)' : rating <= 'D' ? 'var(--amber)' : 'var(--red)'}">
-          ${rating}
+      </a>
+      <a href="/t1/100-leadenhall" class="tier-card">
+        <div class="tier-card-num t1">T1 · Scout</div>
+        <div class="tier-card-name">Site Scout</div>
+        <div class="tier-card-desc">Deep-dive on a single site. Site intelligence score, HMLR ownership, planning applications, flood risk, listed buildings, height context, EPC floor area.</div>
+        <div class="tier-card-foot">
+          <span class="tier-card-access free">Free</span>
+          <span class="tier-card-arrow">→</span>
         </div>
-        <div>
-          <div style="font-size:14px;font-weight:600;color:var(--text)">EPC Rating: ${rating} (${score})</div>
-          <div style="font-size:11px;color:var(--text3)">Potential: ${potential}${potentialScore ? ' ('+potentialScore+')' : ''} · Lodged: ${lodgeDate}</div>
-          ${floorArea !== '?' ? `<div style="font-size:11px;color:var(--text3)">Certified floor area: ${floorArea}sqm · ${builtForm}</div>` : ''}
+      </a>
+      <a href="/t2/100-leadenhall" class="tier-card">
+        <div class="tier-card-num t2">T2 · Appraise</div>
+        <div class="tier-card-name">Development Appraisal</div>
+        <div class="tier-card-desc">Three massing scenarios with live financial sliders. GDV, GEA/NIA, development appraisal, profit on cost, IRR on equity, dual return curves. Assumptions fully transparent.</div>
+        <div class="tier-card-foot">
+          <span class="tier-card-access paid">Paid</span>
+          <span class="tier-card-arrow">→</span>
         </div>
+      </a>
+      <a href="/t3/100-leadenhall" class="tier-card">
+        <div class="tier-card-num t3">T3 · Present</div>
+        <div class="tier-card-name">Investment Report</div>
+        <div class="tier-card-desc">Professional PDF report. Executive summary, architectural recommendation, ownership analysis, design strategy. Ready for board, JV partner, or lender presentation.</div>
+        <div class="tier-card-foot">
+          <span class="tier-card-access paid">Paid</span>
+          <span class="tier-card-arrow">→</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Demo sites ─────────────────────────────────────────────────── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">Demo sites</div>
+    <div class="section-title">Four live appraisals</div>
+    <p class="section-sub">Commercial and residential. City of London and Southwark. Every site fully scored and modelled.</p>
+
+    <div class="sites-grid">
+      <!-- 100 Leadenhall -->
+      <a href="/t1/100-leadenhall" class="site-card">
+        <div class="site-card-map" style="background:#eef2ff">
+          <div style="font:900 28px var(--mono);color:rgba(29,78,216,0.15);letter-spacing:-2px">100LH</div>
+        </div>
+        <div class="site-card-body">
+          <div class="site-card-borough">City of London</div>
+          <div class="site-card-name">100 Leadenhall Street</div>
+          <div class="site-card-addr">EC3A 3BP · 1,551 m²</div>
+          <div class="site-card-score-row">
+            <span class="site-card-score">84</span>
+            <span class="site-card-score-denom">/100</span>
+            <span class="site-card-score-label">Intelligence Score</span>
+          </div>
+          <div class="site-card-tags">
+            <span class="site-tag blue">Commercial</span>
+            <span class="site-tag">PTAL 6a</span>
+            <span class="site-tag">Eastern Cluster</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 1 Silk Street -->
+      <a href="/t1/1-silk-st" class="site-card">
+        <div class="site-card-map" style="background:#f0fdf4">
+          <div style="font:900 28px var(--mono);color:rgba(22,163,74,0.15);letter-spacing:-2px">1SS</div>
+        </div>
+        <div class="site-card-body">
+          <div class="site-card-borough">City of London</div>
+          <div class="site-card-name">1 Silk Street</div>
+          <div class="site-card-addr">EC2Y 8HQ · 5,709 m²</div>
+          <div class="site-card-score-row">
+            <span class="site-card-score">80</span>
+            <span class="site-card-score-denom">/100</span>
+            <span class="site-card-score-label">Intelligence Score</span>
+          </div>
+          <div class="site-card-tags">
+            <span class="site-tag blue">Commercial</span>
+            <span class="site-tag">PTAL 6b</span>
+            <span class="site-tag">Broadgate</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 24 Southwark Street -->
+      <a href="/t1/24-southwark-st" class="site-card">
+        <div class="site-card-map" style="background:#fafaf9">
+          <div style="font:900 28px var(--mono);color:rgba(120,113,108,0.15);letter-spacing:-2px">24SS</div>
+        </div>
+        <div class="site-card-body">
+          <div class="site-card-borough">Southwark</div>
+          <div class="site-card-name">24 Southwark Street</div>
+          <div class="site-card-addr">SE1 0SW · 1,550 m²</div>
+          <div class="site-card-score-row">
+            <span class="site-card-score">71</span>
+            <span class="site-card-score-denom">/100</span>
+            <span class="site-card-score-label">Intelligence Score</span>
+          </div>
+          <div class="site-card-tags">
+            <span class="site-tag blue">Commercial</span>
+            <span class="site-tag">PTAL 6b</span>
+            <span class="site-tag">Bankside</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 196 Blackfriars Road -->
+      <a href="/t1/196-blackfriars-rd" class="site-card">
+        <div class="site-card-map" style="background:#fff7ed">
+          <div style="font:900 28px var(--mono);color:rgba(234,88,12,0.15);letter-spacing:-2px">196BR</div>
+        </div>
+        <div class="site-card-body">
+          <div class="site-card-borough">Southwark</div>
+          <div class="site-card-name">196 Blackfriars Road</div>
+          <div class="site-card-addr">SE1 8NJ · 583 m²</div>
+          <div class="site-card-score-row">
+            <span class="site-card-score">91</span>
+            <span class="site-card-score-denom">/100</span>
+            <span class="site-card-score-label">Intelligence Score</span>
+          </div>
+          <div class="site-card-tags">
+            <span class="site-tag orange">Residential</span>
+            <span class="site-tag">PTAL 6a</span>
+            <span class="site-tag">Blackfriars OA</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ───────────────────────────────────────────────── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">How it works</div>
+    <div class="section-title">Borough to blueprint in four steps</div>
+    <p class="section-sub">Each tier is a decision gate. Stop when you have enough. Go deeper when you need more.</p>
+    <div class="flow-grid">
+      <div class="flow-step">
+        <div class="flow-step-num">T0</div>
+        <div class="flow-step-title">Find the opportunity</div>
+        <div class="flow-step-desc">Borough-wide ranking by 6 development intelligence factors. Identify which sites are worth looking at before committing any time.</div>
       </div>
-      <div class="constraint-flag ${meesRisk}" style="margin-bottom:10px">${meesText}</div>
-      ${co2 ? `<div style="font-size:12px;color:var(--text2);margin-bottom:6px">CO₂: <strong>${co2} t/yr</strong>${co2Potential ? ` → potential ${co2Potential} t/yr` : ''}</div>` : ''}
-      ${ageNote ? `<div style="font-size:12px;color:var(--text2);margin-bottom:6px">${ageNote}</div>` : ''}
-      ${facadeNote ? `<div class="insight caution"><span class="insight-tag">Facade</span>${facadeNote}</div>` : ''}
-      ${windowNote ? `<div class="insight caution"><span class="insight-tag">Glazing</span>${windowNote}</div>` : ''}
-      ${heatingDesc ? `<div style="font-size:12px;color:var(--text2);margin-bottom:6px">Heating: ${heatingDesc}</div>` : ''}
-      ${wallDesc && !facadeNote ? `<div style="font-size:12px;color:var(--text2);margin-bottom:4px">Walls: ${wallDesc}</div>` : ''}
-      ${roofDesc ? `<div style="font-size:12px;color:var(--text2);margin-bottom:4px">Roof: ${roofDesc}</div>` : ''}
-    </div>`;
+      <div class="flow-step">
+        <div class="flow-step-num">T1</div>
+        <div class="flow-step-title">Qualify the site</div>
+        <div class="flow-step-desc">Planning flags, ownership, heritage risk, height context, transport connectivity. Enough to decide if a site warrants a full appraisal.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">T2</div>
+        <div class="flow-step-title">Run the numbers</div>
+        <div class="flow-step-desc">Three massing scenarios, live financial model, IRR on equity, return curve. Professional development appraisal with all assumptions visible.</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-num">T3</div>
+        <div class="flow-step-title">Present the case</div>
+        <div class="flow-step-desc">Investment-grade PDF report. Architectural recommendation, financial conclusions, heritage strategy. Ready for board, funder, or JV partner.</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  // Insert before the notes section (last section)
-  const epcAnchor = document.getElementById('epc-anchor');
-  if(epcAnchor){
-    epcAnchor.insertAdjacentHTML('afterend', html);
-  } else {
-    document.getElementById('panel-body').insertAdjacentHTML('beforeend', html);
-  }
-}
-function extractPostcode(address){
-  const match = address.match(/[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}/i);
-  return match ? match[0].toUpperCase() : '';
-}
-function calcPolygonArea(nodes){
-  const R = 6371000;
-  let area = 0;
-  const n = nodes.length;
-  for(let i = 0; i < n; i++){
-    const j = (i + 1) % n;
-    area += (nodes[j].lon - nodes[i].lon) * Math.PI / 180 * (2 + Math.sin(nodes[i].lat * Math.PI / 180) + Math.sin(nodes[j].lat * Math.PI / 180));
-  }
-  return Math.abs(area * R * R / 2);
-}
-function getCentroid(coords){
-  let sLng = 0, sLat = 0;
-  const n = coords.length - 1;
-  for(let i = 0; i < n; i++){ sLng += coords[i][0]; sLat += coords[i][1]; }
-  return [sLng/n, sLat/n];
-}
-document.getElementById('toggle').onclick = () => document.getElementById('panel').classList.toggle('collapsed');
-// Safety: hide loader after 5s even if map style fails to load
-setTimeout(() => document.getElementById('loader').classList.add('hide'), 5000);
-init().catch(e => { console.error('Init failed:', e); document.getElementById('loader').classList.add('hide'); });
-</script>
+<!-- ── Footer ─────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">D<span class="slash">/</span>A</div>
+  <div>Development Intelligence · London · 2026</div>
+  <div style="display:flex;gap:20px">
+    <a href="/borough/southwark" style="color:var(--text4);text-decoration:none">T0 Borough</a>
+    <a href="/t1/100-leadenhall" style="color:var(--text4);text-decoration:none">T1 Scout</a>
+    <a href="/t2/100-leadenhall" style="color:var(--text4);text-decoration:none">T2 Appraise</a>
+    <a href="/t3/100-leadenhall" style="color:var(--text4);text-decoration:none">T3 Present</a>
+  </div>
+</footer>
+
 </body>
 </html>
