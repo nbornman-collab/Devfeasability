@@ -1,4 +1,4 @@
-# Working Protocol — D/A Dev Feasibility App
+# PROTOCOL v2 — LOCKED
 
 Last updated: 2026-03-17
 Status: LOCKED. Do not deviate without explicit instruction from Nic.
@@ -7,244 +7,274 @@ Status: LOCKED. Do not deviate without explicit instruction from Nic.
 
 ## Why This Exists
 
-This project has repeated the same categories of mistakes across sessions despite documenting them. The root problem: I have no persistent memory. Every session I start fresh. Rules only work if they produce visible, checkable outputs — not if they're filed and assumed to be followed.
+This system fails in repeatable ways:
+- Not reading files properly
+- Making local fixes that break other parts
+- Assuming APIs/data work
+- Declaring success without real verification
 
-This protocol is a ritual script, not a reference document. Every significant action generates specific outputs. That's how compliance is enforced without babysitting.
+The root issue: no persistent memory.
+
+This protocol replaces memory with forced, visible reasoning and proof.
 
 ---
 
-## The Two Non-Negotiable Steps
+## GOAT RULE 🐐
 
-These run on every task. No exceptions. No matter how small it seems.
+Every task that touches this codebase starts with 🐐 on its own line.
+That emoji is proof the protocol was read before anything was done.
+If Nic doesn't see 🐐 before code or decisions: call it out.
 
 ---
 
-### Step 1 — Before touching any file
+## CORE RULE
 
-State in the chat:
+No code is written until:
+1. Understanding is proven
+2. Impact is mapped
+3. Plan is explicit
+
+No task is complete until:
+4. It is verified with evidence
+
+---
+
+## STEP 0 — READ & PLAN CONFIRMATION (MANDATORY)
+
+Runs before anything else. No exceptions.
+
+---
+
+### 1. READ CONFIRMATION (Proof of Understanding)
+
+- Target File: [filename]
+- Core Logic: (1 sentence — what this file does)
+- Key Functions / Sections:
+  - [function] — purpose
+  - [function] — purpose
+- Variables & Data Types:
+  - [variable] ([type]) — source/usage
+  - [variable] ([type]) — source/usage
+
+If this cannot be completed:
+→ STOP
+→ "I have not read the file/context properly"
+
+---
+
+### 2. IMPACT ASSESSMENT (Proof of Scope)
+
+- Impact Zone: (exact functions / lines being changed)
+- Downstream Effects: (files/functions depending on this)
+- Locked Constraints Check: (confirm no conflict with confirmed values, map constraints, layout rules, scoring systems)
+- Edge Case Risks: (1–2 real failure modes)
+
+---
+
+### 3. EXECUTION PLAN (Proof of Logic)
+
+- The Change: "I am changing [X] to achieve [Y]"
+- Proposed Logic: (how the code will actually change)
+- Regression Risk: (what could break elsewhere)
+- Verification Path: (which parts of Step 2 will prove this works)
+
+---
+
+### 4. AMBIGUITY CHECK (Forced)
+
+- Any unclear instruction?
+- Any missing data?
+- Any conflict with existing logic or locked values?
+
+If yes → AMBIGUITY GATE (see below)
+
+---
+
+### 5. APPROVAL REQUIRED
+
+Do not proceed until Nic approves.
+
+---
+
+## STEP 1 — PRE-CHANGE DECLARATION
+
+Before touching any file:
 
 ```
-ABOUT TO CHANGE: [specific change] in [filename]
-DEPENDS ON THIS: [other files/pages that use what I'm changing]
-WILL NOT TOUCH: [confirmed values, locked behaviour]
-RISK: [honest — what could break]
+ABOUT TO CHANGE: [specific change] in [file + location]
+DEPENDS ON THIS: [files/functions]
+WILL NOT TOUCH: [locked values / invariants]
+RISK: [what could break]
 ```
 
-If I cannot answer all four lines, I read the file first until I can.
-No declaration = no code.
+If any part is unclear → go back to Step 0.
 
 ---
 
-### Step 2 — After every commit, before saying anything is done
+## STEP 2 — IMPLEMENTATION
 
-Run live verification against https://web-production-9d1a0.up.railway.app and post:
+Make the change exactly as planned.
+
+If the first attempt fails:
+→ STOP
+→ ROOT CAUSE required before next attempt
+
+Second attempt without root cause = breach.
+Third attempt = full diagnostic + Nic approval required.
+
+---
+
+## STEP 3 — POST-COMMIT VERIFICATION (MANDATORY)
+
+Run against: https://web-production-9d1a0.up.railway.app
 
 ```
 POST-COMMIT VERIFICATION — [commit hash]
-1. Homepage loads: [pass/fail]
-2. T0 Borough screener loads, shows sites: [pass/fail]
-3. T1 [site] loads, map renders, score shows: [pass/fail]
-4. T2 [site] loads, map renders, massing appears on scenario change: [pass/fail]
-5. T3 loads, financials show non-zero numbers: [pass/fail]
+1. Homepage loads
+   Evidence: [response / curl / screenshot]
+   Result: pass/fail
+2. T0 Borough screener loads
+   Evidence: [...]
+   Result: pass/fail
+3. T1 [site] loads, map renders, score shows
+   Evidence: [...]
+   Result: pass/fail
+4. T2 [site] loads, map renders, massing updates
+   Evidence: [...]
+   Result: pass/fail
+5. T3 loads, financials non-zero
+   Evidence: [...]
+   Result: pass/fail
 6. Files touched: [list]
-7. Files NOT touched but depend on what I changed: [list]
-8. Anything uncertain: [honest answer — especially for map/visual rendering]
+7. Dependent files (not touched): [list]
+8. Diff summary:
+   - Lines added: [#]
+   - Lines removed: [#]
+   - Unrelated changes: [yes/no + explanation]
+9. Anything uncertain: [honest answer — especially maps/3D]
+10. SECOND-ORDER CHECK: What could still be wrong even if all passed?
 ```
 
-All pass → commit stands. I say "done."
-Any fail → I fix it and re-run. I do not say "done" until all pass.
-HTTP 200 ≠ map renders. For any map or 3D change, a browser check is required — flag this explicitly.
-I never say "pushed" or "done" without running this. Ever.
+Rules:
+- All pass → commit stands → say "done"
+- Any fail → fix → rerun verification
+- No evidence = fail
+- HTTP 200 ≠ working
+- For map/3D → browser verification required → must be explicitly stated
 
 ---
 
-### What Nic does
+## AMBIGUITY GATE
 
-Nothing mid-task. No babysitting.
-If something looks wrong days later — send me the commit hash. I trace it.
+If anything conflicts or is unclear:
+
+```
+AMBIGUITY: [issue]
+Option A: [interpretation] — consequence
+Option B: [interpretation] — consequence
+Await instruction.
+```
+
+No silent decisions. Ever.
 
 ---
 
-## Ambiguity Gate
+## API DEPENDENCY GATE
 
-If any instruction is unclear, conflicts with existing code, or conflicts with a confirmed decision:
+Before using any external API:
+1. Make live production call
+2. Show response
+3. Output: `API [name] verified working at [timestamp]`
 
-**STOP. Output:**
-
-```
-AMBIGUITY: [what conflicts]
-Option A: [interpretation] — consequence: [what this does]
-Option B: [interpretation] — consequence: [what this does]
-Awaiting instruction before proceeding.
-```
-
-Silent interpretation is a protocol breach. I never resolve ambiguity unilaterally.
+**Known broken in production — do not build against:**
+- OS NGD `/api/building-data` — returns `found:false`
+- OS Places API — returns 401
 
 ---
 
-## Piecemeal Fix Prevention
+## PLACEHOLDER PROTOCOL
 
-If a fix doesn't work and I'm about to try again:
+Any unverified data must:
+1. Be marked in code: `// PLACEHOLDER: [description] — replace before production`
+2. Be logged in `PLACEHOLDERS.md`: file, line, purpose, owner
+3. Use commit prefix: `PLACEHOLDER:`
 
-**STOP. Output root cause analysis first:**
+Never removed without explicit instruction from Nic.
+Nic reviews `PLACEHOLDERS.md` at sprint end.
 
-```
-ROOT CAUSE: [what actually caused the bug — not the symptom]
-FIX SCOPE: [what needs to change to fix the cause]
-```
-
-Second commit on the same bug = root cause analysis required before any code.
-Third commit on the same bug = full diagnostic, Nic sees and approves before I touch anything.
-
----
-
-## Placeholder Data Protocol
-
-Any fabricated, estimated, batch-generated, or unverified data must:
-
-1. Be marked in code: `// PLACEHOLDER: [what this is] — replace before production`
-2. Be logged in `PLACEHOLDERS.md` with: file, line number, what it stands in for, who owns replacing it
-3. Use commit message prefix: `PLACEHOLDER:` — never committed as if it's real
-
-I never remove a PLACEHOLDER marker without explicit instruction from Nic.
-Nic reviews `PLACEHOLDERS.md` at the end of each sprint.
-
-**Verified sites (HMLR + EPC + PropertyData confirmed):**
+**Verified sites only (HMLR + EPC + PropertyData confirmed):**
 - 24 Southwark Street SE1 — TGL221350, RREEF Bankside II, commercial, 1,550m²
 - 196 Blackfriars Road SE1 — SGL322825, Barts Charity, residential, 583m²
 
-**All other demo sites are unverified or disqualified:**
-- 100LH — SOM Diamond, planning granted Jan 2025, plot area wrong (1,551m² used vs 4,450m² actual consolidated site)
-- 1SS — polygon fought over for days, area uncertain, status unverified
-- Surrey Quays, Tesco, Lavington St, Ministry of Sound — fabricated, never real
-- Convoys Wharf — hot mess, bad data from the start
+**Disqualified / unverified:**
+- 100LH — SOM Diamond, planning granted Jan 2025, plot area wrong
+- 1SS — polygon uncertain, status unverified
+- Surrey Quays, Tesco, Lavington St, Ministry of Sound — fabricated
 
 ---
 
-## API Dependency Test Gate
+## REGRESSION PREVENTION
 
-Before writing any code that depends on an external API:
-
-1. Make a live test call to the production endpoint
-2. Show the response or confirm success
-3. Output: `API [name] verified working in production at [timestamp]`
-
-**Known broken in production — do not build against:**
-- OS NGD `/api/building-data` — returns `found:false` in production. Hardcoded fallbacks only.
-- OS Places API — returns 401 in production. Do not use for polygon data.
+When editing shared files (server.js, lib/, site-intelligence.js):
+- List all dependent files before touching anything
+- Run full verification (not partial) after every change
 
 ---
 
-## Regression Prevention
+## 3D MAP — HIGH RISK RULES
 
-Silent regressions are the most damaging failure mode — things get broken by edits to other files, discovered days later by coincidence, and pile up.
+Before editing any map or 3D code:
+- Read entire `initMap()` / `style.load` callback
+- List all variables referenced
+- Confirm every variable is defined in THIS file
 
-**Every time I edit a shared file (server.js, any lib/, site-intelligence.js):**
-- List every page/file that imports or depends on it
-- Run the full verification checklist after committing, not just the pages I edited
-
-**The verification checklist (Step 2) is the regression net.**
-It runs after every commit. Not occasionally. Every time.
-
----
-
-## 3D Map / Massing — Highest Risk Area
-
-Every change must follow this before touching map code:
-
-**Read the entire `initMap()` / `style.load` callback.**
-List every variable referenced. Grep for each one. Confirm it's defined in THIS file.
-
-**Confirmed values — do not change without explicit instruction:**
+**Locked values — do not change without explicit instruction:**
 - `EXISTING_HEIGHT`: 100LH=28.6m, 1SS=30.0m, 24SS=24.8m, 196BR=13.7m
-- `CENTROID`: use this in T2, not `LAT`/`LNG` — those variables don't exist in T2
+- Use `CENTROID` in T2, not `LAT`/`LNG` — those don't exist in T2
 - `SITE_COORDS`: verified title polygons — do not regenerate
-- `fill-extrusion-base` for `podium-3d`: always `0` — prevents z-fighting
+- `fill-extrusion-base` for `podium-3d`: always `0`
 - Layer order: `ctx-3d` → `existing-cap` → `podium-3d` → floor lines → `podium-edge`
-- `map.moveLayer('podium-3d')` called after all layers added
 
-**Known fragile patterns:**
-- Errors inside `style.load` callbacks fail silently — `updateMap()` never runs if there's an error above it
-- `bufferPoly()` output must be wrapped: `coordinates: [envCoords]`
-- OS NGD returns `found:false` in production — hardcoded fallbacks are the only reliable source
+**Known failure pattern:** Silent errors inside `style.load` stop all rendering. `updateMap()` never runs. No error shown.
 
 ---
 
-## Layout Architecture — Do Not Mix
-
-T1, T2, T3 have completely different layout architectures. Never assume they're the same.
+## LAYOUT ARCHITECTURE — DO NOT MIX
 
 | Tier | Layout | Key constraint |
 |------|--------|----------------|
 | T1 | Fixed ribbons + contained map | `--left-w:52px`, `--right-w:420px`, `--ribbon-h:96px` |
-| T2 | Fixed 50/50 split (map + panel) | Both `position:fixed` — external nav bars break this entirely |
-| T3 | Scrollable long-form report | Has own sticky `.tier-nav` |
-
-Before adding anything to a page: read its layout model first.
+| T2 | Fixed 50/50 split | Both `position:fixed` — external nav bars break this |
+| T3 | Scrollable report | Has own sticky `.tier-nav` |
 
 ---
 
-## Things That Must Not Change Without Explicit Instruction
+## PROTOCOL UPDATES
+
+If a rule isn't working or a new failure pattern emerges:
+1. Flag it: "Protocol says X but it failed because Y — proposing update"
+2. Nic approves
+3. Update file, commit, show exactly what changed
+4. No silent edits to this protocol. Ever.
+
+---
+
+## THINGS THAT MUST NOT CHANGE WITHOUT EXPLICIT INSTRUCTION
 
 - Mapbox camera angles on any page
 - `SITE_COORDS` polygon data
 - `EXISTING_HEIGHT` confirmed values
-- T1 100LH layout spec (the reference for all T1 pages)
+- T1 100LH layout spec
 - Intelligence scoring weights and factor names
 - D/A brand: product name, slash colour, nav structure
 - Borough screener scoring formula
-- Any value described as "confirmed" or "locked" in memory files
 
 ---
 
-## Protocol Updates
-
-If a rule isn't working, or a new failure pattern emerges that isn't covered:
-
-1. I flag it explicitly: "The protocol says X but it failed because Y — I think we need to update it. Here's what I'd propose."
-2. Nic approves the change
-3. I update the file, commit it, show exactly what changed
-4. No silent edits to this protocol. Ever.
-
-The protocol improves through use. If something keeps breaking despite the rules, that's a signal the rule is wrong or incomplete — not a reason to ignore it.
-
----
-
-## Sprint Process
-
-1. State the plan in plain language
-2. List files that will be touched
-3. List variables/functions being added or changed
-4. Identify the riskiest part and how it will be handled
-5. Wait for Nic's go-ahead
-6. Run full verification after every commit
-7. Post results before calling the sprint done
-
----
-
-## Known Broken / Parked — Do Not Touch
+## KNOWN BROKEN / PARKED — DO NOT TOUCH
 
 - OS NGD `building-data` — `found:false` in production
 - OS Places API — 401 in production
-- T3 floor plan PDF timing — Overpass async issue, parked
-- Borough screener paywall — parked until Nic confirms approach
-- 3D polygon accuracy for 100LH and 1SS — parked, sites being replaced
-- 100LH plot area (1,551m² is single title only — real site is 4,450m²) — do not use 100LH financials as accurate until corrected
-
----
-
-## Recurring Error Patterns — For Reference
-
-These are documented so the pattern is visible, not to be re-read and forgotten.
-
-**Pattern 1 — 3D breaks on small edits:** Async callbacks fail silently. Variables assumed in scope. Errors before `updateMap()` prevent massing from ever rendering.
-
-**Pattern 2 — Fabricated data presented as real:** Placeholder data committed without markers. Looks intentional once in the code. Tesco, Surrey Quays, Convoys — all examples.
-
-**Pattern 3 — Not reading the file before editing:** Mental model of the file is outdated. 1SS polygon went through 4 broken attempts because I never understood the existing geometry first.
-
-**Pattern 4 — Piecemeal fixes:** Fixing symptom not cause. Tonight's massing took 5 commits. Each fixed the visible thing, not the actual error (LAT/LNG undefined).
-
-**Pattern 5 — Softening instructions:** "Eliminate bad sites" became "add score penalties." Easier to implement, wrong outcome.
-
-**Pattern 6 — API dependencies assumed working:** OS Places and OS NGD both broken in production. Built against them anyway. Multiple polygon failures resulted.
+- T3 floor plan PDF timing — Overpass async issue
+- Borough screener paywall — parked
+- 100LH plot area (1,551m² is single title — real consolidated site is 4,450m²)
