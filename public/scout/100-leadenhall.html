@@ -2,395 +2,460 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T1 Scout — 100 Leadenhall Street</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>100 Leadenhall Street — T1 Scout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="/lib/site-intelligence.js"></script>
+<script src="/lib/intelligence-100lh.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#ffffff;--surface:#f7f8fb;--surface2:#f0f2f6;--border:#dde0ea;
-  --text:#0f1117;--text2:#4a506a;--text3:#8892a8;
-  --accent:#4f46e5;--green:#059669;--red:#dc2626;--amber:#d97706;
-  --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
+  --sans:'Inter',sans-serif;
+  --mono:'DM Mono',monospace;
+  --blue:#1d4ed8;
+  --blue-lt:#eff6ff;
+  --orange:#ea580c;
+  --orange-lt:#fff7ed;
+  --green:#16a34a;
+  --red:#dc2626;
+  --amber:#d97706;
+  --text:#0f172a;
+  --text2:#374151;
+  --text3:#6b7280;
+  --text4:#9ca3af;
+  --border:rgba(0,0,0,0.09);
+  --glass:rgba(255,255,255,0.94);
+  --glass-border:rgba(0,0,0,0.08);
+  --shadow:0 4px 24px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06);
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.07);
+  --ribbon-h:88px;
+  --left-w:52px;
+  --right-w:340px;
 }
-html,body{height:100%;font-family:var(--sans);background:var(--surface);color:var(--text);overflow:hidden}
-#map{position:fixed;top:0;left:0;width:50%;height:100%;z-index:1}
-.panel{position:fixed;top:0;right:0;width:50%;height:100%;overflow-y:auto;overflow-x:hidden;background:var(--surface);z-index:5}
+html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)}
 
-/* ── Tier nav ── */
-.tier-nav{display:flex;align-items:center;background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 24px}
-.tier-link{display:flex;align-items:center;gap:5px;padding:11px 12px;text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:border-color .15s}
-.tier-link .tid{font:700 9px var(--mono);color:var(--text3);letter-spacing:.5px}
-.tier-link .tname{font:600 9px var(--sans);color:var(--text3)}
-.tier-link.active .tid{color:var(--accent)}
-.tier-link.active .tname{color:var(--text)}
-.tier-link.active{border-bottom-color:var(--accent)}
-.tier-link.locked{opacity:.35;cursor:not-allowed;pointer-events:none}
-.tier-sep{font:400 11px var(--sans);color:var(--border);padding:0 1px;user-select:none}
+/* ── Map ─────────────────────────────────── */
+#map{position:fixed;inset:0;z-index:0}
+.mapboxgl-ctrl-top-right{top:calc(var(--ribbon-h) + 8px) !important;right:calc(var(--right-w) + 8px) !important}
 
-/* ── Opportunity hero ── */
-.opp-hero{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 60%,#4338ca 100%);padding:28px 28px 0;color:white}
-.opp-hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:20px}
-.opp-addr{font:800 22px var(--sans);letter-spacing:-0.5px;margin-bottom:3px}
-.opp-sub{font:400 12px var(--sans);opacity:.65}
-.opp-score-wrap{text-align:right}
-.opp-score-label{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;opacity:.65;margin-bottom:4px}
-.opp-score{font:900 44px var(--mono);letter-spacing:-2px;line-height:1}
-.opp-score-max{font:400 14px var(--mono);opacity:.5}
-.opp-score-badge{font:600 9px var(--sans);background:rgba(255,255,255,.15);padding:3px 10px;border-radius:0;margin-top:5px;display:inline-block}
+/* ── Left ribbon ─────────────────────────── */
+#left-ribbon{
+  position:fixed;left:0;top:0;bottom:0;width:var(--left-w);
+  background:var(--glass);
+  border-right:1px solid var(--glass-border);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  z-index:30;display:flex;flex-direction:column;align-items:center;
+  padding:14px 0 16px;gap:4px;
+}
+.lr-logo{
+  width:32px;height:32px;background:var(--blue);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:12px;flex-shrink:0;
+}
+.lr-logo svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2}
+.lr-nav{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%}
+.lr-btn{
+  width:36px;height:36px;border-radius:8px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;color:var(--text3);transition:all .15s;position:relative;
+}
+.lr-btn:hover{background:rgba(0,0,0,0.06);color:var(--text)}
+.lr-btn.active{background:var(--blue-lt);color:var(--blue)}
+.lr-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lr-tip{
+  position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);
+  background:var(--text);color:#fff;font:600 10px var(--sans);
+  padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .12s;z-index:50;
+}
+.lr-btn:hover .lr-tip{opacity:1}
+.lr-divider{width:28px;height:1px;background:var(--border);margin:6px 0}
 
-.uplift-bar-wrap{background:rgba(255,255,255,.08);border-radius:0 10px 0 0;padding:18px 20px}
-.uplift-bar-label{display:flex;justify-content:space-between;font:500 9px var(--sans);opacity:.6;margin-bottom:8px;text-transform:uppercase;letter-spacing:.8px}
-.uplift-track{height:28px;background:rgba(255,255,255,.1);border-radius:0;overflow:visible;position:relative;display:flex;align-items:center}
-.uplift-euv{height:100%;background:rgba(255,255,255,.3);border-radius:0 0 0 6px;display:flex;align-items:center;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
-.uplift-gdv-range{height:100%;background:linear-gradient(90deg,#34d399,#059669);border-radius:0 6px 6px 0;display:flex;align-items:center;justify-content:flex-end;padding:0 8px;font:700 10px var(--mono);white-space:nowrap}
-.uplift-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,.08);margin-top:12px;border-radius:0;overflow:hidden}
-.uplift-stat{padding:10px 12px}
-.uplift-stat .uval{font:800 18px var(--mono);letter-spacing:-0.5px}
-.uplift-stat .ulbl{font:500 8px var(--sans);opacity:.6;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
-.uplift-stat .uval.green{color:#34d399}
-.uplift-stat .uval.amber{color:#fbbf24}
+/* ── Bottom ribbon ───────────────────────── */
+#bottom-ribbon{
+  position:fixed;bottom:0;left:var(--left-w);right:var(--right-w);
+  height:var(--ribbon-h);
+  background:var(--glass);
+  border-top:1px solid var(--glass-border);
+  border-right:1px solid var(--glass-border);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  z-index:30;display:flex;align-items:stretch;
+}
+.r-tile{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:0 16px;border-right:1px solid var(--border);position:relative;
+}
+.r-tile:last-child{border-right:none}
+.r-tile-lbl{
+  font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.8px;
+  color:var(--text4);margin-bottom:3px;
+}
+.r-tile-val{
+  font:500 22px var(--mono);color:var(--text);line-height:1;
+  letter-spacing:-0.5px;
+}
+.r-tile-val.blue{color:var(--blue)}
+.r-tile-val.orange{color:var(--orange)}
+.r-tile-val.green{color:var(--green)}
+.r-tile-sub{font:400 10px var(--sans);color:var(--text3);margin-top:3px}
 
-/* ── Content layout ── */
-.content{padding:20px 24px;display:flex;flex-direction:column;gap:18px}
+/* ── Right panel ─────────────────────────── */
+#right-panel{
+  position:fixed;right:0;top:0;bottom:0;width:var(--right-w);
+  background:var(--glass);
+  border-left:1px solid var(--glass-border);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  z-index:30;overflow-y:auto;display:flex;flex-direction:column;
+}
+#right-panel::-webkit-scrollbar{width:3px}
+#right-panel::-webkit-scrollbar-track{background:transparent}
+#right-panel::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:4px}
 
-/* ── Tags ── */
-.tags-row{display:flex;gap:6px;flex-wrap:wrap;padding:12px 28px;background:white;border-bottom:1px solid var(--border)}
-.tag{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;border:1px solid var(--border);background:#fff;color:var(--text2)}
-.tag.highlight{background:var(--text);color:#fff;border-color:var(--text)}
+/* Panel site header */
+.rp-header{
+  padding:20px 20px 16px;border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.rp-use-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.8px;
+  color:var(--blue);background:var(--blue-lt);
+  padding:3px 8px;border-radius:3px;margin-bottom:10px;
+}
+.rp-name{font:700 18px var(--sans);color:var(--text);line-height:1.2;margin-bottom:3px}
+.rp-addr{font:400 11px var(--sans);color:var(--text3)}
+.rp-score-row{
+  display:flex;align-items:baseline;gap:6px;margin-top:12px;
+}
+.rp-score-num{font:700 36px var(--mono);color:var(--text);letter-spacing:-1px;line-height:1}
+.rp-score-denom{font:400 14px var(--mono);color:var(--text4)}
+.rp-score-badge{
+  font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--blue);background:var(--blue-lt);padding:2px 8px;border-radius:3px;
+}
 
-/* ── Map ── */
-#scout-map{height:220px;border-radius:0;overflow:hidden;border:1px solid var(--border)}
+/* Panel section */
+.rp-section{border-bottom:1px solid var(--border)}
+.rp-section-hd{
+  padding:12px 20px 10px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;
+}
+.rp-section-hd h3{
+  font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3);
+}
+.rp-section-hd .rp-badge{
+  font:500 9px var(--mono);color:var(--text3);background:rgba(0,0,0,0.05);
+  padding:2px 7px;border-radius:3px;
+}
+.rp-section-body{padding:0 20px 16px}
 
-/* ── Cards ── */
-.card{background:white;border:1px solid var(--border);border-radius:0;overflow:hidden}
-.card-head{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-head h3{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3)}
-.card-head .badge{font:600 9px var(--mono);padding:2px 8px;border-radius:0}
-.card-body{padding:14px 16px}
-
-/* Stats 2×2 */
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
-.stat-cell{background:white;padding:13px 16px}
-.stat-cell .val{font:800 18px var(--mono);color:var(--text);letter-spacing:-0.5px;margin-bottom:2px}
-.stat-cell .lbl{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3)}
-.stat-cell .val.green{color:var(--green)}
-.stat-cell .val.amber{color:var(--amber)}
-.stat-cell .val.red{color:var(--red)}
-.stat-cell .val.accent{color:var(--accent)}
-
-/* Market signals */
-.signal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.signal{background:var(--surface);border:1px solid var(--border);border-radius:0;padding:12px;text-align:center}
-.signal .sval{font:800 16px var(--mono);color:var(--text);letter-spacing:-0.5px;margin-bottom:3px}
-.signal .slbl{font:500 8px var(--sans);color:var(--text3);text-transform:uppercase;letter-spacing:.8px;line-height:1.4}
-.signal .sdelta{font:600 9px var(--sans);margin-top:4px}
-.signal .sdelta.up{color:var(--green)}
-.signal .sdelta.down{color:var(--red)}
+/* Stats row */
+.rp-stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.rp-stat .sv{font:600 15px var(--mono);color:var(--text);letter-spacing:-0.3px}
+.rp-stat .sl{font:400 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-top:2px}
+.rp-stat .sv.blue{color:var(--blue)}
+.rp-stat .sv.orange{color:var(--orange)}
+.rp-stat .sv.green{color:var(--green)}
 
 /* Flag rows */
-.flag-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05)}
+.flag-row{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
 .flag-row:last-child{border-bottom:none}
-.flag-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:2px;border:1px solid var(--border);background:#fff}
-.flag-icon.ok{color:#059669;border-color:#d1fae5}
-.flag-icon.warn{color:#d97706;border-color:#fde68a}
-.flag-icon.risk{color:#dc2626;border-color:#fecaca}
-.flag-icon.info{color:#4f46e5;border-color:#e0e7ff}
-.flag-title{font:600 11px var(--sans);color:var(--text);margin-bottom:2px}
-.flag-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5}
+.flag-sym{
+  width:18px;height:18px;border-radius:4px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font:700 10px var(--sans);margin-top:1px;
+}
+.flag-sym.ok{background:#dcfce7;color:#16a34a}
+.flag-sym.warn{background:#fef3c7;color:#d97706}
+.flag-sym.risk{background:#fee2e2;color:#dc2626}
+.flag-sym.info{background:#eff6ff;color:#2563eb}
+.flag-title{font:600 11px var(--sans);color:var(--text);line-height:1.3}
+.flag-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5;margin-top:2px}
 
 /* Height bars */
 .hb-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
-.hb-label{font:500 10px var(--sans);color:var(--text2);width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hb-track{flex:1;height:13px;background:var(--surface2);border-radius:0;overflow:hidden}
-.hb-fill{height:100%;border-radius:0;transition:width .5s ease}
-.hb-val{font:600 9px var(--mono);color:var(--text3);width:34px;text-align:right}
-
-/* T2 upgrade section */
-.upgrade-section{border:1px solid var(--border);overflow:hidden;margin-bottom:0}
-.upgrade-header{background:var(--text);padding:20px 22px}
-.upgrade-tier{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:3px;color:rgba(255,255,255,.45);margin-bottom:6px}
-.upgrade-title{font:700 15px var(--sans);color:#fff;letter-spacing:-.2px;line-height:1.3}
-.upgrade-sub{font:400 11px var(--sans);color:rgba(255,255,255,.6);margin-top:5px;line-height:1.6}
-.upgrade-scenarios{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)}
-.upgrade-scenario{background:#fff;padding:12px 14px}
-.upgrade-scenario-label{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:3px}
-.upgrade-scenario-val{font:700 14px var(--mono);letter-spacing:-.3px}
-.upgrade-scenario-sub{font:400 9px var(--sans);color:var(--text3);margin-top:1px}
-.upgrade-features{padding:16px 22px;border-top:1px solid var(--border)}
-.upgrade-feature{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--border);font:400 11px/1.5 var(--sans);color:var(--text2)}
-.upgrade-feature:last-child{border-bottom:none}
-.upgrade-feature-label{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text);flex-shrink:0;width:110px;padding-top:1px}
-.lock-blur{filter:blur(3px);user-select:none;pointer-events:none;opacity:.5;font:700 13px var(--mono);color:var(--text)}
-.upgrade-cta{display:block;padding:13px 22px;background:var(--text);color:#fff;text-align:center;font:700 10px var(--sans);text-transform:uppercase;letter-spacing:2px;text-decoration:none;border-top:1px solid rgba(255,255,255,.1);transition:opacity .15s}
-.upgrade-cta:hover{opacity:.85}
+.hb-label{font:400 9px var(--sans);color:var(--text3);width:90px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-track{flex:1;height:6px;background:rgba(0,0,0,0.06);border-radius:2px;overflow:hidden}
+.hb-fill{height:100%;border-radius:2px;transition:width .4s ease}
+.hb-val{font:500 10px var(--mono);color:var(--text2);width:34px;text-align:right;flex-shrink:0}
 
 /* Planning apps */
-.side-head{padding:14px 18px;border-bottom:1px solid var(--border)}
-.side-head h2{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:var(--text3)}
-.app-item{padding:10px 18px;border-bottom:1px solid rgba(0,0,0,.05)}
+.app-item{padding:10px 0;border-bottom:1px solid var(--border)}
 .app-item:last-child{border-bottom:none}
-.app-ref{font:600 9px var(--mono);color:var(--accent);margin-bottom:2px}
-.app-desc{font:400 10px var(--sans);color:var(--text2);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.app-meta{font:400 9px var(--sans);color:var(--text3);margin-top:2px;display:flex;gap:6px;flex-wrap:wrap}
-.app-status{display:inline-block;padding:1px 7px;font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.5px;border:1px solid}
-.app-status.approved{background:#fff;color:#059669;border-color:#d1fae5}
-.app-status.refused{background:#fff;color:#dc2626;border-color:#fecaca}
-.app-status.pending{background:#fff;color:#d97706;border-color:#fde68a}
+.app-ref{font:600 10px var(--mono);color:var(--text2);display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.app-status{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1px;padding:1px 5px;border-radius:2px}
+.app-status.approved{background:#dcfce7;color:#16a34a}
+.app-status.refused{background:#fee2e2;color:#dc2626}
+.app-status.pending{background:#fef3c7;color:#d97706}
+.app-desc{font:400 10px var(--sans);color:var(--text3);line-height:1.5}
+.app-meta{font:400 9px var(--sans);color:var(--text4);margin-top:3px;display:flex;gap:10px}
 
-.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:0;height:14px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Capacity bars */
+.cap-wrap{margin-top:6px}
 
-@media(max-width:900px){
-  #map{width:100%;height:45%;position:fixed;top:0}
-  .panel{width:100%;height:55%;top:auto;bottom:0;border-left:none;border-top:1px solid var(--border)}
-  .signal-grid{grid-template-columns:1fr 1fr}
+/* HMLR panel */
+.hmlr-panel{
+  background:rgba(0,0,0,0.03);border:1px solid var(--border);
+  border-radius:6px;padding:10px 12px;margin-top:8px;font:400 10px var(--sans);color:var(--text3);line-height:1.6;
 }
+.hmlr-title-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.hmlr-title-no{font:600 11px var(--mono);color:var(--text2)}
+
+/* Intelligence mount — override inner styles for right panel width */
+#intelligence-mount .int-grid{grid-template-columns:1fr 1fr !important}
+
+/* Teaser curve (blurred upgrade gate) */
+.teaser-wrap{position:relative;overflow:hidden;border-radius:6px;margin-top:8px}
+.teaser-blur{position:absolute;inset:0;backdrop-filter:blur(4px);background:rgba(255,255,255,0.6);z-index:2;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.teaser-cta{font:600 10px var(--sans);color:var(--blue);background:var(--blue-lt);border:1px solid rgba(29,78,216,.2);padding:5px 14px;border-radius:20px;cursor:pointer}
+
+/* T2 / T3 CTA pill */
+.rp-cta-row{padding:16px 20px;display:flex;gap:8px;border-top:1px solid var(--border);flex-shrink:0;position:sticky;bottom:0;background:var(--glass);backdrop-filter:blur(16px)}
+.rp-cta{
+  flex:1;padding:9px 0;border-radius:6px;border:none;cursor:pointer;
+  font:600 11px var(--sans);text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:all .15s;
+}
+.rp-cta.primary{background:var(--blue);color:#fff}
+.rp-cta.primary:hover{background:#1e40af}
+.rp-cta.secondary{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.rp-cta.secondary:hover{background:rgba(0,0,0,0.04)}
+
+/* Map HMLR click hint */
+.map-hint{
+  position:fixed;left:calc(var(--left-w) + 12px);top:12px;z-index:25;
+  background:var(--glass);border:1px solid var(--glass-border);
+  backdrop-filter:blur(12px);
+  border-radius:6px;padding:7px 12px;
+  font:400 10px var(--sans);color:var(--text3);
+  pointer-events:none;
+}
+
 </style>
-<script src="/lib/site-intelligence.js"></script>
-<script src="/lib/intelligence-100lh.js"></script>
 </head>
 <body>
+
+<!-- Full-bleed map -->
 <div id="map"></div>
-<div class="panel">
 
-<!-- Tier nav -->
-<nav class="tier-nav">
-  <a href="/t1/100-leadenhall" class="tier-link active">
-    <span class="tid">T1</span><span class="tname">Scout</span>
-  </a>
-  <span class="tier-sep">·</span>
-  <a href="/t2/100-leadenhall" class="tier-link">
-    <span class="tid">T2</span><span class="tname">Appraise</span>
-  </a>
-  <span class="tier-sep">·</span>
-  <a href="/t3/100-leadenhall" class="tier-link">
-    <span class="tid">T3</span><span class="tname">Present</span>
-  </a>
-  <span class="tier-sep">·</span>
-  <a class="tier-link locked">
-    <span class="tid">T4</span><span class="tname">Commission</span>
-  </a>
-</nav>
+<!-- Map click hint -->
+<div class="map-hint">Click any parcel to see HMLR title</div>
 
-<!-- Opportunity hero banner -->
-<div class="opp-hero">
-  <div class="opp-hero-top">
-    <div>
-      <div class="opp-addr">100 Leadenhall Street</div>
-      <div class="opp-sub">City of London · EC3A 3BP · 1,551 m² plot · Zone 1</div>
-    </div>
-    
-      <div class="opp-score-label">Development Intelligence</div>
-      <div><span class="opp-score" id="hero-score">—</span><span class="opp-score-max">/100</span></div>
-      <div class="opp-score-badge" id="hero-score-badge">Scoring…</div>
-    </div>
+<!-- ── Left ribbon ────────────────────────────────────────────── -->
+<div id="left-ribbon">
+  <!-- Logo mark -->
+  <div class="lr-logo">
+    <svg viewBox="0 0 24 24"><path d="M3 21l9-18 9 18"/><path d="M6 15h12"/></svg>
   </div>
-  <!-- Uplift bar -->
-  <div class="uplift-bar-wrap">
-    <div class="uplift-bar-label">
-      <span>Current use value</span>
-      <span>Potential GDV range</span>
-    </div>
-    <div class="uplift-track">
-      <div class="uplift-euv" style="width:22%">£38M EUV</div>
-      <div class="uplift-gdv-range" id="gdv-bar" style="width:78%">up to £<span id="gdv-hi-val">—</span>M GDV</div>
-    </div>
-    <div class="uplift-stats">
-      <div class="uplift-stat">
-        <div class="uval green" id="uplift-max">—</div>
-        <div class="ulbl">Max uplift potential</div>
-      </div>
-      <div class="uplift-stat">
-        <div class="uval amber" id="uplift-mult">—×</div>
-        <div class="ulbl">Value multiplier on EUV</div>
-      </div>
-      <div class="uplift-stat">
-        <div class="uval" id="uplift-nia">—</div>
-        <div class="ulbl">Max potential NIA</div>
-      </div>
-    </div>
+
+  <nav class="lr-nav">
+    <!-- Back to borough screener -->
+    <button class="lr-btn" onclick="location.href='/borough/southwark'" title="">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg>
+      <span class="lr-tip">Borough View</span>
+    </button>
+
+    <div class="lr-divider"></div>
+
+    <!-- T1 Scout (active) -->
+    <button class="lr-btn active" title="">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="lr-tip">T1 Scout</span>
+    </button>
+
+    <!-- T2 Appraise -->
+    <button class="lr-btn" onclick="location.href='/t2/100-leadenhall'" title="">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+      <span class="lr-tip">T2 Appraise</span>
+    </button>
+
+    <!-- T3 Present -->
+    <button class="lr-btn" onclick="location.href='/t3/100-leadenhall'" title="">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span class="lr-tip">T3 Present</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ── Bottom ribbon ──────────────────────────────────────────── -->
+<div id="bottom-ribbon">
+  <div class="r-tile" style="flex:1.4">
+    <div class="r-tile-lbl">Site</div>
+    <div class="r-tile-val" style="font-size:15px;font-family:var(--sans);font-weight:700">100 Leadenhall St</div>
+    <div class="r-tile-sub">EC3A 3BP · City of London</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Dev Intelligence</div>
+    <div class="r-tile-val blue" id="hero-score">—</div>
+    <div class="r-tile-sub" id="hero-score-badge">—</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Max GDV</div>
+    <div class="r-tile-val">£<span id="gdv-hi-val">—</span>M</div>
+    <div class="r-tile-sub">High scenario</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Uplift on EUV</div>
+    <div class="r-tile-val orange" id="uplift-max">—</div>
+    <div class="r-tile-sub" id="uplift-mult">—× value multiplier</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Max NIA</div>
+    <div class="r-tile-val" id="uplift-nia">—</div>
+    <div class="r-tile-sub">Net internal area</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Existing</div>
+    <div class="r-tile-val" style="font-size:16px">28.6m / 7F</div>
+    <div class="r-tile-sub">£38M EUV</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Margin range</div>
+    <div class="r-tile-val green" id="margin-delta">—</div>
+    <div class="r-tile-sub">Low → High spread</div>
   </div>
 </div>
 
-<!-- Tags row -->
-<div class="tags-row">
-  <span class="tag">PTAL <span id="tag-ptal">6a</span></span>
-  <span class="tag" id="tag-flood">Flood Zone 1</span>
-  <span class="tag highlight">Eastern Cluster</span>
-  <span class="tag">City of London</span>
-  <span class="tag" id="tag-heritage">Heritage…</span>
-</div>
+<!-- ── Right panel ────────────────────────────────────────────── -->
+<div id="right-panel">
 
-<div class="content">
-
-    <!-- Development Intelligence -->
-    <div class="card" id="intelligence-card">
-      <div class="card-head"><h3>Development Intelligence</h3></div>
-      <div class="card-body">
-        <div id="intelligence-mount"></div>
-
-    <!-- Before/After capacity bar -->
-    <div style="margin-top:16px">
-      <div style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:8px">GIA Capacity — Existing vs Scenarios</div>
-      <svg id="capacity-bars" viewBox="0 0 280 80" style="width:100%;height:auto;display:block"></svg>
+  <!-- Site header -->
+  <div class="rp-header">
+    <div class="rp-use-badge">
+      <svg width="8" height="8" viewBox="0 0 8 8"><rect width="8" height="8" rx="1" fill="currentColor"/></svg>
+      Commercial Office · Class E
     </div>
-      </div>
+    <div class="rp-name">100 Leadenhall Street</div>
+    <div class="rp-addr">London EC3A 3BP · City of London</div>
+    <div class="rp-score-row">
+      <span class="rp-score-num" id="rp-score-num">—</span>
+      <span class="rp-score-denom">/100</span>
+      <span class="rp-score-badge" id="rp-score-badge">Scoring…</span>
     </div>
+  </div>
 
-    <!-- Market signals -->
-    <div class="card">
-      <div class="card-head"><h3>Market Signals — City of London · 2025 Q4</h3></div>
-      <div class="card-body">
-        <div class="signal-grid">
-          <div class="signal">
-            <div class="sval">£820</div>
-            <div class="slbl">Grade A ERV psm pa</div>
-            <div class="sdelta up">↑ 6.5% YoY</div>
-          </div>
-          <div class="signal">
-            <div class="sval">4.5%</div>
-            <div class="slbl">Net Initial Yield</div>
-            <div class="sdelta up">Firming ↑</div>
-          </div>
-          <div class="signal">
-            <div class="sval">4.2%</div>
-            <div class="slbl">City Vacancy Rate</div>
-            <div class="sdelta down">↓ from 6.1% 2023</div>
-          </div>
-          <div class="signal">
-            <div class="sval">278m</div>
-            <div class="slbl">Tallest in 300m</div>
-            <div class="sdelta" style="color:var(--accent)">Eastern Cluster</div>
-          </div>
-          <div class="signal">
-            <div class="sval">£5,200</div>
-            <div class="slbl">Avg. office capex psm</div>
-            <div class="sdelta" style="color:var(--text3)">BCIS 2025 Q3</div>
-          </div>
-          <div class="signal">
-            <div class="sval">3.2M ft²</div>
-            <div class="slbl">City take-up 2024</div>
-            <div class="sdelta up">↑ 14% on 2023</div>
-          </div>
+  <!-- Development Intelligence -->
+  <div class="rp-section">
+    <div class="rp-section-hd">
+      <h3>Development Intelligence</h3>
+      <span class="rp-badge" id="rp-intel-score">—/100</span>
+    </div>
+    <div class="rp-section-body">
+      <div id="intelligence-mount"></div>
+    </div>
+  </div>
+
+  <!-- Site overview -->
+  <div class="rp-section">
+    <div class="rp-section-hd"><h3>Site Overview</h3></div>
+    <div class="rp-section-body">
+      <div class="rp-stat-row">
+        <div class="rp-stat">
+          <div class="sv blue" id="stat-ptal">6a</div>
+          <div class="sl">PTAL</div>
+        </div>
+        <div class="rp-stat">
+          <div class="sv green" id="stat-flood">Zone 1</div>
+          <div class="sl">Flood Zone</div>
+        </div>
+        <div class="rp-stat">
+          <div class="sv" id="stat-listed">…</div>
+          <div class="sl">Listed nearby</div>
         </div>
       </div>
-    </div>
-
-    <!-- Site stats -->
-    <div class="card">
-      <div class="card-head"><h3>Site Overview</h3></div>
-      <div class="stats-grid">
-        <div class="stat-cell">
-          <div class="val">1,551 m²</div>
-          <div class="lbl">Plot Area (GEA)</div>
+      <div class="rp-stat-row">
+        <div class="rp-stat">
+          <div class="sv" id="epc-gia">Loading…</div>
+          <div class="sl">EPC GIA</div>
         </div>
-        <div class="stat-cell">
-          <div class="val accent" id="stat-ptal">6a — Excellent</div>
-          <div class="lbl">PTAL Score</div>
+        <div class="rp-stat">
+          <div class="sv" id="current-far">—</div>
+          <div class="sl">Current FAR</div>
         </div>
-        <div class="stat-cell">
-          <div class="val green" id="stat-flood">Zone 1 — Low</div>
-          <div class="lbl">Flood Zone</div>
+        <div class="rp-stat">
+          <div class="sv" id="site-area-display">1,551 m²</div>
+          <div class="sl">Site area</div>
         </div>
-        <div class="stat-cell">
-          <div class="val" id="stat-listed">…</div>
-          <div class="lbl">Listed Bldgs within 200m</div>
+      </div>
+      <!-- Capacity bars -->
+      <div class="cap-wrap">
+        <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-bottom:6px">GIA Capacity — Existing vs Scenarios</div>
+        <svg id="capacity-bars" viewBox="0 0 280 80" style="width:100%;height:auto;display:block"></svg>
+      </div>
+      <!-- Ownership -->
+      <div class="hmlr-panel" id="hmlr-panel">
+        <div class="hmlr-title-row">
+          <span class="hmlr-title-no">NGL786311</span>
+          <span style="font:500 9px var(--mono);color:var(--text3)">Freehold</span>
         </div>
+        <div id="owner-display" style="font:600 11px var(--sans);color:var(--text);margin-bottom:2px">Frontier Dragon Limited</div>
+        <div style="color:var(--text3);font-size:9px">Click a parcel on map to query HMLR titles</div>
       </div>
     </div>
+  </div>
 
-    <!-- Planning flags -->
-    <div class="card">
-      <div class="card-head">
-        <h3>Planning Context</h3>
-        <span class="badge" id="flags-badge" style="background:var(--surface);color:var(--text3)">Loading…</span>
-      </div>
-      <div class="card-body" id="flags-body">
-        <div class="skeleton" style="margin-bottom:10px;width:90%"></div>
-        <div class="skeleton" style="margin-bottom:10px;width:70%"></div>
-        <div class="skeleton" style="width:80%"></div>
+  <!-- Tags row -->
+  <div style="padding:10px 20px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px">
+    <span style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;padding:3px 8px;border-radius:3px;background:var(--blue-lt);color:var(--blue)">PTAL <span id="tag-ptal">6a</span></span>
+    <span style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;padding:3px 8px;border-radius:3px;background:#f0fdf4;color:#16a34a" id="tag-flood">Flood Zone 1</span>
+    <span style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;padding:3px 8px;border-radius:3px;background:#fef3c7;color:#d97706" id="tag-heritage">Heritage…</span>
+  </div>
+
+  <!-- Planning flags -->
+  <div class="rp-section">
+    <div class="rp-section-hd">
+      <h3>Planning Flags</h3>
+      <span class="rp-badge" id="flags-badge">Loading…</span>
+    </div>
+    <div class="rp-section-body" id="flags-body"></div>
+  </div>
+
+  <!-- Height context -->
+  <div class="rp-section">
+    <div class="rp-section-hd"><h3>Height Context</h3></div>
+    <div class="rp-section-body" id="heights-body">
+      <div style="font:400 10px var(--sans);color:var(--text4);padding:4px 0">Loading nearby heights…</div>
+    </div>
+  </div>
+
+  <!-- Return curve teaser -->
+  <div class="rp-section">
+    <div class="rp-section-hd"><h3>Return Curve</h3><span class="rp-badge">T2 Preview</span></div>
+    <div class="rp-section-body">
+      <div style="font:400 10px var(--sans);color:var(--text3);margin-bottom:8px">Margin spread across Low / Base / High scenarios</div>
+      <div class="teaser-wrap">
+        <svg id="teaser-curve" viewBox="0 0 280 80" style="width:100%;height:auto;display:block;background:rgba(0,0,0,0.02);border-radius:4px"></svg>
+        <div class="teaser-blur"><span class="rp-cta primary" onclick="location.href='/t2/100-leadenhall'" style="display:inline-flex;text-decoration:none;border-radius:20px;font:600 10px var(--sans)">Unlock T2 Appraise →</span></div>
       </div>
     </div>
+  </div>
 
-    <!-- Height comparables -->
-    <div class="card">
-      <div class="card-head"><h3>Height Context — Buildings within 300m</h3></div>
-      <div class="card-body" id="heights-body">
-        <div class="skeleton" style="margin-bottom:7px;width:85%"></div>
-        <div class="skeleton" style="margin-bottom:7px;width:65%"></div>
-        <div class="skeleton" style="width:50%"></div>
-      </div>
+  <!-- Planning applications -->
+  <div class="rp-section">
+    <div class="rp-section-hd">
+      <h3>Recent Planning <span id="apps-count" style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0;font-size:9px;font-family:var(--sans)">within 300m</span></h3>
     </div>
-
-    <!-- T2 upgrade -->
-    <div class="upgrade-section">
-      <div class="upgrade-header">
-        <div class="upgrade-tier">T2 Appraise</div>
-        <div class="upgrade-title">Three scenarios. Live assumptions. Return curve.</div>
-        <div class="upgrade-sub">T1 tells you the size of the prize. T2 tells you which scenario captures it — and what each additional floor actually costs.</div>
-      </div>
-      <div class="upgrade-scenarios">
-        <div class="upgrade-scenario">
-          <div class="upgrade-scenario-label">Low</div>
-          <div class="upgrade-scenario-val" style="color:#059669">10F · 42m</div>
-          <div class="upgrade-scenario-sub">Full street cornice</div>
-        </div>
-        <div class="upgrade-scenario" style="border-left:2px solid var(--text)">
-          <div class="upgrade-scenario-label">Base</div>
-          <div class="upgrade-scenario-val" style="color:#4f46e5">14F · 60m</div>
-          <div class="upgrade-scenario-sub">Stepped tower</div>
-        </div>
-        <div class="upgrade-scenario">
-          <div class="upgrade-scenario-label">High</div>
-          <div class="upgrade-scenario-val" style="color:#d97706">22F · 92m</div>
-          <div class="upgrade-scenario-sub">Full Eastern Cluster</div>
-        </div>
-      </div>
-      <div class="upgrade-features">
-        <div class="upgrade-feature">
-          <span class="upgrade-feature-label">Return curve</span>
-          Where developer margin peaks across all scenarios — plotted live as you adjust assumptions
-        </div>
-        <div class="upgrade-feature">
-          <span class="upgrade-feature-label">Live sliders</span>
-          ERV, yield, build cost, S106, profit target — recalculate instantly on drag
-        </div>
-        <div class="upgrade-feature">
-          <span class="upgrade-feature-label">Full pro forma</span>
-          GDV, construction, CIL, fees, finance, and Residual Land Value per scenario
-        </div>
-        <div class="upgrade-feature">
-          <span class="upgrade-feature-label">Constraint map</span>
-          BSA flags, heritage requirements, LVMF, fire strategy — mapped to programme stage
-        </div>
-      </div>
-      <a href="/t2/100-leadenhall" class="upgrade-cta">Run T2 Appraisal →</a>
+    <div class="rp-section-body" id="apps-list">
+      <div style="font:400 10px var(--sans);color:var(--text4)">Loading applications…</div>
     </div>
+  </div>
 
-    <!-- Planning applications (inline) -->
-    <div class="card">
-      <div class="card-head">
-        <h3>Recent Planning Applications <span id="apps-count" style="font-weight:400;color:var(--text3)">within 300m</span></h3>
-      </div>
-      <div id="apps-list">
-        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:8px">
-          <div class="skeleton" style="width:80%"></div>
-          <div class="skeleton" style="width:60%"></div>
-          <div class="skeleton" style="width:75%"></div>
-        </div>
-      </div>
-    </div>
+  <!-- CTA row -->
+  <div class="rp-cta-row">
+    <a href="/t2/100-leadenhall" class="rp-cta primary">T2 Appraise →</a>
+    <a href="/t3/100-leadenhall" class="rp-cta secondary">T3 Present</a>
+  </div>
 
-</div><!-- end .content -->
-</div><!-- end .panel -->
+</div><!-- /right-panel -->
 
 <script>
 const LAT = 51.5137673, LNG = -0.0801551;
 const ADDRESS = '100 Leadenhall Street, London EC3A 3BP';
-let PLOT_AREA = 1551; // updated live from PropertyData HMLR title
+let PLOT_AREA = 1551;
 const EXISTING_EUV = 38000000;
 
 // Render intelligence immediately
@@ -398,8 +463,11 @@ document.getElementById('intelligence-mount').innerHTML = renderIntelligenceT1(S
 (function(){
   const score = computeSiteScore(SITE_INTELLIGENCE);
   document.getElementById('hero-score').textContent = score;
-  const badge = document.getElementById('hero-score-badge');
-  badge.textContent = score >= 85 ? 'Top opportunity' : score >= 70 ? 'Strong opportunity' : score >= 55 ? 'Credible opportunity' : 'Due diligence required';
+  document.getElementById('rp-score-num').textContent = score;
+  document.getElementById('rp-intel-score').textContent = score + '/100';
+  const label = score >= 85 ? 'Top opportunity' : score >= 70 ? 'Strong opportunity' : score >= 55 ? 'Credible opportunity' : 'Due diligence required';
+  document.getElementById('hero-score-badge').textContent = label;
+  document.getElementById('rp-score-badge').textContent = label;
 })();
 
 const GDV_OPTS = [
@@ -427,26 +495,20 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
     return {gdv: effErv / o.niy, nia: totalNIA};
   });
   const gdvHi  = Math.max(...gdvs.map(g=>g.gdv));
-  const gdvLo  = Math.min(...gdvs.map(g=>g.gdv));
   const niaHi  = Math.max(...gdvs.map(g=>g.nia));
   const uplift = gdvHi - EXISTING_EUV;
   const mult   = (gdvHi / EXISTING_EUV).toFixed(1);
-
   set('gdv-hi-val', Math.round(gdvHi/1e6));
-
-  // Rough margin delta (highest vs lowest scenario profit)
   const margins = GDV_OPTS.map(o=>{
     const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
     const nia=(PLOT_AREA*o.cov*o.podF+PLOT_AREA*o.twrPct*o.twrF)*o.nia;
     const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
-    const cc=gea*5000; // rough avg cost
+    const cc=gea*5000;
     const tdc=cc*(1+0.13+0.075)+nia*200+gdv*0.15*0.1+2750000;
     return gdv-tdc;
   });
   const mDelta=Math.round(Math.abs(Math.max(...margins)-Math.min(...margins))/1e6);
   set('margin-delta','£'+mDelta+'M');
-
-  // Blurred teaser curve SVG
   const W=280,H=80,pts=GDV_OPTS.map((o,i)=>{
     const x=20+i*(W-40)/2;
     const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
@@ -460,13 +522,13 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
   }).join(' ');
   const tsvg=document.getElementById('teaser-curve');
   if(tsvg) tsvg.innerHTML=`
-    <polyline points="${pts}" fill="none" stroke="#4f46e5" stroke-width="3"/>
-    ${GDV_OPTS.map((_,i)=>{const[x,y]=pts.split(' ')[i].split(',');return`<circle cx="${x}" cy="${y}" r="5" fill="#4f46e5"/>`;}).join('')}
-    <text x="20" y="${H-2}" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">Low</text>
-    <text x="${W/2}" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">Base</text>
-    <text x="${W-20}" y="${H-2}" text-anchor="end" font-family="Inter,sans-serif" font-size="9" fill="#8892a8">High</text>`;
+    <polyline points="${pts}" fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--blue').trim()||'#1d4ed8'}" stroke-width="2.5"/>
+    ${GDV_OPTS.map((_,i)=>{const[x,y]=pts.split(' ')[i].split(',');return`<circle cx="${x}" cy="${y}" r="4" fill="#1d4ed8"/>`;}).join('')}
+    <text x="20" y="${H-2}" font-family="Inter,sans-serif" font-size="8" fill="#9ca3af">Low</text>
+    <text x="${W/2}" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#9ca3af">Base</text>
+    <text x="${W-20}" y="${H-2}" text-anchor="end" font-family="Inter,sans-serif" font-size="8" fill="#9ca3af">High</text>`;
   set('uplift-max', fmtM(uplift));
-  set('uplift-mult', mult + '×');
+  set('uplift-mult', mult + '× value multiplier');
   set('uplift-nia', fmtK(niaHi));
 })();
 
@@ -481,7 +543,6 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
   map.on('load',()=>{
-    // ── Move 1: Mapbox 3D building extrusions (context) ──
     map.addLayer({
       id:'buildings-3d',source:'composite','source-layer':'building',
       filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
@@ -492,38 +553,49 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
         'fill-extrusion-opacity':0.65
       }
     });
-
-    // ── Site polygon — starts empty, OS Places+NGD fills it ──
     map.addSource('site',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
-    map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#4f46e5','fill-opacity':0.18}});
-    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#4f46e5','line-width':2.5}});
+    map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#1d4ed8','fill-opacity':0.15}});
+    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#1d4ed8','line-width':2.5}});
     map.addLayer({id:'site-extrude',type:'fill-extrusion',source:'site',paint:{
-      'fill-extrusion-color':'#4f46e5','fill-extrusion-height':8,
-      'fill-extrusion-base':0,'fill-extrusion-opacity':0.25}});
+      'fill-extrusion-color':'#1d4ed8','fill-extrusion-height':10,
+      'fill-extrusion-base':0,'fill-extrusion-opacity':0.22}});
 
-    // ── PropertyData legal boundary ──
+    // HMLR WMS overlay
+    map.addSource('hmlr-wms',{type:'raster',tiles:[`/api/hmlr-tile/{z}/{x}/{y}`],tileSize:256,attribution:'© HMLR'});
+    map.addLayer({id:'hmlr-wms-layer',type:'raster',source:'hmlr-wms',paint:{'raster-opacity':0.55}},'buildings-3d');
+
+    // PropertyData legal boundary
     (async()=>{
       try{
         const pd=await(await fetch(`/api/plot-boundary?lat=${LAT}&lng=${LNG}&postcode=EC3A+3BP`)).json();
         if(pd.features&&pd.features.length){
           const f=pd.features[0];
-          // Draw legal boundary on map
           if(f.geometry) map.getSource('site').setData({type:'FeatureCollection',features:[f]});
-          // Update site area + owner in Why This Site card
           const p=f.properties;
-          if(p.area_sqm>0){
-            PLOT_AREA=p.area_sqm;
-            const el=document.getElementById('site-area-display');
-            if(el) el.textContent=p.area_sqm.toLocaleString()+' m²';
-          }
-          if(p.owner){
-            const oel=document.getElementById('owner-display');
-            if(oel) oel.textContent=p.owner+(p.leaseholds>0?` · ${p.leaseholds} leaseholds`:'');
-          }
-          console.log('PropertyData 100LH: title',p.title_number,'area',p.area_sqm,'m² owner:',p.owner);
+          if(p.area_sqm>0){PLOT_AREA=p.area_sqm;set('site-area-display',p.area_sqm.toLocaleString()+' m²');}
+          if(p.owner){set('owner-display',p.owner+(p.leaseholds>0?` · ${p.leaseholds} leaseholds`:''));}
         }
-      }catch(e){console.warn('PropertyData boundary error:',e.message);}
+      }catch(e){console.warn('PropertyData:',e.message);}
     })();
+
+    // HMLR click-select
+    map.on('click', async(e) => {
+      const {lng, lat} = e.lngLat;
+      try {
+        const r = await fetch(`/api/hmlr-tile/click?lat=${lat}&lng=${lng}`);
+        const d = await r.json();
+        if (d && d.title_number) {
+          const panel = document.getElementById('hmlr-panel');
+          if(panel) panel.innerHTML = `
+            <div class="hmlr-title-row">
+              <span class="hmlr-title-no">${d.title_number}</span>
+              <span style="font:500 9px var(--mono);color:var(--text3)">${d.tenure||'—'}</span>
+            </div>
+            <div style="font:600 11px var(--sans);color:var(--text);margin-bottom:2px">${d.proprietor||d.owner||'Unknown owner'}</div>
+            <div style="color:var(--text3);font-size:9px">${d.address||''}</div>`;
+        }
+      } catch(e2){console.warn('HMLR click:',e2.message);}
+    });
   });
 });
 
@@ -537,68 +609,45 @@ async function loadAll(){
     fetch(`/api/context-buildings?lat=${LAT}&lng=${LNG}&radius=300`).then(r=>r.json()),
     fetch(`/api/epc?postcode=EC3A+3BP`).then(r=>r.json()),
   ]);
-
-  // Flood
   if(flood.status==='fulfilled'){
     const fz=flood.value.floodZone??1;
     const label=fz===1?'Zone 1 — Low':fz===2?'Zone 2 — Medium':'Zone 3 — High';
     const col=fz===1?'var(--green)':fz===2?'var(--amber)':'var(--red)';
-    const el=document.getElementById('stat-flood');
-    if(el){el.textContent=label;el.style.color=col;}
+    const el=document.getElementById('stat-flood');if(el){el.textContent=label;el.style.color=col;}
     const tag=document.getElementById('tag-flood');
-    if(tag){tag.textContent=`Flood Zone ${fz}`;tag.className='tag '+(fz===1?'green':fz===2?'amber':'red');}
+    if(tag){tag.textContent=`Flood ${fz===1?'Zone 1':fz===2?'Zone 2':'Zone 3'}`;tag.style.background=fz===1?'#f0fdf4':fz===2?'#fef3c7':'#fee2e2';tag.style.color=fz===1?'#16a34a':fz===2?'#d97706':'#dc2626';}
   }
-
-  // PTAL
   if(ptal.status==='fulfilled'&&ptal.value.ptal!=null){
     const p=ptal.value;
     const band=p.ptal>=5?'6a':p.ptal>=4?'5':p.ptal>=3?'4':'3';
     set('stat-ptal',band+' — '+(p.ptal>=5?'Excellent':p.ptal>=4?'Very Good':'Good'));
     set('tag-ptal',band);
   }
-
-  // Listed buildings
   const listedEls=(listed.status==='fulfilled'?(listed.value.elements||[]):[]).filter(e=>e.tags);
   set('stat-listed',listedEls.length>0?listedEls.length:'0');
   const heritageTag=document.getElementById('tag-heritage');
   if(heritageTag){
-    if(listedEls.length>0){
-      heritageTag.textContent=`${listedEls.length} Listed Building${listedEls.length>1?'s':''} nearby`;
-      heritageTag.className='tag amber';
-    } else {
-      heritageTag.textContent='No listed buildings on-site';
-      heritageTag.className='tag green';
-    }
+    heritageTag.textContent=listedEls.length>0?`${listedEls.length} Listed`:'Clean';
+    if(listedEls.length>0){heritageTag.style.background='#fef3c7';heritageTag.style.color='#d97706';}
+    else{heritageTag.style.background='#f0fdf4';heritageTag.style.color='#16a34a';}
   }
-
   buildFlags(flood,listedEls);
   buildHeights((ctx.status==='fulfilled'?ctx.value.elements:[])||[]);
   buildApps((apps.status==='fulfilled'?apps.value.results:[])||[]);
-
-  // EPC — existing floor area + capacity bar chart
-  if(epc.status==='fulfilled' && epc.value.results && epc.value.results.length){
-    const best = epc.value.results[0];
-    const gia = best.floorArea;
-    if(gia > 0){
-      const far = (gia / PLOT_AREA).toFixed(1);
-      const el = document.getElementById('epc-gia');
-      const farEl = document.getElementById('current-far');
-      if(el) el.textContent = gia.toLocaleString() + ' m²';
-      if(farEl) farEl.textContent = far + '×';
-      const bars_svg = document.getElementById('capacity-bars');
+  if(epc.status==='fulfilled'&&epc.value.results&&epc.value.results.length){
+    const best=epc.value.results[0];const gia=best.floorArea;
+    if(gia>0){
+      const far=(gia/PLOT_AREA).toFixed(1);
+      set('epc-gia',gia.toLocaleString()+' m²');set('current-far',far+'×');
+      const bars_svg=document.getElementById('capacity-bars');
       if(bars_svg){
-        const SCENARIOS_BAR = [
-          {label:'Existing', gia:gia,   col:'#d0d2da'},
-          {label:'Low',      gia:20000, col:'#6b7280'},
-          {label:'Base',     gia:34000, col:'#374151'},
-          {label:'High',     gia:45000, col:'#111827'},
-        ];
-        const maxG = Math.max(...SCENARIOS_BAR.map(s=>s.gia));
-        const BW=220, BH=13, GAP=5, LW=44, TX=LW+4;
-        bars_svg.innerHTML = SCENARIOS_BAR.map((s,i)=>{
-          const y=i*(BH+GAP), bw=Math.round(s.gia/maxG*BW);
+        const SB=[{label:'Existing',gia,col:'#d0d2da'},{label:'Low',gia:20000,col:'#93c5fd'},{label:'Base',gia:34000,col:'#3b82f6'},{label:'High',gia:45000,col:'#1d4ed8'}];
+        const maxG=Math.max(...SB.map(s=>s.gia));
+        const BW=220,BH=11,GAP=6,LW=44,TX=LW+4;
+        bars_svg.innerHTML=SB.map((s,i)=>{
+          const y=i*(BH+GAP),bw=Math.round(s.gia/maxG*BW);
           const lk=s.gia>=1000?(s.gia/1000).toFixed(0)+'k':s.gia;
-          return `<g><text x="0" y="${y+BH-2}" font-family="var(--sans)" font-size="8" font-weight="600" fill="#555">${s.label}</text><rect x="${TX}" y="${y}" width="${bw}" height="${BH}" fill="${s.col}" rx="1"/><text x="${TX+bw+4}" y="${y+BH-2}" font-family="var(--mono)" font-size="8" fill="#888">${lk} m²</text></g>`;
+          return`<g><text x="0" y="${y+BH-1}" font-family="Inter,sans-serif" font-size="8" fill="#6b7280">${s.label}</text><rect x="${TX}" y="${y}" width="${bw}" height="${BH}" fill="${s.col}" rx="1"/><text x="${TX+bw+4}" y="${y+BH-1}" font-family="DM Mono,monospace" font-size="8" fill="#9ca3af">${lk}</text></g>`;
         }).join('');
       }
     }
@@ -609,83 +658,44 @@ function buildFlags(flood,listedEls){
   const fz=flood.status==='fulfilled'?(flood.value.floodZone??1):1;
   const flags=[
     fz===1
-      ?{icon:'ok',sym:'✓',title:'Flood Zone 1 — Low Risk',desc:'No sequential test required. Standard drainage strategy applies. No EA objection expected on flood grounds.'}
+      ?{icon:'ok',sym:'✓',title:'Flood Zone 1 — Low Risk',desc:'No sequential test required. Standard drainage strategy applies.'}
       :fz===2
-      ?{icon:'warn',sym:'⚠',title:'Flood Zone 2 — Medium Risk',desc:'Sequential test and flood risk assessment required before consent. EA consultation is a statutory requirement.'}
-      :{icon:'risk',sym:'✕',title:'Flood Zone 3 — High Risk',desc:'Exception test mandatory. Development may be refused without major mitigation. Consult EA at pre-app stage.'},
-    {icon:'warn',sym:'⚠',title:'Leadenhall Market — Grade II* Listed (85m SW)',desc:'Material consideration in any planning application above podium height. South face recession typically expected. Pre-app essential.'},
-    {icon:'info',sym:'ℹ',title:'Eastern Cluster — Tall Buildings Zone',desc:'City Core Strategy supports tall buildings in this cluster. Design Guide applies above 100m. Tall building justification required.'},
-    {icon:'info',sym:'ℹ',title:'LVMF — Protected Views of St Paul\'s Cathedral',desc:'Strategic sightlines cross the City of London. LVMF compliance assessment required for any scheme above existing cluster heights.'},
-    {icon:'ok',sym:'✓',title:'Conservation Area — Not Applicable',desc:'Site is not within a designated conservation area. Street-level design guidance still applies for public realm treatment.'},
+      ?{icon:'warn',sym:'⚠',title:'Flood Zone 2 — Medium Risk',desc:'Sequential test and FRA required. EA consultation statutory.'}
+      :{icon:'risk',sym:'✕',title:'Flood Zone 3 — High Risk',desc:'Exception test mandatory. Development may be refused without major mitigation.'},
+    {icon:'warn',sym:'⚠',title:"Leadenhall Market — Grade II* Listed (85m SW)",desc:'Material consideration above podium height. South face recession typically expected. Pre-app essential.'},
+    {icon:'info',sym:'i',title:'Eastern Cluster — Tall Buildings Zone',desc:'City Core Strategy supports tall buildings here. Design Guide applies above 100m. TBJ required.'},
+    {icon:'info',sym:'i',title:"LVMF — Protected Views of St Paul's Cathedral",desc:'LVMF compliance assessment required for any scheme above existing cluster heights.'},
+    {icon:'ok',sym:'✓',title:'Conservation Area — Not Applicable',desc:'Site is not within a designated conservation area.'},
   ];
-  if(listedEls.length>0){
-    flags.splice(2,0,{icon:'warn',sym:'⚠',title:`${listedEls.length} Listed Building${listedEls.length>1?'s':''} within 200m`,desc:'Setting of listed buildings is a material consideration. Design & Access Statement must address visual impact on each asset.'});
-  }
-
-  const risks=flags.filter(f=>f.icon==='risk').length;
-  const warns=flags.filter(f=>f.icon==='warn').length;
-  const oks=flags.filter(f=>f.icon==='ok').length;
+  if(listedEls.length>0) flags.splice(2,0,{icon:'warn',sym:'⚠',title:`${listedEls.length} Listed Building${listedEls.length>1?'s':''} within 200m`,desc:'Setting is a material consideration. D&A Statement must address visual impact on each asset.'});
+  const risks=flags.filter(f=>f.icon==='risk').length,warns=flags.filter(f=>f.icon==='warn').length,oks=flags.filter(f=>f.icon==='ok').length;
   const badge=document.getElementById('flags-badge');
-  if(badge){
-    badge.textContent=`${risks} Risk · ${warns} Advisory · ${oks} Clear`;
-    badge.style.cssText=`font:600 9px var(--mono);padding:2px 8px;border:1px solid;${risks>0?'border-color:#fecaca;color:#dc2626':warns>0?'border-color:#fde68a;color:#d97706':'border-color:#d1fae5;color:#059669'};background:#fff`;
-  }
-
-  html('flags-body',flags.map(f=>`
-    <div class="flag-row">
-      <div class="flag-icon ${f.icon}">${f.sym}</div>
-      <div><div class="flag-title">${f.title}</div><div class="flag-desc">${f.desc}</div></div>
-    </div>`).join(''));
+  if(badge){badge.textContent=`${risks} Risk · ${warns} Advisory · ${oks} Clear`;badge.style.color=risks>0?'var(--red)':warns>0?'var(--amber)':'var(--green)';}
+  html('flags-body',flags.map(f=>`<div class="flag-row"><div class="flag-sym ${f.icon}">${f.sym}</div><div><div class="flag-title">${f.title}</div><div class="flag-desc">${f.desc}</div></div></div>`).join(''));
 }
 
 function buildHeights(osmEls){
-  const osmH=osmEls.filter(e=>e.tags&&(e.tags.height||e.tags['building:levels']))
-    .map(e=>({name:e.tags.name||e.tags['addr:housenumber']||'Building',h:parseFloat(e.tags.height)||(parseFloat(e.tags['building:levels'])||1)*4.0}))
-    .filter(e=>e.h>20);
-  const knownNames=KNOWN_HEIGHTS.map(k=>k.name.toLowerCase());
-  const merged=[...KNOWN_HEIGHTS,...osmH.filter(b=>!knownNames.includes(b.name.toLowerCase()))]
-    .sort((a,b)=>b.h-a.h).slice(0,12);
+  const osmH=osmEls.filter(e=>e.tags&&(e.tags.height||e.tags['building:levels'])).map(e=>({name:e.tags.name||e.tags['addr:housenumber']||'Bldg',h:parseFloat(e.tags.height)||(parseFloat(e.tags['building:levels'])||1)*4.0})).filter(e=>e.h>20);
+  const kn=KNOWN_HEIGHTS.map(k=>k.name.toLowerCase());
+  const merged=[...KNOWN_HEIGHTS,...osmH.filter(b=>!kn.includes(b.name.toLowerCase()))].sort((a,b)=>b.h-a.h).slice(0,10);
   const maxH=Math.max(...merged.map(b=>b.h),100);
-  html('heights-body',`
-    <div>
-      ${merged.map(b=>{
-        const pct=Math.round(b.h/maxH*100);
-        const col=b.h>=200?'#4f46e5':b.h>=100?'#059669':b.h>=50?'#d97706':'#94a3b8';
-        return `<div class="hb-row">
-          <div class="hb-label" title="${b.name}">${b.name}</div>
-          <div class="hb-track"><div class="hb-fill" style="width:${pct}%;background:${col}"></div></div>
-          <div class="hb-val">${b.h}m</div>
-        </div>`;
-      }).join('')}
-    </div>
-    <div style="font:400 9px var(--sans);color:var(--text3);margin-top:10px;line-height:1.6">
-      Tallest precedent within 300m: <strong style="color:var(--text)">${Math.max(...merged.map(b=>b.h))}m</strong>. 
-      Site falls within Eastern Cluster — the City's designated tall buildings zone. 
-      Heights up to and beyond 100m have established precedent in this location.
-    </div>`);
+  html('heights-body',`<div>${merged.map(b=>{
+    const pct=Math.round(b.h/maxH*100);
+    const col=b.h>=200?'#1d4ed8':b.h>=100?'#ea580c':b.h>=50?'#f59e0b':'#d1d5db';
+    return`<div class="hb-row"><div class="hb-label" title="${b.name}">${b.name}</div><div class="hb-track"><div class="hb-fill" style="width:${pct}%;background:${col}"></div></div><div class="hb-val">${b.h}m</div></div>`;
+  }).join('')}</div><div style="font:400 9px var(--sans);color:var(--text4);margin-top:8px">Tallest precedent within 300m: <strong style="color:var(--text2)">${Math.max(...merged.map(b=>b.h))}m</strong>. Eastern Cluster — tall buildings zone.</div>`);
 }
 
 function buildApps(apps){
-  set('apps-count',`— ${apps.length} results`);
-  if(!apps.length){
-    html('apps-list','<div style="padding:20px;font:400 11px var(--sans);color:var(--text3)">No recent applications found via PlanIt.</div>');
-    return;
-  }
-  html('apps-list',apps.slice(0,25).map(a=>{
+  set('apps-count',`— ${apps.length} found`);
+  if(!apps.length){html('apps-list','<div style="font:400 10px var(--sans);color:var(--text4)">No recent applications found.</div>');return;}
+  html('apps-list',apps.slice(0,20).map(a=>{
     const sc=/appro|grant/i.test(a.status)?'approved':/refus|reject/i.test(a.status)?'refused':'pending';
-    return `<div class="app-item">
-      <div class="app-ref">${a.reference||'—'} <span class="app-status ${sc}">${a.status||'Pending'}</span></div>
-      <div class="app-desc">${a.description||'No description'}</div>
-      <div class="app-meta">
-        ${a.distance?`<span>${a.distance}m</span>`:''}
-        ${a.decidedDate||a.startDate?`<span>${a.decidedDate||a.startDate}</span>`:''}
-      </div>
-    </div>`;
+    return`<div class="app-item"><div class="app-ref">${a.reference||'—'}<span class="app-status ${sc}">${a.status||'Pending'}</span></div><div class="app-desc">${a.description||'No description'}</div><div class="app-meta">${a.distance?`<span>${a.distance}m</span>`:''}${a.decidedDate||a.startDate?`<span>${a.decidedDate||a.startDate}</span>`:''}</div></div>`;
   }).join(''));
 }
 
 loadAll();
-
 </script>
 </body>
 </html>
