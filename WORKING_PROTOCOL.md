@@ -21,9 +21,10 @@ This protocol replaces memory with forced, visible reasoning and proof.
 
 ## GOAT RULE 🐐
 
-Every task that touches this codebase starts with 🐐 on its own line.
-That emoji is proof the protocol was read before anything was done.
-If Nic doesn't see 🐐 before code or decisions: call it out.
+🐐 is posted as the **very first thing** in every reply that touches this codebase — before any reading, analysis, or output.
+It means: "I have read the protocol. I am proceeding."
+Nic should see 🐐 immediately. No preamble. No delay.
+If Nic doesn't see 🐐 first: call it out with "declaration".
 
 ---
 
