@@ -31,39 +31,27 @@ nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
   height:52px;display:flex;align-items:center;justify-content:space-between;
   padding:0 32px;
-  background:rgba(10,12,20,0);
-  transition:background .4s, border-color .4s;
-  border-bottom:1px solid rgba(255,255,255,0);
-}
-nav.scrolled{
   background:rgba(255,255,255,0.97);
-  border-color:var(--border);
+  border-bottom:1px solid var(--border);
   backdrop-filter:blur(12px);
 }
 .nav-logo{
   font:800 17px var(--sans);letter-spacing:-0.5px;
-  text-decoration:none;color:#fff;transition:color .3s;
+  text-decoration:none;color:var(--text);
 }
-nav.scrolled .nav-logo{color:var(--text)}
-.nav-logo .slash{color:#60a5fa;transition:color .3s}
-nav.scrolled .nav-logo .slash{color:var(--blue)}
+.nav-logo .slash{color:var(--blue)}
 .nav-links{display:flex;align-items:center;gap:2px}
 .nav-link{
   font:500 11px var(--sans);text-transform:uppercase;letter-spacing:1.4px;
-  color:rgba(255,255,255,0.65);text-decoration:none;padding:6px 10px;border-radius:4px;
-  transition:all .2s;
+  color:var(--text3);text-decoration:none;padding:6px 10px;border-radius:4px;
+  transition:all .15s;
 }
-.nav-link:hover{color:#fff;background:rgba(255,255,255,0.1)}
-nav.scrolled .nav-link{color:var(--text3)}
-nav.scrolled .nav-link:hover{color:var(--text);background:var(--surface2)}
+.nav-link:hover{color:var(--text);background:var(--surface2)}
 .nav-cta{
   font:600 11px var(--sans);padding:7px 16px;border-radius:5px;
-  text-decoration:none;transition:all .2s;
-  background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.25);
+  text-decoration:none;background:var(--blue);color:#fff;border:none;transition:background .15s;
 }
-.nav-cta:hover{background:rgba(255,255,255,0.25)}
-nav.scrolled .nav-cta{background:var(--blue);color:#fff;border-color:transparent}
-nav.scrolled .nav-cta:hover{background:#1e40af}
+.nav-cta:hover{background:#1e40af}
 
 /* ── Hero ────────────────────────────────── */
 #hero{position:relative;width:100vw;height:100vh;min-height:100vh;overflow:hidden}
@@ -462,12 +450,6 @@ footer a:hover{color:var(--text3)}
 </div><!-- /page-content -->
 
 <script>
-// ── Nav scroll behaviour ──────────────────────────────────────────
-const nav = document.getElementById('main-nav');
-window.addEventListener('scroll', ()=>{
-  nav.classList.toggle('scrolled', window.scrollY > 60);
-}, {passive:true});
-
 // ── Rotating London map ───────────────────────────────────────────
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken = cfg.mapboxToken;
@@ -512,7 +494,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
     let lastTime = 0;
     function rotate(ts){
       if(ts - lastTime > 16){ // ~60fps cap
-        bearing += 0.007;
+        bearing += 0.021;
         map.setBearing(bearing);
         lastTime = ts;
       }
