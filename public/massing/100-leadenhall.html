@@ -942,7 +942,7 @@ async function initMap(){
     m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.0}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
-    fetch(`/api/building-data?lat=${LAT}&lng=${LNG}`).then(r=>r.json()).then(bd=>{
+    fetch(`/api/building-data?lat=51.5137673&lng=-0.0801551`).then(r=>r.json()).then(bd=>{
       if(!bd.found) return;
       window._existingH = bd.height;
       EXISTING_HEIGHT = bd.height;
