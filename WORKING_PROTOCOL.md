@@ -413,3 +413,16 @@ PropertyData is removed from all tiers permanently.
 Do NOT use `/api/plot-boundary`, `/api/borough`, or any PropertyData endpoint.
 Site area, owner, and boundary data must come from intelligence files or HMLR.
 Do not re-add PropertyData for any reason without explicit instruction from Nic.
+
+---
+
+## SINGLE SOURCE OF TRUTH: SITE POLYGON (🦞 locked 2026-03-18)
+
+**All massing input flows from one source across all tiers: `SITE_INTELLIGENCE.polygon`**
+
+- Defined in `public/lib/intelligence-{site}.js` as a coordinate array
+- Both T1 and T2 read this value. No tier derives its own polygon.
+- No queryRenderedFeatures for polygon. No PropertyData. No runtime API.
+- To update a polygon: edit the intelligence file. That is the only edit needed.
+- No new site enters T1 or T2 until `SITE_INTELLIGENCE.polygon` is defined and verified.
+- When adding a polygon: print the coordinates, verify against satellite, confirm centroid is inside the building before committing.
