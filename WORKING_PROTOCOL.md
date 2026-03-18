@@ -274,6 +274,16 @@ If a rule isn't working or a new failure pattern emerges:
 
 ---
 
+## PLANNING PRECEDENT RULES (🦞 locked)
+
+- **Minimum 2 real precedents per site** in Planning Tailwind and Heritage Shadow intelligence. Must be named schemes or LPA application references within 1km or same typology.
+- **Never fabricate planning references.** If uncertain, flag as "unverified - check LPA register."
+- **Cite LPA application reference** (e.g. 20/AP/1537) wherever known. If unknown, cite scheme name + approximate year.
+- **Precedents must address what IS achievable** - not just flag constraints. Intelligence should answer: what height, what coverage, what strategy got approved nearby?
+- **Victorian/NDHA sites**: Precedent research must include retention-led schemes. Demolition-and-replace requires specific precedent justification - default to set-back/retention strategy unless a clearance scheme within 500m and same character is cited.
+
+---
+
 ## MASSING INPUT RULES (🦞 locked)
 
 - **Never use makeRect/centroid for site massing polygon.** makeRect generates a box sitting in the road. Always use `m.queryRenderedFeatures` on the composite `building` layer at the CENTROID point after `map.once('idle')`. Use the returned OSM polygon as `SITE_COORDS`.
