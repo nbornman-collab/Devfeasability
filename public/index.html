@@ -567,7 +567,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
   const map = new mapboxgl.Map({
     container: 'hero-map',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    style: 'mapbox://styles/mapbox/dark-v11',
     center: [-0.0820, 51.5138],
     zoom: 14.8,
     pitch: 68,
@@ -578,7 +578,9 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   });
 
   map.on('load', () => {
-    // 3D buildings overlaid on satellite - dark blue translucent
+    // 3D buildings - dark vector style, warm accent glow
+    const layers = map.getStyle().layers;
+    const labelLayer = layers.find(l => l.type === 'symbol' && l.layout && l.layout['text-field'])?.id;
     map.addLayer({
       id: 'buildings-3d',
       source: 'composite',
@@ -587,19 +589,19 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
       type: 'fill-extrusion',
       minzoom: 13,
       paint: {
-        'fill-extrusion-color': '#0a1628',
+        'fill-extrusion-color': ['interpolate',['linear'],['get','height'],0,'#1a1f35',50,'#252b4a',150,'#2d3561'],
         'fill-extrusion-height':  ['interpolate',['linear'],['zoom'],13,0,13.5,['get','height']],
         'fill-extrusion-base':    ['interpolate',['linear'],['zoom'],13,0,13.5,['get','min_height']],
-        'fill-extrusion-opacity': 0.7,
+        'fill-extrusion-opacity': 0.9,
       }
-    });
+    }, labelLayer);
 
-    // Slow rotation - 0.007° per frame ≈ 0.42°/s ≈ one full rotation ~14 min
-    let bearing = -20;
+    // 3x rotation speed: 0.063 deg/frame (protocol locked 2026-03-18)
+    let bearing = -30;
     let lastTime = 0;
     function rotate(ts){
-      if(ts - lastTime > 16){ // ~60fps cap
-        bearing += 0.021;
+      if(ts - lastTime > 16){
+        bearing += 0.063;
         map.setBearing(bearing);
         lastTime = ts;
       }

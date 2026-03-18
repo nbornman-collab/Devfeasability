@@ -1,3 +1,12 @@
+## MAP STYLE RULES (🦞 locked 2026-03-18)
+
+- Homepage hero map: dark-v11 vector + 3D fill-extrusion buildings. NOT satellite. Camera rotation speed: 0.063 deg/frame (3x baseline).
+- Borough screener map: satellite-v9 aerial (not vector). Site markers must be strong/visible - minimum 18px, high contrast, with pulse animation on verified sites.
+- Borough site popups: must include (1) satellite thumbnail image from Mapbox Static API, (2) high-level score data, (3) direct link to T2 Appraise if available.
+- Mapbox Static API for thumbnails: `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lng},{lat},18,0,55/320x200?access_token={token}` - lazy-loaded on popup open only (free tier: 50k/month).
+
+---
+
 ## GLA PLANNING DATAMAP (🦞 primary resource)
 
 Last updated: 2026-03-17
