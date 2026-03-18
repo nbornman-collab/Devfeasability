@@ -158,8 +158,8 @@
       "name": "Tower Workshops",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49881,
-      "lng": -0.07671,
+      "lat": 51.505052,
+      "lng": -0.087495,
       "hectares": 0.737,
       "score": 70,
       "verified": false,
@@ -184,7 +184,8 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Kinglake Street Garages",
@@ -360,8 +361,8 @@
       "name": "684-698 Old Kent Road (Kwikfit garage)",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48174,
-      "lng": -0.06222,
+      "lat": 51.48179,
+      "lng": -0.06232,
       "hectares": 0.153,
       "score": 69,
       "verified": false,
@@ -384,16 +385,41 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 221,
+        "majorCount": 71,
+        "hasRedevelopment": true,
+        "recentRef": "26/AP/0568",
+        "recentDate": "2026-02-25",
+        "recentDesc": "Details of Condition 3 'Detailed design' required by planning permission ref no.",
+        "majorApps": [
+          {
+            "ref": "08/AP/2209",
+            "date": "2008-08-28",
+            "desc": "Erection of an Integrated Waste Management Facility (incorporating mechanical bi",
+            "decision": "Granted with legal agreement"
+          },
+          {
+            "ref": "10/AP/1676",
+            "date": "2010-06-16",
+            "desc": "Erection of a 275kV Gas Insulated Switchgear (GIS) electricity substation (maxim",
+            "decision": "Granted with legal agreement"
+          },
+          {
+            "ref": "16/EQ/0402",
+            "date": "2016-12-12",
+            "desc": "Demolition of existing buildings, and erection of a mixed use residential led 15",
+            "decision": "Permitted"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.44336,
-      "lng": -0.06834,
+      "lat": 51.44347,
+      "lng": -0.06816,
       "hectares": 0.498,
       "score": 68,
       "verified": false,
@@ -416,16 +442,41 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 87,
+        "majorCount": 4,
+        "hasRedevelopment": true,
+        "recentRef": "25/AP/0632",
+        "recentDate": "2025-03-05",
+        "recentDesc": "Construction of two-storey residential development comprising of 2 x 1-bed self-",
+        "majorApps": [
+          {
+            "ref": "00/AP/0939",
+            "date": "2000-06-07",
+            "desc": "Construction of 13 residential dwellings (AMENDMENT TO PLANNING PERMISSION DATED",
+            "decision": "Granted"
+          },
+          {
+            "ref": "01/AP/0159",
+            "date": "2000-12-27",
+            "desc": "Redevelopment and erection of 66 flats in one, part 6/part 5 storey block facing",
+            "decision": "Granted for SOS"
+          },
+          {
+            "ref": "02/AP/0244",
+            "date": "2002-01-30",
+            "desc": "Details relating to materials, [condition 2], refuse storage [con.3], landscapin",
+            "decision": "AOD - Granted"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Camberwell Bus Garage",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.474,
-      "lng": -0.0961,
+      "lat": 51.505052,
+      "lng": -0.087495,
       "hectares": 1.715,
       "score": 68,
       "verified": false,
@@ -450,14 +501,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Biscuit Factory and Campus",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49504,
-      "lng": -0.0626,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 7.917,
       "score": 68,
       "verified": false,
@@ -482,14 +534,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Burgess Business Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4803,
-      "lng": -0.08698,
+      "lat": 51.516777,
+      "lng": -0.024876,
       "hectares": 3.814,
       "score": 67,
       "verified": false,
@@ -512,16 +565,22 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 40,
+        "majorCount": 0,
+        "hasRedevelopment": true,
+        "recentRef": "PA/25/00892/S",
+        "recentDate": "2025-05-19",
+        "recentDesc": "Submission of details pursuant to Condition 3 (Car Free Agreement) of planning a",
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Blackpool Road Business Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46953,
-      "lng": -0.06438,
+      "lat": 51.497083,
+      "lng": -0.102709,
       "hectares": 1.764,
       "score": 67,
       "verified": false,
@@ -546,14 +605,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4985,
-      "lng": -0.04574,
+      "lat": 51.453566,
+      "lng": -0.069082,
       "hectares": 4.869,
       "score": 66,
       "verified": false,
@@ -576,16 +636,22 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 85,
+        "majorCount": 0,
+        "hasRedevelopment": true,
+        "recentRef": "25/AP/3611",
+        "recentDate": "2025-12-10",
+        "recentDesc": "Non material amendmnet to planning permission ref no. 24/AP/1263. Amendments sou",
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "St Olav's Business Park, Lower Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49856,
-      "lng": -0.05437,
+      "lat": 51.497083,
+      "lng": -0.102709,
       "hectares": 0.552,
       "score": 66,
       "verified": false,
@@ -610,14 +676,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Aylesbury Phase 2",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48677,
-      "lng": -0.08233,
+      "lat": 51.523677,
+      "lng": -0.103618,
       "hectares": 4.287,
       "score": 65,
       "verified": false,
@@ -642,14 +709,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Aylesbury Phase 3",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48857,
-      "lng": -0.08691,
+      "lat": 51.523677,
+      "lng": -0.103618,
       "hectares": 2.546,
       "score": 65,
       "verified": false,
@@ -674,14 +742,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Aylesbury Phase 2",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48835,
-      "lng": -0.08496,
+      "lat": 51.523677,
+      "lng": -0.103618,
       "hectares": 1.417,
       "score": 65,
       "verified": false,
@@ -706,14 +775,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "123 Grove Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46823,
-      "lng": -0.08327,
+      "lat": 51.46817,
+      "lng": -0.08304,
       "hectares": 0.582,
       "score": 65,
       "verified": false,
@@ -736,16 +806,35 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 94,
+        "majorCount": 2,
+        "hasRedevelopment": true,
+        "recentRef": "26/AP/0726",
+        "recentDate": "2026-03-10",
+        "recentDesc": "2x Lime trees in the rear garden. Crown reduce to previous reduction points by u",
+        "majorApps": [
+          {
+            "ref": "16/AP/4123",
+            "date": "2016-09-30",
+            "desc": "Change of use from class D1 with an ancillary class B1 office function to class ",
+            "decision": "Minor - REFUSED"
+          },
+          {
+            "ref": "17/AP/4124",
+            "date": "2017-10-26",
+            "desc": "Change of use from Class D1 with an ancillary Class B1 office function to Class ",
+            "decision": "Granted with legal agreement"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Aylesbury Phase 4a-c",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48598,
-      "lng": -0.08677,
+      "lat": 51.487528,
+      "lng": -0.087983,
       "hectares": 10.869,
       "score": 65,
       "verified": false,
@@ -770,14 +859,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Aylesbury Plot 18",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48759,
-      "lng": -0.08586,
+      "lat": 51.487528,
+      "lng": -0.087983,
       "hectares": 0.432,
       "score": 65,
       "verified": false,
@@ -802,14 +892,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Aylesbury Site 7",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48908,
-      "lng": -0.08538,
+      "lat": 51.504857,
+      "lng": -0.090169,
       "hectares": 1.053,
       "score": 65,
       "verified": false,
@@ -832,16 +923,29 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 300,
+        "majorCount": 1,
+        "hasRedevelopment": true,
+        "recentRef": "26/AP/0228",
+        "recentDate": "2026-01-26",
+        "recentDesc": "Details of condition 4 (Section 278 agreement) required by planning permission r",
+        "majorApps": [
+          {
+            "ref": "18/AP/4039",
+            "date": "2018-12-11",
+            "desc": "Redevelopment to include demolition of the 1980s office buildings and erection o",
+            "decision": "Non-Determination Appeal"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.45925,
-      "lng": -0.08104,
+      "lat": 51.457584,
+      "lng": -0.082604,
       "hectares": 2.792,
       "score": 65,
       "verified": false,
@@ -864,16 +968,22 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 72,
+        "majorCount": 0,
+        "hasRedevelopment": true,
+        "recentRef": "25/AP/0486",
+        "recentDate": "2025-02-21",
+        "recentDesc": "Certificate of Lawful Development (proposed) Replacement windows and entrance do",
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Railway Rise, East Dulwich",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46051,
-      "lng": -0.08084,
+      "lat": 51.461321,
+      "lng": -0.080002,
       "hectares": 0.788,
       "score": 65,
       "verified": false,
@@ -896,16 +1006,41 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 187,
+        "majorCount": 11,
+        "hasRedevelopment": true,
+        "recentRef": "25/AP/3608",
+        "recentDate": "2025-12-10",
+        "recentDesc": "Loft conversion with hip-to-gable roof extension, a rear dormer set back 200mm f",
+        "majorApps": [
+          {
+            "ref": "05/AP/0060",
+            "date": "2005-01-14",
+            "desc": "Demolition of existing buildings and erection of a part 4 and part 5 storey buil",
+            "decision": "Treated as Withdrawn by LPA"
+          },
+          {
+            "ref": "06/AP/1438",
+            "date": "2006-07-21",
+            "desc": "Demolition of existing buildings and erection of part 3 and part 4 storey buildi",
+            "decision": "Refuse"
+          },
+          {
+            "ref": "07/AP/2516",
+            "date": "2007-10-26",
+            "desc": "Demolition of existing buildings and erection of part 3 and part 4 storey buildi",
+            "decision": "Granted with legal agreement"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "62-67 Park Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50755,
-      "lng": -0.09711,
+      "lat": 51.50763,
+      "lng": -0.09713,
       "hectares": 0.397,
       "score": 65,
       "verified": false,
@@ -928,16 +1063,41 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 283,
+        "majorCount": 77,
+        "hasRedevelopment": true,
+        "recentRef": "26/AP/0232",
+        "recentDate": "2026-01-27",
+        "recentDesc": "Details of condition 23 'BREEAM certification' part b) required by planning perm",
+        "majorApps": [
+          {
+            "ref": "04/AP/1820",
+            "date": "2004-10-05",
+            "desc": "Replacement of existing office building with a new mixed use development compris",
+            "decision": "Refuse"
+          },
+          {
+            "ref": "11/AP/4298",
+            "date": "2011-12-21",
+            "desc": "Demolition of Empire Warehouse, Bear Gardens and No. 2 Rose Alley. Facade retent",
+            "decision": "Granted"
+          },
+          {
+            "ref": "11/AP/4297",
+            "date": "2011-12-21",
+            "desc": "Retention and restoration of 1 Bear Gardens and the facade of 1 Rose Alley, and ",
+            "decision": "Granted with legal agreement"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "185 Park Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50692,
-      "lng": -0.09729,
+      "lat": 51.50675,
+      "lng": -0.09765,
       "hectares": 0.46,
       "score": 65,
       "verified": false,
@@ -960,16 +1120,41 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 163,
+        "majorCount": 75,
+        "hasRedevelopment": true,
+        "recentRef": "26/AP/0232",
+        "recentDate": "2026-01-27",
+        "recentDesc": "Details of condition 23 'BREEAM certification' part b) required by planning perm",
+        "majorApps": [
+          {
+            "ref": "04/AP/1820",
+            "date": "2004-10-05",
+            "desc": "Replacement of existing office building with a new mixed use development compris",
+            "decision": "Refuse"
+          },
+          {
+            "ref": "11/AP/2566",
+            "date": "2011-08-02",
+            "desc": "Demolition of eighth floor and mezzanine in order to construct a three floor ext",
+            "decision": "Granted with legal agreement"
+          },
+          {
+            "ref": "14/AP/3842",
+            "date": "2014-10-10",
+            "desc": "Demolition of existing buildings and redevelopment to provide a mixed use develo",
+            "decision": "Granted with legal agreement"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50738,
-      "lng": -0.09361,
+      "lat": 51.50751,
+      "lng": -0.09441,
       "hectares": 0.792,
       "score": 65,
       "verified": false,
@@ -992,16 +1177,41 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 201,
+        "majorCount": 6,
+        "hasRedevelopment": true,
+        "recentRef": "26/AP/0435",
+        "recentDate": "2026-02-13",
+        "recentDesc": "Details of Condition 2 (Hard and soft landscaping) pursuant to planning permissi",
+        "majorApps": [
+          {
+            "ref": "11/AP/4297",
+            "date": "2011-12-21",
+            "desc": "Retention and restoration of 1 Bear Gardens and the facade of 1 Rose Alley, and ",
+            "decision": "Granted with legal agreement"
+          },
+          {
+            "ref": "11/AP/4298",
+            "date": "2011-12-21",
+            "desc": "Demolition of Empire Warehouse, Bear Gardens and No. 2 Rose Alley. Facade retent",
+            "decision": "Granted"
+          },
+          {
+            "ref": "18/AP/2302",
+            "date": "2018-07-10",
+            "desc": "Refurbishment and extension of existing office building (Use Class B1) to provid",
+            "decision": "Granted with legal agreement"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4731,
-      "lng": -0.06836,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 3.144,
       "score": 65,
       "verified": false,
@@ -1026,14 +1236,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.42133,
-      "lng": -0.07867,
+      "lat": 51.504144,
+      "lng": -0.086692,
       "hectares": 0.504,
       "score": 65,
       "verified": false,
@@ -1058,14 +1269,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "London Bridge Health Cluster",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50313,
-      "lng": -0.08867,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 8.031,
       "score": 65,
       "verified": false,
@@ -1090,14 +1302,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50303,
-      "lng": -0.08494,
+      "lat": 51.5073,
+      "lng": -0.127647,
       "hectares": 0.383,
       "score": 65,
       "verified": false,
@@ -1120,16 +1333,41 @@
       "inSHLAA": false,
       "source": "GLA Site Allocations",
       "planning": {
-        "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "total": 300,
+        "majorCount": 7,
+        "hasRedevelopment": true,
+        "recentRef": "26/00313/ADFULL",
+        "recentDate": "2026-01-20",
+        "recentDesc": "Details of rooftop terrace boundary treatment and furniture pursuant to Conditio",
+        "majorApps": [
+          {
+            "ref": "15/07397/FULL",
+            "date": "2015-08-12",
+            "desc": "Use of part basement, part ground, part first and the upper floors of 49-50 Char",
+            "decision": "Application Permitted"
+          },
+          {
+            "ref": "17/07968/FULL",
+            "date": "2017-09-05",
+            "desc": "Partial demolition and redevelopment behind retained fa\u00e7ades of three buildings ",
+            "decision": "Application Permitted"
+          },
+          {
+            "ref": "17/07969/LBC",
+            "date": "2017-09-05",
+            "desc": "Partial demolition and redevelopment behind retained fa\u00e7ades of three buildings ",
+            "decision": "Application Permitted"
+          }
+        ]
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Landmark Court",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50432,
-      "lng": -0.09233,
+      "lat": 51.505052,
+      "lng": -0.087495,
       "hectares": 0.626,
       "score": 65,
       "verified": false,
@@ -1154,14 +1392,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50243,
-      "lng": -0.08381,
+      "lat": 51.504144,
+      "lng": -0.086692,
       "hectares": 0.405,
       "score": 65,
       "verified": false,
@@ -1186,14 +1425,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Mandela Way",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49252,
-      "lng": -0.08019,
+      "lat": 51.491905,
+      "lng": -0.079253,
       "hectares": 12.354,
       "score": 65,
       "verified": false,
@@ -1217,15 +1457,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46158,
-      "lng": -0.08352,
+      "lat": 51.463466,
+      "lng": -0.082644,
       "hectares": 1.469,
       "score": 65,
       "verified": false,
@@ -1249,15 +1495,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49981,
-      "lng": -0.09447,
+      "lat": 51.49956,
+      "lng": -0.09465,
       "hectares": 0.343,
       "score": 65,
       "verified": false,
@@ -1281,15 +1533,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47036,
-      "lng": -0.06606,
+      "lat": 51.497083,
+      "lng": -0.102709,
       "hectares": 2.053,
       "score": 65,
       "verified": false,
@@ -1314,14 +1572,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Bricklayers Arms",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49379,
-      "lng": -0.086,
+      "lat": 51.505052,
+      "lng": -0.087495,
       "hectares": 3.819,
       "score": 65,
       "verified": false,
@@ -1346,14 +1605,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Crimscott Street and Pages Walk",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49482,
-      "lng": -0.07921,
+      "lat": 51.493579,
+      "lng": -0.081926,
       "hectares": 3.78,
       "score": 65,
       "verified": false,
@@ -1377,15 +1637,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "636 Old Kent Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48272,
-      "lng": -0.06414,
+      "lat": 51.4845,
+      "lng": -0.06769,
       "hectares": 0.088,
       "score": 65,
       "verified": false,
@@ -1409,15 +1675,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Marlborough Grove and St James\u2019s Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48572,
-      "lng": -0.06691,
+      "lat": 51.50447,
+      "lng": -0.136713,
       "hectares": 3.978,
       "score": 65,
       "verified": false,
@@ -1441,15 +1713,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48372,
-      "lng": -0.06834,
+      "lat": 51.482183,
+      "lng": -0.071918,
       "hectares": 11.187,
       "score": 65,
       "verified": false,
@@ -1473,15 +1751,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "4/12 Albany Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48798,
-      "lng": -0.07692,
+      "lat": 51.482339,
+      "lng": -0.093556,
       "hectares": 0.112,
       "score": 65,
       "verified": false,
@@ -1505,15 +1789,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "200 Great Dover Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50073,
-      "lng": -0.09205,
+      "lat": 51.50093,
+      "lng": -0.09215,
       "hectares": 0.196,
       "score": 65,
       "verified": false,
@@ -1537,15 +1827,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "7-14 Great Dover Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49991,
-      "lng": -0.09266,
+      "lat": 51.49987,
+      "lng": -0.09294,
       "hectares": 0.348,
       "score": 65,
       "verified": false,
@@ -1569,15 +1865,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48343,
-      "lng": -0.09264,
+      "lat": 51.50455,
+      "lng": -0.09065,
       "hectares": 1.538,
       "score": 63,
       "verified": false,
@@ -1602,14 +1904,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49907,
-      "lng": -0.09627,
+      "lat": 51.49882,
+      "lng": -0.09595,
       "hectares": 0.306,
       "score": 63,
       "verified": false,
@@ -1633,15 +1936,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49671,
-      "lng": -0.09896,
+      "lat": 51.497513,
+      "lng": -0.098839,
       "hectares": 0.262,
       "score": 63,
       "verified": false,
@@ -1665,15 +1974,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Aylesbury Phase 1",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48362,
-      "lng": -0.09077,
+      "lat": 51.50455,
+      "lng": -0.09065,
       "hectares": 3.76,
       "score": 63,
       "verified": false,
@@ -1698,14 +2013,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49781,
-      "lng": -0.10521,
+      "lat": 51.49837,
+      "lng": -0.10482,
       "hectares": 1.171,
       "score": 63,
       "verified": false,
@@ -1729,15 +2045,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Newington Triangle",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49869,
-      "lng": -0.09795,
+      "lat": 51.53802,
+      "lng": -0.058878,
       "hectares": 1.097,
       "score": 63,
       "verified": false,
@@ -1761,15 +2083,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50453,
-      "lng": -0.10062,
+      "lat": 51.522734,
+      "lng": -0.215411,
       "hectares": 1.316,
       "score": 63,
       "verified": false,
@@ -1793,15 +2121,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "49 Lomond Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4782,
-      "lng": -0.0912,
+      "lat": 51.479451,
+      "lng": -0.092487,
       "hectares": 0.317,
       "score": 63,
       "verified": false,
@@ -1825,15 +2159,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "99 Lomond Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47736,
-      "lng": -0.09111,
+      "lat": 51.476536,
+      "lng": -0.091606,
       "hectares": 0.211,
       "score": 63,
       "verified": false,
@@ -1857,15 +2197,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50564,
-      "lng": -0.10513,
+      "lat": 51.505672,
+      "lng": -0.105487,
       "hectares": 0.375,
       "score": 63,
       "verified": false,
@@ -1890,14 +2236,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48021,
-      "lng": -0.09486,
+      "lat": 51.4805,
+      "lng": -0.09475,
       "hectares": 0.294,
       "score": 63,
       "verified": false,
@@ -1921,15 +2268,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "London Fire and Emergency Planning Authority",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.5025,
-      "lng": -0.09797,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 0.855,
       "score": 63,
       "verified": false,
@@ -1954,14 +2307,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "London Southbank University Quarter",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49778,
-      "lng": -0.10223,
+      "lat": 51.505052,
+      "lng": -0.087495,
       "hectares": 5.184,
       "score": 63,
       "verified": false,
@@ -1986,14 +2340,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47256,
-      "lng": -0.09823,
+      "lat": 51.474161,
+      "lng": -0.096891,
       "hectares": 0.415,
       "score": 63,
       "verified": false,
@@ -2017,15 +2372,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "1-5 Westminster Bridge Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49842,
-      "lng": -0.10553,
+      "lat": 51.49844,
+      "lng": -0.10535,
       "hectares": 0.078,
       "score": 63,
       "verified": false,
@@ -2049,15 +2410,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50145,
-      "lng": -0.10021,
+      "lat": 51.501847,
+      "lng": -0.100622,
       "hectares": 0.603,
       "score": 63,
       "verified": false,
@@ -2081,15 +2448,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50656,
-      "lng": -0.1056,
+      "lat": 51.505672,
+      "lng": -0.105487,
       "hectares": 0.724,
       "score": 63,
       "verified": false,
@@ -2114,14 +2487,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50639,
-      "lng": -0.10637,
+      "lat": 51.5067,
+      "lng": -0.1064,
       "hectares": 0.557,
       "score": 63,
       "verified": false,
@@ -2145,15 +2519,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "63-85 Newington Causeway",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49775,
-      "lng": -0.09794,
+      "lat": 51.4979,
+      "lng": -0.09808,
       "hectares": 0.38,
       "score": 63,
       "verified": false,
@@ -2177,15 +2557,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Southwark Station and 1 Joan Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50386,
-      "lng": -0.10525,
+      "lat": 51.5214,
+      "lng": -0.11466,
       "hectares": 0.649,
       "score": 63,
       "verified": false,
@@ -2209,15 +2595,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Denmark Hill Campus East",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46918,
-      "lng": -0.08991,
+      "lat": 51.467026,
+      "lng": -0.090688,
       "hectares": 6.288,
       "score": 63,
       "verified": false,
@@ -2241,15 +2633,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Camberwell Green Magistrates Court",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47604,
-      "lng": -0.09086,
+      "lat": 51.474881,
+      "lng": -0.093176,
       "hectares": 0.483,
       "score": 63,
       "verified": false,
@@ -2273,15 +2671,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Chambers Wharf",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50077,
-      "lng": -0.06598,
+      "lat": 51.511949,
+      "lng": -0.03329,
       "hectares": 1.406,
       "score": 62,
       "verified": false,
@@ -2305,15 +2709,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Bath Trading Estate",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.45134,
-      "lng": -0.10035,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 1.545,
       "score": 62,
       "verified": false,
@@ -2338,14 +2748,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Goose Green Trading Estate",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46037,
-      "lng": -0.07234,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 0.499,
       "score": 62,
       "verified": false,
@@ -2370,14 +2781,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Colechurch House, London Bridge Walk",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50617,
-      "lng": -0.08724,
+      "lat": 51.506082,
+      "lng": -0.087051,
       "hectares": 0.259,
       "score": 62,
       "verified": false,
@@ -2401,15 +2813,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Devon Street and Sylvan Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48123,
-      "lng": -0.05907,
+      "lat": 51.481624,
+      "lng": -0.058424,
       "hectares": 3.136,
       "score": 62,
       "verified": false,
@@ -2433,15 +2851,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Sandgate Street and Verney Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48409,
-      "lng": -0.06142,
+      "lat": 51.484077,
+      "lng": -0.062688,
       "hectares": 14.683,
       "score": 62,
       "verified": false,
@@ -2465,15 +2889,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Former Southern Railway Stables",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48761,
-      "lng": -0.0648,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 0.627,
       "score": 62,
       "verified": false,
@@ -2498,14 +2928,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48376,
-      "lng": -0.0534,
+      "lat": 51.497083,
+      "lng": -0.102709,
       "hectares": 7.901,
       "score": 62,
       "verified": false,
@@ -2530,14 +2961,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Rotherhite Gasometer",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.5023,
-      "lng": -0.04807,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 0.963,
       "score": 60,
       "verified": false,
@@ -2562,14 +2994,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Camberwell Station",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47388,
-      "lng": -0.09778,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 1.646,
       "score": 60,
       "verified": false,
@@ -2594,14 +3027,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.5054,
-      "lng": -0.10351,
+      "lat": 51.561801,
+      "lng": -0.082641,
       "hectares": 0.666,
       "score": 60,
       "verified": false,
@@ -2625,15 +3059,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.5013,
-      "lng": -0.10393,
+      "lat": 51.505072,
+      "lng": -0.104447,
       "hectares": 0.522,
       "score": 60,
       "verified": false,
@@ -2657,15 +3097,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Valmar Trading Estate",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47289,
-      "lng": -0.09377,
+      "lat": 51.543138,
+      "lng": -0.062396,
       "hectares": 0.604,
       "score": 60,
       "verified": false,
@@ -2690,14 +3136,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50763,
-      "lng": -0.10324,
+      "lat": 51.527348,
+      "lng": -0.080172,
       "hectares": 1.966,
       "score": 60,
       "verified": false,
@@ -2721,15 +3168,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "McLaren House, St George's Circus",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49931,
-      "lng": -0.10522,
+      "lat": 51.498794,
+      "lng": -0.104607,
       "hectares": 0.439,
       "score": 60,
       "verified": false,
@@ -2753,15 +3206,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "330-344 Walworth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48568,
-      "lng": -0.09484,
+      "lat": 51.485983,
+      "lng": -0.094309,
       "hectares": 0.27,
       "score": 59,
       "verified": false,
@@ -2785,15 +3244,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Chatelaine House, Walworth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48975,
-      "lng": -0.09728,
+      "lat": 51.488774,
+      "lng": -0.096037,
       "hectares": 0.317,
       "score": 56,
       "verified": false,
@@ -2818,14 +3283,15 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48927,
-      "lng": -0.07552,
+      "lat": 51.4889,
+      "lng": -0.07623,
       "hectares": 4.074,
       "score": 28,
       "verified": false,
@@ -2849,15 +3315,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47331,
-      "lng": -0.09173,
+      "lat": 51.526338,
+      "lng": -0.162602,
       "hectares": 1.389,
       "score": 27,
       "verified": false,
@@ -2881,15 +3353,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4954,
-      "lng": -0.04757,
+      "lat": 51.498403,
+      "lng": -0.046505,
       "hectares": 20.913,
       "score": 25,
       "verified": false,
@@ -2913,15 +3391,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49188,
-      "lng": -0.08367,
+      "lat": 51.491211,
+      "lng": -0.081839,
       "hectares": 0.539,
       "score": 25,
       "verified": false,
@@ -2945,15 +3429,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47942,
-      "lng": -0.05748,
+      "lat": 51.47982,
+      "lng": -0.05836,
       "hectares": 1.948,
       "score": 25,
       "verified": false,
@@ -2977,15 +3467,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49425,
-      "lng": -0.10016,
+      "lat": 51.500513,
+      "lng": -0.055989,
       "hectares": 3.613,
       "score": 24,
       "verified": false,
@@ -3009,15 +3505,21 @@
       "source": "GLA Site Allocations",
       "planning": {
         "total": 0,
-        "note": "GLA site - coordinates require verification before planning query"
-      }
+        "majorCount": 0,
+        "hasRedevelopment": false,
+        "recentRef": null,
+        "recentDate": null,
+        "recentDesc": null,
+        "majorApps": []
+      },
+      "coordSource": "mapbox-geocoded"
     },
     {
       "name": "Morrisons, Walworth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4874,
-      "lng": -0.09617,
+      "lat": 51.488774,
+      "lng": -0.096037,
       "hectares": 0.513,
       "score": 23,
       "verified": false,
@@ -3042,7 +3544,8 @@
       "planning": {
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
-      }
+      },
+      "coordSource": "mapbox-fallback-suspect"
     }
   ]
 }

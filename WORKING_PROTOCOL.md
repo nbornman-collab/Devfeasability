@@ -467,7 +467,9 @@ Existing GEA must come from publicly available data sources only:
 
 ## FLOOR-TO-FLOOR HEIGHTS (🦞 locked 2026-03-18)
 
-- Office: 4.0m floor-to-floor
+- Office lower-rise (typically sub-8F / refurb-grade): 3.5m floor-to-floor
+- Office higher-rise / Grade A new-build: 4.0m floor-to-floor
 - Residential: 3.15m floor-to-floor
 - Never use 4.2m or any other value
+- FTF selection is context-dependent per site - record the choice and rationale in the intelligence file
 - These drive all massing height calculations across T1 and T2
