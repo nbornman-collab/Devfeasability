@@ -686,11 +686,20 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
       }
     });
     map.addSource('site',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
-    map.addLayer({id:'site-fill',type:'fill',source:'site',paint:{'fill-color':'#1d4ed8','fill-opacity':0.15}});
-    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#1d4ed8','line-width':2.5}});
-    map.addLayer({id:'site-extrude',type:'fill-extrusion',source:'site',paint:{
-      'fill-extrusion-color':'#1d4ed8','fill-extrusion-height':10,
-      'fill-extrusion-base':0,'fill-extrusion-opacity':0.22}});
+    // Site boundary line
+    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':2,'line-dasharray':[5,3],'line-opacity':0.9}});
+    // Amber: existing building mass
+    map.addLayer({id:'site-existing',type:'fill-extrusion',source:'site',paint:{
+      'fill-extrusion-color':'#b45309',
+      'fill-extrusion-height':13.7,
+      'fill-extrusion-base':0,
+      'fill-extrusion-opacity':0.80}});
+    // Green: maximum development potential
+    map.addLayer({id:'site-massing',type:'fill-extrusion',source:'site',paint:{
+      'fill-extrusion-color':'#059669',
+      'fill-extrusion-height':48.0,
+      'fill-extrusion-base':13.7,
+      'fill-extrusion-opacity':0.55}});
 
 
     // PropertyData legal boundary

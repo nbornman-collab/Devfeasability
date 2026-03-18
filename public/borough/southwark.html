@@ -20,7 +20,7 @@
 html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text)}
 
 /* Layout */
-.page{display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 52px);margin-top:52px}
+.page{display:grid;grid-template-columns:1fr 1fr;position:fixed;top:52px;left:0;right:0;bottom:0}
 @media(max-width:900px){.page{grid-template-columns:1fr;grid-template-rows:40vh 1fr}}
 
 /* Map */
@@ -241,12 +241,6 @@ async function loadAndRender() {
   ALL_SITES = data.sites || [];
 
   // Update header stats
-  const statEls = document.querySelectorAll('.stat-box .val');
-  if (statEls[0]) statEls[0].textContent = ALL_SITES.length + ' sites';
-  if (statEls[1]) statEls[1].textContent = ALL_SITES.filter(s=>s.verified).length + ' verified';
-  if (statEls[2]) statEls[2].textContent = ALL_SITES.filter(s=>s.flags&&s.flags.inOA).length + ' in OA';
-
-  // Update header stats
   const el = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
   el('stat-total', ALL_SITES.length);
   el('stat-verified', ALL_SITES.filter(s=>s.verified).length);
@@ -348,7 +342,7 @@ async function initMap(){
           `)
           .addTo(map);
         highlightCard(s._rank);
-      };
+      });
     });
   });
 }

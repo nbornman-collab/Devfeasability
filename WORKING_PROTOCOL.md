@@ -356,3 +356,14 @@ If a rule isn't working or a new failure pattern emerges:
 - Borough screener paywall - parked
 - 100LH plot area (1,551m² is single title - real consolidated site is 4,450m²)
 Protocol violation logged: 2026-03-18 11:13 UTC — 🐐 omitted from reply containing commits 550bdde
+
+---
+
+## COMPREHENSIVE AUDIT RULE (🦞 locked 2026-03-18)
+
+When any page is reported broken, do NOT just fix the symptom reported.
+Run a full audit of ALL active pages before committing any fix:
+- T0 Borough, T1 (24SS + 196BR), T2 (24SS), homepage, methodology
+- Check: JS syntax validity (node --check), CSS variable references, map container height, script src 404s, API endpoint reachability
+- Fix everything found in one commit - not piecemeal
+- Post-commit: verify ALL pages return HTTP 200 AND log what was found + fixed
