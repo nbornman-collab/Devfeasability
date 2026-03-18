@@ -377,3 +377,13 @@ Each SCENARIO object must carry its own `costGsm` value reflecting height-based 
 The financial model must use `s.costGsm` per scenario, not a flat multiplier of one slider value.
 The cost slider sets the Base scenario cost; Low and High derive from scenario-defined escalation factors,
 not arbitrary ×0.82 / ×1.25 multipliers.
+
+---
+
+## SLIDER BASELINE MARKERS (🦞 locked 2026-03-18)
+
+Every financial slider must have an individual snap-back-to-baseline control.
+Do not rely on global reset only. Each slider gets:
+- A small baseline tick/marker on the slider track at the default position
+- A per-slider reset button (↺) that appears when value deviates from default
+- Clicking the reset icon snaps that slider back to its default value only

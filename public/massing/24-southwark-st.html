@@ -136,6 +136,11 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .pstrip-flag.ok{color:var(--lo)}.pstrip-flag.warn{color:#dc2626}
 
 /* ── Assumption sliders ── */
+.sreset{font:600 10px var(--sans);background:none;border:none;cursor:pointer;color:var(--accent);opacity:0.2;padding:0 3px;transition:opacity .15s,color .15s;line-height:1;vertical-align:middle}
+.sreset.live{opacity:1;color:var(--accent)}
+.sreset.live:hover{color:#1d4ed8}
+.slider-wrap{position:relative;margin:2px 0 0}
+.baseline-tick{position:absolute;top:-3px;width:2px;height:7px;background:var(--border);border-radius:1px;pointer-events:none;transform:translateX(-50%)}
 .assump-panel{border:1px solid var(--border);margin:0 20px 16px;overflow:hidden}
 .assump-head{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;background:var(--s1);user-select:none;border-bottom:1px solid transparent}
 .assump-head:hover{background:var(--s2)}
@@ -277,20 +282,30 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
     </div>
     <div class="assump-body" id="assump-body" style="display:block">
       <div class="slider-grid">
-        <div class="srow"><div class="smeta"><span class="slbl">ERV</span><span class="sval" id="sv-erv">£800/m²</span></div>
+        <div class="srow"><div class="smeta"><span class="slbl">ERV</span><span class="sval" id="sv-erv">700</span><button class="sreset" id="sr-erv" onclick="resetSlider('erv')" title="Reset to baseline">↺</button></div>
+          <div class="slider-wrap"><div class="baseline-tick" style="left:28.6%"></div>
           <input type="range" class="srange" id="sl-erv" min="500" max="1200" step="25" value="800" oninput="onSlider('erv',+this.value)">
+          </div></div>
           <div class="sbounds"><span>£500</span><span>£1,200</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">Net Yield</span><span class="sval" id="sv-niy">5.25%</span></div>
+        <div class="srow"><div class="smeta"><span class="slbl">Net Yield</span><span class="sval" id="sv-niy">5.25</span><button class="sreset" id="sr-niy" onclick="resetSlider('niy')" title="Reset to baseline">↺</button></div>
+          <div class="slider-wrap"><div class="baseline-tick" style="left:43.8%"></div>
           <input type="range" class="srange" id="sl-niy" min="3.5" max="7.5" step="0.25" value="5.25" oninput="onSlider('niy',+this.value)">
+          </div></div>
           <div class="sbounds"><span>3.5%</span><span>7.5%</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">Build Cost (base)</span><span class="sval" id="sv-cost">£5,000/m²</span></div>
+        <div class="srow"><div class="smeta"><span class="slbl">Build Cost (base)</span><span class="sval" id="sv-cost">4200</span><button class="sreset" id="sr-cost" onclick="resetSlider('cost')" title="Reset to baseline">↺</button></div>
+          <div class="slider-wrap"><div class="baseline-tick" style="left:24.0%"></div>
           <input type="range" class="srange" id="sl-cost" min="3000" max="8000" step="100" value="5000" oninput="onSlider('cost',+this.value)">
+          </div></div>
           <div class="sbounds"><span>£3k</span><span>£8k</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">S106</span><span class="sval" id="sv-s106">£750k</span></div>
+        <div class="srow"><div class="smeta"><span class="slbl">S106</span><span class="sval" id="sv-s106">500</span><button class="sreset" id="sr-s106" onclick="resetSlider('s106')" title="Reset to baseline">↺</button></div>
+          <div class="slider-wrap"><div class="baseline-tick" style="left:16.7%"></div>
           <input type="range" class="srange" id="sl-s106" min="0" max="3000" step="50" value="750" oninput="onSlider('s106',+this.value)">
+          </div></div>
           <div class="sbounds"><span>£0</span><span>£3M</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">Target Profit</span><span class="sval" id="sv-poc">20%</span></div>
+        <div class="srow"><div class="smeta"><span class="slbl">Target Profit</span><span class="sval" id="sv-poc">20</span><button class="sreset" id="sr-poc" onclick="resetSlider('poc')" title="Reset to baseline">↺</button></div>
+          <div class="slider-wrap"><div class="baseline-tick" style="left:50.0%"></div>
           <input type="range" class="srange" id="sl-poc" min="10" max="30" step="1" value="20" oninput="onSlider('poc',+this.value)">
+          </div></div>
           <div class="sbounds"><span>10%</span><span>30%</span></div></div>
       </div>
       <div style="text-align:right;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
@@ -581,7 +596,14 @@ function onSlider(key,v){
   document.getElementById('lbl-erv').textContent=S.erv;
   document.getElementById('lbl-niy').textContent=S.niy;
   document.getElementById('lbl-cost').textContent=Number(S.cost).toLocaleString();
+  // Show/hide per-slider reset button
+  const rb=document.getElementById(`sr-${key}`);
+  if(rb) rb.classList.toggle('live', v!=DEFS[key]);
   recalc();
+}
+function resetSlider(key){
+  document.getElementById(`sl-${key}`).value=DEFS[key];
+  onSlider(key,DEFS[key]);
 }
 function resetAssump(){
   S={...DEFS};
@@ -598,6 +620,11 @@ function resetAssump(){
   document.getElementById('lbl-erv').textContent=DEFS.erv;
   document.getElementById('lbl-niy').textContent=DEFS.niy;
   document.getElementById('lbl-cost').textContent=DEFS.cost.toLocaleString();
+  // Clear all per-slider reset indicators
+  ['erv','niy','cost','s106','poc'].forEach(k=>{
+    const rb=document.getElementById('sr-'+k);
+    if(rb) rb.classList.remove('live');
+  });
   recalc();
 }
 function toggleAssump(el){
