@@ -51,13 +51,13 @@
       "source": "Verified (HMLR + EPC + PropertyData)"
     },
     {
-      "name": "Aylesbury Phase 2",
+      "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.35603,
-      "lng": -0.0247,
-      "hectares": 4.287,
-      "score": 64,
+      "lat": 51.33917,
+      "lng": -0.00823,
+      "hectares": 1.167,
+      "score": 71,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -68,16 +68,20 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
-      "name": "Aylesbury Phase 3",
+      "name": "Tower Workshops",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.35806,
-      "lng": -0.02918,
-      "hectares": 2.546,
-      "score": 64,
+      "lat": 51.36816,
+      "lng": -0.01892,
+      "hectares": 0.737,
+      "score": 70,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -88,16 +92,20 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
     },
     {
-      "name": "Aylesbury Phase 4a-c",
+      "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.35493,
-      "lng": -0.02803,
-      "hectares": 10.869,
-      "score": 64,
+      "lat": 51.33138,
+      "lng": -0.02025,
+      "hectares": 0.328,
+      "score": 70,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -108,16 +116,20 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": null,
+      "inSHLAA": false
     },
     {
-      "name": "Dulwich Community Hospital, East Dulwich Grove",
+      "name": "Kinglake Street Garages",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.32848,
-      "lng": -0.02317,
-      "hectares": 2.792,
-      "score": 64,
+      "lat": 51.35798,
+      "lng": -0.02014,
+      "hectares": 0.076,
+      "score": 70,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -128,7 +140,203 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Former petrol filling station, 233-247 Old Kent Road",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.3593,
+      "lng": -0.0214,
+      "hectares": 0.087,
+      "score": 70,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Salisbury estate car park",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36138,
+      "lng": -0.03247,
+      "hectares": 0.104,
+      "score": 70,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Croft Street Depot",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36042,
+      "lng": 0.01679,
+      "hectares": 0.47,
+      "score": 70,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
+    },
+    {
+      "name": "Abellio Walworth Depot",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.34498,
+      "lng": -0.03701,
+      "hectares": 1.137,
+      "score": 69,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "684-698 Old Kent Road (Kwikfit garage)",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35113,
+      "lng": -0.0042,
+      "hectares": 0.153,
+      "score": 69,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
+    },
+    {
+      "name": "Biscuit Factory and Campus",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36379,
+      "lng": -0.00449,
+      "hectares": 7.917,
+      "score": 68,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
+    },
+    {
+      "name": "Camberwell Bus Garage",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.34321,
+      "lng": -0.03812,
+      "hectares": 1.715,
+      "score": 68,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": "residential",
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "The Grove Tavern, 520 Lordship Lane",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.31283,
+      "lng": -0.01058,
+      "hectares": 0.498,
+      "score": 68,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": null,
+      "inSHLAA": false
     },
     {
       "name": "Burgess Business Park",
@@ -137,7 +345,7 @@
       "lat": 51.34976,
       "lng": -0.02871,
       "hectares": 3.814,
-      "score": 64,
+      "score": 67,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -148,16 +356,20 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
-      "name": "Aylesham Centre and Peckham Bus Station",
+      "name": "Blackpool Road Business Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.3423,
-      "lng": -0.0101,
-      "hectares": 3.144,
-      "score": 64,
+      "lat": 51.33869,
+      "lng": -0.00602,
+      "hectares": 1.764,
+      "score": 67,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -168,27 +380,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "London Bridge Health Cluster",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37259,
-      "lng": -0.03012,
-      "hectares": 8.031,
-      "score": 64,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -197,7 +393,7 @@
       "lat": 51.36738,
       "lng": 0.0121,
       "hectares": 4.869,
-      "score": 64,
+      "score": 66,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -208,7 +404,179 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
+    },
+    {
+      "name": "St Olav's Business Park, Lower Road",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.368,
+      "lng": 0.00371,
+      "hectares": 0.552,
+      "score": 66,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
+    },
+    {
+      "name": "Aylesbury Phase 2",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35603,
+      "lng": -0.0247,
+      "hectares": 4.287,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Aylesbury Phase 3",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35806,
+      "lng": -0.02918,
+      "hectares": 2.546,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Aylesbury Phase 4a-c",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35493,
+      "lng": -0.02803,
+      "hectares": 10.869,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Dulwich Community Hospital, East Dulwich Grove",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.32848,
+      "lng": -0.02317,
+      "hectares": 2.792,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": null,
+      "inSHLAA": false
+    },
+    {
+      "name": "Aylesham Centre and Peckham Bus Station",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.3423,
+      "lng": -0.0101,
+      "hectares": 3.144,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "London Bridge Health Cluster",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37259,
+      "lng": -0.03012,
+      "hectares": 8.031,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Mandela Way",
@@ -217,7 +585,7 @@
       "lat": 51.36136,
       "lng": -0.02111,
       "hectares": 12.354,
-      "score": 64,
+      "score": 65,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -228,27 +596,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert’s Close",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36563,
-      "lng": 0.0122,
-      "hectares": 20.913,
-      "score": 64,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -257,7 +609,7 @@
       "lat": 51.33972,
       "lng": -0.00847,
       "hectares": 2.053,
-      "score": 64,
+      "score": 65,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -268,7 +620,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Bricklayers Arms",
@@ -277,7 +633,7 @@
       "lat": 51.36339,
       "lng": -0.02791,
       "hectares": 3.819,
-      "score": 64,
+      "score": 65,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -288,7 +644,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -297,7 +657,7 @@
       "lat": 51.36415,
       "lng": -0.02128,
       "hectares": 3.78,
-      "score": 64,
+      "score": 65,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -308,7 +668,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Marlborough Grove and St James’s Road",
@@ -317,7 +681,7 @@
       "lat": 51.35509,
       "lng": -0.0089,
       "hectares": 3.978,
-      "score": 64,
+      "score": 65,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -328,7 +692,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -337,7 +705,7 @@
       "lat": 51.3529,
       "lng": -0.01121,
       "hectares": 11.187,
-      "score": 64,
+      "score": 65,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -348,7 +716,443 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Aylesbury Phase 2",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35768,
+      "lng": -0.02682,
+      "hectares": 1.417,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "123 Grove Park",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.33778,
+      "lng": -0.02524,
+      "hectares": 0.582,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": null,
+      "inSHLAA": false
+    },
+    {
+      "name": "Aylesbury Site 7",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35849,
+      "lng": -0.02745,
+      "hectares": 1.053,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Railway Rise, East Dulwich",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.32985,
+      "lng": -0.02289,
+      "hectares": 0.788,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": null,
+      "inSHLAA": false
+    },
+    {
+      "name": "1 Southwark Bridge Road and Red Lion Court",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37676,
+      "lng": -0.03595,
+      "hectares": 0.792,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.29064,
+      "lng": -0.02061,
+      "hectares": 0.504,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": null,
+      "inSHLAA": false
+    },
+    {
+      "name": "Landmark Court",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37372,
+      "lng": -0.03448,
+      "hectares": 0.626,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.33074,
+      "lng": -0.02594,
+      "hectares": 1.469,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": null,
+      "inSHLAA": false
+    },
+    {
+      "name": "Aylesbury Plot 18",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35687,
+      "lng": -0.02788,
+      "hectares": 0.432,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "62-67 Park Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37696,
+      "lng": -0.03919,
+      "hectares": 0.397,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "185 Park Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37632,
+      "lng": -0.03921,
+      "hectares": 0.46,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37235,
+      "lng": -0.02686,
+      "hectares": 0.383,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37195,
+      "lng": -0.02571,
+      "hectares": 0.405,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "275 Borough High Street and 7 Trinity Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36925,
+      "lng": -0.03642,
+      "hectares": 0.343,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "636 Old Kent Road",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35209,
+      "lng": -0.00616,
+      "hectares": 0.088,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "4/12 Albany Road",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35729,
+      "lng": -0.01903,
+      "hectares": 0.112,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "200 Great Dover Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37015,
+      "lng": -0.03424,
+      "hectares": 0.196,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "7-14 Great Dover Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36926,
+      "lng": -0.03487,
+      "hectares": 0.348,
+      "score": 65,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Aylesbury Phase 1",
@@ -368,7 +1172,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "London Southbank University Quarter",
@@ -388,47 +1196,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Elephant & Castle Shopping Centre and London College of Communication",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36368,
-      "lng": -0.04225,
-      "hectares": 3.613,
-      "score": 63,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Biscuit Factory and Campus",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36379,
-      "lng": -0.00449,
-      "hectares": 7.917,
-      "score": 63,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Denmark Hill Campus East",
@@ -448,7 +1220,467 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Aylesbury Phase 1 Site 1a",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35282,
+      "lng": -0.0347,
+      "hectares": 1.538,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Bakerloo Line Sidings and 7 St George's Circus",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36711,
+      "lng": -0.04748,
+      "hectares": 1.171,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Newington Triangle",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36803,
+      "lng": -0.04057,
+      "hectares": 1.097,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Site Bordering Great Suffolk Street and Ewer Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37399,
+      "lng": -0.04205,
+      "hectares": 1.316,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "London Fire and Emergency Planning Authority",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37181,
+      "lng": -0.04018,
+      "hectares": 0.855,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Land between Great Suffolk Street and Glasshill Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.3707,
+      "lng": -0.04207,
+      "hectares": 0.603,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37606,
+      "lng": -0.04747,
+      "hectares": 0.724,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "1-5 Paris Garden and 16-19 Hatfields",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37573,
+      "lng": -0.04852,
+      "hectares": 0.557,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Southwark Station and 1 Joan Street",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37327,
+      "lng": -0.04774,
+      "hectares": 0.649,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36843,
+      "lng": -0.03816,
+      "hectares": 0.306,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Salvation Army Headquarters, Newington Causeway",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36614,
+      "lng": -0.04104,
+      "hectares": 0.262,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "49 Lomond Grove",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.34754,
+      "lng": -0.03331,
+      "hectares": 0.317,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "99 Lomond Grove",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.34674,
+      "lng": -0.03316,
+      "hectares": 0.211,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37495,
+      "lng": -0.04707,
+      "hectares": 0.375,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Iceland, 118-132 Camberwell Road",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.34964,
+      "lng": -0.03693,
+      "hectares": 0.294,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Land Between Camberwell Station Road and Warner Road",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.34194,
+      "lng": -0.0403,
+      "hectares": 0.415,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "1-5 Westminster Bridge Road",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36782,
+      "lng": -0.04752,
+      "hectares": 0.078,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "63-85 Newington Causeway",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36706,
+      "lng": -0.03995,
+      "hectares": 0.38,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Camberwell Green Magistrates Court",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.34542,
+      "lng": -0.03305,
+      "hectares": 0.483,
+      "score": 63,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -457,7 +1689,7 @@
       "lat": 51.35038,
       "lng": -0.00058,
       "hectares": 3.136,
-      "score": 63,
+      "score": 62,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -468,7 +1700,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -477,7 +1713,7 @@
       "lat": 51.35333,
       "lng": -0.00383,
       "hectares": 14.683,
-      "score": 63,
+      "score": 62,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -488,7 +1724,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -497,7 +1737,7 @@
       "lat": 51.35281,
       "lng": 0.00377,
       "hectares": 7.901,
-      "score": 63,
+      "score": 62,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -508,167 +1748,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Aylesbury Phase 2",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35768,
-      "lng": -0.02682,
-      "hectares": 1.417,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "123 Grove Park",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.33778,
-      "lng": -0.02524,
-      "hectares": 0.582,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Aylesbury Site 7",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35849,
-      "lng": -0.02745,
-      "hectares": 1.053,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Railway Rise, East Dulwich",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.32985,
-      "lng": -0.02289,
-      "hectares": 0.788,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "1 Southwark Bridge Road and Red Lion Court",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37676,
-      "lng": -0.03595,
-      "hectares": 0.792,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.29064,
-      "lng": -0.02061,
-      "hectares": 0.504,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Blackpool Road Business Park",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.33869,
-      "lng": -0.00602,
-      "hectares": 1.764,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Tower Workshops",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36816,
-      "lng": -0.01892,
-      "hectares": 0.737,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
     },
     {
       "name": "Bath Trading Estate",
@@ -688,96 +1772,20 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": null,
+      "inSHLAA": false
     },
     {
-      "name": "Landmark Court",
+      "name": "Chambers Wharf",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.37372,
-      "lng": -0.03448,
-      "hectares": 0.626,
+      "lat": 51.37013,
+      "lng": -0.00801,
+      "hectares": 1.406,
       "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "St Olav's Business Park, Lower Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.368,
-      "lng": 0.00371,
-      "hectares": 0.552,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.33074,
-      "lng": -0.02594,
-      "hectares": 1.469,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.33917,
-      "lng": -0.00823,
-      "hectares": 1.167,
-      "score": 62,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Aylesbury Phase 1 Site 1a",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35282,
-      "lng": -0.0347,
-      "hectares": 1.538,
-      "score": 60,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -788,7 +1796,83 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
+    },
+    {
+      "name": "Former Southern Railway Stables",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.35687,
+      "lng": -0.0068,
+      "hectares": 0.627,
+      "score": 62,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
+    },
+    {
+      "name": "Goose Green Trading Estate",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.32996,
+      "lng": -0.01445,
+      "hectares": 0.499,
+      "score": 62,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Colechurch House, London Bridge Walk",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.37553,
+      "lng": -0.02936,
+      "hectares": 0.259,
+      "score": 62,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Camberwell Station",
@@ -808,7 +1892,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": "residential",
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -828,47 +1916,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Bakerloo Line Sidings and 7 St George's Circus",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36711,
-      "lng": -0.04748,
-      "hectares": 1.171,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Newington Triangle",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36803,
-      "lng": -0.04057,
-      "hectares": 1.097,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -888,27 +1940,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Site Bordering Great Suffolk Street and Ewer Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37399,
-      "lng": -0.04205,
-      "hectares": 1.316,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Valmar Trading Estate",
@@ -928,7 +1964,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": 2,
+      "buildingUse": "terrace",
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -948,587 +1988,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "London Fire and Emergency Planning Authority",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37181,
-      "lng": -0.04018,
-      "hectares": 0.855,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Camberwell Bus Garage",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.34321,
-      "lng": -0.03812,
-      "hectares": 1.715,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Chambers Wharf",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37013,
-      "lng": -0.00801,
-      "hectares": 1.406,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Land between Great Suffolk Street and Glasshill Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.3707,
-      "lng": -0.04207,
-      "hectares": 0.603,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37606,
-      "lng": -0.04747,
-      "hectares": 0.724,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "1-5 Paris Garden and 16-19 Hatfields",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37573,
-      "lng": -0.04852,
-      "hectares": 0.557,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Abellio Walworth Depot",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.34498,
-      "lng": -0.03701,
-      "hectares": 1.137,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Southwark Station and 1 Joan Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37327,
-      "lng": -0.04774,
-      "hectares": 0.649,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Former Southern Railway Stables",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35687,
-      "lng": -0.0068,
-      "hectares": 0.627,
-      "score": 60,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Aylesbury Plot 18",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35687,
-      "lng": -0.02788,
-      "hectares": 0.432,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.33138,
-      "lng": -0.02025,
-      "hectares": 0.328,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "The Grove Tavern, 520 Lordship Lane",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.31283,
-      "lng": -0.01058,
-      "hectares": 0.498,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "62-67 Park Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37696,
-      "lng": -0.03919,
-      "hectares": 0.397,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "185 Park Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37632,
-      "lng": -0.03921,
-      "hectares": 0.46,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37235,
-      "lng": -0.02686,
-      "hectares": 0.383,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Goose Green Trading Estate",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.32996,
-      "lng": -0.01445,
-      "hectares": 0.499,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Colechurch House, London Bridge Walk",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37553,
-      "lng": -0.02936,
-      "hectares": 0.259,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37195,
-      "lng": -0.02571,
-      "hectares": 0.405,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "275 Borough High Street and 7 Trinity Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36925,
-      "lng": -0.03642,
-      "hectares": 0.343,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Kinglake Street Garages",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35798,
-      "lng": -0.02014,
-      "hectares": 0.076,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Former petrol filling station, 233-247 Old Kent Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.3593,
-      "lng": -0.0214,
-      "hectares": 0.087,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "684-698 Old Kent Road (Kwikfit garage)",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35113,
-      "lng": -0.0042,
-      "hectares": 0.153,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "636 Old Kent Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35209,
-      "lng": -0.00616,
-      "hectares": 0.088,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Salisbury estate car park",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36138,
-      "lng": -0.03247,
-      "hectares": 0.104,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "4/12 Albany Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.35729,
-      "lng": -0.01903,
-      "hectares": 0.112,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Croft Street Depot",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36042,
-      "lng": 0.01679,
-      "hectares": 0.47,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "200 Great Dover Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37015,
-      "lng": -0.03424,
-      "hectares": 0.196,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "7-14 Great Dover Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36926,
-      "lng": -0.03487,
-      "hectares": 0.348,
-      "score": 59,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36843,
-      "lng": -0.03816,
-      "hectares": 0.306,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Rotherhite Gasometer",
@@ -1537,7 +2001,7 @@
       "lat": 51.37182,
       "lng": 0.00994,
       "hectares": 0.963,
-      "score": 58,
+      "score": 60,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -1548,127 +2012,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Salvation Army Headquarters, Newington Causeway",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36614,
-      "lng": -0.04104,
-      "hectares": 0.262,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "49 Lomond Grove",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.34754,
-      "lng": -0.03331,
-      "hectares": 0.317,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "99 Lomond Grove",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.34674,
-      "lng": -0.03316,
-      "hectares": 0.211,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.37495,
-      "lng": -0.04707,
-      "hectares": 0.375,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Iceland, 118-132 Camberwell Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.34964,
-      "lng": -0.03693,
-      "hectares": 0.294,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Land Between Camberwell Station Road and Warner Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.34194,
-      "lng": -0.0403,
-      "hectares": 0.415,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -1677,7 +2025,7 @@
       "lat": 51.36858,
       "lng": -0.04735,
       "hectares": 0.439,
-      "score": 58,
+      "score": 60,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -1688,67 +2036,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "1-5 Westminster Bridge Road",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36782,
-      "lng": -0.04752,
-      "hectares": 0.078,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "63-85 Newington Causeway",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.36706,
-      "lng": -0.03995,
-      "hectares": 0.38,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
-    },
-    {
-      "name": "Camberwell Green Magistrates Court",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.34542,
-      "lng": -0.03305,
-      "hectares": 0.483,
-      "score": 58,
-      "verified": false,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": true,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "330-344 Walworth Road",
@@ -1757,7 +2049,7 @@
       "lat": 51.35512,
       "lng": -0.03674,
       "hectares": 0.27,
-      "score": 54,
+      "score": 59,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -1768,7 +2060,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -1777,7 +2073,7 @@
       "lat": 51.35908,
       "lng": -0.0392,
       "hectares": 0.317,
-      "score": 54,
+      "score": 56,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -1788,7 +2084,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -1797,7 +2097,7 @@
       "lat": 51.35843,
       "lng": -0.0177,
       "hectares": 4.074,
-      "score": 26,
+      "score": 28,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -1808,7 +2108,59 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Butterfly Walk & Morrisons Car Park",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.34252,
+      "lng": -0.03382,
+      "hectares": 1.389,
+      "score": 27,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": true,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
+    },
+    {
+      "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert’s Close",
+      "address": "",
+      "borough": "Southwark",
+      "lat": 51.36563,
+      "lng": 0.0122,
+      "hectares": 20.913,
+      "score": 25,
+      "verified": false,
+      "flags": {
+        "inOA": false,
+        "inCAZ": false,
+        "inConservation": false,
+        "inLVMF": false,
+        "inBrownfield": false,
+        "floodZone": 1,
+        "ptal": 3.5
+      },
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -1828,7 +2180,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "760, 812 Old Kent Road (Toys’r’us store), and 840 Old Kent Road (Aldi store)",
@@ -1837,7 +2193,7 @@
       "lat": 51.34896,
       "lng": 0.00009,
       "hectares": 1.948,
-      "score": 24,
+      "score": 25,
       "verified": false,
       "flags": {
         "inOA": false,
@@ -1848,15 +2204,19 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 2,
+      "inSHLAA": false
     },
     {
-      "name": "Butterfly Walk & Morrisons Car Park",
+      "name": "Elephant & Castle Shopping Centre and London College of Communication",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.34252,
-      "lng": -0.03382,
-      "hectares": 1.389,
+      "lat": 51.36368,
+      "lng": -0.04225,
+      "hectares": 3.613,
       "score": 24,
       "verified": false,
       "flags": {
@@ -1868,7 +2228,11 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -1888,14 +2252,20 @@
         "floodZone": 1,
         "ptal": 3.5
       },
-      "source": "GLA Site Allocations"
+      "source": "GLA Site Allocations",
+      "existingLevels": null,
+      "buildingUse": null,
+      "mcil2Band": 3,
+      "inSHLAA": false
     }
   ],
   "stats": {
     "total": 94,
     "verified": 2,
     "inOA": 2,
+    "inSHLAA": 0,
     "topScore": 91,
-    "medianScore": 60
-  }
+    "medianScore": 65
+  },
+  "enriched": "2026-03-18T07:52:11.526Z"
 }

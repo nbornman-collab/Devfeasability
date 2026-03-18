@@ -254,6 +254,15 @@ async function loadAndRender() {
       s.t2 ? `<a href="${s.t2}" style="font:600 10px Inter,sans-serif;color:#059669;text-decoration:none">T2 Appraise</a>` : '',
     ].filter(Boolean).join(' &middot; ');
 
+    const dataChips = [];
+    if (s.existingLevels) dataChips.push(`${s.existingLevels}F existing`);
+    if (s.buildingUse && s.buildingUse !== 'yes') dataChips.push(s.buildingUse);
+    if (s.mcil2Band) dataChips.push(`CIL Band ${s.mcil2Band}`);
+    if (s.inSHLAA) dataChips.push('SHLAA');
+    const dataRow = dataChips.length
+      ? `<div style="font:500 10px Inter,sans-serif;color:var(--text3);margin:4px 0 0">${dataChips.join(' &middot; ')}</div>`
+      : '';
+
     card.innerHTML = `
       <div class="rank" style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
         <span>#${rank}</span>
@@ -262,6 +271,7 @@ async function loadAndRender() {
       </div>
       <div class="name">${s.name}</div>
       <div class="area-tag">${s.address || ''} ${s.hectares ? '&middot; ' + s.hectares.toFixed(2) + 'ha' : ''}</div>
+      ${dataRow}
       ${tierLinks ? '<div style="margin:6px 0">' + tierLinks + '</div>' : ''}
       ${renderConstraintFlags(cflags)}
     `;
@@ -312,7 +322,9 @@ async function initMap(){
             <div class="popup-sub">${s.address || ''}</div>
             <div class="popup-stat"><span class="k">Score</span><span class="v" style="color:var(--accent)">${s.score}/100</span></div>
             <div class="popup-stat"><span class="k">Site</span><span class="v">${s.hectares ? s.hectares.toFixed(2)+'ha' : '-'}</span></div>
-            <div class="popup-stat"><span class="k">OA</span><span class="v">${s.flags&&s.flags.inOA?'Yes - '+s.source:'No'}</span></div>
+            ${s.existingLevels ? '<div class="popup-stat"><span class="k">Existing</span><span class="v">'+s.existingLevels+'F'+((s.buildingUse&&s.buildingUse!=='yes')?' - '+s.buildingUse:'')+'</span></div>' : ''}
+            ${s.mcil2Band ? '<div class="popup-stat"><span class="k">CIL Band</span><span class="v">'+s.mcil2Band+'</span></div>' : ''}
+            <div class="popup-stat"><span class="k">OA</span><span class="v">${s.flags&&s.flags.inOA?'Yes':'No'}</span></div>
             ${s.t1 ? '<a class="popup-btn" href="'+s.t1+'">T1 Scout &rarr;</a>' : ''}
           `)
           .addTo(map);
