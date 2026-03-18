@@ -706,7 +706,7 @@ function buildHeights(osmEls){
     const pct=Math.round(b.h/maxH*100);
     const col=b.h>=200?'#1d4ed8':b.h>=100?'#ea580c':b.h>=50?'#f59e0b':'#d1d5db';
     return`<div class="hb-row"><div class="hb-label" title="${b.name}">${b.name}</div><div class="hb-track"><div class="hb-fill" style="width:${pct}%;background:${col}"></div></div><div class="hb-val">${b.h}m</div></div>`;
-  }).join('')}</div><div style="font:400 9px var(--sans);color:var(--text4);margin-top:8px">Tallest precedent within 300m: <strong style="color:var(--text2)">${Math.max(...merged.map(b=>b.h))}m</strong>. Eastern Cluster — tall buildings zone.</div>`);
+  }).join('')}</div><div style="font:400 9px var(--sans);color:var(--text4);margin-top:8px">Tallest precedent within 300m: <strong style="color:var(--text2)">${Math.max(...merged.map(b=>b.h))}m</strong>. Blackfriars Opportunity Area — tall residential supported.</div>`);
 }
 
 function buildApps(apps){
