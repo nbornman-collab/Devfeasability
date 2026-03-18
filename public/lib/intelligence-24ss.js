@@ -25,8 +25,16 @@ const SITE_INTELLIGENCE = {
     },
     momentum: {
       label: 'Planning Tailwind',
-      score: 7.5, weight: 2.0,
+      score: 8.5, weight: 2.0,
       cluster: 'Bankside / Borough',
+      opportunity_area: {
+        name: 'London Bridge/Bankside Opportunity Area',
+        ref: 'London Plan 2021 Policy SD1 + OAPF',
+        homes_target: 4000,
+        jobs_target: 5500,
+        oapf: 'Bankside, Borough and London Bridge OAPF (Southwark SPD)',
+        implication: 'Mayoral backing for intensification. Departure from standard density matrix supported. LPA required to facilitate not resist. OA designation is the single strongest planning enabler for this site.'
+      },
       consents: 4,
       precedents: [
         { name: 'Liberty of Southwark, 15 Southwark Street', ref: '21/AP/xxxx', floors: '8F+ with heritage restoration', outcome: 'Approved 2021 - Landsec. Directly comparable typology: Southwark Street heritage facade, office-led.' },

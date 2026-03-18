@@ -274,6 +274,17 @@ If a rule isn't working or a new failure pattern emerges:
 
 ---
 
+## OPPORTUNITY AREA RULES (🦞 locked)
+
+- **Layer Opportunity Area (OA) designation into every site.** OA status is a first-class planning intelligence field, not a footnote.
+- **OA sites receive**: Planning Tailwind score bonus, explicit OA flag in T1 planning flags (green), and relaxed height precedent framing in Available Sky insight.
+- **OA source**: London Plan 2021 Policy SD1 / GLA OAPF documents. Cite the named OA and its targets (homes + jobs).
+- **OA means**: Mayoral backing for intensification, departure from standard density matrix, taller buildings more justifiable, LPA expected to facilitate not resist.
+- **Non-OA sites** do not get OA score treatment. Framing must be conservative on height.
+- **Opportunity Area field**: add `opportunity_area: { name, ref, homes_target, jobs_target, oapf }` to the `momentum` factor in every intelligence file.
+
+---
+
 ## PLANNING PRECEDENT RULES (🦞 locked)
 
 - **Minimum 2 real precedents per site** in Planning Tailwind and Heritage Shadow intelligence. Must be named schemes or LPA application references within 1km or same typology.
