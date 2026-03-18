@@ -36,12 +36,12 @@
 html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)}
 
 /* ── Map ─────────────────────────────────── */
-#map{position:fixed;top:0;left:var(--left-w);right:var(--right-w);bottom:var(--ribbon-h);z-index:0}
+#map{position:fixed;top:52px;left:var(--left-w);right:var(--right-w);bottom:var(--ribbon-h);z-index:0}
 .mapboxgl-ctrl-top-right{top:12px !important;right:12px !important}
 
 /* ── Left ribbon ─────────────────────────── */
 #left-ribbon{
-  position:fixed;left:0;top:0;bottom:0;width:var(--left-w);
+  position:fixed;left:0;top:52px;bottom:0;width:var(--left-w);
   background:var(--surface);border-right:1px solid var(--border);
   z-index:30;display:flex;flex-direction:column;align-items:center;
   padding:14px 0 16px;gap:4px;
@@ -92,7 +92,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 
 /* ── Right panel ─────────────────────────── */
 #right-panel{
-  position:fixed;right:0;top:0;bottom:0;width:var(--right-w);
+  position:fixed;right:0;top:52px;bottom:0;width:var(--right-w);
   background:var(--surface);border-left:1px solid var(--border);
   z-index:30;overflow-y:auto;display:flex;flex-direction:column;
 }
@@ -278,9 +278,43 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   .rp-cta-row{position:sticky;bottom:0}
 }
 
+
+/* ── Top nav (shared) ─────────────────────────── */
+.da-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;
+  background:rgba(255,255,255,0.97);
+  border-bottom:1px solid #e5e7eb;
+  backdrop-filter:blur(12px);
+}
+.da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-0.5px;text-decoration:none;color:#0f172a}
+.da-nav-logo .sl{color:#1d4ed8}
+.da-nav-links{display:flex;align-items:center;gap:2px}
+.da-nav-link{
+  font:500 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.4px;
+  color:#6b7280;text-decoration:none;padding:6px 10px;border-radius:4px;
+  transition:all .15s;
+}
+.da-nav-link:hover{color:#0f172a;background:#f9fafb}
+.da-nav-link.active{color:#0f172a;background:#f3f4f6;font-weight:700}
+.da-nav-link.locked{opacity:.35;pointer-events:none}
+
 </style>
 </head>
 <body>
+
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <div class="da-nav-links">
+    <a href="/borough/southwark" class="da-nav-link">T0 Borough</a>
+    <a href="/t1/24-southwark-st" class="da-nav-link active">T1 Scout</a>
+    <a href="/t2/24-southwark-st" class="da-nav-link">T2 Appraise</a>
+    <a href="#" class="da-nav-link locked">T3 Present</a>
+  </div>
+  <a href="/methodology" style="font:500 11px Inter,sans-serif;color:#6b7280;text-decoration:none">Methodology</a>
+</nav>
+
 
 <!-- Full-bleed map -->
 <div id="map"></div>

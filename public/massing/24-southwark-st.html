@@ -18,8 +18,8 @@
 html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--text);overflow:hidden}
 
 /* ── 50/50 layout ───────────────────────────────────────────────── */
-#map{position:fixed;top:0;left:0;width:50%;height:100%}
-.panel{position:fixed;top:0;right:0;width:50%;height:100%;background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:5}
+#map{position:fixed;top:52px;left:0;width:50%;height:calc(100% - 52px)}
+.panel{position:fixed;top:52px;right:0;width:50%;height:100%;background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:5}
 
 /* ── Map overlays ────────────────────────────────────────────────── */
 .map-bar{position:fixed;top:14px;left:14px;z-index:10;display:flex;align-items:center;gap:8px}
@@ -160,11 +160,45 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
   .hero-grid{grid-template-columns:1fr 1fr}
   .chart-row,.intel-grid,.metric-grid{grid-template-columns:1fr}
 }
+
+/* ── Top nav (shared) ─────────────────────────── */
+.da-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;
+  background:rgba(255,255,255,0.97);
+  border-bottom:1px solid #e5e7eb;
+  backdrop-filter:blur(12px);
+}
+.da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-0.5px;text-decoration:none;color:#0f172a}
+.da-nav-logo .sl{color:#1d4ed8}
+.da-nav-links{display:flex;align-items:center;gap:2px}
+.da-nav-link{
+  font:500 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.4px;
+  color:#6b7280;text-decoration:none;padding:6px 10px;border-radius:4px;
+  transition:all .15s;
+}
+.da-nav-link:hover{color:#0f172a;background:#f9fafb}
+.da-nav-link.active{color:#0f172a;background:#f3f4f6;font-weight:700}
+.da-nav-link.locked{opacity:.35;pointer-events:none}
+
 </style>
 <script src="/lib/site-intelligence.js"></script>
 <script src="/lib/intelligence-24ss.js"></script>
 </head>
 <body>
+
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <div class="da-nav-links">
+    <a href="/borough/southwark" class="da-nav-link">T0 Borough</a>
+    <a href="/t1/24-southwark-st" class="da-nav-link">T1 Scout</a>
+    <a href="/t2/24-southwark-st" class="da-nav-link active">T2 Appraise</a>
+    <a href="#" class="da-nav-link locked">T3 Present</a>
+  </div>
+  <a href="/methodology" style="font:500 11px Inter,sans-serif;color:#6b7280;text-decoration:none">Methodology</a>
+</nav>
+
 <div id="map"></div>
 
 <div class="map-bar">
