@@ -197,93 +197,81 @@ function computeScore(s){
 // Removed (2026-03-17): Surrey Quays (active BL masterplan), Tesco Canada Water (active BL masterplan),
 // Lavington St (Timber Square — already built), 53 Loman St (fabricated), 133 Copeland Rd (unverified),
 // 200 Great Dover St (unverified), 112a Warner Rd (unverified), 207 Union St (unverified),
-// Ministry of Sound (live business, speculative).
-const SITES = [
-  // VERIFIED: HMLR TGL221350 | Owner: RREEF Bankside II Limited | EPC: commercial 1,550m² | PropertyData: confirmed
-  {rank:1, name:"24 Southwark Street", address:"24 Southwark Street", area:"Bankside", type:"Office", lat:51.5048, lng:-0.0940, floors:4, potentialFloors:12, plotSqm:1550, remainingSqm:12400, gdv:103700000, marginPct:49, units:0, note:"4-storey office on a street with 8-12F buildings either side. Prime Bankside location, PTAL 6b. Comprehensive redevelopment or upward extension."},
-  // VERIFIED: HMLR SGL322825 | Owner: Barts Charity | EPC: 583m² | Blackfriars Opportunity Area
-  {rank:2, name:"196 Blackfriars Road", address:"196 Blackfriars Road", area:"Blackfriars", type:"Residential", lat:51.5005, lng:-0.1042, floors:3, potentialFloors:15, plotSqm:583, remainingSqm:5247, gdv:42000000, marginPct:20, units:80, note:"3-storey building in Blackfriars Opportunity Area. Southwark policy supports tall residential at this location. One Blackfriars (50F) and 240 Blackfriars (16F) establish height precedent within 300m."},
-];
+// Sites loaded from pre-scored JSON — 92 GLA site allocations + 2 verified sites
+// Regenerate: node /tmp/score-southwark.js
 
-
-// ── Constraint flag detection ───────────────────────────────────────────────
-const ANCHOR_PATTERNS = [
-  /tesco/i, /sainsbury/i, /waitrose/i, /morrison/i, /aldi/i, /lidl/i, /asda/i,
-  /shopping.cent/i, /shopping.mall/i, /retail.park/i, /supermarket/i,
-  /westfield/i, /centre point/i
-];
-const RECENT_CUTOFF = 2015;
-const CONSENT_PATTERNS = [/planning.granted/i, /consent/i, /approved/i];
+const ANCHOR_PATTERNS = [/tesco/i,/sainsbury/i,/waitrose/i,/morrison/i,/aldi/i,/lidl/i,/asda/i,/shopping.cent/i,/supermarket/i,/westfield/i];
 
 function getConstraintFlags(s) {
   const flags = [];
-  const nameAddr = (s.name + ' ' + (s.address||'')).toLowerCase();
-  if (ANCHOR_PATTERNS.some(p => p.test(nameAddr))) {
-    flags.push({cls:'hard', icon:'🏬', label:'Anchor Tenant'});
-  }
-  if (s.yearBuilt && s.yearBuilt >= RECENT_CUTOFF) {
-    flags.push({cls:'soft', icon:'⚠️', label:'Recently Built'});
-  }
-  if (s.hasConsent) {
-    flags.push({cls:'hard', icon:'🚫', label:'Active Consent'});
-  }
-  if (s.listed) {
-    flags.push({cls:'hard', icon:'🏛', label:'Listed Building'});
-  }
-  if (s.floodZone === 3) {
-    flags.push({cls:'soft', icon:'🌊', label:'Flood Zone 3'});
-  }
-  if (s.multiTitle) {
-    flags.push({cls:'info', icon:'📋', label:'Multi-Title'});
-  }
+  const nm = (s.name + ' ' + (s.address||'')).toLowerCase();
+  if (ANCHOR_PATTERNS.some(p => p.test(nm))) flags.push({cls:'hard',icon:'🏬',label:'Anchor Tenant'});
+  if (s.flags && s.flags.floodZone === 3) flags.push({cls:'soft',icon:'🌊',label:'Flood Zone 3'});
+  if (s.flags && s.flags.inConservation) flags.push({cls:'soft',icon:'🏛',label:'Conservation Area'});
+  if (s.flags && s.flags.inLVMF) flags.push({cls:'info',icon:'👁',label:'LVMF Vista'});
   return flags;
 }
 
 function renderConstraintFlags(flags) {
   if (!flags.length) return '';
-  const html = flags.map(f => `<span class="cflag ${f.cls}">${f.icon} ${f.label}</span>`).join('');
-  return `<div class="constraint-flags">${html}</div>`;
+  return '<div class="constraint-flags">' + flags.map(f=>`<span class="cflag ${f.cls}">${f.icon} ${f.label}</span>`).join('') + '</div>';
 }
 
-// Compute and assign scores, then re-sort
-SITES.forEach(s => { s.score = computeScore(s); });
-SITES.sort((a,b) => b.score - a.score);
-SITES.forEach((s,i) => { s.rank = i+1; });
-
-function fmt(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,','); }
-function fmtGDV(n){
-  if(n >= 1e9) return '&pound;' + (n/1e9).toFixed(1) + 'B';
-  return '&pound;' + Math.round(n/1e6) + 'M';
+function renderBadges(s) {
+  const b = [];
+  if (s.verified) b.push('<span style="background:#dcfce7;color:#16a34a;font:600 9px Inter,sans-serif;padding:2px 7px;border-radius:3px">VERIFIED</span>');
+  else b.push('<span style="background:#f3f4f6;color:#6b7280;font:600 9px Inter,sans-serif;padding:2px 7px;border-radius:3px">CANDIDATE</span>');
+  if (s.flags && s.flags.inOA) b.push('<span style="background:#eff6ff;color:#1d4ed8;font:600 9px Inter,sans-serif;padding:2px 7px;border-radius:3px">OA</span>');
+  if (s.flags && s.flags.inCAZ) b.push('<span style="background:#fef3c7;color:#d97706;font:600 9px Inter,sans-serif;padding:2px 7px;border-radius:3px">CAZ</span>');
+  return b.join(' ');
 }
 
-// Render site list
-const listEl = document.getElementById('site-list');
-SITES.forEach(s => {
-  const existPct = Math.round(s.floors / s.potentialFloors * 100);
-  const card = document.createElement('div');
-  card.className = 'site-card';
-  card.dataset.rank = s.rank;
-  const cflags = getConstraintFlags(s);
-  card.innerHTML = `
-    <div class="rank">#${s.rank} &middot; ${s.type} &middot; <span style="color:var(--accent)">${s.score}/10</span></div>
-    <div class="name">${s.name}</div>
-    <div class="area-tag">${s.address} &middot; ${s.area}</div>
-    <div class="capacity-bar"><div class="existing" style="width:${existPct}%"></div><div class="potential" style="width:${100-existPct}%"></div></div>
-    <div class="metrics">
-      <div class="metric"><div class="val">${s.floors}F &rarr; ${s.potentialFloors}F</div><div class="lbl">Floors</div></div>
-      <div class="metric"><div class="val green">+${fmt(s.remainingSqm)}</div><div class="lbl">sqm</div></div>
-      <div class="metric"><div class="val accent">${fmtGDV(s.gdv)}</div><div class="lbl">GDV</div></div>
-      <div class="metric"><div class="val">${s.marginPct}%</div><div class="lbl">Margin</div></div>
-    </div>
-    <div class="note">${s.note}</div>
-    ${renderConstraintFlags(cflags)}
-  `;
-  card.onclick = () => flyToSite(s);
-  listEl.appendChild(card);
-});
-
-// Map
+let ALL_SITES = [];
 let map;
+
+async function loadAndRender() {
+  const data = await fetch('/data/southwark-sites.json').then(r => r.json());
+  ALL_SITES = data.sites || [];
+
+  // Update header stats
+  const statEls = document.querySelectorAll('.stat-box .val');
+  if (statEls[0]) statEls[0].textContent = ALL_SITES.length + ' sites';
+  if (statEls[1]) statEls[1].textContent = ALL_SITES.filter(s=>s.verified).length + ' verified';
+  if (statEls[2]) statEls[2].textContent = ALL_SITES.filter(s=>s.flags&&s.flags.inOA).length + ' in OA';
+
+  const listEl = document.getElementById('site-list');
+  listEl.innerHTML = '';
+
+  ALL_SITES.forEach((s, i) => {
+    const rank = i + 1;
+    s._rank = rank;
+    const card = document.createElement('div');
+    card.className = 'site-card';
+    card.dataset.rank = rank;
+    const cflags = getConstraintFlags(s);
+    const tierLinks = [
+      s.t1 ? `<a href="${s.t1}" style="font:600 10px Inter,sans-serif;color:var(--accent);text-decoration:none">T1 Scout</a>` : '',
+      s.t2 ? `<a href="${s.t2}" style="font:600 10px Inter,sans-serif;color:#059669;text-decoration:none">T2 Appraise</a>` : '',
+    ].filter(Boolean).join(' &middot; ');
+
+    card.innerHTML = `
+      <div class="rank" style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+        <span>#${rank}</span>
+        <span style="color:var(--accent);font-weight:700">${s.score}/100</span>
+        ${renderBadges(s)}
+      </div>
+      <div class="name">${s.name}</div>
+      <div class="area-tag">${s.address || ''} ${s.hectares ? '&middot; ' + s.hectares.toFixed(2) + 'ha' : ''}</div>
+      ${tierLinks ? '<div style="margin:6px 0">' + tierLinks + '</div>' : ''}
+      ${renderConstraintFlags(cflags)}
+    `;
+    card.onclick = () => flyToSite(s);
+    listEl.appendChild(card);
+  });
+
+  await initMap();
+}
+
 async function initMap(){
   const cfg = await fetch('/api/config').then(r=>r.json());
   mapboxgl.accessToken = cfg.mapboxToken;
@@ -291,100 +279,61 @@ async function initMap(){
     container:'map',
     style:'mapbox://styles/mapbox/light-v11',
     center:[-0.08, 51.49],
-    zoom:12,
-    pitch:45,
+    zoom:11.5,
+    pitch:40,
     bearing:-10,
   });
 
   map.on('load', () => {
-    // Add 3d buildings
     const layers = map.getStyle().layers;
     const labelLayerId = layers.find(l => l.type === 'symbol' && l.layout['text-field'])?.id;
     map.addLayer({
-      id:'3d-buildings', source:'composite', 'source-layer':'building', filter:['==','extrude','true'],
-      type:'fill-extrusion', minzoom:14,
-      paint:{
-        'fill-extrusion-color':'#d4d6dc',
-        'fill-extrusion-height':['get','height'],
-        'fill-extrusion-base':['get','min_height'],
-        'fill-extrusion-opacity':0.4
-      }
+      id:'3d-buildings', source:'composite', 'source-layer':'building',
+      filter:['==','extrude','true'], type:'fill-extrusion', minzoom:14,
+      paint:{'fill-extrusion-color':'#d4d6dc','fill-extrusion-height':['get','height'],
+        'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.4}
     }, labelLayerId);
 
-    // Add site markers
-    SITES.forEach(s => {
-      // Marker dot
+    ALL_SITES.forEach(s => {
       const el = document.createElement('div');
-      el.style.cssText = `width:14px;height:14px;background:${s.rank <= 3 ? '#059669' : '#4f46e5'};border:2.5px solid white;border-radius:50%;box-shadow:0 0 8px rgba(0,0,0,.2);cursor:pointer`;
-      
-      const marker = new mapboxgl.Marker({element:el})
-        .setLngLat([s.lng, s.lat])
-        .addTo(map);
-
-      // Number label
-      const label = document.createElement('div');
-      label.className = 'marker-label';
-      label.innerHTML = `#${s.rank}`;
-      new mapboxgl.Marker({element:label, anchor:'bottom'})
-        .setLngLat([s.lng, s.lat])
-        .addTo(map);
-
-      // Popup on click
-      el.onclick = () => {
-        new mapboxgl.Popup({offset:20, maxWidth:'280px'})
+      const isVerified = s.verified;
+      const isTopScorer = s.score >= 70;
+      const color = isVerified ? '#059669' : isTopScorer ? '#4f46e5' : '#94a3b8';
+      const size = isVerified ? '16px' : '10px';
+      el.style.cssText = `width:${size};height:${size};background:${color};border:2px solid white;border-radius:50%;box-shadow:0 0 6px rgba(0,0,0,.2);cursor:pointer`;
+      const marker = new mapboxgl.Marker({element:el}).setLngLat([s.lng, s.lat]).addTo(map);
+      el.onclick = (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.mapboxgl-popup').forEach(p => p.remove());
+        new mapboxgl.Popup({offset:16, maxWidth:'260px'})
           .setLngLat([s.lng, s.lat])
           .setHTML(`
             <div class="popup-title">${s.name}</div>
-            <div class="popup-sub">${s.address} &middot; ${s.area}</div>
-            <div class="popup-stat"><span class="k">Current</span><span class="v">${s.floors}F / ${Math.round(s.floors*3.2)}m</span></div>
-            <div class="popup-stat"><span class="k">Potential</span><span class="v">${s.potentialFloors}F / ${Math.round(s.potentialFloors*3.2)}m</span></div>
-            <div class="popup-stat"><span class="k">Add. GFA</span><span class="v">${fmt(s.remainingSqm)}sqm</span></div>
-            <div class="popup-stat"><span class="k">Est. GDV</span><span class="v" style="color:var(--green)">${fmtGDV(s.gdv)}</span></div>
-            ${s.units > 0 ? '<div class="popup-stat"><span class="k">Est. Units</span><span class="v">~' + s.units + '</span></div>' : ''}
-            <div class="popup-stat"><span class="k">Margin</span><span class="v">${s.marginPct}%</span></div>
-            <a class="popup-btn" href="/?q=${encodeURIComponent(s.address + ', London')}" target="_blank">Full Analysis &rarr;</a>
+            <div class="popup-sub">${s.address || ''}</div>
+            <div class="popup-stat"><span class="k">Score</span><span class="v" style="color:var(--accent)">${s.score}/100</span></div>
+            <div class="popup-stat"><span class="k">Site</span><span class="v">${s.hectares ? s.hectares.toFixed(2)+'ha' : '-'}</span></div>
+            <div class="popup-stat"><span class="k">OA</span><span class="v">${s.flags&&s.flags.inOA?'Yes - '+s.source:'No'}</span></div>
+            ${s.t1 ? '<a class="popup-btn" href="'+s.t1+'">T1 Scout &rarr;</a>' : ''}
           `)
           .addTo(map);
-        highlightCard(s.rank);
+        highlightCard(s._rank);
       };
     });
   });
 }
 
 function flyToSite(s){
-  map.flyTo({center:[s.lng, s.lat], zoom:15, pitch:55, bearing:-20, duration:1500});
-  // Close existing popups
-  document.querySelectorAll('.mapboxgl-popup').forEach(p => p.remove());
-  // Open popup
-  setTimeout(() => {
-    new mapboxgl.Popup({offset:20, maxWidth:'280px'})
-      .setLngLat([s.lng, s.lat])
-      .setHTML(`
-        <div class="popup-title">${s.name}</div>
-        <div class="popup-sub">${s.address} &middot; ${s.area}</div>
-        <div class="popup-stat"><span class="k">Current</span><span class="v">${s.floors}F / ${Math.round(s.floors*3.2)}m</span></div>
-        <div class="popup-stat"><span class="k">Potential</span><span class="v">${s.potentialFloors}F / ${Math.round(s.potentialFloors*3.2)}m</span></div>
-        <div class="popup-stat"><span class="k">Add. GFA</span><span class="v">${fmt(s.remainingSqm)}sqm</span></div>
-        <div class="popup-stat"><span class="k">Est. GDV</span><span class="v" style="color:var(--green)">${fmtGDV(s.gdv)}</span></div>
-        ${s.units > 0 ? '<div class="popup-stat"><span class="k">Est. Units</span><span class="v">~' + s.units + '</span></div>' : ''}
-        <div class="popup-stat"><span class="k">Margin</span><span class="v">${s.marginPct}%</span></div>
-        <a class="popup-btn" href="/?q=${encodeURIComponent(s.address + ', London')}" target="_blank">Full Analysis &rarr;</a>
-      `)
-      .addTo(map);
-  }, 800);
-  highlightCard(s.rank);
+  map.flyTo({center:[s.lng, s.lat], zoom:14, pitch:50, duration:1200});
+  highlightCard(s._rank);
 }
 
 function highlightCard(rank){
   document.querySelectorAll('.site-card').forEach(c => c.classList.remove('active'));
   const card = document.querySelector(`.site-card[data-rank="${rank}"]`);
-  if(card){
-    card.classList.add('active');
-    card.scrollIntoView({behavior:'smooth', block:'nearest'});
-  }
+  if(card){card.classList.add('active');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
 }
 
-initMap();
+loadAndRender();
 </script>
 </body>
 </html>
