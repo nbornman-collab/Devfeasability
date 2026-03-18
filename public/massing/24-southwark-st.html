@@ -435,20 +435,12 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 <script>
 // ══════════════════════════════════════════════════════════════════════════════
 // DATA - identical financial model
-// ══════════════════════════════════════════════════════════════════════════════
-// PLACEHOLDER: SITE_COORDS is a makeRect approximation - replace with actual HMLR polygon for TGL221350 when fetched from INSPIRE WFS
-// Owner: RREEF Bankside II Limited | Title: TGL221350 | EPC-confirmed GIA: 1,550m²
-function _makeRectEarly(cx,cy,areaSqm,aspect){
-  const LM=1/70750,LaM=1/111320;
-  const w=Math.sqrt(areaSqm*aspect),h=w/aspect;
-  const dLng=(w/2)*LM,dLat=(h/2)*LaM;
-  return [[cx-dLng,cy-dLat],[cx+dLng,cy-dLat],[cx+dLng,cy+dLat],[cx-dLng,cy+dLat],[cx-dLng,cy-dLat]];
-}
+// Site polygon from Mapbox composite building layer (queryRenderedFeatures on idle)
 const CENTROID=[-0.0940,51.5048];
 const PLOT_AREA=1550, FTF=4.2;
 let EXISTING_HEIGHT=24.8; // 24SS confirmed (EPC/HMLR)
 const EXISTING_EUV=22000000;
-let SITE_COORDS=_makeRectEarly(CENTROID[0],CENTROID[1],PLOT_AREA,1.2); // temporary fallback - replaced on idle by queryRenderedFeatures
+let SITE_COORDS = null; // populated on map idle from queryRenderedFeatures
 const fmt=n=>(n??0).toLocaleString('en-GB');
 
 const MARKET={
@@ -833,12 +825,7 @@ function clipToSite(pts,clip){
   if(out.length) out.push(out[0]);
   return out;
 }
-function makeRect(cx,cy,areaSqm,aspect){
-  const LM=1/70750, LaM=1/111320;
-  const w=Math.sqrt(areaSqm*aspect), h=w/aspect;
-  const dLng=(w/2)*LM, dLat=(h/2)*LaM;
-  return [[cx-dLng,cy-dLat],[cx+dLng,cy-dLat],[cx+dLng,cy+dLat],[cx-dLng,cy+dLat],[cx-dLng,cy-dLat]];
-}
+// makeRect deleted - use Mapbox queryRenderedFeatures only
 
 function updateMap(idx){
   const s=SCENARIOS[idx],m=window._map;
@@ -940,11 +927,11 @@ async function initMap(){
       paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.20,'fill-extrusion-vertical-gradient':false}});
 
     // Site boundary
-    m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
+    m.addSource('site',{type:'geojson',data:emptyPoly()});
     m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-dasharray':[5,3],'line-opacity':0.8}});
 
     // Red translucent shell - OS NGD real footprint polygon (falls back to SITE_COORDS)
-    m.addSource('existing',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}}});
+    m.addSource('existing',{type:'geojson',data:emptyPoly()});
     m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#e05c5c','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.0}});
     m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#c0392b','line-width':2,'line-opacity':0.85}});
     // Load real OS NGD building data
@@ -976,9 +963,7 @@ async function initMap(){
     }
     m.moveLayer('podium-3d');
     m.moveLayer('podium-edge');
-    updateMap(0);
-
-    // Replace makeRect with real OSM building polygon from Mapbox composite layer
+    // Massing renders only after queryRenderedFeatures loads real polygon on idle
     m.once('idle', () => {
       const pt = m.project(CENTROID);
       const features = m.queryRenderedFeatures([pt.x, pt.y], { layers: ['building'] });
