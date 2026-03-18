@@ -336,30 +336,52 @@ async function initMap(){
 function openSitePopup(s) {
   document.querySelectorAll('.mapboxgl-popup').forEach(p => p.remove());
   const t1url = siteT1Url(s);
-  const imgUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${s.lng},${s.lat},18,0,55/320x180?access_token=${cfg.mapboxToken}`;
   const oaBadge = (s.flags&&s.flags.inOA) ? '<span style="background:#1d4ed8;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px;margin-left:4px">OA</span>' : '';
   const verBadge = s.verified ? '<span style="background:#10b981;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">VERIFIED</span>' : '<span style="background:#6b7280;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">CANDIDATE</span>';
   const t2btn = s.t2 ? `<a class="popup-btn" style="background:#059669;margin-top:4px" href="${s.t2}" onclick="event.stopPropagation()">T2 Appraise &rarr;</a>` : '';
+
+  const popupId = `popup-${Date.now()}`;
+  const dataGrid = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:8px 0">
+      <div class="popup-stat"><span class="k">Score</span><span class="v" style="color:#6366f1;font-weight:700">${s.score}/100</span></div>
+      <div class="popup-stat"><span class="k">Site</span><span class="v">${s.hectares?s.hectares.toFixed(2)+'ha':'-'}</span></div>
+      ${s.existingLevels ? `<div class="popup-stat"><span class="k">Existing</span><span class="v">${s.existingLevels}F</span></div>` : ''}
+      ${s.mcil2Band ? `<div class="popup-stat"><span class="k">CIL Band</span><span class="v">${s.mcil2Band}</span></div>` : ''}
+      ${s.buildingUse&&s.buildingUse!=='yes' ? `<div class="popup-stat" style="grid-column:1/-1"><span class="k">Use</span><span class="v">${s.buildingUse}</span></div>` : ''}
+    </div>`;
+
+  // Start with no image, fetch street view asynchronously
   new mapboxgl.Popup({offset:20, maxWidth:'340px', className:'site-popup'})
     .setLngLat([s.lng, s.lat])
     .setHTML(`
-      <div onclick="window.location.href='${t1url}'" style="cursor:pointer">
-        <img src="${imgUrl}" style="width:calc(100% + 24px);height:160px;object-fit:cover;border-radius:4px 4px 0 0;display:block;margin:-12px -12px 10px" loading="lazy" onerror="this.style.display='none'">
+      <div id="${popupId}" onclick="window.location.href='${t1url}'" style="cursor:pointer">
+        <div id="${popupId}-img" style="width:calc(100% + 24px);height:160px;background:#1a1d2e;border-radius:4px 4px 0 0;display:flex;align-items:center;justify-content:center;margin:-12px -12px 10px">
+          <span style="color:#4a4e6a;font:500 11px Inter,sans-serif">Loading photo...</span>
+        </div>
         <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">${verBadge}${oaBadge}</div>
         <div class="popup-title">${s.name}</div>
         <div class="popup-sub">${s.address||''}</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:8px 0">
-          <div class="popup-stat"><span class="k">Score</span><span class="v" style="color:#6366f1;font-weight:700">${s.score}/100</span></div>
-          <div class="popup-stat"><span class="k">Site</span><span class="v">${s.hectares?s.hectares.toFixed(2)+'ha':'-'}</span></div>
-          ${s.existingLevels ? `<div class="popup-stat"><span class="k">Existing</span><span class="v">${s.existingLevels}F</span></div>` : ''}
-          ${s.mcil2Band ? `<div class="popup-stat"><span class="k">CIL Band</span><span class="v">${s.mcil2Band}</span></div>` : ''}
-          ${s.buildingUse&&s.buildingUse!=='yes' ? `<div class="popup-stat" style="grid-column:1/-1"><span class="k">Use</span><span class="v">${s.buildingUse}</span></div>` : ''}
-        </div>
+        ${dataGrid}
         <a class="popup-btn" href="${t1url}" onclick="event.stopPropagation()">T1 Scout &rarr;</a>
         ${t2btn}
       </div>
     `)
     .addTo(map);
+
+  // Async: fetch bearing-corrected street view thumbnail
+  fetch(`/api/streetview-thumbnail?lat=${s.lat}&lng=${s.lng}`)
+    .then(r => r.json())
+    .then(d => {
+      const el = document.getElementById(`${popupId}-img`);
+      if (!el) return;
+      if (d.found && d.url) {
+        el.outerHTML = `<img src="${d.url}" style="width:calc(100% + 24px);height:160px;object-fit:cover;border-radius:4px 4px 0 0;display:block;margin:-12px -12px 10px" onerror="this.style.display='none'">`;
+      } else {
+        el.style.display = 'none';
+      }
+    })
+    .catch(() => { const el = document.getElementById(`${popupId}-img`); if(el) el.style.display='none'; });
+
   highlightCard(s._rank);
 }
 

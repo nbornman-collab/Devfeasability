@@ -711,6 +711,49 @@ app.get('/api/version', (req, res) => {
 
 // ── Building data from OS NGD — real footprint polygon + height ───────────
 const buildingDataCache = new Map();
+// Street View thumbnail — metadata first to get actual camera position, then compute bearing
+const svCache = new Map();
+app.get('/api/streetview-thumbnail', async (req, res) => {
+  const { lat, lng } = req.query;
+  if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
+  const KEY = process.env.GOOGLE_MAPS_API_KEY;
+  if (!KEY) return res.status(503).json({ error: 'Street View API key not configured' });
+
+  const cacheKey = `${parseFloat(lat).toFixed(4)},${parseFloat(lng).toFixed(4)}`;
+  if (svCache.has(cacheKey)) return res.json(svCache.get(cacheKey));
+
+  try {
+    // Step 1: get actual Street View camera position
+    const metaUrl = `https://maps.googleapis.com/maps/api/streetview/metadata?location=${lat},${lng}&radius=80&source=outdoor&key=${KEY}`;
+    const meta = await fetch(metaUrl).then(r => r.json());
+
+    if (meta.status !== 'OK') {
+      return res.json({ found: false, status: meta.status });
+    }
+
+    const camLat = meta.location.lat;
+    const camLng = meta.location.lng;
+
+    // Step 2: bearing from camera to building
+    const toRad = d => d * Math.PI / 180;
+    const toDeg = r => r * 180 / Math.PI;
+    const dLng = toRad(parseFloat(lng) - camLng);
+    const y = Math.sin(dLng) * Math.cos(toRad(parseFloat(lat)));
+    const x = Math.cos(toRad(camLat)) * Math.sin(toRad(parseFloat(lat))) -
+              Math.sin(toRad(camLat)) * Math.cos(toRad(parseFloat(lat))) * Math.cos(dLng);
+    const heading = Math.round((toDeg(Math.atan2(y, x)) + 360) % 360);
+
+    // Step 3: build static image URL
+    const imgUrl = `https://maps.googleapis.com/maps/api/streetview?size=320x180&location=${lat},${lng}&heading=${heading}&pitch=10&fov=80&radius=80&source=outdoor&key=${KEY}`;
+
+    const result = { found: true, url: imgUrl, heading, camLat, camLng };
+    svCache.set(cacheKey, result);
+    res.json(result);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/api/building-data', async (req, res) => {
   const { lat, lng } = req.query;
   if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
