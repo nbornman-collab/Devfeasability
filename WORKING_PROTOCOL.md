@@ -49,6 +49,8 @@ No task is complete until:
   Replace all em dashes with a regular hyphen-dash (-). This applies everywhere - codebase, replies, docs.
 - **🦞 protocol trigger**: When Nic sends 🦞, it means "add the preceding decision/instruction to WORKING_PROTOCOL.md immediately."
   Ace must update the protocol file and commit before continuing.
+- **Top nav strip**: ALL web pages must display the D/A brand + T0/T1/T2/T3 tier navigation.
+  No page ships without visible D/A branding and tier context. T2 map-bar is minimum acceptable on split-screen pages.
 
 ---
 

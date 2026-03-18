@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>196 Blackfriars Road — T1 Scout</title>
+<title>196 Blackfriars Road - T1 Scout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -118,7 +118,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   padding:3px 10px;border-radius:3px;
 }
 
-/* Section header — tinted band, clear module boundary */
+/* Section header - tinted band, clear module boundary */
 .rp-section{border-bottom:1px solid var(--border)}
 .rp-section-hd{
   background:var(--surface2);border-bottom:1px solid var(--border);
@@ -431,7 +431,7 @@ function svExpand(){
       <div class="rp-stat-row">
         <div class="rp-stat">
           <div class="sv blue" id="stat-ptal">6a</div>
-          <div class="sl">PTAL</div>
+          <div class="sl">Transport</div>
         </div>
         <div class="rp-stat">
           <div class="sv green" id="stat-flood">Zone 1</div>
@@ -458,7 +458,7 @@ function svExpand(){
       </div>
       <!-- Capacity bars -->
       <div class="cap-wrap">
-        <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-bottom:6px">GIA Capacity — Existing vs Scenarios</div>
+        <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-bottom:6px">GIA Capacity - Existing vs Scenarios</div>
         <svg id="capacity-bars" viewBox="0 0 280 80" style="width:100%;height:auto;display:block"></svg>
       </div>
       <!-- Ownership -->
@@ -474,7 +474,7 @@ function svExpand(){
   </div>
 
   <div class="tag-row">
-    <span class="tag blue">PTAL <span id="tag-ptal">6a</span></span>
+    <span class="tag blue">Transport <span id="tag-ptal">6a</span></span>
     <span class="tag ok" id="tag-flood">Flood Zone 1</span>
     <span class="tag ok" id="tag-heritage">Heritage Low</span>
   </div>
@@ -496,12 +496,12 @@ function svExpand(){
     </div>
   </div>
 
-  <!-- Scenario summary — T2 prompt -->
+  <!-- Scenario summary - T2 prompt -->
   <div class="rp-section">
     <div class="rp-section-hd"><h3>Scenarios</h3><span class="rp-badge">3 options modelled</span></div>
     <div class="rp-section-body">
       <svg id="teaser-curve" viewBox="0 0 380 70" style="width:100%;height:auto;display:block;margin-bottom:10px"></svg>
-      <div style="font:400 11px var(--sans);color:var(--text3);line-height:1.6">Low / Base / High massing scenarios with full financial model in T2 Appraise — IRR on equity, return curve, development appraisal.</div>
+      <div style="font:400 11px var(--sans);color:var(--text3);line-height:1.6">Low / Base / High massing scenarios with full financial model in T2 Appraise - IRR on equity, return curve, development appraisal.</div>
     </div>
   </div>
 
@@ -539,7 +539,7 @@ const EXISTING_EUV = 4500000;
   const label = score>=85?'Top opportunity':score>=70?'Strong opportunity':score>=55?'Credible opportunity':'Due diligence required';
   ['hero-score-badge','rp-score-badge'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=label;});
 
-  // Compact 6-factor display — score bar + number, no body copy
+  // Compact 6-factor display - score bar + number, no body copy
   const FACTOR_LABELS = {
     sky:'Available Sky', value:'Rent Headroom', momentum:'Planning Tailwind',
     heritage:'Heritage Shadow', acquisition:'Title Stack', transport:'Station Gravity'
@@ -707,7 +707,7 @@ async function loadAll(){
   ]);
   if(flood.status==='fulfilled'){
     const fz=flood.value.floodZone??1;
-    const label=fz===1?'Zone 1 — Low':fz===2?'Zone 2 — Medium':'Zone 3 — High';
+    const label=fz===1?'Zone 1 - Low':fz===2?'Zone 2 - Medium':'Zone 3 - High';
     const col=fz===1?'var(--green)':fz===2?'var(--amber)':'var(--red)';
     const el=document.getElementById('stat-flood');if(el){el.textContent=label;el.style.color=col;}
     const tag=document.getElementById('tag-flood');
@@ -716,7 +716,7 @@ async function loadAll(){
   if(ptal.status==='fulfilled'&&ptal.value.ptal!=null){
     const p=ptal.value;
     const band=p.ptal>=5?'6a':p.ptal>=4?'5':p.ptal>=3?'4':'3';
-    set('stat-ptal',band+' — '+(p.ptal>=5?'Excellent':p.ptal>=4?'Very Good':'Good'));
+    set('stat-ptal',band+' - '+(p.ptal>=5?'Excellent':p.ptal>=4?'Very Good':'Good'));
     set('tag-ptal',band);
   }
   const listedEls=(listed.status==='fulfilled'?(listed.value.elements||[]):[]).filter(e=>e.tags);
@@ -754,14 +754,14 @@ function buildFlags(flood,listedEls){
   const fz=flood.status==='fulfilled'?(flood.value.floodZone??1):1;
   const flags=[
     fz===1
-      ?{icon:'ok',sym:'✓',title:'Flood Zone 1 — Low Risk',desc:'No sequential test required. Standard drainage strategy applies.'}
+      ?{icon:'ok',sym:'✓',title:'Flood Zone 1 - Low Risk',desc:'No sequential test required. Standard drainage strategy applies.'}
       :fz===2
-      ?{icon:'warn',sym:'⚠',title:'Flood Zone 2 — Medium Risk',desc:'Sequential test and FRA required. EA consultation statutory.'}
-      :{icon:'risk',sym:'✕',title:'Flood Zone 3 — High Risk',desc:'Exception test mandatory. Development may be refused without major mitigation.'},
-    {icon:'info',sym:'i',title:'Blackfriars OA — Tall Buildings Supported',desc:'Southwark Opportunity Area policy supports tall residential development at this location. Heights up to 30F have precedent within 300m.'},
-    {icon:'info',sym:'i',title:'35% Affordable Housing — Southwark Policy',desc:'Southwark policy requires 35% affordable on-site for residential schemes. Off-site or commuted sum only by exception.'},
-    {icon:'ok',sym:'✓',title:'Heritage — Low Constraint',desc:'No listed buildings on or immediately adjacent to the site. One Blackfriars 250m NW. No conservation area designation.'},
-    {icon:'ok',sym:'✓',title:'LVMF — Low Sightline Impact',desc:'No protected views cross this site at expected residential heights.'},
+      ?{icon:'warn',sym:'⚠',title:'Flood Zone 2 - Medium Risk',desc:'Sequential test and FRA required. EA consultation statutory.'}
+      :{icon:'risk',sym:'✕',title:'Flood Zone 3 - High Risk',desc:'Exception test mandatory. Development may be refused without major mitigation.'},
+    {icon:'info',sym:'i',title:'Blackfriars OA - Tall Buildings Supported',desc:'Southwark Opportunity Area policy supports tall residential development at this location. Heights up to 30F have precedent within 300m.'},
+    {icon:'info',sym:'i',title:'35% Affordable Housing - Southwark Policy',desc:'Southwark policy requires 35% affordable on-site for residential schemes. Off-site or commuted sum only by exception.'},
+    {icon:'ok',sym:'✓',title:'Heritage - Low Constraint',desc:'No listed buildings on or immediately adjacent to the site. One Blackfriars 250m NW. No conservation area designation.'},
+    {icon:'ok',sym:'✓',title:'LVMF - Low Sightline Impact',desc:'No protected views cross this site at expected residential heights.'},
   ];
   if(listedEls.length>0) flags.splice(2,0,{icon:'warn',sym:'⚠',title:`${listedEls.length} Listed Building${listedEls.length>1?'s':''} within 200m`,desc:'Setting is a material consideration. D&A Statement must address visual impact on each asset.'});
   const risks=flags.filter(f=>f.icon==='risk').length,warns=flags.filter(f=>f.icon==='warn').length,oks=flags.filter(f=>f.icon==='ok').length;
@@ -779,11 +779,11 @@ function buildHeights(osmEls){
     const pct=Math.round(b.h/maxH*100);
     const col=b.h>=200?'#1d4ed8':b.h>=100?'#ea580c':b.h>=50?'#f59e0b':'#d1d5db';
     return`<div class="hb-row"><div class="hb-label" title="${b.name}">${b.name}</div><div class="hb-track"><div class="hb-fill" style="width:${pct}%;background:${col}"></div></div><div class="hb-val">${b.h}m</div></div>`;
-  }).join('')}</div><div style="font:400 9px var(--sans);color:var(--text4);margin-top:8px">Tallest precedent within 300m: <strong style="color:var(--text2)">${Math.max(...merged.map(b=>b.h))}m</strong>. Blackfriars Opportunity Area — tall residential supported.</div>`);
+  }).join('')}</div><div style="font:400 9px var(--sans);color:var(--text4);margin-top:8px">Tallest precedent within 300m: <strong style="color:var(--text2)">${Math.max(...merged.map(b=>b.h))}m</strong>. Blackfriars Opportunity Area - tall residential supported.</div>`);
 }
 
 function buildApps(apps){
-  set('apps-count',`— ${apps.length} found`);
+  set('apps-count',`- ${apps.length} found`);
   if(!apps.length){html('apps-list','<div style="font:400 10px var(--sans);color:var(--text4)">No recent applications found.</div>');return;}
   html('apps-list',apps.slice(0,20).map(a=>{
     const sc=/appro|grant/i.test(a.status)?'approved':/refus|reject/i.test(a.status)?'refused':'pending';
