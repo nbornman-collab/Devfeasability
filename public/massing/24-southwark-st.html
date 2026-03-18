@@ -869,12 +869,12 @@ function updateMap(idx){
   for(let f=1;f<=30;f++) m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0);
 
   // Green envelope = additional height ABOVE existing (base=existing roof, top=target)
-  const envCoords=bufferPoly(SITE_COORDS,0.000004);
+  const envCoords=bufferPoly(SITE_COORDS,-0.000003); // 300mm inset - amber always visible at edges
   m.getSource('podium').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[envCoords]}});
   m.setPaintProperty('podium-3d','fill-extrusion-color','#059669');
   m.setPaintProperty('podium-3d','fill-extrusion-height',targetH);
   m.setPaintProperty('podium-3d','fill-extrusion-base',0);
-  m.setPaintProperty('podium-3d','fill-extrusion-opacity',1.0);
+  m.setPaintProperty('podium-3d','fill-extrusion-opacity',0.96);
   m.setPaintProperty('podium-edge','line-color','#047857');
   m.setPaintProperty('podium-edge','line-opacity',0.85);
   m.getSource('tower').setData(emptyPoly());
@@ -885,7 +885,7 @@ function updateMap(idx){
   const newFloors=Math.round((targetH-EXISTING_HEIGHT)/ftf);
   for(let f=1;f<=newFloors&&f<=30;f++){
     const h=EXISTING_HEIGHT+(f*ftf);
-    m.getSource('fl'+f).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000005)]}});
+    m.getSource('fl'+f).setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,-0.000002)]}});
     m.setPaintProperty('fl'+f,'fill-extrusion-color','#ffffff');
     m.setPaintProperty('fl'+f,'fill-extrusion-height',h+0.12);
     m.setPaintProperty('fl'+f,'fill-extrusion-base',h-0.12);
@@ -989,7 +989,7 @@ async function initMap(){
     // Green additional envelope + floor lines
     m.addSource('podium',{type:'geojson',data:emptyPoly()});
     m.addSource('tower',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':0.78}});
+    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':0.96}});
     m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0}});
     m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#047857','line-width':2,'line-opacity':0.85}});
     m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0}});
