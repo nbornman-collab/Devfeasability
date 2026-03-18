@@ -430,6 +430,62 @@ app.get('/api/flood-zone', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message, floodZone: null }); }
 });
 
+
+// GLA Planning DataMap — spatial policy checks (no API key required)
+// MapServer: https://gis2.london.gov.uk/server/rest/services/apps/planning_data_map_02/MapServer
+// Layer IDs: 103=OA, 107=CAZ, 205=Conservation Areas, 214=Listed Buildings,
+//            213=Protected Vistas, 101=Brownfield, 102=Site Allocations,
+//            108=SHLAA, 111-113=MCIL2 bands, 218=Thames Policy Area
+app.get('/api/gla-planning', async (req, res) => {
+  const { lat, lng } = req.query;
+  if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
+
+  const GLA_BASE = 'https://gis2.london.gov.uk/server/rest/services/apps/planning_data_map_02/MapServer';
+  const LAYERS = {
+    opportunity_area:    103,
+    caz:                 107,
+    conservation_area:   205,
+    listed_buildings:    214,
+    protected_vista:     213,
+    brownfield:          101,
+    site_allocation:     102,
+    shlaa:               108,
+    mcil2_band:          111,  // check 111, 112, 113 for band
+    thames_policy:       218,
+  };
+
+  const queryLayer = async (layerId, name) => {
+    try {
+      const url = `${GLA_BASE}/${layerId}/query?geometry=${lng},${lat}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&f=json`;
+      const r = await fetch(url, { signal: AbortSignal.timeout(6000) });
+      const d = await r.json();
+      const features = d.features || [];
+      return { name, found: features.length > 0, count: features.length, data: features[0]?.attributes || null };
+    } catch (e) {
+      return { name, found: false, count: 0, error: e.message };
+    }
+  };
+
+  // Run all queries in parallel
+  const results = await Promise.all(
+    Object.entries(LAYERS).map(([name, id]) => queryLayer(id, name))
+  );
+
+  // Also check MCIL2 bands 112 and 113
+  const mcil2_112 = await queryLayer(112, 'mcil2_band2');
+  const mcil2_113 = await queryLayer(113, 'mcil2_band3');
+
+  const out = {};
+  results.forEach(r => { out[r.name] = r; });
+  // Resolve MCIL2 band
+  if (out.mcil2_band.found) out.mcil2_band.band = 1;
+  else if (mcil2_112.found) out.mcil2_band = { ...mcil2_112, band: 2 };
+  else if (mcil2_113.found) out.mcil2_band = { ...mcil2_113, band: 3 };
+  else out.mcil2_band = { name: 'mcil2_band', found: false, band: null };
+
+  res.json({ ok: true, lat: parseFloat(lat), lng: parseFloat(lng), layers: out });
+});
+
 // TfL — PTAL score (via WebCAT proxy or nearest stations)
 app.get('/api/ptal', async (req, res) => {
   try {

@@ -1,9 +1,31 @@
-# PROTOCOL v2 - LOCKED
+## GLA PLANNING DATAMAP (🦞 primary resource)
 
 Last updated: 2026-03-17
 Status: LOCKED. Do not deviate without explicit instruction from Nic.
 
 ---
+
+## GLA PLANNING DATAMAP (🦞 primary resource)
+
+Live ArcGIS REST API - no key required. Use for all spatial policy checks.
+
+Base: `https://gis2.london.gov.uk/server/rest/services/apps/planning_data_map_02/MapServer`
+Query pattern: `/{layer_id}/query?geometry={lng},{lat}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&f=json`
+
+Key layers:
+- 103 Opportunity Areas | 107 Central Activities Zone | 205 Conservation Areas
+- 214 Listed Buildings | 213 Protected Vistas (LVMF) | 101 Brownfield Register
+- 102 Site Allocations | 108 SHLAA | 111-113 MCIL2 Charging Bands | 218 Thames Policy Area
+
+Server endpoint: `/api/gla-planning?lat=&lng=` (all layers in one call, parallel)
+
+Rules:
+- GLA data overrides hardcoded flags. If GLA says LVMF Wider Setting Consultation Area - update the flag.
+- Check all 10 layers for every new site before writing intelligence file.
+- LVMF Wider Setting Consultation Area is an advisory - not a blocking constraint unless in Viewing Corridor.
+
+---
+
 
 ## Why This Exists
 
