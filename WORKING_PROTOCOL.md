@@ -426,3 +426,27 @@ Do not re-add PropertyData for any reason without explicit instruction from Nic.
 - To update a polygon: edit the intelligence file. That is the only edit needed.
 - No new site enters T1 or T2 until `SITE_INTELLIGENCE.polygon` is defined and verified.
 - When adding a polygon: print the coordinates, verify against satellite, confirm centroid is inside the building before committing.
+
+---
+
+## DATA SOURCE ARCHITECTURE (🦞 locked 2026-03-18)
+
+Single authoritative source per data type. No exceptions, no fallbacks to guesswork.
+
+| Data | Source | API |
+|------|--------|-----|
+| Building footprint polygon | OS NGD `bld-fts-buildingpart` | OS DataHub (existing key) |
+| Existing building height | OS NGD `relativeheightmaximum` | OS DataHub (existing key) |
+| Existing GEA (commercial) | VOA Valuation Office Agency | Public API, no key |
+| Existing GEA (residential) | EPC floor area | GOV.UK (key pending) |
+| Ownership / title | HMLR (hardcoded per site from title search) | N/A |
+| Planning apps + designations | GLA Planning DataMap | Free ArcGIS REST |
+| Transport | TfL PTAL proxy | /api/ptal |
+| Flood zone | Environment Agency | /api/flood-zone |
+| Listed buildings | Historic England | /api/listed-buildings |
+
+Rules:
+- OS NGD polygon + height are the ONLY inputs to massing calculations
+- GEA is NEVER derived from (footprint × floors) - always from VOA or EPC
+- No rectangle approximations. No guessing. No PropertyData.
+- When a source fails, surface the error - never silently substitute a guess

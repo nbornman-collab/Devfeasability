@@ -427,7 +427,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
     </button>
   </div>
   <iframe id="sv-frame"
-    src="https://maps.google.com/maps?layer=c&cbll=51.5003,-0.1042&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed"
+    src="https://maps.google.com/maps?layer=c&cbll=51.5049,-0.1042&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed"
     allowfullscreen loading="lazy"></iframe>
 </div>
 <button class="sv-map-btn" id="sv-map-btn" onclick="svExpand()" style="display:none">
@@ -557,9 +557,9 @@ function svExpand(){
 </div><!-- /right-panel -->
 
 <script>
-const LAT = 51.5005, LNG = -0.1042;
+const LAT = 51.504987, LNG = -0.104215;
 const ADDRESS = '196 Blackfriars Road, London SE1 8NJ';
-let PLOT_AREA = 583;
+let PLOT_AREA=596;
 const EXISTING_EUV = 4500000;
 
 // Score + compact intelligence render
@@ -667,7 +667,7 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 // Avoids fabricated rectangles and wrong polygons from prior template copy errors
 let SITE_POLYGON = null;
 
-const CENTROID=[-0.1042,51.5005];
+const CENTROID=[-0.104215,51.504987];
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken=cfg.mapboxToken;
   const map=new mapboxgl.Map({
@@ -820,7 +820,7 @@ function buildApps(apps){
 }
 
 // Site data from HMLR
-if(document.getElementById('site-area-display')) document.getElementById('site-area-display').textContent='583 m²';
+if(document.getElementById('site-area-display')) document.getElementById('site-area-display').textContent='596 m²';
 if(document.getElementById('owner-display')) document.getElementById('owner-display').textContent='Barts Charity · HMLR SGL322825';
 loadAll();
 </script>

@@ -675,39 +675,31 @@ app.get('/api/version', (req, res) => {
 // ── Building data from OS NGD — real footprint polygon + height ───────────
 const buildingDataCache = new Map();
 app.get('/api/building-data', async (req, res) => {
-  const lat = parseFloat(req.query.lat);
-  const lng = parseFloat(req.query.lng);
+  const { lat, lng } = req.query;
   if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
-  const cacheKey = `${lat.toFixed(4)},${lng.toFixed(4)}`;
-  if (buildingDataCache.has(cacheKey)) return res.json(buildingDataCache.get(cacheKey));
   try {
-    const d = 0.0007;
-    const bbox = [lng-d, lat-d, lng+d, lat+d].join(',');
-    const url = `https://api.os.uk/features/ngd/ofa/v1/collections/bld-fts-buildingpart/items?bbox=${bbox}&key=${OS_API_KEY}&limit=20`;
-    const data = await fetch(url).then(r => r.json());
-    const features = (data.features || []).filter(f => (f.properties.geometry_area || 0) > 50);
+    const delta = 0.0015;
+    const bbox = `${parseFloat(lng)-delta},${parseFloat(lat)-delta},${parseFloat(lng)+delta},${parseFloat(lat)+delta}`;
+    const url = `https://api.os.uk/features/ngd/ofa/v1/collections/bld-fts-buildingpart/items?bbox=${bbox}&limit=100&key=${process.env.OS_API_KEY || 'LX85JnG1cHTIXA5bpRGHJmA1QDrHHJWZ'}`;
+    const d = await fetch(url).then(r => r.json());
+    const features = (d.features || []).filter(f => f.geometry && f.geometry.type === 'Polygon');
     if (!features.length) return res.json({ found: false });
-    // Pick largest footprint
-    const main = features.sort((a, b) => (b.properties.geometry_area || 0) - (a.properties.geometry_area || 0))[0];
-    const p = main.properties;
-    const coords = main.geometry.coordinates[0];
-    const cx = coords.reduce((s, c) => s + c[0], 0) / coords.length;
-    const cy = coords.reduce((s, c) => s + c[1], 0) / coords.length;
-    const result = {
-      found: true,
-      height: parseFloat(p.relativeheightmaximum) || 0,
-      footprint_area: Math.round(p.geometry_area || 0),
-      centroid: [parseFloat(cx.toFixed(6)), parseFloat(cy.toFixed(6))],
-      polygon: main.geometry
-    };
-    buildingDataCache.set(cacheKey, result);
-    res.json(result);
+    // Find tallest building part - proxy for main structure
+    features.sort((a,b) => (b.properties.relativeheightmaximum||0)-(a.properties.relativeheightmaximum||0));
+    const tallest = features[0];
+    const coords = tallest.geometry.coordinates[0];
+    const maxH = tallest.properties.relativeheightmaximum || 0;
+    // Area from polygon (Shoelace)
+    let area = 0;
+    for (let i = 0; i < coords.length - 1; i++) {
+      area += coords[i][0] * coords[i+1][1] - coords[i+1][0] * coords[i][1];
+    }
+    area = Math.abs(area) / 2 * 111320 * Math.cos(parseFloat(lat) * Math.PI/180) * 110540;
+    res.json({ found: true, polygon: coords, height: maxH, area: Math.round(area), parts: features.length });
   } catch(e) {
-    console.error('building-data error:', e.message);
     res.status(500).json({ error: e.message });
   }
 });
-
 // ── Generate Render — Gemini 3 Pro image generation ────────────────────────
 const RENDER_PROMPT = `Transform the provided architectural massing image from an isometric parallel view into a 1-point perspective view while preserving the exact proportions and geometry of the buildings.
 

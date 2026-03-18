@@ -378,7 +378,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
     </button>
   </div>
   <iframe id="sv-frame"
-    src="https://maps.google.com/maps?layer=c&cbll=51.5046,-0.094&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed"
+    src="https://maps.google.com/maps?layer=c&cbll=51.5049,-0.09152&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed"
     allowfullscreen loading="lazy"></iframe>
 </div>
 <button class="sv-map-btn" id="sv-map-btn" onclick="svExpand()" style="display:none">
@@ -508,9 +508,9 @@ function svExpand(){
 </div><!-- /right-panel -->
 
 <script>
-const LAT = 51.5048, LNG = -0.0940;
+const LAT = 51.504909, LNG = -0.091522;
 const ADDRESS = '24 Southwark Street, London SE1 0SW';
-let PLOT_AREA = 1550;
+let PLOT_AREA=1575;
 const EXISTING_EUV = 22000000;
 
 // Score + compact intelligence render
@@ -614,7 +614,7 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 // Avoids fabricated rectangles and wrong polygons from prior template copy errors
 let SITE_POLYGON = null;
 
-const CENTROID=[-0.0940,51.5048];
+const CENTROID=[-0.091522,51.504909];
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken=cfg.mapboxToken;
   const map=new mapboxgl.Map({
@@ -791,7 +791,7 @@ function buildApps(apps){
 }
 
 // Site data from HMLR
-if(document.getElementById('site-area-display')) document.getElementById('site-area-display').textContent='1,550 m²';
+if(document.getElementById('site-area-display')) document.getElementById('site-area-display').textContent='1,575 m²';
 if(document.getElementById('owner-display')) document.getElementById('owner-display').textContent='RREEF Bankside II Limited · HMLR TGL221350';
 loadAll();
 </script>
