@@ -367,3 +367,13 @@ Run a full audit of ALL active pages before committing any fix:
 - Check: JS syntax validity (node --check), CSS variable references, map container height, script src 404s, API endpoint reachability
 - Fix everything found in one commit - not piecemeal
 - Post-commit: verify ALL pages return HTTP 200 AND log what was found + fixed
+
+---
+
+## SCENARIO-SPECIFIC CONSTRUCTION COST (🦞 locked 2026-03-18)
+
+Construction cost (£/m²) must be scenario-specific — it escalates with building height.
+Each SCENARIO object must carry its own `costGsm` value reflecting height-based escalation.
+The financial model must use `s.costGsm` per scenario, not a flat multiplier of one slider value.
+The cost slider sets the Base scenario cost; Low and High derive from scenario-defined escalation factors,
+not arbitrary ×0.82 / ×1.25 multipliers.

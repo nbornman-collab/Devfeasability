@@ -214,10 +214,10 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
   <img id="render-img" style="width:100%;border:1px solid #e2e5ec;display:block" />
 </div>
 
-<div class="scenario-pills">
-  <button class="pill lo active" onclick="go(0)">Low<span class="pf">10F · 42m</span></button>
-  <button class="pill base" onclick="go(1)">Base<span class="pf">14F · 60m</span></button>
-  <button class="pill hi" onclick="go(2)">High<span class="pf">22F · 92m</span></button>
+<div class="scenario-pills" id="scenario-pills">
+  <button class="pill lo active" id="pill-0" onclick="go(0)">Low<span class="pf" id="pf-0">—</span></button>
+  <button class="pill base" id="pill-1" onclick="go(1)">Base<span class="pf" id="pf-1">—</span></button>
+  <button class="pill hi" id="pill-2" onclick="go(2)">High<span class="pf" id="pf-2">—</span></button>
 </div>
 
 <div class="panel">
@@ -487,11 +487,11 @@ const MARKET={
 };
 
 const SCENARIOS=[
-  {key:'lo',label:'Low',floors:8,podF:5,podH:21,twrF:3,twrPct:0.70,cov:1.0,eff:0.83,
+  {key:'lo',label:'Low',floors:8,podF:5,podH:21,twrF:3,twrPct:0.70,cov:1.0,eff:0.83,costFactor:0.88,
    narrative:'Full plate to 5F matching the Bankside commercial cornice. Tower steps back above L5, 70% coverage. <strong>Single staircase</strong> compliant sub-18m tower element. Lowest programme risk - 2 year build. No tall buildings assessment required at this height. <strong>Best margin efficiency</strong> - the return curve peaks near 8-9F in the Bankside CAZ.'},
-  {key:'base',label:'Base',floors:10,podF:5,podH:21,twrF:5,twrPct:0.65,cov:1.0,eff:0.81,
+  {key:'base',label:'Base',floors:10,podF:5,podH:21,twrF:5,twrPct:0.65,cov:1.0,eff:0.81,costFactor:1.00,
    narrative:'5F podium holds Bankside street cornice. Tower adds 5F at 65% coverage above. Pre-app views assessment required re <strong>Tate Modern sightlines</strong> (220m W). <strong>Single staircase</strong> compliant throughout (sub-18m tower, overall sub-50m). Strong precedent at this height on Southwark Street. <strong>Absolute profit peaks near this scenario.</strong>'},
-  {key:'hi',label:'High',floors:12,podF:4,podH:17,twrF:8,twrPct:0.60,cov:1.0,eff:0.79,
+  {key:'hi',label:'High',floors:12,podF:4,podH:17,twrF:8,twrPct:0.60,cov:1.0,eff:0.79,costFactor:1.18,
    narrative:'Lower 4F podium activates public realm at ground. 8F tower at 60% coverage - maximum height for this Bankside CAZ position without a tall buildings policy trigger. LVMF assessment required. Southwark Core Strategy requires design justification above surroundings. Highest GDV but <strong>margin % falls</strong> as construction cost and programme compound.'},
 ];
 
@@ -503,9 +503,10 @@ function calcScenarios(){
   // Rebuild MARKET from live S
   MARKET.erv={lo:Math.round(S.erv*.9375),base:S.erv,hi:Math.round(S.erv*1.0625)};
   MARKET.niy={lo:S.niy/100+.0025,base:S.niy/100,hi:S.niy/100};
-  MARKET.costGsm={lo:Math.round(S.cost*.82),base:S.cost,hi:Math.round(S.cost*1.25)};
   MARKET.s106=S.s106*1000;
+  // Per-scenario construction cost based on height escalation factor
   SCENARIOS.forEach(s=>{
+    s.costGsm=Math.round(S.cost*(s.costFactor||1.00));
     const podGIA=PLOT_AREA*s.cov*s.podF;
     const twrGIA=PLOT_AREA*s.twrPct*s.twrF;
     s.gea=Math.round(podGIA+twrGIA);
@@ -513,7 +514,7 @@ function calcScenarios(){
     const grossErv=s.nia*MARKET.erv[s.key];
     const effErv=grossErv*(1-MARKET.rfMo/MARKET.ltMo);
     s.gdv=Math.round(effErv/MARKET.niy[s.key]);
-    s.constCost=Math.round(s.gea*MARKET.costGsm[s.key]);
+    s.constCost=Math.round(s.gea*s.costGsm);
     s.fees=Math.round(s.constCost*MARKET.fees);
     s.contg=Math.round(s.constCost*MARKET.contg);
     s.cil=Math.round(s.nia*MARKET.cilNia);
@@ -641,13 +642,19 @@ function go(idx){
   if(window._map) updateMap(idx);
 }
 
-const SCEN_LABELS=['Low · 10F','Base · 14F','High · 22F'];
+// SCEN_LABELS now built dynamically in render() from SCENARIOS data
 function renderProfitStrip(){
+  const SCEN_KEYS=['lo','base','hi'];
   SCENARIOS.forEach((s,i)=>{
     const poc=parseFloat(s.poc);
     const ok=poc>=S.poc;
+    const h=Math.round(s.floors*FTF);
+    const costLabel=`£${(s.costGsm/1000).toFixed(1)}k/m²`;
+    // Update pill labels dynamically
+    const pf=document.getElementById('pf-'+i);
+    if(pf) pf.textContent=`${s.floors}F · ${h}m · ${costLabel}`;
     document.getElementById('ps-'+i).innerHTML=`
-      <div class="pstrip-scen">${SCEN_LABELS[i]}</div>
+      <div class="pstrip-scen">${s.label} ${s.floors}F</div>
       <div class="pstrip-poc" style="color:${ok?'var(--lo)':'#dc2626'}">${s.poc}<span style="font:600 12px var(--mono);letter-spacing:0">%</span></div>
       <div class="pstrip-abs">£${Math.round(s.profit/1e6)}M profit</div>
       <div class="pstrip-flag ${ok?'ok':'warn'}">${ok?'▲ Hits target':'✕ Below '+S.poc+'%'}</div>`;
@@ -695,7 +702,7 @@ function render(){
       <div class="m-card"><div class="m-val">${fmt(s.nia)} m²</div><div class="m-lbl">Net Internal Area (${Math.round(s.eff*100)}%)</div></div>
       <div class="m-card"><div class="m-val">${fmt(s.core)} m²</div><div class="m-lbl">Core Area (22% of plate)</div></div>
       <div class="m-card"><div class="m-val">${s.lspan}</div><div class="m-lbl">Min. Clear Lease Span</div></div>
-      <div class="m-card"><div class="m-val">£${(MARKET.costGsm[s.key]/1000).toFixed(1)}k/m²</div><div class="m-lbl">Construction Cost (GIA)</div></div>
+      <div class="m-card"><div class="m-val">£${(s.costGsm/1000).toFixed(1)}k/m²</div><div class="m-lbl">Construction Cost (GIA)</div></div>
       <div class="m-card"><div class="m-val">${MARKET.progYrs[s.key]} yrs</div><div class="m-lbl">Programme Duration</div></div>
     </div>`;
 
@@ -703,7 +710,7 @@ function render(){
   const pfHTML=`
     <div class="sec-head">Development Appraisal</div>
     <table class="pf-table">
-      <tr><td>Construction · ${fmt(s.gea)} m² × £${(MARKET.costGsm[s.key]/1000).toFixed(1)}k</td><td>−£${(s.constCost/1e6).toFixed(1)}M</td></tr>
+      <tr><td>Construction · ${fmt(s.gea)} m² × £${(s.costGsm/1000).toFixed(1)}k</td><td>−£${(s.constCost/1e6).toFixed(1)}M</td></tr>
       <tr><td>Professional fees (${Math.round(MARKET.fees*100)}%)</td><td>−£${(s.fees/1e6).toFixed(1)}M</td></tr>
       <tr><td>Contingency (${Math.round(MARKET.contg*100)}%)</td><td>−£${(s.contg/1e6).toFixed(1)}M</td></tr>
       <tr><td>CIL - City + GLA · £200/m² on ${fmt(s.nia)} m² NIA</td><td>−£${(s.cil/1e6).toFixed(1)}M</td></tr>
