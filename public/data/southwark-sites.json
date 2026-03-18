@@ -230,8 +230,8 @@
       "lng": -0.07944,
       "hectares": 0.087,
       "score": 70,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/former-petrol-station-old-kent-road",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -248,13 +248,14 @@
       "buildingUse": null,
       "mcil2Band": 3,
       "inSHLAA": false,
-      "source": "GLA Site Allocations",
+      "source": "Verified (EPC + GLA)",
       "planning": {
         "total": 49,
         "majorCount": 3,
         "hasRedevelopment": true,
         "note": "3 major applications. Active redevelopment pipeline."
-      }
+      },
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Salisbury estate car park",
@@ -1437,8 +1438,8 @@
       "lng": -0.079253,
       "hectares": 12.354,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/mandela-way",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1455,7 +1456,7 @@
       "buildingUse": null,
       "mcil2Band": 3,
       "inSHLAA": false,
-      "source": "GLA Site Allocations",
+      "source": "Verified (EPC + GLA)",
       "planning": {
         "total": 0,
         "majorCount": 0,
@@ -1465,7 +1466,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
