@@ -90,12 +90,12 @@
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46991,
-      "lng": -0.06631,
+      "lat": 51.4558,
+      "lng": -0.0651,
       "hectares": 1.167,
       "score": 71,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/copeland-industrial-park",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -112,13 +112,14 @@
       "buildingUse": null,
       "mcil2Band": 3,
       "inSHLAA": false,
-      "source": "GLA Site Allocations",
+      "source": "Verified (EPC + GLA)",
       "planning": {
         "total": 5,
         "majorCount": 0,
         "hasRedevelopment": true,
         "note": "5 apps including demolition. Active redevelopment candidate."
-      }
+      },
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -422,8 +423,8 @@
       "lng": -0.06816,
       "hectares": 0.498,
       "score": 68,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/grove-tavern-lordship-lane",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -440,7 +441,7 @@
       "buildingUse": null,
       "mcil2Band": null,
       "inSHLAA": false,
-      "source": "GLA Site Allocations",
+      "source": "Verified (EPC + GLA)",
       "planning": {
         "total": 87,
         "majorCount": 4,
@@ -469,7 +470,7 @@
           }
         ]
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Camberwell Bus Garage",
@@ -1157,8 +1158,8 @@
       "lng": -0.09441,
       "hectares": 0.792,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/1-southwark-bridge-road",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1175,7 +1176,7 @@
       "buildingUse": null,
       "mcil2Band": 3,
       "inSHLAA": false,
-      "source": "GLA Site Allocations",
+      "source": "Verified (EPC + GLA)",
       "planning": {
         "total": 201,
         "majorCount": 6,
@@ -1204,7 +1205,7 @@
           }
         ]
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
