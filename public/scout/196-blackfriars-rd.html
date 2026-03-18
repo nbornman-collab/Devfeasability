@@ -686,9 +686,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
         'fill-extrusion-opacity':0.20
       }
     });
-    // PropertyData boundary - dashed outline only
-    map.addSource('site',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
-    map.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':2,'line-dasharray':[5,3],'line-opacity':0.9}});
+    // Site boundary: drawn from intelligence file polygon (no PropertyData)
     // Massing polygon - populated from queryRenderedFeatures idle (same formula as T2)
     map.addSource('site-poly',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
     // Amber: existing building mass
@@ -717,38 +715,6 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
     });
 
 
-    // PropertyData legal boundary
-    (async()=>{
-      try{
-        const pd=await(await fetch(`/api/plot-boundary?lat=${LAT}&lng=${LNG}&postcode=SE1+8NJ`)).json();
-        if(pd.features&&pd.features.length){
-          const f=pd.features[0];
-          if(f.geometry) map.getSource('site').setData({type:'FeatureCollection',features:[f]});
-          const p=f.properties;
-          if(p.area_sqm>0){PLOT_AREA=p.area_sqm;set('site-area-display',p.area_sqm.toLocaleString()+' m²');}
-          if(p.owner){set('owner-display',p.owner+(p.leaseholds>0?` · ${p.leaseholds} leaseholds`:''));}
-        }
-      }catch(e){console.warn('PropertyData:',e.message);}
-    })();
-
-    // HMLR click-select
-    map.on('click', async(e) => {
-      const {lng, lat} = e.lngLat;
-      try {
-        const r = await fetch(`/api/hmlr-tile/click?lat=${lat}&lng=${lng}`);
-        const d = await r.json();
-        if (d && d.title_number) {
-          const panel = document.getElementById('hmlr-panel');
-          if(panel) panel.innerHTML = `
-            <div class="hmlr-title-row">
-              <span class="hmlr-title-no">${d.title_number}</span>
-              <span style="font:500 9px var(--mono);color:var(--text3)">${d.tenure||'—'}</span>
-            </div>
-            <div style="font:600 11px var(--sans);color:var(--text);margin-bottom:2px">${d.proprietor||d.owner||'Unknown owner'}</div>
-            <div style="color:var(--text3);font-size:9px">${d.address||''}</div>`;
-        }
-      } catch(e2){console.warn('HMLR click:',e2.message);}
-    });
   });
 });
 
@@ -853,6 +819,9 @@ function buildApps(apps){
   }).join(''));
 }
 
+// Site data from HMLR (no PropertyData)
+if(document.getElementById('site-area-display')) document.getElementById('site-area-display').textContent='583 m²';
+if(document.getElementById('owner-display')) document.getElementById('owner-display').textContent='Barts Charity · HMLR SGL322825';
 loadAll();
 </script>
 </body>

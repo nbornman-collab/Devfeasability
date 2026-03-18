@@ -88,9 +88,6 @@ app.get('/api/reverse', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-// ── PropertyData Plot Boundary ─────────────────────────────────────────────
-const PROPERTYDATA_KEY = process.env.PROPERTYDATA_KEY || 'ZUMC9NNHVH';
-const PD_BASE = 'https://api.propertydata.co.uk';
 
 // In-memory cache: key = "lat,lng" or "postcode" → result (TTL 24h)
 const pdCache = new Map();
@@ -133,110 +130,6 @@ function pickBestTitle(titles, lat, lng) {
   }).sort((a, b) => b._score - a._score)[0];
 }
 
-// GET /api/plot-boundary?lat=...&lng=...  OR  ?title=NGL786311
-// Returns GeoJSON feature with legal boundary + ownership from PropertyData
-app.get('/api/plot-boundary', async (req, res) => {
-  // Direct title number lookup — most accurate, no centroid guessing
-  if (req.query.title) {
-    const titleNo = req.query.title.trim().toUpperCase();
-    try {
-      const pd = await fetch(`https://api.propertydata.co.uk/title?key=${PROPERTYDATA_KEY}&title=${titleNo}`).then(r=>r.json());
-      if (!pd.data || !pd.data.polygons?.length) return res.json({ type:'FeatureCollection', features:[] });
-      const d = pd.data;
-      const rawCoords = d.polygons[0].coords || [];
-      const coords = rawCoords.map(p => [parseFloat(p.lng), parseFloat(p.lat)]);
-      if (coords.length < 3) return res.json({ type:'FeatureCollection', features:[] });
-      coords.push(coords[0]);
-      const owner = d.ownership?.details?.owner || d.ownership?.details?.name || '';
-      const areaSqm = d.plot_size ? Math.round(parseFloat(d.plot_size) * 4047) : 0;
-      return res.json({ type:'FeatureCollection', features:[{ type:'Feature',
-        geometry:{ type:'Polygon', coordinates:[coords] },
-        properties:{ title_number: titleNo, owner, area_sqm: areaSqm, leaseholds: d.leaseholds || 0, source:'propertydata-direct' }
-      }]});
-    } catch(e) {
-      return res.status(500).json({ error: e.message });
-    }
-  }
-
-  const lat = parseFloat(req.query.lat);
-  const lng = parseFloat(req.query.lng);
-  const postcode = req.query.postcode || '';
-  if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
-
-  const cacheKey = `${lat.toFixed(5)},${lng.toFixed(5)}`;
-  const cached = pdCache.get(cacheKey);
-  if (cached && Date.now() - cached.ts < PD_TTL) return res.json(cached.data);
-
-  try {
-    // Step 1: find freeholds by coordinate, fall back to postcode
-    let fhData = null;
-    try {
-      const fh = await pdGet(`/freeholds?lat=${lat}&long=${lng}`);
-      if (fh.status === 'success' && fh.data?.length) fhData = fh.data;
-    } catch (_) {}
-
-    if (!fhData && postcode) {
-      const fhpc = await pdGet(`/freeholds?postcode=${encodeURIComponent(postcode)}`);
-      if (fhpc.status === 'success' && fhpc.data?.length) fhData = fhpc.data;
-    }
-
-    if (!fhData || !fhData.length) {
-      return res.json({ status: 'no_data', source: 'propertydata', features: [] });
-    }
-
-    // Step 2: pick best title + fetch full detail
-    const best = pickBestTitle(fhData, lat, lng);
-    const titleNo = best.title_number;
-    const detail = await pdGet(`/title?title=${titleNo}`);
-
-    if (!detail.data) return res.json({ status: 'no_title', title_number: titleNo, features: [] });
-
-    const d = detail.data;
-    const poly = d.polygons?.[0];
-    const coords = poly?.coords || [];
-
-    // Convert plot_size (acres) → m²
-    const plotSizeAcres = parseFloat(d.plot_size || poly?.polygon_size || 0);
-    const areaSqm = Math.round(plotSizeAcres * 4047);
-
-    // Build GeoJSON polygon [lng, lat] pairs
-    const ring = coords.map(c => [c.lng, c.lat]);
-    if (ring.length > 0 && (ring[0][0] !== ring[ring.length-1][0] || ring[0][1] !== ring[ring.length-1][1])) {
-      ring.push(ring[0]); // close ring
-    }
-
-    const feature = {
-      type: 'Feature',
-      properties: {
-        title_number: titleNo,
-        title_class: d.class || best.class,
-        area_sqm: areaSqm,
-        plot_size_acres: plotSizeAcres,
-        owner: d.ownership?.details?.owner || null,
-        owner_type: d.ownership?.details?.owner_type || null,
-        owner_address: d.ownership?.details?.owner_address || null,
-        date_registered: d.ownership?.details?.date_added || null,
-        leaseholds: d.leaseholds?.length || 0,
-        polygon_count: d.polygon_count || 1,
-        vertices: coords.length,
-        source: 'PropertyData / HMLR',
-        all_titles: fhData.length
-      },
-      geometry: ring.length > 3 ? {
-        type: 'Polygon',
-        coordinates: [ring]
-      } : null
-    };
-
-    const result = { status: 'ok', source: 'propertydata', features: [feature] };
-    pdCache.set(cacheKey, { data: result, ts: Date.now() });
-    res.json(result);
-
-  } catch (e) {
-    console.error('plot-boundary error:', e.message);
-    res.status(500).json({ error: e.message });
-  }
-});
 
 // Overpass API — building footprint + tags
 app.get('/api/building', async (req, res) => {
@@ -293,79 +186,6 @@ app.get('/api/context-buildings', async (req, res) => {
 });
 
 // HM Land Registry INSPIRE — registered title polygons (WFS 2.0, GML → GeoJSON)
-app.get('/api/plot-boundary', async (req, res) => {
-  try {
-    const { lat, lng } = req.query;
-    if (!lat || !lng) return res.status(400).json({ error: 'lat/lng required' });
-    const buf = 0.0015; // ~150m — large enough to capture big commercial sites
-    const minLon = (parseFloat(lng) - buf).toFixed(6);
-    const minLat = (parseFloat(lat) - buf).toFixed(6);
-    const maxLon = (parseFloat(lng) + buf).toFixed(6);
-    const maxLat = (parseFloat(lat) + buf).toFixed(6);
-
-    // WFS 1.1.0 format — confirmed working with HMLR INSPIRE
-    // BBOX order for EPSG:4326: minLat,minLon,maxLat,maxLon
-    const url = `https://inspire.landregistry.gov.uk/inspire/ows` +
-      `?service=WFS&version=1.1.0&request=GetFeature` +
-      `&typeName=inspire:RegisteredPoleland` +
-      `&maxFeatures=20` +
-      `&srsName=EPSG:4326` +
-      `&bbox=${minLat},${minLon},${maxLat},${maxLon},EPSG:4326`;
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-    let text = '';
-    try {
-      const r = await fetch(url, {
-        signal: controller.signal,
-        headers: { 'User-Agent': 'devfeasibility/1.0 (nbornman@gmail.com)' }
-      });
-      clearTimeout(timeout);
-      text = await r.text();
-    } catch (fetchErr) {
-      clearTimeout(timeout);
-      return res.json({ type: 'FeatureCollection', features: [], error: fetchErr.message });
-    }
-
-    // Parse GML response → GeoJSON
-    const features = [];
-    const memberRe = /<inspire:RegisteredPoleland[^>]*>([\s\S]*?)<\/inspire:RegisteredPoleland>/g;
-    let m;
-    while ((m = memberRe.exec(text)) !== null) {
-      const xml = m[1];
-      const titleMatch = xml.match(/<inspire:TITLE_NO[^>]*>(.*?)<\/inspire:TITLE_NO>/);
-      const titleNo = titleMatch ? titleMatch[1].trim() : '';
-      const rings = [];
-      const posRe = /<gml:posList[^>]*srsDimension="2"[^>]*>([\s\S]*?)<\/gml:posList>|<gml:posList[^>]*>([\s\S]*?)<\/gml:posList>/g;
-      let pr;
-      while ((pr = posRe.exec(xml)) !== null) {
-        const raw = (pr[1] || pr[2] || '').trim();
-        const nums = raw.split(/\s+/).map(Number).filter(n => !isNaN(n));
-        if (nums.length < 6) continue;
-        const coords = [];
-        for (let i = 0; i < nums.length - 1; i += 2) {
-          // HMLR GML in EPSG:4326 is latitude-first — swap to lon,lat for GeoJSON
-          const a = nums[i], b = nums[i + 1];
-          // Detect axis order: UK lat ~51, UK lon ~ -0.1
-          if (Math.abs(a) > 10) coords.push([b, a]); // a=lat, b=lon → swap
-          else coords.push([a, b]); // already lon,lat
-        }
-        if (coords.length >= 3) rings.push(coords);
-      }
-      if (rings.length > 0) {
-        features.push({
-          type: 'Feature',
-          geometry: { type: 'Polygon', coordinates: rings },
-          properties: { titleNo, source: 'hmlr-inspire' }
-        });
-      }
-    }
-
-    res.json({ type: 'FeatureCollection', features, count: features.length });
-  } catch (e) {
-    res.status(500).json({ type: 'FeatureCollection', features: [], error: e.message });
-  }
-});
 
 // Historic England — Listed Buildings near point
 app.get('/api/listed-buildings', async (req, res) => {
@@ -579,41 +399,6 @@ app.get('/api/land-registry', async (req, res) => {
 });
 
 // Borough lookup from coordinates
-app.get('/api/borough', async (req, res) => {
-  try {
-    const { lat, lng } = req.query;
-
-    // Strategy 1: postcodes.io — free, accurate borough from point-in-polygon
-    try {
-      const pcRes = await fetch(`https://api.postcodes.io/postcodes?lon=${lng}&lat=${lat}&limit=1`);
-      const pcData = await pcRes.json();
-      if (pcData.result && pcData.result.length > 0) {
-        const r = pcData.result[0];
-        const borough = r.admin_district || 'Unknown';
-        return res.json({
-          borough: borough,
-          fullName: `${borough}, London`,
-          postcode: r.postcode || '',
-          ward: r.admin_ward || '',
-          parish: r.parish || ''
-        });
-      }
-    } catch (e) { /* fall through to Mapbox */ }
-
-    // Strategy 2: Mapbox reverse geocode (fallback)
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_TOKEN}&types=district,locality,place&country=gb`;
-    const r = await fetch(url);
-    const data = await r.json();
-    const district = data.features?.find(f => f.place_type?.includes('district'));
-    const locality = data.features?.find(f => f.place_type?.includes('locality'));
-    const postcode = data.features?.find(f => f.place_type?.includes('postcode'));
-    res.json({
-      borough: district?.text || locality?.text || 'Unknown',
-      fullName: district?.place_name || locality?.place_name || '',
-      postcode: postcode?.text || ''
-    });
-  } catch (e) { res.status(500).json({ error: e.message }); }
-});
 
 // (old EPC handler removed — replaced by /api/epc below with correct credentials)
 
@@ -853,20 +638,6 @@ app.get('/api/epc', async (req, res) => {
 });
 
 // Debug — raw HMLR response (remove after fixing parser)
-app.get('/api/plot-boundary-debug', async (req, res) => {
-  try {
-    const { lat, lng } = req.query;
-    const buf = 0.0015;
-    const minLon = (parseFloat(lng) - buf).toFixed(6);
-    const minLat = (parseFloat(lat) - buf).toFixed(6);
-    const maxLon = (parseFloat(lng) + buf).toFixed(6);
-    const maxLat = (parseFloat(lat) + buf).toFixed(6);
-    const url = `https://inspire.landregistry.gov.uk/inspire/ows?service=WFS&version=1.1.0&request=GetFeature&typeName=inspire:RegisteredPoleland&maxFeatures=5&srsName=EPSG:4326&bbox=${minLat},${minLon},${maxLat},${maxLon},EPSG:4326`;
-    const r = await fetch(url, { headers: { 'User-Agent': 'devfeasibility/1.0' }, signal: AbortSignal.timeout(15000) });
-    const text = await r.text();
-    res.set('Content-Type', 'text/plain').send(text.substring(0, 4000));
-  } catch (e) { res.status(500).send(e.message); }
-});
 
 // ── HMLR INSPIRE WMS proxy (CORS bypass) ─────────────────────────────────
 // Converts XYZ tile coords → EPSG:3857 bbox → fetches HMLR WMS → returns PNG

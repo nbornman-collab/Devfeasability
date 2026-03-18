@@ -404,3 +404,12 @@ T1 site polygon must come from queryRenderedFeatures on Mapbox composite buildin
 Use map.once('idle') handler with box query around CENTROID on composite/building layer.
 PropertyData polygon = site boundary display only (dashed outline).
 Massing layers (site-existing, site-massing) = queryRenderedFeatures polygon only.
+
+---
+
+## PROPERTYDATA BANNED (🦞 locked 2026-03-18)
+
+PropertyData is removed from all tiers permanently.
+Do NOT use `/api/plot-boundary`, `/api/borough`, or any PropertyData endpoint.
+Site area, owner, and boundary data must come from intelligence files or HMLR.
+Do not re-add PropertyData for any reason without explicit instruction from Nic.
