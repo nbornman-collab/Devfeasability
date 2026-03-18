@@ -355,3 +355,4 @@ If a rule isn't working or a new failure pattern emerges:
 - T3 floor plan PDF timing - Overpass async issue
 - Borough screener paywall - parked
 - 100LH plot area (1,551m² is single title - real consolidated site is 4,450m²)
+Protocol violation logged: 2026-03-18 11:13 UTC — 🐐 omitted from reply containing commits 550bdde
