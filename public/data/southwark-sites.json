@@ -24,7 +24,7 @@
         "floodZone": 1,
         "ptal": 6
       },
-      "source": "Verified (HMLR + EPC + PropertyData)"
+      "source": "Verified (HMLR + EPC)"
     },
     {
       "name": "24 Southwark Street",
@@ -48,7 +48,7 @@
         "floodZone": 1,
         "ptal": 6
       },
-      "source": "Verified (HMLR + EPC + PropertyData)"
+      "source": "Verified (HMLR + EPC)"
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",

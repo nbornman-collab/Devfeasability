@@ -393,27 +393,66 @@ async function initMap(){
   el.style.cssText='width:12px;height:12px;border-radius:50%;background:#4f46e5;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)';
   new mapboxgl.Marker({element:el}).setLngLat(CENTROID).addTo(_map);
 
-  // Click handler — fire PropertyData lookup at exact click point
-  _map.on('click', async e => {
-    if (!_selectMode) return;
-    const {lat, lng} = e.lngLat;
-    showHint('Looking up parcel…');
-    try {
-      const fc = await(await fetch(`/api/plot-boundary?lat=${lat.toFixed(6)}&lng=${lng.toFixed(6)}`)).json();
-      if (fc && fc.features && fc.features.length) {
-        _map.getSource('boundary').setData(fc);
-        const p = fc.features[0].properties;
-        const area = p.area_sqm ? `${p.area_sqm.toLocaleString()} m²` : '—';
-        const owner = p.owner || 'Unknown owner';
-        confirmBoundary(`✓ ${owner} · ${area}`);
-      } else {
-        showHint('No registered title found here — try clicking the centre of the site');
-      }
-    } catch(err) {
-      showHint('Lookup failed — try again');
-    }
-  });
+
 }
+
+function showHint(msg){
+  const h = document.getElementById('click-hint');
+  h.textContent = msg; h.style.display = 'block';
+  clearTimeout(window._hintTimer);
+  window._hintTimer = setTimeout(()=> h.style.display='none', 4000);
+}
+
+function confirmBoundary(msg){
+  const s = document.getElementById('boundary-status');
+  s.textContent = msg; s.style.display = 'block'; s.className = 'confirmed';
+  document.getElementById('click-hint').style.display = 'none';
+  _confirmed = true;
+}
+
+function toggleHMLR(){
+  _selectMode = !_selectMode;
+  const btn = document.getElementById('hmlr-toggle');
+  const status = document.getElementById('boundary-status');
+  if(_selectMode){
+    _map.setPaintProperty('hmlr-wms-layer','raster-opacity',0.7);
+    btn.textContent = '⬡ Parcels ON'; btn.className = 'on';
+    status.textContent = '⬡ Click a land parcel to confirm the site boundary';
+    status.style.display = 'block'; status.className = '';
+    document.getElementById('click-hint').style.display = 'block';
+    document.getElementById('click-hint').textContent = 'Click anywhere on your site';
+  } else {
+    _map.setPaintProperty('hmlr-wms-layer','raster-opacity',0);
+    btn.textContent = '⬡ Show Parcels'; btn.className = '';
+    if(!_confirmed) status.style.display = 'none';
+    document.getElementById('click-hint').style.display = 'none';
+  }
+}
+
+async function searchAddress(){
+  const q = document.getElementById('map-search').value.trim();
+  if(!q) return;
+  const cfg = await(await fetch('/api/config')).json();
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?country=gb&proximity=-0.0262,51.4843&access_token=${cfg.mapboxToken}`;
+  const data = await(await fetch(url)).json();
+  const f = data.features?.[0];
+  if(f){
+    _map.flyTo({center:f.center, zoom:18, pitch:0, bearing:0, duration:1400});
+    // Auto-enable parcels once map settles
+    _map.once('moveend', ()=>{
+      if(!_selectMode) toggleHMLR();
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('map-search').addEventListener('keydown', e=>{ if(e.key==='Enter') searchAddress(); });
+});
+
+initMap();
+</script>
+</body>
+</html>}
 
 function showHint(msg){
   const h = document.getElementById('click-hint');

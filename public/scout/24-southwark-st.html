@@ -633,7 +633,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
         'fill-extrusion-opacity':0.20
       }
     });
-    // Site boundary: drawn from intelligence file polygon (no PropertyData)
+    // Site boundary: drawn from intelligence file polygon
     // Massing polygon - populated from queryRenderedFeatures idle (same formula as T2)
     map.addSource('site-poly',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
     // Amber: existing building mass
@@ -790,7 +790,7 @@ function buildApps(apps){
   }).join(''));
 }
 
-// Site data from HMLR (no PropertyData)
+// Site data from HMLR
 if(document.getElementById('site-area-display')) document.getElementById('site-area-display').textContent='1,550 m²';
 if(document.getElementById('owner-display')) document.getElementById('owner-display').textContent='RREEF Bankside II Limited · HMLR TGL221350';
 loadAll();

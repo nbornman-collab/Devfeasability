@@ -95,7 +95,6 @@ const PD_TTL = 24 * 60 * 60 * 1000;
 
 async function pdGet(path) {
   const sep = path.includes('?') ? '&' : '?';
-  const url = `${PD_BASE}${path}${sep}key=${PROPERTYDATA_KEY}`;
   const r = await fetch(url);
   return r.json();
 }
