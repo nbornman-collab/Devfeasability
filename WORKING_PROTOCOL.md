@@ -387,3 +387,20 @@ Do not rely on global reset only. Each slider gets:
 - A small baseline tick/marker on the slider track at the default position
 - A per-slider reset button (↺) that appears when value deviates from default
 - Clicking the reset icon snaps that slider back to its default value only
+
+---
+
+## T1 MAP MUST CENTER ON SITE COORDINATES (🦞 locked 2026-03-18)
+
+T1 map must always:
+- Initialize with correct LAT/LNG and zoom 17.5+ to show the site clearly
+- Never use PropertyData address or geocoded location to set map center
+- LAT/LNG are hardcoded constants per site - they are the ground truth
+
+## T1 MASSING MUST USE SAME FORMULA AS T2 (🦞 locked 2026-03-18)
+
+T1 site polygon must come from queryRenderedFeatures on Mapbox composite building layer
+(same as T2) - not from PropertyData, not hardcoded rectangles.
+Use map.once('idle') handler with box query around CENTROID on composite/building layer.
+PropertyData polygon = site boundary display only (dashed outline).
+Massing layers (site-existing, site-massing) = queryRenderedFeatures polygon only.
