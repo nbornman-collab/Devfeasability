@@ -450,3 +450,15 @@ Rules:
 - GEA is NEVER derived from (footprint × floors) - always from VOA or EPC
 - No rectangle approximations. No guessing. No PropertyData.
 - When a source fails, surface the error - never silently substitute a guess
+
+---
+
+## EXISTING BUILDING AREA - PUBLIC DATA ONLY (🦞 locked 2026-03-18)
+
+OS NGD must NOT be used to calculate existing building floor area.
+Existing GEA must come from publicly available data sources only:
+- EPC API (assessed floor area - residential + some commercial)
+- Planning application records (GIA stated in planning documents - research at onboarding)
+- These are researched and hardcoded in the intelligence file at site onboarding
+- Label any derived/estimated area clearly - never present it as a measured figure
+- Do not derive GEA from (footprint × floors / height) - that is a calculation, not data
