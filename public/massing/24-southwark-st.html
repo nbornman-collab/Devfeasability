@@ -1050,11 +1050,16 @@ async function initMap(){
       const box = [[pt.x - 15, pt.y - 15], [pt.x + 15, pt.y + 15]];
       const features = m.queryRenderedFeatures(box)
         .filter(f => f.sourceLayer === 'building' && f.geometry && f.geometry.type === 'Polygon');
-      if (features.length > 0) {
-        const geom = features[0].geometry;
-        let coords = geom.type === 'Polygon'
-          ? geom.coordinates[0]
-          : (geom.coordinates || []).sort((a, b) => b[0].length - a[0].length)[0]?.[0];
+      const best = features.sort((a,b) => {
+        const area = c => {
+          const xs = c.map(p=>p[0]), ys = c.map(p=>p[1]);
+          return (Math.max(...xs)-Math.min(...xs)) * (Math.max(...ys)-Math.min(...ys));
+        };
+        return area(b.geometry.coordinates[0]) - area(a.geometry.coordinates[0]);
+      })[0];
+      if (best) {
+        const geom = best.geometry;
+        let coords = geom.coordinates[0];
         if (coords && coords.length > 3) {
           SITE_COORDS = coords;
           m.getSource('site').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}});

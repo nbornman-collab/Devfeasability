@@ -710,11 +710,17 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
       const box = [[pt.x - 15, pt.y - 15], [pt.x + 15, pt.y + 15]];
       const features = map.queryRenderedFeatures(box)
         .filter(f => f.sourceLayer === 'building' && f.geometry && f.geometry.type === 'Polygon');
-      if (features.length > 0) {
-        const geom = features[0].geometry;
-        let coords = geom.type === 'Polygon'
-          ? geom.coordinates[0]
-          : (geom.coordinates || []).sort((a, b) => b[0].length - a[0].length)[0]?.[0];
+      // Pick largest polygon by bounding box area - most likely to be the actual building
+      const best = features.sort((a,b) => {
+        const area = c => {
+          const xs = c.map(p=>p[0]), ys = c.map(p=>p[1]);
+          return (Math.max(...xs)-Math.min(...xs)) * (Math.max(...ys)-Math.min(...ys));
+        };
+        return area(b.geometry.coordinates[0]) - area(a.geometry.coordinates[0]);
+      })[0];
+      if (best) {
+        const geom = best.geometry;
+        let coords = geom.coordinates[0];
         if (coords && coords.length > 3) {
           map.getSource('site-poly').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[coords]}});
           console.log('T1 196BR: qRF polygon loaded, ' + coords.length + ' vertices');
