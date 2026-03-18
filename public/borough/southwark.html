@@ -303,14 +303,7 @@ async function initMap(){
   });
 
   map.on('load', () => {
-    const layers = map.getStyle().layers;
-    const labelLayerId = layers.find(l => l.type === 'symbol' && l.layout['text-field'])?.id;
-    map.addLayer({
-      id:'3d-buildings', source:'composite', 'source-layer':'building',
-      filter:['==','extrude','true'], type:'fill-extrusion', minzoom:14,
-      paint:{'fill-extrusion-color':'#d4d6dc','fill-extrusion-height':['get','height'],
-        'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.4}
-    }, labelLayerId);
+    // satellite-v9 is raster-only - no composite vector source, no 3D buildings layer
 
     ALL_SITES.forEach(s => {
       const el = document.createElement('div');
