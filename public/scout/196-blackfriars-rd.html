@@ -34,13 +34,13 @@
 html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)}
 
 /* ── Map ─────────────────────────────────── */
-#map{position:fixed;top:52px;left:var(--panel-w);right:0;bottom:0;z-index:0}
+#map{position:fixed;top:52px;left:0;width:var(--panel-w);height:calc(100% - 52px);z-index:0}
 .mapboxgl-ctrl-top-right{top:12px !important;right:12px !important}
 
 /* ── Left ribbon ─────────────────────────── */
 #left-ribbon{
-  position:fixed;left:0;top:52px;bottom:0;width:var(--panel-w);
-  background:var(--surface);border-right:1px solid var(--border);
+  position:fixed;right:0;top:52px;bottom:0;width:var(--panel-w);
+  background:var(--surface);border-left:1px solid var(--border);
   z-index:30;display:flex;flex-direction:column;align-items:center;
   padding:14px 0 16px;gap:4px;
 }
@@ -194,7 +194,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 
 /* Map hint */
 .map-hint{
-  position:fixed;left:calc(var(--panel-w) + 10px);top:10px;z-index:25;
+  position:fixed;left:10px;top:10px;z-index:25;
   background:var(--surface);border:1px solid var(--border);
   border-radius:5px;padding:6px 12px;
   font:400 10px var(--sans);color:var(--text3);
@@ -220,7 +220,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 /* ── Street View floating card ────────────────────────────────── */
 .sv-float{
   position:fixed;
-  left:calc(var(--panel-w) + 16px);
+  left:16px;
   bottom:16px;
   width:340px;z-index:20;
   background:#fff;border-radius:10px;
@@ -245,7 +245,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 /* ── SV restore button ────────────────────────────────────────── */
 .sv-map-btn{
   position:fixed;
-  left:calc(var(--panel-w) + 16px);
+  left:16px;
   bottom:calc(0px + 16px);
   z-index:19;
   background:#fff;border:1px solid var(--border);

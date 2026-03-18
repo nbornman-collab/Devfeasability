@@ -20,7 +20,7 @@
 html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text)}
 
 /* Layout */
-.page{display:grid;grid-template-columns:1fr 1fr;height:100vh}
+.page{display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 52px);margin-top:52px}
 @media(max-width:900px){.page{grid-template-columns:1fr;grid-template-rows:40vh 1fr}}
 
 /* Map */
@@ -136,7 +136,6 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   <a href="/methodology" style="font:500 11px Inter,sans-serif;color:#6b7280;text-decoration:none">Methodology</a>
 </nav>
 
-<div style="height:52px"></div>
 <div class="page">
   <div id="map"></div>
   <div class="list-panel">
@@ -144,9 +143,9 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
       <h1>T0 Borough · Southwark</h1>
       <div class="sub">Development intelligence — verified sites only. More being added.</div>
       <div class="stats">
-        <div class="stat-box"><div class="num">2</div><div class="label">verified sites</div></div>
-        <div class="stat-box"><div class="num">&pound;146M</div><div class="label">combined GDV</div></div>
-        <div class="stat-box"><div class="num">80</div><div class="label">homes (resi)</div></div>
+        <div class="stat-box"><div class="num" id="stat-total">—</div><div class="label">sites</div></div>
+        <div class="stat-box"><div class="num" id="stat-verified">—</div><div class="label">verified</div></div>
+        <div class="stat-box"><div class="num" id="stat-oa">—</div><div class="label">in OA</div></div>
       </div>
     </div>
     <div id="site-list"></div>
@@ -246,6 +245,12 @@ async function loadAndRender() {
   if (statEls[0]) statEls[0].textContent = ALL_SITES.length + ' sites';
   if (statEls[1]) statEls[1].textContent = ALL_SITES.filter(s=>s.verified).length + ' verified';
   if (statEls[2]) statEls[2].textContent = ALL_SITES.filter(s=>s.flags&&s.flags.inOA).length + ' in OA';
+
+  // Update header stats
+  const el = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  el('stat-total', ALL_SITES.length);
+  el('stat-verified', ALL_SITES.filter(s=>s.verified).length);
+  el('stat-oa', ALL_SITES.filter(s=>s.flags&&s.flags.inOA).length);
 
   const listEl = document.getElementById('site-list');
   listEl.innerHTML = '';
