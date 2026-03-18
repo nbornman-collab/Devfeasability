@@ -462,3 +462,12 @@ Existing GEA must come from publicly available data sources only:
 - These are researched and hardcoded in the intelligence file at site onboarding
 - Label any derived/estimated area clearly - never present it as a measured figure
 - Do not derive GEA from (footprint × floors / height) - that is a calculation, not data
+
+---
+
+## FLOOR-TO-FLOOR HEIGHTS (🦞 locked 2026-03-18)
+
+- Office: 4.0m floor-to-floor
+- Residential: 3.15m floor-to-floor
+- Never use 4.2m or any other value
+- These drive all massing height calculations across T1 and T2

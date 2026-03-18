@@ -430,7 +430,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
       <div class="ic-head"><span class="ic-cat">Structure</span><span class="ic-title">Structural Systems</span></div>
       <div class="ic-body">
         <p>Minimum 7m clear lease span on at least 2 faces of core to facade - the threshold for Grade A lettability. Below this, floor plates feel constrained and rents discount. Above 10m, column-free spans require transfer beams that push floor-to-floor height, increasing total building height without adding floors.</p>
-        <p>At 10F (Low): simple RC flat slab, 250mm slab, 4.2m F-F height, comfortable 11m clear spans south and west. At 22F (High): the core expands, the tower footprint shrinks to 40% coverage - <strong>clear spans compress to ~7m</strong>, which is the minimum. Any further height and the plate starts failing the lease span test.</p>
+        <p>At 10F (Low): simple RC flat slab, 250mm slab, 4.0m F-F height, comfortable 11m clear spans south and west. At 22F (High): the core expands, the tower footprint shrinks to 40% coverage - <strong>clear spans compress to ~7m</strong>, which is the minimum. Any further height and the plate starts failing the lease span test.</p>
         <div class="ic-callout"><p>The structural grid also influences facade design. Column spacing at 7.5m centres means the facade module is fixed - structural moves cascade into architectural expression.</p></div>
       </div>
     </div>
@@ -486,7 +486,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 // DATA - identical financial model
 // Site polygon from Mapbox composite building layer (queryRenderedFeatures on idle)
 const CENTROID=[-0.091522,51.504909];
-const PLOT_AREA=1550, FTF=4.2;
+const PLOT_AREA=1575, FTF=4.0;
 let EXISTING_HEIGHT=24.8; // 24SS confirmed (EPC/HMLR)
 const EXISTING_EUV=22000000;
 let SITE_COORDS = null; // populated on map idle from queryRenderedFeatures
@@ -502,11 +502,11 @@ const MARKET={
 };
 
 const SCENARIOS=[
-  {key:'lo',label:'Low',floors:8,podF:5,podH:21,twrF:3,twrPct:0.70,cov:1.0,eff:0.83,costFactor:0.88,
+  {key:'lo',label:'Low',floors:8,podF:5,podH:20,twrF:3,twrPct:0.70,cov:1.0,eff:0.83,costFactor:0.88,
    narrative:'Full plate to 5F matching the Bankside commercial cornice. Tower steps back above L5, 70% coverage. <strong>Single staircase</strong> compliant sub-18m tower element. Lowest programme risk - 2 year build. No tall buildings assessment required at this height. <strong>Best margin efficiency</strong> - the return curve peaks near 8-9F in the Bankside CAZ.'},
-  {key:'base',label:'Base',floors:10,podF:5,podH:21,twrF:5,twrPct:0.65,cov:1.0,eff:0.81,costFactor:1.00,
+  {key:'base',label:'Base',floors:10,podF:5,podH:20,twrF:5,twrPct:0.65,cov:1.0,eff:0.81,costFactor:1.00,
    narrative:'5F podium holds Bankside street cornice. Tower adds 5F at 65% coverage above. Pre-app views assessment required re <strong>Tate Modern sightlines</strong> (220m W). <strong>Single staircase</strong> compliant throughout (sub-18m tower, overall sub-50m). Strong precedent at this height on Southwark Street. <strong>Absolute profit peaks near this scenario.</strong>'},
-  {key:'hi',label:'High',floors:12,podF:4,podH:17,twrF:8,twrPct:0.60,cov:1.0,eff:0.79,costFactor:1.18,
+  {key:'hi',label:'High',floors:12,podF:4,podH:16,twrF:8,twrPct:0.60,cov:1.0,eff:0.79,costFactor:1.18,
    narrative:'Lower 4F podium activates public realm at ground. 8F tower at 60% coverage - maximum height for this Bankside CAZ position without a tall buildings policy trigger. LVMF assessment required. Southwark Core Strategy requires design justification above surroundings. Highest GDV but <strong>margin % falls</strong> as construction cost and programme compound.'},
 ];
 
@@ -898,7 +898,7 @@ function clipToSite(pts,clip){
 function updateMap(idx){
   const s=SCENARIOS[idx],m=window._map;
   const targetH=Math.round(s.floors * FTF);
-  const ftf=3.5;
+  const ftf=FTF;
   // Clear all floor lines
   for(let f=1;f<=30;f++) m.setPaintProperty('fl'+f,'fill-extrusion-opacity',0);
 
