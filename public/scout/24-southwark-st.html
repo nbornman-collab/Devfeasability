@@ -629,7 +629,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
         'fill-extrusion-color':'#d4d7df',
         'fill-extrusion-height':['interpolate',['linear'],['zoom'],15,0,15.05,['get','height']],
         'fill-extrusion-base':['interpolate',['linear'],['zoom'],15,0,15.05,['get','min_height']],
-        'fill-extrusion-opacity':0.65
+        'fill-extrusion-opacity':0.20
       }
     });
     map.addSource('site',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
@@ -726,14 +726,19 @@ async function loadAll(){
       set('epc-gia',gia.toLocaleString()+' m²');set('current-far',far+'×');
       const bars_svg=document.getElementById('capacity-bars');
       if(bars_svg){
-        const SB=[{label:'Existing',gia,col:'#d0d2da'},{label:'Low (8F)',gia:11005,col:'#93c5fd'},{label:'Base (10F)',gia:12788,col:'#3b82f6'},{label:'High (12F)',gia:13640,col:'#1d4ed8'}];
+        const existingGIA=8463;
+        const SB=[{label:'Existing',gia:existingGIA,col:'#d0d2da',note:'Current building ~7 floors. Demolish-rebuild assumed for all scenarios.'},{label:'Low (8F)',gia:11005,col:'#93c5fd',note:'Full plate to 5F, tower set-back. Single staircase sub-18m. Best margin - return curve peaks at 8-9F in Bankside CAZ.'},{label:'Base (10F)',gia:12788,col:'#3b82f6',note:'Above-parapet, new benchmark height. BSA compliance point: second staircase mandatory above 18m adds ~40m² per floor.'},{label:'High (12F)',gia:13640,col:'#1d4ed8',note:'Max uplift. Heritage justification required for NDHA. Pre-app with Southwark essential. LVMF views assessment needed.'}];
         const maxG=Math.max(...SB.map(s=>s.gia));
         const BW=220,BH=11,GAP=6,LW=44,TX=LW+4;
+        bars_svg.setAttribute('viewBox',`0 0 280 ${SB.length*(BH+GAP)}`);
         bars_svg.innerHTML=SB.map((s,i)=>{
           const y=i*(BH+GAP),bw=Math.round(s.gia/maxG*BW);
           const lk=s.gia>=1000?(s.gia/1000).toFixed(0)+'k':s.gia;
           return`<g><text x="0" y="${y+BH-1}" font-family="Inter,sans-serif" font-size="8" fill="#6b7280">${s.label}</text><rect x="${TX}" y="${y}" width="${bw}" height="${BH}" fill="${s.col}" rx="1"/><text x="${TX+bw+4}" y="${y+BH-1}" font-family="DM Mono,monospace" font-size="8" fill="#9ca3af">${lk}</text></g>`;
         }).join('');
+        // Scenario notes below bars
+        const notesDiv=bars_svg.parentElement.querySelector('.scenario-notes')||(()=>{const d=document.createElement('div');d.className='scenario-notes';d.style.cssText='margin-top:8px';bars_svg.parentElement.appendChild(d);return d;})();
+        notesDiv.innerHTML=SB.slice(1).map(s=>`<div style="font:400 9px var(--sans);color:var(--text3);line-height:1.4;margin-bottom:4px"><span style="font-weight:600;color:var(--text2)">${s.label}:</span> ${s.note}</div>`).join('');
       }
     }
   }
