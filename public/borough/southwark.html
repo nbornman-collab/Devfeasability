@@ -236,6 +236,12 @@ let ALL_SITES = [];
 let map;
 let cfg = {};
 
+function siteT1Url(s) {
+  if (s.t1) return s.t1;
+  const slug = s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return `/t1/${slug}`;
+}
+
 async function loadAndRender() {
   const data = await fetch('/data/southwark-sites.json').then(r => r.json());
   ALL_SITES = data.sites || [];
@@ -282,7 +288,10 @@ async function loadAndRender() {
       ${tierLinks ? '<div style="margin:6px 0">' + tierLinks + '</div>' : ''}
       ${renderConstraintFlags(cflags)}
     `;
-    card.onclick = () => flyToSite(s);
+    card.onclick = (e) => {
+      if (e.target.tagName === 'A') return; // let tier links navigate normally
+      flyToSite(s);
+    };
     listEl.appendChild(card);
   });
 
@@ -318,38 +327,46 @@ async function initMap(){
 
       el.addEventListener('click', (e) => {
         e.stopPropagation();
-        document.querySelectorAll('.mapboxgl-popup').forEach(p => p.remove());
-        const imgUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${s.lng},${s.lat},18,0,55/320x180?access_token=${cfg.mapboxToken}`;
-        const oaBadge = (s.flags&&s.flags.inOA) ? '<span style="background:#1d4ed8;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px;margin-left:4px">OA</span>' : '';
-        const verBadge = s.verified ? '<span style="background:#10b981;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">VERIFIED</span>' : '<span style="background:#6b7280;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">CANDIDATE</span>';
-        const t2btn = s.t2 ? `<a class="popup-btn" style="background:#059669;margin-top:4px" href="${s.t2}">T2 Appraise &rarr;</a>` : '';
-        const t1btn = s.t1 ? `<a class="popup-btn" href="${s.t1}">T1 Scout &rarr;</a>` : '';
-        new mapboxgl.Popup({offset:20, maxWidth:'340px', className:'site-popup'})
-          .setLngLat([s.lng, s.lat])
-          .setHTML(`
-            <img src="${imgUrl}" style="width:100%;height:160px;object-fit:cover;border-radius:4px 4px 0 0;display:block;margin:-12px -12px 10px;width:calc(100% + 24px)" loading="lazy" onerror="this.style.display='none'">
-            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">${verBadge}${oaBadge}</div>
-            <div class="popup-title">${s.name}</div>
-            <div class="popup-sub">${s.address||''}</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:8px 0">
-              <div class="popup-stat"><span class="k">Score</span><span class="v" style="color:#6366f1;font-weight:700">${s.score}/100</span></div>
-              <div class="popup-stat"><span class="k">Site</span><span class="v">${s.hectares?s.hectares.toFixed(2)+'ha':'-'}</span></div>
-              ${s.existingLevels ? `<div class="popup-stat"><span class="k">Existing</span><span class="v">${s.existingLevels}F</span></div>` : ''}
-              ${s.mcil2Band ? `<div class="popup-stat"><span class="k">CIL Band</span><span class="v">${s.mcil2Band}</span></div>` : ''}
-              ${s.buildingUse&&s.buildingUse!=='yes' ? `<div class="popup-stat" style="grid-column:1/-1"><span class="k">Use</span><span class="v">${s.buildingUse}</span></div>` : ''}
-            </div>
-            ${t1btn}${t2btn}
-          `)
-          .addTo(map);
-        highlightCard(s._rank);
+        openSitePopup(s);
       });
     });
   });
 }
 
-function flyToSite(s){
-  map.flyTo({center:[s.lng, s.lat], zoom:14, pitch:50, duration:1200});
+function openSitePopup(s) {
+  document.querySelectorAll('.mapboxgl-popup').forEach(p => p.remove());
+  const t1url = siteT1Url(s);
+  const imgUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${s.lng},${s.lat},18,0,55/320x180?access_token=${cfg.mapboxToken}`;
+  const oaBadge = (s.flags&&s.flags.inOA) ? '<span style="background:#1d4ed8;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px;margin-left:4px">OA</span>' : '';
+  const verBadge = s.verified ? '<span style="background:#10b981;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">VERIFIED</span>' : '<span style="background:#6b7280;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">CANDIDATE</span>';
+  const t2btn = s.t2 ? `<a class="popup-btn" style="background:#059669;margin-top:4px" href="${s.t2}" onclick="event.stopPropagation()">T2 Appraise &rarr;</a>` : '';
+  new mapboxgl.Popup({offset:20, maxWidth:'340px', className:'site-popup'})
+    .setLngLat([s.lng, s.lat])
+    .setHTML(`
+      <div onclick="window.location.href='${t1url}'" style="cursor:pointer">
+        <img src="${imgUrl}" style="width:calc(100% + 24px);height:160px;object-fit:cover;border-radius:4px 4px 0 0;display:block;margin:-12px -12px 10px" loading="lazy" onerror="this.style.display='none'">
+        <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">${verBadge}${oaBadge}</div>
+        <div class="popup-title">${s.name}</div>
+        <div class="popup-sub">${s.address||''}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:8px 0">
+          <div class="popup-stat"><span class="k">Score</span><span class="v" style="color:#6366f1;font-weight:700">${s.score}/100</span></div>
+          <div class="popup-stat"><span class="k">Site</span><span class="v">${s.hectares?s.hectares.toFixed(2)+'ha':'-'}</span></div>
+          ${s.existingLevels ? `<div class="popup-stat"><span class="k">Existing</span><span class="v">${s.existingLevels}F</span></div>` : ''}
+          ${s.mcil2Band ? `<div class="popup-stat"><span class="k">CIL Band</span><span class="v">${s.mcil2Band}</span></div>` : ''}
+          ${s.buildingUse&&s.buildingUse!=='yes' ? `<div class="popup-stat" style="grid-column:1/-1"><span class="k">Use</span><span class="v">${s.buildingUse}</span></div>` : ''}
+        </div>
+        <a class="popup-btn" href="${t1url}" onclick="event.stopPropagation()">T1 Scout &rarr;</a>
+        ${t2btn}
+      </div>
+    `)
+    .addTo(map);
   highlightCard(s._rank);
+}
+
+function flyToSite(s){
+  map.flyTo({center:[s.lng, s.lat], zoom:15, pitch:50, duration:1200});
+  highlightCard(s._rank);
+  setTimeout(() => openSitePopup(s), 1250);
 }
 
 function highlightCard(rank){

@@ -52,7 +52,44 @@ app.get('/t3/:site', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'reports', `${req.params.site}.html`));
 });
 app.get('/t1/:site', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'scout', `${req.params.site}.html`));
+  const filePath = path.join(__dirname, 'public', 'scout', `${req.params.site}.html`);
+  if (require('fs').existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    // Coming soon — site not yet onboarded
+    const slug = req.params.site;
+    const name = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    res.send(`<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>T1 Scout · ${name} — D/A</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#f5f6f8;color:#1a1d2e;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:40px 24px}
+.da-nav{position:fixed;top:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(255,255,255,.97);border-bottom:1px solid #e5e7eb;z-index:200}
+.da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-.5px;text-decoration:none;color:#0f172a}
+.da-nav-logo .sl{color:#1d4ed8}
+.box{max-width:480px;width:100%;background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:40px;text-align:center}
+.chip{display:inline-block;background:#f3f4f6;color:#6b7280;font:600 10px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.2px;padding:4px 12px;border-radius:4px;margin-bottom:20px}
+h1{font:700 22px Inter,sans-serif;margin-bottom:8px}
+p{font:400 14px Inter,sans-serif;color:#6b7280;line-height:1.6;margin-bottom:24px}
+a.btn{display:inline-block;background:#4f46e5;color:#fff;font:600 13px Inter,sans-serif;text-decoration:none;padding:12px 28px;border-radius:8px}
+a.btn:hover{background:#4338ca}
+a.back{font:500 13px Inter,sans-serif;color:#6b7280;text-decoration:none;margin-top:16px;display:block}
+a.back:hover{color:#1a1d2e}
+</style></head>
+<body>
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+</nav>
+<div class="box">
+  <div class="chip">T1 Scout</div>
+  <h1>${name}</h1>
+  <p>Intelligence report not yet available for this site. It is in the onboarding queue - verified sites are added as analysis is completed.</p>
+  <a class="btn" href="/borough/southwark">Back to Borough Screener</a>
+  <a class="back" href="/">D/A Homepage</a>
+</div>
+</body></html>`);
+  }
 });
 
 // Borough screener — /borough/:name → public/borough/:name.html
