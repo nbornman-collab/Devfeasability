@@ -22,11 +22,11 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .panel{position:fixed;top:52px;right:0;width:50%;height:100%;background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:5}
 
 /* ── Map overlays ────────────────────────────────────────────────── */
-.map-bar{position:fixed;top:14px;left:14px;z-index:10;display:flex;align-items:center;gap:8px}
+.map-bar{position:fixed;top:60px;left:14px;z-index:10;display:flex;align-items:center;gap:8px}
 .logo{font:800 15px var(--sans);color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.4);letter-spacing:-.3px}
 .logo span{opacity:.7;font-weight:500}
 
-.scenario-pills{position:fixed;top:14px;left:50%;transform:translateX(calc(-100% - 14px));z-index:10;display:flex;gap:0;background:rgba(255,255,255,.97);border:1px solid var(--border);padding:0;backdrop-filter:blur(8px)}
+.scenario-pills{position:fixed;top:60px;left:50%;transform:translateX(calc(-100% - 14px));z-index:10;display:flex;gap:0;background:rgba(255,255,255,.97);border:1px solid var(--border);padding:0;backdrop-filter:blur(8px)}
 .pill{padding:10px 18px;border:none;border-right:1px solid var(--border);font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;background:transparent;color:var(--t3);transition:all .15s;line-height:1}.pill:last-child{border-right:none}
 .pill .pf{display:block;font:400 10px var(--sans);margin-top:2px;opacity:.6}
 .pill:hover{background:var(--s1)}
@@ -976,7 +976,10 @@ async function initMap(){
       // Replace red shell with actual OS NGD footprint (slight outset)
       const osCoords = bd.polygon.coordinates[0];
       m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(osCoords,0.000003)]}});
+      m.getSource('existing-ring').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(osCoords,0.000003)]}});
       m.setPaintProperty('existing-cap','fill-extrusion-height',bd.height);
+      m.setPaintProperty('existing-ring','fill-extrusion-height',bd.height);
+      m.setPaintProperty('existing-ring','fill-extrusion-base',bd.height - 1.2);
       m.setPaintProperty('existing-cap','fill-extrusion-opacity',0.5);
       // Re-run map update with corrected height
       updateMap(window._activeIdx||0);
@@ -986,10 +989,19 @@ async function initMap(){
     // Green additional envelope + floor lines
     m.addSource('podium',{type:'geojson',data:emptyPoly()});
     m.addSource('tower',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':1.0}});
+    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':0.78}});
     m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0}});
     m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#047857','line-width':2,'line-opacity':0.85}});
     m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0}});
+
+    // Amber existing-height-marker - shows where existing building tops out
+    m.addSource('existing-ring',{type:'geojson',data:emptyPoly()});
+    m.addLayer({id:'existing-ring',type:'fill-extrusion',source:'existing-ring',paint:{
+      'fill-extrusion-color':'#f59e0b',
+      'fill-extrusion-height':EXISTING_HEIGHT,
+      'fill-extrusion-base':EXISTING_HEIGHT - 1.2,
+      'fill-extrusion-opacity':0.95
+    }});
 
     for(let f=1;f<=30;f++){
       m.addSource('fl'+f,{type:'geojson',data:emptyPoly()});
@@ -1013,6 +1025,7 @@ async function initMap(){
           SITE_COORDS = coords;
           m.getSource('site').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}});
           m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
+          m.getSource('existing-ring').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
           updateMap(window._activeIdx || 0);
           console.log('T2 24SS: real polygon loaded, ' + SITE_COORDS.length + ' vertices');
         }
