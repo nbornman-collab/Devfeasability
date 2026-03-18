@@ -274,6 +274,14 @@ If a rule isn't working or a new failure pattern emerges:
 
 ---
 
+## MASSING INPUT RULES (🦞 locked)
+
+- **Never use makeRect/centroid for site massing polygon.** makeRect generates a box sitting in the road. Always use `m.queryRenderedFeatures` on the composite `building` layer at the CENTROID point after `map.once('idle')`. Use the returned OSM polygon as `SITE_COORDS`.
+- **`SITE_COORDS` must be `let`, not `const`** so the idle handler can replace the makeRect fallback with the real polygon.
+- **Context buildings (ctx-3d) opacity must be 0.20** - ghosted grey surroundings, not solid. `fill-extrusion-opacity: 0.20` on the ctx-3d layer. Never 1.0.
+
+---
+
 ## THINGS THAT MUST NOT CHANGE WITHOUT EXPLICIT INSTRUCTION
 
 - Mapbox camera angles on any page

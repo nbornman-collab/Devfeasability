@@ -448,7 +448,7 @@ const CENTROID=[-0.0940,51.5048];
 const PLOT_AREA=1550, FTF=4.2;
 let EXISTING_HEIGHT=24.8; // 24SS confirmed (EPC/HMLR)
 const EXISTING_EUV=22000000;
-const SITE_COORDS=_makeRectEarly(CENTROID[0],CENTROID[1],PLOT_AREA,1.2); // PLACEHOLDER
+let SITE_COORDS=_makeRectEarly(CENTROID[0],CENTROID[1],PLOT_AREA,1.2); // temporary fallback - replaced on idle by queryRenderedFeatures
 const fmt=n=>(n??0).toLocaleString('en-GB');
 
 const MARKET={
@@ -937,7 +937,7 @@ async function initMap(){
   m.on('style.load',()=>{
     // Context buildings - soft grey
     m.addLayer({id:'ctx-3d',source:'composite','source-layer':'building',filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
-      paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':1.0,'fill-extrusion-vertical-gradient':false}});
+      paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.20,'fill-extrusion-vertical-gradient':false}});
 
     // Site boundary
     m.addSource('site',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}}});
@@ -977,6 +977,25 @@ async function initMap(){
     m.moveLayer('podium-3d');
     m.moveLayer('podium-edge');
     updateMap(0);
+
+    // Replace makeRect with real OSM building polygon from Mapbox composite layer
+    m.once('idle', () => {
+      const pt = m.project(CENTROID);
+      const features = m.queryRenderedFeatures([pt.x, pt.y], { layers: ['building'] });
+      if (features.length > 0) {
+        const geom = features[0].geometry;
+        let coords = geom.type === 'Polygon'
+          ? geom.coordinates[0]
+          : (geom.coordinates || []).sort((a, b) => b[0].length - a[0].length)[0]?.[0];
+        if (coords && coords.length > 3) {
+          SITE_COORDS = coords;
+          m.getSource('site').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}});
+          m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
+          updateMap(window._activeIdx || 0);
+          console.log('T2 24SS: real polygon loaded, ' + SITE_COORDS.length + ' vertices');
+        }
+      }
+    });
   });
 }
 
