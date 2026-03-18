@@ -1045,29 +1045,17 @@ async function initMap(){
     m.moveLayer('podium-edge');
     // Massing renders only after queryRenderedFeatures loads real polygon on idle
     m.once('idle', () => {
-      const pt = m.project(CENTROID);
-      // Box query more reliable than single pixel; filter to building sourceLayer
-      const box = [[pt.x - 15, pt.y - 15], [pt.x + 15, pt.y + 15]];
-      const features = m.queryRenderedFeatures(box)
-        .filter(f => f.sourceLayer === 'building' && f.geometry && f.geometry.type === 'Polygon');
-      const best = features.sort((a,b) => {
-        const area = c => {
-          const xs = c.map(p=>p[0]), ys = c.map(p=>p[1]);
-          return (Math.max(...xs)-Math.min(...xs)) * (Math.max(...ys)-Math.min(...ys));
-        };
-        return area(b.geometry.coordinates[0]) - area(a.geometry.coordinates[0]);
-      })[0];
-      if (best) {
-        const geom = best.geometry;
-        let coords = geom.coordinates[0];
-        if (coords && coords.length > 3) {
-          SITE_COORDS = coords;
-          m.getSource('site').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}});
-          m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
-          m.getSource('existing-ring').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
-          updateMap(window._activeIdx || 0);
-          console.log('T2 24SS: real polygon loaded, ' + SITE_COORDS.length + ' vertices');
-        }
+      // Polygon from intelligence file - single source of truth across T1 + T2
+      if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
+        const poly = SITE_INTELLIGENCE.polygon;
+        SITE_COORDS = poly;
+        m.getSource('site').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}});
+        m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
+        if(m.getSource('existing-ring')) m.getSource('existing-ring').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
+        updateMap(window._activeIdx||0);
+        console.log('T2-24SS: polygon from intelligence file, ' + poly.length + ' vertices');
+      } else {
+        console.warn('T2-24SS: SITE_INTELLIGENCE.polygon missing');
       }
     });
   });

@@ -2,6 +2,7 @@
 // SCORING NOTE: Heritage Shadow 6.0 reflects Victorian NDHA character constraint, not a blocking constraint.
 // Development IS achievable - the score shapes the massing strategy, not the viability decision.
 const SITE_INTELLIGENCE = {
+  polygon: [[-0.094303,51.504967],[-0.093697,51.504967],[-0.093697,51.504633],[-0.094303,51.504633],[-0.094303,51.504967]],
   site: '24 Southwark Street',
   borough: 'Southwark',
   factors: {

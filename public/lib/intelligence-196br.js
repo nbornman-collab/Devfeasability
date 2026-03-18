@@ -1,5 +1,6 @@
 // Development Intelligence - 196 Blackfriars Road, SE1 8NJ
 const SITE_INTELLIGENCE = {
+  polygon: [[-0.104395,51.500600],[-0.104005,51.500600],[-0.104005,51.500400],[-0.104395,51.500400],[-0.104395,51.500600]],
   site: '196 Blackfriars Road',
   borough: 'Southwark',
   use: 'residential',

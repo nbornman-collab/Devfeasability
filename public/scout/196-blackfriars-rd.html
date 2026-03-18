@@ -706,27 +706,13 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
     // queryRenderedFeatures idle handler - exact T2 formula
     map.once('idle', () => {
-      const pt = map.project(CENTROID);
-      const box = [[pt.x - 15, pt.y - 15], [pt.x + 15, pt.y + 15]];
-      const features = map.queryRenderedFeatures(box)
-        .filter(f => f.sourceLayer === 'building' && f.geometry && f.geometry.type === 'Polygon');
-      // Pick largest polygon by bounding box area - most likely to be the actual building
-      const best = features.sort((a,b) => {
-        const area = c => {
-          const xs = c.map(p=>p[0]), ys = c.map(p=>p[1]);
-          return (Math.max(...xs)-Math.min(...xs)) * (Math.max(...ys)-Math.min(...ys));
-        };
-        return area(b.geometry.coordinates[0]) - area(a.geometry.coordinates[0]);
-      })[0];
-      if (best) {
-        const geom = best.geometry;
-        let coords = geom.coordinates[0];
-        if (coords && coords.length > 3) {
-          map.getSource('site-poly').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[coords]}});
-          console.log('T1 196BR: qRF polygon loaded, ' + coords.length + ' vertices');
-        }
+      // Polygon from intelligence file - single source of truth across T1 + T2
+      if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
+        const poly = SITE_INTELLIGENCE.polygon;
+        map.getSource('site-poly').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[poly]}});
+        console.log('T1-196BR: polygon from intelligence file, ' + poly.length + ' vertices');
       } else {
-        console.warn('T1 196BR: qRF found no building - check zoom/location');
+        console.warn('T1-196BR: SITE_INTELLIGENCE.polygon missing');
       }
     });
 
