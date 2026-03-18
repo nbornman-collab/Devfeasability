@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Methodology — D/A</title>
+<title>Methodology - D/A</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -46,7 +46,7 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
 .factor{background:var(--surface);padding:20px 22px}
 .factor-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
 .factor-name{font:700 13px var(--sans);color:var(--text)}
-.factor-weight{font:600 10px var(--mono);color:var(--blue);background:#eff6ff;padding:2px 7px;border-radius:3px}
+
 .factor-bar-bg{height:3px;background:var(--surface3);border-radius:2px;margin-bottom:10px}
 .factor-bar{height:3px;background:var(--blue);border-radius:2px}
 .factor-desc{font:400 12px var(--sans);color:var(--text3);line-height:1.6}
@@ -101,20 +101,19 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
 <div class="hero">
   <div class="hero-eyebrow">Scoring Methodology</div>
   <h1 class="hero-title">How D<span>/</span>A scores<br>development sites</h1>
-  <p class="hero-body">Every site in D/A is scored against six factors that determine real development value — not just land value. The methodology combines spatial analysis, planning data, and market intelligence. This page explains exactly what we measure, how we weight it, and what gets flagged.</p>
+  <p class="hero-body">Every site in D/A is scored against six factors that determine real development value - not just land value. The methodology combines spatial analysis, planning data, and market intelligence. This page explains what we measure and what gets flagged.</p>
 </div>
 
 <!-- Six Factors -->
 <div class="section">
   <div class="section-label">Intelligence Engine</div>
   <h2 class="section-title">The six factors</h2>
-  <p class="section-body">Each factor is scored 0–100 and weighted by its influence on development viability. Weights were calibrated against a reference set of City of London and SE1 consented schemes.</p>
+  <p class="section-body">Each factor is scored 0-100 and weighted by its influence on development viability. Relative weights are proprietary - calibrated against a reference set of City of London and SE1 consented schemes.</p>
 
   <div class="factors">
     <div class="factor">
       <div class="factor-top">
         <div class="factor-name">Available Sky</div>
-        <div class="factor-weight">×2.5</div>
       </div>
       <div class="factor-bar-bg"><div class="factor-bar" style="width:100%"></div></div>
       <div class="factor-desc">Height headroom relative to the surrounding cluster. Sites deep within a tall buildings zone with underbuilt neighbours score highest. Derived from contextual building height analysis within 300m.</div>
@@ -122,7 +121,6 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
     <div class="factor">
       <div class="factor-top">
         <div class="factor-name">Rent Headroom</div>
-        <div class="factor-weight">×2.0</div>
       </div>
       <div class="factor-bar-bg"><div class="factor-bar" style="width:80%"></div></div>
       <div class="factor-desc">Gap between current passing rent and achievable ERV for the proposed use. Measures the value-creation opportunity from intensification. Calibrated to borough-level prime ERV data.</div>
@@ -130,7 +128,6 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
     <div class="factor">
       <div class="factor-top">
         <div class="factor-name">Planning Tailwind</div>
-        <div class="factor-weight">×2.0</div>
       </div>
       <div class="factor-bar-bg"><div class="factor-bar" style="width:80%"></div></div>
       <div class="factor-desc">How strongly local policy supports the proposed use and scale. Tall buildings zones, Opportunity Areas, and CAZ designations are positive signals. Conservation areas and Article 4 directions reduce this score.</div>
@@ -138,15 +135,13 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
     <div class="factor">
       <div class="factor-top">
         <div class="factor-name">Heritage Shadow</div>
-        <div class="factor-weight">×1.5</div>
       </div>
       <div class="factor-bar-bg"><div class="factor-bar" style="width:60%"></div></div>
-      <div class="factor-desc">Proximity and weight of designated heritage assets — listed buildings, World Heritage Sites, conservation areas. Scored inversely: a high score means low heritage constraint. Grade I listings and WHS settings are heaviest penalties.</div>
+      <div class="factor-desc">Proximity and weight of designated heritage assets - listed buildings, World Heritage Sites, conservation areas. Scored inversely: a high score means low heritage constraint. Grade I listings and WHS settings are heaviest penalties.</div>
     </div>
     <div class="factor">
       <div class="factor-top">
         <div class="factor-name">Title Stack</div>
-        <div class="factor-weight">×1.5</div>
       </div>
       <div class="factor-bar-bg"><div class="factor-bar" style="width:60%"></div></div>
       <div class="factor-desc">Complexity of the ownership and leasehold structure. Single freehold with no long leaseholds scores highest. Multi-title campus assemblies, ground leases, and highway titles all reduce this score.</div>
@@ -154,7 +149,6 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
     <div class="factor">
       <div class="factor-top">
         <div class="factor-name">Station Gravity</div>
-        <div class="factor-weight">×0.5</div>
       </div>
       <div class="factor-bar-bg"><div class="factor-bar" style="width:20%"></div></div>
       <div class="factor-desc">PTAL score and walking distance to nearest Elizabeth line, Underground, or Overground station. Given the density of Central London stations, this rarely determines viability but distinguishes fringe sites.</div>
@@ -166,12 +160,12 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
 <div class="section">
   <div class="section-label">Score Interpretation</div>
   <h2 class="section-title">What the number means</h2>
-  <p class="section-body">The composite score runs 0–100. In practice, genuinely viable development sites in Central London score 65–92. Scores above 85 are rare and typically indicate exceptional uplift potential or a structurally undervalued site.</p>
+  <p class="section-body">The composite score runs 0-100. In practice, genuinely viable development sites in Central London score 65-92. Scores above 85 are rare and typically indicate exceptional uplift potential or a structurally undervalued site.</p>
   <div class="penalty-list">
     <div class="penalty-row">
       <div class="penalty-icon" style="color:var(--green)">●</div>
       <div class="penalty-content">
-        <div class="penalty-title">85–100 — Exceptional opportunity</div>
+        <div class="penalty-title">85-100 - Exceptional opportunity</div>
         <div class="penalty-detail">Strong tailwinds across most factors. Underbuilt, low heritage constraint, clean title, supportive policy. Rare in Central London.</div>
       </div>
       <div class="penalty-badge badge-flag">Tier 1</div>
@@ -179,7 +173,7 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
     <div class="penalty-row">
       <div class="penalty-icon" style="color:var(--blue)">●</div>
       <div class="penalty-content">
-        <div class="penalty-title">70–84 — Strong case</div>
+        <div class="penalty-title">70-84 - Strong case</div>
         <div class="penalty-detail">One or two factors constrained but overall case is positive. Standard pre-app territory for a motivated promoter.</div>
       </div>
       <div class="penalty-badge badge-flag">Tier 2</div>
@@ -187,15 +181,15 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
     <div class="penalty-row">
       <div class="penalty-icon" style="color:var(--amber)">●</div>
       <div class="penalty-content">
-        <div class="penalty-title">50–69 — Conditional</div>
-        <div class="penalty-detail">Multiple constraints present. Viable with the right strategy — specialist planning or design intervention needed.</div>
+        <div class="penalty-title">50-69 - Conditional</div>
+        <div class="penalty-detail">Multiple constraints present. Viable with the right strategy - specialist planning or design intervention needed.</div>
       </div>
       <div class="penalty-badge badge-soft">Conditional</div>
     </div>
     <div class="penalty-row">
       <div class="penalty-icon" style="color:var(--red)">●</div>
       <div class="penalty-content">
-        <div class="penalty-title">Below 50 — Heavily constrained</div>
+        <div class="penalty-title">Below 50 - Heavily constrained</div>
         <div class="penalty-detail">Significant blockers present. Site is shown with constraint flags. May still be viable with specialist knowledge not available in public data.</div>
       </div>
       <div class="penalty-badge badge-hard">Flagged</div>
@@ -206,7 +200,7 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
 <!-- Constraint flags -->
 <div class="section">
   <div class="section-label">Site Constraints</div>
-  <h2 class="section-title">What gets flagged — and why we still show it</h2>
+  <h2 class="section-title">What gets flagged - and why we still show it</h2>
   <p class="section-body">D/A does not remove constrained sites from results. Development context changes: leases expire, consents lapse, operators relocate, owners change their minds. A site that scores poorly today may be the most interesting opportunity in the market tomorrow. We flag constraints transparently so you can make that judgement yourself.</p>
 
   <div class="penalty-list">
@@ -214,7 +208,7 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
       <div class="penalty-icon">🚫</div>
       <div class="penalty-content">
         <div class="penalty-title">Active planning consent</div>
-        <div class="penalty-detail">A live permission exists. The development case is effectively already made — but consents lapse, schemes are revised, and sites do come back to market.</div>
+        <div class="penalty-detail">A live permission exists. The development case is effectively already made - but consents lapse, schemes are revised, and sites do come back to market.</div>
       </div>
       <div class="penalty-badge badge-hard">Heavy penalty</div>
     </div>
@@ -278,7 +272,7 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
 
   <div class="transparency">
     <h3>Our position on constrained sites</h3>
-    <p>The public data available to D/A — HMLR title records, EPC certificates, planning portals, OS building data — does not capture everything relevant to a site's viability. A developer with a relationship with the landowner, knowledge of an upcoming lease event, or specialist planning intelligence may see very different prospects for a flagged site.</p>
+    <p>The public data available to D/A - HMLR title records, EPC certificates, planning portals, OS building data - does not capture everything relevant to a site's viability. A developer with a relationship with the landowner, knowledge of an upcoming lease event, or specialist planning intelligence may see very different prospects for a flagged site.</p>
     <p>If you have a site in mind that D/A flags as constrained, or if you want deeper analysis than the public dataset supports, <a href="mailto:hello@da-studio.com" style="color:var(--blue)">get in touch</a>. The most interesting opportunities in London are often the ones that look difficult on the surface.</p>
   </div>
 </div>
@@ -317,7 +311,7 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
       <div class="penalty-icon">💷</div>
       <div class="penalty-content">
         <div class="penalty-title">Market rents + yields</div>
-        <div class="penalty-detail">Borough-level prime ERV and NIY calibrated against published CoStar, Savills, and CBRE research. Updated periodically. D/A does not have a live market data feed — figures are research-based estimates.</div>
+        <div class="penalty-detail">Borough-level prime ERV and NIY calibrated against published CoStar, Savills, and CBRE research. Updated periodically. D/A does not have a live market data feed - figures are research-based estimates.</div>
       </div>
       <div class="penalty-badge badge-flag">Research</div>
     </div>
@@ -344,7 +338,7 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
 <div class="cta-section" id="contact">
   <div class="section-label" style="text-align:center;margin-bottom:16px">Work with us</div>
   <h2 class="cta-title">Site not in the database?<br>Constraint you need unlocked?</h2>
-  <p class="cta-body">D/A's public dataset covers Greater London comprehensively — but the most interesting sites are often the ones with complex stories. Get in touch for bespoke analysis.</p>
+  <p class="cta-body">D/A's public dataset covers Greater London comprehensively - but the most interesting sites are often the ones with complex stories. Get in touch for bespoke analysis.</p>
   <a href="mailto:hello@da-studio.com" class="cta-btn">Get in touch →</a>
 </div>
 

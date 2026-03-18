@@ -1,4 +1,4 @@
-# PROTOCOL v2 — LOCKED
+# PROTOCOL v2 - LOCKED
 
 Last updated: 2026-03-17
 Status: LOCKED. Do not deviate without explicit instruction from Nic.
@@ -21,7 +21,7 @@ This protocol replaces memory with forced, visible reasoning and proof.
 
 ## GOAT RULE 🐐
 
-🐐 is posted as the **very first thing** in every reply that touches this codebase — before any reading, analysis, or output.
+🐐 is posted as the **very first thing** in every reply that touches this codebase - before any reading, analysis, or output.
 It means: "I have read the protocol. I am proceeding."
 Nic should see 🐐 immediately. No preamble. No delay.
 If Nic doesn't see 🐐 first: call it out with "declaration".
@@ -40,7 +40,19 @@ No task is complete until:
 
 ---
 
-## STEP 0 — READ & PLAN CONFIRMATION (MANDATORY)
+
+---
+
+## LANGUAGE RULES
+
+- **No em dashes**: Never use em dashes (—) in any output, code comments, HTML, or messages.
+  Replace all em dashes with a regular hyphen-dash (-). This applies everywhere - codebase, replies, docs.
+- **🦞 protocol trigger**: When Nic sends 🦞, it means "add the preceding decision/instruction to WORKING_PROTOCOL.md immediately."
+  Ace must update the protocol file and commit before continuing.
+
+---
+
+## STEP 0 - READ & PLAN CONFIRMATION (MANDATORY)
 
 Runs before anything else. No exceptions.
 
@@ -49,13 +61,13 @@ Runs before anything else. No exceptions.
 ### 1. READ CONFIRMATION (Proof of Understanding)
 
 - Target File: [filename]
-- Core Logic: (1 sentence — what this file does)
+- Core Logic: (1 sentence - what this file does)
 - Key Functions / Sections:
-  - [function] — purpose
-  - [function] — purpose
+  - [function] - purpose
+  - [function] - purpose
 - Variables & Data Types:
-  - [variable] ([type]) — source/usage
-  - [variable] ([type]) — source/usage
+  - [variable] ([type]) - source/usage
+  - [variable] ([type]) - source/usage
 
 If this cannot be completed:
 → STOP
@@ -97,7 +109,7 @@ Do not proceed until Nic approves.
 
 ---
 
-## STEP 1 — PRE-CHANGE DECLARATION
+## STEP 1 - PRE-CHANGE DECLARATION
 
 Before touching any file:
 
@@ -112,7 +124,7 @@ If any part is unclear → go back to Step 0.
 
 ---
 
-## STEP 2 — IMPLEMENTATION
+## STEP 2 - IMPLEMENTATION
 
 Make the change exactly as planned.
 
@@ -125,12 +137,12 @@ Third attempt = full diagnostic + Nic approval required.
 
 ---
 
-## STEP 3 — POST-COMMIT VERIFICATION (MANDATORY)
+## STEP 3 - POST-COMMIT VERIFICATION (MANDATORY)
 
 Run against: https://web-production-9d1a0.up.railway.app
 
 ```
-POST-COMMIT VERIFICATION — [commit hash]
+POST-COMMIT VERIFICATION - [commit hash]
 1. Homepage loads
    Evidence: [response / curl / screenshot]
    Result: pass/fail
@@ -152,7 +164,7 @@ POST-COMMIT VERIFICATION — [commit hash]
    - Lines added: [#]
    - Lines removed: [#]
    - Unrelated changes: [yes/no + explanation]
-9. Anything uncertain: [honest answer — especially maps/3D]
+9. Anything uncertain: [honest answer - especially maps/3D]
 10. SECOND-ORDER CHECK: What could still be wrong even if all passed?
 ```
 
@@ -171,8 +183,8 @@ If anything conflicts or is unclear:
 
 ```
 AMBIGUITY: [issue]
-Option A: [interpretation] — consequence
-Option B: [interpretation] — consequence
+Option A: [interpretation] - consequence
+Option B: [interpretation] - consequence
 Await instruction.
 ```
 
@@ -187,16 +199,16 @@ Before using any external API:
 2. Show response
 3. Output: `API [name] verified working at [timestamp]`
 
-**Known broken in production — do not build against:**
-- OS NGD `/api/building-data` — returns `found:false`
-- OS Places API — returns 401
+**Known broken in production - do not build against:**
+- OS NGD `/api/building-data` - returns `found:false`
+- OS Places API - returns 401
 
 ---
 
 ## PLACEHOLDER PROTOCOL
 
 Any unverified data must:
-1. Be marked in code: `// PLACEHOLDER: [description] — replace before production`
+1. Be marked in code: `// PLACEHOLDER: [description] - replace before production`
 2. Be logged in `PLACEHOLDERS.md`: file, line, purpose, owner
 3. Use commit prefix: `PLACEHOLDER:`
 
@@ -204,13 +216,13 @@ Never removed without explicit instruction from Nic.
 Nic reviews `PLACEHOLDERS.md` at sprint end.
 
 **Verified sites only (HMLR + EPC + PropertyData confirmed):**
-- 24 Southwark Street SE1 — TGL221350, RREEF Bankside II, commercial, 1,550m²
-- 196 Blackfriars Road SE1 — SGL322825, Barts Charity, residential, 583m²
+- 24 Southwark Street SE1 - TGL221350, RREEF Bankside II, commercial, 1,550m²
+- 196 Blackfriars Road SE1 - SGL322825, Barts Charity, residential, 583m²
 
 **Disqualified / unverified:**
-- 100LH — SOM Diamond, planning granted Jan 2025, plot area wrong
-- 1SS — polygon uncertain, status unverified
-- Surrey Quays, Tesco, Lavington St, Ministry of Sound — fabricated
+- 100LH - SOM Diamond, planning granted Jan 2025, plot area wrong
+- 1SS - polygon uncertain, status unverified
+- Surrey Quays, Tesco, Lavington St, Ministry of Sound - fabricated
 
 ---
 
@@ -222,17 +234,17 @@ When editing shared files (server.js, lib/, site-intelligence.js):
 
 ---
 
-## 3D MAP — HIGH RISK RULES
+## 3D MAP - HIGH RISK RULES
 
 Before editing any map or 3D code:
 - Read entire `initMap()` / `style.load` callback
 - List all variables referenced
 - Confirm every variable is defined in THIS file
 
-**Locked values — do not change without explicit instruction:**
+**Locked values - do not change without explicit instruction:**
 - `EXISTING_HEIGHT`: 100LH=28.6m, 1SS=30.0m, 24SS=24.8m, 196BR=13.7m
-- Use `CENTROID` in T2, not `LAT`/`LNG` — those don't exist in T2
-- `SITE_COORDS`: verified title polygons — do not regenerate
+- Use `CENTROID` in T2, not `LAT`/`LNG` - those don't exist in T2
+- `SITE_COORDS`: verified title polygons - do not regenerate
 - `fill-extrusion-base` for `podium-3d`: always `0`
 - Layer order: `ctx-3d` → `existing-cap` → `podium-3d` → floor lines → `podium-edge`
 
@@ -240,12 +252,12 @@ Before editing any map or 3D code:
 
 ---
 
-## LAYOUT ARCHITECTURE — DO NOT MIX
+## LAYOUT ARCHITECTURE - DO NOT MIX
 
 | Tier | Layout | Key constraint |
 |------|--------|----------------|
 | T1 | Fixed ribbons + contained map | `--left-w:52px`, `--right-w:420px`, `--ribbon-h:96px` |
-| T2 | Fixed 50/50 split | Both `position:fixed` — external nav bars break this |
+| T2 | Fixed 50/50 split | Both `position:fixed` - external nav bars break this |
 | T3 | Scrollable report | Has own sticky `.tier-nav` |
 
 ---
@@ -253,7 +265,7 @@ Before editing any map or 3D code:
 ## PROTOCOL UPDATES
 
 If a rule isn't working or a new failure pattern emerges:
-1. Flag it: "Protocol says X but it failed because Y — proposing update"
+1. Flag it: "Protocol says X but it failed because Y - proposing update"
 2. Nic approves
 3. Update file, commit, show exactly what changed
 4. No silent edits to this protocol. Ever.
@@ -272,10 +284,10 @@ If a rule isn't working or a new failure pattern emerges:
 
 ---
 
-## KNOWN BROKEN / PARKED — DO NOT TOUCH
+## KNOWN BROKEN / PARKED - DO NOT TOUCH
 
-- OS NGD `building-data` — `found:false` in production
-- OS Places API — 401 in production
-- T3 floor plan PDF timing — Overpass async issue
-- Borough screener paywall — parked
-- 100LH plot area (1,551m² is single title — real consolidated site is 4,450m²)
+- OS NGD `building-data` - `found:false` in production
+- OS Places API - 401 in production
+- T3 floor plan PDF timing - Overpass async issue
+- Borough screener paywall - parked
+- 100LH plot area (1,551m² is single title - real consolidated site is 4,450m²)
