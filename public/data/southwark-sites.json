@@ -329,12 +329,12 @@
       "name": "Abellio Walworth Depot",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.47558,
-      "lng": -0.09488,
+      "lat": 51.4828,
+      "lng": -0.0942,
       "hectares": 1.137,
       "score": 69,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/abellio-walworth-depot",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -351,13 +351,14 @@
       "buildingUse": null,
       "mcil2Band": 3,
       "inSHLAA": false,
-      "source": "GLA Site Allocations",
+      "source": "Verified (EPC + GLA)",
       "planning": {
         "total": 12,
         "majorCount": 1,
         "hasRedevelopment": true,
         "note": "1 major application."
-      }
+      },
+      "coordSource": "intelligence-file"
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -946,12 +947,12 @@
       "name": "Dulwich Community Hospital, East Dulwich Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.457584,
-      "lng": -0.082604,
+      "lat": 51.45758,
+      "lng": -0.0826,
       "hectares": 2.792,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/dulwich-community-hospital",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -968,7 +969,7 @@
       "buildingUse": null,
       "mcil2Band": null,
       "inSHLAA": false,
-      "source": "GLA Site Allocations",
+      "source": "Verified (EPC + GLA)",
       "planning": {
         "total": 72,
         "majorCount": 0,
@@ -978,7 +979,7 @@
         "recentDesc": "Certificate of Lawful Development (proposed) Replacement windows and entrance do",
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -3183,12 +3184,12 @@
       "name": "McLaren House, St George's Circus",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.498794,
-      "lng": -0.104607,
+      "lat": 51.49879,
+      "lng": -0.10461,
       "hectares": 0.439,
       "score": 60,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/mclaren-house",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -3205,7 +3206,7 @@
       "buildingUse": null,
       "mcil2Band": 3,
       "inSHLAA": false,
-      "source": "GLA Site Allocations",
+      "source": "Verified (EPC + GLA)",
       "planning": {
         "total": 0,
         "majorCount": 0,
@@ -3215,7 +3216,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "330-344 Walworth Road",
