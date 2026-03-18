@@ -1,0 +1,22 @@
+// Development Intelligence - Blackpool Road Business Park, Blackpool Road, Peckham, SE15 4HH
+// EPC GEA: PLACEHOLDER - verify via EPC API before client use
+// HMLR: PENDING | Polygon: approx 17600m²
+const SITE_INTELLIGENCE = {
+  polygon: [[-0.103519, 51.496375], [-0.101901, 51.496375], [-0.101901, 51.497785], [-0.103519, 51.497785], [-0.103519, 51.496375]],
+  site: "Blackpool Road Business Park",
+  borough: 'Southwark', use: 'industrial', address: "Blackpool Road, Peckham, SE15 4HH",
+  plot_area_m2: 17600, existing_gea_m2: 8000,
+  existing_floors: 2, existing_height_m: 6.0,
+  ftf_m: 3.5, max_height_m: 42.0, max_floors: 12,
+  hmlr_title: null, owner: null, epc_rating: 'PLACEHOLDER',
+  factors: {
+    sky: { label: 'Available Sky', score: 8.5, weight: 2.5, existing_m: 6.0, insight: "Large 1.76ha industrial park at 6m - significant underutilisation. Peckham/New Cross residential corridor supports 8-12F. Scale allows phased delivery." },
+    value: { label: 'Rent Headroom', score: 8.5, weight: 2.0, insight: "Industrial land EUV in SE15. Residential at \u00a3550-650/sqft. 12F scheme on 1.76ha generates \u00a370-95M GDV." },
+    momentum: { label: 'Planning Tailwind', score: 7.0, weight: 2.0,
+      precedents: [{"name":"Peckham Place residential","ref":"Southwark ref 17/AP/4200","desc":"10F residential, SE15. 600m north. Height precedent for Peckham corridor."},{"name":"Surrey Canal Road","ref":"Southwark ref 13/AP/3096","desc":"Industrial-to-residential, 0.8ha SE15. Conversion precedent for industrial land in this catchment."}],
+      insight: "SE15 has active residential intensification of industrial land. No OA but Southwark Local Plan positively supports intensification of surplus industrial land." },
+    heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "SE15 industrial zone - no heritage constraints." },
+    acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Business park - likely multiple leaseholders under single freeholder. Assembly required." },
+    transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Peckham Rye station 800m. Bus-served. Acceptable for residential." }
+  }
+};
