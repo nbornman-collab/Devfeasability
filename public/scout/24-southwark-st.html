@@ -238,7 +238,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   border-bottom:1px solid #e5e7eb;
   backdrop-filter:blur(12px);
 }
-.da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-0.5px;text-decoration:none;color:#0f172a}
+.da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-0.5px;text-decoration:none;color:#0f172a;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
 .da-nav-logo .sl{color:#1d4ed8}
 .da-nav-links{display:flex;align-items:center;gap:2px}
 .da-nav-link{
@@ -255,7 +255,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 <body>
 
 <nav class="da-nav">
-  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A<span style="font:400 8px Inter,sans-serif;letter-spacing:.3px;color:#9ca3af;text-transform:none;line-height:1">Development/Architecture</span></a>
   <div class="da-nav-links">
     <a href="/borough/southwark" class="da-nav-link">T0 Borough</a>
     <a href="/t1/24-southwark-st" class="da-nav-link active">T1 Scout</a>
@@ -728,7 +728,7 @@ async function loadAll(){
       const bars_svg=document.getElementById('capacity-bars');
       if(bars_svg){
         const existingGIA=8463;
-        const SB=[{label:'Existing',gia:existingGIA,col:'#d0d2da',note:'Current building ~7 floors. Demolish-rebuild assumed for all scenarios.'},{label:'Low (8F)',gia:11005,col:'#93c5fd',note:'Full plate to 5F, tower set-back. Single staircase sub-18m. Best margin - return curve peaks at 8-9F in Bankside CAZ.'},{label:'Base (10F)',gia:12788,col:'#3b82f6',note:'Above-parapet, new benchmark height. BSA compliance point: second staircase mandatory above 18m adds ~40m² per floor.'},{label:'High (12F)',gia:13640,col:'#1d4ed8',note:'Max uplift. Heritage justification required for NDHA. Pre-app with Southwark essential. LVMF views assessment needed.'}];
+        const SB=[{label:'Existing',gia:existingGIA,col:'#d0d2da',note:'Current building ~7 floors. Demolish-rebuild assumed for all scenarios.'},{label:'Low (8F)',gia:11005,col:'#93c5fd',note:'Full plate to 5F, tower set-back. Single staircase sub-18m. Best margin - return curve peaks at 8-9F in Bankside CAZ.'},{label:'Base (10F)',gia:12788,col:'#3b82f6',note:'Above-parapet, new benchmark height. Building Safety Act (BSA) compliance point: second staircase mandatory above 18m adds ~40m² per floor.'},{label:'High (12F)',gia:13640,col:'#1d4ed8',note:'Max uplift. Heritage justification required for NDHA. Pre-app with Southwark essential. LVMF views assessment needed.'}];
         const maxG=Math.max(...SB.map(s=>s.gia));
         const BW=220,BH=11,GAP=6,LW=44,TX=LW+4;
         bars_svg.setAttribute('viewBox',`0 0 280 ${SB.length*(BH+GAP)}`);

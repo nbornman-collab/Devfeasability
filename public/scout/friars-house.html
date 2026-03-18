@@ -3,678 +3,797 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Friars House — D/A Scout</title>
+<title>Friars House - T1 Scout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<script src="/lib/site-intelligence.js"></script>
+<script src="/lib/intelligence-friars-house.js"></script>
 <style>
-:root {
-  --sans: 'Inter', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  --bg: #f8f9fb;
-  --surface: #ffffff;
-  --border: #e5e7eb;
-  --text: #111827;
-  --text2: #374151;
-  --text3: #6b7280;
-
-  /* Zone colours */
-  --dev: #1e3a5f;
-  --dev-light: #eff6ff;
-  --dev-mid: #bfdbfe;
-  --arch: #292524;
-  --arch-light: #f5f5f4;
-  --plan: #064e3b;
-  --plan-light: #ecfdf5;
-  --plan-mid: #a7f3d0;
-  --intel: #312e81;
-  --intel-light: #eef2ff;
-  --intel-mid: #c7d2fe;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sans:'Inter',sans-serif;
+  --mono:'DM Mono',monospace;
+  --blue:#1d4ed8;
+  --blue-lt:#eff6ff;
+  --orange:#ea580c;
+  --green:#16a34a;
+  --red:#dc2626;
+  --amber:#d97706;
+  --text:#0f172a;
+  --text2:#374151;
+  --text3:#6b7280;
+  --text4:#9ca3af;
+  --border:#e5e7eb;
+  --border2:#f3f4f6;
+  --surface:#fff;
+  --surface2:#f9fafb;
+  --panel-w:50%;
 }
+html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)}
 
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text)}
+/* ── 50/50 SPLIT LAYOUT ── */
+#map{position:fixed;top:52px;left:0;width:var(--panel-w);height:calc(100% - 52px);z-index:0}
+.mapboxgl-ctrl-top-right{top:12px !important;right:12px !important}
 
-/* ── Nav ── */
-.da-nav{
-  position:fixed;top:0;left:0;right:0;z-index:1000;
-  height:52px;background:#fff;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 24px;gap:24px;
+/* Left data panel */
+#right-panel{
+  position:fixed;right:0;top:52px;bottom:0;width:var(--panel-w);
+  background:var(--surface);border-left:1px solid var(--border);
+  z-index:30;overflow-y:auto;display:flex;flex-direction:column;
 }
-.da-nav-logo{font:800 15px var(--sans);color:#111;text-decoration:none;letter-spacing:-.3px}
-.da-nav-logo .sl{color:#6366f1}
-.da-nav-links{display:flex;gap:4px;margin-left:8px}
-.da-nav-link{font:500 12px var(--sans);color:#6b7280;text-decoration:none;padding:5px 12px;border-radius:6px;transition:all .15s}
-.da-nav-link:hover{background:#f3f4f6;color:#111}
-.da-nav-link.active{background:#f0f0ff;color:#4f46e5;font-weight:600}
-.da-nav-link.locked{opacity:.35;pointer-events:none}
-.da-nav-method{margin-left:auto;font:500 11px var(--sans);color:#6b7280;text-decoration:none}
-.da-nav-method:hover{color:#111}
+#right-panel::-webkit-scrollbar{width:3px}
+#right-panel::-webkit-scrollbar-track{background:transparent}
+#right-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 
-/* ── Page wrapper ── */
-.page{padding-top:52px;min-height:100vh}
+/* hide old left ribbon and bottom ribbon */
+#left-ribbon,#bottom-ribbon{display:none}
 
-/* ── HERO BAND ── */
-.hero-band{
-  background:#fff;border-bottom:1px solid var(--border);
-  padding:32px 40px 28px;
-  display:flex;align-items:flex-start;justify-content:space-between;
-  gap:24px;
+/* Panel site header */
+.rp-header{padding:20px 20px 18px;border-bottom:1px solid var(--border);flex-shrink:0}
+.rp-use-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.6px;
+  color:var(--blue);background:var(--blue-lt);padding:3px 9px;border-radius:3px;margin-bottom:10px;
 }
-.hero-left{}
-.hero-eyebrow{
-  font:600 10px var(--mono);color:#6366f1;text-transform:uppercase;
-  letter-spacing:1.5px;margin-bottom:10px;
-}
-.hero-name{font:800 28px var(--sans);color:var(--text);line-height:1.1;margin-bottom:4px}
-.hero-address{font:400 14px var(--sans);color:var(--text3);margin-bottom:16px}
-.hero-badges{display:flex;gap:6px;flex-wrap:wrap}
-.badge{
-  font:600 10px var(--sans);padding:3px 9px;border-radius:4px;
-  text-transform:uppercase;letter-spacing:.5px;
-}
-.badge.oa{background:#dbeafe;color:#1d4ed8}
-.badge.caz{background:#fef3c7;color:#d97706}
-.badge.mcil{background:#f3f4f6;color:#374151}
-.badge.alloc{background:#ecfdf5;color:#065f46}
-.badge.concept{background:#fdf2f8;color:#9333ea;border:1px dashed #d8b4fe}
-
-.hero-score{
-  flex-shrink:0;text-align:center;
-  width:110px;height:110px;border-radius:50%;
-  background:linear-gradient(135deg,#4f46e5,#7c3aed);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  box-shadow:0 8px 24px rgba(79,70,229,.3);
-  color:#fff;
-}
-.hero-score-num{font:800 32px var(--sans);line-height:1}
-.hero-score-denom{font:500 12px var(--sans);opacity:.8}
-.hero-score-label{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1px;opacity:.7;margin-top:2px}
-
-/* ── FOUR ZONE GRID ── */
-.four-zone-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  grid-template-rows:auto auto auto auto auto;
-  gap:0;
-  max-width:1400px;
-  margin:0 auto;
-  padding:32px 40px;
-  gap:20px;
+.rp-name{font:700 20px var(--sans);color:var(--text);line-height:1.2;margin-bottom:3px}
+.rp-addr{font:400 12px var(--sans);color:var(--text3)}
+.rp-score-row{display:flex;align-items:baseline;gap:6px;margin-top:14px}
+.rp-score-num{font:700 42px var(--mono);color:var(--text);letter-spacing:-1.5px;line-height:1}
+.rp-score-denom{font:400 15px var(--mono);color:var(--text4)}
+.rp-score-badge{
+  font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.4px;
+  color:var(--text2);background:var(--surface2);border:1px solid var(--border);
+  padding:3px 10px;border-radius:3px;
 }
 
-/* Zone cards */
-.zone{
-  background:var(--surface);
-  border-radius:12px;
-  overflow:hidden;
-  border:1px solid var(--border);
+/* Section header - tinted band, clear module boundary */
+.rp-section{border-bottom:1px solid var(--border)}
+.rp-section-hd{
+  background:var(--surface2);border-bottom:1px solid var(--border);
+  padding:9px 20px;display:flex;align-items:center;justify-content:space-between;
 }
-.zone-header{
-  padding:14px 20px 12px;
-  display:flex;align-items:center;gap:10px;
-  border-bottom:1px solid var(--border);
+.rp-section-hd h3{
+  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.6px;color:var(--text2);
 }
-.zone-icon{
-  width:32px;height:32px;border-radius:8px;
+.rp-badge{
+  font:500 10px var(--mono);color:var(--text3);
+}
+.rp-section-body{padding:14px 20px 16px}
+
+/* Compact intelligence grid */
+.int-compact{display:flex;flex-direction:column;gap:8px}
+.int-row{display:flex;align-items:center;gap:10px}
+.int-name{font:500 11px var(--sans);color:var(--text2);width:110px;flex-shrink:0}
+.int-bar-wrap{flex:1;height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.int-bar-fill{height:100%;border-radius:2px;background:var(--text);transition:width .4s ease}
+.int-score{font:600 12px var(--mono);color:var(--text);width:28px;text-align:right;flex-shrink:0}
+
+/* Stats row */
+.rp-stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.rp-stat .sv{font:600 15px var(--mono);color:var(--text);letter-spacing:-0.3px}
+.rp-stat .sl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.4px;color:var(--text4);margin-top:3px}
+
+/* Flag rows */
+.flag-row{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2)}
+.flag-row:last-child{border-bottom:none}
+.flag-sym{
+  width:18px;height:18px;border-radius:3px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-size:16px;flex-shrink:0;
+  font:700 10px var(--sans);margin-top:1px;
 }
-.zone-title{font:700 12px var(--sans);text-transform:uppercase;letter-spacing:1px}
-.zone-subtitle{font:400 11px var(--sans);color:var(--text3);margin-top:1px}
-.zone-body{padding:20px}
+.flag-sym.ok{background:#dcfce7;color:#16a34a}
+.flag-sym.warn{background:#fef3c7;color:#d97706}
+.flag-sym.risk{background:#fee2e2;color:#dc2626}
+.flag-sym.info{background:var(--surface2);color:var(--text3)}
+.flag-title{font:600 11px var(--sans);color:var(--text);line-height:1.3}
+.flag-desc{font:400 11px var(--sans);color:var(--text3);line-height:1.55;margin-top:2px}
 
-/* Developer zone */
-.zone.developer .zone-header{background:var(--dev-light);border-bottom-color:var(--dev-mid)}
-.zone.developer .zone-icon{background:var(--dev);color:#fff}
-.zone.developer .zone-title{color:var(--dev)}
+/* Height bars */
+.hb-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.hb-label{font:400 10px var(--sans);color:var(--text2);width:100px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hb-track{flex:1;height:5px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.hb-fill{height:100%;border-radius:2px}
+.hb-val{font:600 11px var(--mono);color:var(--text);width:36px;text-align:right;flex-shrink:0}
 
-/* Architecture zone */
-.zone.architecture .zone-header{background:#f9fafb;border-bottom-color:#e5e7eb}
-.zone.architecture .zone-icon{background:var(--arch);color:#fff}
-.zone.architecture .zone-title{color:var(--arch)}
+/* Planning apps */
+.app-item{padding:10px 0;border-bottom:1px solid var(--border2)}
+.app-item:last-child{border-bottom:none}
+.app-ref{font:600 10px var(--mono);color:var(--text2);display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.app-status{font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1px;padding:1px 5px;border-radius:2px}
+.app-status.approved{background:#dcfce7;color:#16a34a}
+.app-status.refused{background:#fee2e2;color:#dc2626}
+.app-status.pending{background:#fef3c7;color:#d97706}
+.app-desc{font:400 11px var(--sans);color:var(--text3);line-height:1.55}
+.app-meta{font:400 10px var(--sans);color:var(--text4);margin-top:3px;display:flex;gap:10px}
 
-/* Planning zone */
-.zone.planning .zone-header{background:var(--plan-light);border-bottom-color:var(--plan-mid)}
-.zone.planning .zone-icon{background:var(--plan);color:#fff}
-.zone.planning .zone-title{color:var(--plan)}
-
-/* Intelligence zone */
-.zone.intelligence .zone-header{background:var(--intel-light);border-bottom-color:var(--intel-mid)}
-.zone.intelligence .zone-icon{background:var(--intel);color:#fff}
-.zone.intelligence .zone-title{color:var(--intel)}
-
-/* ── Dev zone internals ── */
-.gdv-row{display:flex;gap:12px;margin-bottom:16px}
-.gdv-card{
-  flex:1;padding:14px;border-radius:8px;background:var(--dev-light);
-  border:1px solid var(--dev-mid);text-align:center;
+/* Ownership block */
+.hmlr-block{
+  background:var(--surface2);border:1px solid var(--border);border-radius:4px;
+  padding:10px 12px;margin-top:10px;
 }
-.gdv-card .val{font:700 18px var(--mono);color:var(--dev)}
-.gdv-card .lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-top:3px}
-.gdv-card.hi .val{color:#059669}
+.hmlr-title-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+.hmlr-title-no{font:600 12px var(--mono);color:var(--text)}
 
-.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
-.metric-cell{padding:10px 8px;background:#f9fafb;border-radius:6px;text-align:center;border:1px solid var(--border)}
-.metric-cell .v{font:600 13px var(--mono);color:var(--text)}
-.metric-cell .k{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-top:2px}
+/* Tags */
+.tag-row{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px}
+.tag{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.3px;padding:3px 8px;border-radius:3px;border:1px solid var(--border)}
+.tag.blue{background:var(--blue-lt);color:var(--blue);border-color:rgba(29,78,216,.15)}
+.tag.ok{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.tag.warn{background:#fefce8;color:#a16207;border-color:#fde68a}
 
-.scenario-toggle{display:flex;gap:4px;margin-bottom:12px}
-.scen-btn{
-  flex:1;padding:6px;font:600 11px var(--mono);text-align:center;
-  border:1px solid var(--border);border-radius:5px;cursor:pointer;
-  background:#f9fafb;color:var(--text3);transition:all .15s;
+/* Map hint */
+.map-hint{
+  position:fixed;left:10px;top:10px;z-index:25;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:5px;padding:6px 12px;
+  font:400 10px var(--sans);color:var(--text3);
+  pointer-events:none;
 }
-.scen-btn.active{background:var(--dev);color:#fff;border-color:var(--dev)}
 
-.assumption-row{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:8px 0;border-bottom:1px solid var(--border);font:400 12px var(--sans);
+/* CTA row */
+.rp-cta-row{
+  padding:14px 20px;display:flex;gap:8px;
+  border-top:1px solid var(--border);flex-shrink:0;
+  position:sticky;bottom:0;background:var(--surface);z-index:5;
 }
-.assumption-row:last-child{border-bottom:none}
-.assumption-row .ak{color:var(--text3)}
-.assumption-row .av{font:600 12px var(--mono);color:var(--text)}
+.rp-cta{
+  flex:1;padding:10px 0;border-radius:5px;border:none;cursor:pointer;
+  font:600 11px var(--sans);text-align:center;text-decoration:none;
+  display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;
+}
+.rp-cta.primary{background:var(--blue);color:#fff}
+.rp-cta.primary:hover{background:#1e40af}
+.rp-cta.secondary{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.rp-cta.secondary:hover{background:var(--surface2)}
 
-/* ── Architecture zone internals ── */
-#arch-map{width:100%;height:260px;border-radius:8px;overflow:hidden;margin-bottom:16px}
-.massing-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.mass-cell{padding:10px 8px;border-radius:6px;text-align:center;background:#f9fafb;border:1px solid var(--border)}
-.mass-cell .v{font:600 13px var(--mono);color:var(--text)}
-.mass-cell .k{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-top:2px}
+/* ── Street View floating card ────────────────────────────────── */
+.sv-float{
+  position:fixed;
+  left:16px;
+  bottom:16px;
+  width:340px;z-index:20;
+  background:#fff;border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.18);
+  border:1px solid rgba(0,0,0,0.08);
+  transition:opacity .2s,transform .2s;
+}
+.sv-float.hidden{opacity:0;pointer-events:none;transform:translateY(6px)}
+.sv-float-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 10px 5px;border-bottom:1px solid #f0f0f0;
+}
+.sv-float-label{font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text3)}
+.sv-float-toggle{
+  width:18px;height:18px;border:none;background:none;cursor:pointer;
+  color:var(--text4);display:flex;align-items:center;justify-content:center;
+  padding:0;border-radius:4px;
+}
+.sv-float-toggle:hover{background:var(--surface2);color:var(--text)}
+.sv-float iframe{display:block;width:100%;height:220px;border:none}
+/* ── SV restore button ────────────────────────────────────────── */
+.sv-map-btn{
+  position:fixed;
+  left:16px;
+  bottom:16px;
+  z-index:19;
+  background:#fff;border:1px solid var(--border);
+  border-radius:8px;padding:6px 12px;
+  font:600 10px var(--sans);color:var(--text2);
+  cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  align-items:center;gap:6px;
+  transition:background .15s;
+}
+.sv-map-btn:hover{background:var(--surface2)}
+/* ── Mobile layout ───────────────────────────────────────────── */
+@media(max-width:768px){
+  #map{left:0!important;right:0!important;bottom:44vh!important;top:0!important;width:100%!important}
+  #left-ribbon{display:none!important}
+  #bottom-ribbon{display:none!important}
+  #right-panel{
+    position:fixed!important;left:0!important;right:0!important;
+    bottom:0!important;top:auto!important;height:44vh!important;
+    border-left:none!important;border-top:1px solid var(--border)!important;
+    width:100%!important;
+  }
+  .sv-float{
+    left:12px!important;
+    bottom:calc(44vh + 12px)!important;
+    width:180px!important;
+  }
+  .sv-float iframe{height:120px!important}
+  .sv-map-btn{left:12px!important;bottom:calc(44vh + 12px)!important}
+  .rp-cta-row{position:sticky;bottom:0}
+}
 
-.floor-bar{margin-top:16px}
-.floor-bar-label{display:flex;justify-content:space-between;font:500 11px var(--sans);color:var(--text3);margin-bottom:6px}
-.floor-bar-track{height:10px;background:#f3f4f6;border-radius:5px;overflow:hidden}
-.floor-bar-fill{height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:5px;transition:width .6s ease}
 
-/* ── Planning zone internals ── */
-.policy-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
-.policy-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:10px 12px;border-radius:7px;border:1px solid;
+/* ── Top nav (shared) ─────────────────────────── */
+.da-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;
+  background:rgba(255,255,255,0.97);
+  border-bottom:1px solid #e5e7eb;
+  backdrop-filter:blur(12px);
 }
-.policy-item.green{background:#f0fdf4;border-color:#bbf7d0}
-.policy-item.amber{background:#fffbeb;border-color:#fde68a}
-.policy-item.blue{background:#eff6ff;border-color:#bfdbfe}
-.policy-icon{font-size:14px;flex-shrink:0;margin-top:1px}
-.policy-text .pt{font:600 12px var(--sans);color:var(--text)}
-.policy-text .ps{font:400 11px var(--sans);color:var(--text3);margin-top:2px}
-
-.precedent-list{display:flex;flex-direction:column;gap:6px}
-.precedent{
-  padding:8px 12px;background:#f9fafb;border-radius:6px;
-  border-left:3px solid #6366f1;font:400 11px var(--sans);color:var(--text2);
+.da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-0.5px;text-decoration:none;color:#0f172a;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+.da-nav-logo .sl{color:#1d4ed8}
+.da-nav-links{display:flex;align-items:center;gap:2px}
+.da-nav-link{
+  font:500 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.4px;
+  color:#6b7280;text-decoration:none;padding:6px 10px;border-radius:4px;
+  transition:all .15s;
 }
-.precedent strong{font-weight:600;color:var(--text)}
-
-/* ── Intelligence zone internals ── */
-.factor-list{display:flex;flex-direction:column;gap:10px}
-.factor{display:flex;flex-direction:column;gap:4px}
-.factor-header{display:flex;justify-content:space-between;align-items:center}
-.factor-name{font:500 11px var(--sans);color:var(--text2)}
-.factor-score{font:700 12px var(--mono);color:var(--intel)}
-.factor-bar-track{height:6px;background:#e0e7ff;border-radius:3px;overflow:hidden}
-.factor-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#6366f1,#818cf8)}
-.factor-weight{font:400 10px var(--sans);color:var(--text3)}
-
-.intel-summary{
-  margin-top:16px;padding:14px;background:var(--intel-light);
-  border-radius:8px;border:1px solid var(--intel-mid);
-  font:400 12px var(--sans);color:var(--text2);line-height:1.6;
-}
-.intel-summary strong{color:var(--intel);font-weight:600}
-
-/* ── CONNECTOR ROWS ── */
-.connector{
-  grid-column:1/-1;
-  display:flex;align-items:stretch;gap:20px;
-}
-.connector-inner{
-  flex:1;
-  display:flex;align-items:center;gap:12px;
-  padding:14px 18px;
-  background:#fff;
-  border-radius:10px;
-  border:1px solid var(--border);
-  border-left:3px solid;
-}
-.connector-inner.dev-arch{border-left-color:var(--dev)}
-.connector-inner.plan-intel{border-left-color:var(--plan)}
-.connector-icon{font-size:18px;flex-shrink:0}
-.connector-text{font:400 12px var(--sans);color:var(--text2);line-height:1.5}
-.connector-text strong{font-weight:600;color:var(--text)}
-
-/* ── BOTTOM SYNTHESIS ── */
-.synthesis{
-  grid-column:1/-1;
-  padding:24px 28px;
-  background:linear-gradient(135deg,#1e1b4b,#312e81);
-  border-radius:12px;
-  color:#fff;
-  display:flex;align-items:center;gap:24px;
-}
-.synth-score{
-  flex-shrink:0;width:80px;height:80px;border-radius:50%;
-  background:rgba(255,255,255,.15);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  border:2px solid rgba(255,255,255,.3);
-}
-.synth-score-num{font:800 26px var(--sans);color:#fff}
-.synth-score-denom{font:500 10px var(--sans);color:rgba(255,255,255,.6)}
-.synth-body{}
-.synth-verdict{font:700 16px var(--sans);color:#fff;margin-bottom:6px}
-.synth-text{font:400 13px var(--sans);color:rgba(255,255,255,.75);line-height:1.6;max-width:700px}
-.synth-cta{
-  margin-left:auto;flex-shrink:0;
-  padding:10px 20px;background:rgba(255,255,255,.15);
-  border:1px solid rgba(255,255,255,.3);
-  border-radius:7px;color:#fff;font:600 12px var(--sans);
-  text-decoration:none;transition:background .15s;white-space:nowrap;
-}
-.synth-cta:hover{background:rgba(255,255,255,.25)}
-
-/* ── Concept disclaimer ── */
-.concept-banner{
-  background:#fdf4ff;border:1px solid #e9d5ff;
-  border-radius:8px;padding:10px 16px;margin-bottom:20px;
-  font:400 11px var(--sans);color:#7e22ce;
-  display:flex;align-items:center;gap:8px;
-}
+.da-nav-link:hover{color:#0f172a;background:#f9fafb}
+.da-nav-link.active{color:#0f172a;background:#f3f4f6;font-weight:700}
+.da-nav-link.locked{opacity:.35;pointer-events:none}
 
 </style>
 </head>
 <body>
 
 <nav class="da-nav">
-  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A<span style="font:400 8px Inter,sans-serif;letter-spacing:.3px;color:#9ca3af;text-transform:none;line-height:1">Development/Architecture</span></a>
   <div class="da-nav-links">
     <a href="/borough/southwark" class="da-nav-link">T0 Borough</a>
-    <a href="/t1/24-southwark-st" class="da-nav-link">T1 Scout</a>
-    <a href="/t2/24-southwark-st" class="da-nav-link">T2 Appraise</a>
+    <a href="/t1/friars-house" class="da-nav-link active">T1 Scout</a>
+    <a href="/t2/friars-house" class="da-nav-link">T2 Appraise</a>
     <a href="#" class="da-nav-link locked">T3 Present</a>
   </div>
-  <a href="/methodology" class="da-nav-method">Methodology</a>
+  <a href="/methodology" style="font:500 11px Inter,sans-serif;color:#6b7280;text-decoration:none">Methodology</a>
 </nav>
 
-<div class="page">
 
-  <!-- HERO BAND -->
-  <div class="hero-band">
-    <div class="hero-left">
-      <div class="hero-eyebrow">T1 Scout - Concept Layout</div>
-      <div class="hero-name">Friars House</div>
-      <div class="hero-address">157-168 Blackfriars Road, SE1 8NY &mdash; Southwark</div>
-      <div class="hero-badges">
-        <span class="badge oa">Opportunity Area</span>
-        <span class="badge caz">CAZ</span>
-        <span class="badge mcil">CIL Band 3</span>
-        <span class="badge alloc">LPA Site Allocation</span>
-        <span class="badge concept">Concept Demo</span>
-      </div>
+<!-- Full-bleed map -->
+<div id="map"></div>
+
+<!-- Map click hint -->
+<div class="map-hint">Click any parcel to see HMLR title</div>
+
+<!-- ── Left ribbon ────────────────────────────────────────────── -->
+<div id="left-ribbon">
+  <!-- Logo mark -->
+  <a href="/" style="text-decoration:none;margin-bottom:12px;flex-shrink:0" title="D/A Home">
+    <div style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">
+      <span style="font:800 13px var(--sans);letter-spacing:-0.5px;color:var(--text)">D<span style="color:var(--blue)">/</span>A</span>
     </div>
-    <div class="hero-score">
-      <div class="hero-score-num">75</div>
-      <div class="hero-score-denom">/100</div>
-      <div class="hero-score-label">D/A Score</div>
+  </a>
+
+  <nav class="lr-nav">
+    <!-- Back to borough screener -->
+    <button class="lr-btn" onclick="location.href='/'" title="">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg>
+      <span class="lr-tip">T0 Borough</span>
+    </button>
+
+    <div class="lr-divider"></div>
+
+    <!-- T1 Scout (active) -->
+    <button class="lr-btn active" title="">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="lr-tip">T1 Scout</span>
+    </button>
+
+    <!-- T2 Appraise -->
+    <button class="lr-btn" onclick="location.href='/t2/friars-house'" title="">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+      <span class="lr-tip">T2 Appraise</span>
+    </button>
+
+    <!-- T3 Present -->
+    <button class="lr-btn" onclick="location.href='/t3/friars-house'" title="">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span class="lr-tip">T3 Present</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ── Bottom ribbon ──────────────────────────────────────────── -->
+<div id="bottom-ribbon">
+  <div class="r-tile" style="flex:1.4">
+    <div class="r-tile-lbl">Site</div>
+    <div class="r-tile-val" style="font-size:15px;font-family:var(--sans);font-weight:700">Friars House</div>
+    <div class="r-tile-sub">SE1 0SW · Southwark</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Dev Intelligence</div>
+    <div class="r-tile-val" id="hero-score">—</div>
+    <div class="r-tile-sub" id="hero-score-badge">—</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Max GDV</div>
+    <div class="r-tile-val">£<span id="gdv-hi-val">—</span>M</div>
+    <div class="r-tile-sub">High scenario</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Uplift on EUV</div>
+    <div class="r-tile-val" id="uplift-max">—</div>
+    <div class="r-tile-sub" id="uplift-mult">—× value multiplier</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Max NIA</div>
+    <div class="r-tile-val" id="uplift-nia">—</div>
+    <div class="r-tile-sub">Net internal area</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Existing</div>
+    <div class="r-tile-val" style="font-size:16px">24.8m / 6F</div>
+    <div class="r-tile-sub">£22M EUV</div>
+  </div>
+  <div class="r-tile">
+    <div class="r-tile-lbl">Margin range</div>
+    <div class="r-tile-val" id="margin-delta">—</div>
+    <div class="r-tile-sub">Low → High spread</div>
+  </div>
+</div>
+
+<!-- ── Right panel ────────────────────────────────────────────── -->
+<div id="right-panel">
+
+  <!-- Site header -->
+  <div class="rp-header">
+    <div class="rp-use-badge">
+      <svg width="8" height="8" viewBox="0 0 8 8"><rect width="8" height="8" rx="1" fill="currentColor"/></svg>
+      Commercial Office · Class E
+    </div>
+    <div class="rp-name">Friars House</div>
+    <div class="rp-addr">London SE1 0SW · Southwark</div>
+    <div class="rp-score-row">
+      <span class="rp-score-num" id="rp-score-num">—</span>
+      <span class="rp-score-denom">/100</span>
+      <span class="rp-score-badge" id="rp-score-badge">Scoring…</span>
     </div>
   </div>
 
-  <!-- FOUR ZONE GRID -->
-  <div class="four-zone-grid">
 
-    <!-- CONCEPT BANNER spanning both columns -->
-    <div style="grid-column:1/-1">
-      <div class="concept-banner">
-        <span>⚗️</span>
-        <span>Concept layout - 4-zone framework. Financial estimates are illustrative. GLA spatial data (OA, CAZ, MCIL2) is live and verified. HMLR and EPC verification pending before product launch.</span>
+
+<!-- Street View floating card -->
+<div class="sv-float" id="sv-float">
+  <div class="sv-float-bar">
+    <span class="sv-float-label">Street View</span>
+    <button class="sv-float-toggle" onclick="svCollapse()" title="Collapse">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <iframe id="sv-frame"
+    src="https://maps.google.com/maps?layer=c&cbll=51.5013,-0.10393&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed"
+    allowfullscreen loading="lazy"></iframe>
+</div>
+<button class="sv-map-btn" id="sv-map-btn" onclick="svExpand()" style="display:none">
+  Street View
+</button>
+<script>
+function svCollapse(){
+  document.getElementById('sv-float').classList.add('hidden');
+  document.getElementById('sv-map-btn').style.display='flex';
+}
+function svExpand(){
+  document.getElementById('sv-float').classList.remove('hidden');
+  document.getElementById('sv-map-btn').style.display='none';
+}
+</script>
+
+
+  <!-- Development Intelligence -->
+  <div class="rp-section">
+    <div class="rp-section-hd">
+      <h3>Development Intelligence</h3>
+      <span class="rp-badge" id="rp-intel-score">—/100</span>
+    </div>
+    <div class="rp-section-body">
+      <div id="intelligence-mount"></div>
+      <!-- compact fallback populated by JS -->
+    </div>
+  </div>
+
+  <!-- Site overview -->
+  <div class="rp-section">
+    <div class="rp-section-hd"><h3>Site Overview</h3></div>
+    <div class="rp-section-body">
+      <div class="rp-stat-row">
+        <div class="rp-stat">
+          <div class="sv blue" id="stat-ptal">6a</div>
+          <div class="sl">Transport</div>
+        </div>
+        <div class="rp-stat">
+          <div class="sv green" id="stat-flood">Zone 1</div>
+          <div class="sl">Flood Zone</div>
+        </div>
+        <div class="rp-stat">
+          <div class="sv" id="stat-listed">…</div>
+          <div class="sl">Listed nearby</div>
+        </div>
+      </div>
+      <div class="rp-stat-row">
+        <div class="rp-stat">
+          <div class="sv" id="epc-gia">Loading…</div>
+          <div class="sl">EPC GIA</div>
+        </div>
+        <div class="rp-stat">
+          <div class="sv" id="current-far">—</div>
+          <div class="sl">Current FAR</div>
+        </div>
+        <div class="rp-stat">
+          <div class="sv" id="site-area-display">1,550 m²</div>
+          <div class="sl">Site area</div>
+        </div>
+      </div>
+      <!-- Capacity bars -->
+      <div class="cap-wrap">
+        <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-bottom:6px">GIA Capacity - Existing vs Scenarios</div>
+        <svg id="capacity-bars" viewBox="0 0 280 80" style="width:100%;height:auto;display:block"></svg>
+      </div>
+      <!-- Ownership -->
+      <div class="hmlr-block" id="hmlr-panel" class="hmlr-block">
+        <div class="hmlr-title-row">
+          <span class="hmlr-title-no">TGL221350</span>
+          <span style="font:500 9px var(--mono);color:var(--text3)">Freehold</span>
+        </div>
+        <div id="owner-display" style="font:600 11px var(--sans);color:var(--text);margin-bottom:2px">RREEF Bankside II Limited</div>
+        <div style="color:var(--text3);font-size:9px">Click a parcel on map to query HMLR titles</div>
       </div>
     </div>
+  </div>
 
-    <!-- ══ DEVELOPER ══ -->
-    <div class="zone developer">
-      <div class="zone-header">
-        <div class="zone-icon">£</div>
-        <div>
-          <div class="zone-title">Developer</div>
-          <div class="zone-subtitle">Residual value, return, and risk</div>
-        </div>
-      </div>
-      <div class="zone-body">
-        <div class="scenario-toggle" id="scen-toggle">
-          <div class="scen-btn active" data-scen="base" onclick="setScen('base')">Base 12F</div>
-          <div class="scen-btn" data-scen="lo" onclick="setScen('lo')">Conservative 10F</div>
-          <div class="scen-btn" data-scen="hi" onclick="setScen('hi')">Optimistic 14F</div>
-        </div>
-        <div class="gdv-row">
-          <div class="gdv-card">
-            <div class="val" id="gdv-val">£148M</div>
-            <div class="lbl">Est. GDV</div>
-          </div>
-          <div class="gdv-card">
-            <div class="val" id="rlv-val">£41M</div>
-            <div class="lbl">Residual Land Value</div>
-          </div>
-          <div class="gdv-card hi">
-            <div class="val" id="margin-val">24%</div>
-            <div class="lbl">Dev Margin</div>
-          </div>
-        </div>
-        <div class="metric-row">
-          <div class="metric-cell">
-            <div class="v" id="gea-val">37,400m²</div>
-            <div class="k">GEA</div>
-          </div>
-          <div class="metric-cell">
-            <div class="v" id="cost-val">£85M</div>
-            <div class="k">Build Cost</div>
-          </div>
-          <div class="metric-cell">
-            <div class="v">Band 3</div>
-            <div class="k">CIL (Low)</div>
-          </div>
-        </div>
-        <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:8px">Key Assumptions</div>
-        <div class="assumption-row">
-          <span class="ak">Office ERV</span>
-          <span class="av">£72/sqft NIA</span>
-        </div>
-        <div class="assumption-row">
-          <span class="ak">Exit yield</span>
-          <span class="av">5.25%</span>
-        </div>
-        <div class="assumption-row">
-          <span class="ak">Build cost</span>
-          <span class="av">£4,000/m² GEA</span>
-        </div>
-        <div class="assumption-row">
-          <span class="ak">S106</span>
-          <span class="av">£2.5M est.</span>
-        </div>
-        <div class="assumption-row">
-          <span class="ak">EUV (office)</span>
-          <span class="av">£38M est.</span>
-        </div>
-        <div style="margin-top:12px;font:400 10px var(--sans);color:var(--text3)">
-          ⚠ Illustrative — pending HMLR + EPC verification
-        </div>
-      </div>
+  <div class="tag-row">
+    <span class="tag blue">Transport <span id="tag-ptal">6b</span></span>
+    <span class="tag ok" id="tag-flood">Flood Zone 1</span>
+    <span class="tag warn" id="tag-heritage">Heritage…</span>
+  </div>
+
+  <!-- Planning flags -->
+  <div class="rp-section">
+    <div class="rp-section-hd">
+      <h3>Planning Flags</h3>
+      <span class="rp-badge" id="flags-badge">Loading…</span>
     </div>
+    <div class="rp-section-body" id="flags-body"></div>
+  </div>
 
-    <!-- ══ ARCHITECTURE ══ -->
-    <div class="zone architecture">
-      <div class="zone-header">
-        <div class="zone-icon" style="font-size:14px">⬜</div>
-        <div>
-          <div class="zone-title">Architecture</div>
-          <div class="zone-subtitle">Massing envelope and physical potential</div>
-        </div>
-      </div>
-      <div class="zone-body">
-        <div id="arch-map"></div>
-        <div class="massing-row">
-          <div class="mass-cell">
-            <div class="v">5,220m²</div>
-            <div class="k">Plot Area</div>
-          </div>
-          <div class="mass-cell">
-            <div class="v">~6F</div>
-            <div class="k">Existing</div>
-          </div>
-          <div class="mass-cell">
-            <div class="v">12-14F</div>
-            <div class="k">Potential</div>
-          </div>
-          <div class="mass-cell">
-            <div class="v">85%</div>
-            <div class="k">Efficiency</div>
-          </div>
-          <div class="mass-cell">
-            <div class="v">~22%</div>
-            <div class="k">Core %</div>
-          </div>
-          <div class="mass-cell">
-            <div class="v">Mixed</div>
-            <div class="k">Use (OA)</div>
-          </div>
-        </div>
-        <div class="floor-bar">
-          <div class="floor-bar-label">
-            <span>Existing envelope</span>
-            <span>Potential envelope</span>
-          </div>
-          <div class="floor-bar-track">
-            <div class="floor-bar-fill" style="width:43%"></div>
-          </div>
-          <div style="font:400 10px var(--sans);color:var(--text3);margin-top:5px">
-            6F existing / 14F potential — 43% of envelope utilised
-          </div>
-        </div>
-        <div style="margin-top:14px;padding:10px 12px;background:#f5f5f4;border-radius:7px;font:400 11px var(--sans);color:var(--text2);line-height:1.5">
-          Large SE1 plot with significant air rights. OA policy supports tall mixed-use. 
-          Massing strategy: commercial podium floors 1-6, residential tower from 7F. 
-          Core positioning critical on a plot this size - central or twin core viable.
-        </div>
-      </div>
+  <!-- Height context -->
+  <div class="rp-section">
+    <div class="rp-section-hd"><h3>Height Context</h3></div>
+    <div class="rp-section-body" id="heights-body">
+      <div style="font:400 10px var(--sans);color:var(--text4);padding:4px 0">Loading nearby heights…</div>
     </div>
+  </div>
 
-    <!-- CONNECTOR: Developer x Architecture -->
-    <div class="connector">
-      <div class="connector-inner dev-arch">
-        <div class="connector-icon">⟷</div>
-        <div class="connector-text">
-          <strong>Developer meets Architecture:</strong>
-          At 85% efficiency, each additional floor adds ~3,130m² NIA. At £72/sqft office ERV and 5.25% yield, that is <strong>+£9.2M GDV per floor</strong>. Heritage setback (floors 7+) reduces this by ~15%. Optimal consent strategy: 12F base with 14F as negotiating position.
-        </div>
-      </div>
+  <!-- Scenario summary - T2 prompt -->
+  <div class="rp-section">
+    <div class="rp-section-hd"><h3>Scenarios</h3><span class="rp-badge">3 options modelled</span></div>
+    <div class="rp-section-body">
+      <svg id="teaser-curve" viewBox="0 0 380 70" style="width:100%;height:auto;display:block;margin-bottom:10px"></svg>
+      <div style="font:400 11px var(--sans);color:var(--text3);line-height:1.6">Low / Base / High massing scenarios with full financial model in T2 Appraise - IRR on equity, return curve, development appraisal.</div>
     </div>
+  </div>
 
-    <!-- ══ PLANNING ══ -->
-    <div class="zone planning">
-      <div class="zone-header">
-        <div class="zone-icon" style="font-size:14px">📋</div>
-        <div>
-          <div class="zone-title">Planning</div>
-          <div class="zone-subtitle">Policy context and consent route</div>
-        </div>
-      </div>
-      <div class="zone-body">
-        <div class="policy-list">
-          <div class="policy-item green">
-            <div class="policy-icon">✅</div>
-            <div class="policy-text">
-              <div class="pt">London Bridge/Bankside Opportunity Area</div>
-              <div class="ps">London Plan Policy SD1 - 4,000 homes + 5,500 jobs target. Active OAPF: Bankside, Borough and London Bridge SPD. Height and density actively supported.</div>
-            </div>
-          </div>
-          <div class="policy-item green">
-            <div class="policy-icon">✅</div>
-            <div class="policy-text">
-              <div class="pt">Central Activities Zone (CAZ)</div>
-              <div class="ps">Commercial intensification supported. Office-to-residential permitted subject to mix. Southwark Local Plan Policy SP1 applies.</div>
-            </div>
-          </div>
-          <div class="policy-item green">
-            <div class="policy-icon">✅</div>
-            <div class="policy-text">
-              <div class="pt">LPA Site Allocation - Southwark Local Plan</div>
-              <div class="ps">Friars House is formally allocated for mixed-use redevelopment. Policy presumption in favour of development at this location.</div>
-            </div>
-          </div>
-          <div class="policy-item blue">
-            <div class="policy-icon">ℹ️</div>
-            <div class="policy-text">
-              <div class="pt">MCIL2 Charging Band 3 (Low)</div>
-              <div class="ps">Lowest Mayoral CIL band. Reduces cost pressure vs Band 1 sites in Central London. Estimated CIL: £180-220/m² NIA.</div>
-            </div>
-          </div>
-          <div class="policy-item amber">
-            <div class="policy-icon">⚠️</div>
-            <div class="policy-text">
-              <div class="pt">No Conservation Area — LVMF check clean</div>
-              <div class="ps">Not within a conservation area. LVMF Protected Vista check negative (GLA confirmed). No heritage officer trigger. Pre-app recommended given scale.</div>
-            </div>
-          </div>
-        </div>
-        <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin:12px 0 8px">Height Precedents (within 500m)</div>
-        <div class="precedent-list">
-          <div class="precedent"><strong>196 Blackfriars Road</strong> — 15F residential approved in principle (OA frontage). 300m north.</div>
-          <div class="precedent"><strong>One Blackfriars (11/AP/2927)</strong> — 50F/163m residential, consented 2014. 400m south. Establishes height in this corridor.</div>
-          <div class="precedent"><strong>240 Blackfriars Road</strong> — 16F office (completed). Adjacent block. Establishes immediate street height.</div>
-        </div>
-      </div>
+  <!-- Planning applications -->
+  <div class="rp-section">
+    <div class="rp-section-hd">
+      <h3>Recent Planning <span id="apps-count" style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0;font-size:9px;font-family:var(--sans)">within 300m</span></h3>
     </div>
-
-    <!-- ══ INTELLIGENCE ══ -->
-    <div class="zone intelligence">
-      <div class="zone-header">
-        <div class="zone-icon" style="font-size:14px">◆</div>
-        <div>
-          <div class="zone-title">Intelligence</div>
-          <div class="zone-subtitle">D/A proprietary 6-factor assessment</div>
-        </div>
-      </div>
-      <div class="zone-body">
-        <div class="factor-list">
-          <div class="factor">
-            <div class="factor-header">
-              <span class="factor-name">Available Sky <span class="factor-weight">(×2.5)</span></span>
-              <span class="factor-score">6.8 / 10</span>
-            </div>
-            <div class="factor-bar-track"><div class="factor-bar-fill" style="width:68%"></div></div>
-          </div>
-          <div class="factor">
-            <div class="factor-header">
-              <span class="factor-name">Rent Headroom <span class="factor-weight">(×2.0)</span></span>
-              <span class="factor-score">7.0 / 10</span>
-            </div>
-            <div class="factor-bar-track"><div class="factor-bar-fill" style="width:70%"></div></div>
-          </div>
-          <div class="factor">
-            <div class="factor-header">
-              <span class="factor-name">Planning Tailwind <span class="factor-weight">(×2.0)</span></span>
-              <span class="factor-score">9.5 / 10</span>
-            </div>
-            <div class="factor-bar-track"><div class="factor-bar-fill" style="width:95%"></div></div>
-          </div>
-          <div class="factor">
-            <div class="factor-header">
-              <span class="factor-name">Heritage Shadow <span class="factor-weight">(×1.5)</span></span>
-              <span class="factor-score">8.0 / 10</span>
-            </div>
-            <div class="factor-bar-track"><div class="factor-bar-fill" style="width:80%"></div></div>
-          </div>
-          <div class="factor">
-            <div class="factor-header">
-              <span class="factor-name">Title Stack <span class="factor-weight">(×1.5)</span></span>
-              <span class="factor-score">6.5 / 10</span>
-            </div>
-            <div class="factor-bar-track"><div class="factor-bar-fill" style="width:65%"></div></div>
-          </div>
-          <div class="factor">
-            <div class="factor-header">
-              <span class="factor-name">Station Gravity <span class="factor-weight">(×0.5)</span></span>
-              <span class="factor-score">9.0 / 10</span>
-            </div>
-            <div class="factor-bar-track"><div class="factor-bar-fill" style="width:90%"></div></div>
-          </div>
-        </div>
-        <div class="intel-summary">
-          <strong>Friars House is a high-conviction OA site</strong> with clean planning tailwind and no heritage drag. The large plot (0.52ha) creates delivery complexity — multi-phasing likely — which tempers the Available Sky score. Planning Tailwind is near-maximum: OA + CAZ + formal site allocation is the trifecta. Title Stack is the primary risk: a large office complex likely has multiple interests or complex leasehold. HMLR verification is the critical next step before T2 appraisal.
-        </div>
-      </div>
+    <div class="rp-section-body" id="apps-list">
+      <div style="font:400 10px var(--sans);color:var(--text4)">Loading applications…</div>
     </div>
+  </div>
 
-    <!-- CONNECTOR: Planning x Intelligence -->
-    <div class="connector">
-      <div class="connector-inner plan-intel">
-        <div class="connector-icon">⟷</div>
-        <div class="connector-text">
-          <strong>Planning meets Intelligence:</strong>
-          OA + site allocation pushes Planning Tailwind to 9.5/10 - the highest of any Southwark site outside the Blackfriars corridor. This reduces consent risk timeline by an estimated <strong>6-9 months</strong> vs a non-OA equivalent, directly improving IRR by 2-3 percentage points in the Developer model.
-        </div>
-      </div>
-    </div>
+  <!-- CTA row -->
+  <div class="rp-cta-row">
+    <a href="/t2/friars-house" class="rp-cta primary">T2 Appraise →</a>
+    <a href="/t3/friars-house" class="rp-cta secondary">T3 Present</a>
+  </div>
 
-    <!-- ══ SYNTHESIS BAND ══ -->
-    <div class="synthesis">
-      <div class="synth-score">
-        <div class="synth-score-num">75</div>
-        <div class="synth-score-denom">/100</div>
-      </div>
-      <div class="synth-body">
-        <div class="synth-verdict">Strong Candidate — Verify Title Before Advancing</div>
-        <div class="synth-text">
-          Friars House sits at the intersection of all four opportunity vectors: the numbers work at 12F+, the massing envelope is largely unencumbered, planning policy is explicitly supportive, and market intelligence points to a live window before the OA targets are met. The one gate is title - a 0.52ha SE1 office complex with a complex ownership structure is a different transaction to a single-title site. Run HMLR before committing to T2 appraisal.
-        </div>
-      </div>
-      <a href="/t2/24-southwark-st" class="synth-cta">Compare T2 Appraise &rarr;</a>
-    </div>
-
-  </div><!-- /four-zone-grid -->
-</div><!-- /page -->
+</div><!-- /right-panel -->
 
 <script>
-const SCENARIOS = {
-  lo:   { floors:10, gea:'31,200m²', gdv:'£121M', cost:'£72M', rlv:'£28M', margin:'21%' },
-  base: { floors:12, gea:'37,400m²', gdv:'£148M', cost:'£85M', rlv:'£41M', margin:'24%' },
-  hi:   { floors:14, gea:'43,700m²', gdv:'£176M', cost:'£98M', rlv:'£54M', margin:'26%' },
-};
+const LAT = 51.504909, LNG = -0.091522;
+const ADDRESS = 'Friars House, London SE1 0SW';
+let PLOT_AREA=1575;
+const EXISTING_EUV = 22000000;
 
-function setScen(key) {
-  const s = SCENARIOS[key];
-  document.getElementById('gdv-val').textContent = s.gdv;
-  document.getElementById('rlv-val').textContent = s.rlv;
-  document.getElementById('margin-val').textContent = s.margin;
-  document.getElementById('gea-val').textContent = s.gea;
-  document.getElementById('cost-val').textContent = s.cost;
-  document.querySelectorAll('.scen-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.scen === key);
+// Score + compact intelligence render
+(function(){
+  const score = computeSiteScore(SITE_INTELLIGENCE);
+  // Bottom ribbon + panel header
+  const scoreEls = ['hero-score','rp-score-num'];
+  scoreEls.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=score;});
+  document.getElementById('rp-intel-score').textContent = score+'/100';
+  const label = score>=85?'Top opportunity':score>=70?'Strong opportunity':score>=55?'Credible opportunity':'Due diligence required';
+  ['hero-score-badge','rp-score-badge'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=label;});
+
+  // Compact 6-factor display - score bar + number, no body copy
+  const FACTOR_LABELS = {
+    sky:'Available Sky', value:'Rent Headroom', momentum:'Planning Tailwind',
+    heritage:'Heritage Shadow', acquisition:'Title Stack', transport:'Station Gravity'
+  };
+  const WEIGHTS = {sky:2.5,value:2.0,momentum:2.0,heritage:1.5,acquisition:1.5,transport:0.5};
+  const fi = SITE_INTELLIGENCE.factors;
+  const rows = Object.entries(fi).map(([k,f])=>{
+    const s = typeof f === 'object' ? (f.score||f.value||0) : f;
+    const pct = Math.round(s/10*100);
+    const label = FACTOR_LABELS[k]||k;
+    const w = WEIGHTS[k]||1;
+    return `<div class="int-row">
+      <div class="int-name">${label}</div>
+      <div class="int-bar-wrap"><div class="int-bar-fill" style="width:${pct}%;opacity:${0.4+w/5}"></div></div>
+      <div class="int-score">${s.toFixed?s.toFixed(1):s}</div>
+    </div>`;
   });
+  const mount = document.getElementById('intelligence-mount');
+  try {
+  if(mount) mount.innerHTML = '<div class="int-compact">'+rows.join('')+'</div>';
+  } catch(e) { console.error('Intelligence render failed:', e); }
+})();
+
+const GDV_OPTS = [
+  {floors:8,podF:5,twrF:3,twrPct:0.70,cov:1.0,nia:0.83,erv:650,niy:0.0525,rf:12,lt:120},
+  {floors:10,podF:5,twrF:5,twrPct:0.65,cov:1.0,nia:0.81,erv:700,niy:0.0500,rf:12,lt:120},
+  {floors:12,podF:4,twrF:8,twrPct:0.60,cov:1.0,nia:0.79,erv:775,niy:0.0475,rf:12,lt:120},
+];
+const KNOWN_HEIGHTS=[
+  {name:'The Shard',h:310},{name:'One Blackfriars',h:163},{name:'Blackfriars Circus',h:85},
+  {name:'240 Blackfriars Rd',h:55},{name:'Tate Modern',h:65},{name:'OXO Tower',h:37},
+];
+
+function fmtM(v,decimals=0){const m=v/1e6;return '£'+(decimals?m.toFixed(decimals):Math.round(m))+'M';}
+function fmtK(v){return (v/1000).toFixed(1).replace(/\.0$/,'')+'k m²';}
+function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
+
+// ── Compute GDV ──────────────────────────────────────────────────────────────
+(function(){
+  const gdvs = GDV_OPTS.map(o=>{
+    const podGIA = PLOT_AREA * o.cov * o.podF;
+    const twrGIA = PLOT_AREA * o.twrPct * o.twrF;
+    const totalNIA = (podGIA + twrGIA) * o.nia;
+    const effErv = totalNIA * o.erv * (1 - o.rf / o.lt);
+    return {gdv: effErv / o.niy, nia: totalNIA};
+  });
+  const gdvHi  = Math.max(...gdvs.map(g=>g.gdv));
+  const niaHi  = Math.max(...gdvs.map(g=>g.nia));
+  const uplift = gdvHi - EXISTING_EUV;
+  const mult   = (gdvHi / EXISTING_EUV).toFixed(1);
+  set('gdv-hi-val', Math.round(gdvHi/1e6));
+  const margins = GDV_OPTS.map(o=>{
+    const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
+    const nia=(PLOT_AREA*o.cov*o.podF+PLOT_AREA*o.twrPct*o.twrF)*o.nia;
+    const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
+    const cc=gea*5000;
+    const tdc=cc*(1+0.13+0.075)+nia*200+gdv*0.15*0.1+2750000;
+    return gdv-tdc;
+  });
+  const mDelta=Math.round(Math.abs(Math.max(...margins)-Math.min(...margins))/1e6);
+  set('margin-delta','£'+mDelta+'M');
+  const W=380,H=70,pts=GDV_OPTS.map((o,i)=>{
+    const x=20+i*(W-40)/2;
+    const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
+    const nia=gea*o.nia;
+    const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
+    const cc=gea*(3800+i*1200);
+    const tdc=cc*(1.2)+nia*200+gdv*0.015+2750000;
+    const poc=(gdv-tdc)/tdc*100;
+    const y=H-10-(poc-20)/(50-20)*(H-20);
+    return `${x},${Math.max(5,Math.min(H-10,y)).toFixed(0)}`;
+  }).join(' ');
+  const tsvg=document.getElementById('teaser-curve');
+  if(tsvg) tsvg.innerHTML=`
+    <polyline points="${pts}" fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--blue').trim()||'#1d4ed8'}" stroke-width="2.5"/>
+    ${GDV_OPTS.map((_,i)=>{const[x,y]=pts.split(' ')[i].split(',');return`<circle cx="${x}" cy="${y}" r="4" fill="#1d4ed8"/>`;}).join('')}
+    <text x="20" y="${H-2}" font-family="Inter,sans-serif" font-size="8" fill="#9ca3af">Low</text>
+    <text x="${W/2}" y="${H-2}" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#9ca3af">Base</text>
+    <text x="${W-20}" y="${H-2}" text-anchor="end" font-family="Inter,sans-serif" font-size="8" fill="#9ca3af">High</text>`;
+  set('uplift-max', fmtM(uplift));
+  set('uplift-mult', mult + '× value multiplier');
+  set('uplift-nia', fmtK(niaHi));
+})();
+
+// ── Map ──────────────────────────────────────────────────────────────────────
+// SITE_POLYGON loaded dynamically from Mapbox composite building layer on map idle
+// Avoids fabricated rectangles and wrong polygons from prior template copy errors
+let SITE_POLYGON = null;
+
+const CENTROID=[-0.10393,51.5013];
+fetch('/api/config').then(r=>r.json()).then(cfg=>{
+  mapboxgl.accessToken=cfg.mapboxToken;
+  const map=new mapboxgl.Map({
+    container:'map',style:'mapbox://styles/mapbox/light-v11',
+    center:[LNG,LAT],zoom:17.5,pitch:52,bearing:5,interactive:true,attributionControl:false,antialias:true
+  });
+  map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
+  map.on('load',()=>{
+    map.addLayer({
+      id:'buildings-3d',source:'composite','source-layer':'building',
+      filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
+      paint:{
+        'fill-extrusion-color':'#d4d7df',
+        'fill-extrusion-height':['interpolate',['linear'],['zoom'],15,0,15.05,['get','height']],
+        'fill-extrusion-base':['interpolate',['linear'],['zoom'],15,0,15.05,['get','min_height']],
+        'fill-extrusion-opacity':0.20
+      }
+    });
+    // Site boundary: drawn from intelligence file polygon
+    // Massing polygon - populated from queryRenderedFeatures idle (same formula as T2)
+    map.addSource('site-poly',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
+    // Amber: existing building mass
+    map.addLayer({id:'site-existing',type:'fill-extrusion',source:'site-poly',paint:{
+      'fill-extrusion-color':'#b45309',
+      'fill-extrusion-height':24.8,
+      'fill-extrusion-base':0,
+      'fill-extrusion-opacity':0.90}});
+    // Green: maximum development potential (inset 300mm like T2)
+    map.addLayer({id:'site-massing',type:'fill-extrusion',source:'site-poly',paint:{
+      'fill-extrusion-color':'#059669',
+      'fill-extrusion-height':42.0,
+      'fill-extrusion-base':24.8,
+      'fill-extrusion-opacity':0.70}});
+
+    // queryRenderedFeatures idle handler - exact T2 formula
+    map.once('idle', () => {
+      // Polygon from intelligence file - single source of truth across T1 + T2
+      if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
+        const poly = SITE_INTELLIGENCE.polygon;
+        map.getSource('site-poly').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[poly]}});
+        console.log('T1-FRIARS: polygon from intelligence file, ' + poly.length + ' vertices');
+      } else {
+        console.warn('T1-FRIARS: SITE_INTELLIGENCE.polygon missing');
+      }
+    });
+
+
+
+
+    // HMLR click-select
+    map.on('click', async(e) => {
+      const {lng, lat} = e.lngLat;
+      try {
+        const r = await fetch(`/api/hmlr-tile/click?lat=${lat}&lng=${lng}`);
+        const d = await r.json();
+        if (d && d.title_number) {
+          const panel = document.getElementById('hmlr-panel');
+          if(panel) panel.innerHTML = `
+            <div class="hmlr-title-row">
+              <span class="hmlr-title-no">${d.title_number}</span>
+              <span style="font:500 9px var(--mono);color:var(--text3)">${d.tenure||'—'}</span>
+            </div>
+            <div style="font:600 11px var(--sans);color:var(--text);margin-bottom:2px">${d.proprietor||d.owner||'Unknown owner'}</div>
+            <div style="color:var(--text3);font-size:9px">${d.address||''}</div>`;
+        }
+      } catch(e2){console.warn('HMLR click:',e2.message);}
+    });
+  });
+});
+
+// ── All API calls ─────────────────────────────────────────────────────────────
+async function loadAll(){
+  const [flood,ptal,listed,apps,ctx,epc]=await Promise.allSettled([
+    fetch(`/api/flood-zone?lat=${LAT}&lng=${LNG}`).then(r=>r.json()),
+    fetch(`/api/ptal?lat=${LAT}&lng=${LNG}`).then(r=>r.json()),
+    fetch(`/api/listed-buildings?lat=${LAT}&lng=${LNG}&radius=200`).then(r=>r.json()),
+    fetch(`/api/planning-apps?lat=${LAT}&lng=${LNG}&krad=0.3`).then(r=>r.json()),
+    fetch(`/api/context-buildings?lat=${LAT}&lng=${LNG}&radius=300`).then(r=>r.json()),
+    fetch(`/api/epc?postcode=SE1+0SW`).then(r=>r.json()),
+  ]);
+  if(flood.status==='fulfilled'){
+    const fz=flood.value.floodZone??1;
+    const label=fz===1?'Zone 1 - Low':fz===2?'Zone 2 - Medium':'Zone 3 - High';
+    const col=fz===1?'var(--green)':fz===2?'var(--amber)':'var(--red)';
+    const el=document.getElementById('stat-flood');if(el){el.textContent=label;el.style.color=col;}
+    const tag=document.getElementById('tag-flood');
+    if(tag){tag.textContent=`Flood ${fz===1?'Zone 1':fz===2?'Zone 2':'Zone 3'}`;tag.style.background=fz===1?'#f0fdf4':fz===2?'#fef3c7':'#fee2e2';tag.style.color=fz===1?'#16a34a':fz===2?'#d97706':'#dc2626';}
+  }
+  if(ptal.status==='fulfilled'&&ptal.value.ptal!=null){
+    const p=ptal.value;
+    const band=p.ptal>=5?'6a':p.ptal>=4?'5':p.ptal>=3?'4':'3';
+    set('stat-ptal',band+' - '+(p.ptal>=5?'Excellent':p.ptal>=4?'Very Good':'Good'));
+    set('tag-ptal',band);
+  }
+  const listedEls=(listed.status==='fulfilled'?(listed.value.elements||[]):[]).filter(e=>e.tags);
+  set('stat-listed',listedEls.length>0?listedEls.length:'0');
+  const heritageTag=document.getElementById('tag-heritage');
+  if(heritageTag){
+    heritageTag.textContent=listedEls.length>0?`${listedEls.length} Listed`:'Clean';
+    if(listedEls.length>0){heritageTag.style.background='#fef3c7';heritageTag.style.color='#d97706';}
+    else{heritageTag.style.background='#f0fdf4';heritageTag.style.color='#16a34a';}
+  }
+  buildFlags(flood,listedEls);
+  buildHeights((ctx.status==='fulfilled'?ctx.value.elements:[])||[]);
+  buildApps((apps.status==='fulfilled'?apps.value.results:[])||[]);
+  if(epc.status==='fulfilled'&&epc.value.results&&epc.value.results.length){
+    const best=epc.value.results[0];const gia=best.floorArea;
+    if(gia>0){
+      const far=(gia/PLOT_AREA).toFixed(1);
+      set('epc-gia',gia.toLocaleString()+' m²');set('current-far',far+'×');
+      const bars_svg=document.getElementById('capacity-bars');
+      if(bars_svg){
+        const existingGIA=8463;
+        const SB=[{label:'Existing',gia:existingGIA,col:'#d0d2da',note:'Current building ~7 floors. Demolish-rebuild assumed for all scenarios.'},{label:'Low (8F)',gia:11005,col:'#93c5fd',note:'Full plate to 5F, tower set-back. Single staircase sub-18m. Best margin - return curve peaks at 8-9F in Bankside CAZ.'},{label:'Base (10F)',gia:12788,col:'#3b82f6',note:'Above-parapet, new benchmark height. Building Safety Act (BSA) compliance point: second staircase mandatory above 18m adds ~40m² per floor.'},{label:'High (12F)',gia:13640,col:'#1d4ed8',note:'Max uplift. Heritage justification required for NDHA. Pre-app with Southwark essential. LVMF views assessment needed.'}];
+        const maxG=Math.max(...SB.map(s=>s.gia));
+        const BW=220,BH=11,GAP=6,LW=44,TX=LW+4;
+        bars_svg.setAttribute('viewBox',`0 0 280 ${SB.length*(BH+GAP)}`);
+        bars_svg.innerHTML=SB.map((s,i)=>{
+          const y=i*(BH+GAP),bw=Math.round(s.gia/maxG*BW);
+          const lk=s.gia>=1000?(s.gia/1000).toFixed(0)+'k':s.gia;
+          return`<g><text x="0" y="${y+BH-1}" font-family="Inter,sans-serif" font-size="8" fill="#6b7280">${s.label}</text><rect x="${TX}" y="${y}" width="${bw}" height="${BH}" fill="${s.col}" rx="1"/><text x="${TX+bw+4}" y="${y+BH-1}" font-family="DM Mono,monospace" font-size="8" fill="#9ca3af">${lk}</text></g>`;
+        }).join('');
+        // Scenario notes below bars
+        const notesDiv=bars_svg.parentElement.querySelector('.scenario-notes')||(()=>{const d=document.createElement('div');d.className='scenario-notes';d.style.cssText='margin-top:8px';bars_svg.parentElement.appendChild(d);return d;})();
+        notesDiv.innerHTML=SB.slice(1).map(s=>`<div style="font:400 9px var(--sans);color:var(--text3);line-height:1.4;margin-bottom:4px"><span style="font-weight:600;color:var(--text2)">${s.label}:</span> ${s.note}</div>`).join('');
+      }
+    }
+  }
 }
 
-// Map
-fetch('/api/config').then(r => r.json()).then(cfg => {
-  mapboxgl.accessToken = cfg.mapboxToken;
-  const map = new mapboxgl.Map({
-    container: 'arch-map',
-    style: 'mapbox://styles/mapbox/dark-v11',
-    center: [-0.10393, 51.5013],
-    zoom: 15.5,
-    pitch: 55,
-    bearing: 20,
-    interactive: true,
-    attributionControl: false,
-  });
+function buildFlags(flood,listedEls){
+  const fz=flood.status==='fulfilled'?(flood.value.floodZone??1):1;
+  const flags=[
+    fz===1
+      ?{icon:'ok',sym:'✓',title:'Flood Zone 1 - Low Risk',desc:'No sequential test required. Standard drainage strategy applies.'}
+      :fz===2
+      ?{icon:'warn',sym:'⚠',title:'Flood Zone 2 - Medium Risk',desc:'Sequential test and FRA required. EA consultation statutory.'}
+      :{icon:'risk',sym:'✕',title:'Flood Zone 3 - High Risk',desc:'Exception test mandatory. Development may be refused without major mitigation.'},
+    {icon:'ok',sym:'✓',title:'London Bridge/Bankside Opportunity Area',desc:'Mayor of London designation under London Plan 2021 Policy SD1. 4,000 homes + 5,500 jobs target. Mayoral backing for intensification - strongest possible planning enabler. LPA required to facilitate, not resist. Departure from standard density matrix supported.'},
+    {icon:'info',sym:'i',title:'Bankside CAZ - Commercial Intensification',desc:'Southwark Core Strategy supports office intensification in the Bankside cluster. No tall buildings policy, but massing above surroundings requires justification.'},
+    {icon:'info',sym:'i',title:'Tate Modern - Grade II* Listed (220m W)',desc:'Setting of listed building is a material consideration. Visual impact assessment required in Design and Access Statement.'},
+    {icon:'ok',sym:'✓',title:'Conservation Area - Not Applicable',desc:'Site is not within a designated conservation area.'},
+    {icon:'warn',sym:'⚠',title:'LVMF - Wider Setting Consultation Area 1A.2',desc:'Site falls within LVMF Protected Vista 1A.2: Alexandra Palace viewing terrace to St Paul\'s Cathedral (Wider Setting Consultation Area). GLA confirmed via live spatial data. A views assessment is required - not a blocking constraint at 8-12F, but a mandatory consideration. Views impact from Alexandra Palace must be demonstrated to be negligible.'},
+    {icon:'warn',sym:'⚠',title:'Non-Designated Heritage Asset (NDHA) - Victorian Fabric',desc:'Site building is Victorian stock brick ex-industrial - a character type Southwark Council identifies under Local Plan Policy P8. Full demolition-and-replace unlikely without exceptional design justification. Facade retention or set-back upper floors is the realistic development strategy. Pre-app essential before RIBA Stage 2.'},
+    {icon:'warn',sym:'⚠',title:'Building Character - London Stock Brick',desc:'Victorian London stock brick fabric on Southwark Street. Southwark has a strong track record of protecting this building typology even where not locally or nationally listed. Massing proposals should demonstrate brick materiality continuity at lower levels.'},
+    {icon:'info',sym:'i',title:'Article 4 Direction - Check Required',desc:'Southwark has extensive Article 4 directions removing permitted development rights. Confirm no Article 4 applies to this address before assuming PD fallback strategy.'},
+  ];
+  if(listedEls.length>0) flags.splice(2,0,{icon:'warn',sym:'⚠',title:`${listedEls.length} Listed Building${listedEls.length>1?'s':''} within 200m`,desc:'Setting is a material consideration. Design and Access Statement must address visual impact on each asset.'});
+  const risks=flags.filter(f=>f.icon==='risk').length,warns=flags.filter(f=>f.icon==='warn').length,oks=flags.filter(f=>f.icon==='ok').length;
+  const badge=document.getElementById('flags-badge');
+  if(badge){badge.textContent=`${risks} Risk · ${warns} Advisory · ${oks} Clear`;badge.style.color=risks>0?'var(--red)':warns>0?'var(--amber)':'var(--green)';}
+  html('flags-body',flags.map(f=>`<div class="flag-row"><div class="flag-sym ${f.icon}">${f.sym}</div><div><div class="flag-title">${f.title}</div><div class="flag-desc">${f.desc}</div></div></div>`).join(''));
+}
 
-  map.on('load', () => {
-    const layers = map.getStyle().layers;
-    const labelLayer = layers.find(l => l.type === 'symbol' && l.layout && l.layout['text-field'])?.id;
-    map.addLayer({
-      id: '3d-buildings',
-      source: 'composite',
-      'source-layer': 'building',
-      filter: ['==', 'extrude', 'true'],
-      type: 'fill-extrusion',
-      minzoom: 13,
-      paint: {
-        'fill-extrusion-color': '#2d3561',
-        'fill-extrusion-height': ['get', 'height'],
-        'fill-extrusion-base': ['get', 'min_height'],
-        'fill-extrusion-opacity': 0.85,
-      }
-    }, labelLayer);
+function buildHeights(osmEls){
+  const osmH=osmEls.filter(e=>e.tags&&(e.tags.height||e.tags['building:levels'])).map(e=>({name:e.tags.name||e.tags['addr:housenumber']||'Bldg',h:parseFloat(e.tags.height)||(parseFloat(e.tags['building:levels'])||1)*4.0})).filter(e=>e.h>20);
+  const kn=KNOWN_HEIGHTS.map(k=>k.name.toLowerCase());
+  const merged=[...KNOWN_HEIGHTS,...osmH.filter(b=>!kn.includes(b.name.toLowerCase()))].sort((a,b)=>b.h-a.h).slice(0,10);
+  const maxH=Math.max(...merged.map(b=>b.h),100);
+  html('heights-body',`<div>${merged.map(b=>{
+    const pct=Math.round(b.h/maxH*100);
+    const col=b.h>=200?'#1d4ed8':b.h>=100?'#ea580c':b.h>=50?'#f59e0b':'#d1d5db';
+    return`<div class="hb-row"><div class="hb-label" title="${b.name}">${b.name}</div><div class="hb-track"><div class="hb-fill" style="width:${pct}%;background:${col}"></div></div><div class="hb-val">${b.h}m</div></div>`;
+  }).join('')}</div><div style="font:400 9px var(--sans);color:var(--text4);margin-top:8px">Tallest precedent within 300m: <strong style="color:var(--text2)">${Math.max(...merged.map(b=>b.h))}m</strong>. Bankside CAZ - commercial intensification area.</div>`);
+}
 
-    // Site marker
-    new mapboxgl.Marker({ color: '#6366f1' })
-      .setLngLat([-0.10393, 51.5013])
-      .setPopup(new mapboxgl.Popup({ offset: 20 }).setHTML('<strong>Friars House</strong><br>157-168 Blackfriars Road'))
-      .addTo(map);
-  });
-}).catch(() => {
-  document.getElementById('arch-map').style.background = '#1a1f35';
-  document.getElementById('arch-map').innerHTML = '<div style="padding:20px;color:#6b7280;font:500 12px Inter,sans-serif">Map unavailable</div>';
-});
+function buildApps(apps){
+  set('apps-count',`- ${apps.length} found`);
+  if(!apps.length){html('apps-list','<div style="font:400 10px var(--sans);color:var(--text4)">No recent applications found.</div>');return;}
+  html('apps-list',apps.slice(0,20).map(a=>{
+    const sc=/appro|grant/i.test(a.status)?'approved':/refus|reject/i.test(a.status)?'refused':'pending';
+    return`<div class="app-item"><div class="app-ref">${a.reference||'—'}<span class="app-status ${sc}">${a.status||'Pending'}</span></div><div class="app-desc">${a.description||'No description'}</div><div class="app-meta">${a.distance?`<span>${a.distance}m</span>`:''}${a.decidedDate||a.startDate?`<span>${a.decidedDate||a.startDate}</span>`:''}</div></div>`;
+  }).join(''));
+}
+
+// Site data from HMLR
+if(document.getElementById('site-area-display')) document.getElementById('site-area-display').textContent='1,575 m²';
+if(document.getElementById('owner-display')) document.getElementById('owner-display').textContent='RREEF Bankside II Limited · HMLR TGL221350';
+loadAll();
 </script>
 </body>
 </html>
