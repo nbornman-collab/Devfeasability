@@ -1000,7 +1000,10 @@ async function initMap(){
     // Massing renders only after queryRenderedFeatures loads real polygon on idle
     m.once('idle', () => {
       const pt = m.project(CENTROID);
-      const features = m.queryRenderedFeatures([pt.x, pt.y], { layers: ['building'] });
+      // Box query more reliable than single pixel; filter to building sourceLayer
+      const box = [[pt.x - 15, pt.y - 15], [pt.x + 15, pt.y + 15]];
+      const features = m.queryRenderedFeatures(box)
+        .filter(f => f.sourceLayer === 'building' && f.geometry && f.geometry.type === 'Polygon');
       if (features.length > 0) {
         const geom = features[0].geometry;
         let coords = geom.type === 'Polygon'

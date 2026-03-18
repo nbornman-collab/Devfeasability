@@ -29,76 +29,26 @@
   --border2:#f3f4f6;
   --surface:#fff;
   --surface2:#f9fafb;
-  --ribbon-h:96px;
-  --left-w:52px;
-  --right-w:420px;
+  --panel-w:50%;
 }
 html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)}
 
-/* ── Map ─────────────────────────────────── */
-#map{position:fixed;top:52px;left:var(--left-w);right:var(--right-w);bottom:var(--ribbon-h);z-index:0}
+/* ── 50/50 SPLIT LAYOUT ── */
+#map{position:fixed;top:52px;left:var(--panel-w);right:0;bottom:0;z-index:0}
 .mapboxgl-ctrl-top-right{top:12px !important;right:12px !important}
 
-/* ── Left ribbon ─────────────────────────── */
-#left-ribbon{
-  position:fixed;left:0;top:52px;bottom:0;width:var(--left-w);
-  background:var(--surface);border-right:1px solid var(--border);
-  z-index:30;display:flex;flex-direction:column;align-items:center;
-  padding:14px 0 16px;gap:4px;
-}
-.lr-logo{
-  width:32px;height:32px;background:var(--blue);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;margin-bottom:12px;flex-shrink:0;
-}
-.lr-logo svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2}
-.lr-nav{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%}
-.lr-btn{
-  width:36px;height:36px;border-radius:8px;border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  background:transparent;color:var(--text3);transition:all .15s;position:relative;
-}
-.lr-btn:hover{background:var(--surface2);color:var(--text)}
-.lr-btn.active{background:var(--blue-lt);color:var(--blue)}
-.lr-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.lr-tip{
-  position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);
-  background:var(--text);color:#fff;font:600 10px var(--sans);
-  padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;
-  opacity:0;transition:opacity .12s;z-index:50;
-}
-.lr-btn:hover .lr-tip{opacity:1}
-.lr-divider{width:28px;height:1px;background:var(--border);margin:6px 0}
-
-/* ── Bottom ribbon ───────────────────────── */
-#bottom-ribbon{
-  position:fixed;bottom:0;left:var(--left-w);right:var(--right-w);
-  height:var(--ribbon-h);
-  background:var(--surface);border-top:1px solid var(--border);
-  z-index:30;display:flex;align-items:stretch;
-}
-.r-tile{
-  flex:1;display:flex;flex-direction:column;justify-content:center;
-  padding:0 18px;border-right:1px solid var(--border);
-}
-.r-tile:last-child{border-right:none}
-.r-tile-lbl{
-  font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.6px;
-  color:var(--text4);margin-bottom:4px;
-}
-.r-tile-val{
-  font:600 22px var(--mono);color:var(--text);line-height:1;letter-spacing:-0.5px;
-}
-.r-tile-sub{font:400 11px var(--sans);color:var(--text3);margin-top:4px}
-
-/* ── Right panel ─────────────────────────── */
+/* Left data panel */
 #right-panel{
-  position:fixed;right:0;top:52px;bottom:0;width:var(--right-w);
-  background:var(--surface);border-left:1px solid var(--border);
+  position:fixed;left:0;top:52px;bottom:0;width:var(--panel-w);
+  background:var(--surface);border-right:1px solid var(--border);
   z-index:30;overflow-y:auto;display:flex;flex-direction:column;
 }
 #right-panel::-webkit-scrollbar{width:3px}
 #right-panel::-webkit-scrollbar-track{background:transparent}
 #right-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* hide old left ribbon and bottom ribbon */
+#left-ribbon,#bottom-ribbon{display:none}
 
 /* Panel site header */
 .rp-header{padding:20px 20px 18px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -221,9 +171,9 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 /* ── Street View floating card ────────────────────────────────── */
 .sv-float{
   position:fixed;
-  left:calc(var(--left-w) + 16px);
-  bottom:calc(var(--ribbon-h) + 16px);
-  width:230px;z-index:20;
+  left:calc(var(--panel-w) + 16px);
+  bottom:16px;
+  width:340px;z-index:20;
   background:#fff;border-radius:10px;
   overflow:hidden;
   box-shadow:0 4px 24px rgba(0,0,0,0.18);
@@ -242,12 +192,12 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   padding:0;border-radius:4px;
 }
 .sv-float-toggle:hover{background:var(--surface2);color:var(--text)}
-.sv-float iframe{display:block;width:100%;height:155px;border:none}
+.sv-float iframe{display:block;width:100%;height:220px;border:none}
 /* ── SV restore button ────────────────────────────────────────── */
 .sv-map-btn{
   position:fixed;
-  left:calc(var(--left-w) + 16px);
-  bottom:calc(var(--ribbon-h) + 16px);
+  left:calc(var(--panel-w) + 16px);
+  bottom:16px;
   z-index:19;
   background:#fff;border:1px solid var(--border);
   border-radius:8px;padding:6px 12px;
@@ -259,7 +209,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 .sv-map-btn:hover{background:var(--surface2)}
 /* ── Mobile layout ───────────────────────────────────────────── */
 @media(max-width:768px){
-  #map{left:0!important;right:0!important;bottom:44vh!important;top:0!important}
+  #map{left:0!important;right:0!important;bottom:44vh!important;top:0!important;width:100%!important}
   #left-ribbon{display:none!important}
   #bottom-ribbon{display:none!important}
   #right-panel{

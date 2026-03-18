@@ -30,13 +30,12 @@
   --surface:#fff;
   --surface2:#f9fafb;
   --ribbon-h:96px;
-  --left-w:52px;
-  --right-w:420px;
+  --panel-w:50%;
 }
 html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)}
 
 /* ── Map ─────────────────────────────────── */
-#map{position:fixed;top:52px;left:var(--left-w);right:var(--right-w);bottom:var(--ribbon-h);z-index:0}
+#map{position:fixed;top:52px;left:var(--panel-w);right:0;bottom:0;z-index:0}
 .mapboxgl-ctrl-top-right{top:12px !important;right:12px !important}
 
 /* ── Left ribbon ─────────────────────────── */
@@ -46,6 +45,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   z-index:30;display:flex;flex-direction:column;align-items:center;
   padding:14px 0 16px;gap:4px;
 }
+#left-ribbon,#bottom-ribbon{display:none}
 .lr-logo{
   width:32px;height:32px;background:var(--blue);border-radius:8px;
   display:flex;align-items:center;justify-content:center;margin-bottom:12px;flex-shrink:0;
@@ -92,7 +92,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 
 /* ── Right panel ─────────────────────────── */
 #right-panel{
-  position:fixed;right:0;top:52px;bottom:0;width:var(--right-w);
+  position:fixed;left:0;top:52px;bottom:0;width:var(--panel-w);
   background:var(--surface);border-left:1px solid var(--border);
   z-index:30;overflow-y:auto;display:flex;flex-direction:column;
 }
@@ -221,9 +221,9 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 /* ── Street View floating card ────────────────────────────────── */
 .sv-float{
   position:fixed;
-  left:calc(var(--left-w) + 16px);
-  bottom:calc(var(--ribbon-h) + 16px);
-  width:230px;z-index:20;
+  left:calc(var(--panel-w) + 16px);
+  bottom:16px;
+  width:340px;z-index:20;
   background:#fff;border-radius:10px;
   overflow:hidden;
   box-shadow:0 4px 24px rgba(0,0,0,0.18);
@@ -242,7 +242,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   padding:0;border-radius:4px;
 }
 .sv-float-toggle:hover{background:var(--surface2);color:var(--text)}
-.sv-float iframe{display:block;width:100%;height:155px;border:none}
+.sv-float iframe{display:block;width:100%;height:220px;border:none}
 /* ── SV restore button ────────────────────────────────────────── */
 .sv-map-btn{
   position:fixed;
