@@ -217,6 +217,14 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 .rp-cta.primary:hover{background:#1e40af}
 .rp-cta.secondary{background:transparent;border:1px solid var(--border);color:var(--text2)}
 .rp-cta.secondary:hover{background:var(--surface2)}
+
+/* ── Street View ─────────────────────────────────────────────────── */
+.sv-wrap{position:relative;width:100%;background:#111;flex-shrink:0}
+.sv-wrap iframe{display:block;width:100%;height:190px;border:none}
+.sv-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;
+  font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;
+  padding:3px 8px;border-radius:3px;pointer-events:none}
+
 </style>
 </head>
 <body>
@@ -320,6 +328,15 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
       <span class="rp-score-denom">/100</span>
       <span class="rp-score-badge" id="rp-score-badge">Scoring…</span>
     </div>
+  </div>
+
+
+  <!-- Street View -->
+  <div class="sv-wrap">
+    <iframe id="sv-frame"
+      src="https://maps.google.com/maps?layer=c&cbll=51.5046,-0.094&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed"
+      allowfullscreen loading="lazy"></iframe>
+    <div class="sv-badge">Street View</div>
   </div>
 
   <!-- Development Intelligence -->
@@ -468,6 +485,7 @@ const EXISTING_EUV = 22000000;
     </div>`;
   });
   const mount = document.getElementById('intelligence-mount');
+  try {
   if(mount) mount.innerHTML = '<div class="int-compact">'+rows.join('')+'</div>';
   } catch(e) { console.error('Intelligence render failed:', e); }
 })();
@@ -535,7 +553,9 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 })();
 
 // ── Map ──────────────────────────────────────────────────────────────────────
-const SITE_POLYGON=[[-0.0802763,51.5140146],[-0.0800595,51.5139875],[-0.0798747,51.51396],[-0.0799754,51.5136468],[-0.079809,51.5136257],[-0.0798425,51.5135377],[-0.0798828,51.513445],[-0.0804144,51.5135131],[-0.0803568,51.5136783],[-0.0802864,51.5136687],[-0.0802571,51.5137575],[-0.080298,51.5137608],[-0.0802591,51.5138813],[-0.0803085,51.5138886],[-0.0803056,51.5138968],[-0.0802763,51.5140146]];
+// SITE_POLYGON loaded dynamically from Mapbox composite building layer on map idle
+// Avoids fabricated rectangles and wrong polygons from prior template copy errors
+let SITE_POLYGON = null;
 
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken=cfg.mapboxToken;
@@ -640,7 +660,7 @@ async function loadAll(){
       set('epc-gia',gia.toLocaleString()+' m²');set('current-far',far+'×');
       const bars_svg=document.getElementById('capacity-bars');
       if(bars_svg){
-        const SB=[{label:'Existing',gia,col:'#d0d2da'},{label:'Low',gia:7000,col:'#93c5fd'},{label:'Base',gia:9000,col:'#3b82f6'},{label:'High',gia:12000,col:'#1d4ed8'}];
+        const SB=[{label:'Existing',gia,col:'#d0d2da'},{label:'Low (8F)',gia:11005,col:'#93c5fd'},{label:'Base (10F)',gia:12788,col:'#3b82f6'},{label:'High (12F)',gia:13640,col:'#1d4ed8'}];
         const maxG=Math.max(...SB.map(s=>s.gia));
         const BW=220,BH=11,GAP=6,LW=44,TX=LW+4;
         bars_svg.innerHTML=SB.map((s,i)=>{
