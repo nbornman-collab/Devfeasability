@@ -125,12 +125,12 @@
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46203,
-      "lng": -0.07823,
+      "lat": 51.462,
+      "lng": -0.0782,
       "hectares": 0.328,
       "score": 70,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/kwik-fit-grove-vale",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -153,7 +153,8 @@
         "majorCount": 0,
         "hasRedevelopment": true,
         "note": "23 apps including redevelopment activity."
-      }
+      },
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Tower Workshops",
@@ -367,12 +368,12 @@
       "name": "684-698 Old Kent Road (Kwikfit garage)",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48179,
-      "lng": -0.06232,
+      "lat": 51.4818,
+      "lng": -0.0623,
       "hectares": 0.153,
       "score": 69,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/684-698-old-kent-road",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -418,7 +419,7 @@
           }
         ]
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -547,12 +548,12 @@
       "name": "Burgess Business Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.516777,
-      "lng": -0.024876,
+      "lat": 51.5168,
+      "lng": -0.0249,
       "hectares": 3.814,
       "score": 67,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/burgess-business-park",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -579,7 +580,7 @@
         "recentDesc": "Submission of details pursuant to Condition 3 (Car Free Agreement) of planning a",
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Blackpool Road Business Park",
@@ -1045,12 +1046,12 @@
       "name": "62-67 Park Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50763,
-      "lng": -0.09713,
+      "lat": 51.5076,
+      "lng": -0.0971,
       "hectares": 0.397,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/62-67-park-street",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1096,7 +1097,7 @@
           }
         ]
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "185 Park Street",
@@ -1657,11 +1658,11 @@
       "address": "",
       "borough": "Southwark",
       "lat": 51.4845,
-      "lng": -0.06769,
+      "lng": -0.0677,
       "hectares": 0.088,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/636-old-kent-road",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1688,7 +1689,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Marlborough Grove and St James\u2019s Road",
@@ -1732,12 +1733,12 @@
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.482183,
-      "lng": -0.071918,
+      "lat": 51.4822,
+      "lng": -0.0719,
       "hectares": 11.187,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/glengall-road-latona",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1764,7 +1765,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "4/12 Albany Road",
