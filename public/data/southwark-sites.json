@@ -2027,12 +2027,12 @@
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49837,
-      "lng": -0.10482,
+      "lat": 51.4984,
+      "lng": -0.1048,
       "hectares": 1.171,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/bakerloo-sidings",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2059,18 +2059,18 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Newington Triangle",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.53802,
-      "lng": -0.058878,
+      "lat": 51.538,
+      "lng": -0.0589,
       "hectares": 1.097,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/newington-triangle",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2097,18 +2097,18 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.522734,
-      "lng": -0.215411,
+      "lat": 51.5018,
+      "lng": -0.1006,
       "hectares": 1.316,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/great-suffolk-ewer",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2135,18 +2135,18 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "49 Lomond Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.479451,
-      "lng": -0.092487,
+      "lat": 51.4795,
+      "lng": -0.0925,
       "hectares": 0.317,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/lomond-grove-49",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2173,7 +2173,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "99 Lomond Grove",
@@ -2505,8 +2505,8 @@
       "lng": -0.1064,
       "hectares": 0.557,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/paris-garden-hatfields",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2533,18 +2533,18 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "63-85 Newington Causeway",
       "address": "",
       "borough": "Southwark",
       "lat": 51.4979,
-      "lng": -0.09808,
+      "lng": -0.0981,
       "hectares": 0.38,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/63-85-newington-causeway",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2571,7 +2571,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -2615,12 +2615,12 @@
       "name": "Denmark Hill Campus East",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.467026,
-      "lng": -0.090688,
+      "lat": 51.467,
+      "lng": -0.0907,
       "hectares": 6.288,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/denmark-hill-campus-east",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2647,7 +2647,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Camberwell Green Magistrates Court",
