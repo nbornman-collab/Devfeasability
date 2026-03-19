@@ -1,7 +1,7 @@
 // Development Intelligence - Iceland, 118-132 Camberwell Road, 118-132 Camberwell Road, SE5 0EE
 // EPC: 1500m² GIA, Band PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.095086, 51.480251], [-0.094514, 51.480251], [-0.094514, 51.480749], [-0.095086, 51.480749], [-0.095086, 51.480251]],
+  polygon: [[-0.095292, 51.48045], [-0.09537, 51.480447], [-0.095347, 51.480245], [-0.095167, 51.480253], [-0.095163, 51.480216], [-0.094525, 51.480244], [-0.094552, 51.480483], [-0.094752, 51.480474], [-0.095043, 51.480461], [-0.095292, 51.48045]],
   site: "Iceland, 118-132 Camberwell Road",
   borough: 'Southwark', use: 'commercial', address: "118-132 Camberwell Road, SE5 0EE",
   plot_area_m2: 2200, existing_gea_m2: 1500,

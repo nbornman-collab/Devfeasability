@@ -1,7 +1,7 @@
 // Development Intelligence - 19-23 Harper Road and 325 Borough High Street, 19-23 Harper Road, SE1 6AW
 // EPC: 4000m² GIA, Band PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.096261, 51.498486], [-0.095539, 51.498486], [-0.095539, 51.499114], [-0.096261, 51.499114], [-0.096261, 51.498486]],
+  polygon: [[-0.095058, 51.499021], [-0.095346, 51.498826], [-0.095733, 51.498571], [-0.095954, 51.498702], [-0.095774, 51.498833], [-0.095711, 51.498796], [-0.095511, 51.498923], [-0.095386, 51.498997], [-0.095201, 51.499115], [-0.095058, 51.499021]],
   site: "19-23 Harper Road and 325 Borough High Street",
   borough: 'Southwark', use: 'office', address: "19-23 Harper Road, SE1 6AW",
   plot_area_m2: 3500, existing_gea_m2: 4000,

@@ -672,7 +672,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken=cfg.mapboxToken;
   const map=new mapboxgl.Map({
     container:'map',style:'mapbox://styles/mapbox/light-v11',
-    center:[LNG,LAT],zoom:17.5,pitch:52,bearing:5,interactive:true,attributionControl:false,antialias:true
+    center:CENTROID,zoom:17.5,pitch:52,bearing:5,interactive:true,attributionControl:false,antialias:true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
   map.on('load',()=>{

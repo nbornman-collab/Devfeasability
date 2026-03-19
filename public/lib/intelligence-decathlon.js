@@ -2,7 +2,7 @@
 // EPC GEA: PLACEHOLDER - verify via EPC API before client use
 // HMLR: PENDING | Polygon: approx 48700m²
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.070982, 51.45437], [-0.070392, 51.453967], [-0.070233, 51.454282], [-0.070936, 51.454401], [-0.070982, 51.45437]],
+  polygon: [[-0.0721, 51.453148], [-0.06931, 51.453148], [-0.06931, 51.455408], [-0.0721, 51.455408], [-0.0721, 51.453148]],
   site: "Decathlon Site and Mulberry Business Park",
   borough: 'Southwark', use: 'industrial', address: "Old Kent Road, SE15 4JG",
   plot_area_m2: 48700, existing_gea_m2: 15000,

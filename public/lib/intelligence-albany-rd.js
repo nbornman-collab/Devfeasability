@@ -1,7 +1,7 @@
 // Development Intelligence - 4-12 Albany Road, 4-12 Albany Road, Walworth, SE5 0AB
 // EPC: 1200m² GIA, Band PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.093873, 51.482062], [-0.093327, 51.482062], [-0.093327, 51.482538], [-0.093873, 51.482538], [-0.093873, 51.482062]],
+  polygon: [[-0.094457, 51.482934], [-0.094426, 51.482374], [-0.094358, 51.482356], [-0.093961, 51.482367], [-0.094071, 51.48299], [-0.09443, 51.482968], [-0.094457, 51.482934]],
   site: "4-12 Albany Road",
   borough: 'Southwark', use: 'commercial', address: "4-12 Albany Road, Walworth, SE5 0AB",
   plot_area_m2: 2000, existing_gea_m2: 1200,

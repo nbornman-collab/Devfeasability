@@ -1,7 +1,7 @@
 // Development Intelligence - Kwik Fit and Gibbs & Dandy, Grove Vale, Grove Vale, East Dulwich, SE22 8LF
 // EPC: 1427m² GIA, Band F | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.078505, 51.461734], [-0.077895, 51.461734], [-0.077895, 51.462266], [-0.078505, 51.462266], [-0.078505, 51.461734]],
+  polygon: [[-0.077966, 51.461744], [-0.078212, 51.461881], [-0.078609, 51.462081], [-0.07817, 51.462419], [-0.078088, 51.462284], [-0.077937, 51.462083], [-0.077829, 51.462094], [-0.077709, 51.46183], [-0.077766, 51.461811], [-0.077966, 51.461744]],
   site: "Kwik Fit and Gibbs & Dandy, Grove Vale",
   borough: 'Southwark', use: 'commercial', address: "Grove Vale, East Dulwich, SE22 8LF",
   plot_area_m2: 2500, existing_gea_m2: 1427,

@@ -1,7 +1,7 @@
 // Development Intelligence - 1-5 Westminster Bridge Road, 1-5 Westminster Bridge Road, SE1 7XW
 // EPC: PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.105634, 51.498109], [-0.104966, 51.498109], [-0.104966, 51.498691], [-0.105634, 51.498691], [-0.105634, 51.498109]],
+  polygon: [[-0.105762, 51.498131], [-0.105797, 51.498156], [-0.106065, 51.498307], [-0.106105, 51.498489], [-0.105196, 51.498586], [-0.105135, 51.498445], [-0.105667, 51.498114], [-0.105762, 51.498131]],
   site: "1-5 Westminster Bridge Road",
   borough: 'Southwark', use: 'office', address: "1-5 Westminster Bridge Road, SE1 7XW",
   plot_area_m2: 3000, existing_gea_m2: 4000,

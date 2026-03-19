@@ -1,7 +1,7 @@
 // Development Intelligence - Southwark Station and 1 Joan Street, 1 Joan Street, Southwark, SE1 8DA
 // EPC: PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.115034, 51.521109], [-0.114366, 51.521109], [-0.114366, 51.521691], [-0.115034, 51.521691], [-0.115034, 51.521109]],
+  polygon: [[-0.115281, 51.521238], [-0.115183, 51.521261], [-0.115268, 51.521392], [-0.115346, 51.521375], [-0.115369, 51.521414], [-0.115329, 51.521423], [-0.115114, 51.521471], [-0.114935, 51.521193], [-0.115212, 51.521131], [-0.115281, 51.521238]],
   site: "Southwark Station and 1 Joan Street",
   borough: 'Southwark', use: 'office', address: "1 Joan Street, Southwark, SE1 8DA",
   plot_area_m2: 3000, existing_gea_m2: 4000,

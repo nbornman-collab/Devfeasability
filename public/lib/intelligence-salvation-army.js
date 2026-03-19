@@ -1,7 +1,7 @@
 // Development Intelligence - Salvation Army Headquarters, Newington Causeway, SE1 6BN
 // EPC: 8000m² GIA, Band PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.099231, 51.497124], [-0.098369, 51.497124], [-0.098369, 51.497876], [-0.099231, 51.497876], [-0.099231, 51.497124]],
+  polygon: [[-0.099155, 51.497893], [-0.099122, 51.497832], [-0.099081, 51.497756], [-0.098993, 51.497578], [-0.098971, 51.497522], [-0.099304, 51.497261], [-0.09997, 51.497793], [-0.100011, 51.49784], [-0.099825, 51.498793], [-0.099798, 51.498759], [-0.099656, 51.498602], [-0.099623, 51.498556], [-0.0995, 51.498391], [-0.099309, 51.498125], [-0.099155, 51.497893]],
   site: "Salvation Army Headquarters",
   borough: 'Southwark', use: 'office', address: "Newington Causeway, SE1 6BN",
   plot_area_m2: 5000, existing_gea_m2: 8000,

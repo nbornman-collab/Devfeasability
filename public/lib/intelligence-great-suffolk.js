@@ -1,7 +1,7 @@
 // Development Intelligence - Great Suffolk Street and Ewer Street, Great Suffolk Street, Bankside, SE1 0NS
 // EPC: PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.100986, 51.501464], [-0.100214, 51.501464], [-0.100214, 51.502136], [-0.100986, 51.502136], [-0.100986, 51.501464]],
+  polygon: [[-0.099004, 51.502127], [-0.099144, 51.502112], [-0.099412, 51.502083], [-0.099651, 51.502057], [-0.099915, 51.502028], [-0.10014, 51.502003], [-0.100402, 51.501974], [-0.100615, 51.501951], [-0.100465, 51.502205], [-0.100205, 51.502223], [-0.099974, 51.502238], [-0.099712, 51.502256], [-0.099458, 51.502273], [-0.099199, 51.50229], [-0.099062, 51.5023], [-0.099004, 51.502127]],
   site: "Great Suffolk Street and Ewer Street",
   borough: 'Southwark', use: 'office', address: "Great Suffolk Street, Bankside, SE1 0NS",
   plot_area_m2: 4000, existing_gea_m2: 5000,

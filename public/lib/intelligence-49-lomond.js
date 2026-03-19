@@ -1,7 +1,7 @@
 // Development Intelligence - 49 Lomond Grove, 49 Lomond Grove, Camberwell, SE5 7HN
 // EPC: PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.092759, 51.479275], [-0.092241, 51.479275], [-0.092241, 51.479725], [-0.092759, 51.479725], [-0.092759, 51.479275]],
+  polygon: [[-0.092794, 51.47899], [-0.092819, 51.479173], [-0.09251, 51.47918], [-0.092477, 51.479003], [-0.092794, 51.47899]],
   site: "49 Lomond Grove",
   borough: 'Southwark', use: 'commercial', address: "49 Lomond Grove, Camberwell, SE5 7HN",
   plot_area_m2: 1800, existing_gea_m2: 1000,

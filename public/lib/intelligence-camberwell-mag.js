@@ -1,7 +1,7 @@
 // Development Intelligence - Camberwell Green Magistrates Court, 15 D'Eynsford Road, SE5 7UP
 // EPC: 3500m² GIA, Band PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.093585, 51.474564], [-0.092815, 51.474564], [-0.092815, 51.475236], [-0.093585, 51.475236], [-0.093585, 51.474564]],
+  polygon: [[-0.093895, 51.474389], [-0.093638, 51.474284], [-0.093451, 51.474218], [-0.093336, 51.474185], [-0.093286, 51.474176], [-0.093257, 51.474176], [-0.093222, 51.47418], [-0.0932, 51.47419], [-0.093184, 51.474206], [-0.093183, 51.474213], [-0.093179, 51.474244], [-0.093169, 51.474413], [-0.093236, 51.474728], [-0.093343, 51.474907], [-0.09371, 51.474841], [-0.093653, 51.474583], [-0.093895, 51.474389]],
   site: "Camberwell Green Magistrates Court",
   borough: 'Southwark', use: 'commercial', address: "15 D'Eynsford Road, SE5 7UP",
   plot_area_m2: 4000, existing_gea_m2: 3500,

@@ -1,7 +1,7 @@
 // Development Intelligence - Burgess Business Park, Parkhouse Street, Camberwell, SE5 0AR
 // EPC: 10000m² GIA, Band PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.025805, 51.516012], [-0.023995, 51.516012], [-0.023995, 51.517588], [-0.025805, 51.517588], [-0.025805, 51.516012]],
+  polygon: [[-0.025286, 51.515204], [-0.025775, 51.515682], [-0.02343, 51.516625], [-0.023375, 51.51659], [-0.023266, 51.516485], [-0.023156, 51.51638], [-0.02304, 51.516271], [-0.022918, 51.516155], [-0.023255, 51.516021], [-0.023508, 51.515924], [-0.023569, 51.515953], [-0.023595, 51.515951], [-0.02388, 51.515817], [-0.023864, 51.51578], [-0.024014, 51.515721], [-0.024032, 51.515704], [-0.025286, 51.515204]],
   site: "Burgess Business Park",
   borough: 'Southwark', use: 'industrial', address: "Parkhouse Street, Camberwell, SE5 0AR",
   plot_area_m2: 22000, existing_gea_m2: 10000,

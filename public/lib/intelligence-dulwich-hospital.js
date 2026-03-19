@@ -2,7 +2,7 @@
 // EPC: 12157m² GIA, Band C | HMLR: PENDING
 // Polygon: OSM way 1480335521, centroid=[-0.082518, 51.458402]
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.08275, 51.458506], [-0.082596, 51.458684], [-0.082133, 51.4582], [-0.082363, 51.458115], [-0.08275, 51.458506]],
+  polygon: [[-0.083574, 51.457547], [-0.081462, 51.457547], [-0.081462, 51.459257], [-0.083574, 51.459257], [-0.083574, 51.457547]],
   site: 'Dulwich Community Hospital',
   borough: 'Southwark',
   use: 'commercial',

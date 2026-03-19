@@ -1,7 +1,7 @@
 // Development Intelligence - Newington Triangle, Newington Causeway, SE1 6DR
 // EPC: PLACEHOLDER | HMLR: PENDING
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.059205, 51.537734], [-0.058595, 51.537734], [-0.058595, 51.538266], [-0.059205, 51.538266], [-0.059205, 51.537734]],
+  polygon: [[-0.058768, 51.537728], [-0.058799, 51.537776], [-0.058828, 51.537902], [-0.058815, 51.538057], [-0.058782, 51.538246], [-0.058702, 51.538283], [-0.05837, 51.538283], [-0.05835, 51.537794], [-0.058768, 51.537728]],
   site: "Newington Triangle",
   borough: 'Southwark', use: 'commercial', address: "Newington Causeway, SE1 6DR",
   plot_area_m2: 2500, existing_gea_m2: 2000,
