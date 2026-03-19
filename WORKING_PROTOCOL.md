@@ -501,3 +501,15 @@ All site location data must follow this pipeline. No exceptions.
 - Accept OSM results tagged `building=residential` for office/industrial sites
 - Use Mapbox fallback geocodes as input to OSM polygon queries
 - Build T1 or add to screener with `coordSource: mapbox-fallback-suspect`
+
+---
+
+## LINKEDIN ACCESS - READ ONLY (🦞 locked 2026-03-19)
+
+When given access to Nic's LinkedIn account:
+- **READ ONLY** - browse profiles, search, read connections
+- **NEVER** send connection requests, messages, InMails, or posts
+- **NEVER** like, comment, react, or engage with any content
+- **NEVER** follow companies or people
+- **NEVER** apply to jobs or express interest
+- Wait for explicit instruction before any action that leaves a trace
