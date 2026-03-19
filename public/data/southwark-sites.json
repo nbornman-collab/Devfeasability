@@ -1317,11 +1317,11 @@
       "address": "",
       "borough": "Southwark",
       "lat": 51.5073,
-      "lng": -0.127647,
+      "lng": -0.1276,
       "hectares": 0.383,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/melior-street-thomas",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1367,7 +1367,7 @@
           }
         ]
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Landmark Court",
@@ -2430,12 +2430,12 @@
       "name": "Land between Great Suffolk Street and Glasshill Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.501847,
-      "lng": -0.100622,
+      "lat": 51.5018,
+      "lng": -0.1006,
       "hectares": 0.603,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/great-suffolk-glasshill",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2462,7 +2462,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -3041,12 +3041,12 @@
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.561801,
-      "lng": -0.082641,
+      "lat": 51.5618,
+      "lng": -0.0826,
       "hectares": 0.666,
       "score": 60,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/conoco-quadrant-house",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -3073,7 +3073,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -3150,12 +3150,12 @@
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.527348,
-      "lng": -0.080172,
+      "lat": 51.5273,
+      "lng": -0.0802,
       "hectares": 1.966,
       "score": 60,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/ludgate-sampson-hopton",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -3182,7 +3182,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "McLaren House, St George's Circus",
