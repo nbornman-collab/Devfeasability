@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ── Tier routes: /t1/:site, /t2/:site, /t3/:site ──────────────────────────
 // T1 Scout  — site overview (placeholder until built)
 // Removed sites — redirect to homepage (100LH planning granted Jan 2025; 1SS unverified)
-const REMOVED_SITES = ['100-leadenhall', '1-silk-st'];
+const REMOVED_SITES = ['100-leadenhall', '1-silk-st', '185-park-street'];
 app.use(['/t1/:site', '/t2/:site', '/t3/:site'], (req, res, next) => {
   const site = req.params.site;
   if (REMOVED_SITES.includes(site)) return res.redirect('/');

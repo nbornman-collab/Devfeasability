@@ -1,8 +1,8 @@
 // Development Intelligence - Dulwich Community Hospital, East Dulwich Grove, SE22 8PT
 // EPC: 12157m² GIA, Band C | HMLR: PENDING
-// Polygon: OSM way 1480335521, centroid=[-0.082518, 51.458402]
+// Polygon: OSM way 1480335521, centroid=[-0.083048,51.456758]
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.083574, 51.457547], [-0.081462, 51.457547], [-0.081462, 51.459257], [-0.083574, 51.459257], [-0.083574, 51.457547]],
+  polygon: [[-0.084104, 51.455903], [-0.081992, 51.455903], [-0.081992, 51.457613], [-0.084104, 51.457613], [-0.084104, 51.455903]],
   site: 'Dulwich Community Hospital',
   borough: 'Southwark',
   use: 'commercial',

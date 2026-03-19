@@ -1,8 +1,8 @@
 // Development Intelligence - Former Petrol Station, 233-247 Old Kent Road, 233-247 Old Kent Road, SE1 5EL
 // EPC: 557m² GIA, Band B | HMLR: PENDING
-// Polygon: OSM way 74866525, centroid=[-0.061655, 51.485439]
+// Polygon: OSM way 74866525, centroid=[-0.079416,51.489889]
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.061845, 51.485285], [-0.061465, 51.485285], [-0.061465, 51.485593], [-0.061845, 51.485593], [-0.061845, 51.485285]],
+  polygon: [[-0.079606, 51.489735], [-0.079226, 51.489735], [-0.079226, 51.490043], [-0.079606, 51.490043], [-0.079606, 51.489735]],
   site: 'Former Petrol Station, 233-247 Old Kent Road',
   borough: 'Southwark',
   use: 'commercial',

@@ -1,9 +1,9 @@
 // Development Intelligence - The Grove Tavern, 520 Lordship Lane, 520 Lordship Lane, East Dulwich, SE22 8LF
 // Source: EPC (1427m² GIA, PLACEHOLDER), GLA DataMap
 // HMLR title: PENDING verification
-// Polygon: OSM way 188589437, centroid=[-0.068908, 51.443905]
+// Polygon: OSM way 188589437, centroid=[-0.068178,51.443454]
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.069355, 51.443543], [-0.068461, 51.443543], [-0.068461, 51.444267], [-0.069355, 51.444267], [-0.069355, 51.443543]],
+  polygon: [[-0.068625, 51.443092], [-0.067731, 51.443092], [-0.067731, 51.443816], [-0.068625, 51.443816], [-0.068625, 51.443092]],
   site: 'The Grove Tavern, 520 Lordship Lane',
   borough: 'Southwark',
   use: 'commercial',

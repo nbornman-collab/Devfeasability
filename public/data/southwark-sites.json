@@ -90,8 +90,8 @@
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.456215,
-      "lng": -0.064591,
+      "lat": 51.47,
+      "lng": -0.064587,
       "hectares": 1.167,
       "score": 71,
       "verified": true,
@@ -119,7 +119,7 @@
         "hasRedevelopment": true,
         "note": "5 apps including demolition. Active redevelopment candidate."
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "google-geocode"
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -228,8 +228,8 @@
       "name": "Former petrol filling station, 233-247 Old Kent Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.485439,
-      "lng": -0.061655,
+      "lat": 51.489889,
+      "lng": -0.079416,
       "hectares": 0.087,
       "score": 70,
       "verified": true,
@@ -257,7 +257,7 @@
         "hasRedevelopment": true,
         "note": "3 major applications. Active redevelopment pipeline."
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "google-geocode"
     },
     {
       "name": "Salisbury estate car park",
@@ -333,8 +333,8 @@
       "name": "Abellio Walworth Depot",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.482286,
-      "lng": -0.098022,
+      "lat": 51.487243,
+      "lng": -0.098102,
       "hectares": 1.137,
       "score": 69,
       "verified": true,
@@ -362,7 +362,7 @@
         "hasRedevelopment": true,
         "note": "1 major application."
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "google-geocode"
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -425,8 +425,8 @@
       "name": "The Grove Tavern, 520 Lordship Lane",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.443905,
-      "lng": -0.068908,
+      "lat": 51.443454,
+      "lng": -0.068178,
       "hectares": 0.498,
       "score": 68,
       "verified": true,
@@ -476,7 +476,7 @@
           }
         ]
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "google-geocode"
     },
     {
       "name": "Camberwell Bus Garage",
@@ -951,8 +951,8 @@
       "name": "Dulwich Community Hospital, East Dulwich Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.458402,
-      "lng": -0.082518,
+      "lat": 51.456758,
+      "lng": -0.083048,
       "hectares": 2.792,
       "score": 65,
       "verified": true,
@@ -983,7 +983,7 @@
         "recentDesc": "Certificate of Lawful Development (proposed) Replacement windows and entrance do",
         "majorApps": []
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "google-geocode"
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -1103,8 +1103,8 @@
       "name": "1 Southwark Bridge Road and Red Lion Court",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.506345,
-      "lng": -0.093424,
+      "lat": 51.507265,
+      "lng": -0.094361,
       "hectares": 0.792,
       "score": 65,
       "verified": true,
@@ -1154,7 +1154,7 @@
           }
         ]
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "google-geocode"
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -1382,8 +1382,8 @@
       "name": "Mandela Way",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.492123,
-      "lng": -0.078272,
+      "lat": 51.492783,
+      "lng": -0.081294,
       "hectares": 12.354,
       "score": 65,
       "verified": true,
@@ -1414,7 +1414,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "google-geocode"
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -3022,8 +3022,8 @@
       "name": "Friars House, 157-168 Blackfriars Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.505806,
-      "lng": -0.104014,
+      "lat": 51.501616,
+      "lng": -0.104381,
       "hectares": 0.522,
       "score": 60,
       "verified": true,
@@ -3054,7 +3054,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "google-geocode"
     },
     {
       "name": "Valmar Trading Estate",
