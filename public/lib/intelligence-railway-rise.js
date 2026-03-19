@@ -2,7 +2,7 @@
 // EPC GEA: PLACEHOLDER - verify via EPC API before client use
 // HMLR: PENDING | Polygon: approx 7900m²
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.080542, 51.460848], [-0.079458, 51.460848], [-0.079458, 51.461792], [-0.080542, 51.461792], [-0.080542, 51.460848]],
+  polygon: [[-0.080063, 51.461619], [-0.079974, 51.461568], [-0.079852, 51.461507], [-0.079968, 51.461398], [-0.080113, 51.461207], [-0.080213, 51.461086], [-0.080422, 51.461217], [-0.08029, 51.461289], [-0.080128, 51.4614], [-0.080147, 51.461485], [-0.080164, 51.461522], [-0.080063, 51.461619]],
   site: "Railway Rise, East Dulwich",
   borough: 'Southwark', use: 'industrial', address: "Railway Rise, East Dulwich, SE22 8RH",
   plot_area_m2: 7900, existing_gea_m2: 4500,

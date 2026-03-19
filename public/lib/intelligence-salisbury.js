@@ -2,7 +2,7 @@
 // EPC GEA: PLACEHOLDER - verify via EPC API before client use
 // HMLR: PENDING | Polygon: approx 1000m²
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.076693, 51.487132], [-0.076307, 51.487132], [-0.076307, 51.487468], [-0.076693, 51.487468], [-0.076693, 51.487132]],
+  polygon: [[-0.07549, 51.486964], [-0.075627, 51.486199], [-0.075878, 51.486216], [-0.075741, 51.486982], [-0.07549, 51.486964]],
   site: "Salisbury Estate Car Park",
   borough: 'Southwark', use: 'industrial', address: "Peckham Road, SE5 8UA",
   plot_area_m2: 1000, existing_gea_m2: 400,

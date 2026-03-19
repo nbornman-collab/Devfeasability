@@ -614,7 +614,7 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 // Avoids fabricated rectangles and wrong polygons from prior template copy errors
 let SITE_POLYGON = null;
 
-const CENTROID=[-0.10271,51.49708];
+const CENTROID=[-0.102315, 51.497585];
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken=cfg.mapboxToken;
   const map=new mapboxgl.Map({

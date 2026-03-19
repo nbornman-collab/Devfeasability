@@ -1,9 +1,9 @@
 // Development Intelligence - Copeland Industrial Park, Copeland Road, Peckham, SE15 3SN
 // Source: EPC (3500m² GIA, PLACEHOLDER), GLA DataMap
 // HMLR title: PENDING verification
-// Polygon: approximate from 11700m² plot area; replace with traced polygon
+// Polygon: OSM way 83516804 (verified), centroid=[-0.064591, 51.456215]
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.065759, 51.455225], [-0.064441, 51.455225], [-0.064441, 51.456375], [-0.065759, 51.456375], [-0.065759, 51.455225]],
+  polygon: [[-0.064091, 51.455837], [-0.064506, 51.455741], [-0.06461, 51.455916], [-0.064719, 51.455891], [-0.065039, 51.45643], [-0.064781, 51.45649], [-0.064796, 51.456516], [-0.064656, 51.456548], [-0.064668, 51.456568], [-0.064543, 51.456597], [-0.064091, 51.455837]],
   site: 'Copeland Industrial Park',
   borough: 'Southwark',
   use: 'industrial',

@@ -2,7 +2,7 @@
 // EPC GEA: PLACEHOLDER - verify via EPC API before client use
 // HMLR: PENDING | Polygon: approx 4700m²
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.063618, 51.483636], [-0.062782, 51.483636], [-0.062782, 51.484364], [-0.063618, 51.484364], [-0.063618, 51.483636]],
+  polygon: [[-0.064344, 51.484664], [-0.064, 51.484318], [-0.064831, 51.483997], [-0.065176, 51.484342], [-0.064344, 51.484664]],
   site: "Croft Street Depot",
   borough: 'Southwark', use: 'industrial', address: "Croft Street, Deptford, SE8 4NA",
   plot_area_m2: 4700, existing_gea_m2: 3500,

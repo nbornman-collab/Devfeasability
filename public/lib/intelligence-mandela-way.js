@@ -1,8 +1,8 @@
 // Development Intelligence - Mandela Way Industrial Estate, Mandela Way, SE1 5SS
 // EPC: 6968m² GIA, Band D | HMLR: PENDING
-// Polygon: approximate 10000m² plot area rectangle
+// Polygon: OSM way 85166142, centroid=[-0.078272, 51.492123]
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.07986, 51.491379], [-0.07864, 51.491379], [-0.07864, 51.492441], [-0.07986, 51.492441], [-0.07986, 51.491379]],
+  polygon: [[-0.077215, 51.492299], [-0.07814, 51.491597], [-0.078589, 51.491826], [-0.078712, 51.491733], [-0.079569, 51.492171], [-0.078462, 51.492934], [-0.077215, 51.492299]],
   site: 'Mandela Way Industrial Estate',
   borough: 'Southwark',
   use: 'industrial',

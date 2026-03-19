@@ -1,9 +1,9 @@
 // Development Intelligence - Friars House, 157-168 Blackfriars Road, SE1 8EZ
 // Source: EPC (11,479m² GIA, Band B), GLA DataMap (OA/CAZ confirmed), GLA Site Allocation
 // HMLR title: PENDING verification - owner unknown
-// Polygon: approximate from 0.522ha plot area; replace with OS NGD/OSM traced polygon when available
+// Polygon: OSM way 77739554, centroid=[-0.104014, 51.505806]
 const SITE_INTELLIGENCE = {
-  polygon: [[-0.104356,51.500904],[-0.103504,51.500904],[-0.103504,51.501696],[-0.104356,51.501696],[-0.104356,51.500904]],
+  polygon: [[-0.104256, 51.505558], [-0.103987, 51.505555], [-0.103978, 51.505819], [-0.103754, 51.505816], [-0.103749, 51.505942], [-0.103954, 51.505945], [-0.103951, 51.506028], [-0.104238, 51.506032], [-0.104256, 51.505558]],
   site: 'Friars House',
   borough: 'Southwark',
   use: 'office',
