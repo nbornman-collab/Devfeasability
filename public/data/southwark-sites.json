@@ -160,8 +160,8 @@
       "name": "Tower Workshops",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.505052,
-      "lng": -0.087495,
+      "lat": 51.498506,
+      "lng": -0.077318,
       "hectares": 0.737,
       "score": 70,
       "verified": false,
@@ -187,7 +187,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Tower Workshops, 58 Riley Rd, London SE1 3DG, UK"
     },
     {
       "name": "Kinglake Street Garages",
@@ -482,8 +483,8 @@
       "name": "Camberwell Bus Garage",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.505052,
-      "lng": -0.087495,
+      "lat": 51.474162,
+      "lng": -0.09517,
       "hectares": 1.715,
       "score": 68,
       "verified": false,
@@ -509,7 +510,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "20 Warner Rd, London SE5 9LU, UK"
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -657,8 +659,8 @@
       "name": "St Olav's Business Park, Lower Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.497083,
-      "lng": -0.102709,
+      "lat": 51.49862,
+      "lng": -0.05466,
       "hectares": 0.552,
       "score": 66,
       "verified": false,
@@ -684,7 +686,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "City Business Centre, Lower Rd, London SE16 2XB, UK"
     },
     {
       "name": "Aylesbury Phase 2",
@@ -723,8 +726,8 @@
       "name": "Aylesbury Phase 3",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.523677,
-      "lng": -0.103618,
+      "lat": 51.487544,
+      "lng": -0.088046,
       "hectares": 2.546,
       "score": 65,
       "verified": false,
@@ -750,7 +753,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Aylesbury Rd, London SE17, UK"
     },
     {
       "name": "Aylesbury Phase 2",
@@ -1160,8 +1164,8 @@
       "name": "Aylesham Centre and Peckham Bus Station",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.543138,
-      "lng": -0.062396,
+      "lat": 51.473532,
+      "lng": -0.066855,
       "hectares": 3.144,
       "score": 65,
       "verified": false,
@@ -1187,14 +1191,15 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Peckham Bus Station, London SE15 5EF, UK"
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.504144,
-      "lng": -0.086692,
+      "lat": 51.438334,
+      "lng": -0.106267,
       "hectares": 0.504,
       "score": 65,
       "verified": false,
@@ -1220,14 +1225,15 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "214 Norwood Rd, Norwood, London SE27 9AW, UK"
     },
     {
       "name": "London Bridge Health Cluster",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.543138,
-      "lng": -0.062396,
+      "lat": 51.503217,
+      "lng": -0.091476,
       "hectares": 8.031,
       "score": 65,
       "verified": false,
@@ -1253,7 +1259,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "1a Newcomen St, London SE1 1YR, UK"
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -1349,8 +1356,8 @@
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.504144,
-      "lng": -0.086692,
+      "lat": 51.502984,
+      "lng": -0.084108,
       "hectares": 0.405,
       "score": 65,
       "verified": false,
@@ -1376,7 +1383,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Fenning St & St Thomas St, London SE1 9GP, UK"
     },
     {
       "name": "Mandela Way",
@@ -1529,8 +1537,8 @@
       "name": "Bricklayers Arms",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.505052,
-      "lng": -0.087495,
+      "lat": 51.494509,
+      "lng": -0.086298,
       "hectares": 3.819,
       "score": 65,
       "verified": false,
@@ -1556,7 +1564,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Bricklayers Arms, London SE1, UK"
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -2160,8 +2169,8 @@
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.505672,
-      "lng": -0.105487,
+      "lat": 51.505211,
+      "lng": -0.104423,
       "hectares": 0.375,
       "score": 63,
       "verified": false,
@@ -2187,7 +2196,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Blackfriars Rd & Meymott St, London SE1 8NL, UK"
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -2264,8 +2274,8 @@
       "name": "London Southbank University Quarter",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.505052,
-      "lng": -0.087495,
+      "lat": 51.49792,
+      "lng": -0.101759,
       "hectares": 5.184,
       "score": 63,
       "verified": false,
@@ -2291,7 +2301,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "103 Borough Rd, London SE1 0AA, UK"
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -2411,8 +2422,8 @@
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.505672,
-      "lng": -0.105487,
+      "lat": 51.505686,
+      "lng": -0.106364,
       "hectares": 0.724,
       "score": 63,
       "verified": false,
@@ -2438,7 +2449,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Paris Gardens, 6 Paris Garden, London SE1 8ND, UK"
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -2705,8 +2717,8 @@
       "name": "Goose Green Trading Estate",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.543138,
-      "lng": -0.062396,
+      "lat": 51.461027,
+      "lng": -0.072877,
       "hectares": 0.499,
       "score": 62,
       "verified": false,
@@ -2732,7 +2744,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Goose Green Trading Estate, 47 E Dulwich Rd, London SE22 9BN, UK"
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -2852,8 +2865,8 @@
       "name": "Former Southern Railway Stables",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.543138,
-      "lng": -0.062396,
+      "lat": 51.487541,
+      "lng": -0.065528,
       "hectares": 0.627,
       "score": 62,
       "verified": false,
@@ -2879,14 +2892,15 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Southern Rail Stables, St James's Rd, London SE1 5US, UK"
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.497083,
-      "lng": -0.102709,
+      "lat": 51.483495,
+      "lng": -0.054705,
       "hectares": 7.901,
       "score": 62,
       "verified": false,
@@ -2912,14 +2926,15 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Penarth St & Hatcham Rd, London SE15 1TW, UK"
     },
     {
       "name": "Rotherhite Gasometer",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.543138,
-      "lng": -0.062396,
+      "lat": 51.49629,
+      "lng": -0.041193,
       "hectares": 0.963,
       "score": 60,
       "verified": false,
@@ -2945,14 +2960,15 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Rotherhithe, London SE16, UK"
     },
     {
       "name": "Camberwell Station",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.543138,
-      "lng": -0.062396,
+      "lat": 51.4737,
+      "lng": -0.097305,
       "hectares": 1.646,
       "score": 60,
       "verified": false,
@@ -2978,7 +2994,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Camberwell Station Rd, London SE5, UK"
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -3060,8 +3077,8 @@
       "name": "Valmar Trading Estate",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.543138,
-      "lng": -0.062396,
+      "lat": 51.4727,
+      "lng": -0.0935,
       "hectares": 0.604,
       "score": 60,
       "verified": false,
@@ -3087,7 +3104,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "Valmar Trading Estate, Valmar Rd, London SE5 9NW, UK"
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -3207,8 +3225,8 @@
       "name": "Chatelaine House, Walworth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.488774,
-      "lng": -0.096037,
+      "lat": 51.489839,
+      "lng": -0.097669,
       "hectares": 0.317,
       "score": 56,
       "verified": false,
@@ -3234,7 +3252,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "13 Amelia St, London SE17 3PY, UK"
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -3468,8 +3487,8 @@
       "name": "Morrisons, Walworth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.488774,
-      "lng": -0.096037,
+      "lat": 51.487544,
+      "lng": -0.095889,
       "hectares": 0.513,
       "score": 23,
       "verified": false,
@@ -3495,7 +3514,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "google-geocode",
+      "geocode_addr": "264 Walworth Rd, London SE17 2DL, UK"
     }
   ],
   "total": 93
