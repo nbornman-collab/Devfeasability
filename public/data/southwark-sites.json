@@ -1100,63 +1100,6 @@
       "coordSource": "intelligence-file"
     },
     {
-      "name": "185 Park Street",
-      "address": "",
-      "borough": "Southwark",
-      "lat": 51.507551,
-      "lng": -0.099706,
-      "hectares": 0.46,
-      "score": 65,
-      "verified": true,
-      "t1": "/t1/185-park-street",
-      "t2": null,
-      "hmlr": null,
-      "owner": null,
-      "flags": {
-        "inOA": false,
-        "inCAZ": false,
-        "inConservation": false,
-        "inLVMF": false,
-        "inBrownfield": false,
-        "floodZone": 1,
-        "ptal": 3.5
-      },
-      "existingLevels": null,
-      "buildingUse": null,
-      "mcil2Band": 3,
-      "inSHLAA": false,
-      "source": "Verified (EPC + GLA)",
-      "planning": {
-        "total": 163,
-        "majorCount": 75,
-        "hasRedevelopment": true,
-        "recentRef": "26/AP/0232",
-        "recentDate": "2026-01-27",
-        "recentDesc": "Details of condition 23 'BREEAM certification' part b) required by planning perm",
-        "majorApps": [
-          {
-            "ref": "04/AP/1820",
-            "date": "2004-10-05",
-            "desc": "Replacement of existing office building with a new mixed use development compris",
-            "decision": "Refuse"
-          },
-          {
-            "ref": "11/AP/2566",
-            "date": "2011-08-02",
-            "desc": "Demolition of eighth floor and mezzanine in order to construct a three floor ext",
-            "decision": "Granted with legal agreement"
-          },
-          {
-            "ref": "14/AP/3842",
-            "date": "2014-10-10",
-            "desc": "Demolition of existing buildings and redevelopment to provide a mixed use develo",
-            "decision": "Granted with legal agreement"
-          }
-        ]
-      },
-      "coordSource": "osm-polygon-centroid"
-    },
-    {
       "name": "1 Southwark Bridge Road and Red Lion Court",
       "address": "",
       "borough": "Southwark",
@@ -3554,5 +3497,6 @@
       },
       "coordSource": "mapbox-fallback-suspect"
     }
-  ]
+  ],
+  "total": 93
 }

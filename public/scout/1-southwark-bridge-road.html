@@ -508,7 +508,7 @@ function svExpand(){
 </div><!-- /right-panel -->
 
 <script>
-const LAT = 51.504909, LNG = -0.091522;
+const LAT = 51.507271, LNG = -0.094315;
 const ADDRESS = '1 Southwark Bridge Road, London SE1 0SW';
 let PLOT_AREA=1575;
 const EXISTING_EUV = 22000000;
@@ -614,7 +614,7 @@ function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
 // Avoids fabricated rectangles and wrong polygons from prior template copy errors
 let SITE_POLYGON = null;
 
-const CENTROID=[-0.093424, 51.506345];
+const CENTROID=[-0.094315,51.507271];
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken=cfg.mapboxToken;
   const map=new mapboxgl.Map({
