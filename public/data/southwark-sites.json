@@ -90,8 +90,8 @@
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4558,
-      "lng": -0.0651,
+      "lat": 51.456215,
+      "lng": -0.064591,
       "hectares": 1.167,
       "score": 71,
       "verified": true,
@@ -119,7 +119,7 @@
         "hasRedevelopment": true,
         "note": "5 apps including demolition. Active redevelopment candidate."
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -192,8 +192,8 @@
       "name": "Kinglake Street Garages",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4921,
-      "lng": -0.0808,
+      "lat": 51.492425,
+      "lng": -0.081528,
       "hectares": 0.076,
       "score": 70,
       "verified": true,
@@ -221,14 +221,14 @@
         "hasRedevelopment": true,
         "note": "1 major application. Active site."
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.48998,
-      "lng": -0.07944,
+      "lat": 51.485439,
+      "lng": -0.061655,
       "hectares": 0.087,
       "score": 70,
       "verified": true,
@@ -256,14 +256,14 @@
         "hasRedevelopment": true,
         "note": "3 major applications. Active redevelopment pipeline."
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Salisbury estate car park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4873,
-      "lng": -0.0765,
+      "lat": 51.486665,
+      "lng": -0.075645,
       "hectares": 0.104,
       "score": 70,
       "verified": true,
@@ -291,14 +291,14 @@
         "hasRedevelopment": true,
         "note": "1 major application."
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Croft Street Depot",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.484,
-      "lng": -0.0632,
+      "lat": 51.484397,
+      "lng": -0.064539,
       "hectares": 0.47,
       "score": 70,
       "verified": true,
@@ -326,14 +326,14 @@
         "hasRedevelopment": false,
         "note": "4 major applications - heavily active."
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Abellio Walworth Depot",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.4828,
-      "lng": -0.0942,
+      "lat": 51.482286,
+      "lng": -0.098022,
       "hectares": 1.137,
       "score": 69,
       "verified": true,
@@ -361,7 +361,7 @@
         "hasRedevelopment": true,
         "note": "1 major application."
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -424,8 +424,8 @@
       "name": "The Grove Tavern, 520 Lordship Lane",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.44347,
-      "lng": -0.06816,
+      "lat": 51.443905,
+      "lng": -0.068908,
       "hectares": 0.498,
       "score": 68,
       "verified": true,
@@ -475,7 +475,7 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Camberwell Bus Garage",
@@ -585,8 +585,8 @@
       "name": "Blackpool Road Business Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49708,
-      "lng": -0.10271,
+      "lat": 51.497585,
+      "lng": -0.102315,
       "hectares": 1.764,
       "score": 67,
       "verified": true,
@@ -612,14 +612,14 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.45357,
-      "lng": -0.06908,
+      "lat": 51.454278,
+      "lng": -0.070705,
       "hectares": 4.869,
       "score": 66,
       "verified": true,
@@ -650,7 +650,7 @@
         "recentDesc": "Non material amendmnet to planning permission ref no. 24/AP/1263. Amendments sou",
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -950,8 +950,8 @@
       "name": "Dulwich Community Hospital, East Dulwich Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.45758,
-      "lng": -0.0826,
+      "lat": 51.458402,
+      "lng": -0.082518,
       "hectares": 2.792,
       "score": 65,
       "verified": true,
@@ -982,14 +982,14 @@
         "recentDesc": "Certificate of Lawful Development (proposed) Replacement windows and entrance do",
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Railway Rise, East Dulwich",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46132,
-      "lng": -0.08,
+      "lat": 51.46141,
+      "lng": -0.080116,
       "hectares": 0.788,
       "score": 65,
       "verified": true,
@@ -1039,7 +1039,7 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "62-67 Park Street",
@@ -1102,8 +1102,8 @@
       "name": "185 Park Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50675,
-      "lng": -0.09765,
+      "lat": 51.507551,
+      "lng": -0.099706,
       "hectares": 0.46,
       "score": 65,
       "verified": true,
@@ -1153,14 +1153,14 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50751,
-      "lng": -0.09441,
+      "lat": 51.506345,
+      "lng": -0.093424,
       "hectares": 0.792,
       "score": 65,
       "verified": true,
@@ -1210,7 +1210,7 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -1438,8 +1438,8 @@
       "name": "Mandela Way",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.491905,
-      "lng": -0.079253,
+      "lat": 51.492123,
+      "lng": -0.078272,
       "hectares": 12.354,
       "score": 65,
       "verified": true,
@@ -1470,7 +1470,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -1514,12 +1514,12 @@
       "name": "275 Borough High Street and 7 Trinity Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49956,
-      "lng": -0.09465,
+      "lat": 51.4996,
+      "lng": -0.0946,
       "hectares": 0.343,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/275-borough-high-street",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1546,7 +1546,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -1618,12 +1618,12 @@
       "name": "Crimscott Street and Pages Walk",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.493579,
-      "lng": -0.081926,
+      "lat": 51.4936,
+      "lng": -0.0819,
       "hectares": 3.78,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/crimscott-street",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1650,7 +1650,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "636 Old Kent Road",
@@ -1808,12 +1808,12 @@
       "name": "200 Great Dover Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50093,
-      "lng": -0.09215,
+      "lat": 51.5009,
+      "lng": -0.0921,
       "hectares": 0.196,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/200-great-dover-street",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1840,18 +1840,18 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "7-14 Great Dover Street",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49987,
-      "lng": -0.09294,
+      "lat": 51.4999,
+      "lng": -0.0929,
       "hectares": 0.348,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/7-14-great-dover-street",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -1878,7 +1878,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -2728,8 +2728,8 @@
       "name": "Bath Trading Estate",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49108,
-      "lng": -0.06822,
+      "lat": 51.490426,
+      "lng": -0.06728,
       "hectares": 1.545,
       "score": 62,
       "verified": true,
@@ -2755,7 +2755,7 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Goose Green Trading Estate",
@@ -2794,8 +2794,8 @@
       "name": "Colechurch House, London Bridge Walk",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.50608,
-      "lng": -0.08705,
+      "lat": 51.504299,
+      "lng": -0.084798,
       "hectares": 0.259,
       "score": 62,
       "verified": true,
@@ -2826,7 +2826,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -3078,8 +3078,8 @@
       "name": "Friars House, 157-168 Blackfriars Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.5013,
-      "lng": -0.10393,
+      "lat": 51.505806,
+      "lng": -0.104014,
       "hectares": 0.522,
       "score": 60,
       "verified": true,
@@ -3110,7 +3110,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "Valmar Trading Estate",
@@ -3187,8 +3187,8 @@
       "name": "McLaren House, St George's Circus",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49879,
-      "lng": -0.10461,
+      "lat": 51.499193,
+      "lng": -0.105296,
       "hectares": 0.439,
       "score": 60,
       "verified": true,
@@ -3219,7 +3219,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "osm-polygon-centroid"
     },
     {
       "name": "330-344 Walworth Road",
