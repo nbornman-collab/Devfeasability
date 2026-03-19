@@ -473,3 +473,31 @@ Existing GEA must come from publicly available data sources only:
 - Never use 4.2m or any other value
 - FTF selection is context-dependent per site - record the choice and rationale in the intelligence file
 - These drive all massing height calculations across T1 and T2
+
+---
+
+## SITE GEOCODING - GOOGLE MAPS FIRST (🦞 locked 2026-03-19)
+
+All site location data must follow this pipeline. No exceptions.
+
+**Step 1 - Google Geocoding API** (address → lat/lng):
+- Pass full address string to Google Maps Geocoding API
+- Validate result is within the correct borough bounding box
+- Reject any result that returns a vague string ("London, UK") or lands outside the expected area
+- GOOGLE_MAPS_API_KEY is the authoritative key to use
+
+**Step 2 - OSM polygon** (Google-verified coords → polygon):
+- Query Overpass with tight radius (15-25m for buildings, 50-80m for large estates)
+- Prefer address-based query `way["addr:housenumber"=X]["addr:street"=Y]` over proximity
+- Validate result: check building type tag, reject residential tags for commercial sites
+- Check area ratio against expected plot area (reject if < 0.1x or > 8x expected)
+
+**Step 3 - Fallback**:
+- If no OSM polygon found: generate correctly-sized rectangle at Google-verified centroid
+- If Google geocode fails: flag site as `coordSource: unverified`, do not build T1 until manually confirmed
+
+**NEVER**:
+- Use proximity-only OSM queries (`way(around:Nm)`) without Google-verified coords as input
+- Accept OSM results tagged `building=residential` for office/industrial sites
+- Use Mapbox fallback geocodes as input to OSM polygon queries
+- Build T1 or add to screener with `coordSource: mapbox-fallback-suspect`
