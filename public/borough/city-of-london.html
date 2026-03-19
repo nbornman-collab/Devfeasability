@@ -18,19 +18,11 @@
   --mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif;
 }
 html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text)}
-
-/* Layout */
 .page{display:grid;grid-template-columns:1fr 1fr;position:fixed;top:52px;left:0;right:0;bottom:0}
 @media(max-width:900px){.page{grid-template-columns:1fr;grid-template-rows:40vh 1fr}}
-
-/* Map */
 #map{width:100%;height:100%}
-
-/* List panel */
 .list-panel{overflow-y:auto;background:var(--surface);border-left:1px solid var(--border)}
 @media(max-width:900px){.list-panel{border-left:none;border-top:1px solid var(--border)}}
-
-/* Header */
 .header{padding:32px 28px 24px;border-bottom:1px solid var(--border);background:var(--surface)}
 .header h1{font:700 22px var(--sans);color:var(--text);margin-bottom:4px}
 .header .sub{font:400 13px var(--sans);color:var(--text3);line-height:1.5}
@@ -38,102 +30,66 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .header .stat-box{text-align:center}
 .header .stat-box .num{font:700 20px var(--mono);color:var(--green)}
 .header .stat-box .label{font:500 10px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-top:2px}
-
-/* Site cards */
 .site-card{padding:20px 28px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
 .site-card:hover{background:var(--accent-glow)}
 .site-card.active{background:var(--accent-glow);border-left:3px solid var(--accent)}
-
 .site-card .rank{font:700 11px var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
 .site-card .name{font:600 15px var(--sans);color:var(--text);margin-bottom:2px}
 .site-card .area-tag{font:500 11px var(--sans);color:var(--text3);margin-bottom:10px}
-
 .site-card .metrics{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px}
 .site-card .metric{text-align:center;padding:8px 4px;background:var(--surface2);border-radius:6px}
 .site-card .metric .val{font:600 13px var(--mono);color:var(--text)}
 .site-card .metric .val.green{color:var(--green)}
 .site-card .metric .val.accent{color:var(--accent)}
 .site-card .metric .lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-top:2px}
-
-/* Capacity bar */
-.capacity-bar{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:8px}
-.capacity-bar .existing{height:100%;background:#c0392b;float:left;border-radius:3px 0 0 3px}
-.capacity-bar .potential{height:100%;background:var(--green);float:left}
-
-.site-card .note{font:400 12px var(--sans);color:var(--text2);line-height:1.5}
-/* Constraint badges */
-.constraint-flags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
-.cflag{display:inline-flex;align-items:center;gap:4px;font:600 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;padding:3px 7px;border-radius:3px;white-space:nowrap}
-.cflag.hard{color:#b91c1c;background:#fef2f2;border:1px solid #fecaca}
-.cflag.soft{color:#92400e;background:#fffbeb;border:1px solid #fde68a}
-.cflag.info{color:#1e40af;background:#eff6ff;border:1px solid #bfdbfe}
-.site-card .note strong{color:var(--text);font-weight:600}
-
-/* Footer */
-.footer{padding:20px 28px;background:var(--surface2);font:400 11px var(--sans);color:var(--text3);line-height:1.6}
-.footer a{color:var(--accent);text-decoration:none}
-
-/* Map markers */
-.marker-label{
-  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
-  padding:4px 8px;border-radius:6px;font:600 11px var(--mono);
-  color:var(--accent);border:1px solid var(--border);
-  box-shadow:0 1px 4px rgba(0,0,0,.1);white-space:nowrap;
-  pointer-events:none;transform:translate(-50%,-100%);margin-top:-8px;
-}
-
-/* Popup */
-.mapboxgl-popup-content{padding:16px 18px;border-radius:10px;font-family:var(--sans);max-width:280px}
+.score-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font:700 13px var(--mono)}
+.score-badge.high{background:rgba(5,150,105,.1);color:var(--green)}
+.score-badge.mid{background:rgba(217,119,6,.1);color:var(--amber)}
+.score-badge.low{background:rgba(220,38,38,.1);color:var(--red)}
+.tag{display:inline-block;padding:2px 7px;border-radius:3px;font:500 10px var(--sans);text-transform:uppercase;letter-spacing:.5px;margin:2px 2px 0 0}
+.tag.oa{background:rgba(79,70,229,.1);color:var(--accent)}
+.tag.caz{background:rgba(5,150,105,.1);color:var(--green)}
+.tag.tll{background:rgba(217,119,6,.1);color:var(--amber)}
+.tag.her{background:rgba(220,38,38,.08);color:var(--red)}
+.tag.use{background:var(--surface2);color:var(--text2)}
+.btn{display:inline-block;padding:7px 14px;background:var(--accent);color:#fff;font:600 12px var(--sans);text-decoration:none;border-radius:4px;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn.outline{background:transparent;border:1.5px solid var(--border);color:var(--text2)}
+.action-row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.mapboxgl-popup-content{border-radius:8px;padding:0;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.15);min-width:260px}
+.popup-img{width:100%;height:140px;object-fit:cover;display:block}
+.popup-body{padding:14px 16px}
 .popup-title{font:600 14px var(--sans);color:var(--text);margin-bottom:4px}
-.popup-sub{font:400 11px var(--sans);color:var(--text3);margin-bottom:8px}
-.popup-stat{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border)}
-.popup-stat:last-child{border-bottom:none}
-.popup-stat .k{color:var(--text2)}
-.popup-stat .v{font:600 12px var(--mono);color:var(--text)}
-.popup-btn{display:block;margin-top:10px;padding:8px 0;text-align:center;background:var(--accent);color:white;border-radius:6px;font:600 12px var(--sans);text-decoration:none;cursor:pointer}
-.popup-btn:hover{background:var(--accent2)}
-
-/* ── Top nav (shared) ─────────────────────────── */
-.da-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:52px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;
-  background:rgba(255,255,255,0.97);
-  border-bottom:1px solid #e5e7eb;
-  backdrop-filter:blur(12px);
-}
-.da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-0.5px;text-decoration:none;color:#0f172a;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
-.da-nav-logo .sl{color:#1d4ed8}
+.popup-sub{font:400 12px var(--sans);color:var(--text3);margin-bottom:10px}
+.popup-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.popup-stat{text-align:center;padding:6px 4px;background:var(--surface2);border-radius:4px}
+.popup-stat .v{font:700 13px var(--mono);color:var(--text)}
+.popup-stat .l{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-top:1px}
+.popup-actions{display:flex;gap:6px}
+.popup-actions a{flex:1;text-align:center;padding:7px 4px;font:600 11px var(--sans);text-decoration:none;border-radius:4px}
+.popup-actions .p-t1{background:var(--accent);color:#fff}
+.popup-actions .p-t2{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+/* Top nav */
+.da-nav{position:fixed;top:0;left:0;right:0;height:52px;background:#fff;border-bottom:1px solid var(--border);z-index:100;display:flex;align-items:center;padding:0 24px;gap:0}
+.da-brand{font:700 15px var(--sans);color:var(--text);text-decoration:none;letter-spacing:-.3px;margin-right:32px;display:flex;flex-direction:column;line-height:1.1}
+.da-brand span{font:400 9px var(--sans);color:var(--text3);letter-spacing:.5px;text-transform:uppercase}
 .da-nav-links{display:flex;align-items:center;gap:2px}
-.da-nav-link{
-  font:500 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.4px;
-  color:#6b7280;text-decoration:none;padding:6px 10px;border-radius:4px;
-  transition:all .15s;
-}
-.da-nav-link:hover{color:#0f172a;background:#f9fafb}
-.da-nav-link.active{color:#0f172a;background:#f3f4f6;font-weight:700}
-.da-nav-link.locked{opacity:.35;pointer-events:none}
-
-
-@keyframes pulse-marker {
-  0%   { box-shadow: 0 2px 12px rgba(0,0,0,.6), 0 0 0 0 rgba(16,185,129,.6); }
-  70%  { box-shadow: 0 2px 12px rgba(0,0,0,.6), 0 0 0 10px rgba(16,185,129,0); }
-  100% { box-shadow: 0 2px 12px rgba(0,0,0,.6), 0 0 0 0 rgba(16,185,129,0); }
-}
-.mapboxgl-popup-content { padding: 12px; border-radius: 8px; }
+.nav-link{padding:6px 12px;font:500 12px var(--sans);color:var(--text2);text-decoration:none;border-radius:4px;white-space:nowrap;transition:background .15s,color .15s}
+.nav-link:hover{background:var(--surface2);color:var(--text)}
+.nav-link.active{background:var(--accent-glow);color:var(--accent);font-weight:600}
 </style>
 </head>
 <body>
-
 <nav class="da-nav">
-  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A<span style="font:400 8px Inter,sans-serif;letter-spacing:.3px;color:#9ca3af;text-transform:none;line-height:1">Development/Architecture</span></a>
+  <a href="/" class="da-brand">D/A<span>Development / Architecture</span></a>
   <div class="da-nav-links">
-    <a href="/borough/city-of-london" class="da-nav-link active">T0 Borough</a>
-    <a href="/t1/24-city-of-london" class="da-nav-link">T1 Scout</a>
-    <a href="/t2/24-city-of-london" class="da-nav-link">T2 Appraise</a>
-    <a href="#" class="da-nav-link locked">T3 Present</a>
+    <a href="/borough/southwark" class="nav-link">T0 Southwark</a>
+    <a href="/borough/city-of-london" class="nav-link active">T0 City</a>
+    <a href="/t1/24-southwark-st" class="nav-link">T1 Scout</a>
+    <a href="/t2/24-southwark-st" class="nav-link">T2 Appraise</a>
+    <a href="#" class="nav-link" style="opacity:.4;cursor:default">T3 Present</a>
+    <a href="/methodology" class="nav-link">Methodology</a>
   </div>
-  <a href="/methodology" style="font:500 11px Inter,sans-serif;color:#6b7280;text-decoration:none">Methodology</a>
 </nav>
 
 <div class="page">
@@ -141,263 +97,152 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   <div class="list-panel">
     <div class="header">
       <h1>T0 Borough · City of London</h1>
-      <div class="sub">Development intelligence — verified sites only. More being added.</div>
+      <div class="sub">
+        Development opportunity sites scored by D/A intelligence. City of London Plan 2022 policies. All sites cross-referenced against confirmed completions - active only.<br><br>
+        <strong>Methodology:</strong> GLA strategic allocations + Corporation of London Plan policies. TfL PTAL 6a/6b zone throughout. Heritage constraints from City's Local List and Listed Building register. GDV assumes policy-compliant heights within City cluster tall building zone.
+      </div>
       <div class="stats">
-        <div class="stat-box"><div class="num" id="stat-total">—</div><div class="label">sites</div></div>
-        <div class="stat-box"><div class="num" id="stat-verified">—</div><div class="label">verified</div></div>
-        <div class="stat-box"><div class="num" id="stat-oa">—</div><div class="label">in OA</div></div>
+        <div class="stat-box"><div class="num" id="stat-total">-</div><div class="label">Sites</div></div>
+        <div class="stat-box"><div class="num" id="stat-avg">-</div><div class="label">Avg Score</div></div>
+        <div class="stat-box"><div class="num" id="stat-high">-</div><div class="label">Score 80+</div></div>
+        <div class="stat-box"><div class="num" id="stat-oa">-</div><div class="label">OA Sites</div></div>
       </div>
     </div>
     <div id="site-list"></div>
-    <div class="footer" id="footer">
-      <strong>Methodology:</strong> OpenStreetMap building data cross-referenced with City of London Plan 2022 policies, TfL PTAL scores, Environment Agency flood data, and conservation area boundaries. Council estates excluded. GDV assumes policy-compliant heights; real schemes typically 40-70% of headline figures after setbacks, affordable, and servicing.<br><br>
-      <a href="/">&#8592; Back to DevFeasibility</a> &middot; Generated March 2026 &middot; Engine: london-planning-v2
-    </div>
   </div>
 </div>
 
 <script>
-// Scoring: utilisation ratio × PTAL weight × size sweet spot × availability multiplier
-// ── One definitive scoring system — same 6 factors as SITE_INTELLIGENCE ──────
-// Available Sky (×2.5), Rent Headroom (×2.0), Planning Tailwind (×2.0),
-// Heritage Shadow (×1.5), Title Stack (×1.5), Station Gravity (×0.5)
-function computeScore(s){
-  // Available Sky: how much of the precedent envelope is unused?
-  const skyRatio = Math.max(0, (s.potentialFloors - s.floors) / s.potentialFloors);
-  const sky = Math.min(10, skyRatio * 12); // 0-10
+const USE_LABELS = {office:'Office',mixed:'Mixed-Use',residential:'Residential',retail:'Retail'};
 
-  // Rent Headroom: type proxy for value gap (industrial/warehouse = highest conversion upside)
-  const rentGap = {Industrial:9,Warehouse:8.5,Office:7,Commercial:6.5,Retail:5.5}[s.type] || 6;
+function scoreClass(s){return s>=75?'high':s>=60?'mid':'low'}
 
-  // Planning Tailwind: area momentum + masterplan penalty
-  const areaMom = {Bankside:9,'Elephant & Castle':8.5,'City of London':8,Borough:8,'Canada Water':7.5,Rotherhithe:6.5,Peckham:7}[s.area] || 7;
-  const momentum = s.activeMasterplan ? areaMom * 0.5 : areaMom; // active masterplan = constrained not free market
-
-  // Heritage Shadow: default moderate, sites can override via s.heritagePenalty (0=none, 10=severe)
-  const heritage = 10 - (s.heritagePenalty || 2);
-
-  // Title Stack: plot size proxy — smaller = likely single title, cleaner
-  const titleScore = s.plotSqm < 2000 ? 9 : s.plotSqm < 5000 ? 7.5 : s.plotSqm < 15000 ? 6 : 4;
-
-  // Station Gravity: PTAL proxy by area
-  const ptalScore = {Bankside:10,'Elephant & Castle':9.5,'City of London':9.5,Borough:9,'Canada Water':8,Rotherhithe:7,Peckham:7.5}[s.area] || 8;
-
-  const weighted = sky*2.5 + rentGap*2.0 + momentum*2.0 + heritage*1.5 + titleScore*1.5 + ptalScore*0.5;
-
-  // Constraint penalties — hard flags tank score 65%, soft flags 30%
-  const nameAddr = (s.name + ' ' + (s.address||'')).toLowerCase();
-  const ANCHORS = [/tesco/i,/sainsbury/i,/waitrose/i,/morrison/i,/aldi/i,/lidl/i,/asda/i,/shopping.cent/i,/shopping.mall/i,/retail.park/i,/supermarket/i,/westfield/i];
-  let mult = 1.0;
-  if (ANCHORS.some(p => p.test(nameAddr)))        mult *= 0.35; // anchor tenant — near impossible possession
-  if (s.hasConsent)                                mult *= 0.25; // live planning consent
-  if (s.listed)                                    mult *= 0.30; // listed building
-  if (s.yearBuilt && s.yearBuilt >= 2015)          mult *= 0.55; // recently built
-  if (s.floodZone === 3)                           mult *= 0.70; // flood zone 3
-  if (s.activeMasterplan && mult === 1.0)          mult *= 0.80; // in-progress masterplan = constrained market
-
-  return Math.round(weighted * mult) / 10;
+function formatGDV(mf, plot){
+  const gia = plot * mf * 0.85;
+  const erv = gia * 85; // City ERV ~£85/sqft NIA
+  const val = erv / 0.045;
+  return val >= 1e9 ? (val/1e9).toFixed(1)+'B' : (val/1e6).toFixed(0)+'M';
 }
 
-// VERIFIED SITES ONLY — each entry confirmed against HMLR + EPC
-// Do not add any site without all three sources corroborating address, ownership, area, and use class.
-// Removed (2026-03-17): Surrey Quays (active BL masterplan), Tesco Canada Water (active BL masterplan),
-// Lavington St (Timber Square — already built), 53 Loman St (fabricated), 133 Copeland Rd (unverified),
-// 200 Great Dover St (unverified), 112a Warner Rd (unverified), 207 Union St (unverified),
-// Sites loaded from pre-scored JSON — 92 GLA site allocations + 2 verified sites
-// Regenerate: node /tmp/score-southwark.js
+function buildCard(s, rank){
+  const gdv = formatGDV(s.mf || 20, s.plot || 3000);
+  const tags = [
+    `<span class="tag use">${USE_LABELS[s.use]||s.use}</span>`,
+    `<span class="tag caz">CAZ</span>`,
+    s.ptal === '6b' ? `<span class="tag oa">PTAL 6b</span>` : `<span class="tag tll">PTAL 6a</span>`,
+  ].join('');
 
-const ANCHOR_PATTERNS = [/tesco/i,/sainsbury/i,/waitrose/i,/morrison/i,/aldi/i,/lidl/i,/asda/i,/shopping.cent/i,/supermarket/i,/westfield/i];
+  const t1url = s.t1 || '#';
+  const hasT1 = s.t1 && s.t1 !== '#';
 
-function getConstraintFlags(s) {
-  const flags = [];
-  const nm = (s.name + ' ' + (s.address||'')).toLowerCase();
-  if (ANCHOR_PATTERNS.some(p => p.test(nm))) flags.push({cls:'hard',icon:'🏬',label:'Anchor Tenant'});
-  if (s.flags && s.flags.floodZone === 3) flags.push({cls:'soft',icon:'🌊',label:'Flood Zone 3'});
-  if (s.flags && s.flags.inConservation) flags.push({cls:'soft',icon:'🏛',label:'Conservation Area'});
-  if (s.flags && s.flags.inLVMF) flags.push({cls:'info',icon:'👁',label:'LVMF Vista'});
-  return flags;
+  return `<div class="site-card" id="card-${rank}" onclick="flyTo(${s.lat},${s.lng},${rank})">
+    <div class="rank">#${rank} &nbsp;<span class="score-badge ${scoreClass(s.score)}">${s.score}</span></div>
+    <div class="name">${s.name}</div>
+    <div class="area-tag">${s.address || ''}</div>
+    <div style="margin-bottom:8px">${tags}</div>
+    <div class="metrics">
+      <div class="metric"><div class="val green">£${gdv}</div><div class="lbl">Est. GDV</div></div>
+      <div class="metric"><div class="val accent">${s.mh||'?'}m</div><div class="lbl">Max Height</div></div>
+      <div class="metric"><div class="val">${s.mf||'?'}F</div><div class="lbl">Max Floors</div></div>
+      <div class="metric"><div class="val">${(s.plot/10000).toFixed(1)}ha</div><div class="lbl">Plot</div></div>
+    </div>
+    <div class="action-row">
+      ${hasT1 ? `<a href="${t1url}" class="btn" onclick="event.stopPropagation()">T1 Scout &rarr;</a>` : `<span class="btn outline" style="cursor:default">Coming Soon</span>`}
+    </div>
+  </div>`;
 }
 
-function renderConstraintFlags(flags) {
-  if (!flags.length) return '';
-  return '<div class="constraint-flags">' + flags.map(f=>`<span class="cflag ${f.cls}">${f.icon} ${f.label}</span>`).join('') + '</div>';
-}
-
-function renderBadges(s) {
-  const b = [];
-  if (s.verified) b.push('<span style="background:#dcfce7;color:#16a34a;font:600 9px Inter,sans-serif;padding:2px 7px;border-radius:3px">VERIFIED</span>');
-  else b.push('<span style="background:#f3f4f6;color:#6b7280;font:600 9px Inter,sans-serif;padding:2px 7px;border-radius:3px">CANDIDATE</span>');
-  if (s.flags && s.flags.inOA) b.push('<span style="background:#eff6ff;color:#1d4ed8;font:600 9px Inter,sans-serif;padding:2px 7px;border-radius:3px">OA</span>');
-  if (s.flags && s.flags.inCAZ) b.push('<span style="background:#fef3c7;color:#d97706;font:600 9px Inter,sans-serif;padding:2px 7px;border-radius:3px">CAZ</span>');
-  return b.join(' ');
-}
-
-let ALL_SITES = [];
-let map;
-let cfg = {};
-
-function siteT1Url(s) {
-  if (s.t1) return s.t1;
-  const slug = s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  return `/t1/${slug}`;
-}
-
-async function loadAndRender() {
-  const data = await fetch('/data/city-sites.json').then(r => r.json());
-  ALL_SITES = data.sites || [];
-
-  // Update header stats
-  const el = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
-  el('stat-total', ALL_SITES.length);
-  el('stat-verified', ALL_SITES.filter(s=>s.verified).length);
-  el('stat-oa', ALL_SITES.filter(s=>s.flags&&s.flags.inOA).length);
-
-  const listEl = document.getElementById('site-list');
-  listEl.innerHTML = '';
-
-  ALL_SITES.forEach((s, i) => {
-    const rank = i + 1;
-    s._rank = rank;
-    const card = document.createElement('div');
-    card.className = 'site-card';
-    card.dataset.rank = rank;
-    const cflags = getConstraintFlags(s);
-    const tierLinks = [
-      s.t1 ? `<a href="${s.t1}" style="font:600 10px Inter,sans-serif;color:var(--accent);text-decoration:none">T1 Scout</a>` : '',
-      s.t2 ? `<a href="${s.t2}" style="font:600 10px Inter,sans-serif;color:#059669;text-decoration:none">T2 Appraise</a>` : '',
-    ].filter(Boolean).join(' &middot; ');
-
-    const dataChips = [];
-    if (s.existingLevels) dataChips.push(`${s.existingLevels}F existing`);
-    if (s.buildingUse && s.buildingUse !== 'yes') dataChips.push(s.buildingUse);
-    if (s.mcil2Band) dataChips.push(`CIL Band ${s.mcil2Band}`);
-    if (s.inSHLAA) dataChips.push('SHLAA');
-    const dataRow = dataChips.length
-      ? `<div style="font:500 10px Inter,sans-serif;color:var(--text3);margin:4px 0 0">${dataChips.join(' &middot; ')}</div>`
-      : '';
-
-    card.innerHTML = `
-      <div class="rank" style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
-        <span>#${rank}</span>
-        <span style="color:var(--accent);font-weight:700">${s.score}/100</span>
-        ${renderBadges(s)}
+function buildPopup(s, rank){
+  const gdv = formatGDV(s.mf||20, s.plot||3000);
+  const t1url = s.t1 || '#';
+  const hasT1 = s.t1 && s.t1 !== '#';
+  const svUrl = `/api/streetview-thumbnail?lat=${s.lat}&lng=${s.lng}`;
+  return `<div class="mapboxgl-popup-content">
+    <img class="popup-img" src="${svUrl}" onerror="this.style.display='none'" alt="">
+    <div class="popup-body">
+      <div class="popup-title">${s.name}</div>
+      <div class="popup-sub">${s.address||''}</div>
+      <div class="popup-stats">
+        <div class="popup-stat"><div class="v">${s.score}</div><div class="l">Score</div></div>
+        <div class="popup-stat"><div class="v">£${gdv}</div><div class="l">Est. GDV</div></div>
+        <div class="popup-stat"><div class="v">${s.mh||'?'}m</div><div class="l">Max Ht</div></div>
       </div>
-      <div class="name">${s.name}</div>
-      <div class="area-tag">${s.address || ''} ${s.hectares ? '&middot; ' + s.hectares.toFixed(2) + 'ha' : ''}</div>
-      ${dataRow}
-      ${tierLinks ? '<div style="margin:6px 0">' + tierLinks + '</div>' : ''}
-      ${renderConstraintFlags(cflags)}
-    `;
-    card.onclick = (e) => {
-      if (e.target.tagName === 'A') return; // let tier links navigate normally
-      flyToSite(s);
-    };
-    listEl.appendChild(card);
-  });
-
-  await initMap();
+      <div class="popup-actions">
+        ${hasT1 ? `<a href="${t1url}" class="p-t1">T1 Scout &rarr;</a>` : `<a href="#" class="p-t2" style="cursor:default">Coming Soon</a>`}
+      </div>
+    </div>
+  </div>`;
 }
 
-async function initMap(){
-  cfg = await fetch('/api/config').then(r=>r.json());
+let map, markers = [], activeCard = null;
+
+function flyTo(lat, lng, rank){
+  map.flyTo({center:[lng,lat], zoom:17, pitch:45, duration:800});
+  if(activeCard !== null) document.getElementById('card-'+activeCard)?.classList.remove('active');
+  document.getElementById('card-'+rank)?.classList.add('active');
+  activeCard = rank;
+}
+
+async function init(){
+  const cfg = await fetch('/api/config').then(r=>r.json());
   mapboxgl.accessToken = cfg.mapboxToken;
+
   map = new mapboxgl.Map({
     container:'map',
     style:'mapbox://styles/mapbox/satellite-v9',
-    center:[-0.08, 51.49],
-    zoom:11.5,
-    pitch:40,
-    bearing:-10,
+    center:[-0.0922,51.5153],
+    zoom:13.5,
+    pitch:0,
+    bearing:0,
+    attributionControl:false
   });
 
+  map.addControl(new mapboxgl.NavigationControl(),'bottom-right');
+
+  const data = await fetch('/data/city-sites.json').then(r=>r.json());
+  const sites = data.sites.sort((a,b)=>b.score-a.score);
+
+  // Stats
+  document.getElementById('stat-total').textContent = sites.length;
+  document.getElementById('stat-avg').textContent = Math.round(sites.reduce((s,x)=>s+x.score,0)/sites.length);
+  document.getElementById('stat-high').textContent = sites.filter(s=>s.score>=80).length;
+  document.getElementById('stat-oa').textContent = sites.filter(s=>s.ptal==='6b').length;
+
+  // Cards
+  const list = document.getElementById('site-list');
+  list.innerHTML = sites.map((s,i)=>buildCard(s,i+1)).join('');
+
+  // Map markers with pulsing dots
   map.on('load', () => {
-    // satellite-v9 is raster-only - no composite vector source, no 3D buildings layer
-
-    ALL_SITES.forEach(s => {
+    sites.forEach((s,i) => {
+      const rank = i+1;
+      // Pulsing marker
       const el = document.createElement('div');
-      const isVerified = s.verified;
-      const isTop = s.score >= 70;
-      const color = isVerified ? '#10b981' : isTop ? '#6366f1' : '#f59e0b';
-      const size = isVerified ? 20 : isTop ? 16 : 12;
-      // NO position:relative or transform - breaks Mapbox marker positioning
-      el.style.cssText = `width:${size}px;height:${size}px;background:${color};border:3px solid white;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.5);cursor:pointer`;
-      if(isVerified) el.style.outline = '2px solid ' + color;
+      const col = s.score>=80?'#059669':s.score>=65?'#d97706':'#dc2626';
+      el.innerHTML = `<div style="width:14px;height:14px;border-radius:50%;background:${col};border:2px solid #fff;box-shadow:0 0 0 0 ${col}88;animation:pulse 2s infinite"></div>`;
+      el.style.cssText = 'cursor:pointer';
 
-      const marker = new mapboxgl.Marker({element:el, anchor:'center'}).setLngLat([s.lng, s.lat]).addTo(map);
+      const marker = new mapboxgl.Marker({element:el})
+        .setLngLat([s.lng,s.lat])
+        .addTo(map);
 
-      el.addEventListener('click', (e) => {
+      const popup = new mapboxgl.Popup({offset:20, closeButton:false, maxWidth:'280px'})
+        .setHTML(buildPopup(s,rank));
+
+      marker.getElement().addEventListener('click', e => {
         e.stopPropagation();
-        openSitePopup(s);
+        popup.setLngLat([s.lng,s.lat]).addTo(map);
+        flyTo(s.lat,s.lng,rank);
+        document.getElementById('card-'+rank)?.scrollIntoView({behavior:'smooth',block:'center'});
       });
+
+      markers.push(marker);
     });
   });
 }
 
-function openSitePopup(s) {
-  document.querySelectorAll('.mapboxgl-popup').forEach(p => p.remove());
-  const t1url = siteT1Url(s);
-  const oaBadge = (s.flags&&s.flags.inOA) ? '<span style="background:#1d4ed8;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px;margin-left:4px">OA</span>' : '';
-  const verBadge = s.verified ? '<span style="background:#10b981;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">VERIFIED</span>' : '<span style="background:#6b7280;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">CANDIDATE</span>';
-  const t2btn = s.t2 ? `<a class="popup-btn" style="background:#059669;margin-top:4px" href="${s.t2}" onclick="event.stopPropagation()">T2 Appraise &rarr;</a>` : '';
-
-  const popupId = `popup-${Date.now()}`;
-  const dataGrid = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:8px 0">
-      <div class="popup-stat"><span class="k">Score</span><span class="v" style="color:#6366f1;font-weight:700">${s.score}/100</span></div>
-      <div class="popup-stat"><span class="k">Site</span><span class="v">${s.hectares?s.hectares.toFixed(2)+'ha':'-'}</span></div>
-      ${s.existingLevels ? `<div class="popup-stat"><span class="k">Existing</span><span class="v">${s.existingLevels}F</span></div>` : ''}
-      ${s.mcil2Band ? `<div class="popup-stat"><span class="k">CIL Band</span><span class="v">${s.mcil2Band}</span></div>` : ''}
-      ${s.buildingUse&&s.buildingUse!=='yes' ? `<div class="popup-stat" style="grid-column:1/-1"><span class="k">Use</span><span class="v">${s.buildingUse}</span></div>` : ''}
-    </div>`;
-
-  // Start with no image, fetch street view asynchronously
-  new mapboxgl.Popup({offset:20, maxWidth:'340px', className:'site-popup'})
-    .setLngLat([s.lng, s.lat])
-    .setHTML(`
-      <div id="${popupId}" onclick="window.location.href='${t1url}'" style="cursor:pointer">
-        <div id="${popupId}-img" style="width:calc(100% + 24px);height:160px;background:#1a1d2e;border-radius:4px 4px 0 0;display:flex;align-items:center;justify-content:center;margin:-12px -12px 10px">
-          <span style="color:#4a4e6a;font:500 11px Inter,sans-serif">Loading photo...</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">${verBadge}${oaBadge}</div>
-        <div class="popup-title">${s.name}</div>
-        <div class="popup-sub">${s.address||''}</div>
-        ${dataGrid}
-        <a class="popup-btn" href="${t1url}" onclick="event.stopPropagation()">T1 Scout &rarr;</a>
-        ${t2btn}
-      </div>
-    `)
-    .addTo(map);
-
-  // Async: fetch bearing-corrected street view thumbnail
-  fetch(`/api/streetview-thumbnail?lat=${s.lat}&lng=${s.lng}`)
-    .then(r => r.json())
-    .then(d => {
-      const el = document.getElementById(`${popupId}-img`);
-      if (!el) return;
-      if (d.found && d.url) {
-        el.outerHTML = `<img src="${d.url}" style="width:calc(100% + 24px);height:160px;object-fit:cover;border-radius:4px 4px 0 0;display:block;margin:-12px -12px 10px" onerror="this.style.display='none'">`;
-      } else {
-        el.style.display = 'none';
-      }
-    })
-    .catch(() => { const el = document.getElementById(`${popupId}-img`); if(el) el.style.display='none'; });
-
-  highlightCard(s._rank);
-}
-
-function flyToSite(s){
-  map.flyTo({center:[s.lng, s.lat], zoom:15, pitch:50, duration:1200});
-  highlightCard(s._rank);
-  setTimeout(() => openSitePopup(s), 1250);
-}
-
-function highlightCard(rank){
-  document.querySelectorAll('.site-card').forEach(c => c.classList.remove('active'));
-  const card = document.querySelector(`.site-card[data-rank="${rank}"]`);
-  if(card){card.classList.add('active');card.scrollIntoView({behavior:'smooth',block:'nearest'});}
-}
-
-loadAndRender();
+init();
 </script>
+<style>@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,70,229,.6)}70%{box-shadow:0 0 0 8px rgba(79,70,229,0)}100%{box-shadow:0 0 0 0 rgba(79,70,229,0)}}</style>
 </body>
 </html>

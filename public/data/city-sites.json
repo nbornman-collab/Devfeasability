@@ -3,8 +3,8 @@
     {
       "name": "1 Liverpool Street",
       "address": "1 Liverpool Street, EC2M 7QD",
-      "lat": 51.5183,
-      "lng": -0.0813,
+      "lat": 51.517544,
+      "lng": -0.083863,
       "use": "office",
       "plot": 8000,
       "h": 48,
@@ -20,7 +20,7 @@
       "verified": true,
       "notes": "Liverpool Street station supersite",
       "score": 84,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "1-liverpool-street",
       "t1": "/t1/1-liverpool-street",
       "source": "GLA + Corporation of London"
@@ -28,8 +28,8 @@
     {
       "name": "Norton Folgate, Spitalfields",
       "address": "Norton Folgate, E1 6DB",
-      "lat": 51.5224,
-      "lng": -0.0792,
+      "lat": 51.520841,
+      "lng": -0.078767,
       "use": "office",
       "plot": 5000,
       "h": 21,
@@ -45,7 +45,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Norton Folgate allocation",
       "score": 79,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "norton-folgate-spitalfields",
       "t1": "/t1/norton-folgate-spitalfields",
       "source": "GLA + Corporation of London"
@@ -53,8 +53,8 @@
     {
       "name": "Bishopsgate Goodsyard",
       "address": "Bishopsgate, E1 6JD",
-      "lat": 51.523,
-      "lng": -0.0765,
+      "lat": 51.520049,
+      "lng": -0.078923,
       "use": "mixed",
       "plot": 18000,
       "h": 21,
@@ -70,7 +70,7 @@
       "verified": true,
       "notes": "SALP108 - Major mixed-use site",
       "score": 83,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "bishopsgate-goodsyard",
       "t1": "/t1/bishopsgate-goodsyard",
       "source": "GLA + Corporation of London"
@@ -78,8 +78,8 @@
     {
       "name": "Stone House and 128-170 Bishopsgate",
       "address": "128-170 Bishopsgate, EC2M 4HH",
-      "lat": 51.5166,
-      "lng": -0.0805,
+      "lat": 51.51655,
+      "lng": -0.080883,
       "use": "office",
       "plot": 4000,
       "h": 60,
@@ -95,7 +95,7 @@
       "verified": true,
       "notes": "GLA layer 108 - City cluster",
       "score": 82,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "stone-house-and-128-170-bishopsgate",
       "t1": "/t1/stone-house-and-128-170-bishopsgate",
       "source": "GLA + Corporation of London"
@@ -103,8 +103,8 @@
     {
       "name": "10 Trinity Square",
       "address": "10 Trinity Square, EC3N 4AJ",
-      "lat": 51.5104,
-      "lng": -0.0784,
+      "lat": 51.510329,
+      "lng": -0.078291,
       "use": "mixed",
       "plot": 6000,
       "h": 30,
@@ -120,7 +120,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Tower Gateway cluster",
       "score": 77,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "10-trinity-square",
       "t1": "/t1/10-trinity-square",
       "source": "GLA + Corporation of London"
@@ -128,8 +128,8 @@
     {
       "name": "Sugar Quay, Lower Thames Street",
       "address": "Lower Thames Street, EC3R 6DU",
-      "lat": 51.5084,
-      "lng": -0.0807,
+      "lat": 51.509144,
+      "lng": -0.083198,
       "use": "office",
       "plot": 5000,
       "h": 24,
@@ -145,7 +145,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Thames-side",
       "score": 78,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "sugar-quay-lower-thames-street",
       "t1": "/t1/sugar-quay-lower-thames-street",
       "source": "GLA + Corporation of London"
@@ -153,8 +153,8 @@
     {
       "name": "Barts Square, Little Britain",
       "address": "34-57B Little Britain, EC1A 7BT",
-      "lat": 51.5183,
-      "lng": -0.0989,
+      "lat": 51.517437,
+      "lng": -0.098633,
       "use": "mixed",
       "plot": 12000,
       "h": 21,
@@ -170,7 +170,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Smithfield/Barbican",
       "score": 78,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "barts-square-little-britain",
       "t1": "/t1/barts-square-little-britain",
       "source": "GLA + Corporation of London"
@@ -178,8 +178,8 @@
     {
       "name": "Curtain Road, Worship Street",
       "address": "Curtain Road, EC2A 3QW",
-      "lat": 51.5227,
-      "lng": -0.0817,
+      "lat": 51.524404,
+      "lng": -0.080314,
       "use": "office",
       "plot": 3500,
       "h": 18,
@@ -195,7 +195,7 @@
       "verified": true,
       "notes": "SALP125 - Shoreditch border",
       "score": 80,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "curtain-road-worship-street",
       "t1": "/t1/curtain-road-worship-street",
       "source": "GLA + Corporation of London"
@@ -203,8 +203,8 @@
     {
       "name": "Crown Place, Earl Street",
       "address": "1-17 Crown Place, EC2A 4PJ",
-      "lat": 51.5204,
-      "lng": -0.0845,
+      "lat": 51.520224,
+      "lng": -0.083893,
       "use": "office",
       "plot": 4000,
       "h": 18,
@@ -220,7 +220,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Moorgate cluster",
       "score": 81,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "crown-place-earl-street",
       "t1": "/t1/crown-place-earl-street",
       "source": "GLA + Corporation of London"
@@ -253,8 +253,8 @@
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
       "address": "15-16 Minories, EC3N 1EX",
-      "lat": 51.5133,
-      "lng": -0.0746,
+      "lat": 51.511932,
+      "lng": -0.075025,
       "use": "office",
       "plot": 3000,
       "h": 18,
@@ -270,7 +270,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Aldgate cluster",
       "score": 80,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "15-16-minories-and-62-aldgate-high-stree",
       "t1": "/t1/15-16-minories-and-62-aldgate-high-stree",
       "source": "GLA + Corporation of London"
@@ -278,8 +278,8 @@
     {
       "name": "Land at Royal Mint Street",
       "address": "Royal Mint Street, E1 8LG",
-      "lat": 51.5108,
-      "lng": -0.0718,
+      "lat": 51.51043,
+      "lng": -0.070763,
       "use": "mixed",
       "plot": 8000,
       "h": 18,
@@ -295,7 +295,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Tower gateway",
       "score": 81,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "land-at-royal-mint-street",
       "t1": "/t1/land-at-royal-mint-street",
       "source": "GLA + Corporation of London"
@@ -303,8 +303,8 @@
     {
       "name": "Aldgate Place, Whitechapel High Street",
       "address": "Whitechapel High Street, E1 7QX",
-      "lat": 51.515,
-      "lng": -0.0706,
+      "lat": 51.515899,
+      "lng": -0.070156,
       "use": "mixed",
       "plot": 10000,
       "h": 24,
@@ -320,7 +320,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Aldgate East",
       "score": 80,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "aldgate-place-whitechapel-high-street",
       "t1": "/t1/aldgate-place-whitechapel-high-street",
       "source": "GLA + Corporation of London"
@@ -328,8 +328,8 @@
     {
       "name": "Fenchurch Place, EC3",
       "address": "Fenchurch Place, EC3M 4AJ",
-      "lat": 51.5115,
-      "lng": -0.0831,
+      "lat": 51.51191,
+      "lng": -0.079216,
       "use": "office",
       "plot": 5000,
       "h": 30,
@@ -345,7 +345,7 @@
       "verified": true,
       "notes": "City cluster - EC3",
       "score": 82,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "fenchurch-place-ec3",
       "t1": "/t1/fenchurch-place-ec3",
       "source": "GLA + Corporation of London"
@@ -353,8 +353,8 @@
     {
       "name": "Liverpool Street Station Air Rights",
       "address": "Liverpool Street, EC2M 7PY",
-      "lat": 51.5178,
-      "lng": -0.0823,
+      "lat": 51.517466,
+      "lng": -0.082636,
       "use": "office",
       "plot": 12000,
       "h": 30,
@@ -370,7 +370,7 @@
       "verified": true,
       "notes": "NR/TfL air rights - maximum density zone",
       "score": 84,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "liverpool-street-station-air-rights",
       "t1": "/t1/liverpool-street-station-air-rights",
       "source": "GLA + Corporation of London"
@@ -378,8 +378,8 @@
     {
       "name": "100 Leadenhall Street",
       "address": "100 Leadenhall Street, EC3A 3BP",
-      "lat": 51.5135,
-      "lng": -0.0831,
+      "lat": 51.513637,
+      "lng": -0.080203,
       "use": "office",
       "plot": 6000,
       "h": 48,
@@ -395,7 +395,7 @@
       "verified": true,
       "notes": "City cluster - Leadenhall corridor",
       "score": 82,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "100-leadenhall-street",
       "t1": "/t1/100-leadenhall-street",
       "source": "GLA + Corporation of London"
@@ -403,8 +403,8 @@
     {
       "name": "Fleet Street East, EC4",
       "address": "Fleet Street, EC4A 2EX",
-      "lat": 51.5138,
-      "lng": -0.1097,
+      "lat": 51.514218,
+      "lng": -0.108252,
       "use": "office",
       "plot": 5000,
       "h": 24,
@@ -420,7 +420,7 @@
       "verified": true,
       "notes": "Fleet Street corridor - media/legal cluster",
       "score": 78,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "fleet-street-east-ec4",
       "t1": "/t1/fleet-street-east-ec4",
       "source": "GLA + Corporation of London"
@@ -428,8 +428,8 @@
     {
       "name": "Holborn Viaduct Development Site",
       "address": "Holborn Viaduct, EC1A 2BN",
-      "lat": 51.5162,
-      "lng": -0.1034,
+      "lat": 51.517096,
+      "lng": -0.104711,
       "use": "office",
       "plot": 4000,
       "h": 21,
@@ -445,7 +445,7 @@
       "verified": true,
       "notes": "City/Holborn border",
       "score": 78,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "holborn-viaduct-development-site",
       "t1": "/t1/holborn-viaduct-development-site",
       "source": "GLA + Corporation of London"
@@ -453,8 +453,8 @@
     {
       "name": "Cannon Street Station Oversite",
       "address": "Cannon Street, EC4N 6AP",
-      "lat": 51.5112,
-      "lng": -0.0904,
+      "lat": 51.511648,
+      "lng": -0.090459,
       "use": "office",
       "plot": 8000,
       "h": 24,
@@ -470,7 +470,7 @@
       "verified": true,
       "notes": "TfL oversite - station air rights",
       "score": 80,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "cannon-street-station-oversite",
       "t1": "/t1/cannon-street-station-oversite",
       "source": "GLA + Corporation of London"
@@ -478,8 +478,8 @@
     {
       "name": "Moorgate Station Oversite",
       "address": "Moorgate, EC2Y 9AE",
-      "lat": 51.5186,
-      "lng": -0.0882,
+      "lat": 51.517934,
+      "lng": -0.088456,
       "use": "office",
       "plot": 5000,
       "h": 21,
@@ -495,7 +495,7 @@
       "verified": true,
       "notes": "TfL oversite - Barbican/City",
       "score": 81,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "moorgate-station-oversite",
       "t1": "/t1/moorgate-station-oversite",
       "source": "GLA + Corporation of London"
@@ -503,8 +503,8 @@
     {
       "name": "Smithfield Market, EC1",
       "address": "Smithfield Market, EC1A 9PS",
-      "lat": 51.519,
-      "lng": -0.1016,
+      "lat": 51.519403,
+      "lng": -0.101404,
       "use": "mixed",
       "plot": 25000,
       "h": 15,
@@ -520,7 +520,7 @@
       "verified": true,
       "notes": "Former meat market - museum/mixed-use",
       "score": 76,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "smithfield-market-ec1",
       "t1": "/t1/smithfield-market-ec1",
       "source": "GLA + Corporation of London"
@@ -528,8 +528,8 @@
     {
       "name": "Bunhill Fields adjacent, EC1",
       "address": "Bunhill Row, EC1Y 8YT",
-      "lat": 51.5241,
-      "lng": -0.0897,
+      "lat": 51.523048,
+      "lng": -0.08983,
       "use": "office",
       "plot": 3500,
       "h": 18,
@@ -545,7 +545,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Moorfields",
       "score": 78,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "bunhill-fields-adjacent-ec1",
       "t1": "/t1/bunhill-fields-adjacent-ec1",
       "source": "GLA + Corporation of London"
@@ -553,8 +553,8 @@
     {
       "name": "Blackfriars Gateway, EC4",
       "address": "1-16 Blackfriars Road, EC4V 3EB",
-      "lat": 51.5076,
-      "lng": -0.1051,
+      "lat": 51.507907,
+      "lng": -0.104017,
       "use": "office",
       "plot": 3500,
       "h": 21,
@@ -570,7 +570,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Blackfriars gateway",
       "score": 80,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "blackfriars-gateway-ec4",
       "t1": "/t1/blackfriars-gateway-ec4",
       "source": "GLA + Corporation of London"
@@ -578,8 +578,8 @@
     {
       "name": "Bourne Estate South, Holborn",
       "address": "Portpool Lane, EC1N 7PN",
-      "lat": 51.5206,
-      "lng": -0.1108,
+      "lat": 51.520934,
+      "lng": -0.111701,
       "use": "residential",
       "plot": 8000,
       "h": 12,
@@ -595,7 +595,7 @@
       "verified": true,
       "notes": "GLA layer 108 - Holborn residential",
       "score": 78,
-      "coordSource": "intelligence-file",
+      "coordSource": "google-geocode",
       "slug": "bourne-estate-south-holborn",
       "t1": "/t1/bourne-estate-south-holborn",
       "source": "GLA + Corporation of London"
