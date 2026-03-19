@@ -789,12 +789,12 @@
       "name": "123 Grove Park",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.46817,
-      "lng": -0.08304,
+      "lat": 51.4682,
+      "lng": -0.083,
       "hectares": 0.582,
       "score": 65,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/123-grove-park",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -834,7 +834,7 @@
           }
         ]
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -2179,12 +2179,12 @@
       "name": "99 Lomond Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.476536,
-      "lng": -0.091606,
+      "lat": 51.4765,
+      "lng": -0.0916,
       "hectares": 0.211,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/99-lomond-grove",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2211,7 +2211,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -2354,12 +2354,12 @@
       "name": "Land Between Camberwell Station Road and Warner Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.474161,
-      "lng": -0.096891,
+      "lat": 51.4742,
+      "lng": -0.0969,
       "hectares": 0.415,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/land-camberwell-warner",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2386,18 +2386,18 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "1-5 Westminster Bridge Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.49844,
-      "lng": -0.10535,
+      "lat": 51.4984,
+      "lng": -0.1053,
       "hectares": 0.078,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/westminster-bridge-road",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2424,7 +2424,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -2578,11 +2578,11 @@
       "address": "",
       "borough": "Southwark",
       "lat": 51.5214,
-      "lng": -0.11466,
+      "lng": -0.1147,
       "hectares": 0.649,
       "score": 63,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/southwark-station-joan",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2609,7 +2609,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Denmark Hill Campus East",
@@ -2691,12 +2691,12 @@
       "name": "Chambers Wharf",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.511949,
-      "lng": -0.03329,
+      "lat": 51.5119,
+      "lng": -0.0333,
       "hectares": 1.406,
       "score": 62,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/chambers-wharf",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2723,7 +2723,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Bath Trading Estate",
@@ -2833,12 +2833,12 @@
       "name": "Devon Street and Sylvan Grove",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.481624,
-      "lng": -0.058424,
+      "lat": 51.4816,
+      "lng": -0.0584,
       "hectares": 3.136,
       "score": 62,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/devon-street-sylvan",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2865,18 +2865,18 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Sandgate Street and Verney Road",
       "address": "",
       "borough": "Southwark",
-      "lat": 51.484077,
-      "lng": -0.062688,
+      "lat": 51.4841,
+      "lng": -0.0627,
       "hectares": 14.683,
       "score": 62,
-      "verified": false,
-      "t1": null,
+      "verified": true,
+      "t1": "/t1/sandgate-verney",
       "t2": null,
       "hmlr": null,
       "owner": null,
@@ -2903,7 +2903,7 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "intelligence-file"
     },
     {
       "name": "Former Southern Railway Stables",
