@@ -23,7 +23,11 @@
       "coordSource": "google-geocode",
       "slug": "1-liverpool-street",
       "t1": "/t1/1-liverpool-street",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -48,7 +52,11 @@
       "coordSource": "google-geocode",
       "slug": "norton-folgate-spitalfields",
       "t1": "/t1/norton-folgate-spitalfields",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Bishopsgate Goodsyard",
@@ -73,7 +81,11 @@
       "coordSource": "google-geocode",
       "slug": "bishopsgate-goodsyard",
       "t1": "/t1/bishopsgate-goodsyard",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -98,7 +110,11 @@
       "coordSource": "google-geocode",
       "slug": "stone-house-and-128-170-bishopsgate",
       "t1": "/t1/128-170-bishopsgate",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "10 Trinity Square",
@@ -123,7 +139,11 @@
       "coordSource": "google-geocode",
       "slug": "10-trinity-square",
       "t1": "/t1/10-trinity-square",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -148,7 +168,11 @@
       "coordSource": "google-geocode",
       "slug": "sugar-quay-lower-thames-street",
       "t1": "/t1/sugar-quay-lower-thames-street",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Barts Square, Little Britain",
@@ -173,7 +197,11 @@
       "coordSource": "google-geocode",
       "slug": "barts-square-little-britain",
       "t1": "/t1/barts-square-little-britain",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -198,7 +226,11 @@
       "coordSource": "google-geocode",
       "slug": "curtain-road-worship-street",
       "t1": "/t1/curtain-road-worship-street",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Crown Place, Earl Street",
@@ -223,7 +255,11 @@
       "coordSource": "google-geocode",
       "slug": "crown-place-earl-street",
       "t1": "/t1/crown-place-earl-street",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -248,7 +284,11 @@
       "coordSource": "intelligence-file",
       "slug": "ocean-house-little-moorfields",
       "t1": "/t1/ocean-house-little-moorfields",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -273,7 +313,11 @@
       "coordSource": "google-geocode",
       "slug": "15-16-minories-and-62-aldgate-high-stree",
       "t1": "/t1/15-16-minories-and-62-aldgate-high-stree",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Land at Royal Mint Street",
@@ -298,7 +342,11 @@
       "coordSource": "google-geocode",
       "slug": "land-at-royal-mint-street",
       "t1": "/t1/land-at-royal-mint-street",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -323,7 +371,11 @@
       "coordSource": "google-geocode",
       "slug": "aldgate-place-whitechapel-high-street",
       "t1": "/t1/aldgate-place-whitechapel-high-street",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -348,7 +400,11 @@
       "coordSource": "google-geocode",
       "slug": "fenchurch-place-ec3",
       "t1": "/t1/fenchurch-place-ec3",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Liverpool Street Station Air Rights",
@@ -373,7 +429,11 @@
       "coordSource": "google-geocode",
       "slug": "liverpool-street-station-air-rights",
       "t1": "/t1/liverpool-street-station-air-rights",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "100 Leadenhall Street",
@@ -398,7 +458,11 @@
       "coordSource": "google-geocode",
       "slug": "100-leadenhall-street",
       "t1": "/t1/100-leadenhall-street",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Fleet Street East, EC4",
@@ -423,7 +487,11 @@
       "coordSource": "google-geocode",
       "slug": "fleet-street-east-ec4",
       "t1": "/t1/fleet-street-east-ec4",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -448,7 +516,11 @@
       "coordSource": "google-geocode",
       "slug": "holborn-viaduct-development-site",
       "t1": "/t1/holborn-viaduct-development-site",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -473,7 +545,11 @@
       "coordSource": "google-geocode",
       "slug": "cannon-street-station-oversite",
       "t1": "/t1/cannon-street-station-oversite",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Moorgate Station Oversite",
@@ -498,7 +574,11 @@
       "coordSource": "google-geocode",
       "slug": "moorgate-station-oversite",
       "t1": "/t1/moorgate-station-oversite",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Smithfield Market, EC1",
@@ -523,7 +603,11 @@
       "coordSource": "google-geocode",
       "slug": "smithfield-market-ec1",
       "t1": "/t1/smithfield-market-ec1",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -548,7 +632,11 @@
       "coordSource": "google-geocode",
       "slug": "bunhill-fields-adjacent-ec1",
       "t1": "/t1/bunhill-fields-adjacent-ec1",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -573,7 +661,11 @@
       "coordSource": "google-geocode",
       "slug": "blackfriars-gateway-ec4",
       "t1": "/t1/blackfriars-gateway-ec4",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -598,7 +690,11 @@
       "coordSource": "google-geocode",
       "slug": "bourne-estate-south-holborn",
       "t1": "/t1/bourne-estate-south-holborn",
-      "source": "GLA + Corporation of London"
+      "source": "GLA + Corporation of London",
+      "offMarket": "high",
+      "flags": {
+        "inBrownfield": false
+      }
     }
   ],
   "borough": "City of London",

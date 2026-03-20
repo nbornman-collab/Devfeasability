@@ -31,7 +31,8 @@
         "recentDesc": "Display of advertisement: Illuminated digital advertisement display",
         "majorApps": [],
         "note": "No major applications. 27 minor apps. Site has no live consent - clean slate."
-      }
+      },
+      "offMarket": "low"
     },
     {
       "name": "24 Southwark Street",
@@ -84,7 +85,8 @@
           }
         ],
         "note": "81 apps. Victorian building, original consent pre-digital records. Most recent activity: conditions discharge 2025."
-      }
+      },
+      "offMarket": "low"
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
@@ -119,7 +121,8 @@
         "hasRedevelopment": true,
         "note": "5 apps including demolition. Active redevelopment candidate."
       },
-      "coordSource": "google-geocode"
+      "coordSource": "google-geocode",
+      "offMarket": "medium"
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -154,7 +157,8 @@
         "hasRedevelopment": true,
         "note": "23 apps including redevelopment activity."
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "low"
     },
     {
       "name": "Tower Workshops",
@@ -188,7 +192,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Tower Workshops, 58 Riley Rd, London SE1 3DG, UK"
+      "geocode_addr": "Tower Workshops, 58 Riley Rd, London SE1 3DG, UK",
+      "offMarket": "high"
     },
     {
       "name": "Kinglake Street Garages",
@@ -223,7 +228,8 @@
         "hasRedevelopment": true,
         "note": "1 major application. Active site."
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "low"
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
@@ -258,7 +264,8 @@
         "hasRedevelopment": true,
         "note": "3 major applications. Active redevelopment pipeline."
       },
-      "coordSource": "google-geocode"
+      "coordSource": "google-geocode",
+      "offMarket": "low"
     },
     {
       "name": "Salisbury estate car park",
@@ -293,7 +300,8 @@
         "hasRedevelopment": true,
         "note": "1 major application."
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "low"
     },
     {
       "name": "Croft Street Depot",
@@ -328,7 +336,8 @@
         "hasRedevelopment": false,
         "note": "4 major applications - heavily active."
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "low"
     },
     {
       "name": "Abellio Walworth Depot",
@@ -363,7 +372,8 @@
         "hasRedevelopment": true,
         "note": "1 major application."
       },
-      "coordSource": "google-geocode"
+      "coordSource": "google-geocode",
+      "offMarket": "low"
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -420,7 +430,8 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "low"
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -477,7 +488,8 @@
           }
         ]
       },
-      "coordSource": "google-geocode"
+      "coordSource": "google-geocode",
+      "offMarket": "low"
     },
     {
       "name": "Camberwell Bus Garage",
@@ -511,7 +523,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "20 Warner Rd, London SE5 9LU, UK"
+      "geocode_addr": "20 Warner Rd, London SE5 9LU, UK",
+      "offMarket": "high"
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -544,7 +557,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "Burgess Business Park",
@@ -582,7 +596,8 @@
         "recentDesc": "Submission of details pursuant to Condition 3 (Car Free Agreement) of planning a",
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "low"
     },
     {
       "name": "Blackpool Road Business Park",
@@ -615,7 +630,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "high"
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -653,7 +669,8 @@
         "recentDesc": "Non material amendmnet to planning permission ref no. 24/AP/1263. Amendments sou",
         "majorApps": []
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "low"
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -687,7 +704,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "City Business Centre, Lower Rd, London SE16 2XB, UK"
+      "geocode_addr": "City Business Centre, Lower Rd, London SE16 2XB, UK",
+      "offMarket": "high"
     },
     {
       "name": "Aylesbury Phase 2",
@@ -720,7 +738,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "Aylesbury Phase 3",
@@ -754,7 +773,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Aylesbury Rd, London SE17, UK"
+      "geocode_addr": "Aylesbury Rd, London SE17, UK",
+      "offMarket": "high"
     },
     {
       "name": "Aylesbury Phase 2",
@@ -787,7 +807,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "123 Grove Park",
@@ -838,7 +859,8 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "low"
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -871,7 +893,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "Aylesbury Plot 18",
@@ -904,7 +927,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "Aylesbury Site 7",
@@ -949,7 +973,8 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "low"
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
@@ -987,7 +1012,8 @@
         "recentDesc": "Certificate of Lawful Development (proposed) Replacement windows and entrance do",
         "majorApps": []
       },
-      "coordSource": "google-geocode"
+      "coordSource": "google-geocode",
+      "offMarket": "low"
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -1044,7 +1070,8 @@
           }
         ]
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "low"
     },
     {
       "name": "62-67 Park Street",
@@ -1101,7 +1128,8 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "low"
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
@@ -1158,7 +1186,8 @@
           }
         ]
       },
-      "coordSource": "google-geocode"
+      "coordSource": "google-geocode",
+      "offMarket": "low"
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -1192,7 +1221,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Peckham Bus Station, London SE15 5EF, UK"
+      "geocode_addr": "Peckham Bus Station, London SE15 5EF, UK",
+      "offMarket": "high"
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
@@ -1226,7 +1256,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "214 Norwood Rd, Norwood, London SE27 9AW, UK"
+      "geocode_addr": "214 Norwood Rd, Norwood, London SE27 9AW, UK",
+      "offMarket": "high"
     },
     {
       "name": "London Bridge Health Cluster",
@@ -1260,7 +1291,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "1a Newcomen St, London SE1 1YR, UK"
+      "geocode_addr": "1a Newcomen St, London SE1 1YR, UK",
+      "offMarket": "high"
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -1317,7 +1349,8 @@
           }
         ]
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "low"
     },
     {
       "name": "Landmark Court",
@@ -1350,7 +1383,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
@@ -1384,7 +1418,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Fenning St & St Thomas St, London SE1 9GP, UK"
+      "geocode_addr": "Fenning St & St Thomas St, London SE1 9GP, UK",
+      "offMarket": "high"
     },
     {
       "name": "Mandela Way",
@@ -1422,7 +1457,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "google-geocode"
+      "coordSource": "google-geocode",
+      "offMarket": "high"
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -1460,7 +1496,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
@@ -1498,7 +1535,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -1531,7 +1569,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "Bricklayers Arms",
@@ -1565,7 +1604,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Bricklayers Arms, London SE1, UK"
+      "geocode_addr": "Bricklayers Arms, London SE1, UK",
+      "offMarket": "high"
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -1603,7 +1643,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "636 Old Kent Road",
@@ -1641,7 +1682,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Marlborough Grove and St James\u2019s Road",
@@ -1679,7 +1721,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -1717,7 +1760,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "4/12 Albany Road",
@@ -1755,7 +1799,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "200 Great Dover Street",
@@ -1793,7 +1838,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "7-14 Great Dover Street",
@@ -1831,7 +1877,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -1864,7 +1911,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
@@ -1902,7 +1950,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
@@ -1940,7 +1989,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Aylesbury Phase 1",
@@ -1973,7 +2023,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
@@ -2011,7 +2062,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Newington Triangle",
@@ -2049,7 +2101,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
@@ -2087,7 +2140,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "49 Lomond Grove",
@@ -2125,7 +2179,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "99 Lomond Grove",
@@ -2163,7 +2218,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -2197,7 +2253,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Blackfriars Rd & Meymott St, London SE1 8NL, UK"
+      "geocode_addr": "Blackfriars Rd & Meymott St, London SE1 8NL, UK",
+      "offMarket": "high"
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -2235,7 +2292,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "London Fire and Emergency Planning Authority",
@@ -2268,7 +2326,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "mapbox-fallback-suspect"
+      "coordSource": "mapbox-fallback-suspect",
+      "offMarket": "high"
     },
     {
       "name": "London Southbank University Quarter",
@@ -2302,7 +2361,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "103 Borough Rd, London SE1 0AA, UK"
+      "geocode_addr": "103 Borough Rd, London SE1 0AA, UK",
+      "offMarket": "high"
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -2340,7 +2400,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "1-5 Westminster Bridge Road",
@@ -2378,7 +2439,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -2416,7 +2478,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -2450,7 +2513,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Paris Gardens, 6 Paris Garden, London SE1 8ND, UK"
+      "geocode_addr": "Paris Gardens, 6 Paris Garden, London SE1 8ND, UK",
+      "offMarket": "high"
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -2488,7 +2552,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "63-85 Newington Causeway",
@@ -2526,7 +2591,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -2564,7 +2630,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Denmark Hill Campus East",
@@ -2602,7 +2669,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Camberwell Green Magistrates Court",
@@ -2640,7 +2708,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Chambers Wharf",
@@ -2678,7 +2747,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Bath Trading Estate",
@@ -2711,7 +2781,8 @@
         "total": 0,
         "note": "GLA site - coordinates require verification before planning query"
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "high"
     },
     {
       "name": "Goose Green Trading Estate",
@@ -2745,7 +2816,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Goose Green Trading Estate, 47 E Dulwich Rd, London SE22 9BN, UK"
+      "geocode_addr": "Goose Green Trading Estate, 47 E Dulwich Rd, London SE22 9BN, UK",
+      "offMarket": "high"
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -2783,7 +2855,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "high"
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -2821,7 +2894,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -2859,7 +2933,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Former Southern Railway Stables",
@@ -2893,7 +2968,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Southern Rail Stables, St James's Rd, London SE1 5US, UK"
+      "geocode_addr": "Southern Rail Stables, St James's Rd, London SE1 5US, UK",
+      "offMarket": "high"
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -2927,7 +3003,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Penarth St & Hatcham Rd, London SE15 1TW, UK"
+      "geocode_addr": "Penarth St & Hatcham Rd, London SE15 1TW, UK",
+      "offMarket": "high"
     },
     {
       "name": "Rotherhite Gasometer",
@@ -2961,7 +3038,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Rotherhithe, London SE16, UK"
+      "geocode_addr": "Rotherhithe, London SE16, UK",
+      "offMarket": "high"
     },
     {
       "name": "Camberwell Station",
@@ -2995,7 +3073,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Camberwell Station Rd, London SE5, UK"
+      "geocode_addr": "Camberwell Station Rd, London SE5, UK",
+      "offMarket": "high"
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -3033,7 +3112,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -3071,7 +3151,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "google-geocode"
+      "coordSource": "google-geocode",
+      "offMarket": "high"
     },
     {
       "name": "Valmar Trading Estate",
@@ -3105,7 +3186,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "Valmar Trading Estate, Valmar Rd, London SE5 9NW, UK"
+      "geocode_addr": "Valmar Trading Estate, Valmar Rd, London SE5 9NW, UK",
+      "offMarket": "high"
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -3143,7 +3225,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "intelligence-file"
+      "coordSource": "intelligence-file",
+      "offMarket": "high"
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -3181,7 +3264,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "osm-polygon-centroid"
+      "coordSource": "osm-polygon-centroid",
+      "offMarket": "high"
     },
     {
       "name": "330-344 Walworth Road",
@@ -3219,7 +3303,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "mapbox-geocoded",
+      "offMarket": "high"
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -3253,7 +3338,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "13 Amelia St, London SE17 3PY, UK"
+      "geocode_addr": "13 Amelia St, London SE17 3PY, UK",
+      "offMarket": "high"
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -3291,7 +3377,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "mapbox-geocoded",
+      "offMarket": "high"
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
@@ -3329,7 +3416,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "mapbox-geocoded",
+      "offMarket": "high"
     },
     {
       "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
@@ -3367,7 +3455,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "mapbox-geocoded",
+      "offMarket": "high"
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -3405,7 +3494,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "mapbox-geocoded",
+      "offMarket": "high"
     },
     {
       "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
@@ -3443,7 +3533,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "mapbox-geocoded",
+      "offMarket": "high"
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
@@ -3481,7 +3572,8 @@
         "recentDesc": null,
         "majorApps": []
       },
-      "coordSource": "mapbox-geocoded"
+      "coordSource": "mapbox-geocoded",
+      "offMarket": "high"
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -3515,7 +3607,8 @@
         "note": "GLA site - coordinates require verification before planning query"
       },
       "coordSource": "google-geocode",
-      "geocode_addr": "264 Walworth Rd, London SE17 2DL, UK"
+      "geocode_addr": "264 Walworth Rd, London SE17 2DL, UK",
+      "offMarket": "high"
     }
   ],
   "total": 93

@@ -78,6 +78,7 @@ const SITE_INTELLIGENCE = {
       tenure: 'Unknown - HMLR verification required',
       owner: 'Unknown',
       jurisdiction: 'England and Wales',
+        encumbrances: 'No known encumbrances',
       insight: 'A 0.52ha office complex in SE1 CAZ is likely to have a complex ownership structure - corporate freehold with occupier leases, or potentially multiple freehold interests. This is the primary risk factor and the critical gate before T2 appraisal. HMLR title register search required. Score conservatively penalised until verified. If single freehold: score upgrades to 8.5. If multiple titles: complex assembly required.'
     },
     transport: {

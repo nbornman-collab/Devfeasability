@@ -62,7 +62,8 @@
           -0.085371,
           51.524339
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "50-60 Commercial Street",
@@ -124,7 +125,8 @@
           -0.074236,
           51.518479
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Worship Street EC2A",
@@ -186,7 +188,8 @@
           -0.084149,
           51.521253
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Shoreditch High Street South",
@@ -248,7 +251,8 @@
           -0.078223,
           51.52261
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Sun Street / Finsbury Square Fringe",
@@ -310,7 +314,8 @@
           -0.086218,
           51.519567
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Curtain Road Warehouse District",
@@ -372,7 +377,8 @@
           -0.08242,
           51.524709
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Hoxton Square Fringe",
@@ -434,7 +440,8 @@
           -0.082469,
           51.52756
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Pitfield Street Industrial",
@@ -496,7 +503,8 @@
           -0.083871,
           51.530829
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Eagle Wharf East",
@@ -558,7 +566,8 @@
           -0.089624,
           51.531556
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "St Leonards Hospital. Hoxton Street, London (Mixed Non-residential)",
@@ -680,7 +689,8 @@
           -0.079715,
           51.533363
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "130 Kingsland Road and site to the rear 130A Kingsland Road (Mixed Residential/Non-Residential)",
@@ -802,7 +812,8 @@
           -0.074553,
           51.54982
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Kingsland Road Industrial Corridor",
@@ -864,7 +875,8 @@
           -0.079467,
           51.534044
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Eagle Wharf Road (Mixed Residential/Non-Residential)",
@@ -986,7 +998,8 @@
           -0.091004,
           51.535094
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "40-43 Andrews Road and Ash Grove Bus Garage (Mixed Residential/Non-Residential)",
@@ -1076,7 +1089,8 @@
           -0.058235,
           51.536492
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "51-61 Mare Street (Mixed Residential/Non-Residential)",
@@ -1178,7 +1192,8 @@
           -0.057956,
           51.535856
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Former Rose Lipman Library and Environs, Downham Road (Mixed Residential/Non-Residential)",
@@ -1300,7 +1315,8 @@
           -0.082093,
           51.538498
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "164-170 Mare Street (Mixed Residential/Non-Residential)",
@@ -1422,7 +1438,8 @@
           -0.055272,
           51.540271
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "27-38 Well Street (Lidl) (Mixed Residential/Non-Residential)",
@@ -1492,7 +1509,8 @@
           -0.054117,
           51.540194
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "182 Mare Street (London College of Fashion) (Mixed Residential/Non-Residential)",
@@ -1614,7 +1632,8 @@
           -0.05427,
           51.540777
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Florfield Road Cluster (Mixed Residential/Non-Residential)",
@@ -1708,7 +1727,8 @@
           -0.057914,
           51.54444
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Tesco Metro, Well Street (Mixed Residential/Non-Residential)",
@@ -1822,7 +1842,8 @@
           -0.04736,
           51.543325
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Former CLR James Library, 16-22 Dalston Lane, 62 Beechwood Road (Mixed Residential/Non-Residential)",
@@ -1944,7 +1965,8 @@
           -0.072707,
           51.545923
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "1, 3, 5, 7 Dalston Lane, (Dalston Western Curve), & 1-7 Ashwin Street (Mixed Residential/Non-Residential)",
@@ -2066,7 +2088,8 @@
           -0.075253,
           51.546314
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of \u00e2\u20ac\u02dceastern curve\u00e2\u20ac\u2122 (Mixed Residential/Non-Residential)",
@@ -2188,7 +2211,8 @@
           -0.074072,
           51.546558
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "36-42 Kingsland High Street (currently McDonalds) (Mixed Residential/Non-Residential)",
@@ -2274,7 +2298,8 @@
           -0.075115,
           51.547403
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "333-337 Mare Street (Iceland Foods) and 231-237 Graham Road (Mixed Residential/Non-Residential)",
@@ -2384,7 +2409,8 @@
           -0.05632,
           51.546708
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "55 Morning Lane (Mixed Residential/Non-Residential)",
@@ -2506,7 +2532,8 @@
           -0.05458,
           51.546293
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Kingsland Shopping Centre (Mixed Residential/Non-Residential)",
@@ -2628,7 +2655,8 @@
           -0.072805,
           51.547108
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Hackney Central Overground Station and Car Park (Mixed Non-residential)",
@@ -2706,7 +2734,8 @@
           -0.056581,
           51.547674
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "339-357 Mare Street, 6-18 Amhurst Road (Marks and Spencer) (Mixed Residential/Non-Residential)",
@@ -2828,7 +2857,8 @@
           -0.055119,
           51.547305
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Ridley Road (Mixed Non-residential)",
@@ -2938,7 +2968,8 @@
           -0.072469,
           51.548508
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Travis Perkins, 111 Dalston Lane (Mixed Residential/Non-Residential)",
@@ -3056,7 +3087,8 @@
           -0.066829,
           51.548909
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Clapton Bus Garage (Mixed Residential/Non-Residential)",
@@ -3178,7 +3210,8 @@
           -0.051681,
           51.547521
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "230 Dalston Lane and Hackney Downs Station Entrance (Mixed Residential/Non-Residential)",
@@ -3252,7 +3285,8 @@
           -0.061459,
           51.548778
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Birkbeck Mews (Mixed Residential/Non-Residential)",
@@ -3314,7 +3348,8 @@
           -0.074556,
           51.549531
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Lower Clapton Health Centre (Mixed Residential/Non-Residential)",
@@ -3436,7 +3471,8 @@
           -0.050566,
           51.550652
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Tram Depot, 38-40 Upper Clapton Road (Mixed Residential/Non-Residential)",
@@ -3558,7 +3594,8 @@
           -0.056341,
           51.559652
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "71-73 Lordship Road (St Mary\u00e2\u20ac\u2122s Lodge) (Mixed Residential/Non-Residential)",
@@ -3664,7 +3701,8 @@
           -0.085564,
           51.565554
         ]
-      ]
+      ],
+      "offMarket": "high"
     },
     {
       "name": "Yard Buildings, 318 Green Lanes (Mixed Residential/Non-Residential)",
@@ -3786,7 +3824,8 @@
           -0.094938,
           51.571573
         ]
-      ]
+      ],
+      "offMarket": "high"
     }
   ]
 }

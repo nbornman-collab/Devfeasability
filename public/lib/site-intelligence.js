@@ -59,7 +59,9 @@ function renderIntelligenceT1(si) {
     { key:'value',       label:'Rent Headroom',      f:F.value,       primary: '+'+F.value.uplift_pct+'% uplift',           secondary: '£'+F.value.existing_rent+' → £'+F.value.new_build_rent+'/ft²' },
     { key:'momentum',    label:'Planning Tailwind',  f:F.momentum,    primary: F.momentum.cluster,                          secondary: F.momentum.consents+' towers consented nearby' },
     { key:'heritage',    label:'Heritage Shadow',    f:F.heritage,    primary: F.heritage.primary.name,                     secondary: 'Grade '+F.heritage.primary.grade+' · '+F.heritage.primary.dist_m+'m' },
-    { key:'acquisition', label:'Title Stack',        f:F.acquisition, primary: F.acquisition.titles === 1 ? 'Single title' : F.acquisition.titles+' titles', secondary: F.acquisition.tenure+' · '+F.acquisition.jurisdiction },
+    { key:'acquisition', label:'Title Stack', f:F.acquisition,
+      primary: (F.acquisition.titles===1?'Single title':(F.acquisition.titles||1)+' titles') + ' · ' + (F.acquisition.tenure||'Freehold'),
+      secondary: (F.acquisition.encumbrances||'No known encumbrances') },
     { key:'transport',   label:'Station Gravity',    f:F.transport,   primary: 'PTAL '+F.transport.ptal,                    secondary: F.transport.stations+' stations within 500m' },
   ];
 
@@ -109,7 +111,7 @@ function renderIntelligenceT2(si) {
     ['Rent Headroom',       '+'+F.value.uplift_pct+'% · £'+F.value.new_build_rent+'/ft²', F.value.score],
     ['Planning Tailwind',   F.momentum.cluster,                                            F.momentum.score],
     ['Heritage Shadow',     F.heritage.primary.name+' · Gr.'+F.heritage.primary.grade,    F.heritage.score],
-    ['Title Stack',         F.acquisition.tenure+' · '+F.acquisition.titles+' title',     F.acquisition.score],
+    ['Title Stack', (F.acquisition.titles||1)+' title · '+(F.acquisition.tenure||'Freehold'), F.acquisition.score],
     ['Station Gravity',     'PTAL '+F.transport.ptal+' · '+F.transport.stations+' stn',   F.transport.score],
   ].map(([label, val, sc]) => {
     const col = sc >= 7.5 ? '#059669' : sc >= 5 ? '#d97706' : '#dc2626';

@@ -64,6 +64,7 @@ const SITE_INTELLIGENCE = {
       tenure: 'Freehold',
       owner: 'Barts Charity',
       jurisdiction: 'England and Wales',
+        encumbrances: 'No known encumbrances',
       insight: 'Barts Charity - single freehold title. Charitable institutions typically transparent on disposal terms, but require trustee sign-off and Charity Commission process. Expect 18-24 months from heads of terms to completion.'
     },
     transport: {

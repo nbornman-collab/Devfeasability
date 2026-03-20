@@ -79,6 +79,7 @@ const SITE_INTELLIGENCE = {
       tenure: 'Freehold',
       owner: 'RREEF Bankside II Limited',
       jurisdiction: 'England and Wales',
+        encumbrances: 'No known encumbrances',
       insight: 'Institutional fund manager - single counterparty acquisition. Clean freehold. Disposal process may take 12-18 months for institutional sign-off, but no assembly required. RREEF (DWS Group) holds Bankside assets as long-term income vehicles - motivated seller likely only at premium or fund wind-down.'
     },
     transport: {
