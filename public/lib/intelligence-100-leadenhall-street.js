@@ -63,6 +63,13 @@ const SITE_INTELLIGENCE = {
       },
       insight: 'City cluster designation explicitly permits tall buildings. Main heritage constraint is St Paul\'s viewing corridors - check alignment at this specific location. Wren churches require daylight/sunlight assessment but not height restriction per se.'
     },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 8.5,
+      verdict: 'EC3 cluster. Leadenhall Building (Cheesegrater, 2014) adjacent. Monument viewing corridor: confirm alignment. No CA on site. Cluster designation is the primary planning context.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 5.0, weight: 1.5,

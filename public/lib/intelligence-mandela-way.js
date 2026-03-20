@@ -20,6 +20,13 @@ const SITE_INTELLIGENCE = {
     value: { label: 'Rent Headroom', score: 8.5, weight: 2.0, insight: 'Storage/distribution at EPC Band D - functionally obsolete low-yield use. Conversion to residential or Grade A industrial intensification (stacked logistics) both viable. At SE1 residential values of £700-800/sqft NSA, even a modest 8F scheme creates substantial GDV.' },
     momentum: { label: 'Planning Tailwind', score: 7.0, weight: 2.0, precedents: [{"name": "Loman Street SE1", "ref": "Southwark ref 20/AP/1537", "desc": "Mixed-use 12F with industrial floorspace retained at ground. Bermondsey. Confirms LPA approach to industrial intensification with ground floor retention."}, {"name": "Bricklayers Arms SE1", "ref": "Southwark ref 15/AP/3000", "desc": "Industrial-to-residential conversion, 8F, Borough. Precedent for change of use from industrial in inner SE1."}], insight: 'Bermondsey/Borough area has active LPA support for industrial intensification. Southwark Industrial Policy requires like-for-like industrial replacement in inner industrial zones but allows additional residential above. No OA but the Borough/Bermondsey cluster has seen consistent approval of mixed-use schemes.' },
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: 'Industrial zone - no heritage constraints, no conservation area. SE1 5SS has no listed buildings in the immediate vicinity.' },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: 'Industrial estate - likely multiple unit leaseholders with single freeholder. 6,968m² storage at Band D suggests ageing stock unlikely to be actively managing. Multiple tenants complicate vacant possession.' },
     transport: { label: 'Station Gravity', score: 7.5, weight: 0.5, ptal: '3', insight: 'PTAL 3-4. London Bridge (Northern/Jubilee/National Rail) 1.2km. Borough Market 900m. Bermondsey station (Jubilee) 600m. Decent inner SE1 connectivity for residential.' }
   }

@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"East Dulwich residential SE22","ref":"Southwark ref 20/AP/2400","desc":"7F residential, East Dulwich. 400m east. Height precedent."},{"name":"Dulwich Hospital conversion","ref":"Southwark ref 16/AP/4200","desc":"Healthcare-to-residential, SE22. Confirms LPA appetite for institutional site conversion in this catchment."}],
       insight: "Football stadium redevelopment is politically complex but Southwark has approved comparable schemes. Community engagement critical. Mixed-use with retained stadium is the viable route." },
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: "Champion Hill has local sporting heritage. Victorian terraces nearby. Heritage manageable at 6-8F." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 5.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Dulwich Hamlet FC - community/semi-professional club. Stadium redevelopment requires club agreement and community consultation. Politically complex. Score reflects acquisition risk." },
     transport: { label: 'Station Gravity', score: 6.0, weight: 0.5, ptal: '2', insight: "PTAL 2. East Dulwich station 500m. Bus-served. Lower transport - residential appropriate." }
   }

@@ -63,6 +63,13 @@ const SITE_INTELLIGENCE = {
       },
       insight: 'City cluster designation explicitly permits tall buildings. Main heritage constraint is St Paul\'s viewing corridors - check alignment at this specific location. Wren churches require daylight/sunlight assessment but not height restriction per se.'
     },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 8.5,
+      verdict: 'EC2 Tall Building Zone. 22 Bishopsgate 278m directly adjacent confirms cluster consent appetite. No direct CA. Design quality within cluster context is the test.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 5.5, weight: 1.5,

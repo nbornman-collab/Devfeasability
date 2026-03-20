@@ -133,3 +133,92 @@ function renderIntelligenceT2(si) {
 
 // ── Export ───────────────────────────────────────────────────────────────────
 if (typeof module !== 'undefined') module.exports = { computeSiteScore, renderIntelligenceT1, renderIntelligenceT2, scoreRingSVG };
+
+// ── Heritage Risk Panel ──────────────────────────────────────────────────────
+function renderHeritageRisk(si) {
+  const hf = si.heritage_framework;
+  if (!hf) return '';
+  const TIER_COLOR = { blocking:'#dc2626', navigable:'#ea580c', manageable:'#d97706', clean:'#059669' };
+  const TIER_BG    = { blocking:'#fef2f2', navigable:'#fff7ed', manageable:'#fffbeb', clean:'#f0fdf4' };
+  const TIER_LABEL = { blocking:'Blocking Constraint', navigable:'Navigable - Strategy Required', manageable:'Manageable', clean:'Clean Run' };
+  const col = TIER_COLOR[hf.tier] || '#6b7280';
+  const bg  = TIER_BG[hf.tier]   || '#f9fafb';
+  return `<div style="background:${bg};border:1px solid ${col}33;border-radius:8px;padding:12px 14px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font:700 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:${col}">Heritage Risk</span>
+      <span style="font:700 11px 'Inter',sans-serif;color:${col}">${TIER_LABEL[hf.tier]}</span>
+    </div>
+    <div style="font:400 11px/1.6 'Inter',sans-serif;color:#374151;margin-bottom:8px">${hf.verdict}</div>
+    <div style="border-top:1px solid ${col}22;padding-top:7px">
+      <div style="font:600 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#9ca3af;margin-bottom:4px">Rocketship Conditions</div>
+      <div style="font:400 10px/1.5 'Inter',sans-serif;color:#6b7280">${hf.rocketship}</div>
+    </div>
+  </div>`;
+}
+
+// ── Site Strategy Panel ──────────────────────────────────────────────────────
+function renderSiteStrategy(si) {
+  const hf = si.heritage_framework;
+  const tier = hf ? hf.tier : 'clean';
+  // Derive viable strategies from heritage tier + site characteristics
+  const F = si.factors;
+  const skyScore = F && F.sky ? F.sky.score : 7;
+  const herScore = F && F.heritage ? F.heritage.score : 7;
+  const strategies = [];
+  if (tier === 'blocking') {
+    strategies.push({ label:'Adaptive Reuse', icon:'♻', why:'Listed fabric must be retained. Re-engineer the existing building for new use. Maximum planning certainty.', carbon:'Lowest embodied carbon. Retains existing structure.' });
+    strategies.push({ label:'Partial Demolition + Extension', icon:'◧', why:'Remove later/poor-quality additions. Retain historic core. Negotiate heritage benefit with LPA.', carbon:'Medium - demolition of later additions only.' });
+  } else if (tier === 'navigable') {
+    strategies.push({ label:'Facade Retention', icon:'◫', why:'Retain historic street-level facade. New structure behind and above. Standard approach for navigable heritage settings.', carbon:'Moderate - new structure behind retained skin.' });
+    strategies.push({ label:'Adaptive Reuse', icon:'♻', why:'Lowest risk route given heritage sensitivity. Re-engineer existing building. Design uplift through contemporary intervention.', carbon:'Lowest embodied carbon option.' });
+    if (skyScore >= 7) strategies.push({ label:'Set-back Upper Floors', icon:'▲', why:'Step back from parapet at upper levels to reduce visual impact on listed setting. Enables additional storeys.', carbon:'Higher - full new build above retained lower floors.' });
+  } else if (tier === 'manageable') {
+    if (skyScore >= 7.5) strategies.push({ label:'New Build + Contextual Design', icon:'■', why:'Full redevelopment viable with strong contextual design response. Heritage Impact Assessment required. Design code must address character.', carbon:'Higher embodied carbon - offset by long operational life.' });
+    strategies.push({ label:'Set-back Upper Floors', icon:'▲', why:'Retain/respect street-level character. Build above with contemporary set-back floors. NDHA/CA-sensitive approach.', carbon:'Medium - lower floors retained or rebuilt to match.' });
+    strategies.push({ label:'Adaptive Reuse + Extension', icon:'◩', why:'Gut-refurb existing fabric and extend upward. Strong sustainability narrative for planning committee.', carbon:'Lowest option for this tier - retains existing structure.' });
+  } else {
+    if (skyScore >= 8) strategies.push({ label:'Full Redevelopment', icon:'■', why:'Clean site - maximum massing viable. No heritage constraint. Height and form limited only by local plan policy and design quality.', carbon:'Higher embodied carbon - offset by long operational life and performance.' });
+    strategies.push({ label:'New Build - Phased', icon:'▣', why:'Phase delivery to manage cashflow and de-risk. Clean site allows flexible phasing strategy.', carbon:'Full new build - consider CLT or low-carbon structural frame.' });
+    if (herScore >= 9) strategies.push({ label:'Adaptive Reuse', icon:'♻', why:'Even on a clean site, reuse may be viable if existing structure is sound. Strong ESG narrative.', carbon:'Best-in-class embodied carbon position.' });
+  }
+  const cards = strategies.map(s =>
+    `<div style="background:#fff;border:1px solid #e5e7eb;border-radius:7px;padding:10px 12px;margin-bottom:7px">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
+        <span style="font-size:14px">${s.icon}</span>
+        <span style="font:700 12px 'Inter',sans-serif;color:#0c0f1a">${s.label}</span>
+      </div>
+      <div style="font:400 10px/1.5 'Inter',sans-serif;color:#374151;margin-bottom:5px">${s.why}</div>
+      <div style="font:500 9px 'Inter',sans-serif;color:#059669;text-transform:uppercase;letter-spacing:.5px">Carbon: ${s.carbon}</div>
+    </div>`
+  ).join('');
+  return `<div>
+    <div style="font:500 10px 'Inter',sans-serif;color:#6b7280;margin-bottom:10px">Viable development strategies for this site based on heritage tier, height potential and planning context.</div>
+    ${cards}
+  </div>`;
+}
+
+// ── No Go / Amber / Green verdict ────────────────────────────────────────────
+function renderVerdict(si) {
+  const score = computeSiteScore(si);
+  const hf = si.heritage_framework;
+  const tier = hf ? hf.tier : 'clean';
+  let verdict, color, bg, border, icon;
+  if (tier === 'blocking' && score < 50) {
+    verdict = 'No Go'; color='#dc2626'; bg='#fef2f2'; border='#fca5a5'; icon='✕';
+  } else if (score < 55 || tier === 'blocking') {
+    verdict = 'Due Diligence Required'; color='#b45309'; bg='#fffbeb'; border='#fcd34d'; icon='⚠';
+  } else if (score < 70 || tier === 'navigable') {
+    verdict = 'Amber - Proceed with Strategy'; color='#d97706'; bg='#fffbeb'; border='#fcd34d'; icon='◐';
+  } else if (score < 80) {
+    verdict = 'Green - Strong Opportunity'; color='#059669'; bg='#f0fdf4'; border='#86efac'; icon='●';
+  } else {
+    verdict = 'Green - Top Opportunity'; color='#059669'; bg='#ecfdf5'; border='#6ee7b7'; icon='✓';
+  }
+  return `<div style="background:${bg};border:2px solid ${border};border-radius:10px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px">
+    <span style="font:900 22px 'Inter',sans-serif;color:${color}">${icon}</span>
+    <div>
+      <div style="font:800 15px 'Inter',sans-serif;color:${color};letter-spacing:-0.3px">${verdict}</div>
+      <div style="font:400 10px 'Inter',sans-serif;color:#6b7280;margin-top:2px">Score ${score}/100 · Heritage: ${tier.charAt(0).toUpperCase()+tier.slice(1)}</div>
+    </div>
+  </div>`;
+}

@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"One Bankside","ref":"Southwark ref 16/AP/3450","desc":"10F luxury residential, Bankside. 150m east. Direct height/value precedent."},{"name":"Bankside 123 (Stanhope)","ref":"Southwark ref 12/AP/1482","desc":"10F CAZ office, 200m south. Confirms commercial intensification at Bankside address."}],
       insight: "OA + CAZ + Tate Modern adjacency = maximum momentum. 77 major apps in the area. Every major London developer knows this address." },
     heritage: { label: 'Heritage Shadow', score: 6.5, weight: 1.5, insight: "Bankside Conservation Area. Tate Modern (listed). Shakespeare Globe (Grade I) 200m. Heritage is a real constraint - but not fatal. Design quality is the currency." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 6.5,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Bankside address - institutional freehold. 77 major area apps confirms intense developer interest. High acquisition price reflecting development potential." },
     transport: { label: 'Station Gravity', score: 9.5, weight: 0.5, ptal: '6a', insight: "PTAL 6a. Blackfriars (Elizabeth/Thameslink) 300m. Southwark (Jubilee) 400m. London Bridge 700m. Waterloo 800m." }
   }

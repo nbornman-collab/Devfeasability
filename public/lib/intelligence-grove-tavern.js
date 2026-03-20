@@ -43,6 +43,13 @@ const SITE_INTELLIGENCE = {
       score: 8.5, weight: 1.5,
       insight: 'No conservation area, no listed buildings in immediate vicinity. Lordship Lane is a typical London high street - no special heritage designation. Clean heritage profile.'
     },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 8.5,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 7.0, weight: 1.5,

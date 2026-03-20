@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Borough High Street mixed-use","ref":"Southwark ref 19/AP/2300","desc":"8F residential/commercial. 100m north. Direct precedent."},{"name":"One The Elephant","ref":"Southwark ref 12/AP/1562","desc":"37F residential, E&C. 400m south. Height context."}],
       insight: "Borough High Street corridor. Active development market. LPA has approved 8-12F within 300m." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "Borough High Street Conservation Area. Some heritage sensitivity. Manageable with quality design." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 7.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Office block - institutional freehold likely. Clean acquisition." },
     transport: { label: 'Station Gravity', score: 8.5, weight: 0.5, ptal: '5', insight: "PTAL 5. Borough (Northern) 200m. London Bridge 600m. E&C 400m." }
   }

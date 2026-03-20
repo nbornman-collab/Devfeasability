@@ -63,6 +63,13 @@ const SITE_INTELLIGENCE = {
       },
       insight: 'City cluster designation explicitly permits tall buildings. Main heritage constraint is St Paul\'s viewing corridors - check alignment at this specific location. Wren churches require daylight/sunlight assessment but not height restriction per se.'
     },
+
+    heritage_framework: {
+      tier: 'navigable',
+      score: 5.5,
+      verdict: 'Cannon Street Station Grade II* listed - but air rights are ABOVE the listed structure. Heritage argument centres on how the oversite relates to the station form. Cannon Place (2010, 9F) is direct precedent for viable delivery.',
+      rocketship: 'Rocketship path: commission heritage consultant before pre-app. Frame scheme as positive heritage intervention. Appeal to NPPF para 202-208 heritage balance test.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 4.5, weight: 1.5,

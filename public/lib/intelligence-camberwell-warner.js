@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Camberwell Station Road","ref":"Southwark ref 18/AP/3600","desc":"9F residential. Direct precedent."},{"name":"Denmark Hill residential","ref":"Southwark ref 21/AP/1200","desc":"8F. 400m south."}],
       insight: "Station-adjacent. LPA supports residential near stations." },
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: "Victorian railway. Some heritage. Manageable." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Likely Network Rail or industrial freeholder." },
     transport: { label: 'Station Gravity', score: 7.5, weight: 0.5, ptal: '3', insight: "PTAL 3. Denmark Hill 200m." }
   }

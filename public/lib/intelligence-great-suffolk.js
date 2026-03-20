@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"240 Blackfriars Road","ref":"Southwark ref 11/AP/2700","desc":"27F mixed-use, 200m west. Major height precedent."},{"name":"Bankside 123","ref":"Southwark ref 12/AP/1482","desc":"10F office, 300m north. CAZ commercial intensification."}],
       insight: "Bankside/Borough corridor. CAZ-adjacent. Active developer market." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "Borough High Street Conservation Area 400m. Some heritage. Manageable." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Office block - institutional. Standard disposal." },
     transport: { label: 'Station Gravity', score: 9.0, weight: 0.5, ptal: '5', insight: "PTAL 5. Southwark (Jubilee) 300m. Waterloo 600m. Blackfriars 500m. Excellent." }
   }

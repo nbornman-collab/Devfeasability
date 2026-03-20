@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"One The Elephant","ref":"Southwark ref 12/AP/1562","desc":"37F residential, E&C. Adjacent. Major height precedent."},{"name":"Newington Butts residential","ref":"Southwark ref 17/AP/2800","desc":"12F residential. E&C approach. Direct precedent."}],
       insight: "Elephant & Castle regeneration zone. Maximum planning momentum for residential." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "E&C conservation area adjacent. Salvation Army building may have local interest. Manageable." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Salvation Army - charitable trust. Institutional disposal requires trustee approval. Achievable if SA decides to relocate." },
     transport: { label: 'Station Gravity', score: 8.5, weight: 0.5, ptal: '5', insight: "PTAL 5. Elephant & Castle (Northern/Bakerloo) 200m. Excellent transport." }
   }

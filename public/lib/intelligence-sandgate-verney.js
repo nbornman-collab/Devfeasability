@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"OKR corridor residential","ref":"Southwark ref 17/AP/3885","desc":"34F, OKR."},{"name":"Bermondsey industrial conversion","ref":"Southwark ref 20/AP/1800","desc":"Mixed-use on industrial land."}],
       insight: "OKR OA adjacent. Strong corridor momentum." },
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "No heritage in industrial zone." },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Industrial estate. Multiple tenants." },
     transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Bus-served. OKR BLE potential." }
   }

@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Malt Street OKR","ref":"Southwark ref 17/AP/3885","desc":"34F residential, OKR. Height precedent for this corridor 400m north."},{"name":"Bermondsey mixed-use industrial","ref":"Southwark ref 20/AP/1800","desc":"Industrial intensification with residential, 500m east. Precedent for mixed-use on former industrial land."}],
       insight: "OKR Opportunity Area. Glengall/Latona is specifically identified in the OKR OAPF for residential-led regeneration. Maximum planning tailwind." },
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "OKR industrial corridor - no heritage constraints." },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Industrial estate - multiple leaseholders. Freehold assembly required. LPA may support CPO for OA sites. Score reflects ownership complexity." },
     transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Bus-served OKR. Proposed BLE station 600m. If BLE: PTAL upgrades to 5." }
   }

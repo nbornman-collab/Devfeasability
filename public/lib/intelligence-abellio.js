@@ -20,6 +20,13 @@ const SITE_INTELLIGENCE = {
     value: { label: 'Rent Headroom', score: 8.0, weight: 2.0, insight: 'Bus depot land value driven by alternative use value, not operational yield. TfL/Abellio bus contracts are routinely restructured. SE17 residential at £650-750/sqft. A 12F scheme on 1.14ha generates £60-80M GDV - transformational uplift on a bus depot.' },
     momentum: { label: 'Planning Tailwind', score: 7.5, weight: 2.0, precedents: [{"name": "Elephant Park (Lend Lease)", "ref": "Southwark ref 12/AP/1092", "desc": "25-acre regeneration, 2,469 homes, Elephant & Castle. Sets precedent for large-site residential development in SE17 corridor."}, {"name": "Walworth Road residential", "ref": "Southwark ref 18/AP/3200", "desc": "8F residential above commercial, Walworth Road. Confirms LPA appetite for residential intensification in SE17."}], insight: 'SE17 regeneration momentum driven by Elephant & Castle masterplan 300m north. Southwark actively supports residential intensification of under-used industrial and transport land. 1 major application signals prior development interest.' },
     heritage: { label: 'Heritage Shadow', score: 8.5, weight: 1.5, insight: 'No heritage constraints. SE17 industrial/residential street - no conservation area, no listed buildings within 400m.' },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 8.5,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: 'Operational bus depot - Abellio London (subsidiary of NS Group, Dutch state railway). Not a typical property acquisition - requires agreement with bus operator to relocate operations. This is the primary risk: vacant possession is possible but operationally complex and costly.' },
     transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: 'PTAL 4. Walworth Road buses. Elephant & Castle (Northern/Bakerloo) 700m. Kennington (Northern) 600m. Good SE17 connectivity.' }
   }

@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Camberwell Station Road","ref":"Southwark ref 18/AP/3600","desc":"9F residential, Camberwell. 500m south. Height precedent for the SE5 corridor."},{"name":"Walworth Road residential","ref":"Southwark ref 19/AP/2800","desc":"8F residential, 700m north. Confirms residential intensification in SE5/SE17 border area."}],
       insight: "Camberwell regeneration corridor. LPA supports residential intensification of under-used industrial land but may require industrial retention at ground floor (Southwark Industrial Policy)." },
     heritage: { label: 'Heritage Shadow', score: 8.5, weight: 1.5, insight: "SE5 industrial zone - no heritage constraints. Clean profile." },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 8.5,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Business park - multiple unit leaseholders under single freeholder. Freehold acquisition required then managed vacancy. Complex but achievable." },
     transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Denmark Hill (Overground/Thameslink) 800m. Buses. Lower transport score - residential-appropriate." }
   }

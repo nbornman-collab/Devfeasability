@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Peckham Road SE5 residential","ref":"Southwark ref 20/AP/1200","desc":"8F residential, Peckham Road. Confirms LPA appetite for residential intensification on estate car parks."},{"name":"Southampton Way Estate","ref":"Southwark ref 18/AP/3400","desc":"Estate infill residential, SE5. Estate car park redevelopment precedent."}],
       insight: "Southwark actively pursues estate car park intensification. 1 major application confirms LPA has evaluated this site." },
     heritage: { label: 'Heritage Shadow', score: 8.5, weight: 1.5, insight: "SE5 residential area - no heritage constraints within 300m." },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 8.5,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 7.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Estate car park - likely Southwark Council freehold. Council disposals require cabinet approval but councils are active disposers. 29 planning apps suggests established engagement." },
     transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Peckham Rye (Overground) 600m. Denmark Hill (Overground/Thameslink) 700m. Good SE5 connectivity." }
   }

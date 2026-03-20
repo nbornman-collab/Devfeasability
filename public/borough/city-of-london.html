@@ -147,7 +147,7 @@ function buildCard(s, rank){
       <div class="metric"><div class="val">${(s.plot/10000).toFixed(1)}ha</div><div class="lbl">Plot</div></div>
     </div>
     <div class="action-row">
-      ${hasT1 ? `<a href="${t1url}" class="btn" onclick="event.stopPropagation()">T1 Scout &rarr;</a>` : `<span class="btn outline" style="cursor:default">Coming Soon</span>`}
+      ${hasT1 ? `<a href="${t1url}" class="btn" onclick="event.stopPropagation()">T1 Scout &rarr;</a>` : `<span class="btn outline" style="cursor:default">In Pipeline</span>`}
     </div>
   </div>`;
 }
@@ -168,7 +168,7 @@ function buildPopup(s, rank){
         <div class="popup-stat"><div class="v">${s.mh||'?'}m</div><div class="l">Max Ht</div></div>
       </div>
       <div class="popup-actions">
-        ${hasT1 ? `<a href="${t1url}" class="p-t1">T1 Scout &rarr;</a>` : `<a href="#" class="p-t2" style="cursor:default">Coming Soon</a>`}
+        ${hasT1 ? `<a href="${t1url}" class="p-t1">T1 Scout &rarr;</a>` : `<a href="#" class="p-t2" style="cursor:default">In Pipeline</a>`}
       </div>
     </div>
   </div>`;

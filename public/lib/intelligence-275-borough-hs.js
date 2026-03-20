@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Hop Exchange redevelopment SE1","ref":"Southwark ref 14/AP/2800","desc":"9F office, Borough High Street. 200m north. Direct height precedent on the same street."},{"name":"One The Elephant","ref":"Southwark ref 12/AP/1562","desc":"37F residential, Elephant & Castle approach. Establishes tall building precedent on the Borough/E&C corridor."}],
       insight: "CAZ + Borough High Street + Shard proximity = maximum planning tailwind for commercial. Education use (EPC Band E) signals an institutional user, not active developer. This is a sleeping asset." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "Borough High Street Conservation Area. Southwark Cathedral 400m. George Inn (Grade I) 100m north - direct heritage neighbour. Design quality critical. LVMF views analysis likely required." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 7.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Education institution - university or similar. Institutional disposal requires board approval but achievable. EPC Band E motivates disposal." },
     transport: { label: 'Station Gravity', score: 9.0, weight: 0.5, ptal: '5', insight: "PTAL 5. Borough (Northern) 200m. London Bridge 500m. Waterloo 1km. Excellent Borough High Street connectivity." }
   }

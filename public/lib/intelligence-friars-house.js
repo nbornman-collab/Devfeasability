@@ -64,6 +64,13 @@ const SITE_INTELLIGENCE = {
       secondary: { name: 'Blackfriars Station', grade: 'II', dist_m: 350 },
       insight: 'Relatively clean heritage profile for a central London site. No listed buildings immediately adjacent. Blackfriars Station (Grade II) is 350m north - setting impact manageable at 12-14F. Southwark Conservation Areas at Bankside are 400m+ east. LVMF: no protected view directly through this site. Heritage Impact Assessment required at RIBA Stage 2 but not expected to be a material constraint.'
     },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 8.0,
+      verdict: 'Blackfriars Station (GrII) 350m, no on-site listing. SE1 design-led context. Quality architecture is the currency. Heritage not a primary blocker.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 5.5, weight: 1.5,

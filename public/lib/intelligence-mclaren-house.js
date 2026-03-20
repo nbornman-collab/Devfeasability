@@ -20,6 +20,13 @@ const SITE_INTELLIGENCE = {
     value: { label: 'Rent Headroom', score: 8.0, weight: 2.0, insight: 'University/student accommodation at Band C - below-market yield. CAZ commercial or Build-to-Rent residential both generate strong GDV uplift at this address. SE1 office ERV at £65-75/sqft for Grade A new-build.' },
     momentum: { label: 'Planning Tailwind', score: 7.5, weight: 2.0, precedents: [{"name": "240 Blackfriars Road", "ref": "Southwark ref 11/AP/2700", "desc": "27F mixed-use, 300m north. Height precedent for mid-Blackfriars Road corridor approaching St George's Circus."}, {"name": "Newington Butts residential", "ref": "Southwark ref 17/AP/2800", "desc": "12F residential, SE1. Establishes residential use at height on the Elephant & Castle approach."}], insight: 'CAZ + proximity to both Blackfriars corridor and E&C regeneration zone gives good planning momentum. No OA but CAZ designation alone supports commercial intensification. LSBU presence means potential for education-anchored mixed-use consent.' },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: 'St George`s Circus is a heritage gateway - circular road layout has conservation interest. Listed buildings within 300m: Bethlem Museum (Grade II). Heritage sensitivity present but not at a level to preclude 12-14F.' },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 7.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: 'LSBU-occupied - likely either LSBU-owned or institutional landlord with education lease. University property disposal is achievable but requires LSBU agreement. Single freehold likely.' },
     transport: { label: 'Station Gravity', score: 8.5, weight: 0.5, ptal: '5', insight: 'PTAL 5. Elephant & Castle (Northern/Bakerloo) 600m. Waterloo (multiple Tube/Rail) 700m. Lambeth North (Bakerloo) 400m. Strong SE1 transport position.' }
   }

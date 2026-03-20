@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Dulwich Road residential","ref":"Southwark ref 20/AP/2400","desc":"7F residential, 400m north. Height precedent for East Dulwich high street sites."},{"name":"Lordship Lane mixed-use","ref":"Southwark ref 19/AP/1100","desc":"6F residential above commercial, 300m south. Confirms residential conversion of commercial sites in SE22."}],
       insight: "East Dulwich is an active residential conversion market. LPA has approved 6-8F residential on comparable commercial sites. No OA but strong local residential demand drives planning cooperation." },
     heritage: { label: 'Heritage Shadow', score: 8.5, weight: 1.5, insight: "No conservation area. No listed buildings within 300m. Clean heritage profile for East Dulwich." },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 8.5,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 8.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Kwik Fit (Itochu) + Gibbs & Dandy (Saint-Gobain) - two corporate tenants likely under a single freeholder or investment fund. Both are national chains that can relocate. Acquisition achievable." },
     transport: { label: 'Station Gravity', score: 6.5, weight: 0.5, ptal: '3', insight: "PTAL 3. East Dulwich station (Overground) 400m. Bus-served. Acceptable for residential." }
   }

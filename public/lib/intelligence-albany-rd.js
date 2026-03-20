@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Walworth Road residential SE17","ref":"Southwark ref 19/AP/2800","desc":"8F residential. 300m north. Height precedent."},{"name":"Aylesbury Estate","ref":"Southwark ref 14/AP/3844","desc":"Major regeneration 400m east. Planning context for residential intensification in SE5/SE17."}],
       insight: "SE5/SE17 corridor with Aylesbury regeneration driving area improvement. LPA supportive of residential intensification." },
     heritage: { label: 'Heritage Shadow', score: 8.0, weight: 1.5, insight: "No heritage constraints in SE5 corridor." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 8.0,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 7.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Commercial building - likely single freehold. Clean acquisition." },
     transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Elephant & Castle 800m. Denmark Hill 700m. Good connectivity." }
   }

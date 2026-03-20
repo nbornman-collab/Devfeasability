@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"New Cross Gate mixed use","ref":"Lewisham ref 17/AP/3800","desc":"10F residential-led, SE14. 300m south. Cross-boundary height precedent."},{"name":"Deptford Market Yard","ref":"Lewisham ref 14/AP/4100","desc":"Industrial-to-residential conversion, SE8. Establishes residential use on former industrial land in Deptford."}],
       insight: "4 major planning applications is very high activity for a site this size - suggests either developer optioning or council-led regeneration interest. New Cross/Deptford is an active regeneration corridor." },
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "No heritage constraints in SE8 industrial zone. Clean heritage profile." },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Depot - likely single owner (council or operator). 4 major apps suggests willing seller or active disposal process. Score reflects uncertainty on current ownership." },
     transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. New Cross Gate (Overground/National Rail) 600m. Buses. Moderate connectivity for residential." }
   }

@@ -452,7 +452,9 @@ function svExpand(){
       <span class="rp-badge" id="rp-intel-score">—/100</span>
     </div>
     <div class="rp-section-body">
+      <div id="verdict-mount"></div>
       <div id="intelligence-mount"></div>
+      <div id="heritage-risk-mount" style="margin-top:10px"></div>
       <!-- compact fallback populated by JS -->
     </div>
   </div>
@@ -521,6 +523,15 @@ function svExpand(){
     <div class="rp-section-body" id="flags-body"></div>
   </div>
 
+  <!-- Site Strategy -->
+  <div class="rp-section">
+    <div class="rp-section-hd">
+      <h3>Development Strategy</h3>
+      <span class="rp-badge" id="strategy-badge">D/A Analysis</span>
+    </div>
+    <div class="rp-section-body" id="strategy-mount"></div>
+  </div>
+
   <!-- Height context -->
   <div class="rp-section">
     <div class="rp-section-hd"><h3>Height Context</h3></div>
@@ -569,12 +580,23 @@ const EXISTING_EUV = 4500000;
   const scoreEls = ['hero-score','rp-score-num'];
   scoreEls.forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=score;});
   document.getElementById('rp-intel-score').textContent = score+'/100';
+  // Verdict panel
+  const vm=document.getElementById('verdict-mount');
+  if(vm && typeof renderVerdict==='function') vm.innerHTML=renderVerdict(SITE_INTELLIGENCE);
+  // Heritage risk panel
+  const hrm=document.getElementById('heritage-risk-mount');
+  if(hrm && typeof renderHeritageRisk==='function') hrm.innerHTML=renderHeritageRisk(SITE_INTELLIGENCE);
+  // Strategy panel
+  setTimeout(function(){
+    const sm=document.getElementById('strategy-mount');
+    if(sm && typeof renderSiteStrategy==='function') sm.innerHTML=renderSiteStrategy(SITE_INTELLIGENCE);
+  },50);
   const label = score>=85?'Top opportunity':score>=70?'Strong opportunity':score>=55?'Credible opportunity':'Due diligence required';
   ['hero-score-badge','rp-score-badge'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=label;});
 
   // Compact 6-factor display - score bar + number, no body copy
   const FACTOR_LABELS = {
-    sky:'Available Sky', value:'Rent Headroom', momentum:'Planning Tailwind',
+    sky:'Available Sky', value:'Rent Headroom', momentum:'Planning Appetite',
     heritage:'Heritage Shadow', acquisition:'Title Stack', transport:'Station Gravity'
   };
   const WEIGHTS = {sky:2.5,value:2.0,momentum:2.0,heritage:1.5,acquisition:1.5,transport:0.5};

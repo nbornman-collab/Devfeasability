@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Walworth residential SE17","ref":"Southwark ref 19/AP/2800","desc":"7F residential, SE17. 500m west. Confirms LPA appetite for residential on garage/industrial sites in SE17."},{"name":"Elephant Park","ref":"Southwark ref 12/AP/1092","desc":"25-acre regeneration, 500m north. Demonstrates SE17 strategic residential uplift."}],
       insight: "SE17 residential intensification actively supported by Southwark LPA. Garage sites are prioritised for housing in the SHLAA. 1 major planning application confirms active developer interest." },
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "No heritage constraints in SE17 industrial/residential area." },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 8.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Garages typically single freehold - council or private landlord. 46 planning apps suggests long-established site with clear ownership. Clean acquisition route." },
     transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Elephant & Castle 700m. Walworth Road buses. Good SE17 connectivity for residential." }
   }

@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"240 Blackfriars Road","ref":"Southwark ref 11/AP/2700","desc":"27F mixed-use, 300m east. Height precedent."},{"name":"One Blackfriars","ref":"Southwark ref 11/AP/2927","desc":"50F/163m residential. 200m south. Maximum height precedent for this micro-area."}],
       insight: "South Bank/Blackfriars corridor. OA + CAZ adjacent. Maximum developer activity." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "South Bank is design-led. ITV/IBM South Bank heritage. LVMF views possible. Design quality is the currency." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'South Bank design context. Potential LVMF adjacency - confirm alignment before scheme. ITV building context. Design quality is the primary planning currency.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "South Bank office - institutional freehold. Premium pricing reflects development potential." },
     transport: { label: 'Station Gravity', score: 9.5, weight: 0.5, ptal: '6a', insight: "PTAL 6a. Blackfriars (Elizabeth/Thameslink) 200m. Waterloo 400m. Southwark 500m. Exceptional." }
   }

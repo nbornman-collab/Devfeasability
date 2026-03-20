@@ -65,6 +65,13 @@ const SITE_INTELLIGENCE = {
       },
       insight: 'Score 6.0 - constrained, not blocked. Statutory heritage is manageable: OXO Tower (Grade II) is 200m west at low height, Borough Market 400m SE. The real constraint is the building itself: Victorian stock brick ex-industrial fabric on Southwark Street, which Southwark Council designates as NDHA under Local Plan Policy P8. The precedent is clear and positive - Liberty at 15 Southwark Street (same street, 2021 consent) achieved heritage restoration + office intensification. What IS achievable: 2-3 set-back floors above the retained parapet line, boutique office character, rooftop terrace. Additional constraint confirmed: LVMF Wider Setting Consultation Area 1A.2 (Alexandra Palace to St Paul\'s) - views assessment required. At 8-12F this is unlikely to be blocking. What is NOT supported by precedent: full clearance and rebuild at maximum plot coverage. Design strategy must lead with the Victorian brick character - not fight it.'
     },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'NDHA character. Victorian facade likely retained at lower floors. Set-back upper floors achievable. OA designation provides GLA backing. No on-site listed building - OXO Tower (GrII, 200m) is context not constraint.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 7.5, weight: 1.5,

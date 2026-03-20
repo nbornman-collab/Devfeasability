@@ -159,7 +159,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 <script>
 // Scoring: utilisation ratio × PTAL weight × size sweet spot × availability multiplier
 // ── One definitive scoring system — same 6 factors as SITE_INTELLIGENCE ──────
-// Available Sky (×2.5), Rent Headroom (×2.0), Planning Tailwind (×2.0),
+// Available Sky (×2.5), Rent Headroom (×2.0), Planning Appetite (×2.0),
 // Heritage Shadow (×1.5), Title Stack (×1.5), Station Gravity (×0.5)
 function computeScore(s){
   // Available Sky: how much of the precedent envelope is unused?
@@ -169,7 +169,7 @@ function computeScore(s){
   // Rent Headroom: type proxy for value gap (industrial/warehouse = highest conversion upside)
   const rentGap = {Industrial:9,Warehouse:8.5,Office:7,Commercial:6.5,Retail:5.5}[s.type] || 6;
 
-  // Planning Tailwind: area momentum + masterplan penalty
+  // Planning Appetite: area momentum + masterplan penalty
   const areaMom = {Bankside:9,'Elephant & Castle':8.5,Hackney:8,Borough:8,'Canada Water':7.5,Rotherhithe:6.5,Peckham:7}[s.area] || 7;
   const momentum = s.activeMasterplan ? areaMom * 0.5 : areaMom; // active masterplan = constrained not free market
 

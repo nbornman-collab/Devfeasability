@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"240 Blackfriars Road","ref":"Southwark ref 11/AP/2700","desc":"27F, 200m east."},{"name":"Sea Containers House","ref":"Southwark ref 16/AP/4200","desc":"14F, South Bank. Height precedent."}],
       insight: "Station oversite development is TfL priority. Maximum planning momentum." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "South Bank area. Some heritage. Manageable." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 5.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "TfL/Network Rail. Station oversite requires transport authority agreement. Complex." },
     transport: { label: 'Station Gravity', score: 10.0, weight: 0.5, ptal: '6b', insight: "PTAL 6b. Southwark (Jubilee) 0m - direct station oversite. Waterloo 300m. Exceptional." }
   }

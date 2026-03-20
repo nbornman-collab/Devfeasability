@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Bermondsey residential SE1","ref":"Southwark ref 19/AP/3000","desc":"10F residential, Bermondsey. 300m north. Height precedent for this Bermondsey location."},{"name":"Loman Street SE1","ref":"Southwark ref 20/AP/1537","desc":"Mixed-use 12F with industrial retention, SE1. Precedent for industrial intensification in inner SE1."}],
       insight: "Bermondsey has active residential conversion of industrial land. Borough/Bermondsey cluster has consistent LPA approvals for intensification." },
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: "Bermondsey Abbey Conservation Area is 500m - some heritage sensitivity. Manageable at 10-12F with quality design." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Trading estate - likely multiple industrial unit leaseholders. Single freeholder probable." },
     transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Bermondsey (Jubilee) 500m. London Bridge 1km. Good inner SE1 transport." }
   }

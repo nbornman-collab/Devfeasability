@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"240 Blackfriars Road","ref":"Southwark ref 11/AP/2700","desc":"27F mixed-use, 200m north. Height precedent for this node."},{"name":"One The Elephant","ref":"Southwark ref 12/AP/1562","desc":"37F residential, E&C. 300m south. Major height context."}],
       insight: "TfL land disposal programme is active. If Bakerloo Line Extension proceeds, this is a station box site. If BLE deferred, the land becomes surplus for development." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "St Georges Circus road junction has heritage significance (listed obelisk). Design sensitivity required. Heritage manageable at 10-12F." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 5.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "TfL freehold. Public sector disposal - politically complex, requires mayoral/TfL board approval. Score heavily penalised for acquisition complexity." },
     transport: { label: 'Station Gravity', score: 8.5, weight: 0.5, ptal: '5', insight: "PTAL 5. Lambeth North (Bakerloo) 200m. Waterloo 500m. E&C 300m. Excellent transport." }
   }

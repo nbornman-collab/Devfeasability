@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Camberwell Road residential","ref":"Southwark ref 20/AP/1200","desc":"8F residential, Camberwell. 300m south. Height precedent."},{"name":"Walworth Road SE17","ref":"Southwark ref 19/AP/2800","desc":"8F residential above commercial. 500m north. Confirms corridor approach."}],
       insight: "Camberwell corridor. LPA supports high street intensification." },
     heritage: { label: 'Heritage Shadow', score: 8.0, weight: 1.5, insight: "Camberwell Green Conservation Area 300m. Manageable." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 8.0,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 7.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Iceland lease under property freeholder. National retailer can relocate." },
     transport: { label: 'Station Gravity', score: 7.5, weight: 0.5, ptal: '4', insight: "PTAL 4. Denmark Hill 600m. E&C 1km. Good bus connectivity." }
   }

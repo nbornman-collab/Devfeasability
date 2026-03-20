@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Bermondsey SE1 residential","ref":"Southwark ref 19/AP/3000","desc":"10F residential, SE1. Height precedent."},{"name":"Loman Street SE1","ref":"Southwark ref 20/AP/1537","desc":"Mixed-use 12F with industrial retention. Precedent for industrial conversion."}],
       insight: "Inner SE1 Bermondsey. Active residential conversion zone." },
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: "Some heritage sensitivity in Bermondsey. Manageable." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Industrial estate - multiple unit likely." },
     transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Bermondsey (Jubilee) 500m. Good inner SE1 connectivity." }
   }

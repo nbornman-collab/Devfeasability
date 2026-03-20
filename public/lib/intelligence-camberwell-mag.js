@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Camberwell Road residential","ref":"Southwark ref 20/AP/1200","desc":"8F residential, Camberwell. 200m east. Direct precedent."},{"name":"Walworth regeneration","ref":"Southwark ref 18/AP/3200","desc":"8F, SE17. 600m north. Corridor height."}],
       insight: "MOJ has an active programme of disposing surplus courts. If Camberwell is surplus, the disposal framework is well-established." },
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: "Magistrates court may have local architectural interest. Camberwell Green Conservation Area 300m. Heritage manageable but design-sensitive." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "MOJ freehold if surplus. Government disposal at market value. Clean acquisition route." },
     transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Denmark Hill 500m. Bus-served. Acceptable for residential." }
   }

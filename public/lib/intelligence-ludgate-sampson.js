@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"One Blackfriars","ref":"Southwark ref 11/AP/2927","desc":"50F/163m. 100m east. Maximum height."},{"name":"South Bank Tower","ref":"Southwark ref 14/AP/3500","desc":"41F residential conversion. 150m west."}],
       insight: "South Bank/Blackfriars. OA + CAZ adjacent. ITV, IBM South Bank cluster. Maximum momentum." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "South Bank cultural quarter. Some heritage. Design-led context." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Major office complex. Institutional freehold. Already subject to planning applications." },
     transport: { label: 'Station Gravity', score: 9.5, weight: 0.5, ptal: '6a', insight: "PTAL 6a. Blackfriars 100m. Southwark (Jubilee) 300m. Waterloo 400m. Exceptional." }
   }

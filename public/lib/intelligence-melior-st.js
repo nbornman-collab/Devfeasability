@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"The Shard (Sellar)","ref":"Southwark ref 05/AP/0174","desc":"95F/310m, London Bridge. 300m south. Maximum height precedent."},{"name":"London Bridge Station Development","ref":"Southwark ref 09/AP/1800","desc":"Major mixed-use, London Bridge. Adjacent."}],
       insight: "London Bridge OA + CAZ. Maximum planning momentum." },
     heritage: { label: 'Heritage Shadow', score: 6.5, weight: 1.5, insight: "Southwark Cathedral (Grade I) 200m. London Bridge Conservation Area. Heritage is real but manageable with quality." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 6.5,
+      verdict: 'Southwark Cathedral (GrI) 200m. London Bridge Conservation Area. Close proximity to Grade I - heritage consultant required. Scheme must demonstrate positive heritage contribution.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Inner London Bridge address. Institutional freehold. Premium pricing." },
     transport: { label: 'Station Gravity', score: 10.0, weight: 0.5, ptal: '6b', insight: "PTAL 6b. London Bridge station 200m. Exceptional." }
   }

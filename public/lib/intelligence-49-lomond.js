@@ -15,6 +15,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Camberwell Road residential","ref":"Southwark ref 20/AP/1200","desc":"8F, 400m north."},{"name":"Aylesbury Estate","ref":"Southwark ref 14/AP/3844","desc":"Major regen, 600m north."}],
       insight: "Camberwell corridor. LPA supportive." },
     heritage: { label: 'Heritage Shadow', score: 8.0, weight: 1.5, insight: "No heritage." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 8.0,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 7.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Likely single freehold." },
     transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Denmark Hill 600m." }
   }

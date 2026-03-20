@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"The Shard (Sellar)","ref":"Southwark ref 05/AP/0174","desc":"95F / 310m, London Bridge. 200m east. The definitive height precedent for this address."},{"name":"London Bridge Station Development","ref":"Southwark ref 09/AP/1800","desc":"Major mixed-use scheme, London Bridge Station frontage. Confirms high-density acceptable at this address."}],
       insight: "London Bridge is the highest-density mixed-use zone in Southwark. OA + CAZ + Shard precedent = maximum planning tailwind. The Shard at 310m makes any scheme here look modest by comparison." },
     heritage: { label: 'Heritage Shadow', score: 6.5, weight: 1.5, insight: "London Bridge heritage sensitivity: Monument (Grade I), Southwark Cathedral (Grade I), and Tower Bridge (Grade I) all within 700m. LVMF views analysis mandatory. Heritage is a real constraint - design quality must be exceptional." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 6.5,
+      verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Central London Bridge address - prime institutional ownership. Likely complex leasehold with major corporate occupiers. High acquisition cost reflects development potential." },
     transport: { label: 'Station Gravity', score: 9.5, weight: 0.5, ptal: '6b', insight: "PTAL 6b. London Bridge (Northern/Jubilee + National Rail) 100m - one of the best-connected addresses in London. Exceptional transport score." }
   }

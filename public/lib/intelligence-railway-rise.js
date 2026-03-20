@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"East Dulwich Station Approach","ref":"Southwark ref 18/AP/2600","desc":"8F residential, station approach. 400m east. Confirms station-adjacent residential consent."},{"name":"Lordship Lane mixed-use","ref":"Southwark ref 20/AP/0900","desc":"6F residential-commercial, SE22. Height precedent for East Dulwich corridor."}],
       insight: "11 major applications indicates an active development pipeline. Network Rail infrastructure may be involved (railway land). Station-adjacent sites are a Southwark planning priority for residential intensification." },
     heritage: { label: 'Heritage Shadow', score: 8.0, weight: 1.5, insight: "Victorian railway infrastructure nearby may have local heritage interest. East Dulwich Conservation Areas are 800m south. Manageable heritage profile." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 8.0,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "11 major apps with no consent suggests complex ownership (potentially Network Rail land, multiple parties). Title Stack is the primary risk." },
     transport: { label: 'Station Gravity', score: 6.5, weight: 0.5, ptal: '3', insight: "PTAL 3. East Dulwich station (Overground) 200m - direct adjacency is a residential premium factor. Honourable mention: one of the best micro-locations for East Dulwich residential buyers." }
   }

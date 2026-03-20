@@ -50,6 +50,13 @@ const SITE_INTELLIGENCE = {
       secondary: { name: 'Waterloo Station', grade: 'II*', dist_m: 700 },
       insight: 'No listed buildings within 400m. One Blackfriars (50F, 2018) is not heritage-listed. Waterloo Station (Grade II*) is 700m - no setting impact at this scale. This is one of the cleanest heritage profiles on the Southwark riverside.'
     },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'No listed buildings within 400m. Blackfriars OA zone. Residential tall building - One Blackfriars (50F) 300m south is the direct precedent. Heritage is not the binding constraint here.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 8.0, weight: 1.5,

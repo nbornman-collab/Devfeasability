@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Bermondsey residential SE1","ref":"Southwark ref 20/AP/1500","desc":"10F residential, Bermondsey. 200m east. Height precedent adjacent."},{"name":"Loman Street SE1","ref":"Southwark ref 20/AP/1537","desc":"Mixed-use 12F, SE1. Confirms LPA appetite for intensification in inner Bermondsey."}],
       insight: "Inner SE1 Bermondsey. Southwark LPA has approved 10-12F residential within 300m. 65 planning applications indicates an active development history." },
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: "Bermondsey Street Conservation Area 400m west - some indirect influence. No listed buildings within 200m. Manageable." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "University/institutional occupied - likely leasehold under a property investor. Institutional disposal achievable. 65 apps suggests well-understood site." },
     transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. London Bridge (National Rail + Tube) 1km. Bermondsey (Jubilee) 600m. Borough (Northern) 700m." }
   }

@@ -20,6 +20,13 @@ const SITE_INTELLIGENCE = {
     value: { label: 'Rent Headroom', score: 8.5, weight: 2.0, insight: 'Former petrol station = distressed/low-yield asset. At £5,000-6,500/m² residential NSA on the OKR corridor, a 10F scheme adds £7-9M GDV against minimal existing value. OKR residential market has strengthened significantly post-2020 following OA designation.' },
     momentum: { label: 'Planning Tailwind', score: 8.0, weight: 2.0, precedents: [{"name": "Malt Street OKR", "ref": "Southwark ref 17/AP/3885", "desc": "34F residential + commercial, Old Kent Road. Approved 2020. Establishes tall residential as policy-compliant on OKR corridor."}, {"name": "Biscuit Factory OKR", "ref": "Southwark ref 14/AP/3438", "desc": "Mixed-use 12F scheme, Old Kent Road. Major residential conversion. Confirms LPA appetite for intensification on this corridor."}], insight: 'Old Kent Road Opportunity Area - one of the highest-priority regeneration zones in London. LPA and GLA explicitly support tall residential on OKR corridor. 3 major apps at this address confirm live developer interest. Planning Tailwind score reflects OKR OA policy strength.' },
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: 'OKR is an A-road commercial corridor - no heritage designation, no listed buildings within 300m, no conservation areas. Cleanest heritage profile of any candidate site.' },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 8.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: '3 major planning apps suggest an active owner willing to engage with development. Former petrol station - likely single freehold, potentially a fuel company or property investor. Acquisition is achievable - fuel sites are non-operational assets.' },
     transport: { label: 'Station Gravity', score: 7.5, weight: 0.5, ptal: '4', insight: 'PTAL 4. Old Kent Road (various buses). Elephant & Castle (Northern/Bakerloo) 1.2km. Proposed Bakerloo Line Extension would add a station within 200m - if delivered, transport score upgrades to 9.0.' }
   }

@@ -43,6 +43,13 @@ const SITE_INTELLIGENCE = {
       score: 7.0, weight: 1.5,
       insight: 'Some heritage sensitivity - Bankside Conservation Area is 500m east, Southwark Cathedral (Grade I) is 700m northeast. LVMF: no direct protected vista through site but proximity to London Bridge/Tower Bridge views means a 16F scheme will require LVMF views analysis. Heritage score reflects real but manageable constraint.'
     },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'Bankside CA 500m east. Southwark Cathedral (GrI) 700m northeast. No direct LVMF alignment. Heritage is real context not a constraint - design response required.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 5.0, weight: 1.5,

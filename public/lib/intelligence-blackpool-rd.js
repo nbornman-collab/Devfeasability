@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Peckham Place residential","ref":"Southwark ref 17/AP/4200","desc":"10F residential, SE15. 600m north. Height precedent for Peckham corridor."},{"name":"Surrey Canal Road","ref":"Southwark ref 13/AP/3096","desc":"Industrial-to-residential, 0.8ha SE15. Conversion precedent for industrial land in this catchment."}],
       insight: "SE15 has active residential intensification of industrial land. No OA but Southwark Local Plan positively supports intensification of surplus industrial land." },
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "SE15 industrial zone - no heritage constraints." },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Business park - likely multiple leaseholders under single freeholder. Assembly required." },
     transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Peckham Rye station 800m. Bus-served. Acceptable for residential." }
   }

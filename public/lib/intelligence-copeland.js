@@ -43,6 +43,13 @@ const SITE_INTELLIGENCE = {
       score: 9.0, weight: 1.5,
       insight: 'No heritage constraints. Peckham industrial area - no listed buildings, no conservation area, no protected vistas. Cleanest heritage profile of any candidate site.'
     },
+
+    heritage_framework: {
+      tier: 'clean',
+      score: 9.0,
+      verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
+      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+    },
     acquisition: {
       label: 'Title Stack',
       score: 6.5, weight: 1.5,

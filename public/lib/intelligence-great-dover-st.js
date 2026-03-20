@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Aylesbury Estate regeneration","ref":"Southwark ref 10/AP/1764","desc":"Major regeneration, SE17. 2.5km south. Establishes Southwark commitment to residential intensification."},{"name":"Borough High Street mixed-use","ref":"Southwark ref 19/AP/2300","desc":"8F residential above commercial, Borough High Street. 200m west. Direct height precedent."}],
       insight: "Borough/London Bridge corridor has strong planning momentum. 65 planning apps over site history. Close to 185 Park Street and Colechurch House which have higher activity - this site sits in their planning shadow." },
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "Borough High Street Conservation Area 200m west. Southwark Cathedral (Grade I) 500m. Heritage sensitivity present - design quality required. Not a fatal constraint." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.0,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 7.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Commercial office block - likely institutional or private freehold. EPC Band E suggests ageing stock with motivated seller. Clean single freehold probable." },
     transport: { label: 'Station Gravity', score: 8.5, weight: 0.5, ptal: '5', insight: "PTAL 5. Borough (Northern) 400m. London Bridge (multiple Tube + Rail) 600m. Elephant & Castle (Northern/Bakerloo) 700m. Very good transport." }
   }

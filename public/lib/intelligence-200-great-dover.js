@@ -16,6 +16,13 @@ const SITE_INTELLIGENCE = {
       precedents: [{"name":"Great Dover Street residential","ref":"Southwark ref 21/AP/1800","desc":"10F residential, Great Dover Street. 100m east. Adjacent height precedent."},{"name":"Borough High Street offices","ref":"Southwark ref 17/AP/2100","desc":"9F office, Borough corridor. Confirms commercial intensification in this sub-area."}],
       insight: "Great Dover Street regeneration corridor. Adjacent 10F consent creates immediate height precedent. Borough LPA track record: consistent approval of 8-12F residential in this area." },
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: "No conservation area on Great Dover Street. Modest heritage profile - manageable at 12-13F with quality design." },
+
+    heritage_framework: {
+      tier: 'manageable',
+      score: 7.5,
+      verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
+      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+    },
     acquisition: { label: 'Title Stack', score: 7.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Office block - likely single corporate freeholder or property investor. EPC Band D suggests motivated seller. Clean acquisition route probable." },
     transport: { label: 'Station Gravity', score: 8.5, weight: 0.5, ptal: '5', insight: "PTAL 5. Borough (Northern) 500m. London Bridge 700m. Elephant & Castle 600m." }
   }
