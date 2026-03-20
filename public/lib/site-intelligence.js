@@ -131,6 +131,61 @@ function renderIntelligenceT2(si) {
   </div>`;
 }
 
+
+// ── OA Implications copy ─────────────────────────────────────────────────────
+function renderOAImplications(si) {
+  const F = si.factors;
+  if (!F || !F.momentum || !F.momentum.opportunity_area) return '';
+  const oa = F.momentum.opportunity_area;
+  return `<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:7px;padding:10px 12px;margin-top:8px">
+    <div style="font:700 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#1d4ed8;margin-bottom:5px">Opportunity Area - ${oa.name}</div>
+    <div style="font:400 10px/1.6 'Inter',sans-serif;color:#1e40af">
+      <strong>Density:</strong> Higher density departures from standard matrix are actively supported. GLA expects LPAs to facilitate, not resist.<br>
+      <strong>Affordable Housing:</strong> AH % is negotiated against viability - OA designation gives GLA leverage to push for higher rates.<br>
+      <strong>Height:</strong> GLA has called in or backed taller schemes in this OA where LPA hesitated. Your appeal backstop is strong.<br>
+      <span style="color:#3b82f6;font-style:italic">Ref: ${oa.ref}</span>
+    </div>
+  </div>`;
+}
+
+// ── GLA Stage 2 Threshold ────────────────────────────────────────────────────
+function renderGLAStage2(si) {
+  const s = si.site || {};
+  const maxH = s.max_h || s.existing_height_m || 0;
+  const maxF = s.max_floors || 0;
+  const triggers = [];
+  if (maxH >= 150) triggers.push('150m+ height triggers mandatory GLA Stage 2 referral');
+  if (maxF >= 50) triggers.push('50F+ scheme likely triggers GLA Stage 2');
+  // Residential threshold - if we have units data
+  const triggered = triggers.length > 0;
+  const col = triggered ? '#d97706' : '#059669';
+  const bg = triggered ? '#fffbeb' : '#f0fdf4';
+  const label = triggered ? 'GLA Stage 2 Likely' : 'GLA Stage 2 Unlikely';
+  const note = triggered ? triggers.join('. ') + '. Programme impact: +4-6 months minimum.' 
+    : 'Scheme parameters suggest no mandatory GLA Stage 2 referral. LPA retains decision. Faster programme.';
+  return `<div style="background:${bg};border-radius:6px;padding:8px 10px;margin-top:6px;display:flex;gap:8px;align-items:flex-start">
+    <span style="font:700 9px 'Inter',sans-serif;color:${col};text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;margin-top:1px">${label}</span>
+    <span style="font:400 10px/1.5 'Inter',sans-serif;color:#374151">${note}</span>
+  </div>`;
+}
+
+// ── Borough LPA Commentary ───────────────────────────────────────────────────
+const LPA_COMMENTARY = {
+  'Southwark': 'Southwark is a commercially active LPA with strong support for office-led intensification in the CAZ. Design quality is the primary currency - the council has a robust design review process (Design Review Panel) and pre-app is essential. Affordable workspace requirements (10% of commercial floorspace) apply to major schemes. S106 negotiations are realistic and well-precedented. Policy P8 protects non-designated heritage - engage early if Victorian fabric is present.',
+  'City of London': 'The City Corporation actively promotes tall buildings within the cluster. Local Plan 2040 designates specific zones for 150m+ buildings. Design quality is expected to be exemplary - the City Design Group runs a robust pre-app process. Heritage is taken seriously (Wren churches, viewing corridors) but the Corporation balances heritage against economic vitality. The Corporation acts as both LPA and landowner in parts - this creates unique negotiating dynamics.',
+  'Hackney': 'Hackney LBC is a design-conscious LPA with a strong community engagement expectation. The Future Shoreditch AAP (2026) is redefining height zones in the City fringe. The Article 4 direction in Shoreditch protects commercial uses - office schemes here face less PD competition. Hackney has a Tall Building SPD (30m threshold) and expects Design Review Panel engagement on major schemes. Community benefit and affordable workspace are key political priorities.',
+  'default': 'Check the relevant Local Plan for this borough. Pre-application engagement with the planning officer and design review panel is recommended before RIBA Stage 2.'
+};
+
+function renderLPACommentary(si) {
+  const borough = (si.borough || si.site && si.site.borough || 'default');
+  const text = LPA_COMMENTARY[borough] || LPA_COMMENTARY['default'];
+  return `<div style="background:#f8f9fb;border-left:3px solid #6366f1;padding:10px 12px;border-radius:0 6px 6px 0;margin-top:8px">
+    <div style="font:700 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#6366f1;margin-bottom:5px">${borough} - LPA Planning Character</div>
+    <div style="font:400 10px/1.7 'Inter',sans-serif;color:#374151">${text}</div>
+  </div>`;
+}
+
 // ── Export ───────────────────────────────────────────────────────────────────
 if (typeof module !== 'undefined') module.exports = { computeSiteScore, renderIntelligenceT1, renderIntelligenceT2, scoreRingSVG };
 

@@ -599,6 +599,26 @@ function onSlider(key,v){
   if(rb) rb.classList.toggle('live', v!=DEFS[key]);
   recalc();
 }
+
+function setSpec(type){
+  const costs = {adaptive:2400, refurb:3200, newbuild:5000};
+  const c = costs[type]||4200;
+  S.cost = c;
+  document.getElementById('sl-cost').value = c;
+  document.getElementById('sv-cost').textContent = c.toLocaleString();
+  document.getElementById('lbl-cost').textContent = c.toLocaleString();
+  ['adaptive','refurb','newbuild'].forEach(t => {
+    const b = document.getElementById('spec-'+t);
+    if(!b) return;
+    if(t===type){
+      b.style.borderColor='#1d4ed8'; b.style.background='#eff6ff'; b.style.color='#1d4ed8';
+    } else {
+      b.style.borderColor='#e5e7eb'; b.style.background='#fff'; b.style.color='#374151';
+    }
+  });
+  updateFinancials();
+}
+
 function resetSlider(key){
   document.getElementById(`sl-${key}`).value=DEFS[key];
   onSlider(key,DEFS[key]);

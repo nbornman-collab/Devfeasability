@@ -514,13 +514,22 @@ function svExpand(){
     <span class="tag ok" id="tag-heritage">Heritage Low</span>
   </div>
 
+  <!-- OA Implications + LPA Commentary -->
+  <div class="rp-section" id="oa-section" style="display:none">
+    <div class="rp-section-hd"><h3>Opportunity Area</h3></div>
+    <div class="rp-section-body">
+      <div id="oa-implications-mount"></div>
+      <div id="lpa-commentary-mount" style="margin-top:8px"></div>
+    </div>
+  </div>
+
   <!-- Planning flags -->
   <div class="rp-section">
     <div class="rp-section-hd">
       <h3>Planning Flags</h3>
       <span class="rp-badge" id="flags-badge">Loading…</span>
     </div>
-    <div class="rp-section-body" id="flags-body"></div>
+    <div class="rp-section-body" id="flags-body"><div id="gla-stage2-mount"></div></div>
   </div>
 
   <!-- Site Strategy -->
@@ -588,8 +597,22 @@ const EXISTING_EUV = 4500000;
   if(hrm && typeof renderHeritageRisk==='function') hrm.innerHTML=renderHeritageRisk(SITE_INTELLIGENCE);
   // Strategy panel
   setTimeout(function(){
-    const sm=document.getElementById('strategy-mount');
+        // Show OA section if applicable
+    const oaSection = document.getElementById('oa-section');
+    if(oaSection && SITE_INTELLIGENCE.factors && SITE_INTELLIGENCE.factors.momentum && SITE_INTELLIGENCE.factors.momentum.opportunity_area) {
+      oaSection.style.display='block';
+    }
+  const sm=document.getElementById('strategy-mount');
     if(sm && typeof renderSiteStrategy==='function') sm.innerHTML=renderSiteStrategy(SITE_INTELLIGENCE);
+    // OA implications
+    const oaMount = document.getElementById('oa-implications-mount');
+    if(oaMount && typeof renderOAImplications==='function') oaMount.innerHTML=renderOAImplications(SITE_INTELLIGENCE);
+    // LPA commentary
+    const lpaMount = document.getElementById('lpa-commentary-mount');
+    if(lpaMount && typeof renderLPACommentary==='function') lpaMount.innerHTML=renderLPACommentary(SITE_INTELLIGENCE);
+    // GLA Stage 2
+    const glaMount = document.getElementById('gla-stage2-mount');
+    if(glaMount && typeof renderGLAStage2==='function') glaMount.innerHTML=renderGLAStage2(SITE_INTELLIGENCE);
   },50);
   const label = score>=85?'Top opportunity':score>=70?'Strong opportunity':score>=55?'Credible opportunity':'Due diligence required';
   ['hero-score-badge','rp-score-badge'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=label;});

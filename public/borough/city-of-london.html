@@ -93,7 +93,8 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 </nav>
 
 <div class="page">
-  <div id="map"></div>
+  <div id="map">
+  <button id="btn-3d-toggle" onclick="toggle3D()" style="position:absolute;top:8px;right:8px;z-index:10;background:rgba(15,23,42,0.85);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:6px 12px;font:600 11px Inter,sans-serif;cursor:pointer;backdrop-filter:blur(4px);letter-spacing:.5px">3D ▲</button></div>
   <div class="list-panel">
     <div class="header">
       <h1>T0 Borough · City of London</h1>
@@ -177,7 +178,7 @@ function buildPopup(s, rank){
 let map, markers = [], activeCard = null;
 
 function flyTo(lat, lng, rank){
-  map.flyTo({center:[lng,lat], zoom:17, pitch:45, duration:800});
+  map.flyTo({center:[lng,lat], zoom:17, pitch:0, duration:800});
   if(activeCard !== null) document.getElementById('card-'+activeCard)?.classList.remove('active');
   document.getElementById('card-'+rank)?.classList.add('active');
   activeCard = rank;
