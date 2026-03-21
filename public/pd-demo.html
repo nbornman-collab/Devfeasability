@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PD Massing Demo · D/A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sans:'Inter',sans-serif;--mono:'DM Mono',monospace;
+  --green:#16a34a;--green-lt:#f0fdf4;--green-bd:#bbf7d0;
+  --amber:#d97706;--amber-lt:#fffbeb;--amber-bd:#fde68a;
+  --red:#dc2626;--red-lt:#fef2f2;--red-bd:#fecaca;
+  --blue:#1d4ed8;--text:#0f172a;--text2:#374151;--text3:#6b7280;--text4:#9ca3af;
+  --border:#e5e7eb;--surface:#fff;--surface2:#f9fafb;
+}
+html,body{font-family:var(--sans);background:#0a0c14;height:100%;overflow:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
+.nav-logo{font:800 17px var(--sans);letter-spacing:-.5px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:4px}
+.slash{color:var(--blue)}
+.nav-back{font:500 12px var(--sans);color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:5px}
+.nav-back:hover{color:var(--text)}
+.nav-tag{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;background:#f0fdf4;color:var(--green);border:1px solid var(--green-bd);padding:3px 8px;border-radius:4px}
+
+/* Layout: fixed 50/50 */
+.layout{position:fixed;top:52px;left:0;right:0;bottom:0;display:flex}
+#map{flex:1;height:100%}
+.panel{width:360px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+
+/* Panel sections */
+.p-section{padding:16px 18px;border-bottom:1px solid var(--border)}
+.p-hd{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text4);margin-bottom:12px}
+.p-title{font:800 16px var(--sans);color:var(--text);letter-spacing:-.3px;margin-bottom:2px}
+.p-sub{font:400 11px var(--sans);color:var(--text3);line-height:1.5}
+
+/* Verdict badge */
+.verdict-badge{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin-bottom:0}
+.verdict-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.verdict-label{font:700 13px var(--sans)}
+.verdict-sub{font:400 11px var(--sans);color:var(--text3);margin-top:2px}
+
+/* Mode tabs */
+.mode-tabs{display:flex;gap:0;background:var(--surface2);border-radius:7px;padding:3px;margin-bottom:12px}
+.mode-tab{flex:1;padding:7px 6px;font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.8px;border-radius:5px;border:none;background:none;cursor:pointer;color:var(--text4);transition:all .15s;text-align:center}
+.mode-tab.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+
+/* Sliders */
+.slider-row{margin-bottom:12px}
+.slider-labels{display:flex;justify-content:space-between;margin-bottom:5px}
+.slider-lbl{font:600 11px var(--sans);color:var(--text2)}
+.slider-val{font:700 12px var(--mono);color:var(--text)}
+input[type=range]{width:100%;height:4px;border-radius:2px;outline:none;-webkit-appearance:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--blue);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.slider-scale{display:flex;justify-content:space-between;margin-top:3px;font:400 9px var(--mono);color:var(--text4)}
+
+/* Dimension readout */
+.dim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px}
+.dim-card{background:var(--surface2);border-radius:6px;padding:8px 10px;text-align:center}
+.dim-val{font:700 16px var(--mono);color:var(--text);letter-spacing:-.5px}
+.dim-unit{font:400 10px var(--mono);color:var(--text4)}
+.dim-lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--text4);margin-top:2px}
+
+/* Rule list */
+.rule-list{display:flex;flex-direction:column;gap:5px}
+.rule-row{display:flex;align-items:flex-start;gap:7px;font:400 11px/1.5 var(--sans);color:var(--text2)}
+.rule-icon{flex-shrink:0;margin-top:1px;font-size:11px}
+
+/* Class notes */
+.class-note{padding:10px 12px;border-radius:6px;font:400 11px/1.6 var(--sans);margin-top:6px}
+.class-note.green{background:var(--green-lt);color:#14532d;border:1px solid var(--green-bd)}
+.class-note.amber{background:var(--amber-lt);color:#78350f;border:1px solid var(--amber-bd)}
+.class-note.red{background:var(--red-lt);color:#7f1d1d;border:1px solid var(--red-bd)}
+
+/* CTA */
+.pd-cta{margin:16px 18px;padding:14px;background:var(--text);border-radius:8px;text-align:center}
+.pd-cta-title{font:700 13px var(--sans);color:#fff;margin-bottom:4px}
+.pd-cta-sub{font:400 11px var(--sans);color:rgba(255,255,255,.5);margin-bottom:12px}
+.pd-cta-btn{display:block;padding:10px;background:var(--green);color:#fff;font:700 12px var(--sans);border-radius:6px;text-decoration:none;text-align:center}
+
+.map-label{position:absolute;bottom:12px;left:12px;z-index:10;background:rgba(15,23,42,.85);color:rgba(255,255,255,.6);font:500 10px var(--mono);padding:5px 10px;border-radius:5px;pointer-events:none}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="nav-logo">D<span class="slash">/</span>A</a>
+  <span class="nav-tag">PD Massing Demo</span>
+  <a href="/pd" class="nav-back">← PD Checker</a>
+</nav>
+
+<div class="layout">
+  <div style="position:relative;flex:1">
+    <div id="map"></div>
+    <div class="map-label">70 Nithdale Road SE18 · Demo property · Semi-detached</div>
+  </div>
+
+  <div class="panel">
+    <!-- Address -->
+    <div class="p-section">
+      <div class="p-hd">Demo Property</div>
+      <div class="p-title">70 Nithdale Road</div>
+      <div class="p-sub">London SE18 3PD · Semi-detached · 2 storeys</div>
+    </div>
+
+    <!-- Verdict -->
+    <div class="p-section">
+      <div class="verdict-badge" id="verdict-badge">
+        <div class="verdict-dot" id="verdict-dot" style="background:var(--green)"></div>
+        <div>
+          <div class="verdict-label" id="verdict-label" style="color:var(--green)">Permitted Development</div>
+          <div class="verdict-sub" id="verdict-sub">No planning permission required</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode tabs -->
+    <div class="p-section">
+      <div class="mode-tabs">
+        <button class="mode-tab active" onclick="setMode('rear')">Rear Ext</button>
+        <button class="mode-tab" onclick="setMode('dormer')">Dormer</button>
+        <button class="mode-tab" onclick="setMode('outbuilding')">Outbuilding</button>
+      </div>
+
+      <!-- Rear extension controls -->
+      <div id="ctrl-rear">
+        <div class="slider-row">
+          <div class="slider-labels"><span class="slider-lbl">Extension depth</span><span class="slider-val" id="val-depth">3.0m</span></div>
+          <input type="range" id="sl-depth" min="1" max="8" step="0.5" value="3" oninput="updateMassing()">
+          <div class="slider-scale"><span>1m</span><span>3m</span><span>4m PD limit</span><span>6m PA</span><span>8m max</span></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-labels"><span class="slider-lbl">Extension width</span><span class="slider-val" id="val-width">4.0m</span></div>
+          <input type="range" id="sl-width" min="2" max="5" step="0.5" value="4" oninput="updateMassing()">
+          <div class="slider-scale"><span>2m</span><span>3.5m</span><span>5m</span></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-labels"><span class="slider-lbl">Ridge height</span><span class="slider-val" id="val-height">3.0m</span></div>
+          <input type="range" id="sl-height" min="2.5" max="4" step="0.1" value="3" oninput="updateMassing()">
+          <div class="slider-scale"><span>2.5m</span><span>3.0m</span><span>4.0m eaves limit</span></div>
+        </div>
+      </div>
+
+      <!-- Dormer controls -->
+      <div id="ctrl-dormer" style="display:none">
+        <div class="slider-row">
+          <div class="slider-labels"><span class="slider-lbl">Dormer width</span><span class="slider-val" id="val-dwidth">2.5m</span></div>
+          <input type="range" id="sl-dwidth" min="1" max="4" step="0.5" value="2.5" oninput="updateMassing()">
+          <div class="slider-scale"><span>1m</span><span>2.5m</span><span>4m</span></div>
+        </div>
+        <div class="slider-row">
+          <div class="slider-labels"><span class="slider-lbl">Dormer projection</span><span class="slider-val" id="val-dproj">1.0m</span></div>
+          <input type="range" id="sl-dproj" min="0.5" max="2" step="0.25" value="1" oninput="updateMassing()">
+        </div>
+      </div>
+
+      <!-- Outbuilding controls -->
+      <div id="ctrl-outbuilding" style="display:none">
+        <div class="slider-row">
+          <div class="slider-labels"><span class="slider-lbl">Width</span><span class="slider-val" id="val-obw">4.0m</span></div>
+          <input type="range" id="sl-obw" min="2" max="8" step="0.5" value="4" oninput="updateMassing()">
+        </div>
+        <div class="slider-row">
+          <div class="slider-labels"><span class="slider-lbl">Depth</span><span class="slider-val" id="val-obd">3.0m</span></div>
+          <input type="range" id="sl-obd" min="2" max="6" step="0.5" value="3" oninput="updateMassing()">
+        </div>
+        <div class="slider-row">
+          <div class="slider-labels"><span class="slider-lbl">Height</span><span class="slider-val" id="val-obh">2.5m</span></div>
+          <input type="range" id="sl-obh" min="2" max="4" step="0.1" value="2.5" oninput="updateMassing()">
+          <div class="slider-scale"><span>2m</span><span>2.5m boundary limit</span><span>4m max</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimensions -->
+    <div class="p-section">
+      <div class="p-hd">Proposed envelope</div>
+      <div class="dim-grid">
+        <div class="dim-card"><div class="dim-val" id="dim-gf">12.0</div><div class="dim-unit">m²</div><div class="dim-lbl">Floor area</div></div>
+        <div class="dim-card"><div class="dim-val" id="dim-ht">3.0</div><div class="dim-unit">m</div><div class="dim-lbl">Height</div></div>
+        <div class="dim-card"><div class="dim-val" id="dim-vol">36</div><div class="dim-unit">m³</div><div class="dim-lbl">Volume</div></div>
+      </div>
+    </div>
+
+    <!-- Rules -->
+    <div class="p-section">
+      <div class="p-hd">PD Rules check</div>
+      <div class="rule-list" id="rule-list"></div>
+      <div class="class-note green" id="class-note">Within standard permitted development limits. No planning application required.</div>
+    </div>
+
+    <!-- CTA -->
+    <div class="pd-cta">
+      <div class="pd-cta-title">Get the full written report</div>
+      <div class="pd-cta-sub">Includes dimensional guide, Prior Approval template, LPA contacts</div>
+      <a href="/pd" class="pd-cta-btn">Check your property →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Property geometry (70 Nithdale Road SE18 - approximate demo) ─────────────
+// Semi-detached: ~5m wide, ~8m deep original, ~18m garden
+// Orientation: house faces roughly north, garden extends south
+
+const BASE_LNG = 0.0694;
+const BASE_LAT = 51.4867;
+
+// Conversion: metres to degrees (approximate at 51.5°N)
+const M_LAT = 0.000009; // 1m in latitude degrees
+const M_LNG = 0.0000143; // 1m in longitude degrees
+
+// House dimensions
+const HOUSE_W = 5; // metres wide
+const HOUSE_D = 8; // metres original depth
+const HOUSE_H = 7.2; // metres to ridge
+const HOUSE_EAVES = 4.5; // metres to eaves
+const GARDEN_D = 18; // metres garden behind house
+
+// Current mode
+let currentMode = 'rear';
+
+// Build polygon from anchor + dimensions
+function makeRect(anchorLng, anchorLat, widthM, depthM, offsetLngM = 0, offsetLatM = 0) {
+  const lng0 = anchorLng + offsetLngM * M_LNG;
+  const lat0 = anchorLat + offsetLatM * M_LAT;
+  const lng1 = lng0 + widthM * M_LNG;
+  const lat1 = lat0 - depthM * M_LAT; // south
+  return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+}
+
+// House polygon - centred around BASE point (front-left corner)
+const houseCoords = makeRect(BASE_LNG, BASE_LAT, HOUSE_W, HOUSE_D);
+const gardenCoords = makeRect(BASE_LNG, BASE_LAT - HOUSE_D * M_LAT, HOUSE_W, GARDEN_D);
+
+let cfg;
+async function initMap() {
+  cfg = await fetch('/api/config').then(r => r.json());
+  mapboxgl.accessToken = cfg.mapboxToken;
+
+  const map = window._map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v11',
+    center: [BASE_LNG + (HOUSE_W / 2) * M_LNG, BASE_LAT - (HOUSE_D / 2 + 4) * M_LAT],
+    zoom: 19,
+    pitch: 55,
+    bearing: 0
+  });
+
+  map.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-left');
+
+  map.on('load', () => {
+    // Context 3D buildings (dim)
+    const layers = map.getStyle().layers;
+    const labelLayerId = layers.find(l => l.type === 'symbol' && l.layout['text-field'])?.id;
+    map.addLayer({
+      id: 'ctx-buildings',
+      source: 'composite',
+      'source-layer': 'building',
+      filter: ['==', 'extrude', 'true'],
+      type: 'fill-extrusion',
+      minzoom: 14,
+      paint: {
+        'fill-extrusion-color': '#1e293b',
+        'fill-extrusion-height': ['get', 'height'],
+        'fill-extrusion-base': ['get', 'min_height'],
+        'fill-extrusion-opacity': 0.5
+      }
+    }, labelLayerId);
+
+    // Garden outline
+    map.addSource('garden', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[gardenCoords]}}});
+    map.addLayer({id:'garden-fill',type:'fill',source:'garden',paint:{'fill-color':'#14532d','fill-opacity':0.2}});
+    map.addLayer({id:'garden-line',type:'line',source:'garden',paint:{'line-color':'#166534','line-width':1,'line-dasharray':[3,2]}});
+
+    // House (existing)
+    map.addSource('house', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:HOUSE_H}}});
+    map.addLayer({
+      id: 'house-3d',
+      type: 'fill-extrusion',
+      source: 'house',
+      paint: {
+        'fill-extrusion-color': '#334155',
+        'fill-extrusion-height': HOUSE_H,
+        'fill-extrusion-base': 0,
+        'fill-extrusion-opacity': 0.95
+      }
+    });
+
+    // House roof ridge (visual detail)
+    map.addSource('house-label', {type:'geojson', data:{type:'Feature',geometry:{type:'Point',coordinates:[BASE_LNG + (HOUSE_W/2)*M_LNG, BASE_LAT - (HOUSE_D/2)*M_LAT]},properties:{label:'Existing'}}});
+
+    // Extension (proposed) - empty initially, built by updateMassing
+    map.addSource('extension', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}}});
+    map.addLayer({
+      id: 'ext-3d',
+      type: 'fill-extrusion',
+      source: 'extension',
+      paint: {
+        'fill-extrusion-color': '#16a34a',
+        'fill-extrusion-height': ['get','height'],
+        'fill-extrusion-base': 0,
+        'fill-extrusion-opacity': 0.85
+      }
+    });
+    map.addLayer({id:'ext-top',type:'line',source:'extension',paint:{'line-color':'#4ade80','line-width':2}});
+
+    // Dormer source (added on roof level)
+    map.addSource('dormer', {type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0,base:0}}});
+    map.addLayer({id:'dormer-3d',type:'fill-extrusion',source:'dormer',paint:{'fill-extrusion-color':'#f59e0b','fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','base'],'fill-extrusion-opacity':0.85}});
+
+    // Max envelope guide (dashed)
+    map.addSource('max-env', {type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
+    map.addLayer({id:'max-env-line',type:'line',source:'max-env',paint:{'line-color':'#4ade80','line-width':1,'line-dasharray':[2,2],'line-opacity':0.4}});
+
+    updateMassing();
+  });
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('ctrl-rear').style.display = mode==='rear'?'block':'none';
+  document.getElementById('ctrl-dormer').style.display = mode==='dormer'?'block':'none';
+  document.getElementById('ctrl-outbuilding').style.display = mode==='outbuilding'?'block':'none';
+  // Hide all proposal layers
+  const map = window._map;
+  if(!map||!map.isStyleLoaded()) return;
+  map.setLayoutProperty('ext-3d','visibility',mode==='rear'?'visible':'none');
+  map.setLayoutProperty('ext-top','visibility',mode==='rear'?'visible':'none');
+  map.setLayoutProperty('dormer-3d','visibility',mode==='dormer'?'visible':'none');
+  map.setLayoutProperty('max-env-line','visibility','visible');
+  updateMassing();
+}
+
+function updateMassing() {
+  const map = window._map;
+  if(!map||!map.isStyleLoaded()) return;
+
+  if(currentMode === 'rear') updateRear(map);
+  else if(currentMode === 'dormer') updateDormer(map);
+  else if(currentMode === 'outbuilding') updateOutbuilding(map);
+}
+
+function updateRear(map) {
+  const depth = parseFloat(document.getElementById('sl-depth').value);
+  const width = parseFloat(document.getElementById('sl-width').value);
+  const height = parseFloat(document.getElementById('sl-height').value);
+
+  document.getElementById('val-depth').textContent = depth.toFixed(1)+'m';
+  document.getElementById('val-width').textContent = width.toFixed(1)+'m';
+  document.getElementById('val-height').textContent = height.toFixed(1)+'m';
+
+  // Calculate verdict
+  const maxPA = 6; // semi-detached
+  const maxPD = 3; // semi-detached standard
+  const exceedsEaves = height > HOUSE_EAVES;
+
+  let verdict, color, sub, noteClass, noteText;
+  const rules = [];
+
+  if(exceedsEaves) {
+    verdict = 'Planning Required';
+    color = 'var(--red)';
+    sub = 'Height exceeds existing eaves - full planning needed';
+    noteClass = 'red';
+    noteText = 'The extension height exceeds the existing eaves. This takes it outside PD rights. You need full planning permission.';
+    rules.push({icon:'✗',text:`Height ${height.toFixed(1)}m exceeds eaves at ${HOUSE_EAVES}m`});
+  } else if(depth > maxPA) {
+    verdict = 'Planning Required';
+    color = 'var(--red)';
+    sub = `Exceeds maximum ${maxPA}m Prior Approval limit`;
+    noteClass = 'red';
+    noteText = `Depth of ${depth.toFixed(1)}m exceeds the maximum 6m (semi-detached) allowed even with Prior Approval. Full planning permission required.`;
+    rules.push({icon:'✗',text:`Depth ${depth.toFixed(1)}m exceeds ${maxPA}m maximum`});
+  } else if(depth > maxPD) {
+    verdict = 'Prior Approval Needed';
+    color = 'var(--amber)';
+    sub = `${depth.toFixed(1)}m depth needs Neighbour Consultation`;
+    noteClass = 'amber';
+    noteText = `Depth of ${depth.toFixed(1)}m exceeds the 3m standard PD limit for a semi-detached. You need Prior Approval under the Neighbour Consultation Scheme. LPA notifies neighbours; 42 days for objections. Fee: ~£120.`;
+    rules.push({icon:'⚠',text:`Depth ${depth.toFixed(1)}m — Prior Approval required (3-6m band)`});
+    rules.push({icon:'✓',text:`Under ${maxPA}m Prior Approval maximum ✓`});
+  } else {
+    verdict = 'Permitted Development';
+    color = 'var(--green)';
+    sub = 'No planning permission required';
+    noteClass = 'green';
+    noteText = `Depth of ${depth.toFixed(1)}m is within the 3m standard PD limit for a semi-detached. No planning application needed.`;
+    rules.push({icon:'✓',text:`Depth ${depth.toFixed(1)}m within 3m PD limit ✓`});
+  }
+
+  rules.push({icon: height<=HOUSE_EAVES?'✓':'✗', text:`Height ${height.toFixed(1)}m vs eaves ${HOUSE_EAVES}m`});
+  rules.push({icon:'✓', text:'Single storey — materials to match'});
+
+  // Update verdict UI
+  document.getElementById('verdict-dot').style.background = color;
+  document.getElementById('verdict-label').style.color = color;
+  document.getElementById('verdict-label').textContent = verdict;
+  document.getElementById('verdict-sub').textContent = sub;
+  document.getElementById('class-note').className = 'class-note ' + noteClass;
+  document.getElementById('class-note').textContent = noteText;
+  document.getElementById('rule-list').innerHTML = rules.map(r => `<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
+
+  // Dimensions
+  const area = (depth * width).toFixed(1);
+  const vol = Math.round(depth * width * height);
+  document.getElementById('dim-gf').textContent = area;
+  document.getElementById('dim-ht').textContent = height.toFixed(1);
+  document.getElementById('dim-vol').textContent = vol;
+
+  // Update colour of extrusion
+  const extColor = noteClass==='green'?'#16a34a':noteClass==='amber'?'#d97706':'#dc2626';
+  map.setPaintProperty('ext-3d','fill-extrusion-color', extColor);
+
+  // Extension sits at rear of house
+  const offsetLng = (HOUSE_W - width) / 2; // centre the extension
+  const rearLat = BASE_LAT - HOUSE_D * M_LAT;
+  const extCoords = makeRect(BASE_LNG + offsetLng * M_LNG, rearLat, width, depth);
+  map.getSource('extension').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[extCoords]},properties:{height}});
+  map.setLayoutProperty('ext-3d','visibility','visible');
+  map.setLayoutProperty('ext-top','visibility','visible');
+  map.setLayoutProperty('dormer-3d','visibility','none');
+
+  // Max envelope guide (6m depth full width)
+  const maxEnvCoords = makeRect(BASE_LNG, rearLat, HOUSE_W, maxPA);
+  map.getSource('max-env').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[maxEnvCoords]}});
+}
+
+function updateDormer(map) {
+  const dwidth = parseFloat(document.getElementById('sl-dwidth').value);
+  const dproj = parseFloat(document.getElementById('sl-dproj').value);
+  document.getElementById('val-dwidth').textContent = dwidth.toFixed(1)+'m';
+  document.getElementById('val-dproj').textContent = dproj.toFixed(2)+'m';
+
+  // Dormer sits on rear slope of roof
+  const dormerBase = HOUSE_EAVES;
+  const dormerH = HOUSE_H - 0.5; // just below ridge
+  const offsetLng = (HOUSE_W - dwidth) / 2;
+  const rearLat = BASE_LAT - (HOUSE_D - dproj) * M_LAT;
+  const dormerCoords = makeRect(BASE_LNG + offsetLng * M_LNG, rearLat, dwidth, dproj);
+
+  // Semi volume check: 40m³ allowed for terraced (using terraced as more restrictive)
+  const vol = dwidth * dproj * (dormerH - dormerBase);
+  const maxVol = 40;
+  const overVol = vol > maxVol;
+  const onFront = false; // rear dormer
+
+  const verdict = overVol ? 'Planning Required' : 'Permitted Development';
+  const color = overVol ? 'var(--red)' : 'var(--green)';
+  const noteClass = overVol ? 'red' : 'green';
+
+  document.getElementById('verdict-dot').style.background = color;
+  document.getElementById('verdict-label').style.color = color;
+  document.getElementById('verdict-label').textContent = verdict;
+  document.getElementById('verdict-sub').textContent = overVol ? `Volume ${vol.toFixed(0)}m³ exceeds 40m³ limit` : 'Rear dormer within PD limits';
+  document.getElementById('class-note').className = 'class-note ' + noteClass;
+  document.getElementById('class-note').textContent = overVol
+    ? `Volume of ${vol.toFixed(0)}m³ exceeds the 40m³ PD limit for this property. Reduce the width or projection.`
+    : `Rear dormer of ${vol.toFixed(0)}m³ is within the 40m³ permitted development allowance. No planning required.`;
+
+  document.getElementById('rule-list').innerHTML = [
+    {icon:!onFront?'✓':'✗', text:'Rear elevation only (not facing highway)'},
+    {icon:!overVol?'✓':'✗', text:`Volume ${vol.toFixed(0)}m³ vs 40m³ limit`},
+    {icon:'✓', text:'Set back 20cm from eaves ✓'},
+    {icon:'✓', text:'Not exceeding ridge height ✓'},
+  ].map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
+
+  document.getElementById('dim-gf').textContent = (dwidth*dproj).toFixed(1);
+  document.getElementById('dim-ht').textContent = (dormerH-dormerBase).toFixed(1);
+  document.getElementById('dim-vol').textContent = vol.toFixed(0);
+
+  map.getSource('dormer').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[dormerCoords]},properties:{height:dormerH,base:dormerBase}});
+  map.setLayoutProperty('dormer-3d','visibility','visible');
+  map.setLayoutProperty('ext-3d','visibility','none');
+  map.setLayoutProperty('ext-top','visibility','none');
+  map.getSource('max-env').setData({type:'FeatureCollection',features:[]});
+}
+
+function updateOutbuilding(map) {
+  const obw = parseFloat(document.getElementById('sl-obw').value);
+  const obd = parseFloat(document.getElementById('sl-obd').value);
+  const obh = parseFloat(document.getElementById('sl-obh').value);
+  document.getElementById('val-obw').textContent = obw.toFixed(1)+'m';
+  document.getElementById('val-obd').textContent = obd.toFixed(1)+'m';
+  document.getElementById('val-obh').textContent = obh.toFixed(1)+'m';
+
+  const GARDEN_AREA = HOUSE_W * GARDEN_D; // m²
+  const OB_AREA = obw * obd;
+  const HOUSE_AREA = HOUSE_W * HOUSE_D;
+  const curtilage = HOUSE_AREA + GARDEN_AREA;
+  const maxArea = curtilage * 0.5 - HOUSE_AREA;
+  const exceedsArea = OB_AREA > maxArea;
+  const nearBoundary = true; // assume within 2m for demo
+  const exceedsH = nearBoundary && obh > 2.5;
+
+  const verdict = (exceedsArea || exceedsH) ? 'Planning Required' : 'Permitted Development';
+  const color = (exceedsArea||exceedsH)?'var(--red)':'var(--green)';
+  const noteClass = (exceedsArea||exceedsH)?'red':'green';
+
+  document.getElementById('verdict-dot').style.background = color;
+  document.getElementById('verdict-label').style.color = color;
+  document.getElementById('verdict-label').textContent = verdict;
+  document.getElementById('verdict-sub').textContent = verdict === 'Permitted Development' ? 'Within outbuilding PD rules' : 'Exceeds PD limits — planning required';
+  document.getElementById('class-note').className = 'class-note ' + noteClass;
+  document.getElementById('class-note').textContent = exceedsH
+    ? `Height of ${obh.toFixed(1)}m exceeds the 2.5m limit when within 2m of the boundary.`
+    : exceedsArea
+    ? `Outbuilding area of ${OB_AREA.toFixed(0)}m² exceeds 50% curtilage limit for this garden.`
+    : `Outbuilding ${obw}×${obd}m at ${obh}m is within PD limits. Class E permitted.`;
+
+  document.getElementById('rule-list').innerHTML = [
+    {icon:!exceedsArea?'✓':'✗', text:`Area ${OB_AREA.toFixed(0)}m² within 50% curtilage (max ~${Math.round(maxArea)}m²)`},
+    {icon:!exceedsH?'✓':'✗', text:`Height ${obh.toFixed(1)}m — 2.5m limit within 2m of boundary`},
+    {icon:'✓', text:'Behind principal elevation ✓'},
+    {icon:'✓', text:'Incidental use — home office / studio ✓'},
+  ].map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
+
+  document.getElementById('dim-gf').textContent = OB_AREA.toFixed(1);
+  document.getElementById('dim-ht').textContent = obh.toFixed(1);
+  document.getElementById('dim-vol').textContent = Math.round(OB_AREA * obh);
+
+  // Position outbuilding in garden, offset from house
+  const obLat = BASE_LAT - (HOUSE_D + 5) * M_LAT; // 5m into garden
+  const obLng = BASE_LNG + 0.5 * M_LNG; // slight offset
+  const obCoords = makeRect(obLng, obLat, obw, obd);
+  map.getSource('extension').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[obCoords]},properties:{height:obh}});
+  map.setLayoutProperty('ext-3d','visibility','visible');
+  map.setLayoutProperty('ext-top','visibility','visible');
+  map.setLayoutProperty('dormer-3d','visibility','none');
+  map.setPaintProperty('ext-3d','fill-extrusion-color', noteClass==='green'?'#16a34a':'#dc2626');
+  map.getSource('max-env').setData({type:'FeatureCollection',features:[]});
+}
+
+initMap();
+</script>
+</body>
+</html>

@@ -34,6 +34,10 @@ function cachedFetch(url, timeoutMs = 10000) {
 
 
 // ── PD Checker ────────────────────────────────────────────────────────────────
+app.get('/pd-demo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'pd-demo.html'));
+});
+
 app.get('/pd', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'pd.html'));
 });
