@@ -400,8 +400,15 @@ async function init(){
 
   updateMetrics();
 
-  // Camera stays locked to massing center — orbit/zoom via lookAt constraint
-  // Do NOT unlock on mousedown: unlocked mode pivots around globe center, not the site
+  // Left drag = rotate (lookAt orbit), wheel = zoom, right drag = pan
+  // Right mousedown releases lookAt so translate events actually move the camera
+  viewer.scene.canvas.addEventListener('pointerdown', function(e){
+    if(e.button === 2){
+      // Release lookAt constraint — right drag pans freely
+      viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+    }
+  });
+  // Re-lock on preset buttons (handled in flyTo)
 }
 
 // ── Sample ground elevation from rendered 3D tiles ────────────────────────────

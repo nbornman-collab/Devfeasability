@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Full Insight - 24 Southwark Street</title>
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Cesium.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -1034,82 +1034,171 @@ async function generateRender(){
   btn.textContent = '⬡ Generate Render';
 }
 
+// ── Cesium viewer — replaces Mapbox in T2 left panel ──────────────────────────
+let _siteElev = 10;
+const FTF_T2 = 4.0;
+const SITE_POLYGON_T2 = typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon
+  ? SITE_INTELLIGENCE.polygon
+  : [[-0.09245,51.50457],[-0.09098,51.50455],[-0.09097,51.50527],[-0.09176,51.50527],[-0.09177,51.50514],[-0.09246,51.50514],[-0.09245,51.50457]];
+
 async function initMap(){
-  const cfg=await(await fetch('/api/config')).json();
-  mapboxgl.accessToken=cfg.mapboxToken;
-  const m=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:CENTROID,zoom:17.0,pitch:55,bearing:5,antialias:true});
-  m.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
-  window._map=m;
-  m.on('style.load',()=>{
-    // Context buildings - soft grey
-    m.addLayer({id:'ctx-3d',source:'composite','source-layer':'building',filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
-      paint:{'fill-extrusion-color':['interpolate',['linear'],['get','height'],0,'#d4d6dc',80,'#b0b3be'],'fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','min_height'],'fill-extrusion-opacity':0.20,'fill-extrusion-vertical-gradient':false}});
+  const cfg = await fetch('/api/config').then(r=>r.json()).catch(()=>({}));
+  const googleKey = cfg.googleMapsKey || '';
+  const mapboxToken = cfg.mapboxToken || '';
 
-    // Site boundary
-    m.addSource('site',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'site-line',type:'line',source:'site',paint:{'line-color':'#6366f1','line-width':1.5,'line-dasharray':[5,3],'line-opacity':0.8}});
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.demo';
 
-    // Red translucent shell - OS NGD real footprint polygon (falls back to SITE_COORDS)
-    m.addSource('existing',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'existing-cap',type:'fill-extrusion',source:'existing',paint:{'fill-extrusion-color':'#b45309','fill-extrusion-height':EXISTING_HEIGHT,'fill-extrusion-base':0,'fill-extrusion-opacity':0.75}});
-    m.addLayer({id:'existing-edge',type:'line',source:'existing',paint:{'line-color':'#92400e','line-width':2,'line-opacity':0.9}});
-    // Load real OS NGD building data
-    fetch(`/api/building-data?lat=51.5048&lng=-0.0940`).then(r=>r.json()).then(bd=>{
-      if(!bd.found) return;
-      window._existingH = bd.height;
-      EXISTING_HEIGHT = bd.height;
-      // Replace red shell with actual OS NGD footprint (slight outset)
-      const osCoords = bd.polygon.coordinates[0];
-      m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(osCoords,0.000003)]}});
-      m.getSource('existing-ring').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(osCoords,0.000003)]}});
-      m.setPaintProperty('existing-cap','fill-extrusion-height',bd.height);
-      m.setPaintProperty('existing-ring','fill-extrusion-height',bd.height);
-      m.setPaintProperty('existing-ring','fill-extrusion-base',bd.height - 1.2);
-      m.setPaintProperty('existing-cap','fill-extrusion-opacity',0.5);
-      // Re-run map update with corrected height
-      updateMap(window._activeIdx||0);
-      console.log('OS NGD 24SS: height='+bd.height+'m footprint='+bd.footprint_area+'m²');
-    }).catch(()=>{});
+  const mapboxSat = mapboxToken ? new Cesium.MapboxStyleImageryProvider({
+    styleId: 'satellite-v9', accessToken: mapboxToken, username: 'mapbox', tilesize: 512,
+  }) : undefined;
 
-    // Green additional envelope + floor lines
-    m.addSource('podium',{type:'geojson',data:emptyPoly()});
-    m.addSource('tower',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'podium-3d',type:'fill-extrusion',source:'podium',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':0,'fill-extrusion-opacity':0.96}});
-    m.addLayer({id:'tower-3d',type:'fill-extrusion',source:'tower',paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42,'fill-extrusion-base':25,'fill-extrusion-opacity':0}});
-    m.addLayer({id:'podium-edge',type:'line',source:'podium',paint:{'line-color':'#047857','line-width':2,'line-opacity':0.85}});
-    m.addLayer({id:'tower-edge',type:'line',source:'tower',paint:{'line-color':'#34d399','line-width':2,'line-opacity':0}});
-
-    // Amber existing-height-marker - shows where existing building tops out
-    m.addSource('existing-ring',{type:'geojson',data:emptyPoly()});
-    m.addLayer({id:'existing-ring',type:'fill-extrusion',source:'existing-ring',paint:{
-      'fill-extrusion-color':'#f59e0b',
-      'fill-extrusion-height':EXISTING_HEIGHT,
-      'fill-extrusion-base':EXISTING_HEIGHT - 1.2,
-      'fill-extrusion-opacity':0.95
-    }});
-
-    for(let f=1;f<=30;f++){
-      m.addSource('fl'+f,{type:'geojson',data:emptyPoly()});
-      m.addLayer({id:'fl'+f,type:'fill-extrusion',source:'fl'+f,paint:{'fill-extrusion-color':'#047857','fill-extrusion-height':0,'fill-extrusion-base':0,'fill-extrusion-opacity':0}});
-    }
-    m.moveLayer('podium-3d');
-    m.moveLayer('podium-edge');
-    // Massing renders only after queryRenderedFeatures loads real polygon on idle
-    m.once('idle', () => {
-      // Polygon from intelligence file - single source of truth across T1 + T2
-      if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
-        const poly = SITE_INTELLIGENCE.polygon;
-        SITE_COORDS = poly;
-        m.getSource('site').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_COORDS]}});
-        m.getSource('existing').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
-        if(m.getSource('existing-ring')) m.getSource('existing-ring').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[bufferPoly(SITE_COORDS,0.000004)]}});
-        updateMap(window._activeIdx||0);
-        console.log('T2-24SS: polygon from intelligence file, ' + poly.length + ' vertices');
-      } else {
-        console.warn('T2-24SS: SITE_INTELLIGENCE.polygon missing');
-      }
-    });
+  const viewer = new Cesium.Viewer('map', {
+    animation:false, baseLayerPicker:false, fullscreenButton:false,
+    geocoder:false, homeButton:false, infoBox:false, sceneModePicker:false,
+    selectionIndicator:false, timeline:false, navigationHelpButton:false,
+    skyBox:false, skyAtmosphere:false,
+    imageryProvider: mapboxSat || new Cesium.IonImageryProvider({assetId:2}),
+    terrainProvider: new Cesium.EllipsoidTerrainProvider(),
   });
+
+  viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#e8ecf0');
+  viewer.scene.fog.enabled = false;
+  viewer.scene.globe.enableLighting = false;
+  viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#dde3ea');
+  viewer.shadows = true;
+  viewer.scene.shadowMap.maximumDistance = 1500;
+  viewer.scene.shadowMap.softShadows = true;
+
+  // Mouse remapping: left=rotate, wheel=zoom, right=pan
+  const ctrl = viewer.scene.screenSpaceCameraController;
+  ctrl.enableRotate = true; ctrl.enableTilt = true;
+  ctrl.enableZoom = true; ctrl.enableTranslate = true;
+  ctrl.minimumZoomDistance = 20; ctrl.maximumZoomDistance = 3000;
+  ctrl.rotateEventTypes    = Cesium.CameraEventType.LEFT_DRAG;
+  ctrl.tiltEventTypes      = Cesium.CameraEventType.MIDDLE_DRAG;
+  ctrl.zoomEventTypes      = [Cesium.CameraEventType.WHEEL, Cesium.CameraEventType.PINCH];
+  ctrl.translateEventTypes = Cesium.CameraEventType.RIGHT_DRAG;
+  ctrl.lookEventTypes      = [];
+
+  // Right drag: release lookAt so pan works
+  viewer.scene.canvas.addEventListener('pointerdown', function(e){
+    if(e.button === 2) viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+  });
+
+  window._cesiumViewer = viewer;
+
+  // Load Google 3D Tiles
+  if(googleKey){
+    try{
+      const tileset = await Cesium.createGooglePhotorealistic3DTileset(googleKey, {showCreditsOnScreen:false});
+      viewer.scene.primitives.add(tileset);
+    } catch(e){ console.warn('Google tiles:', e.message); }
+  }
+
+  // Get actual site polygon
+  const poly = (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3)
+    ? SITE_INTELLIGENCE.polygon
+    : SITE_POLYGON_T2;
+
+  // Site footprint outline (ground-clamped)
+  viewer.entities.add({
+    polyline:{
+      positions: Cesium.Cartesian3.fromDegreesArray(poly.flatMap(([lng,lat])=>[lng,lat])),
+      width: 2, clampToGround: true,
+      material: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.8)),
+    }
+  });
+
+  // Existing building — amber ghost
+  const lngs = poly.map(p=>p[0]), lats = poly.map(p=>p[1]);
+  const cx = lngs.reduce((a,b)=>a+b,0)/lngs.length;
+  const cy = lats.reduce((a,b)=>a+b,0)/lats.length;
+
+  window._existingEntity = viewer.entities.add({
+    polygon:{
+      hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(poly.flatMap(([lng,lat])=>[lng,lat]))),
+      height: _siteElev, extrudedHeight: _siteElev + EXISTING_HEIGHT,
+      heightReference: Cesium.HeightReference.NONE,
+      extrudedHeightReference: Cesium.HeightReference.NONE,
+      material: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#b45309').withAlpha(0.35)),
+      outline: true,
+      outlineColor: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#92400e').withAlpha(0.7)),
+      outlineWidth: 1.5,
+    }
+  });
+
+  // Proposed massing — indigo
+  window._massingEntity = viewer.entities.add({
+    polygon:{
+      hierarchy: new Cesium.PolygonHierarchy(
+        Cesium.Cartesian3.fromDegreesArray(
+          poly.map(([lng,lat])=>[cx+(lng-cx)*0.92, cy+(lat-cy)*0.92]).flatMap(([lng,lat])=>[lng,lat])
+        )
+      ),
+      height: _siteElev, extrudedHeight: _siteElev + 40,
+      heightReference: Cesium.HeightReference.NONE,
+      extrudedHeightReference: Cesium.HeightReference.NONE,
+      material: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#4f46e5').withAlpha(0.42)),
+      outline: true,
+      outlineColor: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.9)),
+      outlineWidth: 2,
+      shadows: Cesium.ShadowMode.ENABLED,
+    }
+  });
+
+  // Sample ground elevation then rebuild massing
+  async function sampleElev(retries){
+    try{
+      const carto = [Cesium.Cartographic.fromDegrees(cx, cy)];
+      const sampled = await viewer.scene.sampleHeightMostDetailed(carto);
+      const h = sampled && sampled[0] ? sampled[0].height : null;
+      if(h != null && h > 0 && h < 200){
+        _siteElev = h;
+        updateMap(window._activeScen || 0);
+      } else if(retries > 0) setTimeout(()=>sampleElev(retries-1), 1500);
+    } catch(e){ if(retries>0) setTimeout(()=>sampleElev(retries-1), 1500); }
+  }
+  setTimeout(()=>sampleElev(3), 800);
+
+  // Initial camera — isometric view on site
+  const center = Cesium.Cartesian3.fromDegrees(cx, cy, _siteElev + 25);
+  viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(
+    Cesium.Math.toRadians(30), Cesium.Math.toRadians(-38), 280
+  ));
+
+  // Update massing immediately for current scenario
+  updateMap(window._activeScen || 0);
+}
+
+function updateMap(idx){
+  if(!window._cesiumViewer || !window._massingEntity) return;
+  const s = SCENARIOS[idx];
+  const massingH = s.floors * FTF_T2;
+  const v = window._cesiumViewer;
+  const poly = (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3)
+    ? SITE_INTELLIGENCE.polygon : SITE_POLYGON_T2;
+  const lngs = poly.map(p=>p[0]), lats = poly.map(p=>p[1]);
+  const cx = lngs.reduce((a,b)=>a+b,0)/lngs.length;
+  const cy = lats.reduce((a,b)=>a+b,0)/lats.length;
+
+  const SCEN_COLORS = ['#059669','#4f46e5','#d97706'];
+  const col = SCEN_COLORS[idx];
+
+  // Update massing height
+  window._massingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(_siteElev + massingH);
+  window._massingEntity.polygon.height = new Cesium.ConstantProperty(_siteElev);
+  window._massingEntity.polygon.material = new Cesium.ColorMaterialProperty(
+    Cesium.Color.fromCssColorString(col).withAlpha(0.42)
+  );
+  window._massingEntity.polygon.outlineColor = new Cesium.ColorMaterialProperty(
+    Cesium.Color.fromCssColorString(col).withAlpha(0.9)
+  );
+
+  // Update existing building base
+  if(window._existingEntity){
+    window._existingEntity.polygon.height = new Cesium.ConstantProperty(_siteElev);
+    window._existingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(_siteElev + EXISTING_HEIGHT);
+  }
 }
 
 render();
