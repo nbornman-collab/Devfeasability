@@ -627,9 +627,13 @@ function populateSummary(si) {
         msg.style.cssText = 'background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;text-align:center;max-width:280px;box-shadow:0 2px 8px rgba(0,0,0,.1)';
         // Check if mapboxgl loaded
         const mglLoaded = typeof mapboxgl !== 'undefined';
+        const webgl2 = (function(){ try { return !!document.createElement('canvas').getContext('webgl2'); } catch(e){ return false; } })();
+        const webgl1 = (function(){ try { return !!document.createElement('canvas').getContext('webgl'); } catch(e){ return false; } })();
         msg.innerHTML = '<div style="font:700 12px sans-serif;color:#92400e;margin-bottom:6px">Map not loading</div>'
-          + '<div style="font:400 11px sans-serif;color:#6b7280;line-height:1.5">'
-          + (mglLoaded ? 'Mapbox GL JS loaded OK. Token fetch or map init failed.' : 'Mapbox GL JS NOT loaded - CDN script blocked.')
+          + '<div style="font:400 11px sans-serif;color:#6b7280;line-height:1.6">'
+          + (mglLoaded ? 'Mapbox GL JS: loaded OK<br>' : 'Mapbox GL JS: NOT loaded (CDN blocked)<br>')
+          + 'WebGL2: ' + (webgl2 ? '<span style="color:#16a34a">YES</span>' : '<span style="color:#dc2626">NO - hardware acceleration likely disabled</span>') + '<br>'
+          + 'WebGL1: ' + (webgl1 ? '<span style="color:#16a34a">YES</span>' : '<span style="color:#dc2626">NO</span>')
           + '</div>';
         mapEl.appendChild(msg);
       }
