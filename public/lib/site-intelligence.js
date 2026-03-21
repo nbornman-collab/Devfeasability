@@ -609,10 +609,11 @@ function populateSummary(si) {
     if(sa) sa.innerHTML = synthesisArchitecture(si);
   }
 
-  // Dev numbers grid (inside dev scope section)
+  // Dev numbers grid - only show inside section if hero was NOT injected
+  // (hero callout shows same metrics more prominently above sections)
   if(typeof renderDevNumbers === 'function') {
     const dn = document.getElementById('dev-numbers-mount');
-    if(dn) dn.innerHTML = renderDevNumbers(si);
+    if(dn) dn.innerHTML = '';  // cleared - hero callout shows these metrics
   }
 
   // ── Map diagnostic: show visible error if Mapbox fails to render ─────────
@@ -627,13 +628,24 @@ function populateSummary(si) {
         msg.style.cssText = 'background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;text-align:center;max-width:280px;box-shadow:0 2px 8px rgba(0,0,0,.1)';
         // Check if mapboxgl loaded
         const mglLoaded = typeof mapboxgl !== 'undefined';
-        const webgl2 = (function(){ try { return !!document.createElement('canvas').getContext('webgl2'); } catch(e){ return false; } })();
-        const webgl1 = (function(){ try { return !!document.createElement('canvas').getContext('webgl'); } catch(e){ return false; } })();
+        // Try to detect the actual Map constructor error
+        let mapErr = 'unknown';
+        if(mglLoaded) {
+          try {
+            const td = document.createElement('div');
+            td.style.cssText = 'width:100px;height:100px;position:absolute;top:-9999px;left:-9999px';
+            document.body.appendChild(td);
+            const tm = new mapboxgl.Map({container:td, style:'mapbox://styles/mapbox/light-v11'});
+            tm.remove();
+            document.body.removeChild(td);
+            mapErr = 'test map OK - original container sizing issue';
+          } catch(e) { mapErr = e.message || String(e); }
+        }
         msg.innerHTML = '<div style="font:700 12px sans-serif;color:#92400e;margin-bottom:6px">Map not loading</div>'
-          + '<div style="font:400 11px sans-serif;color:#6b7280;line-height:1.6">'
-          + (mglLoaded ? 'Mapbox GL JS: loaded OK<br>' : 'Mapbox GL JS: NOT loaded (CDN blocked)<br>')
-          + 'WebGL2: ' + (webgl2 ? '<span style="color:#16a34a">YES</span>' : '<span style="color:#dc2626">NO - hardware acceleration likely disabled</span>') + '<br>'
-          + 'WebGL1: ' + (webgl1 ? '<span style="color:#16a34a">YES</span>' : '<span style="color:#dc2626">NO</span>')
+          + '<div style="font:400 11px sans-serif;color:#6b7280;line-height:1.6;text-align:left">'
+          + 'Mapbox: ' + (mglLoaded ? 'OK' : 'NOT loaded') + '<br>'
+          + 'Supported: ' + (mglLoaded && mapboxgl.supported() ? 'YES' : 'NO') + '<br>'
+          + 'Error: <span style="color:#dc2626;font-size:10px;word-break:break-all">' + mapErr + '</span>'
           + '</div>';
         mapEl.appendChild(msg);
       }
