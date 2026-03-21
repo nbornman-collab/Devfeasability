@@ -615,6 +615,27 @@ function populateSummary(si) {
     if(dn) dn.innerHTML = renderDevNumbers(si);
   }
 
+  // ── Map diagnostic: show visible error if Mapbox fails to render ─────────
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      const mapEl = document.getElementById('map');
+      if(!mapEl) return;
+      if(!mapEl.querySelector('canvas')) {
+        // Mapbox didn't create a canvas - map failed silently
+        mapEl.style.cssText += ';background:#fef3c7;position:fixed;display:flex;align-items:center;justify-content:center';
+        const msg = document.createElement('div');
+        msg.style.cssText = 'background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;text-align:center;max-width:280px;box-shadow:0 2px 8px rgba(0,0,0,.1)';
+        // Check if mapboxgl loaded
+        const mglLoaded = typeof mapboxgl !== 'undefined';
+        msg.innerHTML = '<div style="font:700 12px sans-serif;color:#92400e;margin-bottom:6px">Map not loading</div>'
+          + '<div style="font:400 11px sans-serif;color:#6b7280;line-height:1.5">'
+          + (mglLoaded ? 'Mapbox GL JS loaded OK. Token fetch or map init failed.' : 'Mapbox GL JS NOT loaded - CDN script blocked.')
+          + '</div>';
+        mapEl.appendChild(msg);
+      }
+    }, 3000);
+  });
+
   // ── Hero metrics callout - injected above first intel-group ──────────────
   // Shows key headline numbers prominently before synthesis text
   if(!document.getElementById('metrics-hero-injected')) {
