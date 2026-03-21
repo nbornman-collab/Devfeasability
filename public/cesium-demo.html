@@ -329,21 +329,33 @@ async function init(){
   // Suppress ion token warning - we use Google tiles, not ion
   Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkZW1vIiwiaWF0IjoxNjk3MDAwMDAwfQ.demo';
 
+  // Mapbox satellite as base imagery - no ion token needed
+  const mapboxSat = mapboxToken ? new Cesium.MapboxStyleImageryProvider({
+    styleId: 'satellite-v9',
+    accessToken: mapboxToken,
+    username: 'mapbox',
+    tilesize: 512,
+  }) : new Cesium.IonImageryProvider({ assetId: 2 });
+
   viewer = new Cesium.Viewer('cesiumContainer', {
     animation:false, baseLayerPicker:false, fullscreenButton:false,
     geocoder:false, homeButton:false, infoBox:false, sceneModePicker:false,
     selectionIndicator:false, timeline:false, navigationHelpButton:false,
-    skyBox:false, baseLayer:false, globe:false,
+    skyBox:false, skyAtmosphere: false,
+    imageryProvider: mapboxSat,
+    terrainProvider: new Cesium.EllipsoidTerrainProvider(),
   });
 
-  // Scene atmosphere
+  // Scene setup
   viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#080b14');
   viewer.scene.fog.enabled = false;
-  viewer.scene.moon = undefined;
+  viewer.scene.globe.enableLighting = false;
+  viewer.scene.globe.show = true;
+  viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0c1020');
 
-  // Enable shadows for depth
+  // Shadows
   viewer.shadows = true;
-  viewer.scene.shadowMap.maximumDistance = 3000;
+  viewer.scene.shadowMap.maximumDistance = 2000;
   viewer.scene.shadowMap.softShadows = true;
 
   progress(45, 'Loading Google Photorealistic 3D Tiles…');
@@ -363,12 +375,10 @@ async function init(){
   }
 
   if(!tilesLoaded){
-    progress(55, 'Loading OSM 3D Buildings (fallback)…');
-    try{
-      const osm = await Cesium.createOsmBuildingsAsync();
-      viewer.scene.primitives.add(osm);
-      toast('Google Maps API key not set — showing OSM buildings. Set GOOGLE_MAPS_API_KEY on Railway for full photorealistic tiles.');
-    } catch(e){ toast('3D context unavailable — massing only mode'); }
+    if(!googleKey){
+      progress(65, 'Using Mapbox satellite base…');
+      toast('Set GOOGLE_MAPS_API_KEY on Railway for Google Photorealistic 3D Tiles. Showing Mapbox satellite + massing for now.');
+    }
   }
 
   progress(80, 'Building massing geometry…');
@@ -481,7 +491,7 @@ function onSlider(){
 
 function updateMassingHeight(floors, cov, erv, niy){
   const heightM = floors * FTF;
-  const siteElev = 12; // London approximate
+  const siteElev = 16; // London approximate (Thames riverside ~5-20m)
   const totalH = siteElev + heightM;
 
   if(massingEntity){
