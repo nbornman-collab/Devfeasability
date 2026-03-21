@@ -617,6 +617,26 @@ function populateSummary(si) {
   }
 
   // ── Map diagnostic: show visible error if Mapbox fails to render ─────────
+  // Fallback: if the page's own fetch('/api/config') failed silently,
+  // retry the fetch and set the token so the map can initialize
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      if(typeof mapboxgl === 'undefined' || mapboxgl.accessToken) return;
+      // Token not set - try fetching config again
+      fetch('/api/config').then(function(r){ return r.json(); }).then(function(cfg) {
+        if(!cfg || !cfg.mapboxToken) return;
+        mapboxgl.accessToken = cfg.mapboxToken;
+        const mapEl2 = document.getElementById('map');
+        if(mapEl2 && !mapEl2.querySelector('canvas') && typeof CENTROID !== 'undefined') {
+          try {
+            const m2 = new mapboxgl.Map({container:'map', style:'mapbox://styles/mapbox/light-v11', center:CENTROID, zoom:17.5, pitch:52, bearing:5, antialias:true});
+            window._map = m2;
+          } catch(e) { console.error('Map fallback init failed:', e.message); }
+        }
+      }).catch(function(e){ console.error('Config retry failed:', e.message); });
+    }, 800);
+  });
+
   window.addEventListener('load', function() {
     setTimeout(function() {
       const mapEl = document.getElementById('map');
