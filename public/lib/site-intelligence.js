@@ -532,6 +532,90 @@ function renderSiteStrategy(si) {
   </div>`;
 }
 
+
+// ── Panel interaction + summary population (shared T1 functions) ───────────
+function toggleGroup(id) {
+  const body = document.getElementById(id + '-body');
+  const chev = document.getElementById(id + '-chev');
+  if(!body) return;
+  const open = body.classList.toggle('open');
+  if(chev) chev.classList.toggle('open', open);
+}
+
+function populateSummary(si) {
+  if(!si) return;
+  const s = si.site || {};
+  const F = si.factors || {};
+  const hf = si.heritage_framework || {};
+  const mom = F.momentum || {};
+  const val = F.value || {};
+  const acq = F.acquisition || {};
+
+  // Summary strip
+  const nameEl = document.getElementById('sum-name');
+  const metaEl = document.getElementById('sum-meta');
+  const scoreEl = document.getElementById('sum-score');
+  if(nameEl) nameEl.textContent = si.address || s.address || si.name || '—';
+  if(metaEl) metaEl.textContent = [
+    (s.plot_m2||s.plot_area) ? (s.plot_m2||s.plot_area).toLocaleString()+' m²' : '',
+    s.use||si.use||'',
+    si.borough||''
+  ].filter(Boolean).join(' · ');
+  const score = computeSiteScore(si);
+  if(scoreEl) scoreEl.textContent = score;
+
+  // Verdict badge
+  const vw = document.getElementById('sum-verdict-wrap');
+  if(vw && typeof renderVerdict === 'function') vw.innerHTML = renderVerdict(si);
+
+  // Chips: OA / Conservation / Article 4 / BSA / Off-market / Brownfield (NO flood zone)
+  const chips = [];
+  if(mom.opportunity_area) chips.push('<span class="chip blue">OA: '+(mom.opportunity_area.name||'OA')+'</span>');
+  if(s.conservation_area||s.inConservation) chips.push('<span class="chip amber">Conservation Area</span>');
+  if(s.article4) chips.push('<span class="chip amber">Article 4</span>');
+  const maxH = s.max_h||s.h||0; const maxF = s.max_floors||s.mf||0;
+  if(maxH>=50||maxF>=16) chips.push('<span class="chip red">BSA 50m+</span>');
+  else if(maxH>=30||maxF>=10) chips.push('<span class="chip amber">BSA 30m+</span>');
+  else if(maxH>=18||maxF>=6) chips.push('<span class="chip amber">BSA 18m+</span>');
+  if(s.offMarket==='high'||si.offMarket==='high') chips.push('<span class="chip purple">Off-market signal</span>');
+  if(s.inBrownfield||si.inBrownfield||s.brownfield) chips.push('<span class="chip green">Brownfield</span>');
+  const cr = document.getElementById('sum-chips');
+  if(cr) cr.innerHTML = chips.join('');
+
+  // Group badges
+  const devB = document.getElementById('g-dev-badge');
+  if(devB) {
+    const mf2 = maxF||10; const erv2 = (val.erv||700);
+    devB.textContent = mf2+'F max · £'+erv2+'/m²';
+  }
+  const planB = document.getElementById('g-plan-badge');
+  if(planB) {
+    const ps = (F.momentum||{}).score||5;
+    planB.className = 'ig-badge '+(ps>=7?'green':ps>=5?'amber':'red');
+    planB.textContent = 'Appetite '+ps.toFixed(1)+'/10';
+  }
+
+  // Synthesis paragraphs
+  if(typeof synthesisDevScope === 'function') {
+    const sd = document.getElementById('synth-dev');
+    if(sd) sd.innerHTML = synthesisDevScope(si);
+  }
+  if(typeof synthesisPlanning === 'function') {
+    const sp = document.getElementById('synth-plan');
+    if(sp) sp.innerHTML = synthesisPlanning(si);
+  }
+  if(typeof synthesisArchitecture === 'function') {
+    const sa = document.getElementById('synth-arch');
+    if(sa) sa.innerHTML = synthesisArchitecture(si);
+  }
+
+  // Dev numbers grid
+  if(typeof renderDevNumbers === 'function') {
+    const dn = document.getElementById('dev-numbers-mount');
+    if(dn) dn.innerHTML = renderDevNumbers(si);
+  }
+}
+
 // ── No Go / Amber / Green verdict ────────────────────────────────────────────
 function renderVerdict(si) {
   const score = computeSiteScore(si);

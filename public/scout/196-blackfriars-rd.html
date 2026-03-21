@@ -554,6 +554,7 @@ const EXISTING_EUV = 4500000;
 
 // Score + compact intelligence render
 (function(){
+  if(typeof populateSummary === 'function') populateSummary(SITE_INTELLIGENCE);
   const score = computeSiteScore(SITE_INTELLIGENCE);
   // Bottom ribbon + panel header
   const scoreEls = ['hero-score','rp-score-num'];
