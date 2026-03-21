@@ -417,6 +417,20 @@ async function init(){
   // Re-lock on preset button click (handled in flyTo complete callback)
 }
 
+// ── Scale polygon around centroid for coverage slider ──────────────────────────
+function scaledPolygon(cov){
+  const lngs = SITE.polygon.map(p=>p[0]);
+  const lats = SITE.polygon.map(p=>p[1]);
+  const cx = lngs.reduce((a,b)=>a+b,0)/lngs.length;
+  const cy = lats.reduce((a,b)=>a+b,0)/lats.length;
+  // Scale relative to default 65% coverage
+  const scale = Math.sqrt(cov / 65);
+  return SITE.polygon.map(([lng,lat])=>[
+    cx + (lng - cx) * scale,
+    cy + (lat - cy) * scale
+  ]);
+}
+
 // ── Build proposed massing ────────────────────────────────────────────────────
 function buildMassing(){
   const positions = Cesium.Cartesian3.fromDegreesArray(
@@ -427,7 +441,11 @@ function buildMassing(){
   massingEntity = viewer.entities.add({
     polygon:{
       hierarchy: new Cesium.PolygonHierarchy(positions),
-      extrudedHeight: 0, height: 0,
+      // CLAMP_TO_GROUND: base snaps to real terrain surface (Google tiles)
+      height: 0,
+      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+      extrudedHeight: 40,
+      extrudedHeightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
       material: new Cesium.ColorMaterialProperty(
         Cesium.Color.fromCssColorString('#818cf8').withAlpha(0.45)
       ),
@@ -447,34 +465,40 @@ function buildSiteOutline(){
   const pts = SITE.polygon.flatMap(([lng,lat])=>[lng,lat,3]);
   siteOutline = viewer.entities.add({
     polyline:{
-      positions: Cesium.Cartesian3.fromDegreesArrayHeights(pts),
+      positions: Cesium.Cartesian3.fromDegreesArray(
+        SITE.polygon.flatMap(([lng,lat])=>[lng,lat])
+      ),
       width: 2.5,
       material: new Cesium.ColorMaterialProperty(
-        Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.7)
+        Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.8)
       ),
-      clampToGround: false,
+      clampToGround: true, // snaps to terrain surface
     }
   });
 }
 
 // ── Floor lines ───────────────────────────────────────────────────────────────
-function buildFloorLines(floors, baseElev){
-  // Remove old
+function buildFloorLines(floors, cov){
   floorLines.forEach(e=>viewer.entities.remove(e));
   floorLines = [];
 
-  const pts = SITE.polygon.flatMap(([lng,lat])=>[lng,lat]);
+  const poly = scaledPolygon(cov || 65);
+  const closed = [...poly, poly[0]]; // close the ring
 
   for(let f=1; f<floors; f++){
-    const h = baseElev + (f * FTF);
-    const linePts = SITE.polygon.flatMap(([lng,lat])=>[lng,lat,h]);
-    linePts.push(...[SITE.polygon[0][0],SITE.polygon[0][1],h]); // close
+    const h = f * FTF; // height relative to ground (RELATIVE_TO_GROUND)
+    // Use a slight offset so lines sit on the massing faces
+    const linePts = closed.flatMap(([lng,lat])=>[lng, lat, h]);
     const e = viewer.entities.add({
       polyline:{
-        positions: Cesium.Cartesian3.fromDegreesArrayHeights(linePts),
+        positions: new Cesium.CallbackProperty(()=>{
+          // Clamp to ground + offset by floor height
+          return Cesium.Cartesian3.fromDegreesArrayHeights(linePts);
+        }, false),
+        clampToGround: false,
         width: 0.8,
         material: new Cesium.ColorMaterialProperty(
-          Cesium.Color.fromCssColorString('#c4b5fd').withAlpha(0.25)
+          Cesium.Color.fromCssColorString('#c4b5fd').withAlpha(0.22)
         ),
       }
     });
@@ -497,22 +521,34 @@ function onSlider(){
 
 function updateMassingHeight(floors, cov, erv, niy){
   const heightM = floors * FTF;
-  const siteElev = 16; // London approximate (Thames riverside ~5-20m)
-  const totalH = siteElev + heightM;
 
   if(massingEntity){
-    massingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(totalH);
-    massingEntity.polygon.height = new Cesium.ConstantProperty(siteElev);
-    // Change massing colour with height: lower = cooler blue, taller = warmer purple
+    // Base clamps to real terrain - height is purely the building height above ground
+    massingEntity.polygon.height = new Cesium.ConstantProperty(0);
+    massingEntity.polygon.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND;
+    massingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(heightM);
+    massingEntity.polygon.extrudedHeightReference = Cesium.HeightReference.RELATIVE_TO_GROUND;
+
+    // Update footprint: scale polygon around centroid per coverage %
+    const scaled = scaledPolygon(cov);
+    massingEntity.polygon.hierarchy = new Cesium.ConstantProperty(
+      new Cesium.PolygonHierarchy(
+        Cesium.Cartesian3.fromDegreesArray(scaled.flatMap(([lng,lat])=>[lng,lat]))
+      )
+    );
+
+    // Colour shifts: cool blue (low) → warm purple (tall)
     const t = Math.min(floors/20, 1);
-    const r = Math.round(99 + (167-99)*t);
-    const g = Math.round(102 + (139-102)*t);
-    const b = Math.round(241 + (250-241)*t);
     massingEntity.polygon.material = new Cesium.ColorMaterialProperty(
-      new Cesium.Color(r/255, g/255, b/255, 0.5)
+      new Cesium.Color(
+        (99 + (167-99)*t)/255,
+        (102 + (139-102)*t)/255,
+        (241 + (250-241)*t)/255,
+        0.5
+      )
     );
   }
-  buildFloorLines(floors, siteElev);
+  buildFloorLines(floors, cov);
   updateMetrics(floors, cov, erv, niy);
 }
 
