@@ -2,441 +2,596 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CesiumJS + Google 3D Tiles — Massing Demo</title>
+<title>D/A · Full Insight — 24 Southwark Street</title>
 <link href="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Cesium.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#0c0f1a;color:#fff;height:100vh;overflow:hidden}
-#cesiumContainer{width:100%;height:100vh}
+html,body{width:100%;height:100%;overflow:hidden;background:#080b14;font-family:'Inter',sans-serif;color:#fff}
+#cesiumContainer{position:fixed;inset:0;width:100%;height:100%}
 
-/* Override Cesium chrome */
-.cesium-widget-credits{display:none!important}
-.cesium-viewer-bottom{display:none!important}
-.cesium-viewer-toolbar{display:none!important}
-.cesium-viewer-animationContainer{display:none!important}
-.cesium-viewer-timelineContainer{display:none!important}
-.cesium-viewer-fullscreenContainer{display:none!important}
+/* ── Cesium chrome cleanup ── */
+.cesium-widget-credits,.cesium-viewer-bottom,.cesium-viewer-toolbar,
+.cesium-viewer-animationContainer,.cesium-viewer-timelineContainer,
+.cesium-viewer-fullscreenContainer,.cesium-infoBox,.cesium-selectionIndicator{display:none!important}
 
-/* Top bar */
+/* ── Top bar ── */
 #topbar{
-  position:fixed;top:0;left:0;right:0;height:52px;
-  background:rgba(12,15,26,.92);backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(255,255,255,.08);
+  position:fixed;top:0;left:0;right:0;height:56px;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;z-index:100
+  padding:0 24px;
+  background:linear-gradient(to bottom,rgba(8,11,20,.95) 0%,rgba(8,11,20,0) 100%);
+  pointer-events:none
 }
-#topbar .logo{font:700 13px Inter,sans-serif;letter-spacing:.5px;color:#fff}
-#topbar .logo span{opacity:.4}
-#topbar .site-name{font:600 12px Inter,sans-serif;color:rgba(255,255,255,.7);letter-spacing:-.1px}
-#topbar .badge{
-  font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;
-  padding:3px 9px;border-radius:3px;background:rgba(99,102,241,.2);
-  color:#818cf8;border:1px solid rgba(99,102,241,.3)
+#topbar > *{pointer-events:auto}
+.logo{
+  font:800 15px Inter,sans-serif;letter-spacing:-.3px;
+  background:linear-gradient(135deg,#e2e8f0,#94a3b8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent
 }
-
-/* Side panel */
-#panel{
-  position:fixed;right:0;top:52px;bottom:0;width:300px;
-  background:rgba(12,15,26,.92);backdrop-filter:blur(16px);
-  border-left:1px solid rgba(255,255,255,.08);
-  overflow-y:auto;z-index:90
-}
-#panel::-webkit-scrollbar{width:3px}
-#panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
-
-.p-section{border-bottom:1px solid rgba(255,255,255,.06);padding:16px 18px}
-.p-label{font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.3);margin-bottom:10px}
-.p-title{font:700 14px Inter,sans-serif;color:#fff;letter-spacing:-.2px;margin-bottom:3px}
-.p-sub{font:400 11px Inter,sans-serif;color:rgba(255,255,255,.4)}
-
-/* Metrics grid */
-.metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px}
-.metric{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 10px}
-.metric .val{font:700 16px 'DM Mono',monospace;color:#fff;letter-spacing:-1px;line-height:1}
-.metric .val.green{color:#34d399}
-.metric .val.blue{color:#60a5fa}
-.metric .val.amber{color:#fbbf24}
-.metric .lbl{font:500 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.3);margin-top:3px}
-
-/* Verdict */
-.verdict{
+.logo em{font-style:normal;opacity:.35;margin:0 2px}
+.site-pill{
   display:flex;align-items:center;gap:10px;
-  padding:10px 14px;border-radius:7px;
-  background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);
-  margin-bottom:12px
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(16px);border-radius:30px;padding:7px 16px
 }
-.verdict .icon{font-size:16px}
-.verdict .vt{font:700 12px Inter,sans-serif;color:#34d399}
-.verdict .vs{font:400 10px Inter,sans-serif;color:rgba(255,255,255,.4);margin-top:1px}
+.site-pill .name{font:600 12px Inter,sans-serif;color:rgba(255,255,255,.85)}
+.site-pill .sep{width:1px;height:12px;background:rgba(255,255,255,.15)}
+.site-pill .score{font:700 12px 'DM Mono',monospace;color:#818cf8}
+.site-pill .verd{
+  font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;
+  padding:2px 8px;border-radius:20px;
+  background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.2)
+}
+.nav-btn{
+  font:600 11px Inter,sans-serif;color:rgba(255,255,255,.5);
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  border-radius:6px;padding:7px 14px;text-decoration:none;
+  transition:all .15s;cursor:pointer
+}
+.nav-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+
+/* ── Bottom metrics strip ── */
+#metrics-strip{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:stretch;gap:1px;z-index:100;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(20px);border-radius:12px;overflow:hidden;
+  min-width:600px
+}
+.metric-cell{
+  flex:1;padding:12px 20px;text-align:center;transition:background .2s;
+  border-right:1px solid rgba(255,255,255,.06)
+}
+.metric-cell:last-child{border-right:none}
+.metric-cell:hover{background:rgba(255,255,255,.04)}
+.mc-val{font:800 20px 'DM Mono',monospace;letter-spacing:-1px;line-height:1;margin-bottom:3px}
+.mc-val.green{color:#34d399}
+.mc-val.blue{color:#60a5fa}
+.mc-val.purple{color:#a78bfa}
+.mc-val.amber{color:#fbbf24}
+.mc-lbl{font:500 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3)}
+
+/* ── Right control panel ── */
+#ctrl-panel{
+  position:fixed;right:0;top:56px;bottom:0;width:280px;
+  background:linear-gradient(to left,rgba(8,11,20,.97) 0%,rgba(8,11,20,.85) 100%);
+  backdrop-filter:blur(24px);border-left:1px solid rgba(255,255,255,.05);
+  overflow-y:auto;z-index:90;
+  transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)
+}
+#ctrl-panel.open{transform:translateX(0)}
+#ctrl-panel::-webkit-scrollbar{width:2px}
+#ctrl-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08)}
+
+#panel-toggle{
+  position:fixed;right:24px;top:50%;transform:translateY(-50%);
+  width:36px;height:80px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:95;transition:all .2s;backdrop-filter:blur(12px);
+  writing-mode:vertical-rl;font:600 9px Inter,sans-serif;
+  color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;
+  gap:0
+}
+#panel-toggle:hover{background:rgba(255,255,255,.1);color:#fff}
+#ctrl-panel.open ~ #panel-toggle{right:304px}
+
+.ps{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.05)}
+.ps-label{font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.25);margin-bottom:12px}
+
+/* Scheme selector */
+.scheme-row{display:flex;gap:4px}
+.sc-btn{
+  flex:1;padding:8px 4px;text-align:center;border-radius:6px;cursor:pointer;
+  font:600 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;
+  border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.3);
+  background:transparent;transition:all .15s
+}
+.sc-btn.active{
+  background:rgba(99,102,241,.2);border-color:rgba(99,102,241,.4);
+  color:#818cf8
+}
 
 /* Sliders */
-.slider-row{margin-bottom:12px}
-.slider-row label{
-  display:flex;justify-content:space-between;
-  font:500 11px Inter,sans-serif;color:rgba(255,255,255,.5);margin-bottom:5px
-}
-.slider-row label span{color:#fff;font-weight:600}
+.sl-row{margin-bottom:14px}
+.sl-row:last-child{margin-bottom:0}
+.sl-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.sl-top .sl-name{font:500 11px Inter,sans-serif;color:rgba(255,255,255,.4)}
+.sl-top .sl-val{font:700 12px 'DM Mono',monospace;color:#fff}
 input[type=range]{
-  width:100%;height:3px;-webkit-appearance:none;appearance:none;
-  background:rgba(255,255,255,.1);border-radius:2px;outline:none;cursor:pointer
+  width:100%;height:2px;-webkit-appearance:none;appearance:none;
+  background:rgba(255,255,255,.1);border-radius:1px;outline:none;cursor:pointer
 }
 input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
-  background:#6366f1;cursor:pointer;border:2px solid #fff
+  background:#6366f1;cursor:pointer;border:2px solid rgba(255,255,255,.8);
+  box-shadow:0 0 8px rgba(99,102,241,.6)
 }
 
-/* Scheme toggles */
-.scheme-btns{display:flex;gap:4px;margin-bottom:12px}
-.scheme-btn{
-  flex:1;padding:7px 4px;text-align:center;border-radius:5px;cursor:pointer;
-  font:600 10px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;
-  border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);
-  background:transparent;transition:all .15s
+/* Camera buttons */
+.cam-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.cam-btn{
+  padding:8px;text-align:center;border-radius:6px;cursor:pointer;
+  font:500 10px Inter,sans-serif;color:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.08);background:transparent;transition:all .15s
 }
-.scheme-btn.active{background:rgba(99,102,241,.2);border-color:rgba(99,102,241,.4);color:#818cf8}
+.cam-btn:hover{background:rgba(255,255,255,.06);color:#fff}
+.cam-btn.active{background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3);color:#60a5fa}
 
-/* BSA badge */
-.bsa-badge{
+/* BSA pill */
+.bsa-pill{
   display:inline-flex;align-items:center;gap:5px;
-  padding:4px 9px;border-radius:4px;font:600 9px Inter,sans-serif;
+  border-radius:20px;padding:4px 10px;font:600 9px Inter,sans-serif;
   text-transform:uppercase;letter-spacing:.8px;
 }
-.bsa-badge.green{background:rgba(52,211,153,.1);color:#34d399;border:1px solid rgba(52,211,153,.2)}
-.bsa-badge.amber{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
-.bsa-badge.red{background:rgba(248,113,113,.1);color:#f87171;border:1px solid rgba(248,113,113,.2)}
+.bsa-green{background:rgba(52,211,153,.08);color:#34d399;border:1px solid rgba(52,211,153,.15)}
+.bsa-amber{background:rgba(251,191,36,.08);color:#fbbf24;border:1px solid rgba(251,191,36,.15)}
+.bsa-red{background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.15)}
 
-/* CTA */
-.cta-btn{
-  display:block;width:100%;padding:11px;text-align:center;
-  background:#6366f1;color:#fff;font:700 12px Inter,sans-serif;
-  border-radius:7px;text-decoration:none;border:none;cursor:pointer;
-  transition:background .15s
+/* Intelligence blurb */
+.intel-para{
+  font:400 11px/1.75 Inter,sans-serif;color:rgba(255,255,255,.45);
+  border-left:2px solid rgba(99,102,241,.4);padding-left:10px
 }
-.cta-btn:hover{background:#4f46e5}
 
-/* Loading overlay */
+/* Loading screen */
 #loading{
-  position:fixed;inset:0;background:#0c0f1a;z-index:200;
-  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px
+  position:fixed;inset:0;background:#080b14;z-index:500;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px
 }
-#loading .spin{
-  width:36px;height:36px;border:3px solid rgba(255,255,255,.1);
-  border-top-color:#6366f1;border-radius:50%;animation:spin .8s linear infinite
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-#loading p{font:500 12px Inter,sans-serif;color:rgba(255,255,255,.4)}
+.load-logo{font:900 28px Inter,sans-serif;letter-spacing:-.5px;margin-bottom:8px;
+  background:linear-gradient(135deg,#e2e8f0,#94a3b8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.load-bar{width:180px;height:2px;background:rgba(255,255,255,.08);border-radius:1px;overflow:hidden}
+.load-fill{height:100%;background:linear-gradient(90deg,#6366f1,#818cf8);width:0%;transition:width .4s;border-radius:1px}
+.load-label{font:500 11px Inter,sans-serif;color:rgba(255,255,255,.3);margin-top:4px}
 
-/* Error state */
-#error-msg{
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-  background:#1e1b2e;border:1px solid rgba(248,113,113,.3);color:#f87171;
-  font:500 11px Inter,sans-serif;padding:10px 18px;border-radius:7px;
-  z-index:300;display:none
+/* Error toast */
+#toast{
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
+  background:#1a1f2e;border:1px solid rgba(251,191,36,.3);color:#fbbf24;
+  font:500 11px Inter,sans-serif;padding:10px 18px;border-radius:8px;
+  z-index:300;display:none;backdrop-filter:blur(12px)
 }
 </style>
 </head>
 <body>
 
+<!-- Loading -->
 <div id="loading">
-  <div class="spin"></div>
-  <p>Loading Google Photorealistic 3D Tiles…</p>
+  <div class="load-logo">D/A</div>
+  <div style="font:400 12px Inter,sans-serif;color:rgba(255,255,255,.3);margin-bottom:8px">Full Insight · 24 Southwark Street</div>
+  <div class="load-bar"><div class="load-fill" id="load-fill"></div></div>
+  <div class="load-label" id="load-label">Initialising 3D engine…</div>
 </div>
 
-<div id="error-msg"></div>
-
-<div id="topbar">
-  <div class="logo">D<span>/</span>A <span style="margin-left:8px;font-weight:400;opacity:.3">|</span> <span style="margin-left:8px;font-weight:400;opacity:.5">CesiumJS Demo</span></div>
-  <div class="site-name">24 Southwark Street, SE1</div>
-  <div class="badge">Google 3D Tiles</div>
-</div>
-
+<div id="toast"></div>
 <div id="cesiumContainer"></div>
 
-<div id="panel">
-  <!-- Site identity -->
-  <div class="p-section">
-    <div class="p-label">Site</div>
-    <div class="p-title">24 Southwark Street</div>
-    <div class="p-sub">Southwark, SE1 · 1,550 m² plot</div>
+<!-- Top bar -->
+<div id="topbar">
+  <div class="logo">D<em>/</em>A</div>
+  <div class="site-pill">
+    <span class="name">24 Southwark Street, SE1</span>
+    <div class="sep"></div>
+    <span class="score">82</span>
+    <span class="verd">Green</span>
   </div>
+  <a href="/t2/24-southwark-st" class="nav-btn">Full Insight →</a>
+</div>
 
-  <!-- Verdict -->
-  <div class="p-section">
-    <div class="verdict">
-      <div class="icon">●</div>
-      <div>
-        <div class="vt">Green — Strong Opportunity</div>
-        <div class="vs">Score 82/100 · Heritage: Clean</div>
-      </div>
-    </div>
-    <div class="metrics">
-      <div class="metric"><div class="val green" id="m-floors">10</div><div class="lbl">Floors</div></div>
-      <div class="metric"><div class="val blue" id="m-height">33m</div><div class="lbl">Height</div></div>
-      <div class="metric"><div class="val" id="m-nia">7,800</div><div class="lbl">NIA m²</div></div>
-      <div class="metric"><div class="val amber" id="m-gdv">£54M</div><div class="lbl">GDV est.</div></div>
-    </div>
-    <div class="bsa-badge amber" id="bsa-badge">BSA 30m+ — second staircase</div>
+<!-- Metrics strip -->
+<div id="metrics-strip">
+  <div class="metric-cell">
+    <div class="mc-val green" id="mc-floors">10F</div>
+    <div class="mc-lbl">Max floors</div>
   </div>
+  <div class="metric-cell">
+    <div class="mc-val blue" id="mc-height">40m</div>
+    <div class="mc-lbl">Height</div>
+  </div>
+  <div class="metric-cell">
+    <div class="mc-val purple" id="mc-nia">8,450</div>
+    <div class="mc-lbl">NIA m²</div>
+  </div>
+  <div class="metric-cell">
+    <div class="mc-val amber" id="mc-gdv">£59M</div>
+    <div class="mc-lbl">GDV est.</div>
+  </div>
+  <div class="metric-cell">
+    <div class="mc-val" id="mc-bsa" style="color:#fbbf24;font-size:11px;letter-spacing:0">BSA 30m+</div>
+    <div class="mc-lbl">Regulatory tier</div>
+  </div>
+</div>
 
+<!-- Panel toggle tab -->
+<div id="panel-toggle" onclick="togglePanel()">Controls</div>
+
+<!-- Control panel -->
+<div id="ctrl-panel">
   <!-- Scheme selector -->
-  <div class="p-section">
-    <div class="p-label">Scheme</div>
-    <div class="scheme-btns">
-      <button class="scheme-btn active" onclick="setScheme(0)">Conservative</button>
-      <button class="scheme-btn" onclick="setScheme(1)">Mid-range</button>
-      <button class="scheme-btn" onclick="setScheme(2)">Optimistic</button>
+  <div class="ps">
+    <div class="ps-label">Scheme</div>
+    <div class="scheme-row">
+      <button class="sc-btn" onclick="setScheme(0)">Conservative</button>
+      <button class="sc-btn active" onclick="setScheme(1)">Mid</button>
+      <button class="sc-btn" onclick="setScheme(2)">Optimistic</button>
     </div>
   </div>
 
-  <!-- Controls -->
-  <div class="p-section">
-    <div class="p-label">Massing controls</div>
-    <div class="slider-row">
-      <label>Floors <span id="lbl-floors">10</span></label>
-      <input type="range" id="sl-floors" min="4" max="18" value="10" oninput="updateMassing()">
+  <!-- Sliders -->
+  <div class="ps">
+    <div class="ps-label">Massing</div>
+    <div class="sl-row">
+      <div class="sl-top"><span class="sl-name">Floors</span><span class="sl-val" id="lv-floors">10</span></div>
+      <input type="range" id="sl-floors" min="4" max="20" value="10" oninput="onSlider()">
     </div>
-    <div class="slider-row">
-      <label>Footprint coverage <span id="lbl-cov">65</span>%</label>
-      <input type="range" id="sl-cov" min="40" max="85" value="65" oninput="updateMassing()">
+    <div class="sl-row">
+      <div class="sl-top"><span class="sl-name">Footprint coverage</span><span class="sl-val" id="lv-cov">65%</span></div>
+      <input type="range" id="sl-cov" min="40" max="85" value="65" oninput="onSlider()">
     </div>
-    <div class="slider-row">
-      <label>ERV £/m² <span id="lbl-erv">700</span></label>
-      <input type="range" id="sl-erv" min="500" max="1200" step="25" value="700" oninput="updateMassing()">
+    <div class="sl-row">
+      <div class="sl-top"><span class="sl-name">ERV £/m²</span><span class="sl-val" id="lv-erv">£700</span></div>
+      <input type="range" id="sl-erv" min="500" max="1400" step="25" value="700" oninput="onSlider()">
     </div>
-  </div>
-
-  <!-- Camera presets -->
-  <div class="p-section">
-    <div class="p-label">Camera</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:4px">
-      <button class="scheme-btn" onclick="flyTo('aerial')">Aerial</button>
-      <button class="scheme-btn" onclick="flyTo('street')">Street level</button>
-      <button class="scheme-btn" onclick="flyTo('north')">North elevation</button>
-      <button class="scheme-btn" onclick="flyTo('iso')">Isometric</button>
+    <div class="sl-row">
+      <div class="sl-top"><span class="sl-name">NIY</span><span class="sl-val" id="lv-niy">4.75%</span></div>
+      <input type="range" id="sl-niy" min="3.5" max="6.5" step="0.25" value="4.75" oninput="onSlider()">
     </div>
   </div>
 
-  <!-- CTA -->
-  <div class="p-section">
-    <a href="/t2/24-southwark-st" class="cta-btn">Open Full Insight →</a>
-    <div style="font:400 10px Inter,sans-serif;color:rgba(255,255,255,.25);text-align:center;margin-top:8px">Interactive financial model · GDV · Return curve</div>
+  <!-- Camera -->
+  <div class="ps">
+    <div class="ps-label">View</div>
+    <div class="cam-grid">
+      <button class="cam-btn" id="cam-aerial" onclick="flyTo('aerial')">↑ Aerial</button>
+      <button class="cam-btn active" id="cam-iso" onclick="flyTo('iso')">◈ Isometric</button>
+      <button class="cam-btn" id="cam-street" onclick="flyTo('street')">⇥ Street</button>
+      <button class="cam-btn" id="cam-north" onclick="flyTo('north')">↑ Elevation</button>
+    </div>
+  </div>
+
+  <!-- Intelligence -->
+  <div class="ps">
+    <div class="ps-label">D/A Read</div>
+    <p class="intel-para" id="intel-blurb">Sky availability and a clean heritage position mean the vertical envelope is genuinely open at this site. On the balance of available evidence, a well-argued scheme at 10-14F should find support — the pre-app conversation here is about design quality, not whether development is appropriate at all.</p>
+  </div>
+
+  <!-- BSA -->
+  <div class="ps">
+    <div class="ps-label">Building Safety Act</div>
+    <div id="bsa-detail-pill" class="bsa-pill bsa-amber" style="margin-bottom:8px">BSA 30m+ — second staircase</div>
+    <p style="font:400 10px/1.6 Inter,sans-serif;color:rgba(255,255,255,.3)" id="bsa-detail">At 40m, this scheme crosses the BSA 30m threshold. Second staircase required — approximately £1.2-1.5M in additional cost and 280-340m² NIA surrendered to core. Stress-test the return curve at 9F and 12F before fixing the massing strategy.</p>
   </div>
 </div>
 
 <script>
-// ── Site data ─────────────────────────────────────────────────────────────────
 const SITE = {
-  name: '24 Southwark Street',
-  lat: 51.504909,
-  lng: -0.091522,
-  plotM2: 1550,
-  // Site polygon (approximate) in [lng, lat] pairs
+  lat: 51.504909, lng: -0.091522, plotM2: 1550,
+  // Tighter real polygon
   polygon: [
-    [-0.092100, 51.504650],
-    [-0.090900, 51.504650],
-    [-0.090900, 51.505170],
-    [-0.092100, 51.505170],
-    [-0.092100, 51.504650]
+    [-0.09245, 51.50457],[-0.09098, 51.50455],[-0.09097, 51.50527],
+    [-0.09176, 51.50527],[-0.09177, 51.50514],[-0.09246, 51.50514],
+    [-0.09245, 51.50457]
   ]
 };
 
 const SCHEMES = [
-  { floors: 8,  cov: 60, erv: 650 },
-  { floors: 10, cov: 65, erv: 700 },
-  { floors: 14, cov: 70, erv: 750 }
+  {floors:7, cov:60, erv:650, niy:5.0},
+  {floors:10, cov:65, erv:700, niy:4.75},
+  {floors:14, cov:72, erv:750, niy:4.5}
 ];
 
-const FTF = 4.0; // floor-to-floor m (Grade A office)
-let viewer, massingEntity;
+const FTF = 4.0;
+let viewer, massingEntity, floorLines=[], siteOutline;
+let panelOpen = false;
+
+// ── Loading progress ──────────────────────────────────────────────────────────
+function progress(pct, label){
+  document.getElementById('load-fill').style.width = pct+'%';
+  document.getElementById('load-label').textContent = label;
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-async function init() {
-  let googleKey = '';
+async function init(){
+  progress(10, 'Fetching configuration…');
+  let googleKey = '', mapboxToken = '';
   try {
-    const cfg = await fetch('/api/config').then(r => r.json());
+    const cfg = await fetch('/api/config').then(r=>r.json());
     googleKey = cfg.googleMapsKey || '';
-  } catch(e) {}
+    mapboxToken = cfg.mapboxToken || '';
+  } catch(e){}
 
-  // CesiumJS setup - no ion token needed when using Google 3D Tiles directly
-  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkZWZhdWx0IiwiaWF0IjoxNjk3MDAwMDAwLCJpZCI6MH0.placeholder';
+  progress(25, 'Starting CesiumJS…');
+
+  // Suppress ion token warning - we use Google tiles, not ion
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkZW1vIiwiaWF0IjoxNjk3MDAwMDAwfQ.demo';
 
   viewer = new Cesium.Viewer('cesiumContainer', {
-    animation: false,
-    baseLayerPicker: false,
-    fullscreenButton: false,
-    geocoder: false,
-    homeButton: false,
-    infoBox: false,
-    sceneModePicker: false,
-    selectionIndicator: false,
-    timeline: false,
-    navigationHelpButton: false,
-    skyBox: false,
-    skyAtmosphere: false,
-    baseLayer: false,
-    globe: false,
+    animation:false, baseLayerPicker:false, fullscreenButton:false,
+    geocoder:false, homeButton:false, infoBox:false, sceneModePicker:false,
+    selectionIndicator:false, timeline:false, navigationHelpButton:false,
+    skyBox:false, baseLayer:false, globe:false,
   });
 
-  // Remove default skybox and atmosphere for cleaner look
-  viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#0c0f1a');
+  // Scene atmosphere
+  viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#080b14');
+  viewer.scene.fog.enabled = false;
+  viewer.scene.moon = undefined;
 
-  // Load Google Photorealistic 3D Tiles
+  // Enable shadows for depth
+  viewer.shadows = true;
+  viewer.scene.shadowMap.maximumDistance = 3000;
+  viewer.scene.shadowMap.softShadows = true;
+
+  progress(45, 'Loading Google Photorealistic 3D Tiles…');
+
   let tilesLoaded = false;
-  if(googleKey) {
-    try {
-      const tileset = await Cesium.createGooglePhotorealistic3DTileset(googleKey);
+  if(googleKey){
+    try{
+      const tileset = await Cesium.createGooglePhotorealistic3DTileset(googleKey, {
+        showCreditsOnScreen: false,
+      });
       viewer.scene.primitives.add(tileset);
       tilesLoaded = true;
-    } catch(e) {
-      console.warn('Google 3D Tiles failed:', e.message);
+      progress(70, 'Google 3D Tiles loaded ✓');
+    } catch(e){
+      console.warn('Google tiles failed:', e.message);
     }
   }
 
-  if(!tilesLoaded) {
-    // Fallback: use Cesium OSM Buildings (free, no key needed)
-    try {
-      const osmBuildings = await Cesium.createOsmBuildingsAsync();
-      viewer.scene.primitives.add(osmBuildings);
-      showError('Google Maps API key not configured — showing OSM buildings');
-    } catch(e) {
-      showError('3D tiles unavailable — massing only mode');
-    }
+  if(!tilesLoaded){
+    progress(55, 'Loading OSM 3D Buildings (fallback)…');
+    try{
+      const osm = await Cesium.createOsmBuildingsAsync();
+      viewer.scene.primitives.add(osm);
+      toast('Google Maps API key not set — showing OSM buildings. Set GOOGLE_MAPS_API_KEY on Railway for full photorealistic tiles.');
+    } catch(e){ toast('3D context unavailable — massing only mode'); }
   }
 
-  // Set camera to site
-  flyTo('iso');
+  progress(80, 'Building massing geometry…');
+  buildMassing();
+  buildSiteOutline();
 
-  // Add proposed massing
-  addMassingEntity();
-  updateMassing();
+  progress(95, 'Setting camera…');
 
-  // Hide loading
-  document.getElementById('loading').style.display = 'none';
+  // Cinematic intro: start high, arc down
+  const {lat, lng} = SITE;
+  viewer.camera.setView({
+    destination: Cesium.Cartesian3.fromDegrees(lng + 0.02, lat - 0.012, 1200),
+    orientation:{
+      heading: Cesium.Math.toRadians(310),
+      pitch: Cesium.Math.toRadians(-42),
+      roll: 0
+    }
+  });
 
-  // Enable lighting for depth
-  viewer.scene.globe.enableLighting = false;
-  viewer.scene.sun = new Cesium.Sun();
-  viewer.shadows = true;
+  // Fly to isometric after 400ms
+  setTimeout(()=>flyTo('iso'), 400);
+
+  progress(100, 'Ready');
+  setTimeout(()=>{
+    document.getElementById('loading').style.opacity = '0';
+    document.getElementById('loading').style.transition = 'opacity .6s';
+    setTimeout(()=>document.getElementById('loading').style.display='none', 600);
+  }, 600);
+
+  updateMetrics();
 }
 
-// ── Massing entity ────────────────────────────────────────────────────────────
-function addMassingEntity() {
-  // Convert site polygon to Cesium positions
+// ── Build proposed massing ────────────────────────────────────────────────────
+function buildMassing(){
   const positions = Cesium.Cartesian3.fromDegreesArray(
-    SITE.polygon.flatMap(([lng, lat]) => [lng, lat])
+    SITE.polygon.flatMap(([lng,lat])=>[lng,lat])
   );
 
+  // Main massing block — architectural glass material
   massingEntity = viewer.entities.add({
-    name: 'Proposed Massing',
-    polygon: {
+    polygon:{
       hierarchy: new Cesium.PolygonHierarchy(positions),
-      extrudedHeight: 0,
-      height: 0,
+      extrudedHeight: 0, height: 0,
       material: new Cesium.ColorMaterialProperty(
-        Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.75)
+        Cesium.Color.fromCssColorString('#818cf8').withAlpha(0.45)
       ),
       outline: true,
-      outlineColor: Cesium.Color.fromCssColorString('#818cf8'),
-      outlineWidth: 2,
+      outlineColor: new Cesium.ColorMaterialProperty(
+        Cesium.Color.fromCssColorString('#c4b5fd').withAlpha(0.9)
+      ),
+      outlineWidth: 3,
       shadows: Cesium.ShadowMode.ENABLED,
-      closeTop: true,
-      closeBottom: true,
+      closeTop: true, closeBottom: true,
     }
   });
 }
 
-// ── Update massing from sliders ───────────────────────────────────────────────
-function updateMassing() {
+// ── Site footprint outline on ground ─────────────────────────────────────────
+function buildSiteOutline(){
+  const pts = SITE.polygon.flatMap(([lng,lat])=>[lng,lat,3]);
+  siteOutline = viewer.entities.add({
+    polyline:{
+      positions: Cesium.Cartesian3.fromDegreesArrayHeights(pts),
+      width: 2.5,
+      material: new Cesium.ColorMaterialProperty(
+        Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.7)
+      ),
+      clampToGround: false,
+    }
+  });
+}
+
+// ── Floor lines ───────────────────────────────────────────────────────────────
+function buildFloorLines(floors, baseElev){
+  // Remove old
+  floorLines.forEach(e=>viewer.entities.remove(e));
+  floorLines = [];
+
+  const pts = SITE.polygon.flatMap(([lng,lat])=>[lng,lat]);
+
+  for(let f=1; f<floors; f++){
+    const h = baseElev + (f * FTF);
+    const linePts = SITE.polygon.flatMap(([lng,lat])=>[lng,lat,h]);
+    linePts.push(...[SITE.polygon[0][0],SITE.polygon[0][1],h]); // close
+    const e = viewer.entities.add({
+      polyline:{
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights(linePts),
+        width: 0.8,
+        material: new Cesium.ColorMaterialProperty(
+          Cesium.Color.fromCssColorString('#c4b5fd').withAlpha(0.25)
+        ),
+      }
+    });
+    floorLines.push(e);
+  }
+}
+
+// ── Update massing from slider values ─────────────────────────────────────────
+function onSlider(){
   const floors = parseInt(document.getElementById('sl-floors').value);
   const cov = parseInt(document.getElementById('sl-cov').value);
   const erv = parseInt(document.getElementById('sl-erv').value);
+  const niy = parseFloat(document.getElementById('sl-niy').value);
+  document.getElementById('lv-floors').textContent = floors;
+  document.getElementById('lv-cov').textContent = cov+'%';
+  document.getElementById('lv-erv').textContent = '£'+erv;
+  document.getElementById('lv-niy').textContent = niy.toFixed(2)+'%';
+  updateMassingHeight(floors, cov, erv, niy);
+}
 
-  // Update labels
-  document.getElementById('lbl-floors').textContent = floors;
-  document.getElementById('lbl-cov').textContent = cov;
-  document.getElementById('lbl-erv').textContent = erv;
-
-  // Height
+function updateMassingHeight(floors, cov, erv, niy){
   const heightM = floors * FTF;
-  const siteElev = 10; // approximate elevation above sea level (London ~5-20m)
+  const siteElev = 12; // London approximate
+  const totalH = siteElev + heightM;
 
-  // Update massing entity height
-  if(massingEntity) {
-    massingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(siteElev + heightM);
+  if(massingEntity){
+    massingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(totalH);
     massingEntity.polygon.height = new Cesium.ConstantProperty(siteElev);
+    // Change massing colour with height: lower = cooler blue, taller = warmer purple
+    const t = Math.min(floors/20, 1);
+    const r = Math.round(99 + (167-99)*t);
+    const g = Math.round(102 + (139-102)*t);
+    const b = Math.round(241 + (250-241)*t);
+    massingEntity.polygon.material = new Cesium.ColorMaterialProperty(
+      new Cesium.Color(r/255, g/255, b/255, 0.5)
+    );
   }
+  buildFloorLines(floors, siteElev);
+  updateMetrics(floors, cov, erv, niy);
+}
 
-  // Metrics
-  const plateGross = SITE.plotM2 * (cov / 100);
-  const coreFraction = 0.22;
-  const niaPF = Math.round(plateGross * (1 - coreFraction) * 0.78);
+// ── Metrics ───────────────────────────────────────────────────────────────────
+function updateMetrics(floors, cov, erv, niy){
+  floors = floors || parseInt(document.getElementById('sl-floors').value);
+  cov = cov || parseInt(document.getElementById('sl-cov').value);
+  erv = erv || parseInt(document.getElementById('sl-erv').value);
+  niy = niy || parseFloat(document.getElementById('sl-niy').value);
+
+  const heightM = floors * FTF;
+  const plateGross = SITE.plotM2 * (cov/100);
+  const niaPF = Math.round(plateGross * 0.78 * 0.78);
   const totalNIA = niaPF * floors;
-  const niy = 4.75;
-  const gdv = Math.round(totalNIA * erv / niy / 100) / 10000;
+  const gdv = Math.round(totalNIA * erv / (niy/100) / 1e5) / 10;
 
-  document.getElementById('m-floors').textContent = floors + 'F';
-  document.getElementById('m-height').textContent = heightM + 'm';
-  document.getElementById('m-nia').textContent = totalNIA.toLocaleString();
-  document.getElementById('m-gdv').textContent = '£' + gdv.toFixed(1) + 'M';
+  document.getElementById('mc-floors').textContent = floors+'F';
+  document.getElementById('mc-height').textContent = heightM+'m';
+  document.getElementById('mc-nia').textContent = totalNIA.toLocaleString();
+  document.getElementById('mc-gdv').textContent = '£'+gdv.toFixed(1)+'M';
 
-  // BSA badge
-  const bsaBadge = document.getElementById('bsa-badge');
-  if(heightM >= 50) {
-    bsaBadge.className = 'bsa-badge red';
-    bsaBadge.textContent = 'BSA 50m+ - highest tier';
-  } else if(heightM >= 30) {
-    bsaBadge.className = 'bsa-badge amber';
-    bsaBadge.textContent = 'BSA 30m+ - second staircase required';
-  } else if(heightM >= 18) {
-    bsaBadge.className = 'bsa-badge amber';
-    bsaBadge.textContent = 'BSA 18m+ - enhanced fire strategy';
+  // BSA
+  let bsaClass='bsa-green', bsaText='Below BSA thresholds', bsaDetail='';
+  let mcBsaColor='#34d399';
+  if(heightM>=50){
+    bsaClass='bsa-red'; bsaText='BSA 50m+ — highest tier'; mcBsaColor='#f87171';
+    bsaDetail='Above 50m: full higher-risk building regime. Enhanced structure, second staircase, principal accountable person. Add £2-3M and 6-12 months to programme.';
+  } else if(heightM>=30){
+    bsaClass='bsa-amber'; bsaText='BSA 30m+ — second staircase'; mcBsaColor='#fbbf24';
+    bsaDetail='At '+heightM+'m, this scheme crosses the BSA 30m threshold. Second staircase required — approximately £1.2-1.5M and 280-340m² of NIA surrendered to core. Worth stress-testing the return curve at 9F and 12F before fixing the strategy.';
+  } else if(heightM>=18){
+    bsaClass='bsa-amber'; bsaText='BSA 18m+ — enhanced fire'; mcBsaColor='#fbbf24';
+    bsaDetail='Enhanced fire strategy required at '+heightM+'m, but no second staircase mandate. Consider whether 1-2 additional floors meaningfully improve the return curve — BSA compliance uplift at 18m is manageable.';
   } else {
-    bsaBadge.className = 'bsa-badge green';
-    bsaBadge.textContent = 'Below BSA thresholds - single staircase';
+    bsaDetail='Below all BSA thresholds. Single staircase, standard fire strategy. This is a structural cost and programme advantage vs taller competing schemes.';
   }
+  document.getElementById('mc-bsa').textContent = bsaText;
+  document.getElementById('mc-bsa').style.color = mcBsaColor;
+  document.getElementById('bsa-detail-pill').className = 'bsa-pill '+bsaClass;
+  document.getElementById('bsa-detail-pill').textContent = bsaText;
+  document.getElementById('bsa-detail').textContent = bsaDetail;
 }
 
 // ── Scheme presets ────────────────────────────────────────────────────────────
-function setScheme(idx) {
-  document.querySelectorAll('.scheme-btn').forEach((b, i) => {
-    b.classList.toggle('active', i === idx);
-  });
+function setScheme(idx){
+  document.querySelectorAll('.sc-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
   const s = SCHEMES[idx];
   document.getElementById('sl-floors').value = s.floors;
   document.getElementById('sl-cov').value = s.cov;
   document.getElementById('sl-erv').value = s.erv;
-  updateMassing();
+  document.getElementById('sl-niy').value = s.niy;
+  onSlider();
   flyTo('iso');
 }
 
 // ── Camera presets ────────────────────────────────────────────────────────────
-function flyTo(preset) {
-  const lon = SITE.lng, lat = SITE.lat;
+function flyTo(preset){
+  document.querySelectorAll('.cam-btn').forEach(b=>b.classList.remove('active'));
+  const el = document.getElementById('cam-'+preset);
+  if(el) el.classList.add('active');
+
+  const {lat,lng} = SITE;
   const D = Cesium.Math.toRadians;
-  const positions = {
-    aerial:  { destination: Cesium.Cartesian3.fromDegrees(lon, lat, 500),  orientation: { heading: D(0),   pitch: D(-55), roll: 0 } },
-    street:  { destination: Cesium.Cartesian3.fromDegrees(lon - 0.001, lat - 0.0008, 25), orientation: { heading: D(45), pitch: D(-10), roll: 0 } },
-    north:   { destination: Cesium.Cartesian3.fromDegrees(lon, lat - 0.002, 80),  orientation: { heading: D(0),   pitch: D(-20), roll: 0 } },
-    iso:     { destination: Cesium.Cartesian3.fromDegrees(lon - 0.0015, lat - 0.001, 250), orientation: { heading: D(30), pitch: D(-35), roll: 0 } },
+  const presets = {
+    aerial:  { dest:[lng, lat, 600],     head:D(0),  pitch:D(-60) },
+    iso:     { dest:[lng-0.0018, lat-0.001, 260], head:D(28), pitch:D(-32) },
+    street:  { dest:[lng-0.0012, lat-0.0010, 22], head:D(52), pitch:D(-8)  },
+    north:   { dest:[lng, lat-0.0022, 95],         head:D(0),  pitch:D(-22) },
   };
-  if(!viewer || !positions[preset]) return;
-  viewer.camera.flyTo({ ...positions[preset], duration: 1.5 });
+  const p = presets[preset];
+  if(!p || !viewer) return;
+  viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees(...p.dest),
+    orientation:{ heading:p.head, pitch:p.pitch, roll:0 },
+    duration: 2.0,
+    easingFunction: Cesium.EasingFunction.QUINTIC_IN_OUT,
+  });
 }
 
-// ── Error display ─────────────────────────────────────────────────────────────
-function showError(msg) {
-  const el = document.getElementById('error-msg');
-  el.textContent = msg;
-  el.style.display = 'block';
-  setTimeout(() => el.style.display = 'none', 6000);
+// ── Panel toggle ──────────────────────────────────────────────────────────────
+function togglePanel(){
+  panelOpen = !panelOpen;
+  document.getElementById('ctrl-panel').classList.toggle('open', panelOpen);
 }
 
-// ── Start ─────────────────────────────────────────────────────────────────────
-init().catch(e => {
-  document.getElementById('loading').style.display = 'none';
-  showError('Failed to initialise 3D viewer: ' + e.message);
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.style.display='block';
+  setTimeout(()=>el.style.display='none', 8000);
+}
+
+init().catch(e=>{
+  document.getElementById('loading').style.display='none';
+  toast('3D viewer error: '+e.message);
   console.error(e);
 });
 </script>
