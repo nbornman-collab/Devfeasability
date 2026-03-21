@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T0 Borough · Hackney — D/A</title>
+<title>D/A · Discover - Hackney</title>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -121,6 +121,12 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   100% { box-shadow: 0 2px 12px rgba(0,0,0,.6), 0 0 0 0 rgba(16,185,129,0); }
 }
 .mapboxgl-popup-content { padding: 12px; border-radius: 8px; }
+
+.boro-nav-link{display:flex;align-items:center;gap:6px;padding:10px 20px;font:600 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;color:#6b7280;text-decoration:none;border-bottom:2px solid transparent;transition:all .15s}
+.boro-nav-link:hover{color:#0f172a;border-bottom-color:#e5e7eb}
+.boro-nav-link.active{color:#1d4ed8;border-bottom-color:#1d4ed8}
+.bnav-count{font:500 10px Inter,sans-serif;background:#f3f4f6;color:#6b7280;padding:1px 5px;border-radius:9px}
+.boro-nav-link.active .bnav-count{background:#eff6ff;color:#1d4ed8}
 </style>
 
 <!-- Analytics -->
@@ -131,6 +137,8 @@ mixpanel.init('DA_PLACEHOLDER_TOKEN', {track_pageview: true, persistence: 'local
 // Track current page
 try { mixpanel.track('Page View', {page: window.location.pathname, borough: document.title}); } catch(e){}
 </script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.css">
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.min.js"></script>
 </head>
 <body>
 
@@ -144,6 +152,13 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
   </div>
   <a href="/methodology" style="font:500 11px Inter,sans-serif;color:#6b7280;text-decoration:none">Methodology</a>
 </nav>
+
+  <!-- Borough nav -->
+  <div style="display:flex;gap:0;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:52px;z-index:99">
+    <a href="/borough/southwark" class="boro-nav-link" id="bnav-southwark">Southwark <span class="bnav-count">93</span></a>
+    <a href="/borough/city-of-london" class="boro-nav-link" id="bnav-city">City of London <span class="bnav-count">24</span></a>
+    <a href="/borough/hackney" class="boro-nav-link" id="bnav-hackney" class="boro-nav-link active">Hackney <span class="bnav-count">39</span></a>
+  </div>
 
 <div class="page">
   <div id="map">
@@ -308,6 +323,54 @@ async function loadAndRender() {
   await initMap();
 }
 
+
+// ── SVG Icon markers ───────────────────────────────────────────────
+function getSVGIcon(use, zone, score) {
+  const u = (use||'').toLowerCase();
+  const ht = score>=80?'#059669':score>=70?'#d97706':'#dc2626';
+  
+  // Pick icon path by use type
+  let icon = '';
+  if(u.includes('residential')||u.includes('resi')||u.includes('housing')) {
+    // House with pitched roof
+    icon = '<polygon points="12,4 20,11 20,22 4,22 4,11" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="2,12 12,3 22,12" fill="none" stroke="currentColor" stroke-width="1.8"/>';
+  } else if(u.includes('industrial')||u.includes('warehouse')||u.includes('depot')||u.includes('garage')) {
+    // Flat roof industrial shed
+    icon = '<rect x="3" y="10" width="18" height="12" fill="none" stroke="currentColor" stroke-width="1.8"/><polyline points="3,10 12,4 21,10" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="9" y="16" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.2"/>';
+  } else if(u.includes('mixed')||u.includes('mix')) {
+    // Split block
+    icon = '<rect x="3" y="6" width="7" height="16" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="10" width="8" height="12" fill="none" stroke="currentColor" stroke-width="1.8"/>';
+  } else if(zone==='city-fringe'||u.includes('air right')) {
+    // Tall tower
+    icon = '<rect x="8" y="2" width="8" height="20" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="10" width="16" height="12" fill="none" stroke="currentColor" stroke-width="1.5"/>';
+  } else {
+    // Default: office building
+    icon = '<rect x="4" y="4" width="16" height="18" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="8" y1="8" x2="10" y2="8" stroke="currentColor" stroke-width="1.2"/><line x1="14" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.2"/><line x1="8" y1="12" x2="10" y2="12" stroke="currentColor" stroke-width="1.2"/><line x1="14" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.2"/>';
+  }
+  
+  const size = score>=80?32:score>=70?28:24;
+  return {icon, color:ht, size};
+}
+
+function createMarkerEl(s) {
+  const sc = s.score||60;
+  const {icon, color, size} = getSVGIcon(s.buildingUse, s.zone, sc);
+  const el = document.createElement('div');
+  el.style.cssText = `width:${size}px;height:${size}px;cursor:pointer;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))`;
+  el.innerHTML = `<svg viewBox="0 0 24 24" width="${size}" height="${size}" style="color:${color}">
+    <rect x="1" y="1" width="22" height="22" rx="4" fill="#0f172a" stroke="${color}" stroke-width="2"/>
+    ${icon}
+  </svg>`;
+  if(s.offMarket==='high'){
+    const dot = document.createElement('div');
+    dot.style.cssText=`position:absolute;top:-2px;right:-2px;width:7px;height:7px;background:#7c3aed;border-radius:50%;border:1.5px solid white`;
+    el.style.position='relative';
+    el.appendChild(dot);
+  }
+  el.title = s.name + ' · ' + sc + '/100';
+  return el;
+}
+
 async function initMap(){
   cfg = await fetch('/api/config').then(r=>r.json());
   mapboxgl.accessToken = cfg.mapboxToken;
@@ -340,6 +403,38 @@ async function initMap(){
         openSitePopup(s);
       });
     });
+  // Add site name labels as Mapbox GeoJSON symbol layer
+  const labelFeatures = ALL_SITES.map(s => ({
+    type:'Feature',
+    geometry:{type:'Point',coordinates:[s.lng,s.lat]},
+    properties:{name:s.name, score:s.score||60}
+  }));
+  
+  map.addSource('site-labels', {
+    type:'geojson',
+    data:{type:'FeatureCollection',features:labelFeatures}
+  });
+  
+  map.addLayer({
+    id:'site-name-labels',
+    type:'symbol',
+    source:'site-labels',
+    minzoom:13.5,
+    layout:{
+      'text-field':['get','name'],
+      'text-font':['DIN Offc Pro Medium','Arial Unicode MS Regular'],
+      'text-size':11,
+      'text-offset':[0,-2.2],
+      'text-anchor':'bottom',
+      'text-max-width':12
+    },
+    paint:{
+      'text-color':'#ffffff',
+      'text-halo-color':'#0f172a',
+      'text-halo-width':2,
+      'text-opacity':['interpolate',['linear'],['zoom'],13.5,0,14.5,1]
+    }
+  });
   });
 }
 
@@ -348,7 +443,7 @@ function openSitePopup(s) {
   const t1url = siteT1Url(s);
   const oaBadge = (s.flags&&s.flags.inOA) ? '<span style="background:#1d4ed8;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px;margin-left:4px">OA</span>' : '';
   const verBadge = s.verified ? '<span style="background:#10b981;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">VERIFIED</span>' : '<span style="background:#6b7280;color:#fff;font:600 9px Inter,sans-serif;padding:2px 6px;border-radius:3px">CANDIDATE</span>';
-  const t2btn = s.t2 ? `<a class="popup-btn" style="background:#059669;margin-top:4px" href="${s.t2}" onclick="event.stopPropagation()">T2 Appraise &rarr;</a>` : '';
+  const t2btn = s.t2 ? `<a class="popup-btn" style="background:#059669;margin-top:4px" href="${s.t2}" onclick="event.stopPropagation()">Full Insight &rarr;</a>` : '';
 
   const popupId = `popup-${Date.now()}`;
   const dataGrid = `
@@ -374,7 +469,7 @@ function openSitePopup(s) {
         <div class="popup-title">${s.name}</div>
         <div class="popup-sub">${s.address||''}</div>
         ${dataGrid}
-        <a class="popup-btn" href="${t1url}" onclick="event.stopPropagation()">T1 Scout &rarr;</a>
+        <a class="popup-btn" href="${t1url}" onclick="event.stopPropagation()">Appraise &rarr;</a>
         ${t2btn}
       </div>
     `)
@@ -423,6 +518,25 @@ function toggle3D(){
     btn.style.background = 'rgba(29,78,216,0.9)';
   }
 }
+
+
+  // Address search geocoder
+  if(typeof MapboxGeocoder !== 'undefined') {
+    const geocoder = new MapboxGeocoder({
+      accessToken: cfg.mapboxToken,
+      mapboxgl: mapboxgl,
+      placeholder: 'Search London address or postcode...',
+      countries: 'gb',
+      bbox: [-0.55, 51.28, 0.35, 51.72],
+      proximity: {longitude: -0.1, latitude: 51.5}
+    });
+    const gc = document.getElementById('geocoder-container');
+    if(gc) geocoder.addTo(gc);
+    geocoder.on('result', (e) => {
+      const [lng,lat] = e.result.center;
+      map.flyTo({center:[lng,lat], zoom:15, pitch:0, duration:1200});
+    });
+  }
 
 loadAndRender();
 </script>

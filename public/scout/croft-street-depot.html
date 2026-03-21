@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Croft Street Depot - T1 Scout</title>
+<title>Croft Street Depot - Appraise</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -266,10 +266,10 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 <nav class="da-nav">
   <a href="/" class="da-nav-logo">D<span class="sl">/</span>A<span style="font:400 8px Inter,sans-serif;letter-spacing:.3px;color:#9ca3af;text-transform:none;line-height:1">Development/Architecture</span></a>
   <div class="da-nav-links">
-    <a href="/borough/southwark" class="da-nav-link">T0 Borough</a>
-    <a href="/t1/croft-street-depot" class="da-nav-link active">T1 Scout</a>
-    <a href="/t2/croft-street-depot" class="da-nav-link">T2 Appraise</a>
-    <a href="#" class="da-nav-link locked">T3 Present</a>
+    <a href="/borough/southwark" class="da-nav-link">Discover</a>
+    <a href="/t1/croft-street-depot" class="da-nav-link active">Appraise</a>
+    <a href="/t2/croft-street-depot" class="da-nav-link">Full Insight</a>
+    <a href="#" class="da-nav-link locked">Download (coming)</a>
   </div>
   <a href="/methodology" style="font:500 11px Inter,sans-serif;color:#6b7280;text-decoration:none">Methodology</a>
 </nav>
@@ -294,27 +294,27 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <!-- Back to borough screener -->
     <button class="lr-btn" onclick="location.href='/'" title="">
       <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg>
-      <span class="lr-tip">T0 Borough</span>
+      <span class="lr-tip">Discover</span>
     </button>
 
     <div class="lr-divider"></div>
 
-    <!-- T1 Scout (active) -->
+    <!-- Appraise (active) -->
     <button class="lr-btn active" title="">
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <span class="lr-tip">T1 Scout</span>
+      <span class="lr-tip">Appraise</span>
     </button>
 
-    <!-- T2 Appraise -->
+    <!-- Full Insight -->
     <button class="lr-btn" onclick="location.href='/t2/croft-street-depot'" title="">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
-      <span class="lr-tip">T2 Appraise</span>
+      <span class="lr-tip">Full Insight</span>
     </button>
 
-    <!-- T3 Present -->
+    <!-- Download (coming) -->
     <button class="lr-btn" onclick="location.href='/t3/croft-street-depot'" title="">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      <span class="lr-tip">T3 Present</span>
+      <span class="lr-tip">Download (coming)</span>
     </button>
   </nav>
 </div>
@@ -514,7 +514,7 @@ function svExpand(){
     <div class="rp-section-hd"><h3>Scenarios</h3><span class="rp-badge">3 options modelled</span></div>
     <div class="rp-section-body">
       <svg id="teaser-curve" viewBox="0 0 380 70" style="width:100%;height:auto;display:block;margin-bottom:10px"></svg>
-      <div style="font:400 11px var(--sans);color:var(--text3);line-height:1.6">Low / Base / High massing scenarios with full financial model in T2 Appraise - IRR on equity, return curve, development appraisal.</div>
+      <div style="font:400 11px var(--sans);color:var(--text3);line-height:1.6">Low / Base / High massing scenarios with full financial model in Full Insight - IRR on equity, return curve, development appraisal.</div>
     </div>
   </div>
 
@@ -530,8 +530,8 @@ function svExpand(){
 
   <!-- CTA row -->
   <div class="rp-cta-row">
-    <a href="/t2/croft-street-depot" class="rp-cta primary">T2 Appraise →</a>
-    <a href="/t3/croft-street-depot" class="rp-cta secondary">T3 Present</a>
+    <a href="/t2/croft-street-depot" class="rp-cta primary">Full Insight →</a>
+    <a href="/t3/croft-street-depot" class="rp-cta secondary">Download (coming)</a>
   </div>
 
 </div><!-- /right-panel -->

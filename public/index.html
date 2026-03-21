@@ -290,15 +290,14 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 <nav id="main-nav">
   <a href="/" class="nav-logo">D<span class="slash">/</span>A<span style="font:400 9px Inter,sans-serif;letter-spacing:.3px;color:#6b7280;text-transform:none;line-height:1">Development/Architecture</span></a>
   <div class="nav-links">
-    <a href="/methodology" style="font:500 12px Inter,sans-serif;color:inherit;text-decoration:none;opacity:.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">Methodology</a>
-        <a href="/borough/southwark" class="nav-link">T0 Southwark</a>
-    <a href="/borough/city-of-london" class="nav-link">T0 City</a>
-    <a href="/t1/24-southwark-st" class="nav-link">T1 Scout</a>
-    <a href="/t2/24-southwark-st" class="nav-link">T2 Appraise</a>
-    <a href="/borough/southwark" class="nav-link" style="opacity:.45;pointer-events:none">T3 Present</a>
+    <a href="/borough/southwark" class="nav-link">Discover</a>
+    <a href="/borough/city-of-london" class="nav-link">City of London</a>
+    <a href="/borough/hackney" class="nav-link">Hackney</a>
+    <a href="/t1/24-southwark-st" class="nav-link">Demo: Appraise</a>
+    <a href="/t2/24-southwark-st" class="nav-link">Demo: Full Insight</a>
+    <a href="/methodology" class="nav-link">Methodology</a>
   </div>
-  <a href="/methodology" style="font:500 12px Inter,sans-serif;color:inherit;text-decoration:none;opacity:.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">Methodology</a>
-        <a href="/borough/southwark" class="nav-cta">Explore Southwark →</a>
+  <a href="/borough/southwark" class="nav-cta">Discover Sites →</a>
 </nav>
 
 <!-- ── Hero: rotating London ─────────────────────────────────────── -->
@@ -310,32 +309,38 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <div class="hero-left">
       <div class="hero-eyebrow">Development <span style="color:rgba(255,255,255,0.25);margin:0 4px">/</span> Architecture · London</div>
       <h1 class="hero-headline">
-        Site feasibility.<br>
-        <span class="line2">Architectural</span><br>
-        intelligence.
+        Every London site.<br>
+        <span class="line2">Instantly</span><br>
+        readable.
       </h1>
-      <p class="hero-sub">Development analysis with an architect's eye.<br>Borough screening to design strategy to investment appraisal.</p>
+      <p class="hero-sub">Site intelligence with an architect's eye. Discover underutilised sites, appraise their potential, get a decision-ready verdict.</p>
       <div class="hero-actions">
-        <a href="/methodology" style="font:500 12px Inter,sans-serif;color:inherit;text-decoration:none;opacity:.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">Methodology</a>
-        <a href="/borough/southwark" class="hero-btn-primary">Explore by Borough <span>→</span></a>
-        <a href="/t1/24-southwark-st" class="hero-btn-ghost">View a demo site</a>
+        <a href="/borough/southwark" class="hero-btn-primary">Discover Sites <span>→</span></a>
+        <a href="/t1/24-southwark-st" class="hero-btn-ghost">See a live Appraisal</a>
       </div>
     </div>
 
     <div class="hero-right">
-      <a href="/t1/24-southwark-st" class="hero-site-card">
+      <a href="/borough/southwark" class="hero-site-card">
         <div>
-          <div class="hero-site-name">24 Southwark St</div>
-          <div class="hero-site-addr">Southwark · Commercial</div>
+          <div class="hero-site-name">Discover</div>
+          <div class="hero-site-addr">93 sites · SE1, SE5, SE15, SE17</div>
         </div>
-        <div class="hero-site-score">71<span>/100</span></div>
+        <div class="hero-site-score" style="font-size:13px;letter-spacing:0">Discover →</div>
       </a>
-      <a href="/t1/196-blackfriars-rd" class="hero-site-card">
+      <a href="/borough/city-of-london" class="hero-site-card">
         <div>
-          <div class="hero-site-name">196 Blackfriars Rd</div>
-          <div class="hero-site-addr">Southwark · Residential</div>
+          <div class="hero-site-name">City of London</div>
+          <div class="hero-site-addr">24 sites · EC1-4, Air Rights</div>
         </div>
-        <div class="hero-site-score">91<span>/100</span></div>
+        <div class="hero-site-score" style="font-size:13px;letter-spacing:0">Discover →</div>
+      </a>
+      <a href="/borough/hackney" class="hero-site-card">
+        <div>
+          <div class="hero-site-name">Hackney</div>
+          <div class="hero-site-addr">39 sites · Shoreditch, City fringe</div>
+        </div>
+        <div class="hero-site-score" style="font-size:13px;letter-spacing:0">Discover →</div>
       </a>
     </div>
   </div>
@@ -357,7 +362,7 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
         <div style="padding:28px 28px;border-right:1px solid var(--border)">
           <div style="font:700 10px var(--mono);text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:12px">D · Development</div>
           <div style="font:700 16px var(--sans);color:var(--text);margin-bottom:8px;letter-spacing:-0.3px">Intelligence-led screening</div>
-          <div style="font:400 13px var(--sans);color:var(--text3);line-height:1.65">Six-factor site scoring - Available Sky, Rent Headroom, Planning Tailwind, Heritage Shadow, Title Stack, Station Gravity. Defensible, consistent, reproducible.</div>
+          <div style="font:400 13px var(--sans);color:var(--text3);line-height:1.65">Six-factor site scoring - Available Sky, Rent Headroom, Planning Appetite, Heritage Shadow, Title Stack, Station Gravity. Defensible, consistent, reproducible.</div>
         </div>
 
         <div style="padding:28px 28px;border-right:1px solid var(--border);background:var(--surface2)">
@@ -379,33 +384,26 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
   <!-- Tiers -->
   <section class="section reveal">
     <div class="section-inner">
-      <div class="section-label">The tiers</div>
-      <div class="section-title">One platform, four depths of analysis</div>
-      <p class="section-sub">Data-driven, design-informed. Each tier adds a layer - from raw opportunity to architectural strategy to investment case.</p>
-      <div class="tier-grid">
-        <a href="/methodology" style="font:500 12px Inter,sans-serif;color:inherit;text-decoration:none;opacity:.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">Methodology</a>
-        <a href="/borough/southwark" class="tier-card">
-          <div class="tier-card-num">T0 · Borough</div>
-          <div class="tier-card-name">Borough View</div>
-          <div class="tier-card-desc">Rank every opportunity in a borough. Scored on Available Sky, Rent Headroom, Planning Tailwind, Heritage Shadow, Title Stack, Station Gravity.</div>
-          <div class="tier-card-foot"><span class="tier-card-access free">Free - Top 3</span><span class="tier-card-arrow">→</span></div>
-        </a>
-        <a href="/t1/24-southwark-st" class="tier-card">
-          <div class="tier-card-num">T1 · Scout</div>
-          <div class="tier-card-name">Site Scout</div>
-          <div class="tier-card-desc">Site intelligence, HMLR ownership, planning applications, flood risk, listed buildings, height context, EPC floor area.</div>
+      <div class="section-label">How it works</div>
+      <div class="section-title">Discover. Appraise. Get Full Insight.</div>
+      <p class="section-sub">Three layers of intelligence. Each one earns the next. No fluff, no padding - just the signal you need at each stage.</p>
+      <div class="tier-grid" style="grid-template-columns:repeat(3,1fr)">
+        <a href="/borough/southwark" class="tier-card" style="border-top:3px solid #16a34a">
+          <div class="tier-card-num" style="color:#16a34a">01 - Discover</div>
+          <div class="tier-card-name">Borough Screener</div>
+          <div class="tier-card-desc">Map of top underutilised sites per borough - scored, ranked, constraint-flagged. Click a site for the high-level signal: score, size of prize, key risks. No login required. This is where the search starts.</div>
           <div class="tier-card-foot"><span class="tier-card-access free">Free</span><span class="tier-card-arrow">→</span></div>
         </a>
-        <a href="/t2/24-southwark-st" class="tier-card">
-          <div class="tier-card-num">T2 · Appraise</div>
-          <div class="tier-card-name">Development Appraisal</div>
-          <div class="tier-card-desc">3D massing, live financial sliders. GDV, NIA, development appraisal, profit on cost, IRR on equity, return curves.</div>
-          <div class="tier-card-foot"><span class="tier-card-access paid">Paid</span><span class="tier-card-arrow">→</span></div>
+        <a href="/t1/24-southwark-st" class="tier-card" style="border-top:3px solid #1d4ed8">
+          <div class="tier-card-num" style="color:#1d4ed8">02 - Appraise</div>
+          <div class="tier-card-name">Site Intelligence Brief</div>
+          <div class="tier-card-desc">Constraints in full - heritage tier, PTAL, BSA triggers, planning history, EPC data, ownership chain. What the site can accommodate and why. Enough to know exactly what you don't yet know. Fraction of the cost of a pre-app.</div>
+          <div class="tier-card-foot"><span class="tier-card-access paid">Early Access</span><span class="tier-card-arrow">→</span></div>
         </a>
-        <a href="/borough/southwark" class="tier-card" style="opacity:.5;pointer-events:none">
-          <div class="tier-card-num">T3 · Present</div>
-          <div class="tier-card-name">Investment Report</div>
-          <div class="tier-card-desc">Professional PDF. Executive summary, architectural recommendation, ownership analysis, design strategy. Board-ready.</div>
+        <a href="/t2/24-southwark-st" class="tier-card" style="border-top:3px solid #7c3aed">
+          <div class="tier-card-num" style="color:#7c3aed">03 - Full Insight</div>
+          <div class="tier-card-name">Complete Development Appraisal</div>
+          <div class="tier-card-desc">Interactive massing scenarios, GDV, return curve, margin sensitivity. Multiple scheme options. Full planning intelligence. Downloadable report. The verdict on the site - decision-ready output, not more data.</div>
           <div class="tier-card-foot"><span class="tier-card-access paid">Paid</span><span class="tier-card-arrow">→</span></div>
         </a>
       </div>
@@ -423,10 +421,10 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
         <!-- Header -->
         <div class="sm-header">
           <div class="sm-col-site">Site</div>
-          <div class="sm-col-tier">T0 · Borough</div>
-          <div class="sm-col-tier">T1 · Scout</div>
-          <div class="sm-col-tier">T2 · Appraise</div>
-          <div class="sm-col-tier">T3 · Present</div>
+          <div class="sm-col-tier">Discover</div>
+          <div class="sm-col-tier">Appraise</div>
+          <div class="sm-col-tier">Full Insight</div>
+          <div class="sm-col-tier">Report</div>
         </div>
 
         <!-- 24 Southwark Street -->
@@ -437,15 +435,15 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
             <div class="sm-site-meta">SE1 0SW · 1,550 m² · Commercial · PTAL 6b</div>
           </div>
           <a href="/borough/southwark" class="sm-tier sm-tier-live sm-t0">
-            <span class="sm-tier-label">Southwark</span>
+            <span class="sm-tier-label">Discover</span>
             <span class="sm-tier-arrow">→</span>
           </a>
           <a href="/t1/24-southwark-st" class="sm-tier sm-tier-live sm-t1">
-            <span class="sm-tier-label">Full analysis</span>
+            <span class="sm-tier-label">Appraise →</span>
             <span class="sm-tier-arrow">→</span>
           </a>
           <a href="/t2/24-southwark-st" class="sm-tier sm-tier-live sm-t2">
-            <span class="sm-tier-label">3 scenarios</span>
+            <span class="sm-tier-label">Full Insight →</span>
             <span class="sm-tier-arrow">→</span>
           </a>
           <div class="sm-tier sm-tier-locked">
@@ -461,11 +459,11 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
             <div class="sm-site-meta">SE1 8NJ · 583 m² · Residential · PTAL 6a</div>
           </div>
           <a href="/borough/southwark" class="sm-tier sm-tier-live sm-t0">
-            <span class="sm-tier-label">Southwark</span>
+            <span class="sm-tier-label">Discover</span>
             <span class="sm-tier-arrow">→</span>
           </a>
           <a href="/t1/196-blackfriars-rd" class="sm-tier sm-tier-live sm-t1">
-            <span class="sm-tier-label">Full analysis</span>
+            <span class="sm-tier-label">Appraise →</span>
             <span class="sm-tier-arrow">→</span>
           </a>
           <div class="sm-tier sm-tier-locked">
@@ -527,7 +525,7 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
         </div>
         <div class="method-card">
           <div class="method-icon momentum">→</div>
-          <div class="method-name">Planning Tailwind</div>
+          <div class="method-name">Planning Appetite</div>
           <div class="method-desc">Recent consent history within 500m at comparable scale. Measures LPA appetite. A consented precedent is the single strongest planning argument.</div>
           <div class="method-source">Southwark IDOX - LPA portal</div>
         </div>
@@ -561,10 +559,10 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <div>Development Intelligence · London · 2026</div>
     <div style="display:flex;gap:20px">
       <a href="/methodology" style="font:500 12px Inter,sans-serif;color:inherit;text-decoration:none;opacity:.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">Methodology</a>
-        <a href="/borough/southwark">T0 Borough</a>
-      <a href="/t1/24-southwark-st">T1 Scout</a>
-      <a href="/t2/24-southwark-st">T2 Appraise</a>
-      <a href="/borough/southwark">T3 Present</a>
+        <a href="/borough/southwark">Discover</a>
+      <a href="/t1/24-southwark-st">Appraise</a>
+      <a href="/t2/24-southwark-st">Full Insight</a>
+      <a href="/borough/southwark">Report</a>
     </div>
   </footer>
 

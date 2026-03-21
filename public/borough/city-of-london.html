@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T0 Borough · City of London — D/A</title>
+<title>D/A · Discover - City of London</title>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -77,6 +77,12 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .nav-link{padding:6px 12px;font:500 12px var(--sans);color:var(--text2);text-decoration:none;border-radius:4px;white-space:nowrap;transition:background .15s,color .15s}
 .nav-link:hover{background:var(--surface2);color:var(--text)}
 .nav-link.active{background:var(--accent-glow);color:var(--accent);font-weight:600}
+
+.boro-nav-link{display:flex;align-items:center;gap:6px;padding:10px 20px;font:600 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;color:#6b7280;text-decoration:none;border-bottom:2px solid transparent;transition:all .15s}
+.boro-nav-link:hover{color:#0f172a;border-bottom-color:#e5e7eb}
+.boro-nav-link.active{color:#1d4ed8;border-bottom-color:#1d4ed8}
+.bnav-count{font:500 10px Inter,sans-serif;background:#f3f4f6;color:#6b7280;padding:1px 5px;border-radius:9px}
+.boro-nav-link.active .bnav-count{background:#eff6ff;color:#1d4ed8}
 </style>
 
 <!-- Analytics -->
@@ -87,6 +93,8 @@ mixpanel.init('DA_PLACEHOLDER_TOKEN', {track_pageview: true, persistence: 'local
 // Track current page
 try { mixpanel.track('Page View', {page: window.location.pathname, borough: document.title}); } catch(e){}
 </script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.css">
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.3/mapbox-gl-geocoder.min.js"></script>
 </head>
 <body>
 <nav class="da-nav">
@@ -100,6 +108,13 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <a href="/methodology" class="nav-link">Methodology</a>
   </div>
 </nav>
+
+  <!-- Borough nav -->
+  <div style="display:flex;gap:0;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:52px;z-index:99">
+    <a href="/borough/southwark" class="boro-nav-link" id="bnav-southwark">Southwark <span class="bnav-count">93</span></a>
+    <a href="/borough/city-of-london" class="boro-nav-link" id="bnav-city" class="boro-nav-link active">City of London <span class="bnav-count">24</span></a>
+    <a href="/borough/hackney" class="boro-nav-link" id="bnav-hackney">Hackney <span class="bnav-count">39</span></a>
+  </div>
 
 <div class="page">
   <div id="map">
@@ -157,7 +172,7 @@ function buildCard(s, rank){
       <div class="metric"><div class="val">${(s.plot/10000).toFixed(1)}ha</div><div class="lbl">Plot</div></div>
     </div>
     <div class="action-row">
-      ${hasT1 ? `<a href="${t1url}" class="btn" onclick="event.stopPropagation()">T1 Scout &rarr;</a>` : `<span class="btn outline" style="cursor:default">In Pipeline</span>`}
+      ${hasT1 ? `<a href="${t1url}" class="btn" onclick="event.stopPropagation()">Appraise &rarr;</a>` : `<span class="btn outline" style="cursor:default">In Pipeline</span>`}
     </div>
   </div>`;
 }
@@ -178,7 +193,7 @@ function buildPopup(s, rank){
         <div class="popup-stat"><div class="v">${s.mh||'?'}m</div><div class="l">Max Ht</div></div>
       </div>
       <div class="popup-actions">
-        ${hasT1 ? `<a href="${t1url}" class="p-t1">T1 Scout &rarr;</a>` : `<a href="#" class="p-t2" style="cursor:default">In Pipeline</a>`}
+        ${hasT1 ? `<a href="${t1url}" class="p-t1">Appraise &rarr;</a>` : `<a href="#" class="p-t2" style="cursor:default">In Pipeline</a>`}
       </div>
     </div>
   </div>`;
@@ -248,6 +263,38 @@ async function init(){
 
       markers.push(marker);
     });
+  // Add site name labels as Mapbox GeoJSON symbol layer
+  const labelFeatures = ALL_SITES.map(s => ({
+    type:'Feature',
+    geometry:{type:'Point',coordinates:[s.lng,s.lat]},
+    properties:{name:s.name, score:s.score||60}
+  }));
+  
+  map.addSource('site-labels', {
+    type:'geojson',
+    data:{type:'FeatureCollection',features:labelFeatures}
+  });
+  
+  map.addLayer({
+    id:'site-name-labels',
+    type:'symbol',
+    source:'site-labels',
+    minzoom:13.5,
+    layout:{
+      'text-field':['get','name'],
+      'text-font':['DIN Offc Pro Medium','Arial Unicode MS Regular'],
+      'text-size':11,
+      'text-offset':[0,-2.2],
+      'text-anchor':'bottom',
+      'text-max-width':12
+    },
+    paint:{
+      'text-color':'#ffffff',
+      'text-halo-color':'#0f172a',
+      'text-halo-width':2,
+      'text-opacity':['interpolate',['linear'],['zoom'],13.5,0,14.5,1]
+    }
+  });
   });
 }
 

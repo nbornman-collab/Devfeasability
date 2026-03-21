@@ -215,42 +215,116 @@ function renderHeritageRisk(si) {
 
 // ── Site Strategy Panel ──────────────────────────────────────────────────────
 function renderSiteStrategy(si) {
-  const hf = si.heritage_framework;
-  const tier = hf ? hf.tier : 'clean';
-  // Derive viable strategies from heritage tier + site characteristics
-  const F = si.factors;
-  const skyScore = F && F.sky ? F.sky.score : 7;
-  const herScore = F && F.heritage ? F.heritage.score : 7;
-  const strategies = [];
-  if (tier === 'blocking') {
-    strategies.push({ label:'Adaptive Reuse', icon:'♻', why:'Listed fabric must be retained. Re-engineer the existing building for new use. Maximum planning certainty.', carbon:'Lowest embodied carbon. Retains existing structure.' });
-    strategies.push({ label:'Partial Demolition + Extension', icon:'◧', why:'Remove later/poor-quality additions. Retain historic core. Negotiate heritage benefit with LPA.', carbon:'Medium - demolition of later additions only.' });
-  } else if (tier === 'navigable') {
-    strategies.push({ label:'Facade Retention', icon:'◫', why:'Retain historic street-level facade. New structure behind and above. Standard approach for navigable heritage settings.', carbon:'Moderate - new structure behind retained skin.' });
-    strategies.push({ label:'Adaptive Reuse', icon:'♻', why:'Lowest risk route given heritage sensitivity. Re-engineer existing building. Design uplift through contemporary intervention.', carbon:'Lowest embodied carbon option.' });
-    if (skyScore >= 7) strategies.push({ label:'Set-back Upper Floors', icon:'▲', why:'Step back from parapet at upper levels to reduce visual impact on listed setting. Enables additional storeys.', carbon:'Higher - full new build above retained lower floors.' });
-  } else if (tier === 'manageable') {
-    if (skyScore >= 7.5) strategies.push({ label:'New Build + Contextual Design', icon:'■', why:'Full redevelopment viable with strong contextual design response. Heritage Impact Assessment required. Design code must address character.', carbon:'Higher embodied carbon - offset by long operational life.' });
-    strategies.push({ label:'Set-back Upper Floors', icon:'▲', why:'Retain/respect street-level character. Build above with contemporary set-back floors. NDHA/CA-sensitive approach.', carbon:'Medium - lower floors retained or rebuilt to match.' });
-    strategies.push({ label:'Adaptive Reuse + Extension', icon:'◩', why:'Gut-refurb existing fabric and extend upward. Strong sustainability narrative for planning committee.', carbon:'Lowest option for this tier - retains existing structure.' });
-  } else {
-    if (skyScore >= 8) strategies.push({ label:'Full Redevelopment', icon:'■', why:'Clean site - maximum massing viable. No heritage constraint. Height and form limited only by local plan policy and design quality.', carbon:'Higher embodied carbon - offset by long operational life and performance.' });
-    strategies.push({ label:'New Build - Phased', icon:'▣', why:'Phase delivery to manage cashflow and de-risk. Clean site allows flexible phasing strategy.', carbon:'Full new build - consider CLT or low-carbon structural frame.' });
-    if (herScore >= 9) strategies.push({ label:'Adaptive Reuse', icon:'♻', why:'Even on a clean site, reuse may be viable if existing structure is sound. Strong ESG narrative.', carbon:'Best-in-class embodied carbon position.' });
-  }
-  const cards = strategies.map(s =>
-    `<div style="background:#fff;border:1px solid #e5e7eb;border-radius:7px;padding:10px 12px;margin-bottom:7px">
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
-        <span style="font-size:14px">${s.icon}</span>
-        <span style="font:700 12px 'Inter',sans-serif;color:#0c0f1a">${s.label}</span>
+  const F = si.factors || {};
+  const hf = si.heritage_framework || {};
+  const tier = hf.tier || 'clean';
+  const score = si.opportunity_score || 65;
+  const skyScore = (F.sky || {}).score || 5;
+  
+  // ── Heritage-consistent strategy options ──────────────────────────────────
+  // Rules: blocking = no new build recommendation; must flag heritage navigation
+  // navigable = partial strategies only with strong heritage caveat
+  // manageable = new build with heritage response required
+  // clean = all strategies viable
+  
+  const STRATEGIES = {
+    blocking: [
+      {
+        label: 'Heritage-Led Retrofit',
+        icon: '⟳',
+        desc: 'The heritage designation on this site constrains demolition significantly. The viable route is sensitive refurbishment and adaptive reuse — retaining the existing structure while upgrading its performance and use.',
+        why: 'Any proposal involving significant demolition will face a high bar from the LPA and likely Historic England objection. The path of least resistance — and strongest planning precedent — is retrofit with a clearly articulated conservation philosophy.',
+        carbon: 'Retaining existing structure avoids embodied carbon from demolition and reconstruction. Aligns with RICS Whole Life Carbon methodology.',
+        viable: true
+      },
+      {
+        label: 'Facade Retention + Internal Rebuild',
+        icon: '□',
+        desc: 'Retain and restore the principal facade(s) — particularly those that define the heritage character — while rebuilding internal structure to modern performance standards.',
+        why: 'Widely accepted by LPAs in designated areas when the case is made that the existing internal structure is technically unviable. Requires a thorough structural survey demonstrating necessity. Conservation officer engagement is essential at RIBA Stage 1.',
+        carbon: 'Facade retention reduces structural embodied carbon versus full demolition. Internal rebuild still carries embodied carbon cost — offset by retained envelope.',
+        viable: true
+      }
+    ],
+    navigable: [
+      {
+        label: 'Partial Demolition + Sensitive Extension',
+        icon: '+',
+        desc: 'Retain heritage-significant elements (typically front elevation, primary bays, key streetscape features) while demolishing less significant rear additions to create development depth and height.',
+        why: 'The heritage constraint here is navigable but real. Partial retention gives the LPA a conservation win while enabling meaningful new development. Requires heritage impact assessment at RIBA Stage 2.',
+        carbon: 'Partial retention is more carbon-efficient than full demolition. Hybrid embodied carbon — retained elements offset new construction.',
+        viable: true
+      },
+      {
+        label: 'Adaptive Reuse',
+        icon: '⟳',
+        desc: 'Change of use and internal reconfiguration without significant structural change. Appropriate for B-listed or locally listed buildings where the planning history suggests retention preference.',
+        why: 'When the heritage designation is navigable but the planning officer will require justification for any demolition, adaptive reuse offers a lower-risk planning route with faster programme.',
+        carbon: 'Lowest embodied carbon route. Retains all existing structure. Strong alignment with GLA and RICS sustainability policy.',
+        viable: true
+      }
+    ],
+    manageable: [
+      {
+        label: 'New Build with Heritage Response',
+        icon: '▲',
+        desc: 'Full redevelopment is viable, but the design must articulate a clear response to the surrounding heritage context — scale, material, massing rhythm. Heritage assets nearby do not block development; they shape it.',
+        why: 'The heritage here is manageable: present and relevant to design decisions, but not a block to development consent. A well-designed scheme that contextualises itself appropriately has strong precedent for approval.',
+        carbon: 'New build baseline. BREEAM Excellent or Passivhaus standard should be targeted. Embodied carbon budget to be demonstrated against RICS benchmark in DAS.',
+        viable: true
+      },
+      {
+        label: 'Facade Retention + Vertical Extension',
+        icon: '↑',
+        desc: 'Retain ground and lower floors to address heritage frontage requirements, with a clearly expressed new build above. The vertical break should be legible — "old below, new above" is a well-accepted design approach.',
+        why: 'A strong option when the street-level heritage character is what the LPA cares about. Height gains above that threshold can be ambitious if the design language is confident and clearly differentiated.',
+        carbon: 'Hybrid approach — retained base reduces embodied carbon of lower floors. Upper floors carry new build carbon cost.',
+        viable: true
+      }
+    ],
+    clean: [
+      {
+        label: 'New Build - Full Redevelopment',
+        icon: '▲',
+        desc: 'No heritage constraint on this site. Full demolition and new build is the appropriate primary strategy. Design ambition is unconstrained by heritage — pursue the highest quality scheme the site can support.',
+        why: 'Clean heritage context means the conversation with the LPA is about design quality, massing, programme and planning policy — not conservation. The design team can lead with aspiration rather than negotiation.',
+        carbon: 'New build baseline. BREEAM Excellent minimum. Full embodied carbon budget should be modelled from RIBA Stage 2 in line with RICS Whole Life Carbon methodology.',
+        viable: skyScore >= 6
+      },
+      {
+        label: 'Phased Intensification',
+        icon: '++',
+        desc: 'Where the existing building has residual value, a phased approach — partial retention in Phase 1, full redevelopment in Phase 2 — can reduce initial capital outlay while preserving optionality.',
+        why: 'Useful when the site has a sitting tenant, when funding is staged, or when planning risk justifies a more conservative first application. Phase 1 consent provides proof-of-concept for Phase 2.',
+        carbon: 'Phase 1 embodied carbon lower if partial retention. Phase 2 carries full new build cost. Lifecycle carbon model should span both phases.',
+        viable: true
+      }
+    ]
+  };
+
+  const strategies = STRATEGIES[tier] || STRATEGIES.clean;
+  
+  if (!strategies || strategies.length === 0) return '';
+  
+  const rows = strategies.filter(s => s.viable !== false).map(s => `
+    <div style="border:1px solid #e5e7eb;border-radius:8px;padding:12px 14px;margin-bottom:8px;background:#fafafa">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="font:700 14px Inter,sans-serif;color:#1d4ed8;line-height:1">${s.icon}</span>
+        <span style="font:700 11px Inter,sans-serif;color:#0f172a;letter-spacing:-.1px">${s.label}</span>
       </div>
-      <div style="font:400 10px/1.5 'Inter',sans-serif;color:#374151;margin-bottom:5px">${s.why}</div>
-      <div style="font:500 9px 'Inter',sans-serif;color:#059669;text-transform:uppercase;letter-spacing:.5px">Carbon: ${s.carbon}</div>
-    </div>`
-  ).join('');
+      <div style="font:400 11px/1.65 Inter,sans-serif;color:#374151;margin-bottom:6px">${s.desc}</div>
+      <div style="font:600 10px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;color:#6b7280;margin-bottom:3px">Why this works here</div>
+      <div style="font:400 10px/1.6 Inter,sans-serif;color:#6b7280;margin-bottom:6px">${s.why}</div>
+      <div style="font:400 10px/1.5 Inter,sans-serif;color:#059669;border-top:1px solid #e5e7eb;padding-top:5px;margin-top:4px">
+        <span style="font-weight:600">Carbon:</span> ${s.carbon}
+      </div>
+    </div>`).join('');
+
+  const tierLabel = {blocking:'Heritage-Constrained Strategies Only',navigable:'Heritage-Sensitive Strategies',manageable:'Strategies (Heritage Response Required)',clean:'Viable Development Strategies'}[tier] || 'Viable Strategies';
+
   return `<div>
-    <div style="font:500 10px 'Inter',sans-serif;color:#6b7280;margin-bottom:10px">Viable development strategies for this site based on heritage tier, height potential and planning context.</div>
-    ${cards}
+    <div style="font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;color:#6b7280;margin-bottom:10px">${tierLabel}</div>
+    ${rows}
   </div>`;
 }
 
