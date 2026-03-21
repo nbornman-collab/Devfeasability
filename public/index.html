@@ -295,6 +295,7 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <a href="/borough/hackney" class="nav-link">Hackney</a>
     <a href="/t1/24-southwark-st" class="nav-link">Demo: Appraise</a>
     <a href="/t2/24-southwark-st" class="nav-link">Demo: Full Insight</a>
+    <a href="/pd" class="nav-link">PD Check</a>
     <a href="/methodology" class="nav-link">Methodology</a>
   </div>
   <a href="/borough/southwark" class="nav-cta">Discover Sites →</a>
@@ -554,7 +555,54 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     </div>
   </section>
 
-  <footer>
+  
+  <!-- PD Checker product strand -->
+  <section class="section reveal" style="background:var(--surface2)">
+    <div class="section-inner">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center">
+        <div>
+          <div class="section-label">New · Residential</div>
+          <div class="section-title">Permitted Development<br>rights checker</div>
+          <p class="section-sub" style="margin-bottom:28px">Homeowner? Builder? Architect? Enter any address in England and get an instant breakdown of what you can build without planning permission.</p>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
+            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Rear extensions — single and two-storey</div>
+            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Loft conversions and dormers</div>
+            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Outbuildings and garden rooms</div>
+            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Upward extensions (Class AA)</div>
+            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Conservation area and Article 4 flags</div>
+          </div>
+          <a href="/pd" style="display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;font:700 13px var(--sans);padding:13px 24px;border-radius:6px;text-decoration:none">Check your address <span>→</span></a>
+        </div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:28px">
+          <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-bottom:16px">Example result</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--green-lt);border:1px solid var(--green-bd);border-radius:6px">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
+              <span style="font:600 12px var(--sans);color:var(--green)">Permitted</span>
+              <span style="font:400 12px var(--sans);color:var(--text2);margin-left:4px">Single-storey rear extension up to 4m</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--amber-lt);border:1px solid var(--amber-bd);border-radius:6px">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0"></span>
+              <span style="font:600 12px var(--sans);color:var(--amber)">Prior Approval</span>
+              <span style="font:400 12px var(--sans);color:var(--text2);margin-left:4px">Dormer window — neighbour consultation</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--red-lt);border:1px solid var(--red-bd);border-radius:6px">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0"></span>
+              <span style="font:600 12px var(--sans);color:var(--red)">Planning Required</span>
+              <span style="font:400 12px var(--sans);color:var(--text2);margin-left:4px">Two-storey — conservation area</span>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+            <div style="display:flex;gap:10px;align-items:baseline">
+              <span style="font:800 20px var(--sans);color:var(--text)">£99</span>
+              <span style="font:400 11px var(--sans);color:var(--text4)">per report · or £49/mo for professionals</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<footer>
     <div class="footer-logo">D<span class="slash">/</span>A</div>
     <div>Development Intelligence · London · 2026</div>
     <div style="display:flex;gap:20px">

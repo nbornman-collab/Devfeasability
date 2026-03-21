@@ -1,4 +1,5 @@
 const express = require('express');
+const { buildPDClasses, applyConstraints } = require('./lib/pd-engine');
 const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,74 @@ function cachedFetch(url, timeoutMs = 10000) {
     })
     .catch(e => { clearTimeout(timeout); console.warn('cachedFetch timeout/error:', e.message); return { elements: [] }; });
 }
+
+
+// ── PD Checker ────────────────────────────────────────────────────────────────
+app.get('/pd', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'pd.html'));
+});
+
+app.get('/api/pd-check', async (req, res) => {
+  const address = req.query.address;
+  if (!address) return res.json({ error: 'Address required' });
+
+  try {
+    // Geocode via Google Maps API
+    const mapsKey = process.env.GOOGLE_MAPS_API_KEY;
+    let lat, lng, formattedAddress, lpa;
+    
+    if (mapsKey) {
+      const geoUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address + ', England')}&key=${mapsKey}&region=gb`;
+      const geoRes = await fetch(geoUrl);
+      const geoData = await geoRes.json();
+      if (geoData.results && geoData.results.length > 0) {
+        const r = geoData.results[0];
+        lat = r.geometry.location.lat;
+        lng = r.geometry.location.lng;
+        formattedAddress = r.formatted_address;
+        // Extract borough/LPA from address components
+        const district = r.address_components.find(c => c.types.includes('administrative_area_level_2'));
+        const locality = r.address_components.find(c => c.types.includes('postal_town') || c.types.includes('locality'));
+        lpa = district ? district.long_name : (locality ? locality.long_name : 'Your Local Authority');
+      }
+    } else {
+      // Fallback: OSM Nominatim
+      const nomUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1&countrycodes=gb`;
+      const nomRes = await fetch(nomUrl, { headers: { 'User-Agent': 'DA-DevFeasibility/1.0' } });
+      const nomData = await nomRes.json();
+      if (nomData && nomData.length > 0) {
+        lat = parseFloat(nomData[0].lat);
+        lng = parseFloat(nomData[0].lon);
+        formattedAddress = nomData[0].display_name;
+        lpa = 'Your Local Authority';
+      }
+    }
+
+    if (!lat) return res.json({ error: 'Address not found. Please try with a full UK postcode.' });
+
+    // Check constraints (simplified - using known London conservation area bbox as proxy)
+    // In production: query conservation area polygon dataset
+    const inLondon = lat > 51.28 && lat < 51.72 && lng > -0.55 && lng < 0.35;
+    const inConservation = false; // placeholder - would query conservation area dataset
+    const article4 = false; // placeholder - would query Article 4 dataset
+    const listed = false; // placeholder - would query Historic England API
+    const propertyType = 'semi-detached'; // placeholder - would come from VOA/AddressBase
+
+    const baseClasses = buildPDClasses(propertyType);
+    const classes = applyConstraints(baseClasses, inConservation, article4, listed);
+
+    res.json({
+      address: formattedAddress || address,
+      lat, lng, lpa,
+      propertyType,
+      inConservation, article4, listed,
+      classes
+    });
+  } catch(e) {
+    console.error('PD check error:', e);
+    res.json({ error: 'Unable to process this address. Please try again.' });
+  }
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 

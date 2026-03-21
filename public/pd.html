@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PD Check · Can I build without planning permission?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sans:'Inter',sans-serif;
+  --green:#16a34a;--green-lt:#f0fdf4;--green-bd:#bbf7d0;
+  --amber:#d97706;--amber-lt:#fffbeb;--amber-bd:#fde68a;
+  --red:#dc2626;--red-lt:#fef2f2;--red-bd:#fecaca;
+  --blue:#1d4ed8;--blue-lt:#eff6ff;
+  --text:#0f172a;--text2:#374151;--text3:#6b7280;--text4:#9ca3af;
+  --border:#e5e7eb;--surface:#fff;--surface2:#f9fafb;
+}
+html,body{font-family:var(--sans);color:var(--text);background:var(--surface2);min-height:100vh}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font:800 17px var(--sans);letter-spacing:-.5px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:4px}
+.slash{color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-link{font:500 11px var(--sans);text-transform:uppercase;letter-spacing:1.4px;color:var(--text3);text-decoration:none;padding:6px 10px;border-radius:4px;transition:all .15s}
+.nav-link:hover{color:var(--text);background:var(--surface2)}
+.nav-link.active{color:var(--blue);background:var(--blue-lt)}
+.nav-cta{font:600 11px var(--sans);padding:7px 16px;border-radius:5px;text-decoration:none;background:var(--blue);color:#fff}
+
+/* Hero */
+.pd-hero{margin-top:52px;background:#0f172a;padding:64px 32px 56px;text-align:center}
+.pd-eyebrow{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2.5px;color:rgba(255,255,255,.4);margin-bottom:16px}
+.pd-title{font:800 48px/1 var(--sans);color:#fff;letter-spacing:-2px;margin-bottom:16px}
+.pd-title span{color:#4ade80}
+.pd-sub{font:400 17px var(--sans);color:rgba(255,255,255,.55);max-width:540px;margin:0 auto 36px;line-height:1.6}
+
+/* Search box */
+.search-wrap{max-width:600px;margin:0 auto;position:relative}
+.search-row{display:flex;gap:0;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+#addr-input{flex:1;padding:16px 20px;font:400 15px var(--sans);border:none;outline:none;color:var(--text)}
+#addr-input::placeholder{color:var(--text4)}
+#check-btn{padding:14px 28px;background:var(--green);color:#fff;font:700 13px var(--sans);border:none;cursor:pointer;transition:background .15s;white-space:nowrap}
+#check-btn:hover{background:#15803d}
+#check-btn:disabled{background:#9ca3af;cursor:not-allowed}
+.search-hint{font:400 11px var(--sans);color:rgba(255,255,255,.35);margin-top:10px;text-align:center}
+
+/* Class pills */
+.class-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:32px}
+.class-pill{font:500 10px var(--sans);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.5);cursor:pointer;transition:all .15s}
+.class-pill:hover{border-color:rgba(255,255,255,.4);color:rgba(255,255,255,.8)}
+
+/* Main content */
+.pd-main{max-width:800px;margin:40px auto;padding:0 20px 80px}
+
+/* Loading */
+#loading{display:none;text-align:center;padding:60px 20px}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Results */
+#results{display:none}
+.result-header{background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:20px}
+.result-address{font:700 16px var(--sans);color:var(--text);margin-bottom:4px}
+.result-meta{font:400 12px var(--sans);color:var(--text3)}
+.result-flags{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.rflag{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.8px;padding:3px 8px;border-radius:4px}
+.rflag.warn{background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber-bd)}
+.rflag.ok{background:var(--green-lt);color:var(--green);border:1px solid var(--green-bd)}
+.rflag.block{background:var(--red-lt);color:var(--red);border:1px solid var(--red-bd)}
+.rflag.info{background:var(--blue-lt);color:var(--blue);border:1px solid #bfdbfe}
+
+/* PD class cards */
+.pd-section-title{font:700 11px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text4);margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+.pd-section-title::before{content:'';flex:1;height:1px;background:var(--border)}
+.pd-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.pd-class-card{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.pd-class-header{display:flex;align-items:center;gap:12px;padding:16px 20px;cursor:pointer;transition:background .15s}
+.pd-class-header:hover{background:var(--surface2)}
+.pd-verdict-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.pd-verdict-dot.green{background:var(--green)}
+.pd-verdict-dot.amber{background:var(--amber)}
+.pd-verdict-dot.red{background:var(--red)}
+.pd-class-name{font:700 13px var(--sans);color:var(--text);flex:1}
+.pd-class-verdict{font:600 11px var(--sans)}
+.pd-class-verdict.green{color:var(--green)}
+.pd-class-verdict.amber{color:var(--amber)}
+.pd-class-verdict.red{color:var(--red)}
+.pd-chevron{color:var(--text4);font-size:11px;transition:transform .2s}
+.pd-class-body{border-top:1px solid var(--border);padding:16px 20px;display:none}
+.pd-class-body.open{display:block}
+.pd-rule-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.pd-rule-icon{font-size:12px;flex-shrink:0;margin-top:1px}
+.pd-rule-label{font:600 11px var(--sans);color:var(--text);min-width:160px;flex-shrink:0}
+.pd-rule-val{font:400 11px/1.5 var(--sans);color:var(--text2)}
+.pd-rule-limit{font:500 10px var(--mono);color:var(--text4);margin-top:2px}
+.pd-note{background:var(--amber-lt);border:1px solid var(--amber-bd);border-radius:6px;padding:10px 12px;margin-top:10px;font:400 11px/1.6 var(--sans);color:#92400e}
+.pd-pa-note{background:var(--blue-lt);border:1px solid #bfdbfe;border-radius:6px;padding:10px 12px;margin-top:10px;font:400 11px/1.6 var(--sans);color:#1e40af}
+
+/* Paywall */
+.pd-paywall{background:#fff;border:1px solid var(--border);border-radius:10px;padding:28px;text-align:center;margin-top:24px}
+.pd-paywall-title{font:700 17px var(--sans);color:var(--text);margin-bottom:8px}
+.pd-paywall-sub{font:400 13px var(--sans);color:var(--text3);margin-bottom:20px;line-height:1.6}
+.pd-price-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.pd-price-card{border:1px solid var(--border);border-radius:8px;padding:16px 24px;text-align:center}
+.pd-price-card.featured{border-color:var(--blue);background:var(--blue-lt)}
+.pd-price-amt{font:800 24px var(--sans);color:var(--text);letter-spacing:-1px}
+.pd-price-label{font:400 11px var(--sans);color:var(--text3);margin-top:2px}
+.pd-price-cta{display:inline-block;padding:10px 28px;background:var(--blue);color:#fff;font:700 12px var(--sans);border-radius:6px;text-decoration:none;cursor:pointer;border:none}
+
+/* How it works */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:28px;background:#fff}
+.how-step{padding:24px;border-right:1px solid var(--border)}
+.how-step:last-child{border-right:none}
+.how-num{font:700 28px var(--sans);color:var(--border);letter-spacing:-1px;margin-bottom:10px}
+.how-title{font:700 13px var(--sans);color:var(--text);margin-bottom:6px}
+.how-desc{font:400 12px var(--sans);color:var(--text3);line-height:1.65}
+
+footer{background:#fff;border-top:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;font:400 11px var(--sans);color:var(--text4);margin-top:60px}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">D<span class="slash">/</span>A</a>
+  <div class="nav-links">
+    <a href="/borough/southwark" class="nav-link">Southwark</a>
+    <a href="/borough/city-of-london" class="nav-link">City of London</a>
+    <a href="/borough/hackney" class="nav-link">Hackney</a>
+    <a href="/pd" class="nav-link active">PD Check</a>
+    <a href="/methodology" class="nav-link">Methodology</a>
+  </div>
+  <a href="/borough/southwark" class="nav-cta">Discover Sites →</a>
+</nav>
+
+<div class="pd-hero">
+  <div class="pd-eyebrow">Permitted Development · England</div>
+  <h1 class="pd-title">Can I build it<br><span>without planning?</span></h1>
+  <p class="pd-sub">Enter your address. Get a clear breakdown of what you can build under Permitted Development rights — no architect needed for this bit.</p>
+
+  <div class="search-wrap">
+    <div class="search-row">
+      <input id="addr-input" type="text" placeholder="Enter your address or postcode, e.g. 70 Nithdale Road SE18 3PD" autocomplete="off">
+      <button id="check-btn" onclick="runPDCheck()">Check →</button>
+    </div>
+    <div class="search-hint">Works for residential properties in England. Not for flats in purpose-built blocks.</div>
+  </div>
+
+  <div class="class-pills">
+    <span class="class-pill">Rear extension</span>
+    <span class="class-pill">Loft conversion</span>
+    <span class="class-pill">Side extension</span>
+    <span class="class-pill">Outbuilding</span>
+    <span class="class-pill">Upward extension</span>
+    <span class="class-pill">Garage conversion</span>
+    <span class="class-pill">Solar panels</span>
+  </div>
+</div>
+
+<div class="pd-main">
+  <div id="loading">
+    <div class="spinner"></div>
+    <div style="font:400 13px var(--sans);color:var(--text3)">Checking address and PD rules...</div>
+  </div>
+
+  <div id="results"></div>
+
+  <!-- How it works (shown before search) -->
+  <div id="how-section">
+    <div style="font:700 22px var(--sans);color:var(--text);letter-spacing:-.5px;margin-bottom:6px;text-align:center;margin-top:0">How it works</div>
+    <div style="font:400 14px var(--sans);color:var(--text3);text-align:center;margin-bottom:20px">We check your property against the national PD rules and your local authority's constraints.</div>
+    <div class="how-grid">
+      <div class="how-step">
+        <div class="how-num">01</div>
+        <div class="how-title">Enter your address</div>
+        <div class="how-desc">We geocode your property and identify your local planning authority, conservation area status, and whether Article 4 directions apply.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">02</div>
+        <div class="how-title">Rules engine runs</div>
+        <div class="how-desc">We apply the General Permitted Development Order (GPDO) 2015 rules for each development class: Class A, B, AA, E, Q and more.</div>
+      </div>
+      <div class="how-step">
+        <div class="how-num">03</div>
+        <div class="how-title">Clear verdict</div>
+        <div class="how-desc">Green: you can build it. Amber: Prior Approval needed (cheaper and faster than full planning). Red: full planning permission required.</div>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:24px;margin-top:20px">
+      <div style="font:700 13px var(--sans);color:var(--text);margin-bottom:12px">What we check</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="font:400 12px var(--sans);color:var(--text3);display:flex;gap:6px;align-items:center"><span style="color:var(--green)">✓</span> Class A: Rear extensions (single + two-storey)</div>
+        <div style="font:400 12px var(--sans);color:var(--text3);display:flex;gap:6px;align-items:center"><span style="color:var(--green)">✓</span> Class B: Roof extensions and dormers</div>
+        <div style="font:400 12px var(--sans);color:var(--text3);display:flex;gap:6px;align-items:center"><span style="color:var(--green)">✓</span> Class AA: Upward extensions (1-2 storeys)</div>
+        <div style="font:400 12px var(--sans);color:var(--text3);display:flex;gap:6px;align-items:center"><span style="color:var(--green)">✓</span> Class E: Outbuildings and garden rooms</div>
+        <div style="font:400 12px var(--sans);color:var(--text3);display:flex;gap:6px;align-items:center"><span style="color:var(--green)">✓</span> Class Q: Agricultural to residential</div>
+        <div style="font:400 12px var(--sans);color:var(--text3);display:flex;gap:6px;align-items:center"><span style="color:var(--green)">✓</span> Conservation area + Article 4 constraints</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span style="font:800 14px var(--sans);color:var(--text)">D<span style="color:var(--blue)">/</span>A</span>
+  <span>Development / Architecture · London</span>
+  <a href="/methodology">Methodology</a>
+</footer>
+
+<script>
+async function runPDCheck() {
+  const addr = document.getElementById('addr-input').value.trim();
+  if(!addr || addr.length < 5) {
+    document.getElementById('addr-input').style.border = '2px solid #dc2626';
+    return;
+  }
+  document.getElementById('addr-input').style.border = '';
+  document.getElementById('check-btn').disabled = true;
+  document.getElementById('check-btn').textContent = 'Checking...';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('how-section').style.display = 'none';
+
+  try {
+    const r = await fetch('/api/pd-check?address=' + encodeURIComponent(addr));
+    const data = await r.json();
+    renderResults(data);
+  } catch(e) {
+    document.getElementById('results').innerHTML = '<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;font:400 13px Inter,sans-serif;color:#991b1b">Unable to check this address. Please try again with a full postcode.</div>';
+    document.getElementById('results').style.display = 'block';
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('check-btn').disabled = false;
+    document.getElementById('check-btn').textContent = 'Check →';
+  }
+}
+
+function renderResults(d) {
+  if(d.error) {
+    document.getElementById('results').innerHTML = `<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;font:400 13px Inter,sans-serif;color:#991b1b">${d.error}</div>`;
+    document.getElementById('results').style.display = 'block';
+    return;
+  }
+
+  const flags = [];
+  if(d.inConservation) flags.push('<span class="rflag warn">Conservation Area</span>');
+  if(d.article4) flags.push('<span class="rflag warn">Article 4 Direction</span>');
+  if(d.listed) flags.push('<span class="rflag block">Listed Building</span>');
+  if(d.propertyType === 'flat') flags.push('<span class="rflag info">Flat - limited PD</span>');
+  if(!d.inConservation && !d.article4 && !d.listed) flags.push('<span class="rflag ok">No known constraints</span>');
+
+  const classCards = (d.classes || []).map((c, i) => `
+    <div class="pd-class-card">
+      <div class="pd-class-header" onclick="toggleCard(${i})">
+        <div class="pd-verdict-dot ${c.verdict}"></div>
+        <div class="pd-class-name">${c.name}</div>
+        <div class="pd-class-verdict ${c.verdict}">${c.verdictLabel}</div>
+        <div class="pd-chevron" id="chev-${i}">▼</div>
+      </div>
+      <div class="pd-class-body" id="body-${i}">
+        <div style="font:400 12px/1.7 Inter,sans-serif;color:#374151;margin-bottom:12px">${c.desc}</div>
+        ${c.rules.map(r => `
+          <div class="pd-rule-row">
+            <div class="pd-rule-icon">${r.pass ? '✓' : r.warn ? '⚠' : '✗'}</div>
+            <div>
+              <div class="pd-rule-label">${r.label}</div>
+              <div class="pd-rule-val">${r.value}</div>
+              ${r.limit ? `<div class="pd-rule-limit">Limit: ${r.limit}</div>` : ''}
+            </div>
+          </div>`).join('')}
+        ${c.note ? `<div class="pd-note">${c.note}</div>` : ''}
+        ${c.paNote ? `<div class="pd-pa-note"><strong>Prior Approval:</strong> ${c.paNote}</div>` : ''}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('results').innerHTML = `
+    <div class="result-header">
+      <div class="result-address">${d.address}</div>
+      <div class="result-meta">${d.lpa ? d.lpa + ' · ' : ''}${d.propertyType || 'Residential'} · ${d.lat ? d.lat.toFixed(5) + ', ' + d.lng.toFixed(5) : ''}</div>
+      <div class="result-flags">${flags.join('')}</div>
+    </div>
+    <div class="pd-section-title">Permitted Development Assessment</div>
+    ${classCards}
+    <div class="pd-paywall">
+      <div class="pd-paywall-title">Get the full written report</div>
+      <div class="pd-paywall-sub">This summary shows the national PD rules. The full report includes a site-specific drawing guide, dimensional limits for your property, Prior Approval letter template, and LPA contact details.</div>
+      <div class="pd-price-row">
+        <div class="pd-price-card">
+          <div class="pd-price-amt">£99</div>
+          <div class="pd-price-label">One-off report</div>
+        </div>
+        <div class="pd-price-card featured">
+          <div class="pd-price-amt">£49<span style="font-size:14px;font-weight:400">/mo</span></div>
+          <div class="pd-price-label">Professional · unlimited checks</div>
+        </div>
+      </div>
+      <button class="pd-price-cta">Get Full Report</button>
+      <div style="font:400 10px Inter,sans-serif;color:#9ca3af;margin-top:10px">Early access pricing · cancel anytime</div>
+    </div>`;
+  document.getElementById('results').style.display = 'block';
+}
+
+function toggleCard(i) {
+  const body = document.getElementById('body-' + i);
+  const chev = document.getElementById('chev-' + i);
+  const open = body.classList.toggle('open');
+  chev.textContent = open ? '▲' : '▼';
+}
+
+document.getElementById('addr-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter') runPDCheck();
+});
+</script>
+</body>
+</html>
