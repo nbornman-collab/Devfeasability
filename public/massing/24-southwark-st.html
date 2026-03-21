@@ -34,7 +34,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .pill.lo.active{background:var(--lo)}.pill.base.active{background:var(--base)}.pill.hi.active{background:var(--hi)}
 
 /* ── Tier nav (sticky) ──────────────────────────────────────────── */
-.tier-nav{display:flex;align-items:center;background:var(--bg);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:20}
+.tier-nav{display:flex;align-items:center;background:var(--bg);border-bottom:1px solid var(--border);padding:0 24px;position:relative;z-index:1}
 .tier-link{display:flex;align-items:center;gap:5px;padding:11px 12px;text-decoration:none;border-bottom:2.5px solid transparent;margin-bottom:-1px;white-space:nowrap}
 .tier-link .tid{font:700 9px var(--mono);color:var(--t3);letter-spacing:.5px}
 .tier-link .tn{font:600 10px var(--sans);color:var(--t3)}
@@ -58,9 +58,9 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .hero-delta.up{color:var(--lo)}.hero-delta.dn{color:#dc2626}
 
 /* ── Scenario tabs (sticky below tier nav) ──────────────────────── */
-.stabs{display:flex;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:40px;z-index:18}
+.stabs{display:flex;background:var(--bg);border-bottom:2px solid var(--border);position:relative;z-index:1}
 .stab{flex:1;padding:13px 8px 11px;text-align:center;cursor:pointer;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;background:transparent;font-family:var(--sans);transition:all .15s}
-.stab .sn{display:block;font:700 14px var(--sans);color:var(--t2);transition:color .15s}
+.stab .sn{display:block;font:700 13px var(--sans);color:var(--t2);transition:color .15s}
 .stab .ss{display:block;font:600 10px var(--mono);color:var(--t3);margin-top:2px;transition:color .15s}
 .stab.lo.active{background:rgba(5,150,105,.08);border-bottom-color:var(--lo)}
 .stab.lo.active .sn{color:var(--lo)}.stab.lo.active .ss{color:var(--lo);opacity:.7}
@@ -259,9 +259,9 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 <div class="panel">
   <!-- Tier nav -->
   <nav class="tier-nav">
-    <a href="/t1/24-southwark-st" class="tier-link"><span class="tid">T1</span><span class="tn">Scout</span></a>
-    <a href="/t2/24-southwark-st" class="tier-link active" style="margin-left:8px"><span class="tid">T2</span><span class="tn">Appraise</span></a>
-    <a class="tier-link locked" style="margin-left:8px"><span class="tid">T3</span><span class="tn">Present</span></a>
+    <a href="/t1/24-southwark-st" class="tier-link"><span class="tn">Appraise</span></a>
+    <a href="/t2/24-southwark-st" class="tier-link active" style="margin-left:8px"><span class="tn">Full Insight</span></a>
+    
 
   </nav>
 
