@@ -27,7 +27,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "Liverpool Street station supersite"
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -56,36 +57,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
-    },
-    {
-      "name": "Bishopsgate Goodsyard",
-      "address": "Bishopsgate, E1 6JD",
-      "lat": 51.520049,
-      "lng": -0.078923,
-      "use": "mixed",
-      "plot": 18000,
-      "h": 21,
-      "mh": 150,
-      "mf": 38,
-      "ptal": "6b",
-      "sky": 9.0,
-      "val": 9.5,
-      "mom": 9.0,
-      "her": 7.0,
-      "acq": 5.5,
-      "tra": 10.0,
-      "verified": true,
-      "notes": "SALP108 - Major mixed-use site",
-      "score": 83,
-      "coordSource": "google-geocode",
-      "slug": "bishopsgate-goodsyard",
-      "t1": "/t1/bishopsgate-goodsyard",
-      "source": "GLA + Corporation of London",
-      "offMarket": "high",
-      "flags": {
-        "inBrownfield": false
-      }
+      },
+      "desc": "GLA layer 108 - Norton Folgate allocation"
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -114,7 +87,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "4000m\u00b2 office site with planning context for 30F/120m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
     },
     {
       "name": "10 Trinity Square",
@@ -143,7 +117,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "GLA layer 108 - Tower Gateway cluster"
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -172,7 +147,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "5000m\u00b2 office site with planning context for 22F/90m - strong off-market acquisition signal. A credible development case with manageable constraints."
     },
     {
       "name": "Barts Square, Little Britain",
@@ -201,7 +177,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "GLA layer 108 - Smithfield/Barbican"
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -230,7 +207,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "3500m\u00b2 office site with potential to 12F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
     },
     {
       "name": "Crown Place, Earl Street",
@@ -259,7 +237,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "GLA layer 108 - Moorgate cluster"
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -288,7 +267,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "4500m\u00b2 office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -317,7 +297,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "GLA layer 108 - Aldgate cluster"
     },
     {
       "name": "Land at Royal Mint Street",
@@ -346,7 +327,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "8000m\u00b2 mixed-use site with potential to 18F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -375,7 +357,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "1.0ha mixed-use site with planning context for 22F/90m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -404,7 +387,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "5000m\u00b2 office site with planning context for 25F/100m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
     },
     {
       "name": "Liverpool Street Station Air Rights",
@@ -433,7 +417,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "NR/TfL air rights - maximum density zone"
     },
     {
       "name": "100 Leadenhall Street",
@@ -462,7 +447,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "City cluster - Leadenhall corridor"
     },
     {
       "name": "Fleet Street East, EC4",
@@ -491,7 +477,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "Fleet Street corridor - media/legal cluster"
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -520,7 +507,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "4000m\u00b2 office site with potential to 12F - strong off-market acquisition signal. A credible development case with manageable constraints."
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -549,7 +537,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "TfL oversite - station air rights"
     },
     {
       "name": "Moorgate Station Oversite",
@@ -578,7 +567,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "5000m\u00b2 office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
     },
     {
       "name": "Smithfield Market, EC1",
@@ -607,7 +597,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "Former meat market - museum/mixed-use"
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -636,7 +627,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "3500m\u00b2 office site with potential to 11F - strong off-market acquisition signal. A credible development case with manageable constraints."
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -665,7 +657,8 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "GLA layer 108 - Blackfriars gateway"
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -694,9 +687,10 @@
       "offMarket": "high",
       "flags": {
         "inBrownfield": false
-      }
+      },
+      "desc": "GLA layer 108 - Holborn residential"
     }
   ],
   "borough": "City of London",
-  "total": 24
+  "total": 23
 }

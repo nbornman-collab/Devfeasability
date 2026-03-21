@@ -296,7 +296,7 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <a href="/t1/24-southwark-st" class="nav-link">Demo: Appraise</a>
     <a href="/t2/24-southwark-st" class="nav-link">Demo: Full Insight</a>
     <a href="/pd" class="nav-link">PD Check</a>
-    <a href="/methodology" class="nav-link">Methodology</a>
+    <a href="/methodology" class="nav-link"/a>
   </div>
   <a href="/borough/southwark" class="nav-cta">Discover Sites →</a>
 </nav>
@@ -606,7 +606,7 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <div class="footer-logo">D<span class="slash">/</span>A</div>
     <div>Development Intelligence · London · 2026</div>
     <div style="display:flex;gap:20px">
-      <a href="/methodology" style="font:500 12px Inter,sans-serif;color:inherit;text-decoration:none;opacity:.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">Methodology</a>
+      <a href="/methodology" style="font:500 12px Inter,sans-serif;color:inherit;text-decoration:none;opacity:.7" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7"/a>
         <a href="/borough/southwark">Discover</a>
       <a href="/t1/24-southwark-st">Appraise</a>
       <a href="/t2/24-southwark-st">Full Insight</a>
@@ -626,7 +626,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
     style: 'mapbox://styles/mapbox/dark-v11',
     center: [-0.0820, 51.5138],
     zoom: 14.8,
-    pitch: 68,
+    pitch: 52,
     bearing: -30,
     interactive: false,
     attributionControl: false,
@@ -643,7 +643,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
       'source-layer': 'building',
       filter: ['==', 'extrude', 'true'],
       type: 'fill-extrusion',
-      minzoom: 13,
+      minzoom: 14.5,
       paint: {
         'fill-extrusion-color': ['interpolate',['linear'],['get','height'],0,'#1a1f35',50,'#252b4a',150,'#2d3561'],
         'fill-extrusion-height':  ['interpolate',['linear'],['zoom'],13,0,13.5,['get','height']],
