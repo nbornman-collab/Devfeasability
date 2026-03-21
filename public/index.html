@@ -273,6 +273,27 @@ footer a:hover{color:var(--text3)}
 @media(max-width:768px){.method-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:480px){.method-grid{grid-template-columns:1fr}}
 
+
+/* ── Dropdown nav ──────────────────────────────────────────── */
+.nav-dropdown{position:relative}
+.nav-dropdown:hover .nav-drop-menu,
+.nav-dropdown:focus-within .nav-drop-menu{opacity:1;pointer-events:auto;transform:translateY(0)}
+.nav-drop-menu{
+  position:absolute;top:100%;left:0;min-width:160px;
+  background:#fff;border:1px solid #e5e7eb;border-radius:6px;
+  box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:200;
+  opacity:0;pointer-events:none;transform:translateY(-4px);
+  transition:opacity .15s,transform .15s;padding:4px 0;margin-top:2px
+}
+.nav-drop-menu a{
+  display:block;padding:8px 16px;font:500 12px Inter,sans-serif;
+  color:#374151;text-decoration:none;white-space:nowrap;
+  transition:background .1s
+}
+.nav-drop-menu a:hover{background:#f9fafb;color:#111827}
+.nav-drop-menu .drop-divider{height:1px;background:#f3f4f6;margin:3px 0}
+.nav-link.active{color:var(--text,#111);background:var(--surface2,#f3f4f6)}
+
 </style>
 
 <!-- Analytics -->
@@ -290,13 +311,17 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 <nav id="main-nav">
   <a href="/" class="nav-logo">D<span class="slash">/</span>A<span style="font:400 9px Inter,sans-serif;letter-spacing:.3px;color:#6b7280;text-transform:none;line-height:1">Development/Architecture</span></a>
   <div class="nav-links">
-    <a href="/borough/southwark" class="nav-link">Discover</a>
-    <a href="/borough/city-of-london" class="nav-link">City of London</a>
-    <a href="/borough/hackney" class="nav-link">Hackney</a>
+    <div class="nav-dropdown">
+      <a class="nav-link" href="/borough/southwark" style="display:flex;align-items:center;gap:4px">Discover <span style="font-size:9px;opacity:.6">▾</span></a>
+      <div class="nav-drop-menu">
+        <a href="/borough/southwark">Southwark</a>
+        <a href="/borough/city-of-london">City of London</a>
+        <a href="/borough/hackney">Hackney</a>
+      </div>
+    </div>
     <a href="/t1/24-southwark-st" class="nav-link">Appraise</a>
     <a href="/t2/24-southwark-st" class="nav-link">Full Insight</a>
     <a href="/pd" class="nav-link">PD Check</a>
-    <a href="/methodology" class="nav-link"/a>
   </div>
   <a href="/borough/southwark" class="nav-cta">Discover Sites →</a>
 </nav>

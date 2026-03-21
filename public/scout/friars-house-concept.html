@@ -282,6 +282,24 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
   display:flex;align-items:center;gap:8px;
 }
 
+
+/* ── Dropdown nav (da-nav) ──────────────────────────────────── */
+.da-nav-dropdown{position:relative}
+.da-nav-dropdown:hover .da-nav-drop-menu,
+.da-nav-dropdown:focus-within .da-nav-drop-menu{opacity:1;pointer-events:auto;transform:translateY(0)}
+.da-nav-drop-menu{
+  position:absolute;top:100%;left:0;min-width:160px;
+  background:#fff;border:1px solid #e5e7eb;border-radius:6px;
+  box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:200;
+  opacity:0;pointer-events:none;transform:translateY(-4px);
+  transition:opacity .15s,transform .15s;padding:4px 0;margin-top:2px
+}
+.da-nav-drop-menu a{
+  display:block;padding:8px 16px;font:500 12px Inter,sans-serif;
+  color:#374151;text-decoration:none;white-space:nowrap;transition:background .1s
+}
+.da-nav-drop-menu a:hover{background:#f9fafb;color:#111827}
+
 </style>
 
 <!-- Analytics -->
@@ -298,10 +316,17 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 <nav class="da-nav">
   <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
   <div class="da-nav-links">
-    <a href="/borough/southwark" class="da-nav-link">Discover</a>
+    <div class="da-nav-dropdown">
+      <a class="da-nav-link" href="/borough/southwark" style="display:flex;align-items:center;gap:4px">Discover <span style="font-size:9px;opacity:.6">▾</span></a>
+      <div class="da-nav-drop-menu">
+        <a href="/borough/southwark">Southwark</a>
+        <a href="/borough/city-of-london">City of London</a>
+        <a href="/borough/hackney">Hackney</a>
+      </div>
+    </div>
     <a href="/t1/24-southwark-st" class="da-nav-link">Appraise</a>
     <a href="/t2/24-southwark-st" class="da-nav-link">Full Insight</a>
-    <a href="#" class="da-nav-link locked">Download (coming)</a>
+    <a href="/pd" class="da-nav-link">PD Check</a>
   </div>
   <a href="/methodology" class="da-nav-method"/a>
 </nav>
