@@ -108,6 +108,16 @@ app.get('/api/pd-check', async (req, res) => {
   }
 });
 
+// Force no caching on HTML files - prevents corporate proxies serving stale content
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html') || req.path === '/' || !req.path.includes('.')) {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    res.set('Surrogate-Control', 'no-store');
+  }
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Tier routes: /t1/:site, /t2/:site, /t3/:site ──────────────────────────
