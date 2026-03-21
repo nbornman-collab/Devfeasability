@@ -18,9 +18,8 @@
 html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--text);overflow:hidden}
 
 /* ── 50/50 layout ───────────────────────────────────────────────── */
-#map{position:fixed;top:52px;left:0;width:50%;height:calc(100% - 52px);overflow:hidden}
-#map canvas{max-width:100%!important;pointer-events:auto}
-.panel{position:fixed;top:52px;right:0;width:50%;height:calc(100% - 52px);background:var(--bg);border-left:1px solid var(--border);overflow-y:scroll;overflow-x:hidden;z-index:10;-webkit-overflow-scrolling:touch}
+#map{position:fixed;top:52px;left:0;width:50%;height:calc(100% - 52px);z-index:1}
+.panel{position:fixed;top:52px;right:0;width:50%;height:calc(100% - 52px);background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:10;-webkit-overflow-scrolling:touch;padding-bottom:80px}
 
 /* ── Map overlays ────────────────────────────────────────────────── */
 .map-bar{position:fixed;top:60px;left:14px;z-index:10;display:flex;align-items:center;gap:8px}
@@ -1036,9 +1035,8 @@ async function generateRender(){
 }
 
 async function initMap(){
-  try{
   const cfg=await(await fetch('/api/config')).json();
-  if(!cfg.mapboxToken){ document.getElementById('map').style.background='#f0f2f6'; return; }
+  if(!cfg || !cfg.mapboxToken){ console.error('No mapboxToken from /api/config'); return; }
   mapboxgl.accessToken=cfg.mapboxToken;
   const m=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/light-v11',center:CENTROID,zoom:17.0,pitch:55,bearing:5,antialias:true});
   m.addControl(new mapboxgl.NavigationControl({visualizePitch:true}),'top-left');
@@ -1113,7 +1111,6 @@ async function initMap(){
       }
     });
   });
-  } catch(e){ console.error('Map init failed:', e); document.getElementById('map').innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;background:#f0f2f6;color:#6b7280;font:400 12px Inter">Map loading...</div>'; }
 }
 
 render();
