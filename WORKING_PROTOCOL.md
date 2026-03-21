@@ -513,3 +513,33 @@ When given access to Nic's LinkedIn account:
 - **NEVER** follow companies or people
 - **NEVER** apply to jobs or express interest
 - Wait for explicit instruction before any action that leaves a trace
+
+---
+
+## INTELLIGENCE SYNTHESIS RULE (🦞 locked 2026-03-21)
+
+**Decision:** Every section on T1 (Appraise) and beyond must contain a synthesis paragraph - not just displayed data.
+
+**The principle:**
+Go beyond scraped data and applied numbers. Take the data, triangulate it across multiple factors, and deliver a genuine conclusion. Each section must cross-reference at least two data sources and produce a directional insight that could not be derived from either alone.
+
+**What this means in practice:**
+- Available Sky + Heritage + OA → what the site can actually achieve AND what the real limiting constraint is
+- Planning Appetite + LPA character + precedents → whether this is a fight or a negotiation, and why
+- BSA threshold + max floors + plate size → where the return curve peaks and why
+- Heritage tier + strategy → the architect's most defensible design position, with reasoning
+- Carbon + procurement → what the embodied carbon story is and how it plays in planning
+
+**Structure per section:**
+Each of the four groups (Summary / Development Scope + Numbers / Planning Realm / Architecture Insights) gets one synthesis paragraph. The paragraph must:
+1. Name the data points being triangulated
+2. State how they interact (not just list them)
+3. Give a directional conclusion
+
+**What is NOT acceptable:**
+- Listing scores without interpretation
+- Generic descriptions that could apply to any site
+- Repeating what the data already shows without adding judgment
+- Sections that read like a data dump
+
+**This is the moat.** The data is available to anyone. The architectural judgment applied to it is not.
