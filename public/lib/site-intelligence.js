@@ -609,10 +609,46 @@ function populateSummary(si) {
     if(sa) sa.innerHTML = synthesisArchitecture(si);
   }
 
-  // Dev numbers grid
+  // Dev numbers grid (inside dev scope section)
   if(typeof renderDevNumbers === 'function') {
     const dn = document.getElementById('dev-numbers-mount');
     if(dn) dn.innerHTML = renderDevNumbers(si);
+  }
+
+  // ── Hero metrics callout - injected above first intel-group ──────────────
+  // Shows key headline numbers prominently before synthesis text
+  if(!document.getElementById('metrics-hero-injected')) {
+    const firstGroup = document.querySelector('.intel-group');
+    if(firstGroup) {
+      const mf = maxF||10;
+      const mh = maxH||30;
+      const erv2 = val.erv||700;
+      const niy2 = val.niy||4.75;
+      const plotM2 = s.plot_m2||s.plot_area||1000;
+      const plateSz = Math.round(plotM2 * 0.65);
+      const niaPF = Math.round(plateSz * 0.78 * 0.78);
+      const gdvEst = (Math.round(niaPF * mf * erv2 / 1e5) / 10).toFixed(1);
+      const planScore = (F.momentum||{}).score||5;
+      const planCol = planScore>=7?'#059669':planScore>=5?'#d97706':'#dc2626';
+
+      const m = (v, u, lbl, col) => `<div style="flex:1;text-align:center;padding:10px 6px;border-right:1px solid #e5e7eb;min-width:0">
+        <div style="font:800 17px 'JetBrains Mono',monospace;color:${col||'#0c0f1a'};letter-spacing:-1px;line-height:1.1">${v}<span style="font:500 10px 'Inter',sans-serif;color:#9ca3af;font-weight:400">${u}</span></div>
+        <div style="font:500 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.8px;color:#6b7280;margin-top:3px">${lbl}</div>
+      </div>`;
+
+      const hero = document.createElement('div');
+      hero.id = 'metrics-hero-injected';
+      hero.style.cssText = 'display:flex;background:#fff;border-bottom:2px solid #e5e7eb;flex-shrink:0';
+      hero.innerHTML =
+        m(mf+'F', '', 'Max Floors', '#0c0f1a') +
+        m('£'+gdvEst, 'M', 'GDV Est.', '#0c0f1a') +
+        m('£'+erv2, '/m²', 'ERV', '#0c0f1a') +
+        m(niy2.toFixed(2), '%', 'NIY', '#0c0f1a') +
+        m(planScore.toFixed(1), '/10', 'Planning', planCol);
+      // Remove border-right from last item
+      hero.lastElementChild.style.borderRight = 'none';
+      firstGroup.parentNode.insertBefore(hero, firstGroup);
+    }
   }
 }
 
