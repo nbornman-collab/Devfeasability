@@ -190,22 +190,24 @@ function renderLPACommentary(si) {
 
 
 // ── Intelligence Synthesis Engine ────────────────────────────────────────────
-// Takes all site factors and cross-references them into directional conclusions.
-// Rule: every paragraph must triangulate >= 2 data sources into a conclusion
-// that could not be derived from either alone.
+// Voice: opinionated but not declarative. UK planning is nuanced.
+// Lead with the conclusion, show the working. Never fluffy, never overconfident.
+// Good: "on the balance of it" / "the case stacks up for" / "a well-argued scheme
+//        should find support" / "the evidence points toward" / "worth testing at pre-app"
+// Bad:  "will approve" / "the only question is" / "will not object" / "guaranteed"
 
 function synthesisDevScope(si) {
   const F = si.factors || {};
   const hf = si.heritage_framework || {};
   const s = si.site || {};
   const sky = F.sky || {}; const val = F.value || {}; const mom = F.momentum || {};
-  const trans = F.transport || {}; const herit = F.heritage || {};
-  
+  const trans = F.transport || {};
+
   const skyScore = sky.score || 5;
   const heritTier = hf.tier || 'clean';
   const heritScore = hf.score || 7;
-  const ptal = s.ptal || trans.score || 3;
   const inOA = !!(mom.opportunity_area);
+  const oaName = inOA ? (mom.opportunity_area.name || 'an Opportunity Area') : null;
   const maxF = s.max_floors || 10;
   const maxH = s.max_h || 30;
   const plotM2 = s.plot_m2 || s.plot_area || 1000;
@@ -213,41 +215,38 @@ function synthesisDevScope(si) {
   const bsa30 = maxH >= 30 || maxF >= 10;
   const bsa50 = maxH >= 50 || maxF >= 16;
   const erv = val.erv || 700;
-  const niy = val.niy || 4.75;
-  
-  // Plate at max height (approximate NIA achievable)
-  const efficiency = 0.78;
-  const coreRatio = 0.22;
-  const plateNIA = Math.round(plotM2 * 0.65 * efficiency); // 65% plot coverage typical
-  const totalNIA = Math.round(plateNIA * maxF * 0.85); // multi-floor efficiency loss
-  const gdvEst = Math.round((totalNIA * erv) / 1000) * 1000;
-  
-  // Triangulation: sky + heritage + OA → real potential
+  const plateSizeEst = Math.round(plotM2 * 0.65);
+  const niaPF = Math.round(plateSizeEst * 0.78 * 0.78);
+  const totalNIA = niaPF * maxF;
+
+  // ── Potential narrative (sky + heritage + OA triangulated)
   let potentialNarrative = '';
   if(skyScore >= 7 && heritTier === 'clean' && inOA) {
-    potentialNarrative = `Available Sky (${skyScore.toFixed(1)}/10), a clean heritage position (${heritScore.toFixed(1)}/10), and OA designation align to remove the three most common blockers on sites of this size. The GLA will actively support density here - the limiting factor is not planning, it is economics.`;
+    potentialNarrative = `Sky availability (${skyScore.toFixed(1)}/10), a clean heritage position (${heritScore.toFixed(1)}/10), and ${oaName} designation are three factors that rarely align in central London. On the balance of it, the vertical development case is well-supported here. The GLA expects density in this location - a well-argued scheme should find that the policy conversation is about quantum and design quality, not whether development is appropriate.`;
   } else if(skyScore >= 7 && heritTier === 'clean') {
-    potentialNarrative = `Available Sky (${skyScore.toFixed(1)}/10) and a clean heritage context (${heritScore.toFixed(1)}/10) mean the vertical envelope is genuinely open. Without an OA designation, the LPA retains standard policy discretion - but there is no heritage argument waiting to derail a well-designed scheme.`;
-  } else if(skyScore >= 5 && (heritTier === 'navigable' || heritTier === 'manageable')) {
-    potentialNarrative = `The sky is available (${skyScore.toFixed(1)}/10) but the heritage position (${heritTier}, ${heritScore.toFixed(1)}/10) shapes what can be done with it. Development potential is real but the form must respond to the heritage constraint - this is a design challenge, not a planning block.`;
+    potentialNarrative = `Sky availability (${skyScore.toFixed(1)}/10) is strong and the heritage context is clean (${heritScore.toFixed(1)}/10) - the vertical envelope looks genuinely open. Without an OA designation, the LPA holds more discretion on massing; the case stacks up for a tall scheme but the design argument will need to do real work on contextual fit and public realm. Worth testing at pre-app early.`;
+  } else if(skyScore >= 5 && heritTier === 'manageable') {
+    potentialNarrative = `Sky availability (${skyScore.toFixed(1)}/10) gives headroom to work with, but the heritage position (manageable tier, ${heritScore.toFixed(1)}/10) shapes what that headroom can actually become. On balance, development at scale is credible here - the design response to the heritage context is what opens or closes the planning case. A scheme that engages the context confidently is in a stronger position than one that tries to minimise its impact.`;
+  } else if(skyScore >= 5 && heritTier === 'navigable') {
+    potentialNarrative = `The sky is available (${skyScore.toFixed(1)}/10) but the heritage designation (navigable tier, ${heritScore.toFixed(1)}/10) means the development envelope is meaningfully constrained. Partial retention or adaptive reuse strategies are likely to find more support than full redevelopment. The evidence points toward a scheme that works with what is there rather than starting from scratch.`;
   } else if(skyScore < 5) {
-    potentialNarrative = `Available Sky (${skyScore.toFixed(1)}/10) is the primary constraint on this site. Neighbouring building heights or protected viewing corridors limit the vertical envelope regardless of planning policy. The opportunity here is horizontal intensification, not height.`;
+    potentialNarrative = `Available Sky (${skyScore.toFixed(1)}/10) is the binding constraint on this site - neighbouring heights or protected viewing corridors limit the vertical envelope regardless of planning policy. On the balance of available data, the opportunity here is in horizontal intensification or intensification of use, not additional height. Modelling should reflect that ceiling before testing any financial case.`;
   } else if(heritTier === 'blocking') {
-    potentialNarrative = `The heritage designation (${heritScore.toFixed(1)}/10, blocking tier) is the dominant constraint. Despite reasonable sky availability (${skyScore.toFixed(1)}/10), any development strategy must work within - not against - the heritage framework. Demolition is not the primary route here.`;
+    potentialNarrative = `The heritage designation sits in the blocking tier (${heritScore.toFixed(1)}/10) and is the dominant constraint on development scope. Despite reasonable sky availability (${skyScore.toFixed(1)}/10), the weight of heritage policy points toward a strategy built around retention, restoration, or sensitive extension - not clearance. A well-resourced Heritage Impact Assessment from the outset is not optional here, it is the foundation of any viable planning case.`;
   }
-  
-  // BSA triangulation
+
+  // ── BSA cost/programme triangulation
   let bsaNarrative = '';
   if(bsa50) {
-    bsaNarrative = `At ${maxF}F/${maxH}m, this scheme sits above the BSA 50m threshold - the highest regulatory tier. Second staircase, enhanced structure, and full higher-risk building regime apply. This adds approximately £2-3M and 6-12 months to programme. The return curve only justifies this at high ERV locations.`;
+    bsaNarrative = `At ${maxF}F/${maxH}m, the scheme sits above the BSA 50m threshold - the highest regulatory tier. Full higher-risk building regime, enhanced structural specification, and second staircase all apply. Based on comparable schemes, this adds in the order of £2-3M and 6-12 months to programme. At current ERVs of £${erv}/m², the return curve can carry this - but the margin is thinner and the delivery risk is higher than a sub-30m scheme on the same site.`;
   } else if(bsa30) {
-    bsaNarrative = `At ${maxF}F, the scheme crosses the BSA 30m threshold. Second staircase required (approximately £1.4M cost, 320m² NIA loss). The architectural task is to maximise NIA efficiency on remaining plate area to absorb this cost without fatally diluting returns.`;
+    bsaNarrative = `At ${maxF}F, the scheme crosses the BSA 30m threshold. A second staircase is required - typically £1.2-1.5M in cost and approximately 280-340m² of NIA surrendered to additional core. On balance, schemes in this range need to demonstrate that the GDV uplift from additional floors comfortably outweighs those costs before committing to the upper floors. Worth stress-testing the return curve at 9F and 12F before fixing the massing strategy.`;
   } else if(bsa18) {
-    bsaNarrative = `At ${maxF}F, the scheme sits in the BSA 18m zone - enhanced fire safety requirements without the full second staircase mandate. Consider whether 1-2 additional floors above 18m can be justified by GDV uplift versus the additional compliance and structural cost.`;
+    bsaNarrative = `At ${maxF}F, the scheme sits in the BSA 18m zone - enhanced fire strategy but no second staircase mandate. It is worth pressure-testing whether 1-2 additional floors above 18m meaningfully improve the return curve; at typical construction costs of £4,200/m², the BSA compliance uplift at 18m is manageable and may be worth absorbing for the additional NIA.`;
   } else {
-    bsaNarrative = `At ${maxF}F, the scheme sits below all BSA regulatory thresholds. Single staircase, standard fire strategy, no higher-risk building regime. This is a structural cost and programme advantage that the underwriting model should reflect.`;
+    bsaNarrative = `At ${maxF}F, the scheme sits below all BSA thresholds - single staircase, standard fire strategy, no higher-risk building regime. That is a meaningful cost and programme advantage that should be reflected in the development appraisal. Schemes in this range typically have lower delivery risk than taller comparable sites.`;
   }
-  
+
   return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${potentialNarrative}</p><p style="font:400 12px/1.75 Inter,sans-serif;color:#374151">${bsaNarrative}</p>`;
 }
 
@@ -255,41 +254,51 @@ function synthesisPlanning(si) {
   const F = si.factors || {};
   const hf = si.heritage_framework || {};
   const s = si.site || {};
-  const mom = F.momentum || {}; const plan = F.momentum || {};
-  const herit = F.heritage || {};
+  const mom = F.momentum || {};
   const acq = F.acquisition || {};
-  
+
   const planScore = mom.score || 5;
   const heritTier = hf.tier || 'clean';
+  const heritScore = hf.score || 7;
   const inOA = !!(mom.opportunity_area);
+  const oaName = inOA ? (mom.opportunity_area.name || 'an Opportunity Area') : null;
   const borough = si.borough || 'this borough';
   const inConservation = s.conservation_area || false;
-  const hasRedevelopment = (si.planning || {}).hasRedevelopment || false;
-  const majorCount = (si.planning || {}).majorCount || 0;
-  
-  // Triangulate: planning appetite + heritage + OA + LPA character
+  const titles = (acq.titles || (F.acquisition || {}).titles) || 1;
+
+  // ── Planning appetite + heritage + OA triangulated
   let planNarrative = '';
-  if(planScore >= 7 && inOA && heritTier === 'clean') {
-    planNarrative = `Planning Appetite (${planScore.toFixed(1)}/10), OA policy support, and a clean heritage position create a genuinely favourable planning environment. The LPA is not the obstacle here - the conversation at pre-app is about design quality and planning gain, not whether development is appropriate. That is a fundamentally different negotiation.`;
+  if(planScore >= 7 && inOA && (heritTier === 'clean' || heritTier === 'manageable')) {
+    planNarrative = `Planning Appetite sits at ${planScore.toFixed(1)}/10 and the ${oaName} designation means the GLA actively monitors and supports development in this location. Combined with a ${heritTier} heritage position, the pre-app conversation is likely to focus on scheme quality and planning contributions rather than principle of development. That is a materially better starting position than most sites in ${borough} - the case is constructable without the usual uphill argument on whether development is appropriate at all.`;
   } else if(planScore >= 6 && heritTier === 'manageable') {
-    planNarrative = `Planning Appetite (${planScore.toFixed(1)}/10) is constructive but the heritage position (manageable, ${hf.score ? hf.score.toFixed(1) : '7'}/10) means design quality is non-negotiable. The LPA will approve a confident scheme that articulates its heritage response. A defensive design - one that apologises for itself - will struggle.`;
-  } else if(planScore < 5 && heritTier === 'blocking') {
-    planNarrative = `Planning Appetite (${planScore.toFixed(1)}/10) combined with a blocking heritage tier (${hf.score ? hf.score.toFixed(1) : '4'}/10) signals a difficult planning environment. This is not impossible - it is a longer, more expensive process requiring pre-app investment, a robust heritage assessment, and a design team with listed building experience.`;
-  } else if(heritTier === 'navigable') {
-    planNarrative = `The heritage designation (navigable tier) means planning is navigable but not straightforward. Planning Appetite of ${planScore.toFixed(1)}/10 suggests the LPA is willing to engage - the key is arriving at pre-app with a clear heritage strategy, not a question about whether development is appropriate.`;
+    planNarrative = `Planning Appetite of ${planScore.toFixed(1)}/10 suggests the LPA is broadly receptive to development of this type here - but the heritage position (manageable tier, ${heritScore.toFixed(1)}/10) means design quality is the variable that makes or breaks the case. On the balance of comparable approvals, schemes that arrive at pre-app with a confident heritage response - not a defensive one - tend to find more constructive engagement. The planning case is there to be made; the architecture has to earn it.`;
+  } else if(planScore >= 6 && heritTier === 'navigable') {
+    planNarrative = `Planning Appetite (${planScore.toFixed(1)}/10) indicates the LPA has precedent for approving development in this context, but the navigable heritage tier adds real complexity. On balance, a partial-retention or façade-led strategy is likely to find more planning traction than full redevelopment. Pre-app is essential here - the LPA's position on the heritage strategy should be tested before any significant design investment.`;
+  } else if(planScore < 5 && (heritTier === 'blocking' || heritTier === 'navigable')) {
+    planNarrative = `Planning Appetite (${planScore.toFixed(1)}/10) combined with a ${heritTier} heritage tier signals a difficult planning environment - not impossible, but one that demands a well-resourced approach. The weight of evidence points toward a longer process: professional Heritage Impact Assessment, multiple pre-app rounds, and a design team with listed building or conservation area experience. Budget the process accordingly before committing to the site.`;
+  } else if(heritTier === 'blocking') {
+    planNarrative = `The blocking heritage tier (${heritScore.toFixed(1)}/10) sits alongside a Planning Appetite of ${planScore.toFixed(1)}/10. The planning case for any significant intervention here is not straightforward. On the balance of it, the viable path involves working closely with the heritage constraint from day one - a Heritage Impact Assessment and early heritage consultant engagement are prerequisites, not options.`;
   } else {
-    planNarrative = `Planning Appetite of ${planScore.toFixed(1)}/10 reflects the general policy position for sites of this type in ${borough}. ${majorCount > 0 ? `${majorCount} major application${majorCount>1?'s':''} on or near this site provide precedent context for what the LPA has approved before.` : 'No major applications on this site - a clean slate that avoids the burden of precedent but also lacks proof of approval.'}`;
+    planNarrative = `Planning Appetite of ${planScore.toFixed(1)}/10 reflects the general policy position for sites of this type in ${borough}. The evidence from comparable decisions in this area suggests a well-designed scheme with a clear planning rationale should find engagement at pre-app - but ${borough} planning committees are not predictable, and the quality of the submission counts.`;
   }
-  
-  // Conservation area interaction
+
+  // ── Conservation area / OA modifier
   let caNote = '';
-  if(inConservation) {
-    caNote = ` The conservation area designation modifies PD rights and raises the design quality bar. Any scheme must pass the LPA design review panel - this is not optional, it is where schemes live or die.`;
+  if(inConservation && inOA) {
+    caNote = ` The conservation area designation and OA status create a nuanced policy environment: density is expected, but character is protected. That tension is real and needs to be addressed head-on in the Design and Access Statement - it cannot be papered over.`;
+  } else if(inConservation) {
+    caNote = ` The conservation area designation modifies PD rights and raises the design quality bar materially. Design Review Panel engagement is likely to be required - treat it as part of the process, not an obstacle to manage around.`;
   } else if(inOA) {
-    caNote = ` OA designation means the GLA maintains a monitoring interest in planning decisions here. LPA refusal of a well-argued scheme can be appealed with GLA support - an important backstop that changes the negotiating dynamic.`;
+    caNote = ` OA status means that if the LPA declines a well-argued scheme, the GLA's monitoring role gives the applicant a meaningful backstop - that is not a guarantee of support but it does change the negotiating dynamic at appeal.`;
   }
-  
-  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${planNarrative}${caNote}</p>`;
+
+  // ── Title stack note if complex
+  let titleNote = '';
+  if(titles >= 3) {
+    titleNote = ` The title stack (${titles} titles) adds an acquisition layer to the planning timeline. Assembling control before spending on pre-app is worth considering - fractured ownership can become a material planning constraint if it is not resolved before submission.`;
+  }
+
+  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${planNarrative}${caNote}${titleNote}</p>`;
 }
 
 function synthesisArchitecture(si) {
@@ -297,42 +306,53 @@ function synthesisArchitecture(si) {
   const hf = si.heritage_framework || {};
   const s = si.site || {};
   const sky = F.sky || {};
-  const herit = F.heritage || {};
   const val = F.value || {};
-  
+  const mom = F.momentum || {};
+
   const heritTier = hf.tier || 'clean';
+  const heritScore = hf.score || 7;
   const skyScore = sky.score || 5;
   const maxF = s.max_floors || 10;
   const maxH = s.max_h || 30;
   const plotM2 = s.plot_m2 || s.plot_area || 1000;
   const erv = val.erv || 700;
-  
-  // Floor plate + core triangulation
-  const plateSizeEst = Math.round(plotM2 * 0.65); // 65% plot coverage
+  const inOA = !!(mom.opportunity_area);
+
+  // ── Floor plate + core + lease span triangulation
+  const plateSizeEst = Math.round(plotM2 * 0.65);
   const coreM2 = Math.round(plateSizeEst * 0.22);
-  const leaseSpan = plateSizeEst >= 1500 ? 11 : plateSizeEst >= 800 ? 9 : 7;
-  const structGrid = leaseSpan >= 10 ? 'composite steel frame (10-14m spans achievable)' : leaseSpan >= 8 ? 'RC flat slab or composite (8-10m spans)' : 'RC flat slab (7m min clear span achievable)';
-  
-  // BSA check
-  const bsa18 = maxH >= 18 || maxF >= 6;
+  const niaPF = plateSizeEst - coreM2;
   const bsa30 = maxH >= 30 || maxF >= 10;
-  
-  // Carbon position
+  const bsa18 = maxH >= 18 || maxF >= 6;
+  const leaseSpan = plateSizeEst >= 1500 ? 11 : plateSizeEst >= 800 ? 9 : 7;
+  const meetsMinSpan = leaseSpan >= 7;
+  const structSystem = leaseSpan >= 10 ? 'composite steel or post-tensioned concrete (10-14m column-free spans)' : leaseSpan >= 8 ? 'RC flat slab or composite frame (8-10m spans)' : 'RC flat slab - 7m clear span is achievable but the minimum for institutional occupiers';
+
+  let massingNarrative = `At an estimated ${plateSizeEst}m² gross plate, the core allocation of ~${coreM2}m² (22%) leaves approximately ${niaPF}m² NIA per floor. ${meetsMinSpan ? `A ${structSystem} would achieve the ${leaseSpan}m clear lease span that institutional occupiers require` : `A ${structSystem} is needed - the plate geometry is tight and the structural grid will need careful resolution to meet the 7m minimum span`}. `;
+  if(bsa30) {
+    massingNarrative += `The second staircase requirement above 30m eats further into that NIA figure - on a plate of this size the efficiency loss is material and should be modelled before committing to floors above that threshold. `;
+  } else if(bsa18) {
+    massingNarrative += `The scheme sits below the second staircase threshold (30m), which means the plate efficiency on upper floors is not penalised by additional core. That is a quiet advantage over taller schemes competing for similar occupiers. `;
+  }
+  massingNarrative += `The net-to-gross ratio is where the architecture earns its money - a well-resolved core and structural grid on this plate could realistically hold 78-82% efficiency.`;
+
+  // ── Carbon + sustainability triangulated with heritage
   let carbonNarrative = '';
   if(heritTier === 'blocking' || heritTier === 'navigable') {
-    carbonNarrative = `Retrofit and adaptive reuse strategies carry significantly lower embodied carbon than demolition and rebuild - typically 30-60% less. The heritage constraint and the carbon imperative align here: the most defensible planning argument and the most sustainable approach are the same strategy.`;
+    carbonNarrative = `The heritage position and the carbon imperative point in the same direction here. Retrofit and adaptive reuse carry significantly lower embodied carbon than demolition and rebuild - typically 30-60% less across the full lifecycle. On the balance of it, a retention-led strategy is likely to be both the most plannable and the most defensible on sustainability grounds. That alignment should be made explicit in the Design and Access Statement - it is a planning asset, not just an environmental one.`;
   } else if(heritTier === 'clean' && maxF >= 10) {
-    carbonNarrative = `New build at this scale carries a substantial embodied carbon burden. GLA policy now requires a whole-life carbon assessment from RIBA Stage 2. BREEAM Excellent is the minimum credible target; the carbon narrative in the Design and Access Statement will be scrutinised.`;
+    carbonNarrative = `New build at ${maxF}F carries a substantial embodied carbon burden that GLA policy now scrutinises from RIBA Stage 2 onwards. BREEAM Excellent is the credible minimum; schemes that can demonstrate a genuine circular economy strategy (GLA SPG) tend to find more constructive engagement at planning. The carbon story in the D&A Statement needs to be substantive - GLA and LPA officers in this context are experienced at spotting a thin narrative.`;
   } else {
-    carbonNarrative = `Embodied carbon should be modelled from RIBA Stage 2. At ${maxF}F, a new build scheme in ${heritTier === 'manageable' ? 'a managed heritage context' : 'a clean site'} has a clear path to BREEAM Excellent. Circular economy requirements (GLA SPG) apply to schemes above 1,000m² GIA.`;
+    carbonNarrative = `Embodied carbon modelling should be initiated at RIBA Stage 2 - not retrofitted at Stage 3. At ${maxF}F in ${heritTier === 'manageable' ? 'a managed heritage context' : 'a clean development context'}, BREEAM Excellent is achievable without heroic measures. GLA circular economy requirements apply above 1,000m² GIA - worth understanding the implication for specification and procurement before Stage 3.`;
   }
-  
-  // Massing constraint narrative
-  let massingNarrative = `At an estimated ${plateSizeEst}m² plate, the core takes approximately ${coreM2}m² (22%) leaving a net lettable plate of ~${plateSizeEst - coreM2}m² NIA per floor. To achieve the RICS minimum 7m clear lease span, a ${structGrid} is indicated. `;
-  if(bsa30) massingNarrative += `The BSA 30m threshold requires a second staircase - this adds core area and reduces NIA efficiency on each floor above this point. `;
-  massingNarrative += `The architectural task is to maximise the net-to-gross ratio while maintaining the lease span required by institutional occupiers.`;
-  
-  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${massingNarrative}</p><p style="font:400 12px/1.75 Inter,sans-serif;color:#374151">${carbonNarrative}</p>`;
+
+  // ── Programme note
+  const preAppMonths = (heritTier === 'blocking' || heritTier === 'navigable') ? '6-9' : '3-5';
+  const planningMonths = maxF >= 10 ? '18-24' : '12-18';
+  const buildMonths = maxF >= 12 ? '30-36' : maxF >= 8 ? '24-30' : '18-24';
+  const progNote = `Indicative programme: pre-app ${preAppMonths} months, planning decision ${planningMonths} months post-submission, construction ${buildMonths} months. Total end-to-end from site control: ${(parseInt(preAppMonths)+parseInt(planningMonths)+parseInt(buildMonths)+12)} months is a reasonable planning assumption before testing against lender requirements.`;
+
+  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${massingNarrative}</p><p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${carbonNarrative}</p><p style="font:400 11px/1.6 Inter,sans-serif;color:#6b7280">${progNote}</p>`;
 }
 
 
