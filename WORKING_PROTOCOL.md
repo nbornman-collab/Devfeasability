@@ -543,3 +543,13 @@ Each of the four groups (Summary / Development Scope + Numbers / Planning Realm 
 - Sections that read like a data dump
 
 **This is the moat.** The data is available to anyone. The architectural judgment applied to it is not.
+
+---
+
+## COPY + OUTREACH WRITING (🦞 locked 2026-03-21)
+
+**No em dashes.** Ever. In any written output - emails, LinkedIn messages, copy, UI text, code comments, or any other context.
+
+Use a regular dash (-) instead. This applies to all text written on Nic's behalf or for the product surface.
+
+This is a hard rule with no exceptions.
