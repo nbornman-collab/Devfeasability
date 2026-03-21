@@ -250,7 +250,7 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
   <img id="render-img" style="width:100%;border:1px solid #e2e5ec;display:block" />
 </div>
 
-<div class="scenario-pills" id="scenario-pills">
+<div class="scenario-pills" id="scenario-pills" style="display:none">
   <button class="pill lo active" id="pill-0" onclick="go(0)">Low<span class="pf" id="pf-0">—</span></button>
   <button class="pill base" id="pill-1" onclick="go(1)">Base<span class="pf" id="pf-1">—</span></button>
   <button class="pill hi" id="pill-2" onclick="go(2)">High<span class="pf" id="pf-2">—</span></button>
@@ -1064,7 +1064,7 @@ async function initMap(){
   viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#e8ecf0');
   viewer.scene.fog.enabled = false;
   viewer.scene.globe.enableLighting = false;
-  viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#dde3ea');
+  viewer.scene.globe.show = false; // rely on Google tiles, hide globe sphere below
   viewer.shadows = true;
   viewer.scene.shadowMap.maximumDistance = 1500;
   viewer.scene.shadowMap.softShadows = true;
@@ -1114,16 +1114,17 @@ async function initMap(){
   const cx = lngs.reduce((a,b)=>a+b,0)/lngs.length;
   const cy = lats.reduce((a,b)=>a+b,0)/lats.length;
 
+  // Existing building — thin wireframe ghost (outline only)
   window._existingEntity = viewer.entities.add({
     polygon:{
       hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArray(poly.flatMap(([lng,lat])=>[lng,lat]))),
       height: _siteElev, extrudedHeight: _siteElev + EXISTING_HEIGHT,
       heightReference: Cesium.HeightReference.NONE,
       extrudedHeightReference: Cesium.HeightReference.NONE,
-      material: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#b45309').withAlpha(0.35)),
+      material: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#f59e0b').withAlpha(0.08)),
       outline: true,
-      outlineColor: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#92400e').withAlpha(0.7)),
-      outlineWidth: 1.5,
+      outlineColor: new Cesium.ColorMaterialProperty(Cesium.Color.fromCssColorString('#f59e0b').withAlpha(0.6)),
+      outlineWidth: 2,
     }
   });
 
@@ -1146,6 +1147,33 @@ async function initMap(){
     }
   });
 
+  // Floor lines array
+  window._floorLineEntities = [];
+
+  function buildT2FloorLines(floors, poly, elev){
+    if(window._floorLineEntities){
+      window._floorLineEntities.forEach(e=>viewer.entities.remove(e));
+      window._floorLineEntities = [];
+    }
+    const lngs=poly.map(p=>p[0]), lats=poly.map(p=>p[1]);
+    const cx=lngs.reduce((a,b)=>a+b,0)/lngs.length;
+    const cy=lats.reduce((a,b)=>a+b,0)/lats.length;
+    const insetPoly = poly.map(([lng,lat])=>[cx+(lng-cx)*0.91, cy+(lat-cy)*0.91]);
+    const closed = [...insetPoly, insetPoly[0]];
+    for(let f=1;f<floors;f++){
+      const h = elev + (f * FTF_T2);
+      const e = viewer.entities.add({
+        polyline:{
+          positions: Cesium.Cartesian3.fromDegreesArrayHeights(closed.flatMap(([lng,lat])=>[lng,lat,h])),
+          clampToGround: false, width: 0.7,
+          material: new Cesium.ColorMaterialProperty(Cesium.Color.WHITE.withAlpha(0.35)),
+        }
+      });
+      window._floorLineEntities.push(e);
+    }
+  }
+  window._buildT2FloorLines = buildT2FloorLines;
+
   // Sample ground elevation then rebuild massing
   async function sampleElev(retries){
     try{
@@ -1155,6 +1183,7 @@ async function initMap(){
       if(h != null && h > 0 && h < 200){
         _siteElev = h;
         updateMap(window._activeScen || 0);
+        if(window._buildT2FloorLines) window._buildT2FloorLines(SCENARIOS[window._activeScen||0].floors, poly, h);
       } else if(retries > 0) setTimeout(()=>sampleElev(retries-1), 1500);
     } catch(e){ if(retries>0) setTimeout(()=>sampleElev(retries-1), 1500); }
   }
@@ -1168,6 +1197,7 @@ async function initMap(){
 
   // Update massing immediately for current scenario
   updateMap(window._activeScen || 0);
+  if(window._buildT2FloorLines) window._buildT2FloorLines(SCENARIOS[0].floors, poly, _siteElev);
 }
 
 function updateMap(idx){
@@ -1198,6 +1228,11 @@ function updateMap(idx){
   if(window._existingEntity){
     window._existingEntity.polygon.height = new Cesium.ConstantProperty(_siteElev);
     window._existingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(_siteElev + EXISTING_HEIGHT);
+  }
+
+  // Rebuild floor lines
+  if(window._buildT2FloorLines){
+    window._buildT2FloorLines(s.floors, poly, _siteElev);
   }
 }
 
