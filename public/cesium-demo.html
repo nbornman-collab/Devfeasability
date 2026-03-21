@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CesiumJS + Google 3D Tiles — Massing Demo</title>
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Cesium.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0c0f1a;color:#fff;height:100vh;overflow:hidden}
+#cesiumContainer{width:100%;height:100vh}
+
+/* Override Cesium chrome */
+.cesium-widget-credits{display:none!important}
+.cesium-viewer-bottom{display:none!important}
+.cesium-viewer-toolbar{display:none!important}
+.cesium-viewer-animationContainer{display:none!important}
+.cesium-viewer-timelineContainer{display:none!important}
+.cesium-viewer-fullscreenContainer{display:none!important}
+
+/* Top bar */
+#topbar{
+  position:fixed;top:0;left:0;right:0;height:52px;
+  background:rgba(12,15,26,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;z-index:100
+}
+#topbar .logo{font:700 13px Inter,sans-serif;letter-spacing:.5px;color:#fff}
+#topbar .logo span{opacity:.4}
+#topbar .site-name{font:600 12px Inter,sans-serif;color:rgba(255,255,255,.7);letter-spacing:-.1px}
+#topbar .badge{
+  font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;
+  padding:3px 9px;border-radius:3px;background:rgba(99,102,241,.2);
+  color:#818cf8;border:1px solid rgba(99,102,241,.3)
+}
+
+/* Side panel */
+#panel{
+  position:fixed;right:0;top:52px;bottom:0;width:300px;
+  background:rgba(12,15,26,.92);backdrop-filter:blur(16px);
+  border-left:1px solid rgba(255,255,255,.08);
+  overflow-y:auto;z-index:90
+}
+#panel::-webkit-scrollbar{width:3px}
+#panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+
+.p-section{border-bottom:1px solid rgba(255,255,255,.06);padding:16px 18px}
+.p-label{font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.3);margin-bottom:10px}
+.p-title{font:700 14px Inter,sans-serif;color:#fff;letter-spacing:-.2px;margin-bottom:3px}
+.p-sub{font:400 11px Inter,sans-serif;color:rgba(255,255,255,.4)}
+
+/* Metrics grid */
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px}
+.metric{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:6px;padding:8px 10px}
+.metric .val{font:700 16px 'DM Mono',monospace;color:#fff;letter-spacing:-1px;line-height:1}
+.metric .val.green{color:#34d399}
+.metric .val.blue{color:#60a5fa}
+.metric .val.amber{color:#fbbf24}
+.metric .lbl{font:500 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.3);margin-top:3px}
+
+/* Verdict */
+.verdict{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:7px;
+  background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);
+  margin-bottom:12px
+}
+.verdict .icon{font-size:16px}
+.verdict .vt{font:700 12px Inter,sans-serif;color:#34d399}
+.verdict .vs{font:400 10px Inter,sans-serif;color:rgba(255,255,255,.4);margin-top:1px}
+
+/* Sliders */
+.slider-row{margin-bottom:12px}
+.slider-row label{
+  display:flex;justify-content:space-between;
+  font:500 11px Inter,sans-serif;color:rgba(255,255,255,.5);margin-bottom:5px
+}
+.slider-row label span{color:#fff;font-weight:600}
+input[type=range]{
+  width:100%;height:3px;-webkit-appearance:none;appearance:none;
+  background:rgba(255,255,255,.1);border-radius:2px;outline:none;cursor:pointer
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
+  background:#6366f1;cursor:pointer;border:2px solid #fff
+}
+
+/* Scheme toggles */
+.scheme-btns{display:flex;gap:4px;margin-bottom:12px}
+.scheme-btn{
+  flex:1;padding:7px 4px;text-align:center;border-radius:5px;cursor:pointer;
+  font:600 10px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;
+  border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);
+  background:transparent;transition:all .15s
+}
+.scheme-btn.active{background:rgba(99,102,241,.2);border-color:rgba(99,102,241,.4);color:#818cf8}
+
+/* BSA badge */
+.bsa-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 9px;border-radius:4px;font:600 9px Inter,sans-serif;
+  text-transform:uppercase;letter-spacing:.8px;
+}
+.bsa-badge.green{background:rgba(52,211,153,.1);color:#34d399;border:1px solid rgba(52,211,153,.2)}
+.bsa-badge.amber{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+.bsa-badge.red{background:rgba(248,113,113,.1);color:#f87171;border:1px solid rgba(248,113,113,.2)}
+
+/* CTA */
+.cta-btn{
+  display:block;width:100%;padding:11px;text-align:center;
+  background:#6366f1;color:#fff;font:700 12px Inter,sans-serif;
+  border-radius:7px;text-decoration:none;border:none;cursor:pointer;
+  transition:background .15s
+}
+.cta-btn:hover{background:#4f46e5}
+
+/* Loading overlay */
+#loading{
+  position:fixed;inset:0;background:#0c0f1a;z-index:200;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px
+}
+#loading .spin{
+  width:36px;height:36px;border:3px solid rgba(255,255,255,.1);
+  border-top-color:#6366f1;border-radius:50%;animation:spin .8s linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading p{font:500 12px Inter,sans-serif;color:rgba(255,255,255,.4)}
+
+/* Error state */
+#error-msg{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:#1e1b2e;border:1px solid rgba(248,113,113,.3);color:#f87171;
+  font:500 11px Inter,sans-serif;padding:10px 18px;border-radius:7px;
+  z-index:300;display:none
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spin"></div>
+  <p>Loading Google Photorealistic 3D Tiles…</p>
+</div>
+
+<div id="error-msg"></div>
+
+<div id="topbar">
+  <div class="logo">D<span>/</span>A <span style="margin-left:8px;font-weight:400;opacity:.3">|</span> <span style="margin-left:8px;font-weight:400;opacity:.5">CesiumJS Demo</span></div>
+  <div class="site-name">24 Southwark Street, SE1</div>
+  <div class="badge">Google 3D Tiles</div>
+</div>
+
+<div id="cesiumContainer"></div>
+
+<div id="panel">
+  <!-- Site identity -->
+  <div class="p-section">
+    <div class="p-label">Site</div>
+    <div class="p-title">24 Southwark Street</div>
+    <div class="p-sub">Southwark, SE1 · 1,550 m² plot</div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="p-section">
+    <div class="verdict">
+      <div class="icon">●</div>
+      <div>
+        <div class="vt">Green — Strong Opportunity</div>
+        <div class="vs">Score 82/100 · Heritage: Clean</div>
+      </div>
+    </div>
+    <div class="metrics">
+      <div class="metric"><div class="val green" id="m-floors">10</div><div class="lbl">Floors</div></div>
+      <div class="metric"><div class="val blue" id="m-height">33m</div><div class="lbl">Height</div></div>
+      <div class="metric"><div class="val" id="m-nia">7,800</div><div class="lbl">NIA m²</div></div>
+      <div class="metric"><div class="val amber" id="m-gdv">£54M</div><div class="lbl">GDV est.</div></div>
+    </div>
+    <div class="bsa-badge amber" id="bsa-badge">BSA 30m+ — second staircase</div>
+  </div>
+
+  <!-- Scheme selector -->
+  <div class="p-section">
+    <div class="p-label">Scheme</div>
+    <div class="scheme-btns">
+      <button class="scheme-btn active" onclick="setScheme(0)">Conservative</button>
+      <button class="scheme-btn" onclick="setScheme(1)">Mid-range</button>
+      <button class="scheme-btn" onclick="setScheme(2)">Optimistic</button>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="p-section">
+    <div class="p-label">Massing controls</div>
+    <div class="slider-row">
+      <label>Floors <span id="lbl-floors">10</span></label>
+      <input type="range" id="sl-floors" min="4" max="18" value="10" oninput="updateMassing()">
+    </div>
+    <div class="slider-row">
+      <label>Footprint coverage <span id="lbl-cov">65</span>%</label>
+      <input type="range" id="sl-cov" min="40" max="85" value="65" oninput="updateMassing()">
+    </div>
+    <div class="slider-row">
+      <label>ERV £/m² <span id="lbl-erv">700</span></label>
+      <input type="range" id="sl-erv" min="500" max="1200" step="25" value="700" oninput="updateMassing()">
+    </div>
+  </div>
+
+  <!-- Camera presets -->
+  <div class="p-section">
+    <div class="p-label">Camera</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:4px">
+      <button class="scheme-btn" onclick="flyTo('aerial')">Aerial</button>
+      <button class="scheme-btn" onclick="flyTo('street')">Street level</button>
+      <button class="scheme-btn" onclick="flyTo('north')">North elevation</button>
+      <button class="scheme-btn" onclick="flyTo('iso')">Isometric</button>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="p-section">
+    <a href="/t2/24-southwark-st" class="cta-btn">Open Full Insight →</a>
+    <div style="font:400 10px Inter,sans-serif;color:rgba(255,255,255,.25);text-align:center;margin-top:8px">Interactive financial model · GDV · Return curve</div>
+  </div>
+</div>
+
+<script>
+// ── Site data ─────────────────────────────────────────────────────────────────
+const SITE = {
+  name: '24 Southwark Street',
+  lat: 51.504909,
+  lng: -0.091522,
+  plotM2: 1550,
+  // Site polygon (approximate) in [lng, lat] pairs
+  polygon: [
+    [-0.092100, 51.504650],
+    [-0.090900, 51.504650],
+    [-0.090900, 51.505170],
+    [-0.092100, 51.505170],
+    [-0.092100, 51.504650]
+  ]
+};
+
+const SCHEMES = [
+  { floors: 8,  cov: 60, erv: 650 },
+  { floors: 10, cov: 65, erv: 700 },
+  { floors: 14, cov: 70, erv: 750 }
+];
+
+const FTF = 4.0; // floor-to-floor m (Grade A office)
+let viewer, massingEntity;
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+async function init() {
+  let googleKey = '';
+  try {
+    const cfg = await fetch('/api/config').then(r => r.json());
+    googleKey = cfg.googleMapsKey || '';
+  } catch(e) {}
+
+  // CesiumJS setup - no ion token needed when using Google 3D Tiles directly
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJkZWZhdWx0IiwiaWF0IjoxNjk3MDAwMDAwLCJpZCI6MH0.placeholder';
+
+  viewer = new Cesium.Viewer('cesiumContainer', {
+    animation: false,
+    baseLayerPicker: false,
+    fullscreenButton: false,
+    geocoder: false,
+    homeButton: false,
+    infoBox: false,
+    sceneModePicker: false,
+    selectionIndicator: false,
+    timeline: false,
+    navigationHelpButton: false,
+    skyBox: false,
+    skyAtmosphere: false,
+    baseLayer: false,
+    globe: false,
+  });
+
+  // Remove default skybox and atmosphere for cleaner look
+  viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#0c0f1a');
+
+  // Load Google Photorealistic 3D Tiles
+  let tilesLoaded = false;
+  if(googleKey) {
+    try {
+      const tileset = await Cesium.createGooglePhotorealistic3DTileset(googleKey);
+      viewer.scene.primitives.add(tileset);
+      tilesLoaded = true;
+    } catch(e) {
+      console.warn('Google 3D Tiles failed:', e.message);
+    }
+  }
+
+  if(!tilesLoaded) {
+    // Fallback: use Cesium OSM Buildings (free, no key needed)
+    try {
+      const osmBuildings = await Cesium.createOsmBuildingsAsync();
+      viewer.scene.primitives.add(osmBuildings);
+      showError('Google Maps API key not configured — showing OSM buildings');
+    } catch(e) {
+      showError('3D tiles unavailable — massing only mode');
+    }
+  }
+
+  // Set camera to site
+  flyTo('iso');
+
+  // Add proposed massing
+  addMassingEntity();
+  updateMassing();
+
+  // Hide loading
+  document.getElementById('loading').style.display = 'none';
+
+  // Enable lighting for depth
+  viewer.scene.globe.enableLighting = false;
+  viewer.scene.sun = new Cesium.Sun();
+  viewer.shadows = true;
+}
+
+// ── Massing entity ────────────────────────────────────────────────────────────
+function addMassingEntity() {
+  // Convert site polygon to Cesium positions
+  const positions = Cesium.Cartesian3.fromDegreesArray(
+    SITE.polygon.flatMap(([lng, lat]) => [lng, lat])
+  );
+
+  massingEntity = viewer.entities.add({
+    name: 'Proposed Massing',
+    polygon: {
+      hierarchy: new Cesium.PolygonHierarchy(positions),
+      extrudedHeight: 0,
+      height: 0,
+      material: new Cesium.ColorMaterialProperty(
+        Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.75)
+      ),
+      outline: true,
+      outlineColor: Cesium.Color.fromCssColorString('#818cf8'),
+      outlineWidth: 2,
+      shadows: Cesium.ShadowMode.ENABLED,
+      closeTop: true,
+      closeBottom: true,
+    }
+  });
+}
+
+// ── Update massing from sliders ───────────────────────────────────────────────
+function updateMassing() {
+  const floors = parseInt(document.getElementById('sl-floors').value);
+  const cov = parseInt(document.getElementById('sl-cov').value);
+  const erv = parseInt(document.getElementById('sl-erv').value);
+
+  // Update labels
+  document.getElementById('lbl-floors').textContent = floors;
+  document.getElementById('lbl-cov').textContent = cov;
+  document.getElementById('lbl-erv').textContent = erv;
+
+  // Height
+  const heightM = floors * FTF;
+  const siteElev = 10; // approximate elevation above sea level (London ~5-20m)
+
+  // Update massing entity height
+  if(massingEntity) {
+    massingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(siteElev + heightM);
+    massingEntity.polygon.height = new Cesium.ConstantProperty(siteElev);
+  }
+
+  // Metrics
+  const plateGross = SITE.plotM2 * (cov / 100);
+  const coreFraction = 0.22;
+  const niaPF = Math.round(plateGross * (1 - coreFraction) * 0.78);
+  const totalNIA = niaPF * floors;
+  const niy = 4.75;
+  const gdv = Math.round(totalNIA * erv / niy / 100) / 10000;
+
+  document.getElementById('m-floors').textContent = floors + 'F';
+  document.getElementById('m-height').textContent = heightM + 'm';
+  document.getElementById('m-nia').textContent = totalNIA.toLocaleString();
+  document.getElementById('m-gdv').textContent = '£' + gdv.toFixed(1) + 'M';
+
+  // BSA badge
+  const bsaBadge = document.getElementById('bsa-badge');
+  if(heightM >= 50) {
+    bsaBadge.className = 'bsa-badge red';
+    bsaBadge.textContent = 'BSA 50m+ - highest tier';
+  } else if(heightM >= 30) {
+    bsaBadge.className = 'bsa-badge amber';
+    bsaBadge.textContent = 'BSA 30m+ - second staircase required';
+  } else if(heightM >= 18) {
+    bsaBadge.className = 'bsa-badge amber';
+    bsaBadge.textContent = 'BSA 18m+ - enhanced fire strategy';
+  } else {
+    bsaBadge.className = 'bsa-badge green';
+    bsaBadge.textContent = 'Below BSA thresholds - single staircase';
+  }
+}
+
+// ── Scheme presets ────────────────────────────────────────────────────────────
+function setScheme(idx) {
+  document.querySelectorAll('.scheme-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  const s = SCHEMES[idx];
+  document.getElementById('sl-floors').value = s.floors;
+  document.getElementById('sl-cov').value = s.cov;
+  document.getElementById('sl-erv').value = s.erv;
+  updateMassing();
+  flyTo('iso');
+}
+
+// ── Camera presets ────────────────────────────────────────────────────────────
+function flyTo(preset) {
+  const lon = SITE.lng, lat = SITE.lat;
+  const D = Cesium.Math.toRadians;
+  const positions = {
+    aerial:  { destination: Cesium.Cartesian3.fromDegrees(lon, lat, 500),  orientation: { heading: D(0),   pitch: D(-55), roll: 0 } },
+    street:  { destination: Cesium.Cartesian3.fromDegrees(lon - 0.001, lat - 0.0008, 25), orientation: { heading: D(45), pitch: D(-10), roll: 0 } },
+    north:   { destination: Cesium.Cartesian3.fromDegrees(lon, lat - 0.002, 80),  orientation: { heading: D(0),   pitch: D(-20), roll: 0 } },
+    iso:     { destination: Cesium.Cartesian3.fromDegrees(lon - 0.0015, lat - 0.001, 250), orientation: { heading: D(30), pitch: D(-35), roll: 0 } },
+  };
+  if(!viewer || !positions[preset]) return;
+  viewer.camera.flyTo({ ...positions[preset], duration: 1.5 });
+}
+
+// ── Error display ─────────────────────────────────────────────────────────────
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 6000);
+}
+
+// ── Start ─────────────────────────────────────────────────────────────────────
+init().catch(e => {
+  document.getElementById('loading').style.display = 'none';
+  showError('Failed to initialise 3D viewer: ' + e.message);
+  console.error(e);
+});
+</script>
+</body>
+</html>

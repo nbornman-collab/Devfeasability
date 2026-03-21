@@ -34,6 +34,10 @@ function cachedFetch(url, timeoutMs = 10000) {
 
 
 // ── PD Checker ────────────────────────────────────────────────────────────────
+app.get('/cesium-demo', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'cesium-demo.html'));
+});
+
 app.get('/pd-demo', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'pd-demo.html'));
 });
@@ -176,7 +180,7 @@ app.get('/methodology', (req, res) => {
 
 // Serve mapbox token
 app.get('/api/config', (req, res) => {
-  res.json({ mapboxToken: MAPBOX_TOKEN });
+  res.json({ mapboxToken: MAPBOX_TOKEN, googleMapsKey: process.env.GOOGLE_MAPS_API_KEY || "" });
 });
 
 // UK geocoding via Mapbox (bounded to Greater London)
