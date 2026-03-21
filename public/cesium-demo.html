@@ -358,6 +358,15 @@ async function init(){
   viewer.scene.shadowMap.maximumDistance = 2000;
   viewer.scene.shadowMap.softShadows = true;
 
+  // Camera controller: enable full orbit, pan, zoom
+  const ctrl = viewer.scene.screenSpaceCameraController;
+  ctrl.enableRotate = true;
+  ctrl.enableTilt = true;
+  ctrl.enableZoom = true;
+  ctrl.enableTranslate = false; // disable translate - we use lookAt orbit instead
+  ctrl.minimumZoomDistance = 20;
+  ctrl.maximumZoomDistance = 2000;
+
   progress(45, 'Loading Google Photorealistic 3D Tiles…');
 
   let tilesLoaded = false;
@@ -410,11 +419,8 @@ async function init(){
 
   updateMetrics();
 
-  // Allow free camera movement after user touch/drag
-  viewer.scene.canvas.addEventListener('mousedown', unlockCamera, {once:false});
-  viewer.scene.canvas.addEventListener('touchstart', unlockCamera, {once:false});
-
-  // Re-lock on preset button click (handled in flyTo complete callback)
+  // Camera stays locked to massing center — orbit/zoom via lookAt constraint
+  // Do NOT unlock on mousedown: unlocked mode pivots around globe center, not the site
 }
 
 // ── Scale polygon around centroid for coverage slider ──────────────────────────
@@ -517,6 +523,19 @@ function onSlider(){
   document.getElementById('lv-erv').textContent = '£'+erv;
   document.getElementById('lv-niy').textContent = niy.toFixed(2)+'%';
   updateMassingHeight(floors, cov, erv, niy);
+  // Refresh orbit centre to mid-height of updated massing
+  refreshOrbitCenter();
+}
+
+function refreshOrbitCenter(){
+  if(!viewer) return;
+  const center = getMassingCenter();
+  // Re-lock lookAt at current heading/pitch/range (no camera movement, just re-centres pivot)
+  const heading = viewer.camera.heading;
+  const pitch = viewer.camera.pitch;
+  const floors = parseInt(document.getElementById('sl-floors').value);
+  const range = floors * 4.0 * 2.5; // reasonable distance from massing
+  viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(heading, pitch, Math.max(range, 80)));
 }
 
 function updateMassingHeight(floors, cov, erv, niy){
@@ -676,10 +695,9 @@ function flyTo(preset){
   step();
 }
 
-// Unlock camera for free pan/rotate
-function unlockCamera(){
+// Cancel any in-progress tween (called by flyTo buttons)
+function cancelTween(){
   if(camTween){ cancelAnimationFrame(camTween); camTween=null; }
-  viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
 }
 
 // ── Panel toggle ──────────────────────────────────────────────────────────────
