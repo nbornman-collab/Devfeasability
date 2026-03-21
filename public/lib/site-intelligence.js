@@ -628,23 +628,25 @@ function populateSummary(si) {
         msg.style.cssText = 'background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px 20px;text-align:center;max-width:280px;box-shadow:0 2px 8px rgba(0,0,0,.1)';
         // Check if mapboxgl loaded
         const mglLoaded = typeof mapboxgl !== 'undefined';
-        // Try to detect the actual Map constructor error
-        let mapErr = 'unknown';
-        if(mglLoaded) {
+        // Check if the token was actually set by the original fetch
+        const tokenSet = mglLoaded && !!mapboxgl.accessToken;
+        const tokenVal = mglLoaded && mapboxgl.accessToken ? mapboxgl.accessToken.substring(0,20)+'...' : 'NOT SET';
+        // Try map creation WITH the current token state
+        let mapErr = 'token not set - fetch may have failed';
+        if(mglLoaded && mapboxgl.accessToken) {
           try {
             const td = document.createElement('div');
-            td.style.cssText = 'width:100px;height:100px;position:absolute;top:-9999px;left:-9999px';
+            td.style.cssText = 'width:200px;height:200px;position:absolute;top:-9999px;left:-9999px';
             document.body.appendChild(td);
-            const tm = new mapboxgl.Map({container:td, style:'mapbox://styles/mapbox/light-v11'});
-            tm.remove();
-            document.body.removeChild(td);
-            mapErr = 'test map OK - original container sizing issue';
+            const tm = new mapboxgl.Map({container:td, style:'mapbox://styles/mapbox/light-v11', antialias:true});
+            setTimeout(()=>{ try{tm.remove();document.body.removeChild(td);}catch(e){} }, 2000);
+            mapErr = 'Map constructor OK - canvas not attached to original container';
           } catch(e) { mapErr = e.message || String(e); }
         }
         msg.innerHTML = '<div style="font:700 12px sans-serif;color:#92400e;margin-bottom:6px">Map not loading</div>'
           + '<div style="font:400 11px sans-serif;color:#6b7280;line-height:1.6;text-align:left">'
           + 'Mapbox: ' + (mglLoaded ? 'OK' : 'NOT loaded') + '<br>'
-          + 'Supported: ' + (mglLoaded && mapboxgl.supported() ? 'YES' : 'NO') + '<br>'
+          + 'Token: <span style="color:' + (tokenSet?'#16a34a':'#dc2626') + '">' + tokenVal + '</span><br>'
           + 'Error: <span style="color:#dc2626;font-size:10px;word-break:break-all">' + mapErr + '</span>'
           + '</div>';
         mapEl.appendChild(msg);
