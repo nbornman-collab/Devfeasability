@@ -180,7 +180,7 @@ app.get('/methodology', (req, res) => {
 
 // Serve mapbox token
 app.get('/api/config', (req, res) => {
-  res.json({ mapboxToken: MAPBOX_TOKEN, googleMapsKey: process.env.GOOGLE_MAPS_API_KEY || "" });
+  res.json({ mapboxToken: MAPBOX_TOKEN, googleMapsKey: process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI' });
 });
 
 // UK geocoding via Mapbox (bounded to Greater London)
