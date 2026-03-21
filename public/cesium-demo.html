@@ -554,8 +554,8 @@ function onSlider(){
   document.getElementById('lv-erv').textContent = '£'+erv;
   document.getElementById('lv-niy').textContent = niy.toFixed(2)+'%';
   updateMassingHeight(floors, cov, erv, niy);
-  // Refresh orbit centre to mid-height of updated massing
-  refreshOrbitCenter();
+  // NOTE: do NOT call refreshOrbitCenter() here — camera.lookAt() on every
+  // slider tick computes wrong ECEF range and snaps to global earth view
 }
 
 function refreshOrbitCenter(){
