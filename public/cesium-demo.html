@@ -568,19 +568,28 @@ function setScheme(idx){
   flyTo('iso');
 }
 
-// ── Camera presets — all orbit around massing center ─────────────────────────
+// ── Camera — smooth lookAt tween, never leaves the site ──────────────────────
 function getMassingCenter(){
   const floors = parseInt(document.getElementById('sl-floors').value);
-  const h = floors * 4.0;
   const siteElev = 16;
-  // Centre of site polygon
   const lngs = SITE.polygon.map(p=>p[0]);
   const lats = SITE.polygon.map(p=>p[1]);
   const avgLng = lngs.reduce((a,b)=>a+b,0)/lngs.length;
   const avgLat = lats.reduce((a,b)=>a+b,0)/lats.length;
-  return Cesium.Cartesian3.fromDegrees(avgLng, avgLat, siteElev + h/2);
+  return Cesium.Cartesian3.fromDegrees(avgLng, avgLat, siteElev + (floors*4.0)/2);
 }
 
+// Easing: smooth in-out cubic
+function easeInOut(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+function lerpAngle(a,b,t){
+  // Shortest path for angles
+  let d = b - a;
+  while(d > Math.PI) d -= 2*Math.PI;
+  while(d < -Math.PI) d += 2*Math.PI;
+  return a + d*t;
+}
+
+let camTween = null;
 function flyTo(preset){
   document.querySelectorAll('.cam-btn').forEach(b=>b.classList.remove('active'));
   const el = document.getElementById('cam-'+preset);
@@ -588,48 +597,52 @@ function flyTo(preset){
   if(!viewer) return;
 
   const D = Cesium.Math.toRadians;
-  const center = getMassingCenter();
-  const floors = parseInt(document.getElementById('sl-floors').value);
-  const h = floors * 4.0;
-
-  // Use lookAt to lock orbit around massing center
-  const presets = {
-    aerial:  new Cesium.HeadingPitchRange(D(0),   D(-70), 450),
-    iso:     new Cesium.HeadingPitchRange(D(30),  D(-35), 280),
-    street:  new Cesium.HeadingPitchRange(D(200), D(-8),  80),
-    north:   new Cesium.HeadingPitchRange(D(0),   D(-20), 180),
+  const targets = {
+    aerial:  { h:D(0),   p:D(-70), r:420 },
+    iso:     { h:D(30),  p:D(-35), r:260 },
+    street:  { h:D(200), p:D(-8),  r:75  },
+    north:   { h:D(0),   p:D(-22), r:170 },
   };
+  const tgt = targets[preset];
+  if(!tgt) return;
 
-  const offset = presets[preset];
-  if(!offset) return;
+  const center = getMassingCenter();
 
-  // Animate to new position while keeping orbit locked
-  const startPos = viewer.camera.position.clone();
-  const startHead = viewer.camera.heading;
-  const startPitch = viewer.camera.pitch;
+  // Always use lookAt — camera stays on site, no geodesic arc to space
+  // Get current heading/pitch/range from camera transform
+  let curH = viewer.camera.heading;
+  let curP = viewer.camera.pitch;
+  // Estimate current range from position to center
+  const dist = Cesium.Cartesian3.distance(viewer.camera.position, center);
+  let curR = Math.max(dist, 50);
 
-  viewer.camera.flyTo({
-    destination: Cesium.Cartesian3.fromDegrees(
-      SITE.lng + (preset==='street'?-0.001:preset==='north'?0:-0.0008),
-      SITE.lat + (preset==='street'?-0.0008:preset==='north'?-0.0018:-0.0006),
-      16 + h/2 + offset.range * Math.abs(Math.sin(offset.pitch))
-    ),
-    orientation:{
-      heading: offset.heading,
-      pitch: offset.pitch,
-      roll: 0
-    },
-    duration: 1.8,
-    easingFunction: Cesium.EasingFunction.QUINTIC_IN_OUT,
-    complete: function(){
-      // After fly, lock orbit around massing center
-      viewer.camera.lookAt(center, offset);
+  const duration = 1400; // ms
+  const start = Date.now();
+
+  if(camTween) cancelAnimationFrame(camTween);
+
+  function step(){
+    const elapsed = Date.now() - start;
+    const t = easeInOut(Math.min(elapsed / duration, 1));
+
+    const h = lerpAngle(curH, tgt.h, t);
+    const p = curP + (tgt.p - curP) * t;
+    const r = curR + (tgt.r - curR) * t;
+
+    viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(h, p, r));
+
+    if(t < 1) camTween = requestAnimationFrame(step);
+    else {
+      // Lock at final position
+      viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(tgt.h, tgt.p, tgt.r));
     }
-  });
+  }
+  step();
 }
 
-// Allow free pan/rotate after user interaction
+// Unlock camera for free pan/rotate
 function unlockCamera(){
+  if(camTween){ cancelAnimationFrame(camTween); camTween=null; }
   viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
 }
 
