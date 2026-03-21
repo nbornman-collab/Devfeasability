@@ -79,7 +79,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#080b14;font-family:
   background:linear-gradient(to left,rgba(8,11,20,.97) 0%,rgba(8,11,20,.85) 100%);
   backdrop-filter:blur(24px);border-left:1px solid rgba(255,255,255,.05);
   overflow-y:auto;z-index:90;
-  transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1)
+  transform:translateX(0);transition:transform .35s cubic-bezier(.4,0,.2,1)
 }
 #ctrl-panel.open{transform:translateX(0)}
 #ctrl-panel::-webkit-scrollbar{width:2px}
@@ -96,7 +96,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#080b14;font-family:
   gap:0
 }
 #panel-toggle:hover{background:rgba(255,255,255,.1);color:#fff}
-#ctrl-panel.open ~ #panel-toggle{right:304px}
+#ctrl-panel.open ~ #panel-toggle{right:284px}
 
 .ps{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.05)}
 .ps-label{font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.25);margin-bottom:12px}
@@ -306,7 +306,7 @@ const SCHEMES = [
 
 const FTF = 4.0;
 let viewer, massingEntity, floorLines=[], siteOutline;
-let panelOpen = false;
+let panelOpen = true;
 
 // ── Loading progress ──────────────────────────────────────────────────────────
 function progress(pct, label){
@@ -398,8 +398,8 @@ async function init(){
     }
   });
 
-  // Fly to isometric after 400ms
-  setTimeout(()=>flyTo('iso'), 400);
+  // Fly to isometric after 400ms, then lock orbit
+  setTimeout(()=>{ flyTo('iso'); }, 400);
 
   progress(100, 'Ready');
   setTimeout(()=>{
@@ -409,6 +409,12 @@ async function init(){
   }, 600);
 
   updateMetrics();
+
+  // Allow free camera movement after user touch/drag
+  viewer.scene.canvas.addEventListener('mousedown', unlockCamera, {once:false});
+  viewer.scene.canvas.addEventListener('touchstart', unlockCamera, {once:false});
+
+  // Re-lock on preset button click (handled in flyTo complete callback)
 }
 
 // ── Build proposed massing ────────────────────────────────────────────────────
@@ -562,28 +568,69 @@ function setScheme(idx){
   flyTo('iso');
 }
 
-// ── Camera presets ────────────────────────────────────────────────────────────
+// ── Camera presets — all orbit around massing center ─────────────────────────
+function getMassingCenter(){
+  const floors = parseInt(document.getElementById('sl-floors').value);
+  const h = floors * 4.0;
+  const siteElev = 16;
+  // Centre of site polygon
+  const lngs = SITE.polygon.map(p=>p[0]);
+  const lats = SITE.polygon.map(p=>p[1]);
+  const avgLng = lngs.reduce((a,b)=>a+b,0)/lngs.length;
+  const avgLat = lats.reduce((a,b)=>a+b,0)/lats.length;
+  return Cesium.Cartesian3.fromDegrees(avgLng, avgLat, siteElev + h/2);
+}
+
 function flyTo(preset){
   document.querySelectorAll('.cam-btn').forEach(b=>b.classList.remove('active'));
   const el = document.getElementById('cam-'+preset);
   if(el) el.classList.add('active');
+  if(!viewer) return;
 
-  const {lat,lng} = SITE;
   const D = Cesium.Math.toRadians;
+  const center = getMassingCenter();
+  const floors = parseInt(document.getElementById('sl-floors').value);
+  const h = floors * 4.0;
+
+  // Use lookAt to lock orbit around massing center
   const presets = {
-    aerial:  { dest:[lng, lat, 600],     head:D(0),  pitch:D(-60) },
-    iso:     { dest:[lng-0.0018, lat-0.001, 260], head:D(28), pitch:D(-32) },
-    street:  { dest:[lng-0.0012, lat-0.0010, 22], head:D(52), pitch:D(-8)  },
-    north:   { dest:[lng, lat-0.0022, 95],         head:D(0),  pitch:D(-22) },
+    aerial:  new Cesium.HeadingPitchRange(D(0),   D(-70), 450),
+    iso:     new Cesium.HeadingPitchRange(D(30),  D(-35), 280),
+    street:  new Cesium.HeadingPitchRange(D(200), D(-8),  80),
+    north:   new Cesium.HeadingPitchRange(D(0),   D(-20), 180),
   };
-  const p = presets[preset];
-  if(!p || !viewer) return;
+
+  const offset = presets[preset];
+  if(!offset) return;
+
+  // Animate to new position while keeping orbit locked
+  const startPos = viewer.camera.position.clone();
+  const startHead = viewer.camera.heading;
+  const startPitch = viewer.camera.pitch;
+
   viewer.camera.flyTo({
-    destination: Cesium.Cartesian3.fromDegrees(...p.dest),
-    orientation:{ heading:p.head, pitch:p.pitch, roll:0 },
-    duration: 2.0,
+    destination: Cesium.Cartesian3.fromDegrees(
+      SITE.lng + (preset==='street'?-0.001:preset==='north'?0:-0.0008),
+      SITE.lat + (preset==='street'?-0.0008:preset==='north'?-0.0018:-0.0006),
+      16 + h/2 + offset.range * Math.abs(Math.sin(offset.pitch))
+    ),
+    orientation:{
+      heading: offset.heading,
+      pitch: offset.pitch,
+      roll: 0
+    },
+    duration: 1.8,
     easingFunction: Cesium.EasingFunction.QUINTIC_IN_OUT,
+    complete: function(){
+      // After fly, lock orbit around massing center
+      viewer.camera.lookAt(center, offset);
+    }
   });
+}
+
+// Allow free pan/rotate after user interaction
+function unlockCamera(){
+  viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
 }
 
 // ── Panel toggle ──────────────────────────────────────────────────────────────
