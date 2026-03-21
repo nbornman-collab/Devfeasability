@@ -11,134 +11,98 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#fff;font-family:'Inter',sans-serif;color:#111}
 #cesiumContainer{position:fixed;inset:0;width:100%;height:100%}
 
-/* ── Cesium chrome cleanup ── */
 .cesium-widget-credits,.cesium-viewer-bottom,.cesium-viewer-toolbar,
 .cesium-viewer-animationContainer,.cesium-viewer-timelineContainer,
 .cesium-viewer-fullscreenContainer,.cesium-infoBox,.cesium-selectionIndicator{display:none!important}
 
 /* ── Top bar ── */
 #topbar{
-  position:fixed;top:0;left:0;right:0;height:56px;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;
-  background:linear-gradient(to bottom,rgba(255,255,255,.97) 0%,rgba(255,255,255,0) 100%);border-bottom:none;
+  position:fixed;top:0;left:0;right:0;height:52px;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;padding:0 20px;
+  background:rgba(255,255,255,0.97);border-bottom:1px solid #e5e7eb;
   pointer-events:none
 }
 #topbar > *{pointer-events:auto}
-.logo{
-  font:800 15px Inter,sans-serif;letter-spacing:-.3px;
-  background:linear-gradient(135deg,#111,#374151);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:none
-}
-.logo em{font-style:normal;opacity:.35;margin:0 2px}
-.site-pill{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
-  backdrop-filter:blur(16px);border-radius:30px;padding:7px 16px
-}
-.site-pill .name{font:600 12px Inter,sans-serif;color:rgba(255,255,255,.85)}
-.site-pill .sep{width:1px;height:12px;background:rgba(255,255,255,.15)}
-.site-pill .score{font:700 12px 'DM Mono',monospace;color:#818cf8}
-.site-pill .verd{
-  font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;
-  padding:2px 8px;border-radius:20px;
-  background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.2)
+.logo{font:800 15px Inter,sans-serif;letter-spacing:-.3px;color:#111}
+.logo span{color:#6366f1}
+.site-name{font:600 13px Inter,sans-serif;color:#111}
+.site-score{font:600 12px 'DM Mono',monospace;color:#374151}
+.verd{
+  display:inline-block;padding:2px 10px;border-radius:10px;
+  font:700 10px Inter,sans-serif;letter-spacing:.05em;text-transform:uppercase;
+  background:#d1fae5;color:#065f46;border:1px solid #6ee7b7
 }
 .nav-btn{
-  font:600 11px Inter,sans-serif;color:rgba(255,255,255,.5);
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
-  border-radius:6px;padding:7px 14px;text-decoration:none;
-  transition:all .15s;cursor:pointer
+  padding:6px 14px;background:#ede9fe;border:1px solid #c4b5fd;
+  border-radius:20px;color:#4f46e5;font:600 11px Inter,sans-serif;
+  text-decoration:none;transition:all .2s
 }
-.nav-btn:hover{color:#fff;background:rgba(255,255,255,.1)}
+.nav-btn:hover{background:#ddd6fe}
 
-/* ── Bottom metrics strip ── */
+/* ── Metrics strip (bottom) ── */
 #metrics-strip{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  display:flex;align-items:stretch;gap:1px;z-index:100;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
-  backdrop-filter:blur(20px);border-radius:12px;overflow:hidden;
-  min-width:600px
+  position:fixed;bottom:0;left:0;right:302px;z-index:100;
+  display:flex;justify-content:center;
+  background:rgba(255,255,255,0.97);border-top:1px solid #e5e7eb;
+  padding:10px 0 14px;
 }
-.metric-cell{
-  flex:1;padding:12px 20px;text-align:center;transition:background .2s;
-  border-right:1px solid rgba(255,255,255,.06)
-}
-.metric-cell:last-child{border-right:none}
-.metric-cell:hover{background:rgba(255,255,255,.04)}
-.mc-val{font:800 20px 'DM Mono',monospace;letter-spacing:-1px;line-height:1;margin-bottom:3px}
-.mc-val.green{color:#34d399}
-.mc-val.blue{color:#60a5fa}
-.mc-val.purple{color:#a78bfa}
-.mc-val.amber{color:#fbbf24}
-.mc-lbl{font:500 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3)}
+.metric-cell{flex:1;max-width:180px;text-align:center}
+.mc-val{font:800 18px 'DM Mono',monospace;letter-spacing:-1px;line-height:1;margin-bottom:3px}
+.mc-val.green{color:#059669}
+.mc-val.blue{color:#2563eb}
+.mc-val.purple{color:#6366f1}
+.mc-val.amber{color:#d97706}
+.mc-lbl{font:500 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1px;color:#9ca3af}
 
 /* ── Right control panel ── */
 #ctrl-panel{
-  position:fixed;right:0;top:56px;bottom:0;width:280px;
-  background:linear-gradient(to left,rgba(8,11,20,.97) 0%,rgba(8,11,20,.85) 100%);
-  backdrop-filter:blur(24px);border-left:1px solid rgba(255,255,255,.05);
-  overflow-y:auto;z-index:90;
+  position:fixed;right:0;top:0;bottom:0;width:298px;z-index:90;
+  background:#fff;border-left:1px solid #e5e7eb;
+  overflow-y:auto;
   transform:translateX(0);transition:transform .35s cubic-bezier(.4,0,.2,1)
 }
-#ctrl-panel.open{transform:translateX(0)}
-#ctrl-panel::-webkit-scrollbar{width:2px}
-#ctrl-panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08)}
+#ctrl-panel::-webkit-scrollbar{width:3px}
+#ctrl-panel::-webkit-scrollbar-thumb{background:#e5e7eb}
 
-#panel-toggle{
-  position:fixed;right:24px;top:50%;transform:translateY(-50%);
-  width:36px;height:80px;background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.1);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;z-index:95;transition:all .2s;backdrop-filter:blur(12px);
-  writing-mode:vertical-rl;font:600 9px Inter,sans-serif;
-  color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;
-  gap:0
-}
-#panel-toggle:hover{background:rgba(255,255,255,.1);color:#fff}
-#ctrl-panel.open ~ #panel-toggle{right:284px}
-
-.ps{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.05)}
-.ps-label{font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.25);margin-bottom:12px}
+.ps{padding:14px 18px;border-bottom:1px solid #f3f4f6}
+.ps-label{font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:#9ca3af;margin-bottom:10px}
+.ps:first-child{padding-top:62px}
 
 /* Scheme selector */
 .scheme-row{display:flex;gap:4px}
 .sc-btn{
-  flex:1;padding:8px 4px;text-align:center;border-radius:6px;cursor:pointer;
+  flex:1;padding:7px 4px;text-align:center;border-radius:6px;cursor:pointer;
   font:600 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;
-  border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.3);
-  background:transparent;transition:all .15s
+  border:1px solid #e5e7eb;color:#6b7280;background:#f9fafb;transition:all .15s
 }
-.sc-btn.active{
-  background:rgba(99,102,241,.2);border-color:rgba(99,102,241,.4);
-  color:#818cf8
-}
+.sc-btn.active{background:#ede9fe;border-color:#6366f1;color:#4f46e5}
+.sc-btn:hover:not(.active){background:#f3f4f6}
 
 /* Sliders */
 .sl-row{margin-bottom:14px}
 .sl-row:last-child{margin-bottom:0}
 .sl-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
-.sl-top .sl-name{font:500 11px Inter,sans-serif;color:rgba(255,255,255,.4)}
-.sl-top .sl-val{font:700 12px 'DM Mono',monospace;color:#fff}
+.sl-top .sl-name{font:500 11px Inter,sans-serif;color:#6b7280}
+.sl-top .sl-val{font:700 12px 'DM Mono',monospace;color:#6366f1}
 input[type=range]{
-  width:100%;height:2px;-webkit-appearance:none;appearance:none;
-  background:rgba(255,255,255,.1);border-radius:1px;outline:none;cursor:pointer
+  width:100%;height:3px;-webkit-appearance:none;appearance:none;
+  background:#e5e7eb;border-radius:2px;outline:none;cursor:pointer
 }
 input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
-  background:#6366f1;cursor:pointer;border:2px solid rgba(255,255,255,.8);
-  box-shadow:0 0 8px rgba(99,102,241,.6)
+  background:#6366f1;cursor:pointer;border:2px solid #fff;
+  box-shadow:0 0 0 2px #c7d2fe
 }
 
 /* Camera buttons */
 .cam-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 .cam-btn{
   padding:8px;text-align:center;border-radius:6px;cursor:pointer;
-  font:500 10px Inter,sans-serif;color:rgba(255,255,255,.4);
-  border:1px solid rgba(255,255,255,.08);background:transparent;transition:all .15s
+  font:500 10px Inter,sans-serif;color:#6b7280;
+  border:1px solid #e5e7eb;background:#f9fafb;transition:all .15s
 }
-.cam-btn:hover{background:rgba(255,255,255,.06);color:#fff}
-.cam-btn.active{background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.3);color:#60a5fa}
+.cam-btn:hover{background:#f3f4f6;color:#374151}
+.cam-btn.active{background:#ede9fe;border-color:#6366f1;color:#4f46e5}
 
 /* BSA pill */
 .bsa-pill{
@@ -146,35 +110,38 @@ input[type=range]::-webkit-slider-thumb{
   border-radius:20px;padding:4px 10px;font:600 9px Inter,sans-serif;
   text-transform:uppercase;letter-spacing:.8px;
 }
-.bsa-green{background:rgba(52,211,153,.08);color:#34d399;border:1px solid rgba(52,211,153,.15)}
-.bsa-amber{background:rgba(251,191,36,.08);color:#fbbf24;border:1px solid rgba(251,191,36,.15)}
-.bsa-red{background:rgba(248,113,113,.08);color:#f87171;border:1px solid rgba(248,113,113,.15)}
+.bsa-green{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
+.bsa-amber{background:#fef3c7;color:#92400e;border:1px solid #fcd34d}
+.bsa-red{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
 
-/* Intelligence blurb */
+/* Intel blurb */
 .intel-para{
-  font:400 11px/1.75 Inter,sans-serif;color:rgba(255,255,255,.45);
-  border-left:2px solid rgba(99,102,241,.4);padding-left:10px
+  font:400 11px/1.75 Inter,sans-serif;color:#6b7280;
+  border-left:2px solid #c7d2fe;padding-left:10px
 }
+
+/* BSA detail text */
+.bsa-detail-text{font:400 10px/1.6 Inter,sans-serif;color:#9ca3af}
 
 /* Loading screen */
 #loading{
-  position:fixed;inset:0;background:#080b14;z-index:500;
+  position:fixed;inset:0;background:#f8fafc;z-index:500;
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px
 }
-.load-logo{font:900 28px Inter,sans-serif;letter-spacing:-.5px;margin-bottom:8px;
-  background:linear-gradient(135deg,#111,#374151);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:none}
-.load-bar{width:180px;height:2px;background:rgba(255,255,255,.08);border-radius:1px;overflow:hidden}
+.load-logo{font:900 28px Inter,sans-serif;letter-spacing:-.5px;margin-bottom:8px;color:#111}
+.load-bar{width:180px;height:2px;background:#e5e7eb;border-radius:1px;overflow:hidden}
 .load-fill{height:100%;background:linear-gradient(90deg,#6366f1,#818cf8);width:0%;transition:width .4s;border-radius:1px}
-.load-label{font:500 11px Inter,sans-serif;color:rgba(255,255,255,.3);margin-top:4px}
+.load-label{font:500 11px Inter,sans-serif;color:#9ca3af;margin-top:4px}
 
-/* Error toast */
+/* Toast */
 #toast{
-  position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
-  background:#1a1f2e;border:1px solid rgba(251,191,36,.3);color:#fbbf24;
-  font:500 11px Inter,sans-serif;padding:10px 18px;border-radius:8px;
-  z-index:300;display:none;backdrop-filter:blur(12px)
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#fff;border:1px solid #e5e7eb;color:#374151;
+  padding:10px 16px;border-radius:8px;font:400 12px Inter,sans-serif;
+  z-index:300;opacity:0;transition:all .4s;max-width:380px;text-align:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.08)
 }
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -283,7 +250,7 @@ input[type=range]::-webkit-slider-thumb{
   <div class="ps">
     <div class="ps-label">Building Safety Act</div>
     <div id="bsa-detail-pill" class="bsa-pill bsa-amber" style="margin-bottom:8px">BSA 30m+ — second staircase</div>
-    <p style="font:400 10px/1.6 Inter,sans-serif;color:#9ca3af" id="bsa-detail">At 40m, this scheme crosses the BSA 30m threshold. Second staircase required — approximately £1.2-1.5M in additional cost and 280-340m² NIA surrendered to core. Stress-test the return curve at 9F and 12F before fixing the massing strategy.</p>
+    <p class="bsa-detail-text" id="bsa-detail">At 40m, this scheme crosses the BSA 30m threshold. Second staircase required — approximately £1.2-1.5M in additional cost and 280-340m² NIA surrendered to core. Stress-test the return curve at 9F and 12F before fixing the massing strategy.</p>
   </div>
 </div>
 
@@ -348,11 +315,11 @@ async function init(){
   });
 
   // Scene setup
-  viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#f1f5f9');
+  viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#e8ecf0');
   viewer.scene.fog.enabled = false;
   viewer.scene.globe.enableLighting = false;
   viewer.scene.globe.show = true;
-  viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#e2e8f0');
+  viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#dde3ea');
 
   // Shadows
   viewer.shadows = true;
@@ -655,28 +622,17 @@ function setScheme(idx){
   flyTo('iso');
 }
 
-// ── Camera — smooth lookAt tween, never leaves the site ──────────────────────
+// ── Camera presets — direct lookAt, no distance calculation ──────────────────
 function getMassingCenter(){
-  const floors = parseInt(document.getElementById('sl-floors').value);
-  const siteElev = 16;
   const lngs = SITE.polygon.map(p=>p[0]);
   const lats = SITE.polygon.map(p=>p[1]);
   const avgLng = lngs.reduce((a,b)=>a+b,0)/lngs.length;
   const avgLat = lats.reduce((a,b)=>a+b,0)/lats.length;
-  return Cesium.Cartesian3.fromDegrees(avgLng, avgLat, siteElev + (floors*4.0)/2);
+  // Mid-height of building
+  const floors = parseInt(document.getElementById('sl-floors').value);
+  return Cesium.Cartesian3.fromDegrees(avgLng, avgLat, siteElev + (floors * FTF / 2));
 }
 
-// Easing: smooth in-out cubic
-function easeInOut(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
-function lerpAngle(a,b,t){
-  // Shortest path for angles
-  let d = b - a;
-  while(d > Math.PI) d -= 2*Math.PI;
-  while(d < -Math.PI) d += 2*Math.PI;
-  return a + d*t;
-}
-
-let camTween = null;
 function flyTo(preset){
   document.querySelectorAll('.cam-btn').forEach(b=>b.classList.remove('active'));
   const el = document.getElementById('cam-'+preset);
@@ -684,52 +640,18 @@ function flyTo(preset){
   if(!viewer) return;
 
   const D = Cesium.Math.toRadians;
-  const targets = {
-    aerial:  { h:D(0),   p:D(-70), r:420 },
-    iso:     { h:D(30),  p:D(-35), r:260 },
-    street:  { h:D(200), p:D(-8),  r:75  },
-    north:   { h:D(0),   p:D(-22), r:170 },
+  const presets = {
+    aerial: new Cesium.HeadingPitchRange(D(0),   D(-72), 420),
+    iso:    new Cesium.HeadingPitchRange(D(30),  D(-38), 260),
+    street: new Cesium.HeadingPitchRange(D(200), D(-8),  80),
+    north:  new Cesium.HeadingPitchRange(D(0),   D(-22), 175),
   };
-  const tgt = targets[preset];
-  if(!tgt) return;
+  const hpr = presets[preset];
+  if(!hpr) return;
 
+  // Direct lookAt — no ECEF distance calculation, no arc to space
   const center = getMassingCenter();
-
-  // Always use lookAt — camera stays on site, no geodesic arc to space
-  // Get current heading/pitch/range from camera transform
-  let curH = viewer.camera.heading;
-  let curP = viewer.camera.pitch;
-  // Estimate current range from position to center
-  const dist = Cesium.Cartesian3.distance(viewer.camera.position, center);
-  let curR = Math.max(dist, 50);
-
-  const duration = 1400; // ms
-  const start = Date.now();
-
-  if(camTween) cancelAnimationFrame(camTween);
-
-  function step(){
-    const elapsed = Date.now() - start;
-    const t = easeInOut(Math.min(elapsed / duration, 1));
-
-    const h = lerpAngle(curH, tgt.h, t);
-    const p = curP + (tgt.p - curP) * t;
-    const r = curR + (tgt.r - curR) * t;
-
-    viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(h, p, r));
-
-    if(t < 1) camTween = requestAnimationFrame(step);
-    else {
-      // Lock at final position
-      viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(tgt.h, tgt.p, tgt.r));
-    }
-  }
-  step();
-}
-
-// Cancel any in-progress tween (called by flyTo buttons)
-function cancelTween(){
-  if(camTween){ cancelAnimationFrame(camTween); camTween=null; }
+  viewer.camera.lookAt(center, hpr);
 }
 
 // ── Panel toggle ──────────────────────────────────────────────────────────────
