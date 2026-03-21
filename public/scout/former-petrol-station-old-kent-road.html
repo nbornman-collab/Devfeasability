@@ -250,6 +250,35 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 .da-nav-link.active{color:#0f172a;background:#f3f4f6;font-weight:700}
 .da-nav-link.locked{opacity:.35;pointer-events:none}
 
+
+/* ── 4-group panel structure ─────────────────────────────────────── */
+.intel-group{border-bottom:1px solid var(--border)}
+.intel-group-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;cursor:pointer;user-select:none;background:var(--surface);transition:background .12s}
+.intel-group-hd:hover{background:var(--surface2)}
+.ig-left{display:flex;align-items:center;gap:8px}
+.ig-num{font:700 9px var(--mono);letter-spacing:1.5px;color:var(--text4);min-width:20px}
+.ig-title{font:700 12px var(--sans);color:var(--text);letter-spacing:-.1px}
+.ig-badge{font:600 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;padding:2px 7px;border-radius:3px}
+.ig-badge.green{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+.ig-badge.amber{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
+.ig-badge.red{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.ig-badge.blue{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.ig-badge.grey{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+.ig-chevron{font:500 10px var(--sans);color:var(--text4);transition:transform .25s;flex-shrink:0}
+.ig-chevron.open{transform:rotate(180deg)}
+.intel-group-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
+.intel-group-body.open{max-height:4000px}
+.ig-body-inner{padding:14px 20px 18px}
+.synthesis-para{background:#f8f9fb;border-left:3px solid #1d4ed8;padding:10px 14px;border-radius:0 6px 6px 0;margin-bottom:12px}
+.chip-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.chip{font:600 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;padding:3px 7px;border-radius:3px}
+.chip.green{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+.chip.amber{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
+.chip.red{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.chip.blue{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.chip.purple{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
+.chip.grey{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+
 </style>
 
 <!-- Analytics -->
@@ -360,180 +389,88 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 
 <!-- ── Right panel ────────────────────────────────────────────── -->
 <div id="right-panel">
-
-  <!-- Site header -->
-  <div class="rp-header">
-    <div class="rp-use-badge">
-      <svg width="8" height="8" viewBox="0 0 8 8"><rect width="8" height="8" rx="1" fill="currentColor"/></svg>
-      Commercial Office · Class E
+  <!-- Summary strip -->
+  <div style="padding:14px 20px;border-bottom:1px solid var(--border);background:#fff">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px">
+      <div>
+        <div style="font:700 14px var(--sans);color:var(--text);letter-spacing:-.2px" id="sum-name">—</div>
+        <div style="font:400 11px var(--sans);color:var(--text3);margin-top:2px" id="sum-meta">—</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font:800 24px var(--mono);color:var(--text);letter-spacing:-1px;line-height:1" id="sum-score">—</div>
+        <div style="font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1px;color:var(--text4)">/100</div>
+      </div>
     </div>
-    <div class="rp-name">Former Petrol Station, 233-247 Old Kent Road</div>
-    <div class="rp-addr">London SE1 0SW · Southwark</div>
-    <div class="rp-score-row">
-      <span class="rp-score-num" id="rp-score-num">—</span>
-      <span class="rp-score-denom">/100</span>
-      <span class="rp-score-badge" id="rp-score-badge">Scoring…</span>
-    </div>
+    <div id="sum-verdict-wrap" style="margin-bottom:8px"></div>
+    <div class="chip-row" id="sum-chips"></div>
   </div>
 
-
-
-<!-- Street View floating card -->
-<div class="sv-float" id="sv-float">
-  <div class="sv-float-bar">
-    <span class="sv-float-label">Street View</span>
-    <button class="sv-float-toggle" onclick="svCollapse()" title="Collapse">
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-    </button>
-  </div>
-  <iframe id="sv-frame"
-    src="https://maps.google.com/maps?layer=c&cbll=51.4846,-0.0625&cbp=11,0,,0,0&output=svembed&ie=UTF8&source=embed"
-    allowfullscreen loading="lazy"></iframe>
-</div>
-<button class="sv-map-btn" id="sv-map-btn" onclick="svExpand()" style="display:none">
-  Street View
-</button>
-<script>
-function svCollapse(){
-  document.getElementById('sv-float').classList.add('hidden');
-  document.getElementById('sv-map-btn').style.display='flex';
-}
-function svExpand(){
-  document.getElementById('sv-float').classList.remove('hidden');
-  document.getElementById('sv-map-btn').style.display='none';
-}
-</script>
-
-
-  <!-- Development Intelligence -->
-  <div class="rp-section">
-    <div class="rp-section-hd">
-      <h3>Development Intelligence</h3>
-      <span class="rp-badge" id="rp-intel-score">—/100</span>
+  <!-- GROUP 1: Development Scope + Numbers -->
+  <div class="intel-group">
+    <div class="intel-group-hd" onclick="toggleGroup('g-dev')">
+      <div class="ig-left"><span class="ig-num">01</span><span class="ig-title">Development Scope</span><span class="ig-badge blue" id="g-dev-badge">Loading...</span></div>
+      <span class="ig-chevron open" id="g-dev-chev">▼</span>
     </div>
-    <div class="rp-section-body">
-      <div id="verdict-mount"></div>
-      <div id="intelligence-mount"></div>
-      <div id="heritage-risk-mount" style="margin-top:10px"></div>
-      <!-- compact fallback populated by JS -->
-    </div>
-  </div>
-
-  <!-- Site overview -->
-  <div class="rp-section">
-    <div class="rp-section-hd"><h3>Site Overview</h3></div>
-    <div class="rp-section-body">
-      <div class="rp-stat-row">
-        <div class="rp-stat">
-          <div class="sv blue" id="stat-ptal">6a</div>
-          <div class="sl">Transport</div>
-        </div>
-        <div class="rp-stat">
-          <div class="sv green" id="stat-flood">Zone 1</div>
-          <div class="sl">Flood Zone</div>
-        </div>
-        <div class="rp-stat">
-          <div class="sv" id="stat-listed">…</div>
-          <div class="sl">Listed nearby</div>
-        </div>
-      </div>
-      <div class="rp-stat-row">
-        <div class="rp-stat">
-          <div class="sv" id="epc-gia">Loading…</div>
-          <div class="sl">EPC GIA</div>
-        </div>
-        <div class="rp-stat">
-          <div class="sv" id="current-far">—</div>
-          <div class="sl">Current FAR</div>
-        </div>
-        <div class="rp-stat">
-          <div class="sv" id="site-area-display">1,550 m²</div>
-          <div class="sl">Site area</div>
-        </div>
-      </div>
-      <!-- Capacity bars -->
-      <div class="cap-wrap">
-        <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-bottom:6px">GIA Capacity - Existing vs Scenarios</div>
-        <svg id="capacity-bars" viewBox="0 0 280 80" style="width:100%;height:auto;display:block"></svg>
-      </div>
-      <!-- Ownership -->
-      <div class="hmlr-block" id="hmlr-panel" class="hmlr-block">
-        <div class="hmlr-title-row">
-          <span class="hmlr-title-no">TGL221350</span>
-          <span style="font:500 9px var(--mono);color:var(--text3)">Freehold</span>
-        </div>
-        <div id="owner-display" style="font:600 11px var(--sans);color:var(--text);margin-bottom:2px">RREEF Bankside II Limited</div>
-        <div style="color:var(--text3);font-size:9px">Click a parcel on map to query HMLR titles</div>
+    <div class="intel-group-body open" id="g-dev-body">
+      <div class="ig-body-inner">
+        <div class="synthesis-para" id="synth-dev">Analysing...</div>
+        <div id="dev-numbers-mount"></div>
+        <div id="intelligence-mount" style="margin-top:12px"></div>
       </div>
     </div>
   </div>
 
-  <div class="tag-row">
-    <span class="tag blue">Transport <span id="tag-ptal">6b</span></span>
-    <span class="tag ok" id="tag-flood">Flood Zone 1</span>
-    <span class="tag warn" id="tag-heritage">Heritage…</span>
-  </div>
-
-  <!-- OA Implications + LPA Commentary -->
-  <div class="rp-section" id="oa-section" style="display:none">
-    <div class="rp-section-hd"><h3>Opportunity Area</h3></div>
-    <div class="rp-section-body">
-      <div id="oa-implications-mount"></div>
-      <div id="lpa-commentary-mount" style="margin-top:8px"></div>
+  <!-- GROUP 2: Planning Realm -->
+  <div class="intel-group">
+    <div class="intel-group-hd" onclick="toggleGroup('g-plan')">
+      <div class="ig-left"><span class="ig-num">02</span><span class="ig-title">Planning Realm</span><span class="ig-badge grey" id="g-plan-badge">Loading...</span></div>
+      <span class="ig-chevron open" id="g-plan-chev">▼</span>
+    </div>
+    <div class="intel-group-body open" id="g-plan-body">
+      <div class="ig-body-inner">
+        <div class="synthesis-para" id="synth-plan">Analysing...</div>
+        <div id="planning-flags-mount"></div>
+        <div id="oa-implications-mount" style="margin-top:8px"></div>
+        <div id="lpa-commentary-mount" style="margin-top:8px"></div>
+        <div id="gla-stage2-mount" style="margin-top:6px"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Planning flags -->
-  <div class="rp-section">
-    <div class="rp-section-hd">
-      <h3>Planning Flags</h3>
-      <span class="rp-badge" id="flags-badge">Loading…</span>
+  <!-- GROUP 3: Architecture Insights -->
+  <div class="intel-group">
+    <div class="intel-group-hd" onclick="toggleGroup('g-arch')">
+      <div class="ig-left"><span class="ig-num">03</span><span class="ig-title">Architecture Insights</span><span class="ig-badge blue" id="g-arch-badge">D/A Analysis</span></div>
+      <span class="ig-chevron open" id="g-arch-chev">▼</span>
     </div>
-    <div class="rp-section-body" id="flags-body"><div id="gla-stage2-mount"></div></div>
-  </div>
-
-  <!-- Site Strategy -->
-  <div class="rp-section">
-    <div class="rp-section-hd">
-      <h3>Development Strategy</h3>
-      <span class="rp-badge" id="strategy-badge">D/A Analysis</span>
-    </div>
-    <div class="rp-section-body" id="strategy-mount"></div>
-  </div>
-
-  <!-- Height context -->
-  <div class="rp-section">
-    <div class="rp-section-hd"><h3>Height Context</h3></div>
-    <div class="rp-section-body" id="heights-body">
-      <div style="font:400 10px var(--sans);color:var(--text4);padding:4px 0">Loading nearby heights…</div>
+    <div class="intel-group-body open" id="g-arch-body">
+      <div class="ig-body-inner">
+        <div class="synthesis-para" id="synth-arch">Analysing...</div>
+        <div id="heritage-risk-mount" style="margin-top:10px"></div>
+        <div id="strategy-mount" style="margin-top:10px"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Scenario summary - T2 prompt -->
-  <div class="rp-section">
-    <div class="rp-section-hd"><h3>Scenarios</h3><span class="rp-badge">3 options modelled</span></div>
-    <div class="rp-section-body">
-      <svg id="teaser-curve" viewBox="0 0 380 70" style="width:100%;height:auto;display:block;margin-bottom:10px"></svg>
-      <div style="font:400 11px var(--sans);color:var(--text3);line-height:1.6">Low / Base / High massing scenarios with full financial model in Full Insight - IRR on equity, return curve, development appraisal.</div>
+  <!-- GROUP 4: Massing + Scenarios -->
+  <div class="intel-group">
+    <div class="intel-group-hd" onclick="toggleGroup('g-scen')">
+      <div class="ig-left"><span class="ig-num">04</span><span class="ig-title">Massing + Scenarios</span><span class="ig-badge grey" id="g-scen-badge">Context</span></div>
+      <span class="ig-chevron" id="g-scen-chev">▼</span>
+    </div>
+    <div class="intel-group-body" id="g-scen-body">
+      <div class="ig-body-inner">
+        <div id="heights-body" style="margin-bottom:12px"></div>
+        <div id="scenarios-mount"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Planning applications -->
-  <div class="rp-section">
-    <div class="rp-section-hd">
-      <h3>Recent Planning <span id="apps-count" style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0;font-size:9px;font-family:var(--sans)">within 300m</span></h3>
-    </div>
-    <div class="rp-section-body" id="apps-list">
-      <div style="font:400 10px var(--sans);color:var(--text4)">Loading applications…</div>
-    </div>
+  <!-- Full Insight CTA -->
+  <div style="padding:16px 20px;border-top:1px solid var(--border)">
+    <a href="#" style="display:block;padding:12px;background:#9ca3af;pointer-events:none;color:#fff;font:700 12px Inter,sans-serif;border-radius:7px;text-decoration:none;text-align:center">Full Insight — Coming Soon</a>
+    <div style="font:400 10px Inter,sans-serif;color:var(--text4);text-align:center;margin-top:6px">Interactive massing · GDV · Return curve · Downloadable report</div>
   </div>
-
-  <!-- CTA row -->
-  <div class="rp-cta-row">
-    <a href="/t2/former-petrol-station-old-kent-road" class="rp-cta primary">Full Insight →</a>
-    <a href="/t3/former-petrol-station-old-kent-road" class="rp-cta secondary">Download (coming)</a>
-  </div>
-
 </div><!-- /right-panel -->
 
 <script>

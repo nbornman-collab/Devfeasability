@@ -188,6 +188,190 @@ function renderLPACommentary(si) {
   </div>`;
 }
 
+
+// ── Intelligence Synthesis Engine ────────────────────────────────────────────
+// Takes all site factors and cross-references them into directional conclusions.
+// Rule: every paragraph must triangulate >= 2 data sources into a conclusion
+// that could not be derived from either alone.
+
+function synthesisDevScope(si) {
+  const F = si.factors || {};
+  const hf = si.heritage_framework || {};
+  const s = si.site || {};
+  const sky = F.sky || {}; const val = F.value || {}; const mom = F.momentum || {};
+  const trans = F.transport || {}; const herit = F.heritage || {};
+  
+  const skyScore = sky.score || 5;
+  const heritTier = hf.tier || 'clean';
+  const heritScore = hf.score || 7;
+  const ptal = s.ptal || trans.score || 3;
+  const inOA = !!(mom.opportunity_area);
+  const maxF = s.max_floors || 10;
+  const maxH = s.max_h || 30;
+  const plotM2 = s.plot_m2 || s.plot_area || 1000;
+  const bsa18 = maxH >= 18 || maxF >= 6;
+  const bsa30 = maxH >= 30 || maxF >= 10;
+  const bsa50 = maxH >= 50 || maxF >= 16;
+  const erv = val.erv || 700;
+  const niy = val.niy || 4.75;
+  
+  // Plate at max height (approximate NIA achievable)
+  const efficiency = 0.78;
+  const coreRatio = 0.22;
+  const plateNIA = Math.round(plotM2 * 0.65 * efficiency); // 65% plot coverage typical
+  const totalNIA = Math.round(plateNIA * maxF * 0.85); // multi-floor efficiency loss
+  const gdvEst = Math.round((totalNIA * erv) / 1000) * 1000;
+  
+  // Triangulation: sky + heritage + OA → real potential
+  let potentialNarrative = '';
+  if(skyScore >= 7 && heritTier === 'clean' && inOA) {
+    potentialNarrative = `Available Sky (${skyScore.toFixed(1)}/10), a clean heritage position (${heritScore.toFixed(1)}/10), and OA designation align to remove the three most common blockers on sites of this size. The GLA will actively support density here - the limiting factor is not planning, it is economics.`;
+  } else if(skyScore >= 7 && heritTier === 'clean') {
+    potentialNarrative = `Available Sky (${skyScore.toFixed(1)}/10) and a clean heritage context (${heritScore.toFixed(1)}/10) mean the vertical envelope is genuinely open. Without an OA designation, the LPA retains standard policy discretion - but there is no heritage argument waiting to derail a well-designed scheme.`;
+  } else if(skyScore >= 5 && (heritTier === 'navigable' || heritTier === 'manageable')) {
+    potentialNarrative = `The sky is available (${skyScore.toFixed(1)}/10) but the heritage position (${heritTier}, ${heritScore.toFixed(1)}/10) shapes what can be done with it. Development potential is real but the form must respond to the heritage constraint - this is a design challenge, not a planning block.`;
+  } else if(skyScore < 5) {
+    potentialNarrative = `Available Sky (${skyScore.toFixed(1)}/10) is the primary constraint on this site. Neighbouring building heights or protected viewing corridors limit the vertical envelope regardless of planning policy. The opportunity here is horizontal intensification, not height.`;
+  } else if(heritTier === 'blocking') {
+    potentialNarrative = `The heritage designation (${heritScore.toFixed(1)}/10, blocking tier) is the dominant constraint. Despite reasonable sky availability (${skyScore.toFixed(1)}/10), any development strategy must work within - not against - the heritage framework. Demolition is not the primary route here.`;
+  }
+  
+  // BSA triangulation
+  let bsaNarrative = '';
+  if(bsa50) {
+    bsaNarrative = `At ${maxF}F/${maxH}m, this scheme sits above the BSA 50m threshold - the highest regulatory tier. Second staircase, enhanced structure, and full higher-risk building regime apply. This adds approximately £2-3M and 6-12 months to programme. The return curve only justifies this at high ERV locations.`;
+  } else if(bsa30) {
+    bsaNarrative = `At ${maxF}F, the scheme crosses the BSA 30m threshold. Second staircase required (approximately £1.4M cost, 320m² NIA loss). The architectural task is to maximise NIA efficiency on remaining plate area to absorb this cost without fatally diluting returns.`;
+  } else if(bsa18) {
+    bsaNarrative = `At ${maxF}F, the scheme sits in the BSA 18m zone - enhanced fire safety requirements without the full second staircase mandate. Consider whether 1-2 additional floors above 18m can be justified by GDV uplift versus the additional compliance and structural cost.`;
+  } else {
+    bsaNarrative = `At ${maxF}F, the scheme sits below all BSA regulatory thresholds. Single staircase, standard fire strategy, no higher-risk building regime. This is a structural cost and programme advantage that the underwriting model should reflect.`;
+  }
+  
+  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${potentialNarrative}</p><p style="font:400 12px/1.75 Inter,sans-serif;color:#374151">${bsaNarrative}</p>`;
+}
+
+function synthesisPlanning(si) {
+  const F = si.factors || {};
+  const hf = si.heritage_framework || {};
+  const s = si.site || {};
+  const mom = F.momentum || {}; const plan = F.momentum || {};
+  const herit = F.heritage || {};
+  const acq = F.acquisition || {};
+  
+  const planScore = mom.score || 5;
+  const heritTier = hf.tier || 'clean';
+  const inOA = !!(mom.opportunity_area);
+  const borough = si.borough || 'this borough';
+  const inConservation = s.conservation_area || false;
+  const hasRedevelopment = (si.planning || {}).hasRedevelopment || false;
+  const majorCount = (si.planning || {}).majorCount || 0;
+  
+  // Triangulate: planning appetite + heritage + OA + LPA character
+  let planNarrative = '';
+  if(planScore >= 7 && inOA && heritTier === 'clean') {
+    planNarrative = `Planning Appetite (${planScore.toFixed(1)}/10), OA policy support, and a clean heritage position create a genuinely favourable planning environment. The LPA is not the obstacle here - the conversation at pre-app is about design quality and planning gain, not whether development is appropriate. That is a fundamentally different negotiation.`;
+  } else if(planScore >= 6 && heritTier === 'manageable') {
+    planNarrative = `Planning Appetite (${planScore.toFixed(1)}/10) is constructive but the heritage position (manageable, ${hf.score ? hf.score.toFixed(1) : '7'}/10) means design quality is non-negotiable. The LPA will approve a confident scheme that articulates its heritage response. A defensive design - one that apologises for itself - will struggle.`;
+  } else if(planScore < 5 && heritTier === 'blocking') {
+    planNarrative = `Planning Appetite (${planScore.toFixed(1)}/10) combined with a blocking heritage tier (${hf.score ? hf.score.toFixed(1) : '4'}/10) signals a difficult planning environment. This is not impossible - it is a longer, more expensive process requiring pre-app investment, a robust heritage assessment, and a design team with listed building experience.`;
+  } else if(heritTier === 'navigable') {
+    planNarrative = `The heritage designation (navigable tier) means planning is navigable but not straightforward. Planning Appetite of ${planScore.toFixed(1)}/10 suggests the LPA is willing to engage - the key is arriving at pre-app with a clear heritage strategy, not a question about whether development is appropriate.`;
+  } else {
+    planNarrative = `Planning Appetite of ${planScore.toFixed(1)}/10 reflects the general policy position for sites of this type in ${borough}. ${majorCount > 0 ? `${majorCount} major application${majorCount>1?'s':''} on or near this site provide precedent context for what the LPA has approved before.` : 'No major applications on this site - a clean slate that avoids the burden of precedent but also lacks proof of approval.'}`;
+  }
+  
+  // Conservation area interaction
+  let caNote = '';
+  if(inConservation) {
+    caNote = ` The conservation area designation modifies PD rights and raises the design quality bar. Any scheme must pass the LPA design review panel - this is not optional, it is where schemes live or die.`;
+  } else if(inOA) {
+    caNote = ` OA designation means the GLA maintains a monitoring interest in planning decisions here. LPA refusal of a well-argued scheme can be appealed with GLA support - an important backstop that changes the negotiating dynamic.`;
+  }
+  
+  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${planNarrative}${caNote}</p>`;
+}
+
+function synthesisArchitecture(si) {
+  const F = si.factors || {};
+  const hf = si.heritage_framework || {};
+  const s = si.site || {};
+  const sky = F.sky || {};
+  const herit = F.heritage || {};
+  const val = F.value || {};
+  
+  const heritTier = hf.tier || 'clean';
+  const skyScore = sky.score || 5;
+  const maxF = s.max_floors || 10;
+  const maxH = s.max_h || 30;
+  const plotM2 = s.plot_m2 || s.plot_area || 1000;
+  const erv = val.erv || 700;
+  
+  // Floor plate + core triangulation
+  const plateSizeEst = Math.round(plotM2 * 0.65); // 65% plot coverage
+  const coreM2 = Math.round(plateSizeEst * 0.22);
+  const leaseSpan = plateSizeEst >= 1500 ? 11 : plateSizeEst >= 800 ? 9 : 7;
+  const structGrid = leaseSpan >= 10 ? 'composite steel frame (10-14m spans achievable)' : leaseSpan >= 8 ? 'RC flat slab or composite (8-10m spans)' : 'RC flat slab (7m min clear span achievable)';
+  
+  // BSA check
+  const bsa18 = maxH >= 18 || maxF >= 6;
+  const bsa30 = maxH >= 30 || maxF >= 10;
+  
+  // Carbon position
+  let carbonNarrative = '';
+  if(heritTier === 'blocking' || heritTier === 'navigable') {
+    carbonNarrative = `Retrofit and adaptive reuse strategies carry significantly lower embodied carbon than demolition and rebuild - typically 30-60% less. The heritage constraint and the carbon imperative align here: the most defensible planning argument and the most sustainable approach are the same strategy.`;
+  } else if(heritTier === 'clean' && maxF >= 10) {
+    carbonNarrative = `New build at this scale carries a substantial embodied carbon burden. GLA policy now requires a whole-life carbon assessment from RIBA Stage 2. BREEAM Excellent is the minimum credible target; the carbon narrative in the Design and Access Statement will be scrutinised.`;
+  } else {
+    carbonNarrative = `Embodied carbon should be modelled from RIBA Stage 2. At ${maxF}F, a new build scheme in ${heritTier === 'manageable' ? 'a managed heritage context' : 'a clean site'} has a clear path to BREEAM Excellent. Circular economy requirements (GLA SPG) apply to schemes above 1,000m² GIA.`;
+  }
+  
+  // Massing constraint narrative
+  let massingNarrative = `At an estimated ${plateSizeEst}m² plate, the core takes approximately ${coreM2}m² (22%) leaving a net lettable plate of ~${plateSizeEst - coreM2}m² NIA per floor. To achieve the RICS minimum 7m clear lease span, a ${structGrid} is indicated. `;
+  if(bsa30) massingNarrative += `The BSA 30m threshold requires a second staircase - this adds core area and reduces NIA efficiency on each floor above this point. `;
+  massingNarrative += `The architectural task is to maximise the net-to-gross ratio while maintaining the lease span required by institutional occupiers.`;
+  
+  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${massingNarrative}</p><p style="font:400 12px/1.75 Inter,sans-serif;color:#374151">${carbonNarrative}</p>`;
+}
+
+
+// ── Dev Numbers renderer ──────────────────────────────────────────────────────
+function renderDevNumbers(si) {
+  const F = si.factors || {};
+  const s = si.site || {};
+  const val = F.value || {};
+  const maxF = s.max_floors || 10;
+  const maxH = s.max_h || 30;
+  const plotM2 = s.plot_m2 || s.plot_area || 1000;
+  const erv = val.erv || 700;
+  const niy = val.niy || 4.75;
+  const plateSizeEst = Math.round(plotM2 * 0.65);
+  const niaPF = Math.round(plateSizeEst * 0.78 * 0.78);
+  const totalNIA = niaPF * maxF;
+  const gdvEst = (Math.round(totalNIA * erv / 1e5) / 10).toFixed(1);
+  const tdc = (Math.round(totalNIA * 4200 / 1e5) / 10).toFixed(1);
+  const bsa18 = maxH>=18||maxF>=6; const bsa30 = maxH>=30||maxF>=10; const bsa50 = maxH>=50||maxF>=16;
+  const bsaLabel = bsa50?'BSA 50m+ - highest tier':bsa30?'BSA 30m+ - second staircase required':bsa18?'BSA 18m+ - enhanced fire strategy':'Below all BSA thresholds';
+  const bsaColor = bsa50?'#dc2626':bsa30?'#d97706':bsa18?'#d97706':'#16a34a';
+  
+  const card = (val, unit, lbl) => `<div style="background:var(--surface2);border-radius:6px;padding:8px 10px;text-align:center"><div style="font:800 16px var(--mono);color:var(--text);letter-spacing:-1px">${val}<span style="font-size:10px;font-weight:400;color:var(--text4)">${unit}</span></div><div style="font:500 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:.8px;color:var(--text4);margin-top:2px">${lbl}</div></div>`;
+  
+  return `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">
+    ${card(maxF,'F','Max floors')}
+    ${card(maxH,'m','Max height')}
+    ${card(plotM2.toLocaleString(),'m²','Plot area')}
+    ${card('£'+erv,'/m²','ERV NIA')}
+    ${card(niy.toFixed(2),'%','NIY')}
+    ${card('£'+gdvEst,'M','GDV est.')}
+  </div>
+  <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:4px;border:1px solid ${bsaColor}30;background:${bsaColor}0d;margin-bottom:4px">
+    <span style="width:6px;height:6px;border-radius:50%;background:${bsaColor};flex-shrink:0"></span>
+    <span style="font:600 9px Inter,sans-serif;color:${bsaColor}">${bsaLabel}</span>
+  </div>
+  <div style="font:400 10px/1.5 Inter,sans-serif;color:var(--text4);margin-top:4px">GDV estimate assumes ${Math.round(plateSizeEst * 0.65 * 0.78)}m² NIA/floor at ERV £${erv}/m² · illustrative only</div>`;
+}
+
 // ── Export ───────────────────────────────────────────────────────────────────
 if (typeof module !== 'undefined') module.exports = { computeSiteScore, renderIntelligenceT1, renderIntelligenceT2, scoreRingSVG };
 
