@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#080b14;font-family:'Inter',sans-serif;color:#fff}
+html,body{width:100%;height:100%;overflow:hidden;background:#fff;font-family:'Inter',sans-serif;color:#111}
 #cesiumContainer{position:fixed;inset:0;width:100%;height:100%}
 
 /* ── Cesium chrome cleanup ── */
@@ -21,14 +21,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#080b14;font-family:
   position:fixed;top:0;left:0;right:0;height:56px;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
   padding:0 24px;
-  background:linear-gradient(to bottom,rgba(8,11,20,.95) 0%,rgba(8,11,20,0) 100%);
+  background:linear-gradient(to bottom,rgba(255,255,255,.97) 0%,rgba(255,255,255,0) 100%);border-bottom:none;
   pointer-events:none
 }
 #topbar > *{pointer-events:auto}
 .logo{
   font:800 15px Inter,sans-serif;letter-spacing:-.3px;
-  background:linear-gradient(135deg,#e2e8f0,#94a3b8);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent
+  background:linear-gradient(135deg,#111,#374151);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:none
 }
 .logo em{font-style:normal;opacity:.35;margin:0 2px}
 .site-pill{
@@ -162,8 +162,8 @@ input[type=range]::-webkit-slider-thumb{
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px
 }
 .load-logo{font:900 28px Inter,sans-serif;letter-spacing:-.5px;margin-bottom:8px;
-  background:linear-gradient(135deg,#e2e8f0,#94a3b8);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  background:linear-gradient(135deg,#111,#374151);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:none}
 .load-bar{width:180px;height:2px;background:rgba(255,255,255,.08);border-radius:1px;overflow:hidden}
 .load-fill{height:100%;background:linear-gradient(90deg,#6366f1,#818cf8);width:0%;transition:width .4s;border-radius:1px}
 .load-label{font:500 11px Inter,sans-serif;color:rgba(255,255,255,.3);margin-top:4px}
@@ -283,7 +283,7 @@ input[type=range]::-webkit-slider-thumb{
   <div class="ps">
     <div class="ps-label">Building Safety Act</div>
     <div id="bsa-detail-pill" class="bsa-pill bsa-amber" style="margin-bottom:8px">BSA 30m+ — second staircase</div>
-    <p style="font:400 10px/1.6 Inter,sans-serif;color:rgba(255,255,255,.3)" id="bsa-detail">At 40m, this scheme crosses the BSA 30m threshold. Second staircase required — approximately £1.2-1.5M in additional cost and 280-340m² NIA surrendered to core. Stress-test the return curve at 9F and 12F before fixing the massing strategy.</p>
+    <p style="font:400 10px/1.6 Inter,sans-serif;color:#9ca3af" id="bsa-detail">At 40m, this scheme crosses the BSA 30m threshold. Second staircase required — approximately £1.2-1.5M in additional cost and 280-340m² NIA surrendered to core. Stress-test the return curve at 9F and 12F before fixing the massing strategy.</p>
   </div>
 </div>
 
@@ -307,6 +307,7 @@ const SCHEMES = [
 const FTF = 4.0;
 let viewer, massingEntity, floorLines=[], siteOutline;
 let panelOpen = true;
+let siteElev = 10; // sampled from Google tiles after load
 
 // ── Loading progress ──────────────────────────────────────────────────────────
 function progress(pct, label){
@@ -347,11 +348,11 @@ async function init(){
   });
 
   // Scene setup
-  viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#080b14');
+  viewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#f1f5f9');
   viewer.scene.fog.enabled = false;
   viewer.scene.globe.enableLighting = false;
   viewer.scene.globe.show = true;
-  viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0c1020');
+  viewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#e2e8f0');
 
   // Shadows
   viewer.shadows = true;
@@ -390,9 +391,14 @@ async function init(){
     }
   }
 
-  progress(80, 'Building massing geometry…');
+  progress(80, 'Building initial massing…');
   buildMassing();
   buildSiteOutline();
+
+  progress(88, 'Sampling ground elevation…');
+  // Sample the real ground height from Google tiles (not terrain provider)
+  // Must happen after tiles are in scene; retry a few times as tiles stream in
+  sampleGroundElevation(3);
 
   progress(95, 'Setting camera…');
 
@@ -423,6 +429,31 @@ async function init(){
   // Do NOT unlock on mousedown: unlocked mode pivots around globe center, not the site
 }
 
+// ── Sample ground elevation from rendered 3D tiles ────────────────────────────
+async function sampleGroundElevation(retries){
+  try {
+    const carto = [Cesium.Cartographic.fromDegrees(SITE.lng, SITE.lat)];
+    const sampled = await viewer.scene.sampleHeightMostDetailed(carto);
+    const h = sampled && sampled[0] ? sampled[0].height : null;
+    if(h != null && h > 0 && h < 200){
+      siteElev = h;
+      console.log('Ground elevation sampled:', siteElev.toFixed(1)+'m');
+      // Rebuild massing with corrected base elevation
+      if(massingEntity) viewer.entities.remove(massingEntity);
+      const floors = parseInt(document.getElementById('sl-floors').value);
+      const cov = parseInt(document.getElementById('sl-cov').value);
+      buildMassing();
+      buildFloorLines(floors, cov);
+    } else if(retries > 0){
+      // Tiles may not have streamed yet — retry after 1.5s
+      setTimeout(()=>sampleGroundElevation(retries-1), 1500);
+    }
+  } catch(e){
+    if(retries > 0) setTimeout(()=>sampleGroundElevation(retries-1), 1500);
+    console.warn('Height sample failed:', e.message);
+  }
+}
+
 // ── Scale polygon around centroid for coverage slider ──────────────────────────
 function scaledPolygon(cov){
   const lngs = SITE.polygon.map(p=>p[0]);
@@ -439,27 +470,30 @@ function scaledPolygon(cov){
 
 // ── Build proposed massing ────────────────────────────────────────────────────
 function buildMassing(){
+  const floors = parseInt(document.getElementById('sl-floors').value);
+  const cov = parseInt(document.getElementById('sl-cov').value);
+  const scaled = scaledPolygon(cov);
   const positions = Cesium.Cartesian3.fromDegreesArray(
-    SITE.polygon.flatMap(([lng,lat])=>[lng,lat])
+    scaled.flatMap(([lng,lat])=>[lng,lat])
   );
+  const massingH = floors * FTF;
 
-  // Main massing block — architectural glass material
+  // Absolute heights — base at sampled siteElev, top at siteElev + massingH
   massingEntity = viewer.entities.add({
     polygon:{
       hierarchy: new Cesium.PolygonHierarchy(positions),
-      // CLAMP_TO_GROUND: base snaps to real terrain surface (Google tiles)
-      height: 0,
-      heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-      extrudedHeight: 40,
-      extrudedHeightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+      height: siteElev,
+      extrudedHeight: siteElev + massingH,
+      heightReference: Cesium.HeightReference.NONE,
+      extrudedHeightReference: Cesium.HeightReference.NONE,
       material: new Cesium.ColorMaterialProperty(
-        Cesium.Color.fromCssColorString('#818cf8').withAlpha(0.45)
+        Cesium.Color.fromCssColorString('#818cf8').withAlpha(0.40)
       ),
       outline: true,
       outlineColor: new Cesium.ColorMaterialProperty(
-        Cesium.Color.fromCssColorString('#c4b5fd').withAlpha(0.9)
+        Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.9)
       ),
-      outlineWidth: 3,
+      outlineWidth: 2,
       shadows: Cesium.ShadowMode.ENABLED,
       closeTop: true, closeBottom: true,
     }
@@ -492,19 +526,16 @@ function buildFloorLines(floors, cov){
   const closed = [...poly, poly[0]]; // close the ring
 
   for(let f=1; f<floors; f++){
-    const h = f * FTF; // height relative to ground (RELATIVE_TO_GROUND)
-    // Use a slight offset so lines sit on the massing faces
+    // Absolute height: siteElev + floor offset
+    const h = siteElev + (f * FTF);
     const linePts = closed.flatMap(([lng,lat])=>[lng, lat, h]);
     const e = viewer.entities.add({
       polyline:{
-        positions: new Cesium.CallbackProperty(()=>{
-          // Clamp to ground + offset by floor height
-          return Cesium.Cartesian3.fromDegreesArrayHeights(linePts);
-        }, false),
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights(linePts),
         clampToGround: false,
-        width: 0.8,
+        width: 0.7,
         material: new Cesium.ColorMaterialProperty(
-          Cesium.Color.fromCssColorString('#c4b5fd').withAlpha(0.22)
+          Cesium.Color.fromCssColorString('#6366f1').withAlpha(0.30)
         ),
       }
     });
@@ -529,24 +560,25 @@ function onSlider(){
 
 function refreshOrbitCenter(){
   if(!viewer) return;
+  // Only update pivot point, keep current heading/pitch/range — no snap zoom
   const center = getMassingCenter();
-  // Re-lock lookAt at current heading/pitch/range (no camera movement, just re-centres pivot)
   const heading = viewer.camera.heading;
   const pitch = viewer.camera.pitch;
-  const floors = parseInt(document.getElementById('sl-floors').value);
-  const range = floors * 4.0 * 2.5; // reasonable distance from massing
-  viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(heading, pitch, Math.max(range, 80)));
+  // Estimate current range without changing it
+  const dist = Cesium.Cartesian3.distance(viewer.camera.position, center);
+  const range = Math.max(dist, 60);
+  viewer.camera.lookAt(center, new Cesium.HeadingPitchRange(heading, pitch, range));
 }
 
 function updateMassingHeight(floors, cov, erv, niy){
-  const heightM = floors * FTF;
+  const massingH = floors * FTF;
 
   if(massingEntity){
-    // Base clamps to real terrain - height is purely the building height above ground
-    massingEntity.polygon.height = new Cesium.ConstantProperty(0);
-    massingEntity.polygon.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND;
-    massingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(heightM);
-    massingEntity.polygon.extrudedHeightReference = Cesium.HeightReference.RELATIVE_TO_GROUND;
+    // Absolute heights using sampled siteElev — no height references
+    massingEntity.polygon.height = new Cesium.ConstantProperty(siteElev);
+    massingEntity.polygon.extrudedHeight = new Cesium.ConstantProperty(siteElev + massingH);
+    massingEntity.polygon.heightReference = Cesium.HeightReference.NONE;
+    massingEntity.polygon.extrudedHeightReference = Cesium.HeightReference.NONE;
 
     // Update footprint: scale polygon around centroid per coverage %
     const scaled = scaledPolygon(cov);
@@ -556,14 +588,14 @@ function updateMassingHeight(floors, cov, erv, niy){
       )
     );
 
-    // Colour shifts: cool blue (low) → warm purple (tall)
+    // Colour: cool indigo (low) → deeper purple (tall)
     const t = Math.min(floors/20, 1);
     massingEntity.polygon.material = new Cesium.ColorMaterialProperty(
       new Cesium.Color(
         (99 + (167-99)*t)/255,
         (102 + (139-102)*t)/255,
         (241 + (250-241)*t)/255,
-        0.5
+        0.42
       )
     );
   }
