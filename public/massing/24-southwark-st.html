@@ -20,7 +20,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 
 /* ── 50/50 layout ───────────────────────────────────────────────── */
 #map{position:fixed;top:52px;left:0;width:50%;height:calc(100% - 52px);z-index:1}
-.panel{position:fixed;top:52px;right:0;width:50%;height:calc(100% - 52px);background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:10;-webkit-overflow-scrolling:touch;padding-bottom:80px;padding-top:4px}
+.panel{position:fixed;top:52px;right:0;width:50%;height:calc(100% - 52px);background:var(--bg);border-left:1px solid var(--border);overflow-y:auto;overflow-x:hidden;z-index:10;-webkit-overflow-scrolling:touch;padding-bottom:80px}
 
 /* ── Map overlays ────────────────────────────────────────────────── */
 .map-bar{position:fixed;top:60px;left:14px;z-index:10;display:flex;align-items:center;gap:8px}
@@ -110,10 +110,9 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--t
 .ct-sub{font:400 12px var(--sans);color:var(--t3);margin-top:2px}
 
 /* ── T2 section groups (matching T1 rhythm) ──────────────────────── */
-.t2-group{margin:12px 16px;border-radius:14px;border:1px solid rgba(255,255,255,0.78);background:rgba(255,255,255,0.62);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 4px 28px rgba(17,17,16,0.07),0 1px 4px rgba(17,17,16,0.04);overflow:hidden;transition:box-shadow .2s}
-.t2-group:hover{box-shadow:0 6px 36px rgba(17,17,16,0.11),0 2px 6px rgba(17,17,16,0.05)}
-.t2-group-head{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:transparent;cursor:pointer;user-select:none;border-bottom:1px solid rgba(17,17,16,0.07)}
-.t2-group-head:hover{background:rgba(255,255,255,0.4)}
+.t2-group{border-top:2px solid var(--text)}
+.t2-group-head{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--bg);cursor:pointer;user-select:none}
+.t2-group-head:hover{background:var(--s1)}
 .t2-gnum{font:800 16px var(--mono);color:var(--accent);letter-spacing:.05em;margin-right:10px;flex-shrink:0}
 .t2-gtitle{font:800 16px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--text);flex:1}
 .t2-gbadge{font:500 13px var(--mono);color:var(--t3)}
@@ -269,6 +268,13 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 
 <div class="panel">
   <!-- Tier nav -->
+  <nav class="tier-nav">
+    <a href="/t1/24-southwark-st" class="tier-link"><span class="tn">Appraise</span></a>
+    <a href="/t2/24-southwark-st" class="tier-link active" style="margin-left:8px"><span class="tn">Full Insight</span></a>
+    
+
+  </nav>
+
   <!-- Site header -->
   <div class="site-hdr">
     <div class="site-addr">24 Southwark Street</div>
