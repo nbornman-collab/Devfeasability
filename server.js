@@ -186,8 +186,9 @@ a.back:hover{color:#1a1d2e}
 });
 
 // Borough screener — /borough/:name → public/borough/:name.html
+// Borough pages → redirect to unified Discover page
 app.get('/borough/:name', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'borough', `${req.params.name}.html`));
+  res.redirect(301, '/discover');
 });
 
 app.get('/methodology', (req, res) => {

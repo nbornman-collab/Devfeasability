@@ -3,613 +3,222 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>D/A - Development &amp; Architecture Intelligence · London</title>
+<title>D/A — London Development Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --sans:'Inter',sans-serif;
-  --mono:'DM Mono',monospace;
-  --blue:#1d4ed8;
-  --blue-lt:#eff6ff;
-  --orange:#ea580c;
-  --text:#0f172a;
-  --text2:#374151;
-  --text3:#6b7280;
-  --text4:#9ca3af;
-  --border:#e5e7eb;
-  --surface:#fff;
-  --surface2:#f9fafb;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --sans: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --ink:  #f2f1ed;
+  --ink2: rgba(242,241,237,0.7);
+  --ink3: rgba(242,241,237,0.45);
+  --accent: #e07b2a;
+  --bg-dark: #111110;
 }
-html,body{font-family:var(--sans);color:var(--text);background:#0a0c14;overflow-x:hidden}
+html, body { height: 100%; overflow: hidden; background: var(--bg-dark); }
 
-/* ── Fixed nav ───────────────────────────── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:52px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 32px;
-  background:rgba(255,255,255,0.97);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(12px);
-}
-.nav-logo{display:flex;flex-direction:column;align-items:flex-start;gap:1px;
-  font:800 17px var(--sans);letter-spacing:-0.5px;
-  text-decoration:none;color:var(--text);
-}
-.nav-logo .slash{color:var(--blue)}
-.nav-links{display:flex;align-items:center;gap:2px}
-.nav-link{
-  font:500 11px var(--sans);text-transform:uppercase;letter-spacing:1.4px;
-  color:var(--text3);text-decoration:none;padding:6px 10px;border-radius:4px;
-  transition:all .15s;
-}
-.nav-link:hover{color:var(--text);background:var(--surface2)}
-.nav-cta{
-  font:600 11px var(--sans);padding:7px 16px;border-radius:5px;
-  text-decoration:none;background:var(--blue);color:#fff;border:none;transition:background .15s;
-}
-.nav-cta:hover{background:#1e40af}
-
-/* ── Hero ────────────────────────────────── */
-#hero{position:relative;width:100vw;height:100vh;min-height:100vh;overflow:hidden}
-#hero-map{position:absolute;inset:0;z-index:0}
-.mapboxgl-ctrl-bottom-left,.mapboxgl-ctrl-bottom-right{display:none}
-
-/* Gradient overlay: dark at top + bottom, clear in middle */
-.hero-overlay{
-  position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:
-    linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.88) 100%);
+/* ── MAP ── */
+#map {
+  position: fixed; inset: 0; z-index: 0;
 }
 
-/* Hero copy */
-.hero-content{
-  position:absolute;bottom:0;left:0;right:0;z-index:2;
-  padding:0 48px 80px;
-  display:flex;align-items:flex-end;justify-content:space-between;gap:32px;
-}
-.hero-left{max-width:700px}
-.hero-eyebrow{
-  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2.5px;
-  color:rgba(255,255,255,0.5);margin-bottom:16px;
-  display:flex;align-items:center;gap:10px;
-}
-.hero-eyebrow::before{content:'';display:block;width:20px;height:1px;background:rgba(255,255,255,0.3)}
-.hero-headline{
-  font:900 76px/0.88 var(--sans);
-  color:#fff;letter-spacing:-4px;
-  margin-bottom:22px;
-}
-.hero-headline .line2{
-  color:rgba(255,255,255,0.35);
-}
-.hero-sub{
-  font:300 20px var(--sans);color:rgba(255,255,255,0.6);
-  line-height:1.5;margin-bottom:36px;letter-spacing:-0.2px;
-}
-.hero-actions{display:flex;gap:12px;pointer-events:all}
-.hero-btn-primary{
-  font:600 13px var(--sans);color:#fff;
-  background:var(--blue);border:1px solid rgba(29,78,216,0.8);
-  padding:13px 26px;border-radius:6px;text-decoration:none;
-  transition:all .2s;display:inline-flex;align-items:center;gap:7px;
-}
-.hero-btn-primary:hover{background:#1e40af;transform:translateY(-1px)}
-.hero-btn-ghost{
-  font:600 13px var(--sans);color:rgba(255,255,255,0.8);
-  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);
-  padding:13px 26px;border-radius:6px;text-decoration:none;
-  transition:all .2s;display:inline-flex;align-items:center;gap:7px;
-}
-.hero-btn-ghost:hover{background:rgba(255,255,255,0.14);transform:translateY(-1px)}
-
-/* Hero right - score mini-cards */
-.hero-right{
-  display:flex;flex-direction:column;gap:8px;pointer-events:all;min-width:200px;
-}
-.hero-site-card{
-  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
-  border-radius:8px;padding:12px 16px;text-decoration:none;
-  transition:all .2s;display:flex;align-items:center;justify-content:space-between;gap:16px;
-}
-.hero-site-card:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.2)}
-.hero-site-name{font:600 12px var(--sans);color:rgba(255,255,255,0.8)}
-.hero-site-addr{font:400 10px var(--sans);color:rgba(255,255,255,0.4);margin-top:2px}
-.hero-site-score{font:700 20px var(--mono);color:#fff;letter-spacing:-1px;flex-shrink:0}
-.hero-site-score span{font:400 11px var(--mono);color:rgba(255,255,255,0.35)}
-
-/* Scroll hint */
-.scroll-hint{
-  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:3;
-  display:flex;flex-direction:column;align-items:center;gap:7px;
-  font:500 9px var(--sans);text-transform:uppercase;letter-spacing:2.5px;
-  color:rgba(255,255,255,0.4);pointer-events:none;
-}
-.scroll-hint svg{width:18px;height:18px;fill:none;stroke:rgba(255,255,255,0.4);stroke-width:1.5;
-  animation:bounce 2s ease-in-out infinite;}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-
-/* ── Below-fold: white background ────────── */
-.page-content{background:var(--surface)}
-
-/* ── Scroll reveal ───────────────────────── */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .55s ease, transform .55s ease}
-.reveal.visible{opacity:1;transform:none}
-
-/* ── Section ─────────────────────────────── */
-.section{padding:72px 32px;border-top:1px solid var(--border)}
-.section-inner{max-width:1100px;margin:0 auto}
-.section-label{
-  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2px;
-  color:var(--text4);margin-bottom:10px;display:flex;align-items:center;gap:8px;
-}
-.section-label::before{content:'';display:block;width:20px;height:1px;background:var(--text4)}
-.section-title{font:700 30px var(--sans);color:var(--text);letter-spacing:-0.5px;margin-bottom:8px}
-.section-sub{font:400 15px var(--sans);color:var(--text3);line-height:1.7;max-width:560px;margin-bottom:40px}
-
-/* ── Tier cards ──────────────────────────── */
-.tier-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.tier-card{
-  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
-  padding:24px;text-decoration:none;color:inherit;transition:all .15s;
-  display:flex;flex-direction:column;
-}
-.tier-card:hover{background:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.07);transform:translateY(-2px)}
-.tier-card-num{
-  font:700 10px var(--mono);text-transform:uppercase;letter-spacing:2px;
-  color:var(--text4);margin-bottom:16px;
-}
-.tier-card-name{font:700 17px var(--sans);color:var(--text);margin-bottom:6px;letter-spacing:-0.3px}
-.tier-card-desc{font:400 13px var(--sans);color:var(--text3);line-height:1.65;flex:1}
-.tier-card-foot{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-top:20px;padding-top:16px;border-top:1px solid var(--border);
-}
-.tier-card-access{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.3px}
-.tier-card-access.free{color:#16a34a}
-.tier-card-access.paid{color:var(--blue)}
-.tier-card-arrow{color:var(--text4)}
-
-/* ── Demo sites ──────────────────────────── */
-.sites-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.site-card{
-  border:1px solid var(--border);border-radius:8px;overflow:hidden;
-  text-decoration:none;color:inherit;transition:all .15s;display:flex;flex-direction:column;
-}
-.site-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.09);transform:translateY(-2px)}
-.site-card-chip{
-  height:100px;display:flex;align-items:center;justify-content:center;
-  border-bottom:1px solid var(--border);
-}
-.site-card-chip-text{
-  font:900 32px var(--mono);letter-spacing:-2px;
-}
-.site-card-body{padding:16px}
-.site-card-borough{font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-bottom:5px}
-.site-card-name{font:700 14px var(--sans);color:var(--text);margin-bottom:3px;letter-spacing:-0.2px}
-.site-card-addr{font:400 11px var(--sans);color:var(--text3);margin-bottom:12px}
-.site-card-score-row{display:flex;align-items:baseline;gap:3px;margin-bottom:10px}
-.site-card-score{font:700 28px var(--mono);color:var(--text);letter-spacing:-1px}
-.site-card-score-denom{font:400 12px var(--mono);color:var(--text4)}
-.site-card-tags{display:flex;gap:5px;flex-wrap:wrap}
-.site-tag{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:1.1px;padding:2px 6px;border-radius:3px;border:1px solid var(--border);color:var(--text3)}
-.site-tag.blue{background:var(--blue-lt);color:var(--blue);border-color:rgba(29,78,216,.15)}
-.site-tag.orange{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
-
-/* ── How it works ────────────────────────── */
-.flow-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.flow-step{padding:28px 24px;border-right:1px solid var(--border)}
-.flow-step:last-child{border-right:none}
-.flow-step-num{font:700 30px var(--mono);color:var(--border);letter-spacing:-1px;margin-bottom:14px}
-.flow-step-title{font:700 14px var(--sans);color:var(--text);margin-bottom:7px}
-.flow-step-desc{font:400 12px var(--sans);color:var(--text3);line-height:1.65}
-
-/* ── Footer ──────────────────────────────── */
-footer{background:var(--surface);border-top:1px solid var(--border);padding:28px 32px;display:flex;align-items:center;justify-content:space-between;font:400 11px var(--sans);color:var(--text4)}
-.footer-logo{font:800 14px var(--sans);color:var(--text);letter-spacing:-0.3px}
-.footer-logo .slash{color:var(--blue)}
-footer a{color:var(--text4);text-decoration:none}
-footer a:hover{color:var(--text3)}
-
-@media(max-width:900px){
-  .hero-headline{font-size:52px;letter-spacing:-2px}
-  .hero-content{padding:0 24px 48px;flex-direction:column;align-items:flex-start}
-  .hero-right{display:none}
-  .tier-grid,.sites-grid,.flow-grid{grid-template-columns:1fr 1fr}
-  .flow-step{border-bottom:1px solid var(--border)}
-  nav{padding:0 20px}
-  .section{padding:48px 20px}
+/* ── DARK OVERLAY ── */
+.overlay {
+  position: fixed; inset: 0; z-index: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(17,17,16,0.72) 0%,
+    rgba(17,17,16,0.55) 50%,
+    rgba(17,17,16,0.68) 100%
+  );
 }
 
-/* ── Site matrix ─────────────────────────────────────────────────── */
-.site-matrix{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:28px}
-.sm-header{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--surface2);border-bottom:1px solid var(--border);padding:10px 20px;gap:0}
-.sm-col-site{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text4)}
-.sm-col-tier{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text4);text-align:center}
-.sm-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;border-bottom:1px solid var(--border);align-items:stretch;min-height:72px}
-.sm-row:last-child{border-bottom:none}
-.sm-row-add{min-height:44px;background:var(--surface2)}
-.sm-col-site{padding:16px 20px;display:flex;flex-direction:column;justify-content:center;gap:2px}
-.sm-site-score{font:700 22px var(--mono);color:var(--text);letter-spacing:-1px;line-height:1}
-.sm-site-score span{font:400 12px var(--mono);color:var(--text4)}
-.sm-site-name{font:600 13px var(--sans);color:var(--text);margin-top:4px;letter-spacing:-0.2px}
-.sm-site-meta{font:400 11px var(--sans);color:var(--text3)}
-.sm-tier{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 8px;border-left:1px solid var(--border);text-decoration:none;transition:background .15s}
-.sm-tier-label{font:500 11px var(--sans);text-align:center}
-.sm-tier-arrow{font:600 13px var(--sans)}
-.sm-tier-live{cursor:pointer}
-.sm-tier-live:hover{background:var(--surface2)}
-.sm-t0{color:var(--text3)}.sm-t0:hover .sm-tier-label{color:var(--text)}
-.sm-t1 .sm-tier-label{color:var(--blue)}.sm-t1 .sm-tier-arrow{color:var(--blue)}
-.sm-t1:hover{background:#eff6ff}
-.sm-t2 .sm-tier-label{color:#7c3aed}.sm-t2 .sm-tier-arrow{color:#7c3aed}
-.sm-t2:hover{background:#f5f3ff}
-.sm-tier-locked{color:var(--text4);cursor:default;opacity:.4}
-.sm-tier-locked .sm-tier-label{font:400 11px var(--sans)}
-.sm-tier-empty{border-left:1px solid var(--border)}
-@media(max-width:768px){
-  .sm-header,.sm-row{grid-template-columns:1fr}
-  .sm-header .sm-col-tier,.sm-tier-empty{display:none}
-  .sm-tier{border-left:none;border-top:1px solid var(--border);flex-direction:row;justify-content:space-between;padding:10px 20px}
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 56px; display: flex; align-items: center; padding: 0 32px;
+  justify-content: space-between;
 }
-
-/* ── Methodology grid ──────────────────────────── */
-.method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
-.method-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:8px}
-.method-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font:700 15px var(--mono);flex-shrink:0}
-.method-icon.sky{background:#eff6ff;color:#1d4ed8}
-.method-icon.value{background:#f0fdf4;color:#16a34a}
-.method-icon.momentum{background:#fff7ed;color:#ea580c}
-.method-icon.heritage{background:#fef3c7;color:#d97706}
-.method-icon.acquisition{background:#f5f3ff;color:#7c3aed}
-.method-icon.transport{background:#f0f9ff;color:#0284c7}
-.method-name{font:700 13px var(--sans);color:var(--text)}
-.method-desc{font:400 12px var(--sans);color:var(--text2);line-height:1.6}
-.method-source{font:500 10px var(--mono);color:var(--text4);margin-top:auto;padding-top:8px;border-top:1px solid var(--border2)}
-.method-footer{margin-top:20px;font:400 12px var(--sans);color:var(--text3);text-align:center}
-@media(max-width:768px){.method-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.method-grid{grid-template-columns:1fr}}
-
-
-/* ── Dropdown nav ──────────────────────────────────────────── */
-.nav-dropdown{position:relative}
-.nav-dropdown:hover .nav-drop-menu,
-.nav-dropdown:focus-within .nav-drop-menu{opacity:1;pointer-events:auto;transform:translateY(0)}
-.nav-drop-menu{
-  position:absolute;top:100%;left:0;min-width:160px;
-  background:#fff;border:1px solid #e5e7eb;border-radius:6px;
-  box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:200;
-  opacity:0;pointer-events:none;transform:translateY(-4px);
-  transition:opacity .15s,transform .15s;padding:4px 0;margin-top:2px
+.nav-logo {
+  font: 800 18px var(--mono); color: var(--ink); text-decoration: none; letter-spacing: -.02em;
 }
-.nav-drop-menu a{
-  display:block;padding:8px 16px;font:500 12px Inter,sans-serif;
-  color:#374151;text-decoration:none;white-space:nowrap;
-  transition:background .1s
+.nav-logo .sl { color: var(--accent); }
+.nav-logo-sub { font: 500 9px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin-left: 10px; }
+.nav-links { display: flex; align-items: center; gap: 6px; }
+.nav-link {
+  font: 600 10px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink2); text-decoration: none; padding: 6px 12px; border-radius: 4px;
+  transition: color .15s, background .15s;
 }
-.nav-drop-menu a:hover{background:#f9fafb;color:#111827}
-.nav-drop-menu .drop-divider{height:1px;background:#f3f4f6;margin:3px 0}
-.nav-link.active{color:var(--text,#111);background:var(--surface2,#f3f4f6)}
+.nav-link:hover { color: var(--ink); background: rgba(242,241,237,0.08); }
+.nav-cta {
+  font: 700 10px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--bg-dark); background: var(--ink); text-decoration: none;
+  padding: 8px 16px; border-radius: 5px; transition: background .15s;
+}
+.nav-cta:hover { background: var(--accent); color: #fff; }
 
+/* ── HERO CONTENT ── */
+.hero {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: flex-end;
+  padding: 0 64px 80px;
+}
+.hero-label {
+  font: 700 9px var(--sans); letter-spacing: .24em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px;
+}
+.hero-title {
+  font: 900 clamp(48px,6.5vw,96px) var(--sans);
+  color: var(--ink); letter-spacing: -.04em; line-height: .95;
+  margin-bottom: 24px;
+}
+.hero-title em { font-style: normal; color: var(--accent); }
+.hero-sub {
+  font: 400 clamp(14px,1.4vw,20px) var(--sans);
+  color: var(--ink2); line-height: 1.6; margin-bottom: 36px;
+  max-width: 520px;
+}
+.hero-stats {
+  display: flex; gap: 0; margin-bottom: 44px;
+}
+.hero-stat {
+  padding: 0 28px; border-right: 1px solid rgba(242,241,237,0.15);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.hero-stat:first-child { padding-left: 0; }
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font: 800 clamp(28px,2.8vw,42px) var(--mono); color: var(--ink);
+  letter-spacing: -.03em; line-height: 1;
+}
+.hero-stat-num.accent { color: var(--accent); }
+.hero-stat-label { font: 600 8px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); }
+.hero-ctas { display: flex; gap: 12px; align-items: center; }
+.btn-primary {
+  font: 700 11px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  background: var(--accent); color: #fff; text-decoration: none;
+  padding: 16px 32px; border-radius: 6px; transition: background .15s, transform .15s;
+  display: inline-block;
+}
+.btn-primary:hover { background: #c96b1e; transform: translateY(-1px); }
+.btn-ghost {
+  font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink2); text-decoration: none; padding: 16px 24px;
+  border: 1px solid rgba(242,241,237,0.25); border-radius: 6px;
+  transition: border-color .15s, color .15s;
+}
+.btn-ghost:hover { border-color: rgba(242,241,237,0.6); color: var(--ink); }
+
+/* ── BOTTOM STRIP ── */
+.hero-bottom {
+  position: fixed; bottom: 28px; right: 40px; z-index: 10;
+  font: 400 9px var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink3);
+}
+.hero-bottom a { color: var(--ink3); text-decoration: none; }
+.hero-bottom a:hover { color: var(--ink2); }
+
+/* Mapbox attribution */
+.mapboxgl-ctrl-attrib { display: none !important; }
+.mapboxgl-ctrl-logo { display: none !important; }
 </style>
-
-<!-- Analytics -->
-<script>
-(function(f,b){if(!b.__SV){var e,g,i,h;window.mixpanel=b;b._i=[];b.init=function(e,f,c){function g(a,d){var b=d.split(".");2==b.length&&(a=a[b[0]],d=b[1]);a[d]=function(){a.push([d].concat(Array.prototype.slice.call(arguments,0)))}}var a=b;"undefined"!==typeof c?a=b[c]=[]:c="mixpanel";a.people=a.people||[];a.toString=function(a){var d="mixpanel";"mixpanel"!==c&&(d+="."+c);a||(d+=" (stub)");return d};a.people.toString=function(){return a.toString(1)+".people (stub)"};i="disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(" ");
-for(h=0;h<i.length;h++)g(a,i[h]);var j="set set_once union unset remove delete".split(" ");a.get_group=function(){function b(c){d[c]=function(){call2_args=arguments;call2=[c].concat(Array.prototype.slice.call(call2_args,0));a.push([e].concat([call2]))}}for(var d={},e=["get_group"].concat(Array.prototype.slice.call(arguments,0)),c=0;c<j.length;c++)b(j[c]);return d};b._i.push([e,f,c])};b.__SV=1.2;e=f.createElement("script");e.type="text/javascript";e.async=!0;e.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";g=f.getElementsByTagName("script")[0];g.parentNode.insertBefore(e,g)}})(document,window.mixpanel||[]);
-mixpanel.init('DA_PLACEHOLDER_TOKEN', {track_pageview: true, persistence: 'localStorage'});
-// Track current page
-try { mixpanel.track('Page View', {page: window.location.pathname, borough: document.title}); } catch(e){}
-</script>
 </head>
 <body>
 
-<!-- ── Nav ───────────────────────────────────────────────────────── -->
-<nav id="main-nav">
-  <a href="/" class="nav-logo">D<span class="slash">/</span>A<span style="font:400 9px Inter,sans-serif;letter-spacing:.3px;color:#6b7280;text-transform:none;line-height:1">Development/Architecture</span></a>
-  <div class="nav-links">
-    <div class="nav-dropdown">
-      <a class="nav-link" href="/borough/southwark" style="display:flex;align-items:center;gap:4px">Discover <span style="font-size:9px;opacity:.6">▾</span></a>
-      <div class="nav-drop-menu">
-        <a href="/borough/southwark">Southwark</a>
-        <a href="/borough/city-of-london">City of London</a>
-        <a href="/borough/hackney">Hackney</a>
-      </div>
-    </div>
-    <a href="/t1/24-southwark-st" class="nav-link">Appraise</a>
-    <a href="/t2/24-southwark-st" class="nav-link">Full Insight</a>
+<div id="map"></div>
+<div class="overlay"></div>
+
+<nav class="nav">
+  <div style="display:flex;align-items:baseline;gap:0">
+    <a href="/" class="nav-logo">D<span class="sl">/</span>A</a>
+    <span class="nav-logo-sub">Development Intelligence</span>
   </div>
-  <a href="/borough/southwark" class="nav-cta">Discover Sites →</a>
+  <div class="nav-links">
+    <a class="nav-link" href="/discover">Discover</a>
+    <a class="nav-link" href="/t1/24-southwark-st">Appraise</a>
+    <a class="nav-cta" href="/discover">Explore Sites →</a>
+  </div>
 </nav>
 
-<!-- ── Hero: rotating London ─────────────────────────────────────── -->
-<section id="hero">
-  <div id="hero-map"></div>
-  <div class="hero-overlay"></div>
-
-  <div class="hero-content">
-    <div class="hero-left">
-      <div class="hero-eyebrow">Development <span style="color:rgba(255,255,255,0.25);margin:0 4px">/</span> Architecture · London</div>
-      <h1 class="hero-headline">
-        Development intelligence<br>
-        <span class="line2">for London.</span>
-      </h1>
-      <p class="hero-sub">Site scoring, planning appetite, heritage risk, ownership, massing strategy - for any site in London. Architecture and development in one assessment.</p>
-      <div class="hero-actions">
-        <a href="/borough/southwark" class="hero-btn-primary">Explore sites <span>→</span></a>
-        <a href="/t1/24-southwark-st" class="hero-btn-ghost">See a live Appraisal</a>
-      </div>
+<div class="hero">
+  <div class="hero-label">London Development Intelligence</div>
+  <h1 class="hero-title">Know every site.<br><em>Before you bid.</em></h1>
+  <p class="hero-sub">Score, rank and appraise commercial development opportunities across London. Planning intelligence, heritage risk, massing potential and financial returns - in one place.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="h-sites">155</div>
+      <div class="hero-stat-label">Verified sites</div>
     </div>
-
-    <div class="hero-right">
-      <a href="/borough/southwark" class="hero-site-card">
-        <div>
-          <div class="hero-site-name">Discover</div>
-          <div class="hero-site-addr">93 sites · SE1, SE5, SE15, SE17</div>
-        </div>
-        <div class="hero-site-score" style="font-size:13px;letter-spacing:0">Discover →</div>
-      </a>
-      <a href="/borough/city-of-london" class="hero-site-card">
-        <div>
-          <div class="hero-site-name">City of London</div>
-          <div class="hero-site-addr">24 sites · EC1-4, Air Rights</div>
-        </div>
-        <div class="hero-site-score" style="font-size:13px;letter-spacing:0">Discover →</div>
-      </a>
-      <a href="/borough/hackney" class="hero-site-card">
-        <div>
-          <div class="hero-site-name">Hackney</div>
-          <div class="hero-site-addr">39 sites · Shoreditch, City fringe</div>
-        </div>
-        <div class="hero-site-score" style="font-size:13px;letter-spacing:0">Discover →</div>
-      </a>
+    <div class="hero-stat">
+      <div class="hero-stat-num accent" id="h-gdv">—</div>
+      <div class="hero-stat-label">Total GDV potential</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">3</div>
+      <div class="hero-stat-label">London boroughs</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">100</div>
+      <div class="hero-stat-label">Scored &amp; ranked</div>
     </div>
   </div>
-
-  <div class="scroll-hint">
-    <svg viewBox="0 0 16 16"><polyline points="3,5 8,11 13,5"/></svg>
-    Scroll
+  <div class="hero-ctas">
+    <a class="btn-primary" href="/discover">Discover Sites &rarr;</a>
+    <a class="btn-ghost" href="/t1/24-southwark-st">See a live Appraisal</a>
   </div>
-</section>
+</div>
 
-<!-- ── Below fold ─────────────────────────────────────────────────── -->
-<div class="page-content">
-
-  <!-- Differentiator strip -->
-  <section style="padding:48px 32px 0;border-top:none" class="reveal">
-    <div style="max-width:1100px;margin:0 auto">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden">
-        
-        <div style="padding:28px 28px;border-right:1px solid var(--border)">
-          <div style="font:700 10px var(--mono);text-transform:uppercase;letter-spacing:2px;color:var(--blue);margin-bottom:12px">D · Development</div>
-          <div style="font:700 16px var(--sans);color:var(--text);margin-bottom:8px;letter-spacing:-0.3px">Site scoring</div>
-          <div style="font:400 13px var(--sans);color:var(--text3);line-height:1.65">Six factors scored against verified public data: Available Sky, Rent Headroom, Planning Appetite, Heritage Shadow, Title Stack, Station Gravity.</div>
-        </div>
-
-        <div style="padding:28px 28px;border-right:1px solid var(--border);background:var(--surface2)">
-          <div style="font:700 10px var(--mono);text-transform:uppercase;letter-spacing:2px;color:var(--orange);margin-bottom:12px">A · Architecture</div>
-          <div style="font:700 16px var(--sans);color:var(--text);margin-bottom:8px;letter-spacing:-0.3px">Massing and design</div>
-          <div style="font:400 13px var(--sans);color:var(--text3);line-height:1.65">Core sizing, floor plate efficiency, setback logic, heritage response. The architecture is in the assessment - not added as a footnote.</div>
-        </div>
-
-        <div style="padding:28px 28px">
-          <div style="font:700 10px var(--mono);text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:12px">D/A · Combined</div>
-          <div style="font:700 16px var(--sans);color:var(--text);margin-bottom:8px;letter-spacing:-0.3px">Development appraisal</div>
-          <div style="font:400 13px var(--sans);color:var(--text3);line-height:1.65">GDV, NIA, IRR, return curves - with an architectural verdict. What the site can carry, what it should be, and what it will cost.</div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Tiers -->
-  <section class="section reveal">
-    <div class="section-inner">
-      <div class="section-label">The product</div>
-      <div class="section-title">Three levels of site intelligence.</div>
-      <p class="section-sub">Start with what's visible. Go deeper when the site warrants it.</p>
-      <div class="tier-grid" style="grid-template-columns:repeat(3,1fr)">
-        <a href="/borough/southwark" class="tier-card" style="border-top:3px solid #16a34a">
-          <div class="tier-card-num" style="color:#16a34a">01</div>
-          <div class="tier-card-name">Discover</div>
-          <div class="tier-card-desc">Scored and ranked sites across London. Score, plot size, key constraints visible before you commit any time. No login required.</div>
-          <div class="tier-card-foot"><span class="tier-card-access free">Free</span><span class="tier-card-arrow">→</span></div>
-        </a>
-        <a href="/t1/24-southwark-st" class="tier-card" style="border-top:3px solid #1d4ed8">
-          <div class="tier-card-num" style="color:#1d4ed8">02</div>
-          <div class="tier-card-name">Appraise</div>
-          <div class="tier-card-desc">Planning appetite, heritage tier, BSA thresholds, ownership chain, architecture assessment. What the site can carry and why - before you commission anything.</div>
-          <div class="tier-card-foot"><span class="tier-card-access paid">From £49 / site</span><span class="tier-card-arrow">→</span></div>
-        </a>
-        <a href="/t2/24-southwark-st" class="tier-card" style="border-top:3px solid #7c3aed">
-          <div class="tier-card-num" style="color:#7c3aed">03</div>
-          <div class="tier-card-name">Full Insight</div>
-          <div class="tier-card-desc">Massing scenarios, GDV, return curve, margin sensitivity. Full planning and architecture analysis. Numbers and a verdict - not raw data to interpret yourself.</div>
-          <div class="tier-card-foot"><span class="tier-card-access paid">From £149 / site</span><span class="tier-card-arrow">→</span></div>
-        </a>
-      </div>
-      <p style="text-align:center;margin-top:20px;font:400 12px var(--sans);color:var(--text3)">Professional subscription available &middot; All tiers &middot; Unlimited sites &middot; <a href="mailto:hello@devfeasibility.com" style="color:var(--blue)">Contact for pricing</a></p>
-    </div>
-  </section>
-
-  <!-- PD Checker product strand -->
-  <section class="section reveal" style="background:var(--surface2)">
-    <div class="section-inner">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center">
-        <div>
-          <div class="section-label">PD Check &middot; Residential product</div>
-          <div class="section-title">Permitted Development<br>rights checker</div>
-          <p class="section-sub" style="margin-bottom:20px">Enter any address in England and get an instant breakdown of what you can build without planning permission. For homeowners, builders, and architects.</p>
-          <div style="display:flex;gap:16px;margin-bottom:24px;align-items:flex-end">
-            <div><span style="font:800 28px var(--sans);color:var(--text)">£9.99</span><span style="font:400 12px var(--sans);color:var(--text3);margin-left:4px">per check</span></div>
-            <div style="font:400 12px var(--sans);color:var(--text4)">or</div>
-            <div><span style="font:800 28px var(--sans);color:var(--text)">£49</span><span style="font:400 12px var(--sans);color:var(--text3);margin-left:4px">/ month professional</span></div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px">
-            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Rear extensions — single and two-storey</div>
-            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Loft conversions and dormers</div>
-            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Outbuildings and garden rooms</div>
-            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Upward extensions (Class AA)</div>
-            <div style="display:flex;align-items:center;gap:10px;font:400 13px var(--sans);color:var(--text2)"><span style="color:var(--green);font-weight:700">✓</span> Conservation area and Article 4 flags</div>
-          </div>
-          <a href="/pd" style="display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;font:700 13px var(--sans);padding:13px 24px;border-radius:6px;text-decoration:none">Check your address <span>→</span></a>
-        </div>
-        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:28px">
-          <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--text4);margin-bottom:16px">Example result</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--green-lt);border:1px solid var(--green-bd);border-radius:6px">
-              <span style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
-              <span style="font:600 12px var(--sans);color:var(--green)">Permitted</span>
-              <span style="font:400 12px var(--sans);color:var(--text2);margin-left:4px">Single-storey rear extension up to 4m</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--amber-lt);border:1px solid var(--amber-bd);border-radius:6px">
-              <span style="width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0"></span>
-              <span style="font:600 12px var(--sans);color:var(--amber)">Prior Approval</span>
-              <span style="font:400 12px var(--sans);color:var(--text2);margin-left:4px">Dormer window — neighbour consultation</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--red-lt);border:1px solid var(--red-bd);border-radius:6px">
-              <span style="width:8px;height:8px;border-radius:50%;background:var(--red);flex-shrink:0"></span>
-              <span style="font:600 12px var(--sans);color:var(--red)">Planning Required</span>
-              <span style="font:400 12px var(--sans);color:var(--text2);margin-left:4px">Two-storey — conservation area</span>
-            </div>
-          </div>
-          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-            <div style="display:flex;gap:10px;align-items:baseline">
-              <span style="font:800 20px var(--sans);color:var(--text)">£99</span>
-              <span style="font:400 11px var(--sans);color:var(--text4)">per report · or £49/mo for professionals</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section reveal">
-    <div class="section-inner">
-      <div class="section-label">Scoring methodology</div>
-      <div class="section-title">Six factors. One score.</div>
-      <p class="section-sub">Every site is scored across six weighted factors. Each factor draws on verified public data sources - no estimates, no guesses. The composite score drives tier recommendations and borough rankings.</p>
-      <div class="method-grid">
-        <div class="method-card">
-          <div class="method-icon sky">↑</div>
-          <div class="method-name">Available Sky</div>
-          <div class="method-desc">Height headroom above existing roofline relative to confirmed precedents within 300m. Measures raw vertical development potential.</div>
-          <div class="method-source">OS NGD - Overpass - EPC</div>
-        </div>
-        <div class="method-card">
-          <div class="method-icon value">£</div>
-          <div class="method-name">Rent Headroom</div>
-          <div class="method-desc">Gap between existing achievable rent and new-build market ERV. Measures the financial argument for redevelopment. No uplift, no case.</div>
-          <div class="method-source">HMLR - EPC - MSCI</div>
-        </div>
-        <div class="method-card">
-          <div class="method-icon momentum">→</div>
-          <div class="method-name">Planning Appetite</div>
-          <div class="method-desc">Recent consent history within 500m at comparable scale. Measures LPA appetite. A consented precedent is the single strongest planning argument.</div>
-          <div class="method-source">Southwark IDOX - LPA portal</div>
-        </div>
-        <div class="method-card">
-          <div class="method-icon heritage">▲</div>
-          <div class="method-name">Heritage Shadow</div>
-          <div class="method-desc">Statutory listings, World Heritage settings, conservation areas - and non-designated heritage assets (NDHA). Victorian and Edwardian fabric assessed separately from statutory constraints.</div>
-          <div class="method-source">Historic England - Overpass - LPA records</div>
-        </div>
-        <div class="method-card">
-          <div class="method-icon acquisition">□</div>
-          <div class="method-name">Title Stack</div>
-          <div class="method-desc">HMLR title count, tenure type, and ownership category. Institutional freeholds and fragmented leaseholds are scored differently. Assembly risk is priced in.</div>
-          <div class="method-source">HMLR INSPIRE - Land Registry API</div>
-        </div>
-        <div class="method-card">
-          <div class="method-icon transport">◎</div>
-          <div class="method-name">Station Gravity</div>
-          <div class="method-desc">Transport connectivity score and station proximity within 800m. Measures occupier demand risk - poor connectivity is a structural constraint on achievable ERV.</div>
-          <div class="method-source">TfL PTAL - Overpass</div>
-        </div>
-      </div>
-      <div class="method-footer">
-        Relative weightings are proprietary. Calibrated against consented City of London and SE1 schemes. 
-      </div>
-    </div>
-  </section>
-
-  
-
-<footer>
-    <div class="footer-logo">D<span class="slash">/</span>A</div>
-    <div>Development Intelligence · London · 2026</div>
-    <div style="display:flex;gap:20px">
-      <a href="/borough/southwark">Discover</a>
-      <a href="/t1/24-southwark-st">Appraise</a>
-      <a href="/t2/24-southwark-st">Full Insight</a>
-      <a href="/pd">PD Check</a>
-    </div>
-  </footer>
-
-</div><!-- /page-content -->
+<div class="hero-bottom">
+  Southwark &middot; City of London &middot; Hackney &nbsp;|&nbsp;
+  <a href="/t1/24-southwark-st">Sample report</a>
+</div>
 
 <script>
-// ── Rotating London map ───────────────────────────────────────────
-fetch('/api/config').then(r=>r.json()).then(cfg=>{
+// Load total GDV from site data
+Promise.all([
+  fetch('/data/southwark-sites.json').then(r=>r.json()).catch(()=>[]),
+  fetch('/data/city-sites.json').then(r=>r.json()).catch(()=>[]),
+  fetch('/data/hackney-sites.json').then(r=>r.json()).catch(()=>[]),
+]).then(([sw,city,hack]) => {
+  const all = [
+    ...(Array.isArray(sw)?sw:sw.sites||Object.values(sw)),
+    ...(Array.isArray(city)?city:city.sites||Object.values(city)),
+    ...(Array.isArray(hack)?hack:hack.sites||Object.values(hack)),
+  ];
+  const total = all.reduce((s,x)=>s+(Number(x.gdvEst)||0),0);
+  const str = total>=1000 ? `£${(total/1000).toFixed(1)}B` : `£${Math.round(total)}M`;
+  document.getElementById('h-gdv').textContent = str;
+  document.getElementById('h-sites').textContent = all.length;
+}).catch(()=>{});
+
+// Map
+fetch('/api/config').then(r=>r.json()).then(cfg => {
+  if (!cfg.mapboxToken) return;
   mapboxgl.accessToken = cfg.mapboxToken;
-
   const map = new mapboxgl.Map({
-    container: 'hero-map',
+    container: 'map',
     style: 'mapbox://styles/mapbox/dark-v11',
-    center: [-0.0820, 51.5138],
-    zoom: 14.8,
-    pitch: 52,
-    bearing: -30,
+    center: [-0.090, 51.505],
+    zoom: 11.5, pitch: 55, bearing: 0,
     interactive: false,
-    attributionControl: false,
-    antialias: true,
+    attributionControl: false
   });
-
+  // Slow rotation
+  let bearing = 0;
   map.on('load', () => {
-    // 3D buildings - dark vector style, warm accent glow
-    const layers = map.getStyle().layers;
-    const labelLayer = layers.find(l => l.type === 'symbol' && l.layout && l.layout['text-field'])?.id;
-    map.addLayer({
-      id: 'buildings-3d',
-      source: 'composite',
-      'source-layer': 'building',
-      filter: ['==', 'extrude', 'true'],
-      type: 'fill-extrusion',
-      minzoom: 14.5,
-      paint: {
-        'fill-extrusion-color': ['interpolate',['linear'],['get','height'],0,'#1a1f35',50,'#252b4a',150,'#2d3561'],
-        'fill-extrusion-height':  ['interpolate',['linear'],['zoom'],13,0,13.5,['get','height']],
-        'fill-extrusion-base':    ['interpolate',['linear'],['zoom'],13,0,13.5,['get','min_height']],
-        'fill-extrusion-opacity': 0.9,
-      }
-    }, labelLayer);
-
-    // 3x rotation speed: 0.063 deg/frame (protocol locked 2026-03-18)
-    let bearing = -30;
-    let lastTime = 0;
-    function rotate(ts){
-      if(ts - lastTime > 16){
-        bearing += 0.063;
-        map.setBearing(bearing);
-        lastTime = ts;
-      }
+    (function rotate() {
+      bearing = (bearing + 0.04) % 360;
+      map.setBearing(bearing);
       requestAnimationFrame(rotate);
-    }
-    requestAnimationFrame(rotate);
+    })();
   });
-}).catch(()=>{
-  // Fallback: static dark bg if map fails
-  document.getElementById('hero-map').style.background='#0a0c14';
 });
-
-// ── Scroll reveal ─────────────────────────────────────────────────
-const revealObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
-},{threshold:0.08});
-document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
 </script>
 </body>
 </html>
