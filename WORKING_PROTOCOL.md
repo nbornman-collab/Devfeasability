@@ -553,3 +553,39 @@ Each of the four groups (Summary / Development Scope + Numbers / Planning Realm 
 Use a regular dash (-) instead. This applies to all text written on Nic's behalf or for the product surface.
 
 This is a hard rule with no exceptions.
+
+---
+
+## UK BUILDING REGULATIONS - OFFICIAL REFERENCE (🦞 locked 2026-03-22)
+
+**Decision:** UK Approved Documents are official reference material for all architectural intelligence in D/A. Where building regs are cited in architecture synthesis, planning analysis, or site strategy - reference the correct Approved Document part and clause, not generic language.
+
+**Source:** https://www.gov.uk/government/collections/approved-documents
+**Merged PDF:** https://assets.publishing.service.gov.uk/media/6717d29438149ce9d09e3862/The_Merged_Approved_Documents_Oct24.pdf
+
+### Approved Documents - Relevance to D/A
+
+**CRITICAL (cite in architecture section):**
+- **Part B (Fire Safety)** - B1 (dwellings) + B2 (buildings other than dwellings). Means of escape, compartmentation, sprinklers. BSA 2022 overlays this for Higher Risk Buildings (18m+, 30m+, 50m+). Second staircase requirement derives from here. CITE FOR ALL COMMERCIAL SCHEMES.
+- **Part A (Structure)** - Spans, loads, disproportionate collapse. Relevant for transfer structures, roof additions, air rights schemes. Minimum span requirements for commercial bays.
+- **Part L (Conservation of Fuel and Power)** - L1 (dwellings) / L2 (new non-dwellings). Energy performance targets, U-values, thermal bridging. GLA energy SPG sits on top of this. CITE FOR GDV/BREEAM RISK.
+- **Part M (Access)** - M2 (buildings other than dwellings). Lift provision, accessible toilet, level access. Mandatory for commercial buildings. Affects core sizing and floor plate design.
+
+**IMPORTANT (flag where triggered):**
+- **Part O (Overheating)** - New requirement (2021). Glazed commercial buildings and mixed-use residential need solar gain/overheating analysis. Relevant where architectural strategy involves large glazed areas.
+- **Part F (Ventilation)** - F1/F2. Mechanical ventilation strategy for commercial buildings. Affects floor-to-floor height requirements and risers/plantroom allocation.
+- **Part S (EV Charging)** - New requirement (2022). Commercial buildings with parking must provide EV infrastructure. Cost and planning note.
+- **Part E (Sound)** - Resistance to passage of sound. Critical for mixed-use (office + residential) schemes. Affects structure and facade spec.
+- **Part K (Protection from falling)** - Balustrades, guarding, glazing. Relevant for terrace/setback schemes, roof amenity.
+
+**CONTEXT ONLY (not in synthesis unless triggered):**
+- Part C (Site preparation/moisture), Part G (Sanitation/water efficiency), Part H (Drainage), Part P (Electrical), Part Q (Security), Part R (Telecoms), Part T (Toilets)
+
+### Rules for citing in synthesis
+- Never cite a Part without a reason - only reference if it affects feasibility, cost, massing, or planning
+- Part B / BSA is already covered in BSA threshold logic - extend not duplicate
+- Part L / BREEAM references should appear in Market Context (GLA energy policy) AND Architecture (facade/M&E spec implication)
+- Part M should appear in core sizing analysis (lift provision drives core m²)
+- Part A should appear in transfer structure / air rights analysis
+- Part O / F should appear in glazing strategy and M&E plant allowance notes
+
