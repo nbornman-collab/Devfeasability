@@ -32,7 +32,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── NAV ── */
 .da-nav {
   position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
-  background: rgba(242,241,237,0.88);
+  background: rgba(242,241,237,0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255,255,255,0.3);
@@ -68,7 +68,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   flex-shrink: 0;
   padding: 14px 20px 12px;
   display: flex; gap: 0; align-items: stretch;
-  background: rgba(242,241,237,0.82);
+  background: rgba(242,241,237,0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255,255,255,0.3);
@@ -100,7 +100,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .borough-selector {
   flex-shrink: 0;
   padding: 10px 16px 12px;
-  background: rgba(242,241,237,0.82);
+  background: rgba(242,241,237,0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(255,255,255,0.3);
@@ -126,7 +126,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   width: var(--panel-w); height: calc(100% - var(--nav-h));
   display: flex; flex-direction: column;
   overflow: hidden; z-index: 10;
-  background: rgba(242,241,237,0.88);
+  background: rgba(242,241,237,0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-left: 1px solid rgba(255,255,255,0.35);
@@ -225,62 +225,99 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .card-cta.locked { background: var(--bg2); color: var(--ink3); pointer-events: none; }
 
 /* EXPANDED SITE PREVIEW */
-.card-expand {
-  display: none; border-top: 1px solid rgba(255,255,255,0.4);
+/* ── ACTIVE CARD: grouped fillet pop ── */
+@keyframes cardPop {
+  0%   { transform: scale(0.97) translateY(2px); opacity: .7; }
+  65%  { transform: scale(1.015) translateY(-1px); }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
 }
-.site-card.active .card-expand { display: block; }
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.site-card {
+  border-bottom: 1px solid var(--rule); cursor: pointer;
+  transition: background .1s, box-shadow .2s, border-radius .2s, margin .2s;
+  border-radius: 0;
+}
+.site-card.active {
+  animation: cardPop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  border-radius: 12px;
+  margin: 6px 8px;
+  border: 1px solid rgba(224,123,42,.3);
+  box-shadow: 0 6px 28px rgba(17,17,16,.14), 0 1px 4px rgba(17,17,16,.08);
+  overflow: hidden;
+  background: var(--bg);
+}
+.site-card.active + .site-card { border-top: none; }
 
-/* Satellite thumbnail */
-.expand-visual {
-  position: relative; overflow: hidden; height: 160px;
-  background: var(--bg2);
+.card-expand {
+  display: none;
+}
+.site-card.active .card-expand {
+  display: block;
+  animation: expandIn 0.22s ease-out;
+  border-top: 1px solid var(--rule);
+}
+
+/* Square tile: thumbnail left + data right */
+.expand-top {
+  display: flex; gap: 0; align-items: stretch; min-height: 0;
+}
+.expand-thumb {
+  flex-shrink: 0;
+  width: 160px; height: 160px;
+  position: relative; overflow: hidden; background: var(--bg2);
 }
 .expand-sat-img {
   width: 100%; height: 100%; object-fit: cover; display: block;
   transition: transform .4s ease;
 }
-.site-card.active .expand-sat-img:hover { transform: scale(1.04); }
-.expand-visual-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(17,17,16,.65) 0%, transparent 50%);
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 14px 16px;
+.site-card.active .expand-sat-img:hover { transform: scale(1.06); }
+
+.expand-data {
+  flex: 1; padding: 14px 14px; display: flex; flex-direction: column; gap: 6px;
+  border-left: 1px solid var(--rule); justify-content: center;
 }
 .expand-gdv {
-  font: 800 22px var(--mono); color: #fff; letter-spacing: -.02em; line-height: 1;
-  text-shadow: 0 2px 8px rgba(0,0,0,.4);
+  font: 800 26px var(--mono); color: var(--accent); letter-spacing: -.02em; line-height: 1;
 }
-.expand-gdv-label { font: 600 8px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-top: 3px; }
+.expand-gdv-label { font: 700 8px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); margin-top: 2px; }
+.expand-stat-row { display: flex; gap: 14px; margin-top: 8px; }
+.expand-stat { display: flex; flex-direction: column; gap: 1px; }
+.expand-stat-val { font: 700 14px var(--mono); color: var(--ink); }
+.expand-stat-lbl { font: 600 7px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); }
 
-/* Tension / hook line */
-.expand-hook {
-  padding: 12px 16px; font: 400 11px/1.6 var(--sans); color: var(--ink2);
-  border-bottom: 1px solid rgba(255,255,255,0.4);
+/* Narrative */
+.expand-narrative {
+  padding: 10px 14px; font: 400 11px/1.65 var(--sans); color: var(--ink2);
+  border-top: 1px solid var(--rule);
 }
-.expand-hook strong { color: var(--ink); font-weight: 700; }
+.expand-narrative strong { color: var(--ink); font-weight: 700; }
 
-/* Gated indicators - light suggestion, not heavy blocks */
+/* Gated indicators */
 .expand-gated {
-  padding: 10px 16px 4px; display: flex; flex-direction: column; gap: 6px;
+  padding: 8px 14px 2px; display: flex; flex-direction: column; gap: 5px;
+  border-top: 1px solid var(--rule);
 }
 .expand-gated-row {
-  display: flex; align-items: center; gap: 8px;
-  font: 600 9px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink3);
-  opacity: 0.5;
+  display: flex; align-items: center; gap: 7px;
+  font: 600 8px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); opacity: 0.45;
 }
-.expand-gated-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink3); flex-shrink: 0; }
-.expand-gated-line { flex: 1; height: 1px; background: var(--ink3); opacity: .3; border-radius: 1px; }
+.expand-gated-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink3); flex-shrink: 0; }
+.expand-gated-line { flex: 1; height: 1px; background: var(--ink3); opacity: .25; border-radius: 1px; }
 
 /* CTA */
-.expand-cta-row { padding: 12px 16px 14px; }
+.expand-cta-row { padding: 10px 14px 14px; }
 .expand-cta {
   font: 700 10px var(--sans); letter-spacing: .12em; text-transform: uppercase;
-  padding: 11px 24px; border-radius: 5px; text-decoration: none;
+  padding: 11px 24px; border-radius: 6px; text-decoration: none;
   background: var(--ink); color: var(--bg); transition: background .15s;
   display: block; width: 100%; text-align: center;
 }
 .expand-cta:hover { background: var(--accent); }
-.expand-cta.locked { background: rgba(17,17,16,.15); color: var(--ink3); pointer-events: none; }
+.expand-cta.locked { background: rgba(17,17,16,.12); color: var(--ink3); pointer-events: none; }
 
 /* ── MAP POPUP ── */
 .mapboxgl-popup-content {
@@ -551,24 +588,44 @@ function render() {
     const tension = tensionParts.length
       ? tensionParts.join(' + ') + ' - full planning analysis in report'
       : `${s.maxFloors}F potential, ${s.plotM2.toLocaleString()}m² plot - full analysis in report`;
+    // Derived hook numbers
+    const existF = Math.max(1, Math.round(s.maxFloors * 0.45)); // rough existing estimate
+    const addF = s.maxFloors - existF;
+    const addNIA = Math.round(s.plotM2 * 0.42 * 0.78 * addF);
     const expandHTML = `
       <div class="card-expand">
-        ${thumbUrl ? `
-        <div class="expand-visual">
-          <img class="expand-sat-img" src="${thumbUrl}" loading="lazy" alt="Satellite view">
-          <div class="expand-visual-overlay">
-            <div class="expand-gdv">£${s.gdvEst}M</div>
-            <div class="expand-gdv-label">GDV potential · ${s.maxFloors}F maximum</div>
+        <div class="expand-top">
+          <div class="expand-thumb">
+            ${thumbUrl
+              ? `<img class="expand-sat-img" src="${thumbUrl}" loading="lazy" alt="Satellite view">`
+              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--bg2)"><span style="font:800 28px var(--mono);color:var(--accent)">£${s.gdvEst}M</span></div>`}
           </div>
-        </div>` : `
-        <div style="height:80px;background:var(--bg2);display:flex;align-items:center;justify-content:center">
-          <div style="text-align:center"><div style="font:800 28px var(--mono);color:var(--accent)">£${s.gdvEst}M</div><div style="font:600 9px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-top:4px">GDV potential · ${s.maxFloors}F max</div></div>
-        </div>`}
-        <div class="expand-hook">${tension}</div>
+          <div class="expand-data">
+            <div>
+              <div class="expand-gdv">£${s.gdvEst}M</div>
+              <div class="expand-gdv-label">GDV potential</div>
+            </div>
+            <div class="expand-stat-row">
+              <div class="expand-stat">
+                <div class="expand-stat-val">+${addF}F</div>
+                <div class="expand-stat-lbl">Added floors</div>
+              </div>
+              <div class="expand-stat">
+                <div class="expand-stat-val">${addNIA.toLocaleString()}m²</div>
+                <div class="expand-stat-lbl">New NIA</div>
+              </div>
+              <div class="expand-stat">
+                <div class="expand-stat-val">${s.planScore}/10</div>
+                <div class="expand-stat-lbl">Planning</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-narrative">${tension}${s.desc ? ' ' + s.desc : ''}</div>
         <div class="expand-gated">
-          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Planning analysis + constraints<div class="expand-gated-line"></div></div>
-          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Heritage risk + strategy<div class="expand-gated-line"></div></div>
-          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Architecture + financial model<div class="expand-gated-line"></div></div>
+          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Full planning analysis + constraint map<div class="expand-gated-line"></div></div>
+          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Heritage risk + site strategy<div class="expand-gated-line"></div></div>
+          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Architecture intelligence + pro forma<div class="expand-gated-line"></div></div>
         </div>
         <div class="expand-cta-row">
           ${hasCTA
