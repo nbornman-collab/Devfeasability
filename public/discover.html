@@ -32,7 +32,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── NAV ── */
 .da-nav {
   position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
-  background: rgba(242,241,237,0.78);
+  background: rgba(242,241,237,0.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255,255,255,0.3);
@@ -66,27 +66,29 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* HERO STATS - glass overlay on top of map */
 .discover-hero {
   flex-shrink: 0;
-  padding: 14px 20px 12px;
+  padding: 16px 20px 14px;
   display: flex; gap: 0; align-items: stretch;
-  background: rgba(242,241,237,0.72);
+  background: rgba(242,241,237,0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255,255,255,0.3);
+  border-bottom: 2px solid rgba(224,123,42,0.18);
 }
 .hero-stat {
-  flex: 1; padding: 0 16px; border-right: 1px solid var(--rule);
-  display: flex; flex-direction: column; gap: 3px;
+  flex: 1; padding: 0 18px; border-right: 1px solid rgba(17,17,16,0.08);
+  display: flex; flex-direction: column; gap: 4px;
+  transition: background .15s;
 }
 .hero-stat:first-child { padding-left: 0; }
 .hero-stat:last-child { border-right: none; }
+.hero-stat:hover { background: rgba(224,123,42,0.05); border-radius: 6px; }
 .hero-stat-label {
-  font-size: 8px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--ink3);
+  font-size: 8px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--ink2);
 }
 .hero-stat-value {
-  font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; line-height: 1;
+  font: 800 clamp(28px,3vw,44px) var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1;
 }
 .hero-stat-value.accent { color: var(--accent); }
-.hero-stat-sub { font-size: 9px; color: var(--ink3); }
+.hero-stat-sub { font-size: 10px; font-weight: 500; color: var(--ink2); margin-top: 1px; }
 
 /* MAP LABEL */
 .map-label {
@@ -100,7 +102,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .borough-selector {
   flex-shrink: 0;
   padding: 10px 16px 12px;
-  background: rgba(242,241,237,0.72);
+  background: rgba(242,241,237,0.90);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(255,255,255,0.3);
@@ -119,6 +121,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .borough-pill:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
 .borough-pill.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+/* Borough colour pills */
+.borough-pill.southwark { border-color: #8b5cf6; color: #5b21b6; }
+.borough-pill.southwark.active,.borough-pill.southwark:hover { background:#ddd6fe; border-color:#5b21b6; color:#5b21b6; }
+.borough-pill.city { border-color: #38bdf8; color: #075985; }
+.borough-pill.city.active,.borough-pill.city:hover { background:#bae6fd; border-color:#075985; color:#075985; }
+.borough-pill.hackney { border-color: #4ade80; color: #14532d; }
+.borough-pill.hackney.active,.borough-pill.hackney:hover { background:#bbf7d0; border-color:#14532d; color:#14532d; }
 
 /* ── RIGHT PANEL: glass floating over map ── */
 .col-right {
@@ -126,9 +135,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   width: var(--panel-w); height: calc(100% - var(--nav-h));
   display: flex; flex-direction: column;
   overflow: hidden; z-index: 10;
-  background: rgba(210,205,195,0.58);
-  backdrop-filter: blur(28px) saturate(1.6) brightness(1.04);
-  -webkit-backdrop-filter: blur(28px) saturate(1.6) brightness(1.04);
+  background: rgba(242,241,237,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-left: 1px solid rgba(255,255,255,0.45);
   box-shadow: -4px 0 32px rgba(17,17,16,.10);
 }
@@ -647,10 +656,13 @@ async function loadSites() {
   const pillsEl = document.getElementById('borough-pills');
   boroughs.forEach(b => {
     const pill = document.createElement('div');
-    pill.className = 'borough-pill';
-    pill.textContent = b;
+    pill.className = `borough-pill ${boroughChipClass(b).replace('bor-','')}`;
+    pill.textContent = boroughShort(b);
     pill.dataset.borough = b;
     pill.onclick = () => selectBorough(b, pill);
+    // Hover: highlight that borough's dots on map
+    pill.addEventListener('mouseenter', () => highlightBorough(b));
+    pill.addEventListener('mouseleave', () => highlightBorough(null));
     pillsEl.appendChild(pill);
   });
 
@@ -677,7 +689,7 @@ function selectBorough(bor, el) {
       MAP.flyTo({center:[avgLng,avgLat], zoom:14, duration:800});
     }
   } else if (MAP) {
-    MAP.flyTo({center:[-0.118,51.510], zoom:11, duration:800});
+    MAP.flyTo({center:[-0.090,51.505], zoom:11.5, pitch:0, bearing:0, duration:800});
   }
 }
 
@@ -840,7 +852,7 @@ function openFocus(site) {
 function closeFocus() {
   activeSite = null;
   document.getElementById('site-focus').classList.remove('visible');
-  if (MAP) MAP.flyTo({center:[-0.118,51.510],zoom:10.5,pitch:45,duration:800,padding:{}});
+  if (MAP) MAP.flyTo({center:[-0.090,51.505],zoom:11.5,pitch:0,bearing:0,duration:800,padding:{}});
 }
 
 // ── Popup ─────────────────────────────────────────────────────────────────────
@@ -868,32 +880,15 @@ function initMap(token) {
   MAPBOX_TOKEN = token;
   MAP = new mapboxgl.Map({
     container: 'map-canvas',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
-    center: [-0.118, 51.510],
-    zoom: 10.5, pitch: 45, bearing: 0,
+    style: 'mapbox://styles/mapbox/dark-v11',
+    center: [-0.090, 51.505],
+    zoom: 11.5, pitch: 0, bearing: 0,
     attributionControl: false, antialias: true
   });
   MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
   MAP.on('load', () => {
-    // Hide road labels + POI labels - keep aerial clean
-    MAP.getStyle().layers.forEach(layer => {
-      if (layer.type === 'symbol' && (
-        /road|highway|street|path|transit|bus|rail|label|shield|exit|intersection/i.test(layer.id)
-      )) {
-        MAP.setLayoutProperty(layer.id, 'visibility', 'none');
-      }
-    });
-    // 3D building massing - same formula as T1 (opacity 0.20, per WORKING_PROTOCOL ctx-3d rule)
-    MAP.addLayer({
-      id: 'discover-3d', source: 'composite', 'source-layer': 'building',
-      filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 12,
-      paint: {
-        'fill-extrusion-color': '#d4d7df',
-        'fill-extrusion-height': ['interpolate',['linear'],['zoom'],13,0,13.5,['get','height']],
-        'fill-extrusion-base':  ['interpolate',['linear'],['zoom'],13,0,13.5,['get','min_height']],
-        'fill-extrusion-opacity': 0.20
-      }
-    });
+    // dark-v11 roads are clean - no label scrubbing needed
+    // 3D massing removed from browse mode (dark-v11, flat 2D)
     addSiteMarkers();
     addBoroughOutlines();
   });
@@ -920,13 +915,13 @@ function addSiteMarkers() {
   MAP.addSource('sites',{type:'geojson',data:geojson});
   // White ring
   MAP.addLayer({id:'sites-ring',type:'circle',source:'sites',paint:{
-    'circle-radius':['+',['get','r'],2.5],
-    'circle-color':'#ffffff','circle-opacity':0.9
+    'circle-radius':['+',['get','r'],3],
+    'circle-color':'#ffffff','circle-opacity':0.95
   }});
   // Colour dot
   MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',paint:{
     'circle-radius':['get','r'],
-    'circle-color':['get','color'],'circle-opacity':1
+    'circle-color':['get','color'],'circle-opacity':0.95
   }});
   MAP.on('click','sites-dot',e=>{
     const id = e.features[0].properties.id;
@@ -981,6 +976,22 @@ function addBoroughOutlines() {
       });
     })
     .catch(()=>{}); // Borough GeoJSON not yet available - silent fail
+}
+
+function highlightBorough(bor) {
+  if (!MAP || !MAP.getLayer('sites-dot')) return;
+  if (!bor) {
+    // Reset to current filter
+    MAP.setPaintProperty('sites-dot','circle-opacity',0.95);
+    MAP.setPaintProperty('sites-ring','circle-opacity',0.95);
+    return;
+  }
+  // Dim non-borough sites, keep borough sites bright
+  const borIds = ALL_SITES.filter(s=>s.borough===bor).map(s=>s.id);
+  MAP.setPaintProperty('sites-dot','circle-opacity',
+    ['case',['in',['get','id'],['literal',borIds]],1,0.12]);
+  MAP.setPaintProperty('sites-ring','circle-opacity',
+    ['case',['in',['get','id'],['literal',borIds]],1,0.08]);
 }
 
 function updateMapFilter(ids) {
