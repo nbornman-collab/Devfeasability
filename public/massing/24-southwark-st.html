@@ -10,12 +10,13 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#ffffff;--s1:#f8f9fb;--s2:#f1f3f7;--border:#e5e7ec;
-  --text:#0c0f1a;--t2:#505770;--t3:#8b91a8;
-  --lo:#059669;--base:#4f46e5;--hi:#d97706;
+  --bg:#f2f1ed;--s1:#e8e7e2;--s2:#e0ded9;--border:rgba(17,17,16,.1);
+  --text:#111110;--t2:#555550;--t3:#999990;
+  --accent:#e07b2a;--accent-bg:#fdf3ea;
+  --lo:#059669;--base:#e07b2a;--hi:#b45309;
   --sans:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono',monospace;
 }
-html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--text);overflow:hidden}
+html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text);overflow:hidden}
 
 /* ── 50/50 layout ───────────────────────────────────────────────── */
 #map{position:fixed;top:52px;left:0;width:50%;height:calc(100% - 52px);z-index:1}
@@ -64,7 +65,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .stab .ss{display:block;font:600 10px var(--mono);color:var(--t3);margin-top:2px;transition:color .15s}
 .stab.lo.active{background:rgba(5,150,105,.08);border-bottom-color:var(--lo)}
 .stab.lo.active .sn{color:var(--lo)}.stab.lo.active .ss{color:var(--lo);opacity:.7}
-.stab.base.active{background:rgba(79,70,229,.08);border-bottom-color:var(--base)}
+.stab.base.active{background:rgba(224,123,42,.08);border-bottom-color:var(--base)}
 .stab.base.active .sn{color:var(--base)}.stab.base.active .ss{color:var(--base);opacity:.7}
 .stab.hi.active{background:rgba(217,119,6,.08);border-bottom-color:var(--hi)}
 .stab.hi.active .sn{color:var(--hi)}.stab.hi.active .ss{color:var(--hi);opacity:.7}
@@ -177,22 +178,19 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 /* ── Top nav (shared) ─────────────────────────── */
 .da-nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
-  height:52px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;
-  background:rgba(255,255,255,0.97);
-  border-bottom:1px solid #e5e7eb;
-  backdrop-filter:blur(12px);
+  height:52px;display:flex;align-items:center;
+  padding:0 24px;gap:20px;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
 }
-.da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-0.5px;text-decoration:none;color:#0f172a;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
-.da-nav-logo .sl{color:#1d4ed8}
-.da-nav-links{display:flex;align-items:center;gap:2px}
-.da-nav-link{
-  font:500 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.4px;
-  color:#6b7280;text-decoration:none;padding:6px 10px;border-radius:4px;
-  transition:all .15s;
-}
-.da-nav-link:hover{color:#0f172a;background:#f9fafb}
-.da-nav-link.active{color:#0f172a;background:#f3f4f6;font-weight:700}
+.da-nav-logo{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text);text-decoration:none;flex-shrink:0}
+.da-nav-logo .sl{color:var(--accent)}
+.nav-sep{width:1px;height:16px;background:var(--border);flex-shrink:0}
+.nav-site{font-size:11px;color:var(--t3);letter-spacing:.03em;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.da-nav-links{display:flex;gap:20px;margin-left:auto;flex-shrink:0}
+.da-nav-link{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);text-decoration:none;transition:color .15s}
+.da-nav-link:hover{color:var(--text)}
+.da-nav-link.active{color:var(--text);border-bottom:1.5px solid var(--accent);padding-bottom:1px}
 .da-nav-link.locked{opacity:.35;pointer-events:none}
 
 
@@ -229,20 +227,14 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 <body>
 
 <nav class="da-nav">
-  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A<span style="font:400 8px Inter,sans-serif;letter-spacing:.3px;color:#9ca3af;text-transform:none;line-height:1">Development/Architecture</span></a>
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <div class="nav-sep"></div>
+  <span class="nav-site">24 Southwark Street &middot; SE1 0SW &middot; Southwark</span>
   <div class="da-nav-links">
-    <div class="da-nav-dropdown">
-      <a class="da-nav-link" href="/borough/southwark" style="display:flex;align-items:center;gap:4px">Discover <span style="font-size:9px;opacity:.6">▾</span></a>
-      <div class="da-nav-drop-menu">
-        <a href="/borough/southwark">Southwark</a>
-        <a href="/borough/city-of-london">City of London</a>
-        <a href="/borough/hackney">Hackney</a>
-      </div>
-    </div>
-    <a href="/t1/24-southwark-st" class="da-nav-link active">Appraise</a>
-    <a href="/t2/24-southwark-st" class="da-nav-link active">Full Insight</a>
+    <a class="da-nav-link" href="/borough/southwark">Discover</a>
+    <a class="da-nav-link" href="/t1/24-southwark-st">Appraise</a>
+    <a class="da-nav-link active" href="/t2/24-southwark-st">Full Insight</a>
   </div>
-  <a href="/methodology" style="font:500 11px Inter,sans-serif;color:#6b7280;text-decoration:none"/a>
 </nav>
 
 <div id="map"></div>
