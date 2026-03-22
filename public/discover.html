@@ -32,7 +32,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── NAV ── */
 .da-nav {
   position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
-  background: rgba(242,241,237,0.96);
+  background: rgba(242,241,237,0.78);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255,255,255,0.3);
@@ -68,7 +68,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   flex-shrink: 0;
   padding: 14px 20px 12px;
   display: flex; gap: 0; align-items: stretch;
-  background: rgba(242,241,237,0.94);
+  background: rgba(242,241,237,0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255,255,255,0.3);
@@ -100,7 +100,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .borough-selector {
   flex-shrink: 0;
   padding: 10px 16px 12px;
-  background: rgba(242,241,237,0.94);
+  background: rgba(242,241,237,0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(255,255,255,0.3);
@@ -126,7 +126,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   width: var(--panel-w); height: calc(100% - var(--nav-h));
   display: flex; flex-direction: column;
   overflow: hidden; z-index: 10;
-  background: rgba(242,241,237,0.96);
+  background: rgba(242,241,237,0.78);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-left: 1px solid rgba(255,255,255,0.35);
@@ -227,8 +227,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* EXPANDED SITE PREVIEW */
 /* ── ACTIVE CARD: grouped fillet pop ── */
 @keyframes cardPop {
-  0%   { transform: scale(0.97) translateY(2px); opacity: .7; }
-  65%  { transform: scale(1.015) translateY(-1px); }
+  0%   { transform: scale(0.93) translateY(4px); opacity: .5; }
+  55%  { transform: scale(1.04) translateY(-3px); }
+  75%  { transform: scale(0.98) translateY(1px); }
   100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 @keyframes expandIn {
@@ -268,6 +269,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   flex-shrink: 0;
   width: 160px; height: 160px;
   position: relative; overflow: hidden; background: var(--bg2);
+  flex-shrink: 0;
 }
 .expand-sat-img {
   width: 100%; height: 100%; object-fit: cover; display: block;
@@ -576,10 +578,7 @@ function render() {
 
     // Expanded preview sections
     const heritLabel = s.heritTier==='blocking'?'High Risk':s.heritTier==='navigable'?'Navigable':'Manageable';
-    // Satellite thumbnail URL (built when token available)
-    const thumbUrl = MAPBOX_TOKEN
-      ? `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${s.lng},${s.lat},18,0,55/480x160@2x?access_token=${MAPBOX_TOKEN}`
-      : '';
+    // Satellite thumbnail: lazy-loaded on card expand via cardClick()
     // Tension line - one sentence, creates a question
     const tensionParts = [];
     if (s.inOA) tensionParts.push('<strong>Opportunity Area</strong> designation');
@@ -596,9 +595,10 @@ function render() {
       <div class="card-expand">
         <div class="expand-top">
           <div class="expand-thumb">
-            ${thumbUrl
-              ? `<img class="expand-sat-img" src="${thumbUrl}" loading="lazy" alt="Satellite view">`
-              : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--bg2)"><span style="font:800 28px var(--mono);color:var(--accent)">£${s.gdvEst}M</span></div>`}
+            <img class="expand-sat-img" src="" alt="Satellite view" style="display:block;width:100%;height:100%;object-fit:cover">
+            <div class="expand-thumb-fallback" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg2)">
+              <span style="font:800 22px var(--mono);color:var(--accent)">£${s.gdvEst}M</span>
+            </div>
           </div>
           <div class="expand-data">
             <div>
@@ -672,11 +672,26 @@ function cardClick(id) {
   document.getElementById('card-'+id)?.classList.add('active');
   document.getElementById('card-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'});
   activeSite = id;
-  // Map
+  // Map - center in the visible left half (right panel is 50% width)
   if (MAP && site.lat && site.lng) {
-    MAP.flyTo({center:[site.lng,site.lat], zoom:16, duration:600});
+    const panelW = Math.round(window.innerWidth * 0.5);
+    MAP.flyTo({
+      center: [site.lng, site.lat], zoom: 16, duration: 700,
+      padding: { top: 80, bottom: 80, left: 40, right: panelW + 40 }
+    });
     showPopup(site);
   }
+  // Lazy-load satellite thumbnail once token is available
+  setTimeout(() => {
+    if (MAPBOX_TOKEN) {
+      const img = document.querySelector(`#card-${id} .expand-sat-img`);
+      const fallback = document.querySelector(`#card-${id} .expand-thumb-fallback`);
+      if (img) {
+        img.onload = () => { if (fallback) fallback.style.display = 'none'; };
+        img.src = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},18,0,55/480x160@2x?access_token=${MAPBOX_TOKEN}`;
+      }
+    }
+  }, 120);
 }
 
 // ── Popup ─────────────────────────────────────────────────────────────────────
