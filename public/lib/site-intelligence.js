@@ -912,3 +912,73 @@ function renderVerdict(si) {
     </div>
   </div>`;
 }
+
+// ── Burger menu injection (applies to all T1 + T2 pages) ─────────────────────
+(function() {
+  function injectBurger() {
+    if (document.getElementById('da-burger')) return;
+    const nav = document.querySelector('.da-nav');
+    if (!nav) return;
+
+    // Inject CSS
+    const style = document.createElement('style');
+    style.textContent = `
+      .da-burger{display:flex;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;padding:6px;background:none;border:none;cursor:pointer;border-radius:6px;margin-left:auto;flex-shrink:0;transition:background .15s}
+      .da-burger:hover{background:rgba(17,17,16,.06)}
+      .da-burger span{display:block;height:2px;background:#111110;border-radius:2px;transition:all .25s}
+      body.nav-open .da-burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+      body.nav-open .da-burger span:nth-child(2){opacity:0;transform:scaleX(0)}
+      body.nav-open .da-burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+      .da-drawer{position:fixed;top:52px;right:0;bottom:0;width:280px;background:#f2f1ed;border-left:1px solid rgba(17,17,16,.1);z-index:500;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding:24px 0}
+      body.nav-open .da-drawer{transform:translateX(0)}
+      .da-overlay{position:fixed;inset:0;background:rgba(17,17,16,.18);z-index:499;opacity:0;pointer-events:none;transition:opacity .28s}
+      body.nav-open .da-overlay{opacity:1;pointer-events:auto}
+      .da-drawer a,.da-drawer button.da-drawer-link{display:block;padding:14px 28px;font:600 14px Inter,sans-serif;color:#111110;text-decoration:none;border:none;background:none;width:100%;text-align:left;cursor:pointer;border-bottom:1px solid rgba(17,17,16,.06);letter-spacing:.01em;transition:background .12s}
+      .da-drawer a:hover,.da-drawer button.da-drawer-link:hover{background:rgba(17,17,16,.04)}
+      .da-drawer .drawer-label{padding:8px 28px 4px;font:700 9px Inter,sans-serif;text-transform:uppercase;letter-spacing:.15em;color:#999990}
+      .da-drawer .drawer-divider{height:1px;background:rgba(17,17,16,.08);margin:8px 0}
+      .da-drawer .drawer-accent{color:#e07b2a}
+    `;
+    document.head.appendChild(style);
+
+    // Burger button
+    const burger = document.createElement('button');
+    burger.id = 'da-burger';
+    burger.className = 'da-burger';
+    burger.setAttribute('aria-label', 'Menu');
+    burger.innerHTML = '<span></span><span></span><span></span>';
+    burger.onclick = () => document.body.classList.toggle('nav-open');
+    nav.appendChild(burger);
+
+    // Drawer
+    const drawer = document.createElement('div');
+    drawer.className = 'da-drawer';
+    const currentPath = window.location.pathname;
+    const siteSlug = currentPath.split('/').pop() || '24-southwark-st';
+    drawer.innerHTML = `
+      <div class="drawer-label">Navigate</div>
+      <a href="/">D/A Home</a>
+      <a href="/borough/southwark">Discover - Southwark</a>
+      <a href="/borough/city-of-london">Discover - City of London</a>
+      <a href="/borough/hackney">Discover - Hackney</a>
+      <div class="drawer-divider"></div>
+      <a href="/t1/${siteSlug}" class="${currentPath.includes('/t1/')?' drawer-accent':''}">Appraise - ${siteSlug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</a>
+      <a href="/t2/${siteSlug}" class="${currentPath.includes('/t2/')?' drawer-accent':''}">Full Insight - ${siteSlug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</a>
+      <div class="drawer-divider"></div>
+      <a href="/pd">PD Check</a>
+    `;
+    document.body.appendChild(drawer);
+
+    // Overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'da-overlay';
+    overlay.onclick = () => document.body.classList.remove('nav-open');
+    document.body.appendChild(overlay);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectBurger);
+  } else {
+    injectBurger();
+  }
+})();
