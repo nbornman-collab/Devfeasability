@@ -187,7 +187,7 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 // Scoring: utilisation ratio × PTAL weight × size sweet spot × availability multiplier
 // ── One definitive scoring system — same 6 factors as SITE_INTELLIGENCE ──────
 // Available Sky (×2.5), Rent Headroom (×2.0), Planning Appetite (×2.0),
-// Heritage Shadow (×1.5), Title Stack (×1.5), Transport Links (×0.5)
+// Heritage Shadow (×1.5), Title Stack (×1.5), Station Gravity (×0.5)
 function computeScore(s){
   // Available Sky: how much of the precedent envelope is unused?
   const skyRatio = Math.max(0, (s.potentialFloors - s.floors) / s.potentialFloors);
@@ -206,7 +206,7 @@ function computeScore(s){
   // Title Stack: plot size proxy — smaller = likely single title, cleaner
   const titleScore = s.plotSqm < 2000 ? 9 : s.plotSqm < 5000 ? 7.5 : s.plotSqm < 15000 ? 6 : 4;
 
-  // Transport Links: PTAL proxy by area
+  // Station Gravity: PTAL proxy by area
   const ptalScore = {Bankside:10,'Elephant & Castle':9.5,Southwark:9.5,Borough:9,'Canada Water':8,Rotherhithe:7,Peckham:7.5}[s.area] || 8;
 
   const weighted = sky*2.5 + rentGap*2.0 + momentum*2.0 + heritage*1.5 + titleScore*1.5 + ptalScore*0.5;

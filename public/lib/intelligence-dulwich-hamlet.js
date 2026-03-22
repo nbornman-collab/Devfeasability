@@ -23,6 +23,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 5.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Dulwich Hamlet FC - community/semi-professional club. Stadium redevelopment requires club agreement and community consultation. Politically complex. Score reflects acquisition risk." },
-    transport: { label: 'Transport Links', score: 6.0, weight: 0.5, ptal: '2', insight: "PTAL 2. East Dulwich station 500m. Bus-served. Lower transport - residential appropriate." }
+    transport: { label: 'Station Gravity', score: 6.0, weight: 0.5, ptal: '2', insight: "PTAL 2. East Dulwich station 500m. Bus-served. Lower transport - residential appropriate." }
   }
 };

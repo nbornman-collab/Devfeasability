@@ -24,6 +24,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 8.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Garages typically single freehold - council or private landlord. 46 planning apps suggests long-established site with clear ownership. Clean acquisition route." },
-    transport: { label: 'Transport Links', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Elephant & Castle 700m. Walworth Road buses. Good SE17 connectivity for residential." }
+    transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Elephant & Castle 700m. Walworth Road buses. Good SE17 connectivity for residential." }
   }
 };

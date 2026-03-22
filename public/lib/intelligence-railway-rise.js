@@ -24,6 +24,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "11 major apps with no consent suggests complex ownership (potentially Network Rail land, multiple parties). Title Stack is the primary risk." },
-    transport: { label: 'Transport Links', score: 6.5, weight: 0.5, ptal: '3', insight: "PTAL 3. East Dulwich station (Overground) 200m - direct adjacency is a residential premium factor. Honourable mention: one of the best micro-locations for East Dulwich residential buyers." }
+    transport: { label: 'Station Gravity', score: 6.5, weight: 0.5, ptal: '3', insight: "PTAL 3. East Dulwich station (Overground) 200m - direct adjacency is a residential premium factor. Honourable mention: one of the best micro-locations for East Dulwich residential buyers." }
   }
 };

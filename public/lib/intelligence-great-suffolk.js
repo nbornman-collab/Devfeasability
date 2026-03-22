@@ -23,6 +23,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Office block - institutional. Standard disposal." },
-    transport: { label: 'Transport Links', score: 9.0, weight: 0.5, ptal: '5', insight: "PTAL 5. Southwark (Jubilee) 300m. Waterloo 600m. Blackfriars 500m. Excellent." }
+    transport: { label: 'Station Gravity', score: 9.0, weight: 0.5, ptal: '5', insight: "PTAL 5. Southwark (Jubilee) 300m. Waterloo 600m. Blackfriars 500m. Excellent." }
   }
 };

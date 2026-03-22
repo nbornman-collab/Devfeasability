@@ -28,6 +28,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 5.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: 'NHS Southwark - Kings College Hospital NHS Foundation Trust likely freeholder. Public sector disposal: political risk, NHSE valuation requirement, possible community right-to-bid. Complex acquisition - score penalised accordingly. However, NHS estates are routinely disposed: 72 planning apps suggests active engagement.' },
-    transport: { label: 'Transport Links', score: 6.5, weight: 0.5, ptal: '3', insight: 'PTAL 3. East Dulwich station (Overground) 600m. Bus-served. Lower connectivity than SE1 corridor but East Dulwich is highly sought-after residential postcode.' }
+    transport: { label: 'Station Gravity', score: 6.5, weight: 0.5, ptal: '3', insight: 'PTAL 3. East Dulwich station (Overground) 600m. Bus-served. Lower connectivity than SE1 corridor but East Dulwich is highly sought-after residential postcode.' }
   }
 };

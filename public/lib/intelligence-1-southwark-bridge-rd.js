@@ -59,7 +59,7 @@ const SITE_INTELLIGENCE = {
       insight: 'Large office complex - 6 major apps suggests multiple ownership interests or complex leasehold structure. 19,389m² GEA building at £900-1,200/m² capital value = £17-23M existing asset. Institutional ownership likely. Corporate disposal would require board/trustee approval. Score penalised for complexity - HMLR verification critical.'
     },
     transport: {
-      label: 'Transport Links',
+      label: 'Station Gravity',
       score: 9.5, weight: 0.5,
       ptal: '6b',
       insight: 'Exceptional connectivity. London Bridge station (National Rail + Northern + Jubilee) 400m. Borough station (Northern) 300m. Waterloo (National Rail + multiple Tube) 750m. PTAL 6b - amongst the highest in London.'

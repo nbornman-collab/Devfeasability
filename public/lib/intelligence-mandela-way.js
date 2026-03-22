@@ -28,6 +28,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: 'Industrial estate - likely multiple unit leaseholders with single freeholder. 6,968m² storage at Band D suggests ageing stock unlikely to be actively managing. Multiple tenants complicate vacant possession.' },
-    transport: { label: 'Transport Links', score: 7.5, weight: 0.5, ptal: '3', insight: 'PTAL 3-4. London Bridge (Northern/Jubilee/National Rail) 1.2km. Borough Market 900m. Bermondsey station (Jubilee) 600m. Decent inner SE1 connectivity for residential.' }
+    transport: { label: 'Station Gravity', score: 7.5, weight: 0.5, ptal: '3', insight: 'PTAL 3-4. London Bridge (Northern/Jubilee/National Rail) 1.2km. Borough Market 900m. Bermondsey station (Jubilee) 600m. Decent inner SE1 connectivity for residential.' }
   }
 };

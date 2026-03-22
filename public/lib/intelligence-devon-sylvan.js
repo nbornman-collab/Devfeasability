@@ -23,6 +23,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Industrial estate. Multiple tenants likely." },
-    transport: { label: 'Transport Links', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. New Cross Gate 500m." }
+    transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. New Cross Gate 500m." }
   }
 };

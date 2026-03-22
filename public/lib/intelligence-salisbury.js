@@ -24,6 +24,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 7.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Estate car park - likely Southwark Council freehold. Council disposals require cabinet approval but councils are active disposers. 29 planning apps suggests established engagement." },
-    transport: { label: 'Transport Links', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Peckham Rye (Overground) 600m. Denmark Hill (Overground/Thameslink) 700m. Good SE5 connectivity." }
+    transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Peckham Rye (Overground) 600m. Denmark Hill (Overground/Thameslink) 700m. Good SE5 connectivity." }
   }
 };

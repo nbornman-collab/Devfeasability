@@ -28,6 +28,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: 'Operational bus depot - Abellio London (subsidiary of NS Group, Dutch state railway). Not a typical property acquisition - requires agreement with bus operator to relocate operations. This is the primary risk: vacant possession is possible but operationally complex and costly.' },
-    transport: { label: 'Transport Links', score: 8.0, weight: 0.5, ptal: '4', insight: 'PTAL 4. Walworth Road buses. Elephant & Castle (Northern/Bakerloo) 700m. Kennington (Northern) 600m. Good SE17 connectivity.' }
+    transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: 'PTAL 4. Walworth Road buses. Elephant & Castle (Northern/Bakerloo) 700m. Kennington (Northern) 600m. Good SE17 connectivity.' }
   }
 };

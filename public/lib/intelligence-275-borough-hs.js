@@ -24,6 +24,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 7.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Education institution - university or similar. Institutional disposal requires board approval but achievable. EPC Band E motivates disposal." },
-    transport: { label: 'Transport Links', score: 9.0, weight: 0.5, ptal: '5', insight: "PTAL 5. Borough (Northern) 200m. London Bridge 500m. Waterloo 1km. Excellent Borough High Street connectivity." }
+    transport: { label: 'Station Gravity', score: 9.0, weight: 0.5, ptal: '5', insight: "PTAL 5. Borough (Northern) 200m. London Bridge 500m. Waterloo 1km. Excellent Borough High Street connectivity." }
   }
 };

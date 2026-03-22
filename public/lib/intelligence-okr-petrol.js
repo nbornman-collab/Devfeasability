@@ -28,6 +28,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 8.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: '3 major planning apps suggest an active owner willing to engage with development. Former petrol station - likely single freehold, potentially a fuel company or property investor. Acquisition is achievable - fuel sites are non-operational assets.' },
-    transport: { label: 'Transport Links', score: 7.5, weight: 0.5, ptal: '4', insight: 'PTAL 4. Old Kent Road (various buses). Elephant & Castle (Northern/Bakerloo) 1.2km. Proposed Bakerloo Line Extension would add a station within 200m - if delivered, transport score upgrades to 9.0.' }
+    transport: { label: 'Station Gravity', score: 7.5, weight: 0.5, ptal: '4', insight: 'PTAL 4. Old Kent Road (various buses). Elephant & Castle (Northern/Bakerloo) 1.2km. Proposed Bakerloo Line Extension would add a station within 200m - if delivered, transport score upgrades to 9.0.' }
   }
 };

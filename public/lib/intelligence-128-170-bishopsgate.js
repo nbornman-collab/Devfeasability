@@ -78,7 +78,7 @@ const SITE_INTELLIGENCE = {
       insight: 'Air rights acquisition requires structured deal with "existing freeholder". Long-leasehold airspace interest typical. Oversail licences required from affected neighbours - City Corporation may use S.203 to facilitate.'
     },
     transport: {
-      label: 'Transport Links',
+      label: 'Station Gravity',
       score: 10.0, weight: 0.5,
       ptal: "6b",
       nearest_station: 'On-station or within 200m',

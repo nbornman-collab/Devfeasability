@@ -68,7 +68,7 @@ const SITE_INTELLIGENCE = {
       insight: 'Barts Charity - single freehold title. Charitable institutions typically transparent on disposal terms, but require trustee sign-off and Charity Commission process. Expect 18-24 months from heads of terms to completion.'
     },
     transport: {
-      label: 'Transport Links',
+      label: 'Station Gravity',
       score: 9.5, weight: 0.5,
       ptal: '6a',
       stations: 4,
