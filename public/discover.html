@@ -295,11 +295,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .chip.cons  { background: #fef3c7; color: #b45309; }
 .chip.bor   { background: var(--bg2); color: var(--ink3); }
 .chip.ptal  { background: var(--bg2); color: var(--ink2); }
-/* Borough colour chips */
-.chip.bor-southwark      { background: #ede9fe; color: #6d28d9; }
-.chip.bor-city           { background: #e0f2fe; color: #0369a1; }
-.chip.bor-hackney        { background: #dcfce7; color: #15803d; }
-.chip.bor-other          { background: var(--bg2); color: var(--ink3); }
+/* Borough colour chips - prominent */
+.chip.bor-southwark,
+.chip.bor-city,
+.chip.bor-hackney,
+.chip.bor-other {
+  font-size: 8px; font-weight: 800; letter-spacing: .08em;
+  padding: 3px 7px; border-radius: 4px;
+}
+.chip.bor-southwark { background: #ddd6fe; color: #5b21b6; }
+.chip.bor-city      { background: #bae6fd; color: #075985; }
+.chip.bor-hackney   { background: #bbf7d0; color: #14532d; }
+.chip.bor-other     { background: var(--bg2); color: var(--ink2); }
 
 .card-right-col { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 1px; }
 .verdict-pill {
