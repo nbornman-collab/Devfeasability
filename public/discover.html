@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discover Sites - D/A London</title>
+<title>Discover - D/A London Development Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -24,10 +24,10 @@
   --sans: 'Inter', sans-serif;
   --mono: 'JetBrains Mono', monospace;
   --nav-h: 48px;
-  --panel-w: 480px;
+  --panel-w: 460px;
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: var(--sans); -webkit-font-smoothing: antialiased; color: var(--ink); }
 
 /* ── NAV ── */
 .da-nav {
@@ -44,26 +44,89 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .da-nav-link:hover { color: var(--ink); }
 .da-nav-link.active { color: var(--ink); border-bottom: 1.5px solid var(--accent); padding-bottom: 1px; }
 
-/* ── LAYOUT ── */
-#map {
-  position: fixed; top: var(--nav-h); left: 0;
-  width: calc(100% - var(--panel-w));
-  height: calc(100% - var(--nav-h)); z-index: 1;
-}
-.panel {
-  position: fixed; top: var(--nav-h); right: 0;
-  width: var(--panel-w); height: calc(100% - var(--nav-h));
-  background: var(--bg); border-left: 1px solid var(--rule);
-  display: flex; flex-direction: column; z-index: 10;
+/* ── PAGE LAYOUT (same split as T1) ── */
+.page {
+  position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr var(--panel-w);
 }
 
-/* ── MODE TABS ── */
+/* ── LEFT COL ── */
+.col-left {
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--rule);
+  overflow: hidden; height: 100%;
+}
+
+/* HERO STATS */
+.discover-hero {
+  flex-shrink: 0;
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid var(--rule);
+  display: flex; gap: 0; align-items: stretch;
+}
+.hero-stat {
+  flex: 1; padding: 0 16px; border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 3px;
+}
+.hero-stat:first-child { padding-left: 0; }
+.hero-stat:last-child { border-right: none; }
+.hero-stat-label {
+  font-size: 8px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--ink3);
+}
+.hero-stat-value {
+  font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; line-height: 1;
+}
+.hero-stat-value.accent { color: var(--accent); }
+.hero-stat-sub { font-size: 9px; color: var(--ink3); }
+
+/* MAP */
+.map-wrap {
+  flex: 1; position: relative; min-height: 0; overflow: hidden;
+}
+.map-label {
+  position: absolute; top: 10px; left: 12px; z-index: 5;
+  font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink3); background: var(--bg); padding: 3px 7px; border-radius: 4px;
+  pointer-events: none;
+}
+#map { width: 100%; height: 100%; }
+
+/* BOROUGH SELECTOR */
+.borough-selector {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--rule);
+  background: var(--bg);
+}
+.borough-selector-label {
+  font-size: 8px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 8px;
+}
+.borough-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.borough-pill {
+  font-size: 10px; font-weight: 600; letter-spacing: .05em;
+  padding: 5px 12px; border-radius: 20px; cursor: pointer;
+  background: var(--bg2); color: var(--ink2); border: 1px solid var(--rule);
+  transition: all .15s; white-space: nowrap;
+}
+.borough-pill:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+.borough-pill.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* ── RIGHT PANEL ── */
+.col-right {
+  display: flex; flex-direction: column;
+  overflow: hidden; height: 100%;
+  background: var(--bg);
+}
+
+/* MODE TABS */
 .mode-tabs {
-  display: flex; border-bottom: 1px solid var(--rule); flex-shrink: 0; background: var(--bg);
+  display: flex; border-bottom: 1px solid var(--rule); flex-shrink: 0;
 }
 .mode-tab {
-  flex: 1; padding: 14px 8px; text-align: center; cursor: pointer;
-  font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  flex: 1; padding: 14px 6px; text-align: center; cursor: pointer;
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
   color: var(--ink3); border-bottom: 2px solid transparent; margin-bottom: -1px;
   background: none; border-top: none; border-left: none; border-right: none;
   font-family: var(--sans); transition: color .15s;
@@ -71,103 +134,129 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .mode-tab:hover { color: var(--ink); }
 .mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
 
-/* ── CONTROLS BAR ── */
-.controls {
-  padding: 12px 16px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
-  display: flex; gap: 8px; align-items: center; background: var(--bg);
+/* SEARCH BAR */
+.search-bar {
+  padding: 10px 14px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+  display: none;
 }
+.search-bar.visible { display: block; }
 .search-input {
-  flex: 1; padding: 8px 12px; background: var(--bg2);
+  width: 100%; padding: 8px 12px; background: var(--bg2);
   border: 1px solid var(--rule); border-radius: 6px;
   font: 400 12px var(--sans); color: var(--ink); outline: none;
 }
 .search-input::placeholder { color: var(--ink3); }
 .search-input:focus { border-color: var(--accent); background: var(--bg); }
-.borough-select {
-  padding: 8px 10px; background: var(--bg2); border: 1px solid var(--rule);
-  border-radius: 6px; font: 500 11px var(--sans); color: var(--ink2);
-  cursor: pointer; outline: none;
-}
-.borough-select:focus { border-color: var(--accent); }
-.count-label { font-size: 10px; color: var(--ink3); flex-shrink: 0; white-space: nowrap; }
 
-/* ── SITE LIST ── */
-.site-list {
-  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+/* LIST HEADER */
+.list-header {
+  padding: 8px 16px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
 }
+.list-header-label { font-size: 10px; font-weight: 600; color: var(--ink2); }
+.list-count { font-size: 10px; color: var(--ink3); font-family: var(--mono); }
+
+/* SITE LIST */
+.site-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 /* ── SITE CARD ── */
 .site-card {
-  padding: 16px 20px; border-bottom: 1px solid var(--rule);
-  cursor: pointer; transition: background .1s; display: flex; gap: 14px; align-items: flex-start;
+  border-bottom: 1px solid var(--rule); cursor: pointer;
+  transition: background .1s;
 }
-.site-card:hover { background: var(--bg2); }
-.site-card.highlighted { background: var(--accent-bg); border-left: 3px solid var(--accent); padding-left: 17px; }
-.site-card.no-t1 { opacity: .6; }
+.site-card:hover .card-header { background: var(--bg2); }
+.site-card.active .card-header { background: var(--accent-bg); }
+.site-card.active { border-left: 3px solid var(--accent); }
 
-/* Score block */
-.card-score-block {
-  flex-shrink: 0; width: 48px; text-align: center;
+.card-header {
+  padding: 12px 16px; display: flex; gap: 12px; align-items: flex-start;
+  transition: background .1s;
 }
-.card-score-num {
-  font: 800 24px var(--mono); line-height: 1; color: var(--ink); letter-spacing: -.02em;
+.card-rank {
+  font: 700 10px var(--mono); color: var(--ink3); flex-shrink: 0; width: 24px; padding-top: 2px;
 }
-.card-score-bar {
-  width: 100%; height: 2px; background: var(--rule); border-radius: 2px; margin-top: 5px; overflow: hidden;
-}
+.card-score-col { flex-shrink: 0; text-align: center; width: 36px; }
+.card-score-num { font: 800 20px var(--mono); color: var(--ink); letter-spacing: -.02em; line-height: 1; }
+.card-score-bar { width: 100%; height: 2px; background: var(--rule); border-radius: 2px; margin-top: 4px; overflow: hidden; }
 .card-score-fill { height: 100%; border-radius: 2px; }
 
-/* Card body */
-.card-body { flex: 1; min-width: 0; }
-.card-name { font: 700 13px var(--sans); color: var(--ink); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.card-address { font: 400 10px var(--sans); color: var(--ink3); margin-bottom: 7px; }
-.card-chips { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 7px; }
+.card-main { flex: 1; min-width: 0; }
+.card-name { font: 700 12px var(--sans); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.card-address { font: 400 9px var(--sans); color: var(--ink3); margin-bottom: 5px; }
+.card-chips { display: flex; gap: 4px; flex-wrap: wrap; }
 .chip {
-  font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  padding: 2px 6px; border-radius: 3px; white-space: nowrap;
+  font-size: 7px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 5px; border-radius: 3px; white-space: nowrap;
 }
 .chip.oa    { background: var(--accent-bg); color: var(--accent); }
 .chip.caz   { background: #eff6ff; color: #1d4ed8; }
 .chip.cons  { background: #fef3c7; color: #b45309; }
-.chip.lvmf  { background: #f3e8ff; color: #7c3aed; }
+.chip.bor   { background: var(--bg2); color: var(--ink3); }
 .chip.ptal  { background: var(--bg2); color: var(--ink2); }
-.chip.verified { background: #f0fdf4; color: #15803d; }
-.chip.borough { background: var(--bg2); color: var(--ink2); }
-.card-desc { font: 400 10px/1.55 var(--sans); color: var(--ink2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-/* Verdict + CTA */
-.card-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.card-right-col { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 1px; }
 .verdict-pill {
-  font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  padding: 3px 7px; border-radius: 20px; color: #fff; white-space: nowrap;
+  font-size: 7px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 20px; color: #fff; white-space: nowrap;
 }
 .verdict-pill.green  { background: var(--green); }
 .verdict-pill.amber  { background: var(--amber); }
 .verdict-pill.red    { background: var(--red); }
 .verdict-pill.grey   { background: var(--ink3); }
-.cta-btn {
-  font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  padding: 5px 10px; border-radius: 4px; text-decoration: none; white-space: nowrap;
-  background: var(--ink); color: var(--bg); transition: background .15s;
+.card-cta {
+  font: 700 8px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 8px; border-radius: 3px; text-decoration: none;
+  background: var(--ink); color: var(--bg); white-space: nowrap; transition: background .15s;
 }
-.cta-btn:hover { background: var(--accent); }
-.cta-btn.locked { background: var(--rule); color: var(--ink3); cursor: default; }
-.cta-btn.locked:hover { background: var(--rule); }
+.card-cta:hover { background: var(--accent); }
+.card-cta.locked { background: var(--bg2); color: var(--ink3); pointer-events: none; }
 
-/* ── NO RESULTS ── */
-.no-results { padding: 40px 20px; text-align: center; color: var(--ink3); font-size: 12px; }
+/* EXPANDED SITE PREVIEW */
+.card-expand {
+  display: none; border-top: 1px solid var(--rule);
+  background: var(--bg);
+}
+.site-card.active .card-expand { display: block; }
+.expand-section { padding: 10px 16px; border-bottom: 1px solid var(--rule); }
+.expand-section:last-of-type { border-bottom: none; }
+.expand-sec-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.expand-sec-num { font: 700 8px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+.expand-sec-title { font: 700 10px var(--sans); color: var(--ink); margin-left: 6px; }
+.expand-sec-badge { font: 600 10px var(--sans); color: var(--ink3); }
+.expand-row {
+  display: flex; justify-content: space-between; padding: 4px 0;
+  border-bottom: 1px solid var(--rule); font-size: 10px;
+}
+.expand-row:last-child { border-bottom: none; }
+.expand-key { color: var(--ink3); font-weight: 600; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }
+.expand-val { color: var(--ink); font-weight: 600; text-align: right; }
+.expand-desc { font: 400 10px/1.55 var(--sans); color: var(--ink2); margin-top: 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.expand-cta-row { padding: 12px 16px; display: flex; justify-content: center; border-top: 1px solid var(--rule); }
+.expand-cta {
+  font: 700 10px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  padding: 10px 24px; border-radius: 5px; text-decoration: none;
+  background: var(--ink); color: var(--bg); transition: background .15s; display: block; width: 100%; text-align: center;
+}
+.expand-cta:hover { background: var(--accent); }
+.expand-cta.locked {
+  background: var(--bg2); color: var(--ink3); pointer-events: none;
+  border: 1px solid var(--rule);
+}
 
 /* ── MAP POPUP ── */
 .mapboxgl-popup-content {
   background: var(--bg); border: 1px solid var(--rule); border-radius: 8px;
-  padding: 12px 14px; box-shadow: 0 4px 20px rgba(0,0,0,.12); min-width: 180px;
+  padding: 10px 12px; box-shadow: 0 4px 20px rgba(0,0,0,.15); min-width: 160px;
+  font-family: var(--sans);
 }
-.popup-name { font: 700 12px var(--sans); color: var(--ink); margin-bottom: 2px; }
-.popup-score { font: 800 20px var(--mono); color: var(--ink); }
-.popup-verdict { font: 700 8px var(--sans); letter-spacing: .1em; text-transform: uppercase; margin-left: 6px; }
-.popup-addr { font: 400 10px var(--sans); color: var(--ink3); margin-top: 4px; }
-.popup-cta { display: block; margin-top: 10px; font: 700 9px var(--sans); letter-spacing: .1em; text-transform: uppercase; background: var(--ink); color: var(--bg); text-decoration: none; padding: 6px 12px; border-radius: 4px; text-align: center; }
-.popup-cta:hover { background: var(--accent); }
+.popup-name { font: 700 11px var(--sans); color: var(--ink); }
+.popup-score-row { display: flex; align-items: baseline; gap: 6px; margin-top: 5px; }
+.popup-score { font: 800 22px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.popup-verdict { font: 700 7px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.popup-addr { font: 400 9px var(--sans); color: var(--ink3); margin-top: 3px; }
 </style>
 </head>
 <body>
@@ -182,343 +271,468 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   </div>
 </nav>
 
-<div id="map"></div>
+<div class="page">
 
-<div class="panel">
-  <!-- Mode tabs -->
-  <div class="mode-tabs">
-    <button class="mode-tab active" id="tab-top100" onclick="setMode('top100')">London Top 100</button>
-    <button class="mode-tab" id="tab-borough" onclick="setMode('borough')">Borough</button>
-    <button class="mode-tab" id="tab-search" onclick="setMode('search')">Address Search</button>
-  </div>
+  <!-- ── LEFT COL ── -->
+  <div class="col-left">
 
-  <!-- Controls -->
-  <div class="controls" id="controls-bar">
-    <!-- Populated per mode -->
-    <span class="count-label" id="count-label">Loading...</span>
-  </div>
+    <!-- Hero aggregate stats -->
+    <div class="discover-hero" id="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-label">Total Sites</div>
+        <div class="hero-stat-value" id="stat-total">—</div>
+        <div class="hero-stat-sub">Verified opportunities</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Top Score</div>
+        <div class="hero-stat-value accent" id="stat-top">—</div>
+        <div class="hero-stat-sub" id="stat-top-name">Loading...</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Opp. Areas</div>
+        <div class="hero-stat-value" id="stat-oa">—</div>
+        <div class="hero-stat-sub">Sites in designated OA</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">With Report</div>
+        <div class="hero-stat-value" id="stat-t1">—</div>
+        <div class="hero-stat-sub">Full site reports live</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-label">Avg Score</div>
+        <div class="hero-stat-value" id="stat-avg">—</div>
+        <div class="hero-stat-sub">London portfolio</div>
+      </div>
+    </div>
 
-  <!-- Site list -->
-  <div class="site-list" id="site-list">
-    <div class="no-results">Loading sites...</div>
-  </div>
-</div>
+    <!-- Map -->
+    <div class="map-wrap">
+      <div class="map-label">London Development Sites</div>
+      <div id="map"></div>
+    </div>
+
+    <!-- Borough selector -->
+    <div class="borough-selector">
+      <div class="borough-selector-label">Filter by Borough</div>
+      <div class="borough-pills" id="borough-pills">
+        <div class="borough-pill active" data-borough="all" onclick="selectBorough('all',this)">All London</div>
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+  </div><!-- /col-left -->
+
+  <!-- ── RIGHT PANEL ── -->
+  <div class="col-right">
+
+    <!-- Mode tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tab-top100" onclick="setMode('top100')">London Top 100</button>
+      <button class="mode-tab" id="tab-borough" onclick="setMode('borough')">Borough Top 30</button>
+      <button class="mode-tab" id="tab-search" onclick="setMode('search')">Address Search</button>
+    </div>
+
+    <!-- Search bar (search mode only) -->
+    <div class="search-bar" id="search-bar">
+      <input class="search-input" id="search-q" type="text" placeholder="Search address, postcode, site name..." oninput="render()">
+    </div>
+
+    <!-- List header -->
+    <div class="list-header">
+      <span class="list-header-label" id="list-label">London Top 100</span>
+      <span class="list-count" id="list-count">—</span>
+    </div>
+
+    <!-- Site list -->
+    <div class="site-list" id="site-list">
+      <div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">Loading sites...</div>
+    </div>
+
+  </div><!-- /col-right -->
+
+</div><!-- /page -->
 
 <script>
-// ── Data + state ──────────────────────────────────────────────────────────────
+// ── State ─────────────────────────────────────────────────────────────────────
 let ALL_SITES = [];
 let MAP = null;
 let activeMode = 'top100';
-let activeSiteId = null;
+let activeSite = null;
+let activeBorough = 'all';
 let popup = null;
 
-// ── Verdict helpers ───────────────────────────────────────────────────────────
-function verdictClass(score) {
-  return score >= 80 ? 'green' : score >= 65 ? 'amber' : score >= 50 ? 'amber' : 'grey';
-}
-function verdictLabel(score) {
-  return score >= 80 ? 'Top Opportunity' : score >= 65 ? 'Strong' : score >= 50 ? 'Credible' : 'Due Diligence';
-}
-function scoreBarColor(score) {
-  return score >= 80 ? '#15803d' : score >= 65 ? '#e07b2a' : score >= 50 ? '#b45309' : '#999990';
-}
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const verdictClass = s => s >= 80 ? 'green' : s >= 65 ? 'amber' : s >= 50 ? 'amber' : 'grey';
+const verdictLabel = s => s >= 80 ? 'Top Opportunity' : s >= 65 ? 'Strong' : s >= 50 ? 'Credible' : 'Due Diligence';
+const scoreColor  = s => s >= 80 ? '#15803d' : s >= 65 ? '#e07b2a' : s >= 50 ? '#b45309' : '#999990';
 
-// ── Normalise sites from 3 different JSON shapes ──────────────────────────────
 function normaliseSite(s, idx) {
-  const borough = s.borough || (s.address && s.address.includes('EC') ? 'City of London' : 'London');
+  const borough = s.borough || 'London';
+  const ptal = s.flags?.ptal || s.ptal || null;
+  const inOA = !!(s.flags?.inOA || s.flags?.oa);
+  const inCAZ = !!(s.flags?.inCAZ || s.flags?.caz);
+  const inCons = !!(s.flags?.inConservation);
+  // Estimate max floors and GDV for sites without explicit data
+  const maxFloors = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
+  const hectares = s.hectares || (s.plot ? s.plot / 10000 : 0.05);
+  const plotM2 = Math.round(hectares * 10000);
+  const erv = inOA ? 700 : inCAZ ? 750 : 650;
+  const nia = plotM2 * 0.78 * 0.42 * maxFloors;
+  const gdvEst = (nia * erv / 0.0475 / 1e6).toFixed(1);
+  const planScore = s.mom || (inOA ? 8.5 : inCAZ ? 7.5 : 6.5);
+  const heritTier = s.her || (inCons ? 'navigable' : 'manageable');
   return {
-    id: idx,
-    name: s.name || s.address,
-    address: s.address || s.name,
-    borough: borough,
-    lat: parseFloat(s.lat) || 0,
-    lng: parseFloat(s.lng) || 0,
-    score: parseInt(s.score) || 0,
-    verified: !!s.verified,
-    t1: s.t1 || null,
-    desc: s.desc || s.notes || '',
-    flags: s.flags || {},
-    // Normalise flags across datasets
-    inOA:   !!(s.flags?.inOA || s.flags?.oa),
-    inCAZ:  !!(s.flags?.inCAZ || s.flags?.caz),
-    inCons: !!(s.flags?.inConservation || s.flags?.conservation),
-    inLVMF: !!(s.flags?.inLVMF || s.flags?.lvmf),
-    ptal:   s.flags?.ptal || s.ptal || null,
+    id: idx, name: s.name||s.address, address: s.address||s.name, borough,
+    lat: parseFloat(s.lat)||0, lng: parseFloat(s.lng)||0,
+    score: parseInt(s.score)||0, verified: !!s.verified, t1: s.t1||null,
+    desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
+    ptal, maxFloors, plotM2, gdvEst, planScore, heritTier,
+    offMarket: s.offMarket||'unknown',
   };
 }
 
-// ── Load all sites ────────────────────────────────────────────────────────────
+// ── Load data ─────────────────────────────────────────────────────────────────
 async function loadSites() {
   const [sw, city, hack] = await Promise.all([
-    fetch('/data/southwark-sites.json').then(r => r.json()),
-    fetch('/data/city-sites.json').then(r => r.json()),
-    fetch('/data/hackney-sites.json').then(r => r.json()),
+    fetch('/data/southwark-sites.json').then(r=>r.json()),
+    fetch('/data/city-sites.json').then(r=>r.json()),
+    fetch('/data/hackney-sites.json').then(r=>r.json()),
   ]);
-  const swA  = Array.isArray(sw)   ? sw   : (sw.sites   || Object.values(sw));
-  const cityA= Array.isArray(city) ? city : (city.sites  || Object.values(city));
-  const hackA= Array.isArray(hack) ? hack : (hack.sites  || Object.values(hack));
+  const toArr = d => Array.isArray(d) ? d : (d.sites || Object.values(d));
   let idx = 0;
   ALL_SITES = [
-    ...swA.map(s  => normaliseSite({...s, borough: s.borough || 'Southwark'}, idx++)),
-    ...cityA.map(s => normaliseSite({...s, borough: s.borough || 'City of London'}, idx++)),
-    ...hackA.map(s => normaliseSite({...s, borough: s.borough || 'Hackney'}, idx++)),
-  ].sort((a, b) => b.score - a.score);
+    ...toArr(sw).map(s  => normaliseSite({...s, borough: s.borough||'Southwark'}, idx++)),
+    ...toArr(city).map(s => normaliseSite({...s, borough: s.borough||'City of London'}, idx++)),
+    ...toArr(hack).map(s => normaliseSite({...s, borough: s.borough||'Hackney'}, idx++)),
+  ].sort((a,b) => b.score - a.score);
+
+  // Stats
+  const top = ALL_SITES[0];
+  const withT1 = ALL_SITES.filter(s=>s.t1).length;
+  const withOA = ALL_SITES.filter(s=>s.inOA).length;
+  const avg = Math.round(ALL_SITES.reduce((s,x)=>s+x.score,0)/ALL_SITES.length);
+  document.getElementById('stat-total').textContent = ALL_SITES.length;
+  document.getElementById('stat-top').textContent = top.score;
+  document.getElementById('stat-top-name').textContent = top.name;
+  document.getElementById('stat-oa').textContent = withOA;
+  document.getElementById('stat-t1').textContent = withT1;
+  document.getElementById('stat-avg').textContent = avg;
+
+  // Borough pills
+  const boroughs = [...new Set(ALL_SITES.map(s=>s.borough))].sort();
+  const pillsEl = document.getElementById('borough-pills');
+  boroughs.forEach(b => {
+    const pill = document.createElement('div');
+    pill.className = 'borough-pill';
+    pill.textContent = b;
+    pill.dataset.borough = b;
+    pill.onclick = () => selectBorough(b, pill);
+    pillsEl.appendChild(pill);
+  });
 
   render();
-  initMapMarkers();
 }
 
-// ── Filter sites by mode ──────────────────────────────────────────────────────
-function filteredSites() {
-  if (activeMode === 'top100') {
-    return ALL_SITES.slice(0, 100);
+// ── Borough filter ────────────────────────────────────────────────────────────
+function selectBorough(bor, el) {
+  activeBorough = bor;
+  document.querySelectorAll('.borough-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  if (bor !== 'all') {
+    setMode('borough');
+  } else {
+    render();
   }
-  if (activeMode === 'borough') {
-    const sel = document.getElementById('borough-sel');
-    const bor = sel ? sel.value : 'all';
-    const list = bor === 'all' ? ALL_SITES : ALL_SITES.filter(s => s.borough === bor);
-    return list.slice(0, 30);
+  updateMapFilter();
+  // Fly map to borough centroid
+  if (MAP && bor !== 'all') {
+    const sites = ALL_SITES.filter(s=>s.borough===bor);
+    if (sites.length) {
+      const avgLat = sites.reduce((s,x)=>s+x.lat,0)/sites.length;
+      const avgLng = sites.reduce((s,x)=>s+x.lng,0)/sites.length;
+      MAP.flyTo({center:[avgLng,avgLat], zoom:14, duration:800});
+    }
+  } else if (MAP) {
+    MAP.flyTo({center:[-0.118,51.510], zoom:11, duration:800});
   }
-  if (activeMode === 'search') {
-    const q = (document.getElementById('search-q')?.value || '').trim().toLowerCase();
-    if (!q) return ALL_SITES.slice(0, 50);
-    return ALL_SITES.filter(s =>
-      s.name.toLowerCase().includes(q) ||
-      s.address.toLowerCase().includes(q) ||
-      s.borough.toLowerCase().includes(q)
-    ).slice(0, 50);
-  }
-  return ALL_SITES.slice(0, 100);
 }
 
-// ── Render site cards ─────────────────────────────────────────────────────────
-function render() {
-  const sites = filteredSites();
-  const list = document.getElementById('site-list');
-  const countEl = document.getElementById('count-label');
-  if (countEl) countEl.textContent = sites.length + ' sites';
-
-  if (!sites.length) {
-    list.innerHTML = '<div class="no-results">No sites found</div>';
-    return;
-  }
-
-  list.innerHTML = sites.map((s, i) => {
-    const rank = activeMode === 'top100' ? i + 1 : null;
-    const chips = [
-      rank ? `<span class="chip borough">#${rank}</span>` : '',
-      `<span class="chip borough">${s.borough}</span>`,
-      s.inOA  ? '<span class="chip oa">Opp. Area</span>' : '',
-      s.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
-      s.inCons? '<span class="chip cons">Conservation</span>' : '',
-      s.inLVMF? '<span class="chip lvmf">LVMF</span>' : '',
-      s.ptal  ? `<span class="chip ptal">PTAL ${s.ptal}</span>` : '',
-      s.verified ? '<span class="chip verified">Verified</span>' : '',
-    ].filter(Boolean).join('');
-
-    const vcls = verdictClass(s.score);
-    const vlab = verdictLabel(s.score);
-    const barColor = scoreBarColor(s.score);
-    const hasT1 = !!s.t1;
-    const ctaLabel = hasT1 ? 'View Report' : 'Coming Soon';
-    const ctaClass = hasT1 ? '' : ' locked';
-    const ctaHref = hasT1 ? s.t1 : '#';
-
-    return `<div class="site-card${!hasT1 ? ' no-t1' : ''}" id="card-${s.id}" onclick="cardClick(${s.id})">
-      <div class="card-score-block">
-        <div class="card-score-num">${s.score}</div>
-        <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${barColor}"></div></div>
-      </div>
-      <div class="card-body">
-        <div class="card-name">${s.name}</div>
-        <div class="card-address">${s.address}</div>
-        <div class="card-chips">${chips}</div>
-        ${s.desc ? `<div class="card-desc">${s.desc}</div>` : ''}
-      </div>
-      <div class="card-right">
-        <span class="verdict-pill ${vcls}">${vlab}</span>
-        <a class="cta-btn${ctaClass}" href="${ctaHref}" onclick="event.stopPropagation()">${ctaLabel}</a>
-      </div>
-    </div>`;
-  }).join('');
-
-  // Update map filter
-  updateMapFilter(sites.map(s => s.id));
-}
-
-// ── Mode switching ────────────────────────────────────────────────────────────
+// ── Mode ──────────────────────────────────────────────────────────────────────
 function setMode(mode) {
   activeMode = mode;
   ['top100','borough','search'].forEach(m => {
-    document.getElementById('tab-' + m).classList.toggle('active', m === mode);
+    document.getElementById('tab-'+m).classList.toggle('active', m===mode);
   });
-  buildControls();
+  const searchBar = document.getElementById('search-bar');
+  searchBar.classList.toggle('visible', mode==='search');
+  if (mode==='search') setTimeout(()=>document.getElementById('search-q')?.focus(),50);
   render();
 }
 
-function buildControls() {
-  const bar = document.getElementById('controls-bar');
-  if (activeMode === 'top100') {
-    bar.innerHTML = `<span style="font:500 11px var(--sans);color:var(--ink2)">Top 100 opportunities across all London boroughs</span><span class="count-label" id="count-label"></span>`;
-  } else if (activeMode === 'borough') {
-    const boroughs = [...new Set(ALL_SITES.map(s => s.borough))].sort();
-    bar.innerHTML = `
-      <select class="borough-select" id="borough-sel" onchange="render()">
-        <option value="all">All boroughs</option>
-        ${boroughs.map(b => `<option value="${b}">${b}</option>`).join('')}
-      </select>
-      <span class="count-label" id="count-label"></span>`;
-  } else if (activeMode === 'search') {
-    bar.innerHTML = `
-      <input class="search-input" id="search-q" type="text" placeholder="Search by address, postcode or site name..." oninput="render()" autofocus>
-      <span class="count-label" id="count-label"></span>`;
-    setTimeout(() => document.getElementById('search-q')?.focus(), 50);
+// ── Filtered sites ────────────────────────────────────────────────────────────
+function filteredSites() {
+  let list = ALL_SITES;
+  if (activeMode==='borough' || activeBorough!=='all') {
+    if (activeBorough!=='all') list = list.filter(s=>s.borough===activeBorough);
+    if (activeMode==='borough') list = list.slice(0,30);
   }
+  if (activeMode==='top100') list = ALL_SITES.slice(0,100);
+  if (activeMode==='search') {
+    const q = (document.getElementById('search-q')?.value||'').trim().toLowerCase();
+    if (q) list = ALL_SITES.filter(s=>s.name.toLowerCase().includes(q)||s.address.toLowerCase().includes(q)||s.borough.toLowerCase().includes(q));
+    else list = ALL_SITES.slice(0,50);
+  }
+  return list;
 }
 
-// ── Card click (scroll + highlight) ──────────────────────────────────────────
+// ── Render site list ──────────────────────────────────────────────────────────
+function render() {
+  const sites = filteredSites();
+  const label = activeMode==='top100' ? 'London Top 100' : activeMode==='borough' ? (activeBorough==='all'?'All boroughs':activeBorough+' top 30') : 'Search results';
+  document.getElementById('list-label').textContent = label;
+  document.getElementById('list-count').textContent = sites.length + ' sites';
+
+  const list = document.getElementById('site-list');
+  if (!sites.length) { list.innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">No sites found</div>'; return; }
+
+  list.innerHTML = sites.map((s,i) => {
+    const rank = activeMode==='top100' ? i+1 : null;
+    const vc = verdictClass(s.score);
+    const vl = verdictLabel(s.score);
+    const bc = scoreColor(s.score);
+    const chips = [
+      s.inOA  ? '<span class="chip oa">OA</span>' : '',
+      s.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
+      s.inCons? '<span class="chip cons">Conservation</span>' : '',
+      `<span class="chip bor">${s.borough}</span>`,
+      s.ptal  ? `<span class="chip ptal">PTAL ${s.ptal}</span>` : '',
+    ].filter(Boolean).join('');
+    const hasCTA = !!s.t1;
+
+    // Expanded preview sections
+    const heritLabel = s.heritTier==='blocking'?'High Risk':s.heritTier==='navigable'?'Navigable':'Manageable';
+    const expandHTML = `
+      <div class="card-expand">
+        <div class="expand-section">
+          <div class="expand-sec-head">
+            <div><span class="expand-sec-num">01</span><span class="expand-sec-title">Development Scope</span></div>
+            <span class="expand-sec-badge">${s.maxFloors}F · £${s.gdvEst}M GDV</span>
+          </div>
+          <div class="expand-row"><span class="expand-key">Max Floors</span><span class="expand-val">${s.maxFloors}F</span></div>
+          <div class="expand-row"><span class="expand-key">Plot Area</span><span class="expand-val">${s.plotM2.toLocaleString()} m²</span></div>
+          <div class="expand-row"><span class="expand-key">GDV Estimate</span><span class="expand-val" style="color:var(--accent)">£${s.gdvEst}M</span></div>
+          <div class="expand-row"><span class="expand-key">Off-Market Signal</span><span class="expand-val">${s.offMarket==='low'?'Low activity':s.offMarket==='medium'?'Moderate':'High activity'}</span></div>
+          ${s.desc ? `<div class="expand-desc">${s.desc}</div>` : ''}
+        </div>
+        <div class="expand-section">
+          <div class="expand-sec-head">
+            <div><span class="expand-sec-num">02</span><span class="expand-sec-title">Planning Realm</span></div>
+            <span class="expand-sec-badge">Appetite ${s.planScore}/10</span>
+          </div>
+          <div class="expand-row"><span class="expand-key">Planning Appetite</span><span class="expand-val">${s.planScore}/10</span></div>
+          <div class="expand-row"><span class="expand-key">Opportunity Area</span><span class="expand-val">${s.inOA?'<span style="color:var(--accent)">Yes - OA designated</span>':'None'}</span></div>
+          <div class="expand-row"><span class="expand-key">Conservation</span><span class="expand-val">${s.inCons?'Within CA':'No constraint'}</span></div>
+          <div class="expand-row"><span class="expand-key">CAZ</span><span class="expand-val">${s.inCAZ?'Central Activities Zone':'Outside CAZ'}</span></div>
+        </div>
+        <div class="expand-section">
+          <div class="expand-sec-head">
+            <div><span class="expand-sec-num">03</span><span class="expand-sec-title">Architecture</span></div>
+            <span class="expand-sec-badge">Heritage: ${heritLabel}</span>
+          </div>
+          <div class="expand-row"><span class="expand-key">Heritage Tier</span><span class="expand-val">${heritLabel}</span></div>
+          <div class="expand-row"><span class="expand-key">PTAL</span><span class="expand-val">${s.ptal ? s.ptal + ' / 6' : 'Not assessed'}</span></div>
+        </div>
+        <div class="expand-cta-row">
+          ${hasCTA
+            ? `<a class="expand-cta" href="${s.t1}">View Full Site Report &rarr;</a>`
+            : `<span class="expand-cta locked">Full report coming soon</span>`}
+        </div>
+      </div>`;
+
+    return `<div class="site-card" id="card-${s.id}" onclick="cardClick(${s.id})">
+      <div class="card-header">
+        ${rank ? `<div class="card-rank">#${rank}</div>` : ''}
+        <div class="card-score-col">
+          <div class="card-score-num">${s.score}</div>
+          <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${bc}"></div></div>
+        </div>
+        <div class="card-main">
+          <div class="card-name">${s.name}</div>
+          <div class="card-address">${s.address}</div>
+          <div class="card-chips">${chips}</div>
+        </div>
+        <div class="card-right-col">
+          <span class="verdict-pill ${vc}">${vl}</span>
+          ${hasCTA
+            ? `<a class="card-cta" href="${s.t1}" onclick="event.stopPropagation()">Report</a>`
+            : `<span class="card-cta locked">Soon</span>`}
+        </div>
+      </div>
+      ${expandHTML}
+    </div>`;
+  }).join('');
+
+  updateMapFilter(sites.map(s=>s.id));
+}
+
+// ── Card click ────────────────────────────────────────────────────────────────
 function cardClick(id) {
-  const site = ALL_SITES.find(s => s.id === id);
+  const site = ALL_SITES.find(s=>s.id===id);
   if (!site) return;
-
-  // Highlight card
-  document.querySelectorAll('.site-card.highlighted').forEach(el => el.classList.remove('highlighted'));
-  document.getElementById('card-' + id)?.classList.add('highlighted');
-  activeSiteId = id;
-
-  // Fly map to site
+  const wasActive = activeSite===id;
+  // Deactivate all
+  document.querySelectorAll('.site-card.active').forEach(el=>el.classList.remove('active'));
+  if (wasActive) { activeSite=null; return; }
+  // Activate this card
+  document.getElementById('card-'+id)?.classList.add('active');
+  document.getElementById('card-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'});
+  activeSite = id;
+  // Map
   if (MAP && site.lat && site.lng) {
-    MAP.flyTo({ center: [site.lng, site.lat], zoom: 17, duration: 800 });
+    MAP.flyTo({center:[site.lng,site.lat], zoom:16, duration:600});
     showPopup(site);
   }
 }
 
 // ── Popup ─────────────────────────────────────────────────────────────────────
 function showPopup(site) {
-  if (popup) popup.remove();
-  const vcls = verdictClass(site.score);
-  const vlab = verdictLabel(site.score);
-  const ctaHtml = site.t1
-    ? `<a class="popup-cta" href="${site.t1}">View Site Report &rarr;</a>`
-    : `<div style="font:400 10px var(--sans);color:var(--ink3);margin-top:8px;text-align:center">Report coming soon</div>`;
-  popup = new mapboxgl.Popup({ offset: 12, closeButton: false, maxWidth: '240px' })
-    .setLngLat([site.lng, site.lat])
+  if (popup) { popup.remove(); popup=null; }
+  const vc = verdictClass(site.score);
+  const vl = verdictLabel(site.score);
+  const col = vc==='green'?'#15803d':vc==='amber'?'#b45309':'#999';
+  popup = new mapboxgl.Popup({offset:10,closeButton:true,maxWidth:'220px'})
+    .setLngLat([site.lng,site.lat])
     .setHTML(`
       <div class="popup-name">${site.name}</div>
-      <div style="display:flex;align-items:baseline;gap:6px;margin-top:6px">
+      <div class="popup-score-row">
         <span class="popup-score">${site.score}</span>
-        <span class="popup-verdict" style="color:${vcls === 'green' ? '#15803d' : vcls === 'amber' ? '#b45309' : '#999'}">${vlab}</span>
+        <span class="popup-verdict" style="color:${col}">${vl}</span>
       </div>
       <div class="popup-addr">${site.borough}</div>
-      ${ctaHtml}
     `)
     .addTo(MAP);
 }
 
-// ── Map init ──────────────────────────────────────────────────────────────────
+// ── Map ───────────────────────────────────────────────────────────────────────
 function initMap(token) {
   mapboxgl.accessToken = token;
   MAP = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    style: 'mapbox://styles/mapbox/satellite-v9',
     center: [-0.118, 51.510],
-    zoom: 11,
-    pitch: 0,
-    bearing: 0,
-    attributionControl: false,
-    antialias: true
+    zoom: 10.5, pitch: 0, bearing: 0,
+    attributionControl: false, antialias: true
   });
-  MAP.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+  MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
   MAP.on('load', () => {
-    initMapMarkers();
+    addSiteMarkers();
+    addBoroughOutlines();
   });
 }
 
-function initMapMarkers() {
+function addSiteMarkers() {
   if (!MAP || !ALL_SITES.length) return;
-  if (!MAP.isStyleLoaded()) { MAP.once('load', initMapMarkers); return; }
-
-  // Remove existing layers/source if re-initialising
-  if (MAP.getLayer('sites-circle')) MAP.removeLayer('sites-circle');
-  if (MAP.getLayer('sites-labels')) MAP.removeLayer('sites-labels');
-  if (MAP.getSource('sites')) MAP.removeSource('sites');
-
   const geojson = {
-    type: 'FeatureCollection',
-    features: ALL_SITES.map(s => ({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [s.lng, s.lat] },
-      properties: {
-        id: s.id, score: s.score, name: s.name, t1: s.t1 || '',
-        color: s.score >= 80 ? '#15803d' : s.score >= 65 ? '#e07b2a' : s.score >= 50 ? '#b45309' : '#6b7280',
-        size: s.score >= 80 ? 14 : s.score >= 65 ? 11 : 9,
+    type:'FeatureCollection',
+    features: ALL_SITES.map(s=>({
+      type:'Feature',
+      geometry:{type:'Point',coordinates:[s.lng,s.lat]},
+      properties:{
+        id:s.id, score:s.score, name:s.name,
+        color: scoreColor(s.score),
+        r: s.score>=80 ? 7 : s.score>=65 ? 5 : 4,
       }
     }))
   };
-
-  MAP.addSource('sites', { type: 'geojson', data: geojson });
-
-  // Outer ring (white)
-  MAP.addLayer({
-    id: 'sites-ring', type: 'circle', source: 'sites',
-    paint: {
-      'circle-radius': ['get', 'size'],
-      'circle-color': '#fff',
-      'circle-opacity': 0.9,
-    }
-  });
-  // Inner dot (score colour)
-  MAP.addLayer({
-    id: 'sites-circle', type: 'circle', source: 'sites',
-    paint: {
-      'circle-radius': ['-', ['get', 'size'], 3],
-      'circle-color': ['get', 'color'],
-      'circle-opacity': 1,
-    }
-  });
-
-  // Click handler
-  MAP.on('click', 'sites-circle', e => {
-    const props = e.features[0].properties;
-    const site = ALL_SITES.find(s => s.id === props.id);
+  if (MAP.getSource('sites')) {
+    MAP.getSource('sites').setData(geojson);
+    return;
+  }
+  MAP.addSource('sites',{type:'geojson',data:geojson});
+  // White ring
+  MAP.addLayer({id:'sites-ring',type:'circle',source:'sites',paint:{
+    'circle-radius':['+',['get','r'],2.5],
+    'circle-color':'#ffffff','circle-opacity':0.9
+  }});
+  // Colour dot
+  MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',paint:{
+    'circle-radius':['get','r'],
+    'circle-color':['get','color'],'circle-opacity':1
+  }});
+  MAP.on('click','sites-dot',e=>{
+    const id = e.features[0].properties.id;
+    // Scroll to card and activate
+    const site = ALL_SITES.find(s=>s.id===id);
     if (!site) return;
-    // Scroll card into view
-    const card = document.getElementById('card-' + site.id);
-    if (card) {
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      document.querySelectorAll('.site-card.highlighted').forEach(el => el.classList.remove('highlighted'));
-      card.classList.add('highlighted');
+    // Ensure the site is visible in current mode; if not, switch to borough
+    const visible = filteredSites().find(s=>s.id===id);
+    if (!visible) {
+      activeBorough = site.borough;
+      document.querySelectorAll('.borough-pill').forEach(p=>p.classList.toggle('active',p.dataset.borough===site.borough));
+      setMode('borough');
     }
-    showPopup(site);
+    setTimeout(()=>{
+      cardClick(id);
+    },100);
   });
-  MAP.on('mouseenter', 'sites-circle', () => MAP.getCanvas().style.cursor = 'pointer');
-  MAP.on('mouseleave', 'sites-circle', () => MAP.getCanvas().style.cursor = '');
+  MAP.on('mouseenter','sites-dot',()=>MAP.getCanvas().style.cursor='pointer');
+  MAP.on('mouseleave','sites-dot',()=>MAP.getCanvas().style.cursor='');
 }
 
-function updateMapFilter(visibleIds) {
-  if (!MAP || !MAP.getSource('sites')) return;
-  const idSet = new Set(visibleIds);
-  ['sites-ring', 'sites-circle'].forEach(layer => {
-    if (MAP.getLayer(layer)) {
-      MAP.setFilter(layer, ['in', ['get', 'id'], ['literal', [...idSet]]]);
-    }
+function addBoroughOutlines() {
+  // Borough outlines with hover - loads from public GeoJSON if available
+  // Falls back gracefully if not present
+  fetch('/data/london-boroughs.geojson')
+    .then(r=>r.ok ? r.json() : null)
+    .then(gj=>{
+      if (!gj || !MAP) return;
+      MAP.addSource('boroughs',{type:'geojson',data:gj});
+      MAP.addLayer({
+        id:'borough-fill', type:'fill', source:'boroughs',
+        paint:{'fill-color':'rgba(255,255,255,0)','fill-opacity':0}
+      });
+      MAP.addLayer({
+        id:'borough-outline', type:'line', source:'boroughs',
+        paint:{'line-color':'rgba(255,255,255,0.4)','line-width':1.5}
+      });
+      // Hover highlight
+      let hoveredId = null;
+      MAP.on('mousemove','borough-fill',e=>{
+        if (e.features.length) {
+          if (hoveredId!==null) MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:false});
+          hoveredId = e.features[0].id;
+          MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:true});
+          MAP.setPaintProperty('borough-fill','fill-opacity',['case',['boolean',['feature-state','hover'],false],0.12,0]);
+          MAP.getCanvas().style.cursor='default';
+        }
+      });
+      MAP.on('mouseleave','borough-fill',()=>{
+        if (hoveredId!==null) MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:false});
+        hoveredId = null;
+      });
+    })
+    .catch(()=>{}); // Borough GeoJSON not yet available - silent fail
+}
+
+function updateMapFilter(ids) {
+  if (!MAP || !MAP.getLayer('sites-dot')) return;
+  if (!ids) { // Show all
+    ['sites-ring','sites-dot'].forEach(l=>MAP.setFilter(l,null));
+    return;
+  }
+  const idSet = [...new Set(ids)];
+  ['sites-ring','sites-dot'].forEach(l=>{
+    if (MAP.getLayer(l)) MAP.setFilter(l,['in',['get','id'],['literal',idSet]]);
   });
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
-async function boot() {
-  buildControls();
-  const [, data] = await Promise.all([
-    loadSites(),
-    fetch('/api/config').then(r => r.json()).catch(() => null),
-  ]);
-  // loadSites() triggers render() internally; map init from config
-  fetch('/api/config').then(r => r.json()).then(cfg => {
-    if (cfg?.mapboxToken) initMap(cfg.mapboxToken);
-  }).catch(console.warn);
-}
-
-boot();
+Promise.all([
+  loadSites(),
+  fetch('/api/config').then(r=>r.json()).catch(()=>null)
+]).then(([,cfg])=>{
+  if (cfg?.mapboxToken) initMap(cfg.mapboxToken);
+});
 </script>
 </body>
 </html>
