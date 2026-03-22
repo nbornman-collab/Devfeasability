@@ -118,7 +118,7 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 // ── Tier routes: /t1/:site, /t2/:site, /t3/:site ──────────────────────────
 // T1 Scout  — site overview (placeholder until built)
