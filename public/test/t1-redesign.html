@@ -76,69 +76,78 @@
     flex-direction: column;
   }
 
-  /* HERO SCORE */
-  .hero {
-    padding: 48px 40px 40px;
+  /* ── LEFT BANNER: score + metrics side by side ── */
+  .hero-banner {
+    padding: 24px 28px 20px;
     border-bottom: 1px solid var(--rule);
     display: flex;
+    gap: 24px;
+    align-items: stretch;
+    flex-shrink: 0;
+  }
+  /* Score block - left side */
+  .hero-score-block {
+    display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 100px;
+    border-right: 1px solid var(--rule);
+    padding-right: 24px;
   }
   .hero-label {
-    font-size: 10px; font-weight: 700; letter-spacing: .18em;
+    font-size: 9px; font-weight: 700; letter-spacing: .18em;
     text-transform: uppercase; color: var(--ink3);
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: 6px;
   }
   .hero-dot {
-    width: 6px; height: 6px; border-radius: 50%;
+    width: 5px; height: 5px; border-radius: 50%;
     background: var(--accent); display: inline-block; flex-shrink: 0;
   }
   .hero-number {
-    font-size: var(--display-size);
+    font-size: clamp(52px,7vw,88px);
     font-weight: 800;
     line-height: .9;
     color: var(--ink);
     letter-spacing: -.03em;
   }
-  .hero-verdict {
-    display: flex; align-items: center; gap: 12px;
-    padding-top: 4px;
-  }
   .verdict-pill {
-    font-size: 10px; font-weight: 700; letter-spacing: .12em;
+    font-size: 9px; font-weight: 700; letter-spacing: .1em;
     text-transform: uppercase;
     background: var(--ink); color: var(--bg);
-    padding: 4px 10px; border-radius: 20px;
+    padding: 3px 8px; border-radius: 20px;
+    align-self: flex-start;
   }
   .verdict-pill.green { background: #15803d; }
   .verdict-pill.amber { background: #b45309; }
   .verdict-pill.red   { background: #b91c1c; }
   .hero-sub {
-    font-size: 11px; color: var(--ink2); letter-spacing: .02em;
+    font-size: 10px; color: var(--ink3); letter-spacing: .01em;
+    line-height: 1.4;
   }
 
-  /* KEY METRICS */
+  /* Metrics grid - right side of banner */
   .metrics-block {
-    padding: 32px 40px;
-    border-bottom: 1px solid var(--rule);
+    flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 28px 20px;
+    gap: 14px 16px;
+    align-content: center;
   }
   .metric {
-    display: flex; flex-direction: column; gap: 4px;
+    display: flex; flex-direction: column; gap: 2px;
   }
   .metric-label {
-    font-size: 9px; font-weight: 700; letter-spacing: .15em;
+    font-size: 8px; font-weight: 700; letter-spacing: .15em;
     text-transform: uppercase; color: var(--ink3);
   }
   .metric-value {
-    font-size: 32px; font-weight: 800; color: var(--ink);
-    letter-spacing: -.02em; line-height: 1;
+    font-size: 18px; font-weight: 800; color: var(--ink);
+    letter-spacing: -.02em; line-height: 1.1;
   }
   .metric-value.accent { color: var(--accent); }
   .metric-sub {
-    font-size: 10px; color: var(--ink3); letter-spacing: .02em;
+    font-size: 9px; color: var(--ink3); letter-spacing: .01em;
   }
 
   /* MAP PANEL */
@@ -190,11 +199,11 @@
   }
   .factor-row:last-child { border-bottom: none; }
   .factor-name {
-    font-size: 11px; font-weight: 500; color: var(--ink2);
-    flex: 1; letter-spacing: .01em;
+    font-size: 10px; font-weight: 500; color: var(--ink2);
+    flex: 1; letter-spacing: .01em; min-width: 0;
   }
   .factor-bar-wrap {
-    width: 80px; height: 3px; background: var(--rule);
+    width: 52px; height: 2px; background: var(--rule);
     border-radius: 2px; overflow: hidden; flex-shrink: 0;
   }
   .factor-bar { height: 100%; background: var(--ink); border-radius: 2px; }
@@ -358,94 +367,53 @@
   <!-- LEFT COLUMN -->
   <div class="col-left">
 
-    <!-- HERO SCORE -->
-    <div class="hero">
-      <div class="hero-label">
-        <span class="hero-dot"></span>
-        Development Score
-      </div>
-      <div class="hero-number">70</div>
-      <div class="hero-verdict">
+    <!-- BANNER: score (left) + metrics (right) side by side -->
+    <div class="hero-banner">
+      <div class="hero-score-block">
+        <div class="hero-label"><span class="hero-dot"></span>Development Score</div>
+        <div class="hero-number">70</div>
         <span class="verdict-pill green">Strong Opportunity</span>
-        <span class="hero-sub">Score /100 &middot; Heritage: Manageable</span>
+        <div class="hero-sub">Score /100<br>Heritage: Manageable</div>
+      </div>
+      <div class="metrics-block">
+        <div class="metric">
+          <div class="metric-label">Floors</div>
+          <div class="metric-value">6 <span style="font-size:.6em;font-weight:500;color:var(--ink3)">+ 4 add</span></div>
+          <div class="metric-sub">existing + additional</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">GDV Est.</div>
+          <div class="metric-value accent">£2.8M</div>
+          <div class="metric-sub">gross</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">ERV</div>
+          <div class="metric-value">£700</div>
+          <div class="metric-sub">per m&sup2; NIA</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Area Uplift</div>
+          <div class="metric-value" style="color:#15803d">+67<span style="font-size:.55em">%</span></div>
+          <div class="metric-sub">vs existing NIA</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Net Yield</div>
+          <div class="metric-value">4.75<span style="font-size:.55em;font-weight:500">%</span></div>
+          <div class="metric-sub">CAZ prime</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Plot Area</div>
+          <div class="metric-value">1,550</div>
+          <div class="metric-sub">m&sup2;</div>
+        </div>
       </div>
     </div>
 
-    <!-- KEY METRICS -->
-    <div class="metrics-block">
-      <div class="metric">
-        <div class="metric-label">Max Floors</div>
-        <div class="metric-value">10</div>
-        <div class="metric-sub">above existing</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">GDV Est.</div>
-        <div class="metric-value accent">£2.8M</div>
-        <div class="metric-sub">gross</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">ERV</div>
-        <div class="metric-value">£700</div>
-        <div class="metric-sub">per m&sup2; NIA</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Net Yield</div>
-        <div class="metric-value">4.75<span style="font-size:.5em;font-weight:500">%</span></div>
-        <div class="metric-sub">CAZ prime</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">PTAL</div>
-        <div class="metric-value">6b</div>
-        <div class="metric-sub">exceptional</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Plot Area</div>
-        <div class="metric-value">1,550</div>
-        <div class="metric-sub">m&sup2;</div>
-      </div>
-    </div>
-
-    <!-- MAP -->
+    <!-- MAP fills all remaining left column height -->
     <div class="map-panel">
       <div class="map-panel-label">Site Location</div>
       <div id="map-canvas"></div>
       <div class="map-attribution">&copy; Mapbox &copy; OpenStreetMap</div>
-    </div>
-
-    <!-- SCORE FACTORS -->
-    <div class="factors-block">
-      <div class="factors-title">Intelligence Factors</div>
-
-      <div class="factor-row">
-        <span class="factor-name">Available Sky</span>
-        <div class="factor-bar-wrap"><div class="factor-bar high" style="width:65%"></div></div>
-        <span class="factor-score">6.5</span>
-      </div>
-      <div class="factor-row">
-        <span class="factor-name">Rent Headroom</span>
-        <div class="factor-bar-wrap"><div class="factor-bar" style="width:60%"></div></div>
-        <span class="factor-score">6.0</span>
-      </div>
-      <div class="factor-row">
-        <span class="factor-name">Planning Appetite</span>
-        <div class="factor-bar-wrap"><div class="factor-bar high" style="width:85%"></div></div>
-        <span class="factor-score">8.5</span>
-      </div>
-      <div class="factor-row">
-        <span class="factor-name">Heritage Shadow</span>
-        <div class="factor-bar-wrap"><div class="factor-bar" style="width:60%"></div></div>
-        <span class="factor-score">6.0</span>
-      </div>
-      <div class="factor-row">
-        <span class="factor-name">Title Stack</span>
-        <div class="factor-bar-wrap"><div class="factor-bar high" style="width:75%"></div></div>
-        <span class="factor-score">7.5</span>
-      </div>
-      <div class="factor-row">
-        <span class="factor-name">Station Gravity</span>
-        <div class="factor-bar-wrap"><div class="factor-bar high" style="width:90%"></div></div>
-        <span class="factor-score">9.0</span>
-      </div>
     </div>
 
   </div><!-- /col-left -->
@@ -464,6 +432,17 @@
         <span class="tag accent-tag">Opportunity Area</span>
         <span class="tag">Freehold</span>
       </div>
+    </div>
+
+    <!-- SCORE FACTORS (moved from left panel) -->
+    <div style="padding:16px 28px;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:8px 24px">
+      <div style="grid-column:1/-1;font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:4px">Intelligence Factors</div>
+      <div class="factor-row"><span class="factor-name">Available Sky</span><div class="factor-bar-wrap"><div class="factor-bar high" style="width:65%"></div></div><span class="factor-score">6.5</span></div>
+      <div class="factor-row"><span class="factor-name">Rent Headroom</span><div class="factor-bar-wrap"><div class="factor-bar" style="width:60%"></div></div><span class="factor-score">6.0</span></div>
+      <div class="factor-row"><span class="factor-name">Planning Appetite</span><div class="factor-bar-wrap"><div class="factor-bar high" style="width:85%"></div></div><span class="factor-score">8.5</span></div>
+      <div class="factor-row"><span class="factor-name">Heritage Shadow</span><div class="factor-bar-wrap"><div class="factor-bar" style="width:60%"></div></div><span class="factor-score">6.0</span></div>
+      <div class="factor-row"><span class="factor-name">Title Stack</span><div class="factor-bar-wrap"><div class="factor-bar high" style="width:75%"></div></div><span class="factor-score">7.5</span></div>
+      <div class="factor-row"><span class="factor-name">Station Gravity</span><div class="factor-bar-wrap"><div class="factor-bar high" style="width:90%"></div></div><span class="factor-score">9.0</span></div>
     </div>
 
     <!-- DEVELOPMENT SCOPE -->
