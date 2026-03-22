@@ -618,13 +618,32 @@ function initMap(token) {
   mapboxgl.accessToken = token;
   MAP = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/satellite-v9',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
     center: [-0.118, 51.510],
-    zoom: 10.5, pitch: 0, bearing: 0,
+    zoom: 10.5, pitch: 45, bearing: 0,
     attributionControl: false, antialias: true
   });
   MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
   MAP.on('load', () => {
+    // Hide road labels + POI labels - keep aerial clean
+    MAP.getStyle().layers.forEach(layer => {
+      if (layer.type === 'symbol' && (
+        /road|highway|street|path|transit|bus|rail|label|shield|exit|intersection/i.test(layer.id)
+      )) {
+        MAP.setLayoutProperty(layer.id, 'visibility', 'none');
+      }
+    });
+    // 3D building massing - same formula as T1 (opacity 0.20, per WORKING_PROTOCOL ctx-3d rule)
+    MAP.addLayer({
+      id: 'discover-3d', source: 'composite', 'source-layer': 'building',
+      filter: ['==', 'extrude', 'true'], type: 'fill-extrusion', minzoom: 12,
+      paint: {
+        'fill-extrusion-color': '#d4d7df',
+        'fill-extrusion-height': ['interpolate',['linear'],['zoom'],13,0,13.5,['get','height']],
+        'fill-extrusion-base':  ['interpolate',['linear'],['zoom'],13,0,13.5,['get','min_height']],
+        'fill-extrusion-opacity': 0.20
+      }
+    });
     addSiteMarkers();
     addBoroughOutlines();
   });
