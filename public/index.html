@@ -193,6 +193,28 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .hero-bottom a { color: var(--ink3); text-decoration: none; }
 .hero-bottom a:hover { color: var(--ink2); }
 
+/* D / P / A triangle pillars */
+.dpa-strip {
+  display: flex; gap: 10px; margin-bottom: 28px; align-items: stretch;
+}
+.dpa-pill {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 14px; border-radius: 6px;
+  border: 1px solid rgba(242,241,237,0.18);
+  background: rgba(242,241,237,0.06);
+  backdrop-filter: blur(8px);
+  transition: border-color .2s, background .2s;
+}
+.dpa-pill:hover { border-color: rgba(224,123,42,0.5); background: rgba(224,123,42,0.08); }
+.dpa-letter {
+  font: 800 15px var(--mono); color: var(--accent);
+  letter-spacing: -.02em; line-height: 1; flex-shrink: 0;
+}
+.dpa-text { display: flex; flex-direction: column; gap: 1px; }
+.dpa-name { font: 700 9px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink); }
+.dpa-desc { font: 400 8px var(--sans); color: var(--ink3); letter-spacing: .04em; }
+.dpa-sep { font: 300 18px var(--mono); color: rgba(242,241,237,0.2); align-self: center; }
+
 /* Mapbox attribution */
 .mapboxgl-ctrl-attrib { display: none !important; }
 .mapboxgl-ctrl-logo { display: none !important; }
@@ -218,6 +240,31 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
 <div class="hero">
   <div class="hero-label">London Development Intelligence</div>
+  <div class="dpa-strip">
+    <div class="dpa-pill">
+      <div class="dpa-letter">D</div>
+      <div class="dpa-text">
+        <div class="dpa-name">Development</div>
+        <div class="dpa-desc">Massing · GDV · NIA</div>
+      </div>
+    </div>
+    <div class="dpa-sep">/</div>
+    <div class="dpa-pill">
+      <div class="dpa-letter">P</div>
+      <div class="dpa-text">
+        <div class="dpa-name">Planning</div>
+        <div class="dpa-desc">Appetite · Precedent · Risk</div>
+      </div>
+    </div>
+    <div class="dpa-sep">/</div>
+    <div class="dpa-pill">
+      <div class="dpa-letter">A</div>
+      <div class="dpa-text">
+        <div class="dpa-name">Architecture</div>
+        <div class="dpa-desc">Heritage · Massing · Constraints</div>
+      </div>
+    </div>
+  </div>
   <h1 class="hero-title">Know every site.<br><em>Before you <span id="hero-cycle">bid.</span></em></h1>
   <p class="hero-sub">Score, rank and appraise commercial development opportunities across London. Planning intelligence, heritage risk, massing potential and financial returns - in one place.</p>
   <div class="hero-stats">
