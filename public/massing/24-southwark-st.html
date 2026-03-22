@@ -108,6 +108,14 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .ct-text{font:400 12px/1.5 var(--sans);color:var(--t2)}
 .ct-sub{font:400 10px var(--sans);color:var(--t3);margin-top:2px}
 
+/* ── T2 section groups (matching T1 rhythm) ──────────────────────── */
+.t2-group{border-top:2px solid var(--text)}
+.t2-group-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--s1)}
+.t2-gnum{font:700 9px var(--sans);color:var(--t3);letter-spacing:.12em;margin-right:8px}
+.t2-gtitle{font:800 11px var(--sans);text-transform:uppercase;letter-spacing:.08em;color:var(--text);flex:1}
+.t2-gbadge{font:600 10px var(--mono);color:var(--t3)}
+.t2-group-body{}
+
 /* ── Design intelligence cards ──────────────────────────────────── */
 .intel-divider{padding:32px 28px 16px;border-bottom:1px solid var(--border)}
 .intel-divider h2{font:800 14px var(--sans);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
@@ -278,130 +286,137 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <button class="stab hi" onclick="go(2)"><span class="sn">High</span><span class="ss">22F · 92m</span></button>
   </div>
 
-  <!-- Development Intelligence strip -->
-  <div id="t2-intelligence" style="padding:12px 20px;border-bottom:1px solid var(--border)"></div>
+  <!-- Score summary -->
+  <div id="t2-intelligence" style="padding:10px 20px;border-bottom:1px solid var(--border)"></div>
 
-  <!-- Heritage flags - site-specific, ALL scenarios -->
-  <div style="background:#f0fdf4;border-bottom:2px solid #86efac;padding:14px 28px">
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <span style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:#14532d">Heritage Setting - Low Constraint · All Scenarios</span>
+  <!-- ══ 01 DEVELOPMENT SCOPE ══════════════════════════════════════ -->
+  <div class="t2-group">
+    <div class="t2-group-head">
+      <span class="t2-gnum">01</span>
+      <span class="t2-gtitle">Development Scope</span>
+      <span class="t2-gbadge" id="t2-dev-badge">10F &middot; £2.8M GDV</span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-      <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
-        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">Tate Modern</div>
-        <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Grade II* · 220m West</div>
-        <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">Setting primarily defined by Thames frontage and Millennium Bridge axis - not Southwark Street. Low impact at 8–12F.</div>
+    <div class="t2-group-body">
+      <!-- Hero metrics -->
+      <div class="hero-grid" id="hero"></div>
+      <!-- Assumption sliders -->
+      <div class="assump-panel">
+        <div class="assump-head" onclick="toggleAssump(this)">
+          <span class="assump-title">Assumptions</span>
+          <span class="assump-summary">ERV £<span id="lbl-erv">800</span>/m² &middot; Yield <span id="lbl-niy">4.75</span>% &middot; Cost £<span id="lbl-cost">5,000</span>/m²</span>
+          <span class="assump-chev">&#9660;</span>
+        </div>
+        <div class="assump-body" id="assump-body" style="display:block">
+          <div class="slider-grid">
+            <div class="srow"><div class="smeta"><span class="slbl">ERV</span><span class="sval" id="sv-erv">700</span><button class="sreset" id="sr-erv" onclick="resetSlider('erv')" title="Reset to baseline">&#8635;</button></div>
+              <div class="slider-wrap"><div class="baseline-tick" style="left:28.6%"></div>
+              <input type="range" class="srange" id="sl-erv" min="500" max="1200" step="25" value="800" oninput="onSlider('erv',+this.value)">
+              </div></div>
+              <div class="sbounds"><span>£500</span><span>£1,200</span></div></div>
+            <div class="srow"><div class="smeta"><span class="slbl">Net Yield</span><span class="sval" id="sv-niy">4.75</span><button class="sreset" id="sr-niy" onclick="resetSlider('niy')" title="Reset to baseline">&#8635;</button></div>
+              <div class="slider-wrap"><div class="baseline-tick" style="left:43.8%"></div>
+              <input type="range" class="srange" id="sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="onSlider('niy',+this.value)">
+              </div></div>
+              <div class="sbounds"><span>3.5%</span><span>7.5%</span></div></div>
+            <div class="srow"><div class="smeta"><span class="slbl">Build Cost (base)</span><span class="sval" id="sv-cost">4200</span><button class="sreset" id="sr-cost" onclick="resetSlider('cost')" title="Reset to baseline">&#8635;</button></div>
+              <div class="slider-wrap"><div class="baseline-tick" style="left:24.0%"></div>
+              <input type="range" class="srange" id="sl-cost" min="3000" max="8000" step="100" value="5000" oninput="onSlider('cost',+this.value)">
+              </div></div>
+              <div class="sbounds"><span>£3k</span><span>£8k</span></div></div>
+            <div class="srow"><div class="smeta"><span class="slbl">S106</span><span class="sval" id="sv-s106">500</span><button class="sreset" id="sr-s106" onclick="resetSlider('s106')" title="Reset to baseline">&#8635;</button></div>
+              <div class="slider-wrap"><div class="baseline-tick" style="left:16.7%"></div>
+              <input type="range" class="srange" id="sl-s106" min="0" max="3000" step="50" value="750" oninput="onSlider('s106',+this.value)">
+              </div></div>
+              <div class="sbounds"><span>£0</span><span>£3M</span></div></div>
+            <div class="srow"><div class="smeta"><span class="slbl">Target Profit</span><span class="sval" id="sv-poc">20</span><button class="sreset" id="sr-poc" onclick="resetSlider('poc')" title="Reset to baseline">&#8635;</button></div>
+              <div class="slider-wrap"><div class="baseline-tick" style="left:50.0%"></div>
+              <input type="range" class="srange" id="sl-poc" min="10" max="30" step="1" value="20" oninput="onSlider('poc',+this.value)">
+              </div></div>
+              <div class="sbounds"><span>10%</span><span>30%</span></div></div>
+          </div>
+          <div style="text-align:right;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+            <button onclick="resetAssump()" style="font:500 11px var(--sans);color:var(--t3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset defaults</button>
+          </div>
+        </div>
       </div>
-      <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
-        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">Borough Market CA</div>
-        <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">400m South-East</div>
-        <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">Conservation Area boundary does not extend to this site. No Article 4 Directions apply. Standard use class applies.</div>
+      <!-- Live profit strip -->
+      <div class="profit-strip" id="profit-strip">
+        <div class="pstrip-col" id="ps-0"></div>
+        <div class="pstrip-col" id="ps-1"></div>
+        <div class="pstrip-col" id="ps-2"></div>
       </div>
-      <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
-        <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">No LVMF Constraint</div>
-        <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Protected Views - Clear</div>
-        <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">No LVMF protected views cross this site at 8–12F. Strategic sightlines compliance is not a constraint here.</div>
-      </div>
-    </div>
-    <div style="margin-top:8px;font:400 11px var(--sans);color:#166534;line-height:1.6">
-      Heritage Impact Assessment is standard procedure from RIBA Stage 2. The assessment burden at this location is materially lower than EC2/EC3 comparables. Tate Modern setting and Southwark streetscape are the primary considerations - both manageable at the proposed heights.
-    </div>
-  </div>
-
-  <!-- Hero metrics -->
-  <div class="hero-grid" id="hero"></div>
-
-  <!-- ── Assumption sliders ── -->
-  <div class="assump-panel">
-    <div class="assump-head" onclick="toggleAssump(this)">
-      <span class="assump-title">Assumptions</span>
-      <span class="assump-summary">ERV £<span id="lbl-erv">800</span>/m² · Yield <span id="lbl-niy">4.75</span>% · Cost £<span id="lbl-cost">5,000</span>/m²</span>
-      <span class="assump-chev">▼</span>
-    </div>
-    <div class="assump-body" id="assump-body" style="display:block">
-      <div class="slider-grid">
-        <div class="srow"><div class="smeta"><span class="slbl">ERV</span><span class="sval" id="sv-erv">700</span><button class="sreset" id="sr-erv" onclick="resetSlider('erv')" title="Reset to baseline">↺</button></div>
-          <div class="slider-wrap"><div class="baseline-tick" style="left:28.6%"></div>
-          <input type="range" class="srange" id="sl-erv" min="500" max="1200" step="25" value="800" oninput="onSlider('erv',+this.value)">
-          </div></div>
-          <div class="sbounds"><span>£500</span><span>£1,200</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">Net Yield</span><span class="sval" id="sv-niy">4.75</span><button class="sreset" id="sr-niy" onclick="resetSlider('niy')" title="Reset to baseline">↺</button></div>
-          <div class="slider-wrap"><div class="baseline-tick" style="left:43.8%"></div>
-          <input type="range" class="srange" id="sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="onSlider('niy',+this.value)">
-          </div></div>
-          <div class="sbounds"><span>3.5%</span><span>7.5%</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">Build Cost (base)</span><span class="sval" id="sv-cost">4200</span><button class="sreset" id="sr-cost" onclick="resetSlider('cost')" title="Reset to baseline">↺</button></div>
-          <div class="slider-wrap"><div class="baseline-tick" style="left:24.0%"></div>
-          <input type="range" class="srange" id="sl-cost" min="3000" max="8000" step="100" value="5000" oninput="onSlider('cost',+this.value)">
-          </div></div>
-          <div class="sbounds"><span>£3k</span><span>£8k</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">S106</span><span class="sval" id="sv-s106">500</span><button class="sreset" id="sr-s106" onclick="resetSlider('s106')" title="Reset to baseline">↺</button></div>
-          <div class="slider-wrap"><div class="baseline-tick" style="left:16.7%"></div>
-          <input type="range" class="srange" id="sl-s106" min="0" max="3000" step="50" value="750" oninput="onSlider('s106',+this.value)">
-          </div></div>
-          <div class="sbounds"><span>£0</span><span>£3M</span></div></div>
-        <div class="srow"><div class="smeta"><span class="slbl">Target Profit</span><span class="sval" id="sv-poc">20</span><button class="sreset" id="sr-poc" onclick="resetSlider('poc')" title="Reset to baseline">↺</button></div>
-          <div class="slider-wrap"><div class="baseline-tick" style="left:50.0%"></div>
-          <input type="range" class="srange" id="sl-poc" min="10" max="30" step="1" value="20" oninput="onSlider('poc',+this.value)">
-          </div></div>
-          <div class="sbounds"><span>10%</span><span>30%</span></div></div>
-      </div>
-      <div style="text-align:right;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
-        <button onclick="resetAssump()" style="font:500 11px var(--sans);color:var(--t3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset defaults</button>
-      </div>
+      <!-- Development Appraisal inline -->
+      <div id="proforma-inline" style="margin:0 20px 16px"></div>
+      <!-- Full proforma -->
+      <div class="section" id="proforma-section"></div>
+      <!-- Massing + efficiency detail -->
+      <div class="section" id="metrics-section"></div>
     </div>
   </div>
 
-  <!-- ── Live profit strip ── -->
-  <div class="profit-strip" id="profit-strip">
-    <div class="pstrip-col" id="ps-0"></div>
-    <div class="pstrip-col" id="ps-1"></div>
-    <div class="pstrip-col" id="ps-2"></div>
-  </div>
-
-  <!-- ── Development Appraisal (inline, updates with sliders) ── -->
-  <div id="proforma-inline" style="margin:0 20px 16px"></div>
-
-  <!-- Charts -->
-  <div class="section">
-    <div class="chart-row">
-      <div class="chart-box">
-        <div class="chart-title">GEA / NIA Efficiency</div>
-        <div id="vert-bars"></div>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title">Return Curve - Margin % vs Height</div>
-        <div id="return-curve"></div>
-      </div>
-      <div class="chart-box">
-        <div class="chart-title">Absolute Profit £M vs Height</div>
-        <div id="profit-curve"></div>
-      </div>
+  <!-- ══ 02 PLANNING REALM ═════════════════════════════════════════ -->
+  <div class="t2-group">
+    <div class="t2-group-head">
+      <span class="t2-gnum">02</span>
+      <span class="t2-gtitle">Planning Realm</span>
+      <span class="t2-gbadge">Appetite 8.5/10</span>
     </div>
-    <div class="sec-desc">Coloured bars = lettable NIA. Grey = core, structure, compliance. The margin curve shows where PoC% peaks. The profit curve shows where absolute £M peaks - developers push toward this, not the margin peak.</div>
+    <div class="t2-group-body">
+      <!-- Heritage context -->
+      <div style="background:#f0fdf4;border-bottom:1px solid #bbf7d0;padding:14px 20px">
+        <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.8px;color:#14532d;margin-bottom:10px">Heritage Setting - Low Constraint</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
+            <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">Tate Modern</div>
+            <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Grade II* &middot; 220m West</div>
+            <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">Setting defined by Thames frontage - not Southwark Street. Low impact at 8-12F.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
+            <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">Borough Market CA</div>
+            <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">400m South-East</div>
+            <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">CA boundary does not extend to this site. No Article 4 Directions apply.</div>
+          </div>
+          <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px">
+            <div style="font:700 11px var(--sans);color:#0c0f1a;margin-bottom:2px">No LVMF Constraint</div>
+            <div style="font:600 9px var(--sans);color:#16a34a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px">Protected Views - Clear</div>
+            <div style="font:400 10px var(--sans);color:#166534;line-height:1.5">No LVMF protected views cross this site at 8-12F.</div>
+          </div>
+        </div>
+      </div>
+      <!-- Constraint timeline + scenario narrative (JS rendered) -->
+      <div class="section" id="constraints-section"></div>
+      <div class="section" id="narrative-section"></div>
+    </div>
   </div>
 
-  <!-- Massing & efficiency detail -->
-  <div class="section" id="metrics-section"></div>
-
-  <!-- Development appraisal -->
-  <div class="section" id="proforma-section"></div>
-
-  <!-- Constraint timeline -->
-  <div class="section" id="constraints-section"></div>
-
-  <!-- Scenario narrative -->
-  <div class="section" id="narrative-section"></div>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       DESIGN INTELLIGENCE - scroll for the good stuff
-       ═══════════════════════════════════════════════════════════════ -->
-  <div class="intel-divider">
-    <h2>Design Intelligence</h2>
-    <p>What shapes a building on this site - and why every floor changes the equation</p>
-  </div>
-
-  <div class="intel-grid">
+  <!-- ══ 03 ARCHITECTURE + MASSING ════════════════════════════════ -->
+  <div class="t2-group">
+    <div class="t2-group-head">
+      <span class="t2-gnum">03</span>
+      <span class="t2-gtitle">Architecture + Massing</span>
+      <span class="t2-gbadge">D/A Analysis</span>
+    </div>
+    <div class="t2-group-body">
+      <!-- Charts -->
+      <div class="section">
+        <div class="chart-row">
+          <div class="chart-box">
+            <div class="chart-title">GEA / NIA Efficiency</div>
+            <div id="vert-bars"></div>
+          </div>
+          <div class="chart-box">
+            <div class="chart-title">Return Curve - Margin % vs Height</div>
+            <div id="return-curve"></div>
+          </div>
+          <div class="chart-box">
+            <div class="chart-title">Absolute Profit &pound;M vs Height</div>
+            <div id="profit-curve"></div>
+          </div>
+        </div>
+        <div class="sec-desc">Coloured bars = lettable NIA. Grey = core, structure, compliance. The margin curve shows where PoC% peaks. The profit curve shows where absolute £M peaks.</div>
+      </div>
+      <!-- Design intelligence cards -->
+      <div class="intel-grid">
 
     <div class="intel-card">
       <div class="ic-head"><span class="ic-cat">Structure</span><span class="ic-title">Core Arrangement</span></div>
@@ -506,9 +521,13 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 
   </div>
 
+      </div><!-- /intel-grid -->
+    </div><!-- /t2-group-body Architecture -->
+  </div><!-- /t2-group Architecture -->
+
   <!-- Footer -->
   <div style="padding:32px 28px;text-align:center;border-top:1px solid var(--border)">
-    <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t3)">Full Insight · 24 Southwark Street · D/A Studio</div>
+    <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t3)">Full Insight &middot; 24 Southwark Street &middot; D/A Studio</div>
   </div>
 </div>
 
