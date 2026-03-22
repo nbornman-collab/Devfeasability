@@ -34,6 +34,10 @@ function cachedFetch(url, timeoutMs = 10000) {
 
 
 // ── PD Checker ────────────────────────────────────────────────────────────────
+app.get('/discover', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'discover.html'));
+});
+
 app.get('/cesium-demo', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'cesium-demo.html'));
 });

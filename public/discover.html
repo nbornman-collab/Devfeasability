@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover Sites - D/A London</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<style>
+:root {
+  --bg:        #f2f1ed;
+  --bg2:       #e8e7e2;
+  --ink:       #111110;
+  --ink2:      #555550;
+  --ink3:      #999990;
+  --accent:    #e07b2a;
+  --accent-bg: #fdf3ea;
+  --rule:      rgba(17,17,16,.1);
+  --green:     #15803d;
+  --amber:     #b45309;
+  --red:       #b91c1c;
+  --sans: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --nav-h: 48px;
+  --panel-w: 480px;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+
+/* ── NAV ── */
+.da-nav {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+  background: var(--bg); border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center; padding: 0 24px; gap: 20px; z-index: 200;
+}
+.da-nav-logo { font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); text-decoration: none; flex-shrink: 0; }
+.da-nav-logo .sl { color: var(--accent); }
+.nav-sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
+.nav-tagline { font-size: 11px; color: var(--ink3); letter-spacing: .03em; flex: 1; }
+.da-nav-links { display: flex; gap: 20px; margin-left: auto; flex-shrink: 0; }
+.da-nav-link { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color .15s; }
+.da-nav-link:hover { color: var(--ink); }
+.da-nav-link.active { color: var(--ink); border-bottom: 1.5px solid var(--accent); padding-bottom: 1px; }
+
+/* ── LAYOUT ── */
+#map {
+  position: fixed; top: var(--nav-h); left: 0;
+  width: calc(100% - var(--panel-w));
+  height: calc(100% - var(--nav-h)); z-index: 1;
+}
+.panel {
+  position: fixed; top: var(--nav-h); right: 0;
+  width: var(--panel-w); height: calc(100% - var(--nav-h));
+  background: var(--bg); border-left: 1px solid var(--rule);
+  display: flex; flex-direction: column; z-index: 10;
+}
+
+/* ── MODE TABS ── */
+.mode-tabs {
+  display: flex; border-bottom: 1px solid var(--rule); flex-shrink: 0; background: var(--bg);
+}
+.mode-tab {
+  flex: 1; padding: 14px 8px; text-align: center; cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink3); border-bottom: 2px solid transparent; margin-bottom: -1px;
+  background: none; border-top: none; border-left: none; border-right: none;
+  font-family: var(--sans); transition: color .15s;
+}
+.mode-tab:hover { color: var(--ink); }
+.mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* ── CONTROLS BAR ── */
+.controls {
+  padding: 12px 16px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+  display: flex; gap: 8px; align-items: center; background: var(--bg);
+}
+.search-input {
+  flex: 1; padding: 8px 12px; background: var(--bg2);
+  border: 1px solid var(--rule); border-radius: 6px;
+  font: 400 12px var(--sans); color: var(--ink); outline: none;
+}
+.search-input::placeholder { color: var(--ink3); }
+.search-input:focus { border-color: var(--accent); background: var(--bg); }
+.borough-select {
+  padding: 8px 10px; background: var(--bg2); border: 1px solid var(--rule);
+  border-radius: 6px; font: 500 11px var(--sans); color: var(--ink2);
+  cursor: pointer; outline: none;
+}
+.borough-select:focus { border-color: var(--accent); }
+.count-label { font-size: 10px; color: var(--ink3); flex-shrink: 0; white-space: nowrap; }
+
+/* ── SITE LIST ── */
+.site-list {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+
+/* ── SITE CARD ── */
+.site-card {
+  padding: 16px 20px; border-bottom: 1px solid var(--rule);
+  cursor: pointer; transition: background .1s; display: flex; gap: 14px; align-items: flex-start;
+}
+.site-card:hover { background: var(--bg2); }
+.site-card.highlighted { background: var(--accent-bg); border-left: 3px solid var(--accent); padding-left: 17px; }
+.site-card.no-t1 { opacity: .6; }
+
+/* Score block */
+.card-score-block {
+  flex-shrink: 0; width: 48px; text-align: center;
+}
+.card-score-num {
+  font: 800 24px var(--mono); line-height: 1; color: var(--ink); letter-spacing: -.02em;
+}
+.card-score-bar {
+  width: 100%; height: 2px; background: var(--rule); border-radius: 2px; margin-top: 5px; overflow: hidden;
+}
+.card-score-fill { height: 100%; border-radius: 2px; }
+
+/* Card body */
+.card-body { flex: 1; min-width: 0; }
+.card-name { font: 700 13px var(--sans); color: var(--ink); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-address { font: 400 10px var(--sans); color: var(--ink3); margin-bottom: 7px; }
+.card-chips { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 7px; }
+.chip {
+  font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 3px; white-space: nowrap;
+}
+.chip.oa    { background: var(--accent-bg); color: var(--accent); }
+.chip.caz   { background: #eff6ff; color: #1d4ed8; }
+.chip.cons  { background: #fef3c7; color: #b45309; }
+.chip.lvmf  { background: #f3e8ff; color: #7c3aed; }
+.chip.ptal  { background: var(--bg2); color: var(--ink2); }
+.chip.verified { background: #f0fdf4; color: #15803d; }
+.chip.borough { background: var(--bg2); color: var(--ink2); }
+.card-desc { font: 400 10px/1.55 var(--sans); color: var(--ink2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* Verdict + CTA */
+.card-right { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.verdict-pill {
+  font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: 20px; color: #fff; white-space: nowrap;
+}
+.verdict-pill.green  { background: var(--green); }
+.verdict-pill.amber  { background: var(--amber); }
+.verdict-pill.red    { background: var(--red); }
+.verdict-pill.grey   { background: var(--ink3); }
+.cta-btn {
+  font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 5px 10px; border-radius: 4px; text-decoration: none; white-space: nowrap;
+  background: var(--ink); color: var(--bg); transition: background .15s;
+}
+.cta-btn:hover { background: var(--accent); }
+.cta-btn.locked { background: var(--rule); color: var(--ink3); cursor: default; }
+.cta-btn.locked:hover { background: var(--rule); }
+
+/* ── NO RESULTS ── */
+.no-results { padding: 40px 20px; text-align: center; color: var(--ink3); font-size: 12px; }
+
+/* ── MAP POPUP ── */
+.mapboxgl-popup-content {
+  background: var(--bg); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 12px 14px; box-shadow: 0 4px 20px rgba(0,0,0,.12); min-width: 180px;
+}
+.popup-name { font: 700 12px var(--sans); color: var(--ink); margin-bottom: 2px; }
+.popup-score { font: 800 20px var(--mono); color: var(--ink); }
+.popup-verdict { font: 700 8px var(--sans); letter-spacing: .1em; text-transform: uppercase; margin-left: 6px; }
+.popup-addr { font: 400 10px var(--sans); color: var(--ink3); margin-top: 4px; }
+.popup-cta { display: block; margin-top: 10px; font: 700 9px var(--sans); letter-spacing: .1em; text-transform: uppercase; background: var(--ink); color: var(--bg); text-decoration: none; padding: 6px 12px; border-radius: 4px; text-align: center; }
+.popup-cta:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <div class="nav-sep"></div>
+  <span class="nav-tagline">Development Intelligence · London</span>
+  <div class="da-nav-links">
+    <a class="da-nav-link active" href="/discover">Discover</a>
+    <a class="da-nav-link" href="/t1/24-southwark-st">Appraise</a>
+  </div>
+</nav>
+
+<div id="map"></div>
+
+<div class="panel">
+  <!-- Mode tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-top100" onclick="setMode('top100')">London Top 100</button>
+    <button class="mode-tab" id="tab-borough" onclick="setMode('borough')">Borough</button>
+    <button class="mode-tab" id="tab-search" onclick="setMode('search')">Address Search</button>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls" id="controls-bar">
+    <!-- Populated per mode -->
+    <span class="count-label" id="count-label">Loading...</span>
+  </div>
+
+  <!-- Site list -->
+  <div class="site-list" id="site-list">
+    <div class="no-results">Loading sites...</div>
+  </div>
+</div>
+
+<script>
+// ── Data + state ──────────────────────────────────────────────────────────────
+let ALL_SITES = [];
+let MAP = null;
+let activeMode = 'top100';
+let activeSiteId = null;
+let popup = null;
+
+// ── Verdict helpers ───────────────────────────────────────────────────────────
+function verdictClass(score) {
+  return score >= 80 ? 'green' : score >= 65 ? 'amber' : score >= 50 ? 'amber' : 'grey';
+}
+function verdictLabel(score) {
+  return score >= 80 ? 'Top Opportunity' : score >= 65 ? 'Strong' : score >= 50 ? 'Credible' : 'Due Diligence';
+}
+function scoreBarColor(score) {
+  return score >= 80 ? '#15803d' : score >= 65 ? '#e07b2a' : score >= 50 ? '#b45309' : '#999990';
+}
+
+// ── Normalise sites from 3 different JSON shapes ──────────────────────────────
+function normaliseSite(s, idx) {
+  const borough = s.borough || (s.address && s.address.includes('EC') ? 'City of London' : 'London');
+  return {
+    id: idx,
+    name: s.name || s.address,
+    address: s.address || s.name,
+    borough: borough,
+    lat: parseFloat(s.lat) || 0,
+    lng: parseFloat(s.lng) || 0,
+    score: parseInt(s.score) || 0,
+    verified: !!s.verified,
+    t1: s.t1 || null,
+    desc: s.desc || s.notes || '',
+    flags: s.flags || {},
+    // Normalise flags across datasets
+    inOA:   !!(s.flags?.inOA || s.flags?.oa),
+    inCAZ:  !!(s.flags?.inCAZ || s.flags?.caz),
+    inCons: !!(s.flags?.inConservation || s.flags?.conservation),
+    inLVMF: !!(s.flags?.inLVMF || s.flags?.lvmf),
+    ptal:   s.flags?.ptal || s.ptal || null,
+  };
+}
+
+// ── Load all sites ────────────────────────────────────────────────────────────
+async function loadSites() {
+  const [sw, city, hack] = await Promise.all([
+    fetch('/data/southwark-sites.json').then(r => r.json()),
+    fetch('/data/city-sites.json').then(r => r.json()),
+    fetch('/data/hackney-sites.json').then(r => r.json()),
+  ]);
+  const swA  = Array.isArray(sw)   ? sw   : (sw.sites   || Object.values(sw));
+  const cityA= Array.isArray(city) ? city : (city.sites  || Object.values(city));
+  const hackA= Array.isArray(hack) ? hack : (hack.sites  || Object.values(hack));
+  let idx = 0;
+  ALL_SITES = [
+    ...swA.map(s  => normaliseSite({...s, borough: s.borough || 'Southwark'}, idx++)),
+    ...cityA.map(s => normaliseSite({...s, borough: s.borough || 'City of London'}, idx++)),
+    ...hackA.map(s => normaliseSite({...s, borough: s.borough || 'Hackney'}, idx++)),
+  ].sort((a, b) => b.score - a.score);
+
+  render();
+  initMapMarkers();
+}
+
+// ── Filter sites by mode ──────────────────────────────────────────────────────
+function filteredSites() {
+  if (activeMode === 'top100') {
+    return ALL_SITES.slice(0, 100);
+  }
+  if (activeMode === 'borough') {
+    const sel = document.getElementById('borough-sel');
+    const bor = sel ? sel.value : 'all';
+    const list = bor === 'all' ? ALL_SITES : ALL_SITES.filter(s => s.borough === bor);
+    return list.slice(0, 30);
+  }
+  if (activeMode === 'search') {
+    const q = (document.getElementById('search-q')?.value || '').trim().toLowerCase();
+    if (!q) return ALL_SITES.slice(0, 50);
+    return ALL_SITES.filter(s =>
+      s.name.toLowerCase().includes(q) ||
+      s.address.toLowerCase().includes(q) ||
+      s.borough.toLowerCase().includes(q)
+    ).slice(0, 50);
+  }
+  return ALL_SITES.slice(0, 100);
+}
+
+// ── Render site cards ─────────────────────────────────────────────────────────
+function render() {
+  const sites = filteredSites();
+  const list = document.getElementById('site-list');
+  const countEl = document.getElementById('count-label');
+  if (countEl) countEl.textContent = sites.length + ' sites';
+
+  if (!sites.length) {
+    list.innerHTML = '<div class="no-results">No sites found</div>';
+    return;
+  }
+
+  list.innerHTML = sites.map((s, i) => {
+    const rank = activeMode === 'top100' ? i + 1 : null;
+    const chips = [
+      rank ? `<span class="chip borough">#${rank}</span>` : '',
+      `<span class="chip borough">${s.borough}</span>`,
+      s.inOA  ? '<span class="chip oa">Opp. Area</span>' : '',
+      s.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
+      s.inCons? '<span class="chip cons">Conservation</span>' : '',
+      s.inLVMF? '<span class="chip lvmf">LVMF</span>' : '',
+      s.ptal  ? `<span class="chip ptal">PTAL ${s.ptal}</span>` : '',
+      s.verified ? '<span class="chip verified">Verified</span>' : '',
+    ].filter(Boolean).join('');
+
+    const vcls = verdictClass(s.score);
+    const vlab = verdictLabel(s.score);
+    const barColor = scoreBarColor(s.score);
+    const hasT1 = !!s.t1;
+    const ctaLabel = hasT1 ? 'View Report' : 'Coming Soon';
+    const ctaClass = hasT1 ? '' : ' locked';
+    const ctaHref = hasT1 ? s.t1 : '#';
+
+    return `<div class="site-card${!hasT1 ? ' no-t1' : ''}" id="card-${s.id}" onclick="cardClick(${s.id})">
+      <div class="card-score-block">
+        <div class="card-score-num">${s.score}</div>
+        <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${barColor}"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${s.name}</div>
+        <div class="card-address">${s.address}</div>
+        <div class="card-chips">${chips}</div>
+        ${s.desc ? `<div class="card-desc">${s.desc}</div>` : ''}
+      </div>
+      <div class="card-right">
+        <span class="verdict-pill ${vcls}">${vlab}</span>
+        <a class="cta-btn${ctaClass}" href="${ctaHref}" onclick="event.stopPropagation()">${ctaLabel}</a>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Update map filter
+  updateMapFilter(sites.map(s => s.id));
+}
+
+// ── Mode switching ────────────────────────────────────────────────────────────
+function setMode(mode) {
+  activeMode = mode;
+  ['top100','borough','search'].forEach(m => {
+    document.getElementById('tab-' + m).classList.toggle('active', m === mode);
+  });
+  buildControls();
+  render();
+}
+
+function buildControls() {
+  const bar = document.getElementById('controls-bar');
+  if (activeMode === 'top100') {
+    bar.innerHTML = `<span style="font:500 11px var(--sans);color:var(--ink2)">Top 100 opportunities across all London boroughs</span><span class="count-label" id="count-label"></span>`;
+  } else if (activeMode === 'borough') {
+    const boroughs = [...new Set(ALL_SITES.map(s => s.borough))].sort();
+    bar.innerHTML = `
+      <select class="borough-select" id="borough-sel" onchange="render()">
+        <option value="all">All boroughs</option>
+        ${boroughs.map(b => `<option value="${b}">${b}</option>`).join('')}
+      </select>
+      <span class="count-label" id="count-label"></span>`;
+  } else if (activeMode === 'search') {
+    bar.innerHTML = `
+      <input class="search-input" id="search-q" type="text" placeholder="Search by address, postcode or site name..." oninput="render()" autofocus>
+      <span class="count-label" id="count-label"></span>`;
+    setTimeout(() => document.getElementById('search-q')?.focus(), 50);
+  }
+}
+
+// ── Card click (scroll + highlight) ──────────────────────────────────────────
+function cardClick(id) {
+  const site = ALL_SITES.find(s => s.id === id);
+  if (!site) return;
+
+  // Highlight card
+  document.querySelectorAll('.site-card.highlighted').forEach(el => el.classList.remove('highlighted'));
+  document.getElementById('card-' + id)?.classList.add('highlighted');
+  activeSiteId = id;
+
+  // Fly map to site
+  if (MAP && site.lat && site.lng) {
+    MAP.flyTo({ center: [site.lng, site.lat], zoom: 17, duration: 800 });
+    showPopup(site);
+  }
+}
+
+// ── Popup ─────────────────────────────────────────────────────────────────────
+function showPopup(site) {
+  if (popup) popup.remove();
+  const vcls = verdictClass(site.score);
+  const vlab = verdictLabel(site.score);
+  const ctaHtml = site.t1
+    ? `<a class="popup-cta" href="${site.t1}">View Site Report &rarr;</a>`
+    : `<div style="font:400 10px var(--sans);color:var(--ink3);margin-top:8px;text-align:center">Report coming soon</div>`;
+  popup = new mapboxgl.Popup({ offset: 12, closeButton: false, maxWidth: '240px' })
+    .setLngLat([site.lng, site.lat])
+    .setHTML(`
+      <div class="popup-name">${site.name}</div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-top:6px">
+        <span class="popup-score">${site.score}</span>
+        <span class="popup-verdict" style="color:${vcls === 'green' ? '#15803d' : vcls === 'amber' ? '#b45309' : '#999'}">${vlab}</span>
+      </div>
+      <div class="popup-addr">${site.borough}</div>
+      ${ctaHtml}
+    `)
+    .addTo(MAP);
+}
+
+// ── Map init ──────────────────────────────────────────────────────────────────
+function initMap(token) {
+  mapboxgl.accessToken = token;
+  MAP = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/satellite-streets-v12',
+    center: [-0.118, 51.510],
+    zoom: 11,
+    pitch: 0,
+    bearing: 0,
+    attributionControl: false,
+    antialias: true
+  });
+  MAP.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+  MAP.on('load', () => {
+    initMapMarkers();
+  });
+}
+
+function initMapMarkers() {
+  if (!MAP || !ALL_SITES.length) return;
+  if (!MAP.isStyleLoaded()) { MAP.once('load', initMapMarkers); return; }
+
+  // Remove existing layers/source if re-initialising
+  if (MAP.getLayer('sites-circle')) MAP.removeLayer('sites-circle');
+  if (MAP.getLayer('sites-labels')) MAP.removeLayer('sites-labels');
+  if (MAP.getSource('sites')) MAP.removeSource('sites');
+
+  const geojson = {
+    type: 'FeatureCollection',
+    features: ALL_SITES.map(s => ({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [s.lng, s.lat] },
+      properties: {
+        id: s.id, score: s.score, name: s.name, t1: s.t1 || '',
+        color: s.score >= 80 ? '#15803d' : s.score >= 65 ? '#e07b2a' : s.score >= 50 ? '#b45309' : '#6b7280',
+        size: s.score >= 80 ? 14 : s.score >= 65 ? 11 : 9,
+      }
+    }))
+  };
+
+  MAP.addSource('sites', { type: 'geojson', data: geojson });
+
+  // Outer ring (white)
+  MAP.addLayer({
+    id: 'sites-ring', type: 'circle', source: 'sites',
+    paint: {
+      'circle-radius': ['get', 'size'],
+      'circle-color': '#fff',
+      'circle-opacity': 0.9,
+    }
+  });
+  // Inner dot (score colour)
+  MAP.addLayer({
+    id: 'sites-circle', type: 'circle', source: 'sites',
+    paint: {
+      'circle-radius': ['-', ['get', 'size'], 3],
+      'circle-color': ['get', 'color'],
+      'circle-opacity': 1,
+    }
+  });
+
+  // Click handler
+  MAP.on('click', 'sites-circle', e => {
+    const props = e.features[0].properties;
+    const site = ALL_SITES.find(s => s.id === props.id);
+    if (!site) return;
+    // Scroll card into view
+    const card = document.getElementById('card-' + site.id);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      document.querySelectorAll('.site-card.highlighted').forEach(el => el.classList.remove('highlighted'));
+      card.classList.add('highlighted');
+    }
+    showPopup(site);
+  });
+  MAP.on('mouseenter', 'sites-circle', () => MAP.getCanvas().style.cursor = 'pointer');
+  MAP.on('mouseleave', 'sites-circle', () => MAP.getCanvas().style.cursor = '');
+}
+
+function updateMapFilter(visibleIds) {
+  if (!MAP || !MAP.getSource('sites')) return;
+  const idSet = new Set(visibleIds);
+  ['sites-ring', 'sites-circle'].forEach(layer => {
+    if (MAP.getLayer(layer)) {
+      MAP.setFilter(layer, ['in', ['get', 'id'], ['literal', [...idSet]]]);
+    }
+  });
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+async function boot() {
+  buildControls();
+  const [, data] = await Promise.all([
+    loadSites(),
+    fetch('/api/config').then(r => r.json()).catch(() => null),
+  ]);
+  // loadSites() triggers render() internally; map init from config
+  fetch('/api/config').then(r => r.json()).then(cfg => {
+    if (cfg?.mapboxToken) initMap(cfg.mapboxToken);
+  }).catch(console.warn);
+}
+
+boot();
+</script>
+</body>
+</html>
