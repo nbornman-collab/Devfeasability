@@ -165,6 +165,17 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   display: inline-block;
 }
 .btn-primary:hover { background: #c96b1e; transform: translateY(-1px); }
+
+/* Cycling hero text */
+#hero-cycle {
+  display: inline-block;
+  transition: opacity 0.38s ease, transform 0.38s ease;
+  color: inherit;
+}
+#hero-cycle.out {
+  opacity: 0;
+  transform: translateY(-10px);
+}
 .btn-ghost {
   font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
   color: var(--ink2); text-decoration: none; padding: 16px 24px;
@@ -207,7 +218,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
 <div class="hero">
   <div class="hero-label">London Development Intelligence</div>
-  <h1 class="hero-title">Know every site.<br><em>Before you bid.</em></h1>
+  <h1 class="hero-title">Know every site.<br><em>Before you <span id="hero-cycle">bid.</span></em></h1>
   <p class="hero-sub">Score, rank and appraise commercial development opportunities across London. Planning intelligence, heritage risk, massing potential and financial returns - in one place.</p>
   <div class="hero-stats">
     <div class="hero-stat">
@@ -290,6 +301,31 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 </div>
 
 <script>
+// ── Hero text cycle ───────────────────────────────────────────────────────────
+(function() {
+  const phrases = ['appoint.', 'go to feasibility.', 'go to planning.', 'bid.', 'build.'];
+  const el = document.getElementById('hero-cycle');
+  if (!el) return;
+  let idx = 0, loops = 0, timer;
+  // Start after 1.8s - let the page breathe first
+  setTimeout(() => {
+    timer = setInterval(() => {
+      // Fade out
+      el.classList.add('out');
+      setTimeout(() => {
+        idx = (idx + 1) % phrases.length;
+        if (idx === 0) loops++;
+        el.textContent = phrases[idx];
+        el.classList.remove('out');
+        // Stop after 2 full loops, settle on 'bid.'
+        if (loops >= 2 && phrases[idx] === 'bid.') {
+          clearInterval(timer);
+        }
+      }, 380);
+    }, 2800);
+  }, 1800);
+})();
+
 // Load total GDV from site data
 Promise.all([
   fetch('/data/southwark-sites.json').then(r=>r.json()).catch(()=>[]),
