@@ -280,21 +280,29 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .site-card.active { border-left: 3px solid var(--accent); }
 
 .card-header {
-  padding: 12px 16px; display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px 14px 10px; display: flex; gap: 10px; align-items: flex-start;
   transition: background .1s;
 }
+/* Big rank - left column */
 .card-rank {
-  font: 700 10px var(--mono); color: var(--ink3); flex-shrink: 0; width: 24px; padding-top: 2px;
+  font: 800 28px var(--mono); color: var(--rule); flex-shrink: 0; width: 42px;
+  letter-spacing: -.04em; line-height: 1; padding-top: 2px; text-align: right;
+  transition: color .15s;
 }
-.card-score-col { flex-shrink: 0; text-align: center; width: 36px; }
-.card-score-num { font: 800 20px var(--mono); color: var(--ink); letter-spacing: -.02em; line-height: 1; }
-.card-score-bar { width: 100%; height: 2px; background: var(--rule); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+.site-card:hover .card-rank, .site-card.active .card-rank { color: var(--ink3); }
+/* Score far right */
+.card-score-col { flex-shrink: 0; text-align: right; width: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.card-score-num { font: 800 22px var(--mono); color: var(--ink); letter-spacing: -.02em; line-height: 1; }
+.card-score-bar { width: 36px; height: 2px; background: var(--rule); border-radius: 2px; overflow: hidden; }
 .card-score-fill { height: 100%; border-radius: 2px; }
 
+/* Main body */
 .card-main { flex: 1; min-width: 0; }
-.card-name { font: 700 12px var(--sans); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
-.card-address { font: 400 9px var(--sans); color: var(--ink3); margin-bottom: 5px; }
-.card-chips { display: flex; gap: 4px; flex-wrap: wrap; }
+.card-name { font: 700 12px/1.3 var(--sans); color: var(--ink); overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+.card-address { font: 400 9px var(--sans); color: var(--ink2); margin-bottom: 5px; }
+.card-borough-row { margin-bottom: 4px; }
+.card-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 5px; }
+.card-summary { font: 400 9px/1.55 var(--sans); color: var(--ink2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .chip {
   font-size: 7px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
   padding: 2px 5px; border-radius: 3px; white-space: nowrap;
@@ -470,29 +478,29 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 <div class="col-left">
   <div class="discover-hero" id="hero-stats">
     <div class="hero-stat">
-      <div class="hero-stat-label">Total Sites</div>
+      <div class="hero-stat-label">Sites Tracked</div>
       <div class="hero-stat-value" id="stat-total">—</div>
-      <div class="hero-stat-sub">Verified opportunities</div>
+      <div class="hero-stat-sub">Verified London opportunities</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-label">Top Score</div>
-      <div class="hero-stat-value accent" id="stat-top">—</div>
-      <div class="hero-stat-sub" id="stat-top-name">Loading...</div>
+      <div class="hero-stat-label">Total GDV</div>
+      <div class="hero-stat-value accent" id="stat-gdv">—</div>
+      <div class="hero-stat-sub">Combined development value</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-label">Opp. Areas</div>
+      <div class="hero-stat-label">Floor Area</div>
+      <div class="hero-stat-value" id="stat-nia">—</div>
+      <div class="hero-stat-sub">Potential new NIA</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">OA Designated</div>
       <div class="hero-stat-value" id="stat-oa">—</div>
-      <div class="hero-stat-sub">In designated OA</div>
+      <div class="hero-stat-sub">Opportunity Area sites</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-label">Reports Live</div>
       <div class="hero-stat-value" id="stat-t1">—</div>
-      <div class="hero-stat-sub">Full site reports</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-label">Avg Score</div>
-      <div class="hero-stat-value" id="stat-avg">—</div>
-      <div class="hero-stat-sub">London portfolio</div>
+      <div class="hero-stat-sub">Full appraisals available</div>
     </div>
   </div>
 
@@ -644,12 +652,18 @@ async function loadSites() {
   const withT1 = ALL_SITES.filter(s=>s.t1).length;
   const withOA = ALL_SITES.filter(s=>s.inOA).length;
   const avg = Math.round(ALL_SITES.reduce((s,x)=>s+x.score,0)/ALL_SITES.length);
+  const totalGDV = ALL_SITES.reduce((s,x)=>s+(x.gdvEst||0),0);
+  const gdvStr = totalGDV>=1000 ? `£${(totalGDV/1000).toFixed(1)}B` : `£${totalGDV}M`;
+  const totalAddF = ALL_SITES.reduce((s,x)=>{
+    const existF=Math.max(1,Math.round((x.maxFloors||0)*0.45));
+    return s+Math.round((x.plotM2||0)*0.42*0.78*((x.maxFloors||0)-existF));
+  },0);
+  const niaStr = totalAddF>=1000000 ? `${(totalAddF/1000000).toFixed(1)}Mm²` : `${Math.round(totalAddF/1000)}km²`;
   document.getElementById('stat-total').textContent = ALL_SITES.length;
-  document.getElementById('stat-top').textContent = top.score;
-  document.getElementById('stat-top-name').textContent = top.name;
+  document.getElementById('stat-gdv').textContent = gdvStr;
+  document.getElementById('stat-nia').textContent = niaStr;
   document.getElementById('stat-oa').textContent = withOA;
   document.getElementById('stat-t1').textContent = withT1;
-  document.getElementById('stat-avg').textContent = avg;
 
   // Borough pills
   const boroughs = [...new Set(ALL_SITES.map(s=>s.borough))].sort();
@@ -736,8 +750,7 @@ function render() {
     const vc = verdictClass(s.score);
     const vl = verdictLabel(s.score);
     const bc = scoreColor(s.score);
-    const chips = [
-      `<span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span>`,
+    const otherChips = [
       s.inOA  ? '<span class="chip oa">OA</span>' : '',
       s.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
       s.inCons? '<span class="chip cons">Conservation</span>' : '',
@@ -760,18 +773,18 @@ function render() {
 
     return `<div class="site-card" id="card-${s.id}" onclick="cardClick(${s.id})">
       <div class="card-header">
-        ${rank ? `<div class="card-rank">#${rank}</div>` : ''}
-        <div class="card-score-col">
-          <div class="card-score-num">${s.score}</div>
-          <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${bc}"></div></div>
-        </div>
+        ${rank ? `<div class="card-rank">${rank}</div>` : ''}
         <div class="card-main">
           <div class="card-name">${s.name}</div>
           <div class="card-address">${s.address}</div>
-          <div class="card-chips">${chips}</div>
+          <div class="card-borough-row"><span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span></div>
+          <div class="card-chips">${otherChips}</div>
+          ${s.desc ? `<div class="card-summary">${s.desc}</div>` : ''}
         </div>
-        <div class="card-right-col">
+        <div class="card-score-col">
           <span class="verdict-pill ${vc}">${vl}</span>
+          <div class="card-score-num">${s.score}</div>
+          <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${bc}"></div></div>
           ${hasCTA
             ? `<a class="card-cta" href="${s.t1}" onclick="event.stopPropagation()">Report</a>`
             : `<span class="card-cta locked">Soon</span>`}
@@ -887,6 +900,10 @@ function initMap(token) {
   });
   MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
   MAP.on('load', () => {
+    // Offset center to account for 50% right panel
+    const panelW = Math.round(window.innerWidth * 0.5);
+    MAP.setPadding({top:60, bottom:60, left:20, right:panelW});
+    MAP.setCenter([-0.090, 51.505]);
     // dark-v11 roads are clean - no label scrubbing needed
     // 3D massing removed from browse mode (dark-v11, flat 2D)
     addSiteMarkers();
@@ -944,38 +961,62 @@ function addSiteMarkers() {
 }
 
 function addBoroughOutlines() {
-  // Borough outlines with hover - loads from public GeoJSON if available
-  // Falls back gracefully if not present
   fetch('/data/london-boroughs.geojson')
     .then(r=>r.ok ? r.json() : null)
     .then(gj=>{
       if (!gj || !MAP) return;
+      // Add feature id for feature-state
+      gj.features.forEach((f,i) => f.id = i);
       MAP.addSource('boroughs',{type:'geojson',data:gj});
+      // Colour-coded fill by borough
       MAP.addLayer({
         id:'borough-fill', type:'fill', source:'boroughs',
-        paint:{'fill-color':'rgba(255,255,255,0)','fill-opacity':0}
+        paint:{
+          'fill-color': ['match',['get','code'],
+            'southwark','#8b5cf6',
+            'city','#38bdf8',
+            'hackney','#4ade80',
+            '#ffffff'],
+          'fill-opacity': ['case',['boolean',['feature-state','hover'],false],0.18,0.04]
+        }
       });
       MAP.addLayer({
         id:'borough-outline', type:'line', source:'boroughs',
-        paint:{'line-color':'rgba(255,255,255,0.4)','line-width':1.5}
+        paint:{
+          'line-color': ['match',['get','code'],
+            'southwark','#8b5cf6',
+            'city','#38bdf8',
+            'hackney','#4ade80',
+            '#ffffff'],
+          'line-width': ['case',['boolean',['feature-state','hover'],false],2.5,1.2],
+          'line-opacity': ['case',['boolean',['feature-state','hover'],false],0.9,0.5]
+        }
       });
-      // Hover highlight
       let hoveredId = null;
       MAP.on('mousemove','borough-fill',e=>{
         if (e.features.length) {
           if (hoveredId!==null) MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:false});
           hoveredId = e.features[0].id;
           MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:true});
-          MAP.setPaintProperty('borough-fill','fill-opacity',['case',['boolean',['feature-state','hover'],false],0.12,0]);
-          MAP.getCanvas().style.cursor='default';
+          // Also highlight matching sites on map
+          const bname = e.features[0].properties.name;
+          highlightBorough(bname);
         }
       });
       MAP.on('mouseleave','borough-fill',()=>{
         if (hoveredId!==null) MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:false});
         hoveredId = null;
+        highlightBorough(null);
+      });
+      MAP.on('click','borough-fill',e=>{
+        if (e.features.length) {
+          const bname = e.features[0].properties.name;
+          const pill = [...document.querySelectorAll('.borough-pill')].find(p=>p.dataset.borough===bname);
+          if (pill) selectBorough(bname, pill);
+        }
       });
     })
-    .catch(()=>{}); // Borough GeoJSON not yet available - silent fail
+    .catch(()=>{});
 }
 
 function highlightBorough(bor) {
