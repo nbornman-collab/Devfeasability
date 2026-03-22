@@ -125,3 +125,27 @@ Subscription tier is a future product strand. Do not design for it yet.
 - **Dom H.** (Planning Consultant): T0 enrichment must create a question, not answer it. Show score + verdict + OA flag = enough. Full analysis = paid. Model B fixes the perceived value gap of Model A.
 - **Yemi A.** (Architect): Needs intel + massing + financials on one page. 3D massing inline preferred. Print-ready working document value proposition.
 - **Rachel V.** (PropTech Investor): Model B stronger product logic. Sequence: T0 enrichment first (fast), T1 merger second (slower). Do not launch merged T1 until genuinely complete.
+
+---
+
+## Milestones
+
+### milestone/discover-v1 - 2026-03-22
+*Tagged commit: `0eee727`*
+
+First complete T0 Discovery page. London-first unified interface.
+
+- Full-canvas 3D massing map (satellite-streets-v12, building extrusions)
+- Glassmorphism right panel (50% width) floating over the map
+- London Top 100 / Borough Top 30 / Address Search modes
+- Site cards: spring bounce on select, spotlight fade on non-selected
+- Grouped fillet card (rounded, lifted, amber border) when active
+- Square satellite thumbnail + GDV + floors + NIA + planning score
+- Narrative tension line + gated indicators + Unlock CTA
+- Borough selector flies map to centroid
+- FlyTo offset-corrected for panel width
+
+Product direction locked same day:
+- Single pay gate (T0 free, T1 = full paid product)
+- T2 absorbed into T1 as section 04
+- T0 hook = visual desire, not data satisfaction
