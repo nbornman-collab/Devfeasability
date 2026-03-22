@@ -251,16 +251,17 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* MODE TABS */
 .mode-tabs {
-  display: flex; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+  display: flex; border-bottom: 2px solid var(--rule); flex-shrink: 0;
+  background: var(--bg);
 }
 .mode-tab {
-  flex: 1; padding: 14px 6px; text-align: center; cursor: pointer;
-  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--ink3); border-bottom: 2px solid transparent; margin-bottom: -1px;
+  flex: 1; padding: 16px 6px; text-align: center; cursor: pointer;
+  font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); border-bottom: 3px solid transparent; margin-bottom: -2px;
   background: none; border-top: none; border-left: none; border-right: none;
   font-family: var(--sans); transition: color .15s;
 }
-.mode-tab:hover { color: var(--ink); }
+.mode-tab:hover { color: var(--ink2); }
 .mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
 
 /* SEARCH BAR */
@@ -279,11 +280,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* LIST HEADER */
 .list-header {
-  padding: 8px 16px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
-  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px 10px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+  display: flex; align-items: baseline; justify-content: space-between;
 }
-.list-header-label { font-size: 10px; font-weight: 600; color: var(--ink2); }
-.list-count { font-size: 10px; color: var(--ink3); font-family: var(--mono); }
+.list-header-label { font: 800 14px var(--sans); color: var(--ink); letter-spacing: -.01em; }
+.list-count { font: 600 10px var(--mono); color: var(--ink2); }
 
 /* SITE LIST */
 .site-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
@@ -303,15 +304,16 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 /* Big rank - left column */
 .card-rank {
-  font: 800 28px var(--mono); color: var(--rule); flex-shrink: 0; width: 42px;
+  font: 800 28px var(--mono); color: var(--ink); flex-shrink: 0; width: 42px;
   letter-spacing: -.04em; line-height: 1; padding-top: 2px; text-align: right;
   transition: color .15s;
 }
 .site-card:hover .card-rank, .site-card.active .card-rank { color: var(--ink3); }
 /* Score far right */
-.card-score-col { flex-shrink: 0; text-align: right; width: 40px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.card-score-col { flex-shrink: 0; text-align: right; width: 52px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 .card-score-num { font: 800 22px var(--mono); color: var(--ink); letter-spacing: -.02em; line-height: 1; }
-.card-score-bar { width: 36px; height: 2px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.card-score-sub { font: 700 7px var(--mono); color: var(--ink3); letter-spacing: .08em; }
+.card-score-bar { width: 44px; height: 2px; background: var(--rule); border-radius: 2px; overflow: hidden; }
 .card-score-fill { height: 100%; border-radius: 2px; }
 
 /* Main body */
@@ -322,8 +324,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .card-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 5px; }
 .card-summary { font: 400 9px/1.55 var(--sans); color: var(--ink2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .chip {
-  font-size: 7px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  padding: 2px 5px; border-radius: 3px; white-space: nowrap;
+  font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 7px; border-radius: 4px; white-space: nowrap;
 }
 .chip.oa    { background: var(--accent-bg); color: var(--accent); }
 .chip.caz   { background: #eff6ff; color: #1d4ed8; }
@@ -675,11 +677,11 @@ async function loadSites() {
   const withT1 = ALL_SITES.filter(s=>s.t1).length;
   const withOA = ALL_SITES.filter(s=>s.inOA).length;
   const avg = Math.round(ALL_SITES.reduce((s,x)=>s+x.score,0)/ALL_SITES.length);
-  const totalGDV = ALL_SITES.reduce((s,x)=>s+(x.gdvEst||0),0);
+  const totalGDV = ALL_SITES.reduce((s,x)=>s+(Number(x.gdvEst)||0),0);
   const gdvStr = totalGDV>=1000 ? `£${(totalGDV/1000).toFixed(1)}B` : `£${totalGDV}M`;
   const totalAddF = ALL_SITES.reduce((s,x)=>{
     const existF=Math.max(1,Math.round((x.maxFloors||0)*0.45));
-    return s+Math.round((x.plotM2||0)*0.42*0.78*((x.maxFloors||0)-existF));
+    return s+Math.round((Number(x.plotM2)||0)*0.42*0.78*((Number(x.maxFloors)||0)-existF));
   },0);
   const niaStr = totalAddF>=1000000 ? `${(totalAddF/1000000).toFixed(1)}Mm²` : `${Math.round(totalAddF/1000)}km²`;
   document.getElementById('stat-total').textContent = ALL_SITES.length;
@@ -807,6 +809,7 @@ function render() {
         <div class="card-score-col">
           <span class="verdict-pill ${vc}">${vl}</span>
           <div class="card-score-num">${s.score}</div>
+          <div class="card-score-sub">/100</div>
           <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${bc}"></div></div>
           ${hasCTA
             ? `<a class="card-cta" href="${s.t1}" onclick="event.stopPropagation()">Report</a>`
@@ -948,7 +951,7 @@ function initMap(token) {
     // dark-v11 roads are clean - no label scrubbing needed
     // 3D massing removed from browse mode (dark-v11, flat 2D)
     addSiteMarkers();
-    addBoroughOutlines();
+    // addBoroughOutlines(); // removed until accurate GLA polygon data available
   });
 }
 
