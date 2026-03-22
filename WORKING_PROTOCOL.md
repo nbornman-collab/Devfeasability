@@ -1,55 +1,3 @@
-## MAP STYLE RULES (🦞 locked 2026-03-18)
-
-- Homepage hero map: dark-v11 vector + 3D fill-extrusion buildings. NOT satellite. Camera rotation speed: 0.063 deg/frame (3x baseline).
-- Borough screener map: satellite-v9 aerial (not vector). Site markers must be strong/visible - minimum 18px, high contrast, with pulse animation on verified sites.
-- Borough site popups: must include (1) satellite thumbnail image from Mapbox Static API, (2) high-level score data, (3) direct link to T2 Appraise if available.
-- Mapbox Static API for thumbnails: `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/{lng},{lat},18,0,55/320x200?access_token={token}` - lazy-loaded on popup open only (free tier: 50k/month).
-
----
-
-## GLA PLANNING DATAMAP (🦞 primary resource)
-
-Last updated: 2026-03-17
-Status: LOCKED. Do not deviate without explicit instruction from Nic.
-
----
-
-## GLA PLANNING DATAMAP (🦞 primary resource)
-
-Live ArcGIS REST API - no key required. Use for all spatial policy checks.
-
-Base: `https://gis2.london.gov.uk/server/rest/services/apps/planning_data_map_02/MapServer`
-Query pattern: `/{layer_id}/query?geometry={lng},{lat}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&f=json`
-
-Key layers:
-- 103 Opportunity Areas | 107 Central Activities Zone | 205 Conservation Areas
-- 214 Listed Buildings | 213 Protected Vistas (LVMF) | 101 Brownfield Register
-- 102 Site Allocations | 108 SHLAA | 111-113 MCIL2 Charging Bands | 218 Thames Policy Area
-
-Server endpoint: `/api/gla-planning?lat=&lng=` (all layers in one call, parallel)
-
-Rules:
-- GLA data overrides hardcoded flags. If GLA says LVMF Wider Setting Consultation Area - update the flag.
-- Check all 10 layers for every new site before writing intelligence file.
-- LVMF Wider Setting Consultation Area is an advisory - not a blocking constraint unless in Viewing Corridor.
-
----
-
-
-## Why This Exists
-
-This system fails in repeatable ways:
-- Not reading files properly
-- Making local fixes that break other parts
-- Assuming APIs/data work
-- Declaring success without real verification
-
-The root issue: no persistent memory.
-
-This protocol replaces memory with forced, visible reasoning and proof.
-
----
-
 ## GOAT RULE 🐐
 
 🐐 is posted as the **very first thing** in every reply that touches this codebase - before any reading, analysis, or output.
@@ -71,17 +19,33 @@ No task is complete until:
 
 ---
 
+## PRODUCT ARCHITECTURE (current state)
+
+| URL | Name | Status |
+|-----|------|--------|
+| `/` | Homepage | Live - dark map hero, D/P/A pills, cycling text, scroll section |
+| `/discover` | Discover (T0) | Live - 155 sites, two-mode UX, intelligence hook, teased factor bars |
+| `/t1/:site` | Appraise | 64 pages - 24SS rebuilt (new design), rest are old design |
+| `/t2/:site` | Full Insight | 24SS only - live demo endpoint |
+| `/borough/*` | Borough screeners | 301 redirect → /discover. Dead as navigation. |
+| `/pd` | PD Check | Separate product strand, not in D/A nav |
+
+**Demo flow:** `/` → `/discover` → site focus panel → `/t2/24-southwark-st`
+
+**Public naming:** Discover / Appraise / Full Insight (never T0/T1/T2 externally)
+
+**D/A brand is internal.** Not on product surface.
 
 ---
 
 ## LANGUAGE RULES
 
-- **No em dashes**: Never use em dashes (—) in any output, code comments, HTML, or messages.
-  Replace all em dashes with a regular hyphen-dash (-). This applies everywhere - codebase, replies, docs.
-- **🦞 protocol trigger**: When Nic sends 🦞, it means "add the preceding decision/instruction to WORKING_PROTOCOL.md immediately."
-  Ace must update the protocol file and commit before continuing.
-- **Top nav strip**: ALL web pages must display the D/A brand + T0/T1/T2/T3 tier navigation.
-  No page ships without visible D/A branding and tier context. T2 map-bar is minimum acceptable on split-screen pages.
+- **No em dashes.** Ever. Use a regular dash (-) instead. All output - code, UI, messages, docs.
+- **🦞 protocol trigger**: When Nic sends 🦞, add the preceding decision to this file immediately and commit.
+- **Underutilised** is the core product angle - use it in copy, titles, and framing.
+- **No AI references** anywhere on the product surface.
+- **Borough names** not in top ribbon - Discover dropdown only.
+- **PD Check** not in D/A main nav.
 
 ---
 
@@ -89,52 +53,36 @@ No task is complete until:
 
 Runs before anything else. No exceptions.
 
----
-
-### 1. READ CONFIRMATION (Proof of Understanding)
+### 1. READ CONFIRMATION
 
 - Target File: [filename]
-- Core Logic: (1 sentence - what this file does)
-- Key Functions / Sections:
-  - [function] - purpose
-  - [function] - purpose
-- Variables & Data Types:
-  - [variable] ([type]) - source/usage
-  - [variable] ([type]) - source/usage
+- Core Logic: (1 sentence)
+- Key Functions / Sections: [list]
+- Variables & Data Types: [list]
 
-If this cannot be completed:
-→ STOP
-→ "I have not read the file/context properly"
+If this cannot be completed → STOP → "I have not read the file properly"
 
----
+### 2. IMPACT ASSESSMENT
 
-### 2. IMPACT ASSESSMENT (Proof of Scope)
+- Impact Zone: (exact functions / lines)
+- Downstream Effects: (files depending on this)
+- Locked Constraints Check: (no conflict with confirmed values)
+- Edge Case Risks: (1-2 real failure modes)
 
-- Impact Zone: (exact functions / lines being changed)
-- Downstream Effects: (files/functions depending on this)
-- Locked Constraints Check: (confirm no conflict with confirmed values, map constraints, layout rules, scoring systems)
-- Edge Case Risks: (1–2 real failure modes)
-
----
-
-### 3. EXECUTION PLAN (Proof of Logic)
+### 3. EXECUTION PLAN
 
 - The Change: "I am changing [X] to achieve [Y]"
-- Proposed Logic: (how the code will actually change)
-- Regression Risk: (what could break elsewhere)
-- Verification Path: (which parts of Step 2 will prove this works)
+- Proposed Logic: (how the code changes)
+- Regression Risk: (what could break)
+- Verification Path: (how to prove it works)
 
----
-
-### 4. AMBIGUITY CHECK (Forced)
+### 4. AMBIGUITY CHECK
 
 - Any unclear instruction?
 - Any missing data?
-- Any conflict with existing logic or locked values?
+- Any conflict with locked values?
 
 If yes → AMBIGUITY GATE (see below)
-
----
 
 ### 5. APPROVAL REQUIRED
 
@@ -153,18 +101,13 @@ WILL NOT TOUCH: [locked values / invariants]
 RISK: [what could break]
 ```
 
-If any part is unclear → go back to Step 0.
-
 ---
 
 ## STEP 2 - IMPLEMENTATION
 
 Make the change exactly as planned.
 
-If the first attempt fails:
-→ STOP
-→ ROOT CAUSE required before next attempt
-
+If the first attempt fails → STOP → ROOT CAUSE required before next attempt.
 Second attempt without root cause = breach.
 Third attempt = full diagnostic + Nic approval required.
 
@@ -177,42 +120,24 @@ Run against: https://web-production-9d1a0.up.railway.app
 ```
 POST-COMMIT VERIFICATION - [commit hash]
 1. Homepage loads
-   Evidence: [response / curl / screenshot]
-   Result: pass/fail
-2. T0 Borough screener loads
-   Evidence: [...]
-   Result: pass/fail
-3. T1 [site] loads, map renders, score shows
-   Evidence: [...]
-   Result: pass/fail
-4. T2 [site] loads, map renders, massing updates
-   Evidence: [...]
-   Result: pass/fail
-5. T3 loads, financials non-zero
-   Evidence: [...]
-   Result: pass/fail
-6. Files touched: [list]
-7. Dependent files (not touched): [list]
-8. Diff summary:
-   - Lines added: [#]
-   - Lines removed: [#]
-   - Unrelated changes: [yes/no + explanation]
-9. Anything uncertain: [honest answer - especially maps/3D]
-10. SECOND-ORDER CHECK: What could still be wrong even if all passed?
+2. /discover loads, sites render, focus panel works
+3. T1 24SS loads, map renders, score shows
+4. T2 24SS loads, massing renders, financials update
+5. Files touched: [list]
+6. Diff summary: lines added/removed
+7. Anything uncertain: [honest answer]
+8. SECOND-ORDER CHECK: What could still be wrong even if all passed?
 ```
 
 Rules:
 - All pass → commit stands → say "done"
-- Any fail → fix → rerun verification
-- No evidence = fail
-- HTTP 200 ≠ working
-- For map/3D → browser verification required → must be explicitly stated
+- Any fail → fix → rerun
+- HTTP 200 alone is not evidence of working
+- Map/3D always requires browser confirmation
 
 ---
 
 ## AMBIGUITY GATE
-
-If anything conflicts or is unclear:
 
 ```
 AMBIGUITY: [issue]
@@ -233,29 +158,24 @@ Before using any external API:
 3. Output: `API [name] verified working at [timestamp]`
 
 **Known broken in production - do not build against:**
-- OS NGD `/api/building-data` - returns `found:false`
-- OS Places API - returns 401
+- OS Places API - 401
+- HMLR INSPIRE WFS - permanently disabled
+- Street View thumbnail - `GOOGLE_MAPS_API_KEY` not set on Railway (Nic action pending)
 
 ---
 
 ## PLACEHOLDER PROTOCOL
 
 Any unverified data must:
-1. Be marked in code: `// PLACEHOLDER: [description] - replace before production`
-2. Be logged in `PLACEHOLDERS.md`: file, line, purpose, owner
+1. Be marked: `// PLACEHOLDER: [description] - replace before production`
+2. Be logged in `PLACEHOLDERS.md`
 3. Use commit prefix: `PLACEHOLDER:`
 
 Never removed without explicit instruction from Nic.
-Nic reviews `PLACEHOLDERS.md` at sprint end.
 
-**Verified sites only (HMLR + EPC + PropertyData confirmed):**
-- 24 Southwark Street SE1 - TGL221350, RREEF Bankside II, commercial, 1,550m²
-- 196 Blackfriars Road SE1 - SGL322825, Barts Charity, residential, 583m²
-
-**Disqualified / unverified:**
-- 100LH - SOM Diamond, planning granted Jan 2025, plot area wrong
-- 1SS - polygon uncertain, status unverified
-- Surrey Quays, Tesco, Lavington St, Ministry of Sound - fabricated
+**Verified sites:**
+- 24 Southwark Street SE1 - TGL221350, commercial, 1,550m²
+- 196 Blackfriars Road SE1 - SGL322825, residential, 583m²
 
 ---
 
@@ -263,7 +183,53 @@ Nic reviews `PLACEHOLDERS.md` at sprint end.
 
 When editing shared files (server.js, lib/, site-intelligence.js):
 - List all dependent files before touching anything
-- Run full verification (not partial) after every change
+- Run full verification after every change
+
+---
+
+## BULK SCRIPT BAN (🦞 locked 2026-03-22)
+
+**Python/sed bulk scripts across multiple production files are permanently banned.**
+They have broken layouts. Do not use them.
+
+Visual changes: test page `/test/t1-redesign` ONLY.
+Live file edits: surgical, one file at a time, read before edit.
+
+---
+
+## VISUAL REVIEW RULE (🦞 locked 2026-03-22)
+
+`/test/t1-redesign` is the canonical review URL for all design work.
+No visual change touches any live page until Nic approves the test page.
+Once approved - surgical rollout one file at a time.
+
+---
+
+## SINGLE PAYMENT GATE (🦞 locked 2026-03-22)
+
+T0 (Discover) is always free.
+One payment unlocks the full site report (T1 + T2 merged).
+Double-gating is permanently off the table.
+Subscription tier: do not design for now.
+
+---
+
+## T2 ABSORBED INTO T1 (🦞 locked 2026-03-22)
+
+T2 as standalone URL is deprecated (kept live for 24SS demo only).
+All T2 content moves into T1 as section 04 (Massing + Financials).
+Do not invest further in `/t2/` as a product URL.
+
+---
+
+## MAP STYLE RULES
+
+- **Homepage**: dark-v11 vector, pitch 55, slow bearing rotation, interactive:false
+- **Discover (T0)**: dark-v11 vector, pitch 0 browse / pitch 52 site focus flyTo
+- **T1 (Appraise)**: light-v11, pitch 0, zoom 17.5, 3D massing layers
+- **T2 (Full Insight)**: satellite-streets-v12, pitch 60, 3D massing layers
+
+Locked camera values - do not change without explicit instruction.
 
 ---
 
@@ -274,65 +240,177 @@ Before editing any map or 3D code:
 - List all variables referenced
 - Confirm every variable is defined in THIS file
 
-**Locked values - do not change without explicit instruction:**
-- `EXISTING_HEIGHT`: 100LH=28.6m, 1SS=30.0m, 24SS=24.8m, 196BR=13.7m
-- Use `CENTROID` in T2, not `LAT`/`LNG` - those don't exist in T2
+**Locked values:**
+- `EXISTING_HEIGHT`: 24SS=24.8m, 196BR=13.7m
 - `SITE_COORDS`: verified title polygons - do not regenerate
 - `fill-extrusion-base` for `podium-3d`: always `0`
+- `ctx-3d` opacity: always `0.20`
 - Layer order: `ctx-3d` → `existing-cap` → `podium-3d` → floor lines → `podium-edge`
 
-**Known failure pattern:** Silent errors inside `style.load` stop all rendering. `updateMap()` never runs. No error shown.
+**Known failure pattern:** Silent errors inside `style.load` stop all rendering. No error shown.
 
 ---
 
-## LAYOUT ARCHITECTURE - DO NOT MIX
+## LAYOUT ARCHITECTURE
 
 | Tier | Layout | Key constraint |
 |------|--------|----------------|
-| T1 | Fixed ribbons + contained map | `--left-w:52px`, `--right-w:420px`, `--ribbon-h:96px` |
-| T2 | Fixed 50/50 split | Both `position:fixed` - external nav bars break this |
-| T3 | Scrollable report | Has own sticky `.tier-nav` |
+| Homepage | Full viewport fixed map + scrollable below-fold | `overflow-x:hidden`, hero-wrap is `100vh` |
+| T0 Discover | Fixed map full canvas + fixed right panel + absolute focus overlay | Two-mode UX: browse / site-focus |
+| T1 Appraise | Fixed nav + fixed left map + fixed right panel | `--panel-w:50%`, `top:52px` |
+| T2 Full Insight | Fixed 50/50 split | Both `position:fixed` - external nav bars break this |
 
 ---
 
-## PROTOCOL UPDATES
+## COMPREHENSIVE AUDIT RULE (🦞 locked 2026-03-18)
 
-If a rule isn't working or a new failure pattern emerges:
-1. Flag it: "Protocol says X but it failed because Y - proposing update"
-2. Nic approves
-3. Update file, commit, show exactly what changed
-4. No silent edits to this protocol. Ever.
-
----
-
-## OPPORTUNITY AREA RULES (🦞 locked)
-
-- **Layer Opportunity Area (OA) designation into every site.** OA status is a first-class planning intelligence field, not a footnote.
-- **OA sites receive**: Planning Tailwind score bonus, explicit OA flag in T1 planning flags (green), and relaxed height precedent framing in Available Sky insight.
-- **OA source**: London Plan 2021 Policy SD1 / GLA OAPF documents. Cite the named OA and its targets (homes + jobs).
-- **OA means**: Mayoral backing for intensification, departure from standard density matrix, taller buildings more justifiable, LPA expected to facilitate not resist.
-- **Non-OA sites** do not get OA score treatment. Framing must be conservative on height.
-- **Opportunity Area field**: add `opportunity_area: { name, ref, homes_target, jobs_target, oapf }` to the `momentum` factor in every intelligence file.
+When any page is reported broken, do NOT just fix the symptom.
+Audit ALL active pages before committing:
+- Homepage, /discover, T1 24SS, T2 24SS
+- Check: JS syntax, CSS variable refs, map container height, script src 404s
+- Fix everything in one commit - not piecemeal
 
 ---
 
-## PLANNING PRECEDENT RULES (🦞 locked)
+## SITE POLYGON - SINGLE SOURCE OF TRUTH (🦞 locked 2026-03-18)
 
-- **Minimum 2 real precedents per site** in Planning Tailwind and Heritage Shadow intelligence. Must be named schemes or LPA application references within 1km or same typology.
-- **Never fabricate planning references.** If uncertain, flag as "unverified - check LPA register."
-- **Cite LPA application reference** (e.g. 20/AP/1537) wherever known. If unknown, cite scheme name + approximate year.
-- **Precedents must address what IS achievable** - not just flag constraints. Intelligence should answer: what height, what coverage, what strategy got approved nearby?
-- **Victorian/NDHA sites**: Precedent research must include retention-led schemes. Demolition-and-replace requires specific precedent justification - default to set-back/retention strategy unless a clearance scheme within 500m and same character is cited.
+**`SITE_INTELLIGENCE.polygon` in `public/lib/intelligence-{site}.js` is the only source.**
+
+- Both T1 and T2 read this value
+- No queryRenderedFeatures for polygon
+- No runtime API polygon
+- `SITE_COORDS` must be `let` (not const)
+- No new site enters T1 or T2 until polygon is verified
 
 ---
 
-## MASSING INPUT RULES (🦞 locked)
+## DATA SOURCE ARCHITECTURE (🦞 locked 2026-03-18)
 
-- **makeRect and _makeRectEarly are DELETED. Do not recreate them.** No rectangle fallback for site massing, ever.
-- **Site polygon source**: `m.queryRenderedFeatures` on the composite `building` layer at CENTROID after `map.once('idle')`. Sources initialise with `emptyPoly()`. Massing renders only after real polygon loads.
-- **`SITE_COORDS = null` on init.** Set only after queryRenderedFeatures returns valid coords (length > 3). If it returns nothing, show empty state - never fake a polygon.
-- **`SITE_COORDS` must be `let`** (not const) so the idle handler can assign it.
-- **Context buildings (ctx-3d) opacity must be 0.20** - ghosted grey surroundings, not solid. `fill-extrusion-opacity: 0.20` on the ctx-3d layer. Never 1.0.
+| Data | Source |
+|------|--------|
+| Building footprint polygon | Intelligence file (verified HMLR / OS NGD) |
+| Existing building height | OS NGD `relativeheightmaximum` |
+| Existing GEA | VOA (commercial) / EPC (residential) |
+| Ownership / title | HMLR (hardcoded per site) |
+| Planning designations | GLA Planning DataMap (ArcGIS REST) |
+| Transport | TfL PTAL proxy `/api/ptal` |
+| Flood zone | Environment Agency `/api/flood-zone` |
+| Listed buildings | Historic England `/api/listed-buildings` |
+
+Rules:
+- GEA never derived from footprint x floors - always VOA or EPC
+- No rectangle approximations, no guessing
+- When a source fails: surface the error, never silently substitute
+
+---
+
+## FLOOR-TO-FLOOR HEIGHTS (🦞 locked 2026-03-18)
+
+- Office lower-rise / refurb-grade: **3.5m**
+- Office Grade A new-build: **4.0m**
+- Residential: **3.15m**
+- Never use 4.2m or any other value
+- Record choice and rationale in intelligence file
+
+---
+
+## SITE GEOCODING - GOOGLE MAPS FIRST (🦞 locked 2026-03-19)
+
+1. Google Geocoding API → lat/lng (validate within borough bbox)
+2. OSM Overpass → polygon (prefer address-based query over proximity)
+3. Fallback: rectangle at Google-verified centroid
+
+Never use proximity-only OSM queries without Google-verified coords.
+Never accept OSM `building=residential` for commercial sites.
+
+---
+
+## SCORING + INTELLIGENCE RULES
+
+**Scoring weights (internal only - never share with contractors):**
+- Available Sky ×2.5 | Rent Headroom ×2.0 | Planning Appetite ×2.0
+- Heritage Shadow ×1.5 | Title Stack ×1.5 | Transport Links ×0.5
+
+**Verdict thresholds:**
+- Score < 50 + blocking = No Go
+- Score < 70 or navigable = Amber
+- Score >= 80 = Green
+
+**Score /100 always shown alongside verdict badge.**
+
+**No Go is a feature** - explicit negatives differentiate D/A from LandTech/Nimbus.
+
+**OA designation** is a first-class field. OA sites get planning score bonus + explicit flag.
+
+**Minimum 2 real planning precedents per site.** Never fabricate references.
+
+**NIY sub-market defaults:** City core 4.25% / Southwark CAZ 4.75% / Outer London 5.5%
+
+---
+
+## INTELLIGENCE SYNTHESIS RULE (🦞 locked 2026-03-21)
+
+Every section must contain a synthesis paragraph - not just data.
+
+Each paragraph must:
+1. Name the data points being triangulated
+2. State how they interact
+3. Give a directional conclusion
+
+Not acceptable: listing scores without interpretation, generic descriptions, repeating data without adding judgment.
+
+**Synthesis voice:** opinionated but not declarative.
+- Good: "on the balance of it" / "the case stacks up for"
+- Bad: "will approve" / "the only question is"
+
+---
+
+## UK BUILDING REGULATIONS (🦞 locked 2026-03-22)
+
+Official reference for all architectural intelligence. Cite Part + clause.
+
+**4 kickers in T0-T2 synthesis only:**
+- Part B / BSA (fire safety, second staircase, 18m/30m/50m thresholds)
+- Part M2 (access, lift provision, core sizing)
+- Part L2 (energy performance, BREEAM/GLA energy SPG)
+- Part O (overheating, glazed buildings)
+
+Only cite a Part if it affects feasibility, cost, massing, or planning.
+
+Source: https://www.gov.uk/government/collections/approved-documents
+
+---
+
+## T0 HOOK PRINCIPLE (🦞 locked 2026-03-22)
+
+T0 shows enough to create desire - not enough to satisfy it.
+
+- Show: score + verdict + OA flag + analyst hook (3 sentences) + 3-of-6 factor bars
+- Gate: Heritage Shadow, Title Complexity, Transport Position scores - visible as locked bars
+- CTA: site-specific "See why this scores X/100 → +XF · planning precedents · does it stack?"
+
+---
+
+## GLA PLANNING DATAMAP
+
+Base: `https://gis2.london.gov.uk/server/rest/services/apps/planning_data_map_02/MapServer`
+Query: `/{layer_id}/query?geometry={lng},{lat}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=*&f=json`
+
+Key layers: 103 OA | 107 CAZ | 205 Conservation Areas | 214 Listed Buildings | 213 LVMF | 102 Site Allocations
+
+Server proxy: `/api/gla-planning?lat=&lng=`
+
+---
+
+## DISCOVER (T0) - LOCKED BEHAVIOURS
+
+- Map style: `dark-v11`
+- Browse mode: pitch 0 (flat 2D)
+- Site focus flyTo: pitch 52, zoom 16
+- Ranking: score desc → GDV desc → plotM2 desc → planScore desc → alphabetical (no tied ranks)
+- Borough colours: Southwark `#8b5cf6` | City `#38bdf8` | Hackney `#4ade80`
+- `expandHTML` card expansion: permanently removed (two-mode UX replaces it)
+- Bishopsgate Goodsyard: always EXCLUDE from screeners
 
 ---
 
@@ -341,251 +419,48 @@ If a rule isn't working or a new failure pattern emerges:
 - Mapbox camera angles on any page
 - `SITE_COORDS` polygon data
 - `EXISTING_HEIGHT` confirmed values
-- T1 100LH layout spec
 - Intelligence scoring weights and factor names
-- D/A brand: product name, slash colour, nav structure
-- Borough screener scoring formula
+- Scoring multipliers (not publicly visible)
+- D/A brand: name, slash colour, nav structure
+- `fill-extrusion-base` for podium-3d: always 0
+- `ctx-3d` opacity: always 0.20
+- Layer order in 3D map
 
 ---
 
 ## KNOWN BROKEN / PARKED - DO NOT TOUCH
 
-- OS NGD `building-data` - `found:false` in production
 - OS Places API - 401 in production
-- T3 floor plan PDF timing - Overpass async issue
-- Borough screener paywall - parked
-- 100LH plot area (1,551m² is single title - real consolidated site is 4,450m²)
-Protocol violation logged: 2026-03-18 11:13 UTC — 🐐 omitted from reply containing commits 550bdde
+- HMLR INSPIRE WFS - permanently disabled
+- Street View thumbnails - GOOGLE_MAPS_API_KEY not set on Railway
+- Satellite focus panel thumbnail - same
+- Mixpanel - DA_PLACEHOLDER_TOKEN needs real token
+- T2 Cesium integration - blocked until cesium-demo verified in production
+- OS NGD `bld-fts-building` - use `bld-fts-buildingpart` instead
 
 ---
 
-## COMPREHENSIVE AUDIT RULE (🦞 locked 2026-03-18)
+## CONTRACTOR RULES
 
-When any page is reported broken, do NOT just fix the symptom reported.
-Run a full audit of ALL active pages before committing any fix:
-- T0 Borough, T1 (24SS + 196BR), T2 (24SS), homepage, methodology
-- Check: JS syntax validity (node --check), CSS variable references, map container height, script src 404s, API endpoint reachability
-- Fix everything found in one commit - not piecemeal
-- Post-commit: verify ALL pages return HTTP 200 AND log what was found + fixed
-
----
-
-## SCENARIO-SPECIFIC CONSTRUCTION COST (🦞 locked 2026-03-18)
-
-Construction cost (£/m²) must be scenario-specific — it escalates with building height.
-Each SCENARIO object must carry its own `costGsm` value reflecting height-based escalation.
-The financial model must use `s.costGsm` per scenario, not a flat multiplier of one slider value.
-The cost slider sets the Base scenario cost; Low and High derive from scenario-defined escalation factors,
-not arbitrary ×0.82 / ×1.25 multipliers.
-
----
-
-## SLIDER BASELINE MARKERS (🦞 locked 2026-03-18)
-
-Every financial slider must have an individual snap-back-to-baseline control.
-Do not rely on global reset only. Each slider gets:
-- A small baseline tick/marker on the slider track at the default position
-- A per-slider reset button (↺) that appears when value deviates from default
-- Clicking the reset icon snaps that slider back to its default value only
-
----
-
-## T1 MAP MUST CENTER ON SITE COORDINATES (🦞 locked 2026-03-18)
-
-T1 map must always:
-- Initialize with correct LAT/LNG and zoom 17.5+ to show the site clearly
-- Never use PropertyData address or geocoded location to set map center
-- LAT/LNG are hardcoded constants per site - they are the ground truth
-
-## T1 MASSING MUST USE SAME FORMULA AS T2 (🦞 locked 2026-03-18)
-
-T1 site polygon must come from queryRenderedFeatures on Mapbox composite building layer
-(same as T2) - not from PropertyData, not hardcoded rectangles.
-Use map.once('idle') handler with box query around CENTROID on composite/building layer.
-PropertyData polygon = site boundary display only (dashed outline).
-Massing layers (site-existing, site-massing) = queryRenderedFeatures polygon only.
-
----
-
-## PROPERTYDATA BANNED (🦞 locked 2026-03-18)
-
-PropertyData is removed from all tiers permanently.
-Do NOT use `/api/plot-boundary`, `/api/borough`, or any PropertyData endpoint.
-Site area, owner, and boundary data must come from intelligence files or HMLR.
-Do not re-add PropertyData for any reason without explicit instruction from Nic.
-
----
-
-## SINGLE SOURCE OF TRUTH: SITE POLYGON (🦞 locked 2026-03-18)
-
-**All massing input flows from one source across all tiers: `SITE_INTELLIGENCE.polygon`**
-
-- Defined in `public/lib/intelligence-{site}.js` as a coordinate array
-- Both T1 and T2 read this value. No tier derives its own polygon.
-- No queryRenderedFeatures for polygon. No PropertyData. No runtime API.
-- To update a polygon: edit the intelligence file. That is the only edit needed.
-- No new site enters T1 or T2 until `SITE_INTELLIGENCE.polygon` is defined and verified.
-- When adding a polygon: print the coordinates, verify against satellite, confirm centroid is inside the building before committing.
-
----
-
-## DATA SOURCE ARCHITECTURE (🦞 locked 2026-03-18)
-
-Single authoritative source per data type. No exceptions, no fallbacks to guesswork.
-
-| Data | Source | API |
-|------|--------|-----|
-| Building footprint polygon | OS NGD `bld-fts-buildingpart` | OS DataHub (existing key) |
-| Existing building height | OS NGD `relativeheightmaximum` | OS DataHub (existing key) |
-| Existing GEA (commercial) | VOA Valuation Office Agency | Public API, no key |
-| Existing GEA (residential) | EPC floor area | GOV.UK (key pending) |
-| Ownership / title | HMLR (hardcoded per site from title search) | N/A |
-| Planning apps + designations | GLA Planning DataMap | Free ArcGIS REST |
-| Transport | TfL PTAL proxy | /api/ptal |
-| Flood zone | Environment Agency | /api/flood-zone |
-| Listed buildings | Historic England | /api/listed-buildings |
-
-Rules:
-- OS NGD polygon + height are the ONLY inputs to massing calculations
-- GEA is NEVER derived from (footprint × floors) - always from VOA or EPC
-- No rectangle approximations. No guessing. No PropertyData.
-- When a source fails, surface the error - never silently substitute a guess
-
----
-
-## EXISTING BUILDING AREA - PUBLIC DATA ONLY (🦞 locked 2026-03-18)
-
-OS NGD must NOT be used to calculate existing building floor area.
-Existing GEA must come from publicly available data sources only:
-- EPC API (assessed floor area - residential + some commercial)
-- Planning application records (GIA stated in planning documents - research at onboarding)
-- These are researched and hardcoded in the intelligence file at site onboarding
-- Label any derived/estimated area clearly - never present it as a measured figure
-- Do not derive GEA from (footprint × floors / height) - that is a calculation, not data
-
----
-
-## FLOOR-TO-FLOOR HEIGHTS (🦞 locked 2026-03-18)
-
-- Office lower-rise (typically sub-8F / refurb-grade): 3.5m floor-to-floor
-- Office higher-rise / Grade A new-build: 4.0m floor-to-floor
-- Residential: 3.15m floor-to-floor
-- Never use 4.2m or any other value
-- FTF selection is context-dependent per site - record the choice and rationale in the intelligence file
-- These drive all massing height calculations across T1 and T2
-
----
-
-## SITE GEOCODING - GOOGLE MAPS FIRST (🦞 locked 2026-03-19)
-
-All site location data must follow this pipeline. No exceptions.
-
-**Step 1 - Google Geocoding API** (address → lat/lng):
-- Pass full address string to Google Maps Geocoding API
-- Validate result is within the correct borough bounding box
-- Reject any result that returns a vague string ("London, UK") or lands outside the expected area
-- GOOGLE_MAPS_API_KEY is the authoritative key to use
-
-**Step 2 - OSM polygon** (Google-verified coords → polygon):
-- Query Overpass with tight radius (15-25m for buildings, 50-80m for large estates)
-- Prefer address-based query `way["addr:housenumber"=X]["addr:street"=Y]` over proximity
-- Validate result: check building type tag, reject residential tags for commercial sites
-- Check area ratio against expected plot area (reject if < 0.1x or > 8x expected)
-
-**Step 3 - Fallback**:
-- If no OSM polygon found: generate correctly-sized rectangle at Google-verified centroid
-- If Google geocode fails: flag site as `coordSource: unverified`, do not build T1 until manually confirmed
-
-**NEVER**:
-- Use proximity-only OSM queries (`way(around:Nm)`) without Google-verified coords as input
-- Accept OSM results tagged `building=residential` for office/industrial sites
-- Use Mapbox fallback geocodes as input to OSM polygon queries
-- Build T1 or add to screener with `coordSource: mapbox-fallback-suspect`
+- NDA + IP assignment required before repo access
+- Scoring weights never shared with contractors
+- Two separate engagements: boundary/polygon + 3D massing
+- Architecture spec reviewed by Nic before briefing
 
 ---
 
 ## LINKEDIN ACCESS - READ ONLY (🦞 locked 2026-03-19)
 
-When given access to Nic's LinkedIn account:
-- **READ ONLY** - browse profiles, search, read connections
-- **NEVER** send connection requests, messages, InMails, or posts
-- **NEVER** like, comment, react, or engage with any content
-- **NEVER** follow companies or people
-- **NEVER** apply to jobs or express interest
+- Browse profiles, search, read connections only
+- Never send connection requests, messages, or posts
+- Never like, comment, react, follow, or engage
 - Wait for explicit instruction before any action that leaves a trace
 
 ---
 
-## INTELLIGENCE SYNTHESIS RULE (🦞 locked 2026-03-21)
+## PROTOCOL UPDATES
 
-**Decision:** Every section on T1 (Appraise) and beyond must contain a synthesis paragraph - not just displayed data.
-
-**The principle:**
-Go beyond scraped data and applied numbers. Take the data, triangulate it across multiple factors, and deliver a genuine conclusion. Each section must cross-reference at least two data sources and produce a directional insight that could not be derived from either alone.
-
-**What this means in practice:**
-- Available Sky + Heritage + OA → what the site can actually achieve AND what the real limiting constraint is
-- Planning Appetite + LPA character + precedents → whether this is a fight or a negotiation, and why
-- BSA threshold + max floors + plate size → where the return curve peaks and why
-- Heritage tier + strategy → the architect's most defensible design position, with reasoning
-- Carbon + procurement → what the embodied carbon story is and how it plays in planning
-
-**Structure per section:**
-Each of the four groups (Summary / Development Scope + Numbers / Planning Realm / Architecture Insights) gets one synthesis paragraph. The paragraph must:
-1. Name the data points being triangulated
-2. State how they interact (not just list them)
-3. Give a directional conclusion
-
-**What is NOT acceptable:**
-- Listing scores without interpretation
-- Generic descriptions that could apply to any site
-- Repeating what the data already shows without adding judgment
-- Sections that read like a data dump
-
-**This is the moat.** The data is available to anyone. The architectural judgment applied to it is not.
-
----
-
-## COPY + OUTREACH WRITING (🦞 locked 2026-03-21)
-
-**No em dashes.** Ever. In any written output - emails, LinkedIn messages, copy, UI text, code comments, or any other context.
-
-Use a regular dash (-) instead. This applies to all text written on Nic's behalf or for the product surface.
-
-This is a hard rule with no exceptions.
-
----
-
-## UK BUILDING REGULATIONS - OFFICIAL REFERENCE (🦞 locked 2026-03-22)
-
-**Decision:** UK Approved Documents are official reference material for all architectural intelligence in D/A. Where building regs are cited in architecture synthesis, planning analysis, or site strategy - reference the correct Approved Document part and clause, not generic language.
-
-**Source:** https://www.gov.uk/government/collections/approved-documents
-**Merged PDF:** https://assets.publishing.service.gov.uk/media/6717d29438149ce9d09e3862/The_Merged_Approved_Documents_Oct24.pdf
-
-### Approved Documents - Relevance to D/A
-
-**CRITICAL (cite in architecture section):**
-- **Part B (Fire Safety)** - B1 (dwellings) + B2 (buildings other than dwellings). Means of escape, compartmentation, sprinklers. BSA 2022 overlays this for Higher Risk Buildings (18m+, 30m+, 50m+). Second staircase requirement derives from here. CITE FOR ALL COMMERCIAL SCHEMES.
-- **Part A (Structure)** - Spans, loads, disproportionate collapse. Relevant for transfer structures, roof additions, air rights schemes. Minimum span requirements for commercial bays.
-- **Part L (Conservation of Fuel and Power)** - L1 (dwellings) / L2 (new non-dwellings). Energy performance targets, U-values, thermal bridging. GLA energy SPG sits on top of this. CITE FOR GDV/BREEAM RISK.
-- **Part M (Access)** - M2 (buildings other than dwellings). Lift provision, accessible toilet, level access. Mandatory for commercial buildings. Affects core sizing and floor plate design.
-
-**IMPORTANT (flag where triggered):**
-- **Part O (Overheating)** - New requirement (2021). Glazed commercial buildings and mixed-use residential need solar gain/overheating analysis. Relevant where architectural strategy involves large glazed areas.
-- **Part F (Ventilation)** - F1/F2. Mechanical ventilation strategy for commercial buildings. Affects floor-to-floor height requirements and risers/plantroom allocation.
-- **Part S (EV Charging)** - New requirement (2022). Commercial buildings with parking must provide EV infrastructure. Cost and planning note.
-- **Part E (Sound)** - Resistance to passage of sound. Critical for mixed-use (office + residential) schemes. Affects structure and facade spec.
-- **Part K (Protection from falling)** - Balustrades, guarding, glazing. Relevant for terrace/setback schemes, roof amenity.
-
-**CONTEXT ONLY (not in synthesis unless triggered):**
-- Part C (Site preparation/moisture), Part G (Sanitation/water efficiency), Part H (Drainage), Part P (Electrical), Part Q (Security), Part R (Telecoms), Part T (Toilets)
-
-### Rules for citing in synthesis
-- Never cite a Part without a reason - only reference if it affects feasibility, cost, massing, or planning
-- Part B / BSA is already covered in BSA threshold logic - extend not duplicate
-- Part L / BREEAM references should appear in Market Context (GLA energy policy) AND Architecture (facade/M&E spec implication)
-- Part M should appear in core sizing analysis (lift provision drives core m²)
-- Part A should appear in transfer structure / air rights analysis
-- Part O / F should appear in glazing strategy and M&E plant allowance notes
-
+1. Flag: "Protocol says X but it failed because Y - proposing update"
+2. Nic approves
+3. Update file, commit, show exactly what changed
+4. No silent edits to this protocol. Ever.
