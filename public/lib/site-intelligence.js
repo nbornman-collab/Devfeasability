@@ -106,30 +106,113 @@ function renderIntelligenceT1(si) {
 function renderIntelligenceT2(si) {
   const score = computeSiteScore(si);
   const F = si.factors;
+
+  // Score summary row
   const rows = [
-    ['Available Sky',       F.sky.sky_m+'m · '+F.sky.factor,                              F.sky.score],
-    ['Rent Headroom',       '+'+F.value.uplift_pct+'% · £'+F.value.new_build_rent+'/ft²', F.value.score],
-    ['Planning Tailwind',   F.momentum.cluster,                                            F.momentum.score],
-    ['Heritage Shadow',     F.heritage.primary.name+' · Gr.'+F.heritage.primary.grade,    F.heritage.score],
-    ['Title Stack', (F.acquisition.titles||1)+' title · '+(F.acquisition.tenure||'Freehold'), F.acquisition.score],
-    ['Station Gravity',     'PTAL '+F.transport.ptal+' · '+F.transport.stations+' stn',   F.transport.score],
+    ['Available Sky',    F.sky.sky_m+'m buildable - '+F.sky.factor+' of precedent envelope',    F.sky.score],
+    ['Rent Headroom',    '+'+F.value.uplift_pct+'% uplift - £'+F.value.new_build_rent+'/m² new build vs £'+F.value.existing_rent+' existing', F.value.score],
+    ['Planning Appetite',F.momentum.cluster+' - '+((F.momentum.consents||0)+' consents nearby'),  F.momentum.score],
+    ['Heritage Shadow',  (F.heritage.statutory&&F.heritage.statutory.primary?F.heritage.statutory.primary.name+' GrII '+F.heritage.statutory.primary.dist_m+'m':F.heritage_framework&&F.heritage_framework.verdict?'See verdict below':'No constraints noted'), F.heritage.score],
+    ['Title Stack',      (F.acquisition.titles||1)+' title - '+(F.acquisition.tenure||'Freehold')+(F.acquisition.owner?' - '+F.acquisition.owner:''), F.acquisition.score],
+    ['Station Gravity',  'PTAL '+(F.transport.ptal||'-')+' - '+(F.transport.stations||0)+' stations within 500m', F.transport.score],
   ].map(([label, val, sc]) => {
     const col = sc >= 7.5 ? '#059669' : sc >= 5 ? '#d97706' : '#dc2626';
-    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #f3f4f6">
-      <div>
-        <div style="font:600 10px 'Inter',sans-serif;color:#374151">${label}</div>
-        <div style="font:400 10px 'Inter',sans-serif;color:#9ca3af">${val}</div>
+    return `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid #f3f4f6;gap:12px">
+      <div style="flex:1;min-width:0">
+        <div style="font:700 10px 'Inter',sans-serif;color:#374151;text-transform:uppercase;letter-spacing:.8px">${label}</div>
+        <div style="font:400 10px 'Inter',sans-serif;color:#9ca3af;margin-top:2px;line-height:1.4">${val}</div>
       </div>
-      <div style="font:700 13px 'Inter',sans-serif;color:${col};min-width:28px;text-align:right">${sc.toFixed(1)}</div>
+      <div style="font:800 14px 'Inter',sans-serif;color:${col};min-width:32px;text-align:right;flex-shrink:0">${sc.toFixed(1)}</div>
     </div>`;
   }).join('');
 
-  return `<div style="margin-bottom:16px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <span style="font:600 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:1.5px;color:#6b7280">Site Intelligence</span>
-      <span style="font:800 16px 'Inter',sans-serif;color:#0c0f1a">${score}<span style="font-weight:400;font-size:11px;color:#9ca3af"> / 100</span></span>
+  // Full synthesis sections - collapsible
+  function section(num, title, badge, bodyHtml) {
+    return `<details style="border-top:1px solid #e5e7eb" open>
+      <summary style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;cursor:pointer;list-style:none;-webkit-appearance:none">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font:700 9px 'Inter',sans-serif;color:#9ca3af;letter-spacing:.1em">${num}</span>
+          <span style="font:700 11px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#111">${title}</span>
+        </div>
+        <span style="font:600 10px 'Inter',sans-serif;color:#6b7280">${badge}</span>
+      </summary>
+      <div style="padding-bottom:16px">${bodyHtml}</div>
+    </details>`;
+  }
+
+  function dataRow(key, val) {
+    return `<div style="display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid #f3f4f6;gap:16px">
+      <span style="font:600 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;flex-shrink:0">${key}</span>
+      <span style="font:600 12px 'Inter',sans-serif;color:#111;text-align:right">${val}</span>
+    </div>`;
+  }
+
+  // Dev scope section
+  const s = (si.site||{});
+  const maxF = s.max_floors||10, maxH = s.max_h||40, plotM2 = s.plot_m2||1550;
+  const grossPlate = Math.round(plotM2 * 0.42);
+  const coreM2 = Math.round(grossPlate * 0.22);
+  const niaFloor = grossPlate - coreM2;
+  const erv = (F.value&&F.value.new_build_rent)||700;
+  const gdvM = ((niaFloor * maxF * erv) / 1e6).toFixed(1);
+  const devSynthText = typeof synthesisDevScope === 'function' ? synthesisDevScope(si) : (F.sky&&F.sky.insight?F.sky.insight.substring(0,280)+'...':'');
+
+  const devBody = dataRow('Max Floors', maxF+'F') + dataRow('Max Height', maxH+'m AOD') +
+    dataRow('Gross Plate', grossPlate+'m²') + dataRow('Core (22%)', coreM2+'m²') +
+    dataRow('NIA / Floor', niaFloor+'m²') + dataRow('GDV Est.', '£'+gdvM+'M') +
+    (devSynthText ? `<p style="font:400 11px/1.7 'Inter',sans-serif;color:#6b7280;margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6">${devSynthText}</p>` : '');
+
+  // Planning section
+  const oa = F.momentum&&F.momentum.opportunity_area;
+  const precedents = (F.momentum&&F.momentum.precedents||[]).slice(0,2).map(p=>
+    `<div style="background:#f9fafb;border-radius:6px;padding:10px 12px;margin-top:8px">
+      <div style="font:700 10px 'Inter',sans-serif;color:#111">${p.name}</div>
+      <div style="font:400 10px 'Inter',sans-serif;color:#6b7280;margin-top:3px;line-height:1.5">${p.ref||''} - ${p.outcome||''}</div>
+    </div>`).join('');
+  const planSynthText = typeof synthesisPlanning === 'function' ? synthesisPlanning(si) : (F.momentum&&F.momentum.insight?F.momentum.insight.substring(0,280)+'...':'');
+  const oaBanner = oa ? `<div style="background:#eff6ff;border-left:3px solid #3b82f6;border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:12px">
+    <div style="font:700 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.12em;color:#1d4ed8;margin-bottom:2px">Opportunity Area</div>
+    <div style="font:600 11px 'Inter',sans-serif;color:#111">${oa.name}</div>
+    <div style="font:400 10px 'Inter',sans-serif;color:#4b5563;margin-top:2px">${oa.ref||''} - ${oa.jobs_target||''} jobs target</div>
+  </div>` : '';
+  const planBody = oaBanner + dataRow('LPA', 'London Borough of Southwark') +
+    dataRow('Consents Nearby', (F.momentum&&F.momentum.consents||0)+' within 700m') +
+    dataRow('Strategy', 'Retention-led - set-back upper floors') +
+    precedents +
+    (planSynthText ? `<p style="font:400 11px/1.7 'Inter',sans-serif;color:#6b7280;margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6">${planSynthText}</p>` : '');
+
+  // Architecture section
+  const archSynthText = typeof synthesisArchitecture === 'function' ? synthesisArchitecture(si) : (F.heritage&&F.heritage.insight?F.heritage.insight.substring(0,280)+'...':'');
+  const hf = si.heritage_framework || (F.heritage&&F.heritage.heritage_framework) || {};
+  const archBody = dataRow('Site Strategy', hf.verdict ? hf.verdict.substring(0,60)+'...' : 'Set-back upper floors, facade retention') +
+    dataRow('Structural', 'New core - retained Victorian facade') +
+    dataRow('Facade', 'London stock brick (retained lower floors)') +
+    dataRow('BSA Threshold', maxH>=30?'30m+ - full BSA regime applies':'Below 30m BSA threshold') +
+    dataRow('Core Min Span', '7m clear on min 2 faces') +
+    (archSynthText ? `<p style="font:400 11px/1.7 'Inter',sans-serif;color:#6b7280;margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6">${archSynthText}</p>` : '');
+
+  // Market section
+  const marketBody = dataRow('Existing Rent', '£'+(F.value&&F.value.existing_rent||650)+'/m²') +
+    dataRow('New Build ERV', '£'+(F.value&&F.value.new_build_rent||750)+'-800/m²') +
+    dataRow('Uplift on Redev.', '+'+(F.value&&F.value.uplift_pct||19)+'%') +
+    dataRow('NIY (CAZ)', '4.75%') +
+    dataRow('Owner', (F.acquisition&&F.acquisition.owner)||'Unknown') +
+    dataRow('Title', (F.acquisition&&F.acquisition.tenure||'Freehold')+' - '+(F.acquisition&&F.acquisition.titles||1)+' title') +
+    (F.acquisition&&F.acquisition.insight ? `<p style="font:400 11px/1.7 'Inter',sans-serif;color:#6b7280;margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6">${F.acquisition.insight.substring(0,300)}...</p>` : '');
+
+  return `
+  <div style="margin-bottom:4px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font:700 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.15em;color:#9ca3af">Site Intelligence</span>
+      <span style="font:800 18px 'Inter',sans-serif;color:#0c0f1a">${score}<span style="font-weight:400;font-size:11px;color:#9ca3af"> /100</span></span>
     </div>
     ${rows}
+  </div>
+  <div style="margin-top:4px">
+    ${section('01','Development Scope',maxF+'F - £'+gdvM+'M GDV', devBody)}
+    ${section('02','Planning Realm','Appetite '+F.momentum.score.toFixed(1)+'/10', planBody)}
+    ${section('03','Architecture Insights','D/A Analysis', archBody)}
+    ${section('04','Market Context','£'+erv+' ERV - 4.75% NIY', marketBody)}
   </div>`;
 }
 

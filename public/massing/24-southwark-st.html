@@ -58,7 +58,7 @@ html,body{height:100%;font-family:var(--sans);background:#f0f2f6;color:var(--tex
 .hero-delta.up{color:var(--lo)}.hero-delta.dn{color:#dc2626}
 
 /* ── Scenario tabs (sticky below tier nav) ──────────────────────── */
-.stabs{display:flex;background:var(--bg);border-bottom:2px solid var(--border);position:relative;z-index:1}
+.stabs{display:flex;background:var(--bg);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:15}
 .stab{flex:1;padding:13px 8px 11px;text-align:center;cursor:pointer;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;background:transparent;font-family:var(--sans);transition:all .15s}
 .stab .sn{display:block;font:700 13px var(--sans);color:var(--t2);transition:color .15s}
 .stab .ss{display:block;font:600 10px var(--mono);color:var(--t3);margin-top:2px;transition:color .15s}
@@ -271,6 +271,13 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
     <div class="site-sub">London Borough of Southwark · SE1 0SW · 1,550 m² site · Transport 6b · Bankside CAZ</div>
   </div>
 
+  <!-- Scenario tabs - sticky at top of panel so always visible -->
+  <div class="stabs">
+    <button class="stab lo active" onclick="go(0)"><span class="sn">Low</span><span class="ss">10F · 42m</span></button>
+    <button class="stab base" onclick="go(1)"><span class="sn">Base</span><span class="ss">14F · 60m</span></button>
+    <button class="stab hi" onclick="go(2)"><span class="sn">High</span><span class="ss">22F · 92m</span></button>
+  </div>
+
   <!-- Development Intelligence strip -->
   <div id="t2-intelligence" style="padding:12px 20px;border-bottom:1px solid var(--border)"></div>
 
@@ -354,13 +361,6 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 
   <!-- ── Development Appraisal (inline, updates with sliders) ── -->
   <div id="proforma-inline" style="margin:0 20px 16px"></div>
-
-  <!-- Scenario tabs -->
-  <div class="stabs">
-    <button class="stab lo active" onclick="go(0)"><span class="sn">Low</span><span class="ss">10F · 42m</span></button>
-    <button class="stab base" onclick="go(1)"><span class="sn">Base</span><span class="ss">14F · 60m</span></button>
-    <button class="stab hi" onclick="go(2)"><span class="sn">High</span><span class="ss">22F · 92m</span></button>
-  </div>
 
   <!-- Charts -->
   <div class="section">
