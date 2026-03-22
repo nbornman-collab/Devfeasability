@@ -1209,10 +1209,19 @@ function updateMapFilter(ids) {
 }
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
+// Handle ?mode= deep-link from homepage discovery cards
+const _urlMode = new URLSearchParams(window.location.search).get('mode');
+if (_urlMode && ['top100','borough','search'].includes(_urlMode)) {
+  activeMode = _urlMode;
+}
 Promise.all([
   loadSites(),
   fetch('/api/config').then(r=>r.json()).catch(()=>null)
 ]).then(([,cfg])=>{
+  // Apply URL mode after data loads
+  if (_urlMode && ['top100','borough','search'].includes(_urlMode)) {
+    setMode(_urlMode);
+  }
   if (cfg?.mapboxToken) initMap(cfg.mapboxToken);
 });
 </script>

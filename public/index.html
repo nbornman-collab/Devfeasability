@@ -19,7 +19,8 @@
   --accent: #e07b2a;
   --bg-dark: #111110;
 }
-html, body { height: 100%; overflow: hidden; background: var(--bg-dark); }
+html { scroll-behavior: smooth; }
+body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
 /* ── MAP ── */
 #map {
@@ -63,12 +64,69 @@ html, body { height: 100%; overflow: hidden; background: var(--bg-dark); }
 .nav-cta:hover { background: var(--accent); color: #fff; }
 
 /* ── HERO CONTENT ── */
+.hero-wrap { height: 100vh; position: relative; }
 .hero {
-  position: fixed; inset: 0; z-index: 10;
+  position: absolute; inset: 0; z-index: 10;
   display: flex; flex-direction: column;
   align-items: flex-start; justify-content: flex-end;
   padding: 0 64px 80px;
 }
+
+/* ── BELOW FOLD ── */
+.below-fold {
+  position: relative; z-index: 20;
+  background: #f2f1ed;
+  padding: 72px 64px 80px;
+}
+.below-fold-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1100px;
+}
+.below-fold-intro {
+  display: flex; flex-direction: column; justify-content: center;
+}
+.below-fold-label {
+  font: 700 8px var(--sans-light, 'Inter', sans-serif); letter-spacing: .22em; text-transform: uppercase;
+  color: #e07b2a; margin-bottom: 16px;
+}
+.below-fold-heading {
+  font: 800 clamp(28px,3vw,42px) 'Inter', sans-serif;
+  color: #111110; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 20px;
+}
+.below-fold-heading em { font-style: normal; color: #e07b2a; }
+.below-fold-body {
+  font: 400 14px/1.8 'Inter', sans-serif; color: #555550; max-width: 420px;
+}
+.below-fold-body strong { font-weight: 700; color: #111110; }
+
+/* Discovery mode cards */
+.mode-cards { display: flex; flex-direction: column; gap: 10px; }
+.mode-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px; background: #fff;
+  border: 1px solid rgba(17,17,16,0.08); border-radius: 10px;
+  text-decoration: none; transition: border-color .15s, box-shadow .15s, transform .12s;
+  cursor: pointer;
+}
+.mode-card:hover {
+  border-color: #e07b2a;
+  box-shadow: 0 4px 20px rgba(224,123,42,.12);
+  transform: translateX(3px);
+}
+.mode-card-num {
+  font: 800 18px 'JetBrains Mono', monospace;
+  color: #e8e7e2; flex-shrink: 0; width: 28px; letter-spacing: -.02em;
+}
+.mode-card:hover .mode-card-num { color: #e07b2a; }
+.mode-card-body { flex: 1; }
+.mode-card-title {
+  font: 700 13px 'Inter', sans-serif; color: #111110;
+  letter-spacing: -.01em; margin-bottom: 2px;
+}
+.mode-card-sub { font: 400 10px 'Inter', sans-serif; color: #999990; letter-spacing: .04em; }
+.mode-card-arrow {
+  font-size: 16px; color: #d4d3cf; transition: color .15s, transform .15s;
+}
+.mode-card:hover .mode-card-arrow { color: #e07b2a; transform: translateX(3px); }
 .hero-label {
   font: 700 9px var(--sans); letter-spacing: .24em; text-transform: uppercase;
   color: var(--accent); margin-bottom: 20px;
@@ -131,6 +189,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg-dark); }
 </head>
 <body>
 
+<div class="hero-wrap">
 <div id="map"></div>
 <div class="overlay"></div>
 
@@ -177,6 +236,57 @@ html, body { height: 100%; overflow: hidden; background: var(--bg-dark); }
 <div class="hero-bottom">
   Southwark &middot; City of London &middot; Hackney &nbsp;|&nbsp;
   <a href="/t2/24-southwark-st">Sample report</a>
+</div>
+
+</div><!-- /hero-wrap -->
+
+<!-- Below fold: narrative + discovery modes -->
+<div class="below-fold">
+  <div class="below-fold-grid">
+    <div class="below-fold-intro">
+      <div class="below-fold-label">What we do</div>
+      <h2 class="below-fold-heading">London's underutilised sites.<br><em>Ranked. Scored. Ready.</em></h2>
+      <p class="below-fold-body">
+        Across London, thousands of sites are <strong>structurally underused</strong> - surface car parks in Zone 1, low-rise industrial land with residential pressure above, single-storey buildings in high-density corridors.
+        <br><br>
+        D/A identifies them, scores them across six development intelligence factors, and gives you the planning, heritage and financial picture before you commit time or capital.
+      </p>
+    </div>
+    <div class="mode-cards">
+      <a class="mode-card" href="/discover?mode=top100">
+        <div class="mode-card-num">01</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">London Top 100 Underutilised Sites</div>
+          <div class="mode-card-sub">All boroughs · ranked by development intelligence score</div>
+        </div>
+        <div class="mode-card-arrow">→</div>
+      </a>
+      <a class="mode-card" href="/discover?mode=borough">
+        <div class="mode-card-num">02</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">Borough Top 25 Underutilised Sites</div>
+          <div class="mode-card-sub">Filter by Southwark · City of London · Hackney</div>
+        </div>
+        <div class="mode-card-arrow">→</div>
+      </a>
+      <a class="mode-card" href="/discover?mode=search">
+        <div class="mode-card-num">03</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">Search by Address</div>
+          <div class="mode-card-sub">Type a street or postcode · find nearby scored sites</div>
+        </div>
+        <div class="mode-card-arrow">→</div>
+      </a>
+      <a class="mode-card" href="/discover">
+        <div class="mode-card-num">04</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">Browse the Map</div>
+          <div class="mode-card-sub">Click any site on the London intelligence map</div>
+        </div>
+        <div class="mode-card-arrow">→</div>
+      </a>
+    </div>
+  </div>
 </div>
 
 <script>
