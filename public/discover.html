@@ -160,11 +160,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .focus-back:hover { color: var(--ink); }
 .focus-back-arrow { font-size: 14px; line-height: 1; }
 .focus-sat {
-  width: 100%; height: 220px; object-fit: cover; display: block;
+  width: 100%; height: 260px; object-fit: cover; display: block;
   flex-shrink: 0;
 }
 .focus-sat-placeholder {
-  width: 100%; height: 220px; background: var(--bg2);
+  width: 100%; height: 260px; background: var(--bg2);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 .focus-header {
@@ -184,7 +184,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .focus-verdict.green { background: var(--green); }
 .focus-verdict.amber { background: var(--amber); }
 .focus-verdict.red   { background: var(--red); }
-.focus-score-sub { font: 400 10px var(--sans); color: var(--ink3); }
+.focus-score-sub { font: 400 10px var(--sans); color: var(--ink2); }
 .focus-metrics {
   display: grid; grid-template-columns: 1fr 1fr 1fr;
   gap: 1px; background: var(--rule);
@@ -194,25 +194,25 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   background: transparent; padding: 14px 16px;
   display: flex; flex-direction: column; gap: 3px;
 }
-.focus-metric-val { font: 700 18px var(--mono); color: var(--ink); letter-spacing: -.01em; }
+.focus-metric-val { font: 700 22px var(--mono); color: var(--ink); letter-spacing: -.01em; }
 .focus-metric-val.accent { color: var(--accent); }
-.focus-metric-lbl { font: 600 7px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); }
+.focus-metric-lbl { font: 600 8px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); }
 .focus-narrative {
-  padding: 16px 20px; font: 400 12px/1.7 var(--sans); color: var(--ink2);
+  padding: 16px 20px; font: 400 13px/1.75 var(--sans); color: var(--ink);
   border-bottom: 1px solid var(--rule);
 }
-.focus-narrative strong { color: var(--ink); font-weight: 700; }
+.focus-narrative strong { color: var(--accent); font-weight: 700; }
 .focus-gated {
   padding: 14px 20px; display: flex; flex-direction: column; gap: 8px;
   border-bottom: 1px solid var(--rule);
 }
-.focus-gated-title { font: 700 8px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.focus-gated-title { font: 700 9px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); margin-bottom: 6px; }
 .focus-gated-row {
   display: flex; align-items: center; gap: 8px;
-  font: 600 10px var(--sans); color: var(--ink3); opacity: 0.5;
+  font: 500 11px var(--sans); color: var(--ink2);
 }
-.focus-gated-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink3); flex-shrink: 0; }
-.focus-gated-line { flex: 1; height: 1px; background: var(--ink3); opacity: .25; }
+.focus-gated-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink2); flex-shrink: 0; }
+.focus-gated-line { flex: 1; height: 1px; background: var(--ink2); opacity: .2; }
 .focus-cta-wrap { padding: 16px 20px 24px; }
 .focus-cta {
   display: block; width: 100%; padding: 14px 24px; border-radius: 8px; text-align: center;
@@ -821,7 +821,7 @@ function openFocus(site) {
   const visEl = document.getElementById('focus-visual');
   const buildThumb = () => {
     if (MAPBOX_TOKEN) {
-      visEl.innerHTML = `<img class="focus-sat" src="https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},18,0,60/960x440@2x?access_token=${MAPBOX_TOKEN}" alt="">`;
+      visEl.innerHTML = `<img class="focus-sat" src="https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},17.5,20,58/960x520@2x?access_token=${MAPBOX_TOKEN}" alt="">`;
     } else {
       visEl.innerHTML = `<div class="focus-sat-placeholder"><span style="font:800 36px var(--mono);color:var(--accent)">£${site.gdvEst}M</span></div>`;
       setTimeout(()=>{ if(MAPBOX_TOKEN&&activeSite===site.id) buildThumb(); }, 1200);
@@ -831,8 +831,9 @@ function openFocus(site) {
   document.getElementById('site-focus').classList.add('visible');
   if (MAP && site.lat && site.lng) {
     const panelW = Math.round(window.innerWidth * 0.5);
-    MAP.flyTo({ center:[site.lng,site.lat], zoom:16.5, duration:900, pitch:52,
-      padding:{top:80,bottom:80,left:40,right:panelW+40} });
+    MAP.flyTo({ center:[site.lng,site.lat], zoom:16, duration:900, pitch:52,
+      padding:{top:60,bottom:60,left:30,right:panelW} });
+    showPopup(site);
   }
 }
 
