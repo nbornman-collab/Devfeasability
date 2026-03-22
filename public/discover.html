@@ -24,7 +24,7 @@
   --sans: 'Inter', sans-serif;
   --mono: 'JetBrains Mono', monospace;
   --nav-h: 48px;
-  --panel-w: 460px;
+  --panel-w: 50%;
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: var(--sans); -webkit-font-smoothing: antialiased; color: var(--ink); }
@@ -32,7 +32,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── NAV ── */
 .da-nav {
   position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
-  background: var(--bg); border-bottom: 1px solid var(--rule);
+  background: rgba(242,241,237,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
   display: flex; align-items: center; padding: 0 24px; gap: 20px; z-index: 200;
 }
 .da-nav-logo { font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); text-decoration: none; flex-shrink: 0; }
@@ -44,26 +47,31 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .da-nav-link:hover { color: var(--ink); }
 .da-nav-link.active { color: var(--ink); border-bottom: 1.5px solid var(--accent); padding-bottom: 1px; }
 
-/* ── PAGE LAYOUT (same split as T1) ── */
-.page {
-  position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0;
-  display: grid;
-  grid-template-columns: 1fr var(--panel-w);
+/* ── MAP: full canvas behind everything ── */
+#map-canvas {
+  position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; z-index: 1;
 }
 
-/* ── LEFT COL ── */
+/* ── LEFT OVERLAY (hero stats + borough selector) ── */
 .col-left {
+  position: fixed; top: var(--nav-h); left: 0;
+  width: calc(100% - var(--panel-w));
+  height: calc(100% - var(--nav-h));
   display: flex; flex-direction: column;
-  border-right: 1px solid var(--rule);
-  overflow: hidden; height: 100%;
+  pointer-events: none; /* pass clicks through to map */
+  z-index: 5;
 }
+.col-left > * { pointer-events: all; }
 
-/* HERO STATS */
+/* HERO STATS - glass overlay on top of map */
 .discover-hero {
   flex-shrink: 0;
-  padding: 18px 24px 14px;
-  border-bottom: 1px solid var(--rule);
+  padding: 14px 20px 12px;
   display: flex; gap: 0; align-items: stretch;
+  background: rgba(242,241,237,0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
 }
 .hero-stat {
   flex: 1; padding: 0 16px; border-right: 1px solid var(--rule);
@@ -80,24 +88,23 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .hero-stat-value.accent { color: var(--accent); }
 .hero-stat-sub { font-size: 9px; color: var(--ink3); }
 
-/* MAP */
-.map-wrap {
-  flex: 1; position: relative; min-height: 0; overflow: hidden;
-}
+/* MAP LABEL */
 .map-label {
-  position: absolute; top: 10px; left: 12px; z-index: 5;
+  position: fixed; bottom: 80px; left: 16px; z-index: 6;
   font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--ink3); background: var(--bg); padding: 3px 7px; border-radius: 4px;
-  pointer-events: none;
+  color: rgba(255,255,255,0.7); pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
 }
-#map { width: 100%; height: 100%; }
 
-/* BOROUGH SELECTOR */
+/* BOROUGH SELECTOR - glass overlay at bottom of map */
 .borough-selector {
   flex-shrink: 0;
-  padding: 12px 16px;
-  border-top: 1px solid var(--rule);
-  background: var(--bg);
+  padding: 10px 16px 12px;
+  background: rgba(242,241,237,0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255,255,255,0.3);
+  margin-top: auto;
 }
 .borough-selector-label {
   font-size: 8px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
@@ -113,11 +120,17 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .borough-pill:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
 .borough-pill.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
-/* ── RIGHT PANEL ── */
+/* ── RIGHT PANEL: glass floating over map ── */
 .col-right {
+  position: fixed; top: var(--nav-h); right: 0;
+  width: var(--panel-w); height: calc(100% - var(--nav-h));
   display: flex; flex-direction: column;
-  overflow: hidden; height: 100%;
-  background: var(--bg);
+  overflow: hidden; z-index: 10;
+  background: rgba(242,241,237,0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255,255,255,0.35);
+  box-shadow: -4px 0 24px rgba(17,17,16,.08);
 }
 
 /* MODE TABS */
@@ -213,38 +226,61 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* EXPANDED SITE PREVIEW */
 .card-expand {
-  display: none; border-top: 1px solid var(--rule);
-  background: var(--bg);
+  display: none; border-top: 1px solid rgba(255,255,255,0.4);
 }
 .site-card.active .card-expand { display: block; }
-.expand-section { padding: 10px 16px; border-bottom: 1px solid var(--rule); }
-.expand-section:last-of-type { border-bottom: none; }
-.expand-sec-head {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 8px;
+
+/* Satellite thumbnail */
+.expand-visual {
+  position: relative; overflow: hidden; height: 160px;
+  background: var(--bg2);
 }
-.expand-sec-num { font: 700 8px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
-.expand-sec-title { font: 700 10px var(--sans); color: var(--ink); margin-left: 6px; }
-.expand-sec-badge { font: 600 10px var(--sans); color: var(--ink3); }
-.expand-row {
-  display: flex; justify-content: space-between; padding: 4px 0;
-  border-bottom: 1px solid var(--rule); font-size: 10px;
+.expand-sat-img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .4s ease;
 }
-.expand-row:last-child { border-bottom: none; }
-.expand-key { color: var(--ink3); font-weight: 600; font-size: 9px; letter-spacing: .05em; text-transform: uppercase; }
-.expand-val { color: var(--ink); font-weight: 600; text-align: right; }
-.expand-desc { font: 400 10px/1.55 var(--sans); color: var(--ink2); margin-top: 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.expand-cta-row { padding: 12px 16px; display: flex; justify-content: center; border-top: 1px solid var(--rule); }
+.site-card.active .expand-sat-img:hover { transform: scale(1.04); }
+.expand-visual-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(17,17,16,.65) 0%, transparent 50%);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 14px 16px;
+}
+.expand-gdv {
+  font: 800 22px var(--mono); color: #fff; letter-spacing: -.02em; line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,.4);
+}
+.expand-gdv-label { font: 600 8px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); margin-top: 3px; }
+
+/* Tension / hook line */
+.expand-hook {
+  padding: 12px 16px; font: 400 11px/1.6 var(--sans); color: var(--ink2);
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+.expand-hook strong { color: var(--ink); font-weight: 700; }
+
+/* Gated indicators - light suggestion, not heavy blocks */
+.expand-gated {
+  padding: 10px 16px 4px; display: flex; flex-direction: column; gap: 6px;
+}
+.expand-gated-row {
+  display: flex; align-items: center; gap: 8px;
+  font: 600 9px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink3);
+  opacity: 0.5;
+}
+.expand-gated-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink3); flex-shrink: 0; }
+.expand-gated-line { flex: 1; height: 1px; background: var(--ink3); opacity: .3; border-radius: 1px; }
+
+/* CTA */
+.expand-cta-row { padding: 12px 16px 14px; }
 .expand-cta {
   font: 700 10px var(--sans); letter-spacing: .12em; text-transform: uppercase;
-  padding: 10px 24px; border-radius: 5px; text-decoration: none;
-  background: var(--ink); color: var(--bg); transition: background .15s; display: block; width: 100%; text-align: center;
+  padding: 11px 24px; border-radius: 5px; text-decoration: none;
+  background: var(--ink); color: var(--bg); transition: background .15s;
+  display: block; width: 100%; text-align: center;
 }
 .expand-cta:hover { background: var(--accent); }
-.expand-cta.locked {
-  background: var(--bg2); color: var(--ink3); pointer-events: none;
-  border: 1px solid var(--rule);
-}
+.expand-cta.locked { background: rgba(17,17,16,.15); color: var(--ink3); pointer-events: none; }
 
 /* ── MAP POPUP ── */
 .mapboxgl-popup-content {
@@ -271,56 +307,47 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   </div>
 </nav>
 
-<div class="page">
+<!-- Full-canvas map (behind all overlays) -->
+<div id="map-canvas"></div>
+<div class="map-label">London Development Intelligence</div>
 
-  <!-- ── LEFT COL ── -->
-  <div class="col-left">
-
-    <!-- Hero aggregate stats -->
-    <div class="discover-hero" id="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-label">Total Sites</div>
-        <div class="hero-stat-value" id="stat-total">—</div>
-        <div class="hero-stat-sub">Verified opportunities</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-label">Top Score</div>
-        <div class="hero-stat-value accent" id="stat-top">—</div>
-        <div class="hero-stat-sub" id="stat-top-name">Loading...</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-label">Opp. Areas</div>
-        <div class="hero-stat-value" id="stat-oa">—</div>
-        <div class="hero-stat-sub">Sites in designated OA</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-label">With Report</div>
-        <div class="hero-stat-value" id="stat-t1">—</div>
-        <div class="hero-stat-sub">Full site reports live</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-label">Avg Score</div>
-        <div class="hero-stat-value" id="stat-avg">—</div>
-        <div class="hero-stat-sub">London portfolio</div>
-      </div>
+<!-- Left overlays: hero stats (top) + borough selector (bottom) -->
+<div class="col-left">
+  <div class="discover-hero" id="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-label">Total Sites</div>
+      <div class="hero-stat-value" id="stat-total">—</div>
+      <div class="hero-stat-sub">Verified opportunities</div>
     </div>
-
-    <!-- Map -->
-    <div class="map-wrap">
-      <div class="map-label">London Development Sites</div>
-      <div id="map"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Top Score</div>
+      <div class="hero-stat-value accent" id="stat-top">—</div>
+      <div class="hero-stat-sub" id="stat-top-name">Loading...</div>
     </div>
-
-    <!-- Borough selector -->
-    <div class="borough-selector">
-      <div class="borough-selector-label">Filter by Borough</div>
-      <div class="borough-pills" id="borough-pills">
-        <div class="borough-pill active" data-borough="all" onclick="selectBorough('all',this)">All London</div>
-        <!-- Populated by JS -->
-      </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Opp. Areas</div>
+      <div class="hero-stat-value" id="stat-oa">—</div>
+      <div class="hero-stat-sub">In designated OA</div>
     </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Reports Live</div>
+      <div class="hero-stat-value" id="stat-t1">—</div>
+      <div class="hero-stat-sub">Full site reports</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Avg Score</div>
+      <div class="hero-stat-value" id="stat-avg">—</div>
+      <div class="hero-stat-sub">London portfolio</div>
+    </div>
+  </div>
 
-  </div><!-- /col-left -->
+  <div class="borough-selector">
+    <div class="borough-selector-label">Borough</div>
+    <div class="borough-pills" id="borough-pills">
+      <div class="borough-pill active" data-borough="all" onclick="selectBorough('all',this)">All London</div>
+    </div>
+  </div>
+</div>
 
   <!-- ── RIGHT PANEL ── -->
   <div class="col-right">
@@ -356,6 +383,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 // ── State ─────────────────────────────────────────────────────────────────────
 let ALL_SITES = [];
 let MAP = null;
+let MAPBOX_TOKEN = null;
 let activeMode = 'top100';
 let activeSite = null;
 let activeBorough = 'all';
@@ -511,41 +539,41 @@ function render() {
 
     // Expanded preview sections
     const heritLabel = s.heritTier==='blocking'?'High Risk':s.heritTier==='navigable'?'Navigable':'Manageable';
+    // Satellite thumbnail URL (built when token available)
+    const thumbUrl = MAPBOX_TOKEN
+      ? `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${s.lng},${s.lat},18,0,55/480x160@2x?access_token=${MAPBOX_TOKEN}`
+      : '';
+    // Tension line - one sentence, creates a question
+    const tensionParts = [];
+    if (s.inOA) tensionParts.push('<strong>Opportunity Area</strong> designation');
+    if (s.inCons) tensionParts.push('conservation area overlay');
+    if (s.inCAZ) tensionParts.push('CAZ intensification pressure');
+    const tension = tensionParts.length
+      ? tensionParts.join(' + ') + ' - full planning analysis in report'
+      : `${s.maxFloors}F potential, ${s.plotM2.toLocaleString()}m² plot - full analysis in report`;
     const expandHTML = `
       <div class="card-expand">
-        <div class="expand-section">
-          <div class="expand-sec-head">
-            <div><span class="expand-sec-num">01</span><span class="expand-sec-title">Development Scope</span></div>
-            <span class="expand-sec-badge">${s.maxFloors}F · £${s.gdvEst}M GDV</span>
+        ${thumbUrl ? `
+        <div class="expand-visual">
+          <img class="expand-sat-img" src="${thumbUrl}" loading="lazy" alt="Satellite view">
+          <div class="expand-visual-overlay">
+            <div class="expand-gdv">£${s.gdvEst}M</div>
+            <div class="expand-gdv-label">GDV potential · ${s.maxFloors}F maximum</div>
           </div>
-          <div class="expand-row"><span class="expand-key">Max Floors</span><span class="expand-val">${s.maxFloors}F</span></div>
-          <div class="expand-row"><span class="expand-key">Plot Area</span><span class="expand-val">${s.plotM2.toLocaleString()} m²</span></div>
-          <div class="expand-row"><span class="expand-key">GDV Estimate</span><span class="expand-val" style="color:var(--accent)">£${s.gdvEst}M</span></div>
-          <div class="expand-row"><span class="expand-key">Off-Market Signal</span><span class="expand-val">${s.offMarket==='low'?'Low activity':s.offMarket==='medium'?'Moderate':'High activity'}</span></div>
-          ${s.desc ? `<div class="expand-desc">${s.desc}</div>` : ''}
-        </div>
-        <div class="expand-section">
-          <div class="expand-sec-head">
-            <div><span class="expand-sec-num">02</span><span class="expand-sec-title">Planning Realm</span></div>
-            <span class="expand-sec-badge">Appetite ${s.planScore}/10</span>
-          </div>
-          <div class="expand-row"><span class="expand-key">Planning Appetite</span><span class="expand-val">${s.planScore}/10</span></div>
-          <div class="expand-row"><span class="expand-key">Opportunity Area</span><span class="expand-val">${s.inOA?'<span style="color:var(--accent)">Yes - OA designated</span>':'None'}</span></div>
-          <div class="expand-row"><span class="expand-key">Conservation</span><span class="expand-val">${s.inCons?'Within CA':'No constraint'}</span></div>
-          <div class="expand-row"><span class="expand-key">CAZ</span><span class="expand-val">${s.inCAZ?'Central Activities Zone':'Outside CAZ'}</span></div>
-        </div>
-        <div class="expand-section">
-          <div class="expand-sec-head">
-            <div><span class="expand-sec-num">03</span><span class="expand-sec-title">Architecture</span></div>
-            <span class="expand-sec-badge">Heritage: ${heritLabel}</span>
-          </div>
-          <div class="expand-row"><span class="expand-key">Heritage Tier</span><span class="expand-val">${heritLabel}</span></div>
-          <div class="expand-row"><span class="expand-key">PTAL</span><span class="expand-val">${s.ptal ? s.ptal + ' / 6' : 'Not assessed'}</span></div>
+        </div>` : `
+        <div style="height:80px;background:var(--bg2);display:flex;align-items:center;justify-content:center">
+          <div style="text-align:center"><div style="font:800 28px var(--mono);color:var(--accent)">£${s.gdvEst}M</div><div style="font:600 9px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-top:4px">GDV potential · ${s.maxFloors}F max</div></div>
+        </div>`}
+        <div class="expand-hook">${tension}</div>
+        <div class="expand-gated">
+          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Planning analysis + constraints<div class="expand-gated-line"></div></div>
+          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Heritage risk + strategy<div class="expand-gated-line"></div></div>
+          <div class="expand-gated-row"><div class="expand-gated-dot"></div>Architecture + financial model<div class="expand-gated-line"></div></div>
         </div>
         <div class="expand-cta-row">
           ${hasCTA
-            ? `<a class="expand-cta" href="${s.t1}">View Full Site Report &rarr;</a>`
-            : `<span class="expand-cta locked">Full report coming soon</span>`}
+            ? `<a class="expand-cta" href="${s.t1}">Unlock Site Report &rarr;</a>`
+            : `<span class="expand-cta locked">Report coming soon</span>`}
         </div>
       </div>`;
 
@@ -616,8 +644,9 @@ function showPopup(site) {
 // ── Map ───────────────────────────────────────────────────────────────────────
 function initMap(token) {
   mapboxgl.accessToken = token;
+  MAPBOX_TOKEN = token;
   MAP = new mapboxgl.Map({
-    container: 'map',
+    container: 'map-canvas',
     style: 'mapbox://styles/mapbox/satellite-streets-v12',
     center: [-0.118, 51.510],
     zoom: 10.5, pitch: 45, bearing: 0,
