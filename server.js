@@ -108,9 +108,11 @@ app.get('/api/pd-check', async (req, res) => {
   }
 });
 
-// Force no caching on HTML files - prevents corporate proxies serving stale content
+// Force no caching on HTML and JS files - prevents corporate proxies serving stale content
 app.use((req, res, next) => {
-  if (req.path.endsWith('.html') || req.path === '/' || !req.path.includes('.')) {
+  const isHtml = req.path.endsWith('.html') || req.path === '/' || !req.path.includes('.');
+  const isJs = req.path.endsWith('.js');
+  if (isHtml || isJs) {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
