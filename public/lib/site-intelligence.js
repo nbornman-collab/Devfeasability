@@ -687,6 +687,12 @@ function populateSummary(si) {
     archB.textContent = tierLabel + ' · ' + maxH2 + 'm max';
   }
 
+  // ── Section data rows helper ────────────────────────────────────────────────
+  const sdr = (k, v) => `<div style="display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid #f3f4f6;gap:12px">
+    <span style="font:600 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;flex-shrink:0">${k}</span>
+    <span style="font:600 11px 'Inter',sans-serif;color:#111;text-align:right">${v}</span>
+  </div>`;
+
   // Synthesis paragraphs
   if(typeof synthesisDevScope === 'function') {
     const sd = document.getElementById('synth-dev');
@@ -694,11 +700,59 @@ function populateSummary(si) {
   }
   if(typeof synthesisPlanning === 'function') {
     const sp = document.getElementById('synth-plan');
-    if(sp) sp.innerHTML = synthesisPlanning(si);
+    if(sp) {
+      sp.innerHTML = synthesisPlanning(si);
+      // Inject data rows before synthesis text if not already done
+      if(!document.getElementById('plan-data-rows-injected')) {
+        const mom2 = F.momentum || {};
+        const oa2 = mom2.opportunity_area;
+        const rows = [
+          sdr('Planning Appetite', (mom2.score||5).toFixed(1) + ' / 10'),
+          sdr('Consents Nearby', (mom2.consents||0) + ' within 700m'),
+          sdr('Opportunity Area', oa2 ? oa2.name : 'None designated'),
+          sdr('Conservation Area', s.conservation_area ? 'Yes - restricted PD' : 'No'),
+          sdr('Article 4', s.article4 ? 'Yes - applies' : 'No'),
+          sdr('LPA', si.borough ? 'London Borough of ' + si.borough : 'Southwark'),
+        ].join('');
+        const planDataDiv = document.createElement('div');
+        planDataDiv.id = 'plan-data-rows-injected';
+        planDataDiv.style.cssText = 'margin-bottom:12px;padding-bottom:4px';
+        planDataDiv.innerHTML = rows;
+        sp.parentNode.insertBefore(planDataDiv, sp);
+      }
+    }
   }
   if(typeof synthesisArchitecture === 'function') {
     const sa = document.getElementById('synth-arch');
-    if(sa) sa.innerHTML = synthesisArchitecture(si);
+    if(sa) {
+      sa.innerHTML = synthesisArchitecture(si);
+      // Inject data rows before synthesis text if not already done
+      if(!document.getElementById('arch-data-rows-injected')) {
+        const mf3 = maxF || 10;
+        const mh3 = maxH || 40;
+        const plotM2b = s.plot_m2 || s.plot_area || 1000;
+        const grossPlate = Math.round(plotM2b * 0.42);
+        const coreM2b = Math.round(grossPlate * 0.22);
+        const niaFloorB = grossPlate - coreM2b;
+        const effPct = Math.round((niaFloorB / grossPlate) * 100);
+        const heritTierLabel = (hf.tier||'manageable').charAt(0).toUpperCase()+(hf.tier||'manageable').slice(1);
+        const bsaLabel = mh3>=50||mf3>=16?'50m+ - full higher-risk regime':mh3>=30||mf3>=10?'30m+ - second staircase required':mh3>=18||mf3>=6?'18m+ - enhanced fire strategy':'Below BSA thresholds';
+        const rows = [
+          sdr('Heritage Tier', heritTierLabel),
+          sdr('Max Height', mh3 + 'm AOD'),
+          sdr('Gross Plate', grossPlate + 'm²'),
+          sdr('NIA / Floor', niaFloorB + 'm² (' + effPct + '% net-to-gross)'),
+          sdr('Core Allocation', coreM2b + 'm² (22% of plate)'),
+          sdr('Min Lease Span', '7m clear on min 2 faces'),
+          sdr('BSA Threshold', bsaLabel),
+        ].join('');
+        const archDataDiv = document.createElement('div');
+        archDataDiv.id = 'arch-data-rows-injected';
+        archDataDiv.style.cssText = 'margin-bottom:12px;padding-bottom:4px';
+        archDataDiv.innerHTML = rows;
+        sa.parentNode.insertBefore(archDataDiv, sa);
+      }
+    }
   }
 
   // Dev numbers grid - only show inside section if hero was NOT injected
