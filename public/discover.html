@@ -295,6 +295,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .chip.cons  { background: #fef3c7; color: #b45309; }
 .chip.bor   { background: var(--bg2); color: var(--ink3); }
 .chip.ptal  { background: var(--bg2); color: var(--ink2); }
+/* Borough colour chips */
+.chip.bor-southwark      { background: #ede9fe; color: #6d28d9; }
+.chip.bor-city           { background: #e0f2fe; color: #0369a1; }
+.chip.bor-hackney        { background: #dcfce7; color: #15803d; }
+.chip.bor-other          { background: var(--bg2); color: var(--ink3); }
 
 .card-right-col { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 1px; }
 .verdict-pill {
@@ -556,6 +561,20 @@ let popup = null;
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const verdictClass = s => s >= 80 ? 'green' : s >= 65 ? 'amber' : s >= 50 ? 'amber' : 'grey';
 const verdictLabel = s => s >= 80 ? 'Top Opportunity' : s >= 65 ? 'Strong' : s >= 50 ? 'Credible' : 'Due Diligence';
+const boroughChipClass = b => {
+  const l = (b||'').toLowerCase();
+  if (l.includes('southwark')) return 'bor-southwark';
+  if (l.includes('city')) return 'bor-city';
+  if (l.includes('hackney')) return 'bor-hackney';
+  return 'bor-other';
+};
+const boroughShort = b => {
+  const l = (b||'').toLowerCase();
+  if (l.includes('southwark')) return 'Southwark';
+  if (l.includes('city')) return 'City';
+  if (l.includes('hackney')) return 'Hackney';
+  return b;
+};
 const scoreColor  = s => s >= 80 ? '#15803d' : s >= 65 ? '#e07b2a' : s >= 50 ? '#b45309' : '#999990';
 
 function normaliseSite(s, idx) {
@@ -699,10 +718,10 @@ function render() {
     const vl = verdictLabel(s.score);
     const bc = scoreColor(s.score);
     const chips = [
+      `<span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span>`,
       s.inOA  ? '<span class="chip oa">OA</span>' : '',
       s.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
       s.inCons? '<span class="chip cons">Conservation</span>' : '',
-      `<span class="chip bor">${s.borough}</span>`,
       s.ptal  ? `<span class="chip ptal">PTAL ${s.ptal}</span>` : '',
     ].filter(Boolean).join('');
     const hasCTA = !!s.t1;
