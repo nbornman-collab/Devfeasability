@@ -224,11 +224,57 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .focus-intel-row:last-child { border-bottom: none; }
 .focus-intel-key { font: 600 9px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); flex-shrink: 0; }
 .focus-intel-val { font: 500 11px var(--sans); color: var(--ink); text-align: right; }
-.focus-narrative {
-  padding: 14px 20px; font: 400 12px/1.75 var(--sans); color: var(--ink);
-  border-bottom: 1px solid var(--rule);
+/* Analyst hook */
+.focus-hook {
+  padding: 16px 20px; border-bottom: 1px solid var(--rule);
 }
-.focus-narrative strong { color: var(--accent); font-weight: 700; }
+.focus-hook-label {
+  font: 700 8px var(--sans); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+}
+.focus-hook-text {
+  font: 400 12px/1.8 var(--sans); color: var(--ink);
+}
+.focus-hook-text strong { font-weight: 700; color: var(--ink); }
+.focus-hook-question {
+  margin-top: 10px; padding: 10px 14px; background: var(--accent-bg);
+  border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0;
+  font: 600 11px/1.6 var(--sans); color: var(--ink2);
+}
+
+/* Teased factor bars */
+.focus-factors {
+  padding: 14px 20px; border-bottom: 1px solid var(--rule);
+}
+.focus-factors-label {
+  font: 700 8px var(--sans); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink2); margin-bottom: 10px;
+}
+.focus-factor-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.focus-factor-row:last-child { margin-bottom: 0; }
+.focus-factor-name {
+  font: 600 9px var(--sans); letter-spacing: .06em; color: var(--ink);
+  width: 118px; flex-shrink: 0;
+}
+.focus-factor-name.locked { color: var(--ink3); font-style: italic; }
+.focus-factor-bar {
+  flex: 1; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; position: relative;
+}
+.focus-factor-fill {
+  height: 100%; border-radius: 2px; transition: width .6s cubic-bezier(.22,1,.36,1);
+}
+.focus-factor-fill.locked {
+  background: repeating-linear-gradient(90deg, var(--rule) 0, var(--rule) 4px, transparent 4px, transparent 8px);
+  width: 100% !important; opacity: 0.5;
+}
+.focus-factor-score {
+  font: 700 10px var(--mono); color: var(--ink); width: 28px; text-align: right; flex-shrink: 0;
+}
+.focus-factor-score.locked {
+  color: var(--ink3); font-size: 8px; letter-spacing: .06em;
+}
 .focus-gated {
   padding: 14px 20px; display: flex; flex-direction: column; gap: 8px;
   border-bottom: 1px solid var(--rule);
@@ -247,7 +293,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   background: var(--ink); color: var(--bg); text-decoration: none; transition: background .15s;
 }
 .focus-cta:hover { background: var(--accent); }
-.focus-cta.locked { background: rgba(17,17,16,.15); color: var(--ink3); pointer-events: none; }
+.focus-cta.locked { background: rgba(17,17,16,.12); color: var(--ink3); pointer-events: none; }
+.focus-cta-sub {
+  display: block; font: 500 9px var(--sans); letter-spacing: .04em;
+  text-transform: none; opacity: 0.7; margin-top: 4px;
+}
 
 /* MODE TABS */
 .mode-tabs {
@@ -581,15 +631,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
         </div>
       </div>
       <div class="focus-metrics" id="focus-metrics"></div>
-      <div class="focus-intel" id="focus-intel"></div>
-      <div class="focus-narrative" id="focus-narrative"></div>
-      <div class="focus-gated">
-        <div class="focus-gated-title">Full report includes</div>
-        <div class="focus-gated-row"><div class="focus-gated-dot"></div>Planning analysis · constraints · precedents<div class="focus-gated-line"></div></div>
-        <div class="focus-gated-row"><div class="focus-gated-dot"></div>Heritage risk + site strategy<div class="focus-gated-line"></div></div>
-        <div class="focus-gated-row"><div class="focus-gated-dot"></div>Architecture intelligence + massing model<div class="focus-gated-line"></div></div>
-        <div class="focus-gated-row"><div class="focus-gated-dot"></div>Full pro forma · IRR · residual land value<div class="focus-gated-line"></div></div>
-      </div>
+      <!-- Analyst hook - the intelligence that creates the question -->
+      <div class="focus-hook" id="focus-hook"></div>
+      <!-- Teased factor bars - 3 visible, 3 locked -->
+      <div class="focus-factors" id="focus-factors"></div>
+      <!-- Specific CTA -->
       <div class="focus-cta-wrap" id="focus-cta-wrap"></div>
     </div>
 
@@ -823,6 +869,77 @@ function render() {
 }
 
 // ── Card click ────────────────────────────────────────────────────────────────
+// ── Analyst hook generator ────────────────────────────────────────────────────
+function analystHook(s) {
+  const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
+  const sentences = [];
+
+  // 1. Opening: the planning opportunity signal
+  if (s.inOA && s.planScore >= 7) {
+    sentences.push(`${s.borough}'s Opportunity Area mandate is <strong>actively driving intensification</strong> at this scale - the LPA has been approving comparable massing in this corridor, and the policy framework expects it.`);
+  } else if (s.inCAZ && s.planScore >= 6) {
+    sentences.push(`CAZ designation creates an <strong>intensification imperative</strong> that ${s.borough} has been honouring in recent decisions - comparable schemes have landed approvals on near-identical plots within the last 18 months.`);
+  } else if (s.planScore >= 8) {
+    sentences.push(`Planning appetite here is <strong>genuinely strong</strong> - a ${s.planScore}/10 reflects a corridor where the LPA has been approving at this massing scale and the development plan allocation supports the use.`);
+  } else if (s.planScore <= 4) {
+    sentences.push(`Planning appetite is <strong>resistant</strong> - but the constraints are specific and the allocation language in the ${s.borough} development plan leaves a window for a well-argued scheme with the right architect.`);
+  } else {
+    sentences.push(`The planning position is <strong>nuanced</strong> - not a straightforward approval, but precedent in this postcode suggests the right massing strategy can thread the policy needle.`);
+  }
+
+  // 2. Heritage / architectural tension
+  if (s.heritTier === 'blocking') {
+    sentences.push(`Heritage is the <strong>dominant constraint</strong>. Listed building context creates a hard massing ceiling - the question is whether the development value survives the reduced envelope, or whether a landmark design argument opens the door.`);
+  } else if (s.inCons) {
+    sentences.push(`The conservation area overlay is the <strong>key architectural test</strong>. Massing above the parapet line will trigger a detailed character assessment - the precedent case within this CA is mixed and will be determinative.`);
+  } else if (s.heritTier === 'navigable') {
+    sentences.push(`Heritage requires careful management but isn't a blocker. A <strong>views analysis and daylight study</strong> will be the gateway to securing the upper floors - the question is how much they give back.`);
+  } else {
+    sentences.push(`Heritage position is <strong>clean</strong> - no listed constraints within the relevant envelope. The massing question is driven by planning policy rather than heritage sensitivity, which is the better problem to have.`);
+  }
+
+  // 3. The unresolved question - creates desire to pay
+  if (s.gdvEst >= 100) {
+    sentences.push(`At <strong>£${s.gdvEst}M GDV</strong> the development value is substantial - but the residual land value depends entirely on whether planning is secured without a viability negotiation stripping the return. That calculation requires the full planning and financial model.`);
+  } else if (addF >= 8) {
+    sentences.push(`The <strong>+${addF} floor uplift</strong> is the value driver - but whether that massing secures planning intact, or gets negotiated down, turns on three or four specific comparable approvals that aren't in the public record without digging.`);
+  } else {
+    sentences.push(`Whether this <strong>stacks at current land values</strong> depends on planning risk premium and affordable housing obligations - neither of which can be modelled without the full precedent and policy analysis.`);
+  }
+
+  return sentences.join(' ');
+}
+
+// ── Factor bar data ───────────────────────────────────────────────────────────
+function factorBars(s) {
+  const ptal = Number(s.ptal) || 3;
+  const visible = [
+    { name: 'Planning Appetite', score: Math.round(s.planScore * 10), color: s.planScore>=7?'var(--green)':s.planScore>=5?'var(--amber)':'var(--red)' },
+    { name: 'Available Sky', score: s.heritTier==='blocking'?28:s.inCons?52:s.heritTier==='navigable'?62:78, color: 'var(--accent)' },
+    { name: 'Rent Headroom', score: s.borough==='City of London'?82:s.inCAZ?74:s.inOA?68:56, color: 'var(--ink2)' },
+  ];
+  const locked = [
+    { name: 'Heritage shadow →', label: 'In full report' },
+    { name: 'Title complexity →', label: 'In full report' },
+    { name: 'Transport position →', label: 'In full report' },
+  ];
+  const rows = [
+    ...visible.map(f => `
+      <div class="focus-factor-row">
+        <div class="focus-factor-name">${f.name}</div>
+        <div class="focus-factor-bar"><div class="focus-factor-fill" style="width:${f.score}%;background:${f.color}"></div></div>
+        <div class="focus-factor-score">${f.score}</div>
+      </div>`),
+    ...locked.map(f => `
+      <div class="focus-factor-row">
+        <div class="focus-factor-name locked">${f.name}</div>
+        <div class="focus-factor-bar"><div class="focus-factor-fill locked"></div></div>
+        <div class="focus-factor-score locked">—</div>
+      </div>`),
+  ];
+  return rows.join('');
+}
+
 function cardClick(id) {
   const site = ALL_SITES.find(s=>s.id===id);
   if (site) openFocus(site);
@@ -869,23 +986,23 @@ function openFocus(site) {
     <div class="focus-metric"><div class="focus-metric-val">${ptalLabel}</div><div class="focus-metric-lbl">PTAL</div></div>
   `;
   // Intel rows - extra data lines
-  document.getElementById('focus-intel').innerHTML = `
-    <div class="focus-intel-row"><span class="focus-intel-key">Heritage risk</span><span class="focus-intel-val">${heritRisk}</span></div>
-    <div class="focus-intel-row"><span class="focus-intel-key">Planning appetite</span><span class="focus-intel-val">${planRisk}</span></div>
-    <div class="focus-intel-row"><span class="focus-intel-key">Plot area</span><span class="focus-intel-val">${site.plotM2.toLocaleString()}m² · ~${coverageM2.toLocaleString()}m² max coverage</span></div>
-    <div class="focus-intel-row"><span class="focus-intel-key">Opportunity Area</span><span class="focus-intel-val">${site.inOA?'<span style="color:var(--accent);font-weight:700">Yes - OA designated</span>':'Not designated'}</span></div>
-    <div class="focus-intel-row"><span class="focus-intel-key">CAZ</span><span class="focus-intel-val">${site.inCAZ?'Central Activities Zone':'Outside CAZ'}</span></div>
-    <div class="focus-intel-row"><span class="focus-intel-key">Conservation</span><span class="focus-intel-val">${site.inCons?'<span style="color:#b45309">Within conservation area</span>':'No constraint'}</span></div>
+  // ── Analyst hook ───────────────────────────────────────────────────────
+  const hookText = analystHook(site);
+  document.getElementById('focus-hook').innerHTML = `
+    <div class="focus-hook-label">Intelligence Signal</div>
+    <div class="focus-hook-text">${hookText}</div>
+    <div class="focus-hook-question">What are the 3 comparable approvals? Does the massing stack above ${Math.round(site.maxFloors*0.7)}F? What does the residual land value look like at current yields?</div>
   `;
-  const tensionParts = [];
-  if (site.inOA)   tensionParts.push('<strong>Opportunity Area</strong> designation');
-  if (site.inCons) tensionParts.push('conservation area overlay');
-  if (site.inCAZ)  tensionParts.push('CAZ intensification pressure');
-  const tension = tensionParts.length ? tensionParts.join(' + ') + '. ' : '';
-  document.getElementById('focus-narrative').innerHTML = tension + (site.desc || `${site.maxFloors}F potential on ${site.plotM2.toLocaleString()}m² plot.`);
+  // ── Factor bars ─────────────────────────────────────────────────────────
+  document.getElementById('focus-factors').innerHTML = `
+    <div class="focus-factors-label">Score drivers · 3 of 6 visible</div>
+    ${factorBars(site)}
+  `;
+  // ── CTA - site-specific ─────────────────────────────────────────────────
+  const addFf = site.maxFloors - Math.max(1, Math.round(site.maxFloors * 0.45));
   document.getElementById('focus-cta-wrap').innerHTML = site.t1
-    ? `<a class="focus-cta" href="${site.t1}">Unlock Site Report &rarr;</a>`
-    : `<span class="focus-cta locked">Report coming soon</span>`;
+    ? `<a class="focus-cta" href="${site.t1}">See why this scores ${site.score}/100 &rarr;<span class="focus-cta-sub">+${addFf}F · planning precedents · does it stack at current land value?</span></a>`
+    : `<span class="focus-cta locked">Full report coming soon</span>`;
   const visEl = document.getElementById('focus-visual');
   const phEl  = document.getElementById('focus-sat-ph');
   if (phEl) phEl.textContent = `£${site.gdvEst}M`;
