@@ -736,15 +736,35 @@ function populateSummary(si) {
         const niaFloorB = grossPlate - coreM2b;
         const effPct = Math.round((niaFloorB / grossPlate) * 100);
         const heritTierLabel = (hf.tier||'manageable').charAt(0).toUpperCase()+(hf.tier||'manageable').slice(1);
-        const bsaLabel = mh3>=50||mf3>=16?'50m+ - full higher-risk regime':mh3>=30||mf3>=10?'30m+ - second staircase required':mh3>=18||mf3>=6?'18m+ - enhanced fire strategy':'Below BSA thresholds';
+        // Part B / BSA 2022 threshold
+        const bsaLabel = mh3>=50||mf3>=16
+          ? '50m+ - HRB regime (BSA 2022, Part B2) - BSR Gateway 2+3 required'
+          : mh3>=30||mf3>=10
+          ? '30m+ (Part B2 / BSA 2022) - second staircase + fireman\'s lift mandatory, ~£1.2-1.5M + 280-340m² NIA to core'
+          : mh3>=18||mf3>=6
+          ? '18m+ (Part B2) - enhanced fire strategy, BS 9991 compliant design'
+          : 'Below 18m - standard fire strategy, no BSA overlay';
+        // Part M2 - lift provision
+        const liftCount = mf3>=11 ? 3 : mf3>=6 ? 2 : 1;
+        const liftExtra = (mh3>=30||mf3>=10) ? ' + second lift bank (BSA 30m+)' : '';
+        const liftLabel = liftCount + ' lift' + (liftCount>1?'s':'')+' min (Part M2 §3.5)' + liftExtra;
+        const liftM2 = liftCount * 9 + ((mh3>=30||mf3>=10) ? 18 : 0);
+        // Part L2 - BREEAM
+        const isGLAScheme = !!(F.momentum&&F.momentum.opportunity_area) || plotM2b >= 1000;
+        const breeamLabel = isGLAScheme ? 'BREEAM Excellent required (GLA Energy SPG + Part L2) - ~£50/m² uplift' : 'BREEAM Very Good min (Part L2)';
+        // Part O - overheating risk (flag for urban CAZ sites with tall glazed potential)
+        const overheatFlag = mf3 >= 8 ? 'Dynamic thermal modelling required if resi component (Part O / CIBSE TM52)' : null;
         const rows = [
           sdr('Heritage Tier', heritTierLabel),
           sdr('Max Height', mh3 + 'm AOD'),
           sdr('Gross Plate', grossPlate + 'm²'),
           sdr('NIA / Floor', niaFloorB + 'm² (' + effPct + '% net-to-gross)'),
-          sdr('Core Allocation', coreM2b + 'm² (22% of plate)'),
-          sdr('Min Lease Span', '7m clear on min 2 faces'),
-          sdr('BSA Threshold', bsaLabel),
+          sdr('Core Allocation', coreM2b + 'm² (22% of plate) incl. ' + liftM2 + 'm² lifts'),
+          sdr('Min Lease Span', '7m clear on min 2 faces (Part A compliance)'),
+          sdr('Part B / BSA 2022', bsaLabel),
+          sdr('Part M2 - Lifts', liftLabel),
+          sdr('Part L2 - Energy', breeamLabel),
+          overheatFlag ? sdr('Part O - Overheating', overheatFlag) : '',
         ].join('');
         const archDataDiv = document.createElement('div');
         archDataDiv.id = 'arch-data-rows-injected';
