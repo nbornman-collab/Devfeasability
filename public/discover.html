@@ -126,12 +126,99 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   width: var(--panel-w); height: calc(100% - var(--nav-h));
   display: flex; flex-direction: column;
   overflow: hidden; z-index: 10;
-  background: rgba(242,241,237,0.78);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(255,255,255,0.35);
-  box-shadow: -4px 0 24px rgba(17,17,16,.08);
+  background: rgba(210,205,195,0.58);
+  backdrop-filter: blur(28px) saturate(1.6) brightness(1.04);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6) brightness(1.04);
+  border-left: 1px solid rgba(255,255,255,0.45);
+  box-shadow: -4px 0 32px rgba(17,17,16,.10);
 }
+
+/* ── SITE FOCUS PANEL ── */
+#site-focus {
+  display: none; flex-direction: column;
+  position: absolute; inset: 0;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background: transparent;
+  animation: panelSlideIn .28s cubic-bezier(.22,1,.36,1);
+  z-index: 20;
+}
+#site-focus.visible { display: flex; }
+@keyframes panelSlideIn {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.focus-back {
+  display: flex; align-items: center; gap: 7px; padding: 12px 16px 10px;
+  font: 600 10px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); cursor: pointer; border-bottom: 1px solid var(--rule);
+  background: transparent; border-top: none; border-left: none; border-right: none;
+  font-family: var(--sans); text-align: left; width: 100%;
+  transition: color .15s;
+}
+.focus-back:hover { color: var(--ink); }
+.focus-back-arrow { font-size: 14px; line-height: 1; }
+.focus-sat {
+  width: 100%; height: 220px; object-fit: cover; display: block;
+  flex-shrink: 0;
+}
+.focus-sat-placeholder {
+  width: 100%; height: 220px; background: var(--bg2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.focus-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.focus-name { font: 800 22px var(--sans); color: var(--ink); letter-spacing: -.01em; margin-bottom: 4px; }
+.focus-addr { font: 400 11px var(--sans); color: var(--ink3); margin-bottom: 10px; }
+.focus-chips { display: flex; gap: 5px; flex-wrap: wrap; }
+.focus-score-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; border-bottom: 1px solid var(--rule);
+}
+.focus-score-num { font: 800 52px var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
+.focus-score-right { display: flex; flex-direction: column; gap: 6px; }
+.focus-verdict { font: 700 9px var(--sans); letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; color: #fff; align-self: flex-start; }
+.focus-verdict.green { background: var(--green); }
+.focus-verdict.amber { background: var(--amber); }
+.focus-verdict.red   { background: var(--red); }
+.focus-score-sub { font: 400 10px var(--sans); color: var(--ink3); }
+.focus-metrics {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px; background: var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.focus-metric {
+  background: transparent; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.focus-metric-val { font: 700 18px var(--mono); color: var(--ink); letter-spacing: -.01em; }
+.focus-metric-val.accent { color: var(--accent); }
+.focus-metric-lbl { font: 600 7px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); }
+.focus-narrative {
+  padding: 16px 20px; font: 400 12px/1.7 var(--sans); color: var(--ink2);
+  border-bottom: 1px solid var(--rule);
+}
+.focus-narrative strong { color: var(--ink); font-weight: 700; }
+.focus-gated {
+  padding: 14px 20px; display: flex; flex-direction: column; gap: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.focus-gated-title { font: 700 8px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.focus-gated-row {
+  display: flex; align-items: center; gap: 8px;
+  font: 600 10px var(--sans); color: var(--ink3); opacity: 0.5;
+}
+.focus-gated-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink3); flex-shrink: 0; }
+.focus-gated-line { flex: 1; height: 1px; background: var(--ink3); opacity: .25; }
+.focus-cta-wrap { padding: 16px 20px 24px; }
+.focus-cta {
+  display: block; width: 100%; padding: 14px 24px; border-radius: 8px; text-align: center;
+  font: 700 11px var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  background: var(--ink); color: var(--bg); text-decoration: none; transition: background .15s;
+}
+.focus-cta:hover { background: var(--accent); }
+.focus-cta.locked { background: rgba(17,17,16,.15); color: var(--ink3); pointer-events: none; }
 
 /* MODE TABS */
 .mode-tabs {
@@ -420,6 +507,36 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
       <div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">Loading sites...</div>
     </div>
 
+    <!-- Site Focus Panel (replaces list on site select) -->
+    <div id="site-focus">
+      <button class="focus-back" onclick="closeFocus()">
+        <span class="focus-back-arrow">&#8592;</span> All sites
+      </button>
+      <div id="focus-visual"></div>
+      <div class="focus-score-row">
+        <div class="focus-score-num" id="focus-score">—</div>
+        <div class="focus-score-right">
+          <span class="focus-verdict" id="focus-verdict">—</span>
+          <span class="focus-score-sub" id="focus-score-sub">Score /100</span>
+        </div>
+      </div>
+      <div class="focus-header">
+        <div class="focus-name" id="focus-name">—</div>
+        <div class="focus-addr" id="focus-addr">—</div>
+        <div class="focus-chips" id="focus-chips"></div>
+      </div>
+      <div class="focus-metrics" id="focus-metrics"></div>
+      <div class="focus-narrative" id="focus-narrative"></div>
+      <div class="focus-gated">
+        <div class="focus-gated-title">Full report includes</div>
+        <div class="focus-gated-row"><div class="focus-gated-dot"></div>Planning analysis · constraints · precedents<div class="focus-gated-line"></div></div>
+        <div class="focus-gated-row"><div class="focus-gated-dot"></div>Heritage risk + site strategy<div class="focus-gated-line"></div></div>
+        <div class="focus-gated-row"><div class="focus-gated-dot"></div>Architecture intelligence + massing model<div class="focus-gated-line"></div></div>
+        <div class="focus-gated-row"><div class="focus-gated-dot"></div>Full pro forma · IRR · residual land value<div class="focus-gated-line"></div></div>
+      </div>
+      <div class="focus-cta-wrap" id="focus-cta-wrap"></div>
+    </div>
+
   </div><!-- /col-right -->
 
 </div><!-- /page -->
@@ -669,37 +786,69 @@ function render() {
 // ── Card click ────────────────────────────────────────────────────────────────
 function cardClick(id) {
   const site = ALL_SITES.find(s=>s.id===id);
-  if (!site) return;
-  const wasActive = activeSite===id;
-  // Deactivate all
-  document.querySelectorAll('.site-card.active').forEach(el=>el.classList.remove('active'));
-  const list = document.getElementById('site-list');
-  if (wasActive) { activeSite=null; list.classList.remove('has-active'); return; }
-  // Activate this card
-  document.getElementById('card-'+id)?.classList.add('active');
-  list.classList.add('has-active');
-  document.getElementById('card-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'});
-  activeSite = id;
-  // Map - center in the visible left half (right panel is 50% width)
+  if (site) openFocus(site);
+}
+
+function openFocus(site) {
+  activeSite = site.id;
+  const vc = verdictClass(site.score), vl = verdictLabel(site.score);
+  document.getElementById('focus-score').textContent = site.score;
+  const vEl = document.getElementById('focus-verdict');
+  vEl.textContent = vl; vEl.className = 'focus-verdict ' + vc;
+  document.getElementById('focus-score-sub').textContent = site.score + '/100 · ' + site.borough;
+  document.getElementById('focus-name').textContent = site.name;
+  document.getElementById('focus-addr').textContent = site.address;
+  const chips = [
+    site.inOA  ? '<span class="chip oa">OA</span>' : '',
+    site.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
+    site.inCons? '<span class="chip cons">Conservation</span>' : '',
+    site.ptal  ? `<span class="chip ptal">PTAL ${site.ptal}</span>` : '',
+    site.verified ? '<span class="chip" style="background:#f0fdf4;color:#15803d">Verified</span>' : '',
+  ].filter(Boolean).join('');
+  document.getElementById('focus-chips').innerHTML = chips;
+  const existF = Math.max(1, Math.round(site.maxFloors * 0.45));
+  const addF = site.maxFloors - existF;
+  const addNIA = Math.round(site.plotM2 * 0.42 * 0.78 * addF);
+  const heritLabel = site.heritTier==='blocking'?'High Risk':site.heritTier==='navigable'?'Navigable':'Manageable';
+  document.getElementById('focus-metrics').innerHTML = `
+    <div class="focus-metric"><div class="focus-metric-val accent">£${site.gdvEst}M</div><div class="focus-metric-lbl">GDV potential</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">+${addF}F</div><div class="focus-metric-lbl">Added floors</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${addNIA.toLocaleString()}m²</div><div class="focus-metric-lbl">New NIA</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.planScore}/10</div><div class="focus-metric-lbl">Planning appetite</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.plotM2.toLocaleString()}m²</div><div class="focus-metric-lbl">Plot area</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${heritLabel}</div><div class="focus-metric-lbl">Heritage tier</div></div>
+  `;
+  const tensionParts = [];
+  if (site.inOA)   tensionParts.push('<strong>Opportunity Area</strong> designation');
+  if (site.inCons) tensionParts.push('conservation area overlay');
+  if (site.inCAZ)  tensionParts.push('CAZ intensification pressure');
+  const tension = tensionParts.length ? tensionParts.join(' + ') + '.' : `${site.maxFloors}F potential on ${site.plotM2.toLocaleString()}m² plot.`;
+  document.getElementById('focus-narrative').innerHTML = tension + (site.desc ? ' ' + site.desc : '');
+  document.getElementById('focus-cta-wrap').innerHTML = site.t1
+    ? `<a class="focus-cta" href="${site.t1}">Unlock Site Report &rarr;</a>`
+    : `<span class="focus-cta locked">Report coming soon</span>`;
+  const visEl = document.getElementById('focus-visual');
+  const buildThumb = () => {
+    if (MAPBOX_TOKEN) {
+      visEl.innerHTML = `<img class="focus-sat" src="https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},18,0,60/960x440@2x?access_token=${MAPBOX_TOKEN}" alt="">`;
+    } else {
+      visEl.innerHTML = `<div class="focus-sat-placeholder"><span style="font:800 36px var(--mono);color:var(--accent)">£${site.gdvEst}M</span></div>`;
+      setTimeout(()=>{ if(MAPBOX_TOKEN&&activeSite===site.id) buildThumb(); }, 1200);
+    }
+  };
+  buildThumb();
+  document.getElementById('site-focus').classList.add('visible');
   if (MAP && site.lat && site.lng) {
     const panelW = Math.round(window.innerWidth * 0.5);
-    MAP.flyTo({
-      center: [site.lng, site.lat], zoom: 16, duration: 700,
-      padding: { top: 80, bottom: 80, left: 40, right: panelW + 40 }
-    });
-    showPopup(site);
+    MAP.flyTo({ center:[site.lng,site.lat], zoom:16.5, duration:900, pitch:52,
+      padding:{top:80,bottom:80,left:40,right:panelW+40} });
   }
-  // Lazy-load satellite thumbnail once token is available
-  setTimeout(() => {
-    if (MAPBOX_TOKEN) {
-      const img = document.querySelector(`#card-${id} .expand-sat-img`);
-      const fallback = document.querySelector(`#card-${id} .expand-thumb-fallback`);
-      if (img) {
-        img.onload = () => { if (fallback) fallback.style.display = 'none'; };
-        img.src = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},18,0,55/480x160@2x?access_token=${MAPBOX_TOKEN}`;
-      }
-    }
-  }, 120);
+}
+
+function closeFocus() {
+  activeSite = null;
+  document.getElementById('site-focus').classList.remove('visible');
+  if (MAP) MAP.flyTo({center:[-0.118,51.510],zoom:10.5,pitch:45,duration:800,padding:{}});
 }
 
 // ── Popup ─────────────────────────────────────────────────────────────────────
