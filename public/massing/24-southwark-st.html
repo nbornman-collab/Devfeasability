@@ -281,9 +281,9 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 
   <!-- Scenario tabs - sticky at top of panel so always visible -->
   <div class="stabs">
-    <button class="stab lo active" onclick="go(0)"><span class="sn">Low</span><span class="ss">10F · 42m</span></button>
-    <button class="stab base" onclick="go(1)"><span class="sn">Base</span><span class="ss">14F · 60m</span></button>
-    <button class="stab hi" onclick="go(2)"><span class="sn">High</span><span class="ss">22F · 92m</span></button>
+    <button class="stab lo active" onclick="go(0)"><span class="sn">Low</span><span class="ss" id="stab-ss-0">—</span></button>
+    <button class="stab base" onclick="go(1)"><span class="sn">Base</span><span class="ss" id="stab-ss-1">—</span></button>
+    <button class="stab hi" onclick="go(2)"><span class="sn">High</span><span class="ss" id="stab-ss-2">—</span></button>
   </div>
 
   <!-- Score summary -->
@@ -762,8 +762,24 @@ function render(){
   renderProfitStrip();
   const s=SCENARIOS[activeIdx], col=COLS[activeIdx];
 
+  // Floors calculation
+  const existF = EXISTING_HEIGHT > 0 ? Math.max(1, Math.round(EXISTING_HEIGHT / FTF)) : 0;
+  const addF = Math.max(0, s.floors - existF);
+  const existNIA = Math.round((PLOT_AREA * 0.65) * existF * 0.78 * 0.78);
+  const areaUpliftPct = existNIA > 0 ? Math.round((s.nia - existNIA) / existNIA * 100) : 0;
+
   // Hero metrics
   document.getElementById('hero').innerHTML=`
+    <div class="hero-card">
+      <div class="hero-val">${existF}<span class="hero-unit" style="font-size:10px"> exist</span> + ${addF}<span class="hero-unit" style="font-size:10px">F add</span></div>
+      <div class="hero-lbl">Existing + Additional Floors</div>
+      <div class="hero-delta" style="color:var(--t3)">${s.floors}F total · ${s.podH||40}m</div>
+    </div>
+    <div class="hero-card">
+      <div class="hero-val">${areaUpliftPct > 0 ? '+'+areaUpliftPct : areaUpliftPct}<span class="hero-unit">%</span></div>
+      <div class="hero-lbl">Area Uplift</div>
+      <div class="hero-delta" style="color:var(--t3)">${fmt(s.nia)} m² NIA · ${Math.round(s.eff*100)}% eff</div>
+    </div>
     <div class="hero-card">
       <div class="hero-val">£${Math.round(s.gdv/1e6)}M</div>
       <div class="hero-lbl">Gross Development Value</div>
@@ -773,17 +789,21 @@ function render(){
       <div class="hero-val" style="color:${parseFloat(s.poc)>=S.poc?'var(--lo)':'#dc2626'}">${s.poc}<span class="hero-unit">%</span></div>
       <div class="hero-lbl">Profit on Cost</div>
       <div class="hero-delta ${parseFloat(s.poc)>=S.poc?'up':'dn'}">${parseFloat(s.poc)>=S.poc?'▲ Hits '+S.poc+'% target':'✕ Below '+S.poc+'% target'}</div>
-    </div>
-    <div class="hero-card">
-      <div class="hero-val">${(s.nia/1000).toFixed(1)}<span class="hero-unit">k m²</span></div>
-      <div class="hero-lbl">Net Internal Area</div>
-      <div class="hero-delta" style="color:var(--t3)">${Math.round(s.eff*100)}% efficiency</div>
-    </div>
-    <div class="hero-card">
-      <div class="hero-val">£${(s.tdc/1e6).toFixed(1)}<span class="hero-unit">M</span></div>
-      <div class="hero-lbl">Total Development Cost</div>
-      <div class="hero-delta" style="color:var(--t3)">${MARKET.progYrs[s.key]}yr programme</div>
     </div>`;
+
+  // Update group badge with floors context
+  const devBadge = document.getElementById('t2-dev-badge');
+  if(devBadge) devBadge.textContent = existF+'F exist + '+addF+'F add · £'+Math.round(s.gdv/1e6)+'M GDV';
+
+  // Update stab sublabels with existing+additional floors
+  SCENARIOS.forEach((sc, i) => {
+    const el = document.getElementById('stab-ss-'+i);
+    if(el) {
+      const ef = EXISTING_HEIGHT > 0 ? Math.max(1, Math.round(EXISTING_HEIGHT / FTF)) : 0;
+      const af = Math.max(0, sc.floors - ef);
+      el.textContent = ef+'F + '+af+'F add';
+    }
+  });
 
   // Vertical bars
   buildBars();

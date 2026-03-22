@@ -674,8 +674,17 @@ function populateSummary(si) {
   const planB = document.getElementById('g-plan-badge');
   if(planB) {
     const ps = (F.momentum||{}).score||5;
+    const consents = (F.momentum||{}).consents||0;
     planB.className = 'ig-badge '+(ps>=7?'green':ps>=5?'amber':'red');
-    planB.textContent = 'Appetite '+ps.toFixed(1)+'/10';
+    planB.textContent = 'Appetite '+ps.toFixed(1)+'/10 · '+consents+' consents nearby';
+  }
+  // Architecture badge - tier + strategy summary
+  const archB = document.getElementById('g-arch-badge');
+  if(archB) {
+    const heritTier = hf.tier || 'manageable';
+    const tierLabel = heritTier === 'blocking' ? 'Heritage: Blocking' : heritTier === 'navigable' ? 'Heritage: Navigable' : heritTier === 'clean' ? 'Heritage: Clean' : 'Heritage: Manageable';
+    const maxH2 = maxH||40;
+    archB.textContent = tierLabel + ' · ' + maxH2 + 'm max';
   }
 
   // Synthesis paragraphs
@@ -773,6 +782,18 @@ function populateSummary(si) {
       const planScore = (F.momentum||{}).score||5;
       const planCol = planScore>=7?'#059669':planScore>=5?'#d97706':'#dc2626';
 
+      // Existing vs additional floors
+      const existingM = (F.sky&&F.sky.existing_m)||0;
+      const FTF = 4.0;
+      const existingF = existingM > 0 ? Math.max(1, Math.round(existingM / FTF)) : 0;
+      const additionalF = Math.max(0, mf - existingF);
+      const floorsLabel = existingF > 0 ? existingF+'<span style="font:400 9px sans-serif;color:#9ca3af"> exist</span> + '+additionalF+'<span style="font:400 9px sans-serif;color:#9ca3af">F add</span>' : mf+'F';
+
+      // Area uplift %
+      const existingNIA = Math.round(niaPF * Math.max(existingF, 1));
+      const proposedNIA = Math.round(niaPF * mf);
+      const areaUplift = existingNIA > 0 ? Math.round((proposedNIA - existingNIA) / existingNIA * 100) : 0;
+
       const m = (v, u, lbl, col) => `<div style="flex:1;text-align:center;padding:10px 6px;border-right:1px solid #e5e7eb;min-width:0">
         <div style="font:800 17px 'JetBrains Mono',monospace;color:${col||'#0c0f1a'};letter-spacing:-1px;line-height:1.1">${v}<span style="font:500 10px 'Inter',sans-serif;color:#9ca3af;font-weight:400">${u}</span></div>
         <div style="font:500 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.8px;color:#6b7280;margin-top:3px">${lbl}</div>
@@ -782,11 +803,15 @@ function populateSummary(si) {
       hero.id = 'metrics-hero-injected';
       hero.style.cssText = 'display:flex;background:#fff;border-bottom:2px solid #e5e7eb;flex-shrink:0';
       hero.innerHTML =
-        m(mf+'F', '', 'Max Floors', '#0c0f1a') +
+        `<div style="flex:1;text-align:center;padding:10px 6px;border-right:1px solid #e5e7eb;min-width:0">
+          <div style="font:800 17px 'JetBrains Mono',monospace;color:#0c0f1a;letter-spacing:-1px;line-height:1.1">${floorsLabel}</div>
+          <div style="font:500 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.8px;color:#6b7280;margin-top:3px">Floors</div>
+        </div>` +
         m('£'+gdvEst, 'M', 'GDV Est.', '#0c0f1a') +
         m('£'+erv2, '/m²', 'ERV', '#0c0f1a') +
         m(niy2.toFixed(2), '%', 'NIY', '#0c0f1a') +
-        m(planScore.toFixed(1), '/10', 'Planning', planCol);
+        (areaUplift > 0 ? m('+'+areaUplift, '%', 'Area Uplift', '#059669') : '') +
+        m(planScore.toFixed(1), '/10', 'Planning Appetite', planCol);
       // Remove border-right from last item
       hero.lastElementChild.style.borderRight = 'none';
       firstGroup.parentNode.insertBefore(hero, firstGroup);
