@@ -62,7 +62,7 @@ function renderIntelligenceT1(si) {
     { key:'acquisition', label:'Title Stack', f:F.acquisition,
       primary: (F.acquisition.titles===1?'Single title':(F.acquisition.titles||1)+' titles') + ' · ' + (F.acquisition.tenure||'Freehold'),
       secondary: (F.acquisition.encumbrances||'No known encumbrances') },
-    { key:'transport',   label:'Station Gravity',    f:F.transport,   primary: 'PTAL '+F.transport.ptal,                    secondary: F.transport.stations+' stations within 500m' },
+    { key:'transport',   label:'Transport Links',    f:F.transport,   primary: 'PTAL '+F.transport.ptal,                    secondary: F.transport.stations+' stations within 500m' },
   ];
 
   const cols = factors.map(({label, f, primary, secondary}) => {
@@ -114,7 +114,7 @@ function renderIntelligenceT2(si) {
     ['Planning Appetite',F.momentum.cluster+' - '+((F.momentum.consents||0)+' consents nearby'),  F.momentum.score],
     ['Heritage Shadow',  (F.heritage.statutory&&F.heritage.statutory.primary?F.heritage.statutory.primary.name+' GrII '+F.heritage.statutory.primary.dist_m+'m':F.heritage_framework&&F.heritage_framework.verdict?'See verdict below':'No constraints noted'), F.heritage.score],
     ['Title Stack',      (F.acquisition.titles||1)+' title - '+(F.acquisition.tenure||'Freehold')+(F.acquisition.owner?' - '+F.acquisition.owner:''), F.acquisition.score],
-    ['Station Gravity',  'PTAL '+(F.transport.ptal||'-')+' - '+(F.transport.stations||0)+' stations within 500m', F.transport.score],
+    ['Transport Links',  'PTAL '+(F.transport.ptal||'-')+' - '+(F.transport.stations||0)+' stations within 500m', F.transport.score],
   ].map(([label, val, sc]) => {
     const col = sc >= 7.5 ? '#059669' : sc >= 5 ? '#d97706' : '#dc2626';
     return `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid #f3f4f6;gap:12px">
@@ -200,20 +200,14 @@ function renderIntelligenceT2(si) {
     dataRow('Title', (F.acquisition&&F.acquisition.tenure||'Freehold')+' - '+(F.acquisition&&F.acquisition.titles||1)+' title') +
     (F.acquisition&&F.acquisition.insight ? `<p style="font:400 11px/1.7 'Inter',sans-serif;color:#6b7280;margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6">${F.acquisition.insight.substring(0,300)}...</p>` : '');
 
+  // T2 intelligence strip: score + factor rows only
+  // The 3 group sections (Development / Planning / Architecture) are in the T2 HTML below
   return `
-  <div style="margin-bottom:4px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <span style="font:700 9px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.15em;color:#9ca3af">Site Intelligence</span>
-      <span style="font:800 18px 'Inter',sans-serif;color:#0c0f1a">${score}<span style="font-weight:400;font-size:11px;color:#9ca3af"> /100</span></span>
-    </div>
-    ${rows}
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <span style="font:700 10px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.15em;color:#999990">Site Intelligence Score</span>
+    <span style="font:800 22px 'Inter',sans-serif;color:#111110">${score}<span style="font-weight:400;font-size:12px;color:#999990"> /100</span></span>
   </div>
-  <div style="margin-top:4px">
-    ${section('01','Development Scope',maxF+'F - £'+gdvM+'M GDV', devBody)}
-    ${section('02','Planning Realm','Appetite '+F.momentum.score.toFixed(1)+'/10', planBody)}
-    ${section('03','Architecture Insights','D/A Analysis', archBody)}
-    ${section('04','Market Context','£'+erv+' ERV - 4.75% NIY', marketBody)}
-  </div>`;
+  ${rows}`;
 }
 
 

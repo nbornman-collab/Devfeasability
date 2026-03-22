@@ -24,6 +24,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Decathlon (French retailer) likely tenanted under a property company freehold. Large retail warehouse sites are routinely brought forward for development at lease end. 85 planning apps suggests long-standing developer interest but complex." },
-    transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Bus-served OKR. Proposed Bakerloo Line Extension adds station 500m. If BLE delivered: score upgrades to PTAL 6. Currently the weakest transport score in the SE1 tier - compensated by land size." }
+    transport: { label: 'Transport Links', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Bus-served OKR. Proposed Bakerloo Line Extension adds station 500m. If BLE delivered: score upgrades to PTAL 6. Currently the weakest transport score in the SE1 tier - compensated by land size." }
   }
 };

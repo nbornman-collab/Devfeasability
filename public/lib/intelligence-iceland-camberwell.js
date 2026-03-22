@@ -23,6 +23,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 7.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Iceland lease under property freeholder. National retailer can relocate." },
-    transport: { label: 'Station Gravity', score: 7.5, weight: 0.5, ptal: '4', insight: "PTAL 4. Denmark Hill 600m. E&C 1km. Good bus connectivity." }
+    transport: { label: 'Transport Links', score: 7.5, weight: 0.5, ptal: '4', insight: "PTAL 4. Denmark Hill 600m. E&C 1km. Good bus connectivity." }
   }
 };

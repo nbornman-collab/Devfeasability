@@ -23,6 +23,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 5.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "TfL freehold. Public sector disposal - politically complex, requires mayoral/TfL board approval. Score heavily penalised for acquisition complexity." },
-    transport: { label: 'Station Gravity', score: 8.5, weight: 0.5, ptal: '5', insight: "PTAL 5. Lambeth North (Bakerloo) 200m. Waterloo 500m. E&C 300m. Excellent transport." }
+    transport: { label: 'Transport Links', score: 8.5, weight: 0.5, ptal: '5', insight: "PTAL 5. Lambeth North (Bakerloo) 200m. Waterloo 500m. E&C 300m. Excellent transport." }
   }
 };

@@ -283,9 +283,9 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 
   <!-- Scenario tabs - sticky at top of panel so always visible -->
   <div class="stabs">
-    <button class="stab lo active" onclick="go(0)"><span class="sn">Low</span><span class="ss" id="stab-ss-0">—</span></button>
-    <button class="stab base" onclick="go(1)"><span class="sn">Base</span><span class="ss" id="stab-ss-1">—</span></button>
-    <button class="stab hi" onclick="go(2)"><span class="sn">High</span><span class="ss" id="stab-ss-2">—</span></button>
+    <button class="stab lo active" onclick="go(0)"><span class="sn">Option 1</span><span class="ss">Baseline</span><span class="ss" id="stab-ss-0" style="font-size:9px;opacity:.7"></span></button>
+    <button class="stab base" onclick="go(1)"><span class="sn">Option 2</span><span class="ss">Expanded</span><span class="ss" id="stab-ss-1" style="font-size:9px;opacity:.7"></span></button>
+    <button class="stab hi" onclick="go(2)"><span class="sn">Option 3</span><span class="ss">Full Potential</span><span class="ss" id="stab-ss-2" style="font-size:9px;opacity:.7"></span></button>
   </div>
 
   <!-- Score summary -->
@@ -554,11 +554,11 @@ const MARKET={
 };
 
 const SCENARIOS=[
-  {key:'lo',label:'Low',floors:8,podF:5,podH:20,twrF:3,twrPct:0.70,cov:1.0,eff:0.83,costFactor:0.88,
+  {key:'lo',label:'Baseline',floors:8,podF:5,podH:20,twrF:3,twrPct:0.70,cov:1.0,eff:0.83,costFactor:0.88,
    narrative:'Full plate to 5F matching the Bankside commercial cornice. Tower steps back above L5, 70% coverage. <strong>Single staircase</strong> compliant sub-18m tower element. Lowest programme risk - 2 year build. No tall buildings assessment required at this height. <strong>Best margin efficiency</strong> - the return curve peaks near 8-9F in the Bankside CAZ.'},
-  {key:'base',label:'Base',floors:10,podF:5,podH:20,twrF:5,twrPct:0.65,cov:1.0,eff:0.81,costFactor:1.00,
+  {key:'base',label:'Expanded',floors:10,podF:5,podH:20,twrF:5,twrPct:0.65,cov:1.0,eff:0.81,costFactor:1.00,
    narrative:'5F podium holds Bankside street cornice. Tower adds 5F at 65% coverage above. Pre-app views assessment required re <strong>Tate Modern sightlines</strong> (220m W). <strong>Single staircase</strong> compliant throughout (sub-18m tower, overall sub-50m). Strong precedent at this height on Southwark Street. <strong>Absolute profit peaks near this scenario.</strong>'},
-  {key:'hi',label:'High',floors:12,podF:4,podH:16,twrF:8,twrPct:0.60,cov:1.0,eff:0.79,costFactor:1.18,
+  {key:'hi',label:'Full Potential',floors:12,podF:4,podH:16,twrF:8,twrPct:0.60,cov:1.0,eff:0.79,costFactor:1.18,
    narrative:'Lower 4F podium activates public realm at ground. 8F tower at 60% coverage - maximum height for this Bankside CAZ position without a tall buildings policy trigger. LVMF assessment required. Southwark Core Strategy requires design justification above surroundings. Highest GDV but <strong>margin % falls</strong> as construction cost and programme compound.'},
 ];
 
