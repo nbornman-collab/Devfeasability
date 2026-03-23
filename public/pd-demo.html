@@ -225,8 +225,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 
       <!-- Wrap-around controls -->
       <div id="ctrl-wrap" style="display:none">
-        <div style="font:400 10px/1.6 var(--sans);color:var(--ink3);margin-bottom:10px;padding:8px 10px;background:var(--bg2);border-radius:6px;">
-          Rear extension + side return infill. L-shape fills the narrow corridor alongside the house back to the new rear wall.
+        <div style="font:400 10px/1.6 var(--sans);color:#7f1d1d;margin-bottom:10px;padding:8px 10px;background:var(--red-lt);border:1px solid var(--red-bd);border-radius:6px;">
+          A connected L-shape always requires <strong>full planning permission</strong> - joining side and rear voids PD rights. Use the sliders to size your envelope. Alternative: phase the build (side first under PD, rear second separately).
         </div>
         <div class="slider-row">
           <div class="slider-labels"><span class="slider-lbl">Rear depth</span><span class="slider-val" id="val-wdepth">3.0m</span></div>
@@ -809,49 +809,47 @@ function updateWrap(map) {
   document.getElementById('val-srw').textContent    = srw.toFixed(1)+'m';
   document.getElementById('val-wht').textContent    = height.toFixed(1)+'m';
 
-  // PD rules for wrap-around (single storey):
-  // - Rear element: 3m PD limit (semi/terraced), up to 6m with Prior Approval
-  // - Side element: width must be <= half original house width
-  // - Height: must not exceed original eaves; hard cap 4m
-  const halfHouse  = HOUSE_W / 2;
-  const exceedsEaves   = height > HOUSE_EAVES;
-  const exceedsSideW   = srw > halfHouse;
-  const exceedsPADepth = depth > 6;
-  const needsPA        = depth > 3 && depth <= 6;
+  // CORRECT RULE: A connected L-shaped wrap-around (side + rear joined) almost always
+  // requires full planning permission. Joining the two elements into a single structure
+  // voids PD rights for both. GPDO Sch 2 Part 1 Class A (rear) and Class B (side) are
+  // assessed independently -- a connected L-shape fails both.
+  //
+  // The only lawful PD routes are:
+  //  1. Build side extension first under PD, then rear extension later as a separate build
+  //  2. Keep them physically disconnected (rare; limits open-plan)
+  //
+  // Therefore this massing always shows "Planning Permission Required" -- the sliders
+  // let the user size the envelope they need and understand the planning requirements.
 
-  let verdict, color, sub, noteClass, noteText;
-  const rules = [];
+  const halfHouse    = HOUSE_W / 2;
+  const exceedsEaves = height > HOUSE_EAVES;
+  const exceedsSideW = srw > halfHouse;
+  const exceedsDepth = depth > 6;
 
-  if (exceedsSideW) {
-    verdict = 'Planning Required'; color = 'var(--red)'; noteClass = 'red';
-    sub = `Side return ${srw.toFixed(1)}m exceeds half house width (${halfHouse.toFixed(1)}m)`;
-    noteText = `The side return width of ${srw.toFixed(1)}m exceeds half the original house width (${halfHouse.toFixed(1)}m). PD for side extensions is capped at half the original width. Full planning permission required.`;
-    rules.push({icon:'✗', text:`Side return ${srw.toFixed(1)}m > half house width ${halfHouse.toFixed(1)}m`});
-  } else if (exceedsEaves) {
-    verdict = 'Planning Required'; color = 'var(--red)'; noteClass = 'red';
-    sub = `Height ${height.toFixed(1)}m exceeds eaves at ${HOUSE_EAVES}m`;
-    noteText = `Height exceeds the existing eaves level. Single storey PD extensions must stay below the eaves. Full planning required.`;
-    rules.push({icon:'✗', text:`Height ${height.toFixed(1)}m exceeds eaves ${HOUSE_EAVES}m`});
-  } else if (exceedsPADepth) {
-    verdict = 'Planning Required'; color = 'var(--red)'; noteClass = 'red';
-    sub = `Depth ${depth.toFixed(1)}m exceeds 6m Prior Approval maximum`;
-    noteText = `Rear depth of ${depth.toFixed(1)}m exceeds the 6m maximum even with Prior Approval. Reduce the depth or submit a full planning application.`;
-    rules.push({icon:'✗', text:`Depth ${depth.toFixed(1)}m exceeds 6m PA limit`});
-  } else if (needsPA) {
-    verdict = 'Prior Approval Needed'; color = 'var(--amber-v)'; noteClass = 'amber';
-    sub = `${depth.toFixed(1)}m rear depth needs Neighbour Consultation Scheme`;
-    noteText = `Rear depth of ${depth.toFixed(1)}m (3-6m band) requires Prior Approval. LPA notifies neighbours; 42 days for objections. Side return of ${srw.toFixed(1)}m is within PD limits. Fee: ~£120.`;
-    rules.push({icon:'⚠', text:`Rear depth ${depth.toFixed(1)}m -- Prior Approval required`});
-    rules.push({icon:'✓', text:`Side return ${srw.toFixed(1)}m within half-width limit ✓`});
-  } else {
-    verdict = 'Permitted Development'; color = 'var(--green)'; noteClass = 'green';
-    sub = 'Rear extension and side return within PD limits';
-    noteText = `Wrap-around of ${depth.toFixed(1)}m depth with ${srw.toFixed(1)}m side return is within standard PD limits. No planning application required. Materials should match the original dwelling.`;
-    rules.push({icon:'✓', text:`Rear depth ${depth.toFixed(1)}m within 3m PD limit ✓`});
-    rules.push({icon:'✓', text:`Side return ${srw.toFixed(1)}m within half-width limit ✓`});
-  }
-  rules.push({icon: height<=HOUSE_EAVES?'✓':'✗', text:`Height ${height.toFixed(1)}m vs eaves ${HOUSE_EAVES}m`});
-  rules.push({icon:'✓', text:'Single storey -- materials to match'});
+  // Always planning required for connected L-shape
+  const verdict   = 'Planning Permission Required';
+  const color     = 'var(--red)';
+  const noteClass = 'red';
+
+  // Identify any additional blockers beyond the fundamental L-shape issue
+  const additionalIssues = [];
+  if (exceedsSideW) additionalIssues.push(`Side return ${srw.toFixed(1)}m exceeds half house width (${halfHouse.toFixed(1)}m max)`);
+  if (exceedsEaves) additionalIssues.push(`Height ${height.toFixed(1)}m exceeds eaves (${HOUSE_EAVES}m)`);
+  if (exceedsDepth) additionalIssues.push(`Rear depth ${depth.toFixed(1)}m exceeds 6m PA maximum`);
+
+  const sub = additionalIssues.length
+    ? `L-shape voids PD rights + ${additionalIssues.length} further issue${additionalIssues.length>1?'s':''}`
+    : 'Connected L-shape voids PD rights -- householder application needed';
+
+  const noteText = `A connected L-shaped extension joining the rear and side always requires a householder planning application. Joining the two elements into one structure voids Permitted Development rights under GPDO Sch 2 Part 1 Class A and Class B. Alternatives: (1) build the side extension first under PD, then the rear separately; (2) keep them physically unconnected. Typical householder application: 8 weeks, ~£258 fee.`;
+
+  const rules = [
+    {icon:'✗', text:'Connected L-shape voids PD rights (GPDO Part 1 Class A + B)'},
+    {icon: !exceedsSideW?'✓':'✗', text:`Side return ${srw.toFixed(1)}m -- half-width limit ${halfHouse.toFixed(1)}m`},
+    {icon: !exceedsEaves?'✓':'✗', text:`Height ${height.toFixed(1)}m vs eaves ${HOUSE_EAVES}m`},
+    {icon: depth<=6?'✓':'✗', text:`Rear depth ${depth.toFixed(1)}m (6m PA max if built separately)`},
+    {icon:'ℹ', text:'Alternative: Phase build -- side PD first, rear PD second'},
+  ];
 
   document.getElementById('verdict-dot').style.background = color;
   document.getElementById('verdict-label').style.color = color;
