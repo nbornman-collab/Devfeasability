@@ -34,6 +34,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:300;height:52px;display:flex;ali
 /* Panel sections */
 .p-section{padding:16px 18px;border-bottom:1px solid var(--border)}
 .p-hd{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text4);margin-bottom:12px}
+.roof-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--border)}
+.roof-row:last-of-type{border-bottom:none}
+.roof-key{font:400 11px var(--sans);color:var(--text3)}
+.roof-val{font:700 12px var(--mono);color:var(--text)}
+.roof-val.accent{color:var(--blue)}
+.roof-val.green{color:var(--green)}
+.roof-val.amber{color:var(--amber,#f59e0b)}
+.roof-note{font:400 10px/1.6 var(--sans);color:var(--text3);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
 .p-title{font:800 16px var(--sans);color:var(--text);letter-spacing:-.3px;margin-bottom:2px}
 .p-sub{font:400 11px var(--sans);color:var(--text3);line-height:1.5}
 
@@ -94,15 +102,21 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 <div class="layout">
   <div style="position:relative;flex:1">
     <div id="map"></div>
-    <div class="map-label">70 Nithdale Road SE18 · Demo property · Semi-detached</div>
+    <div class="map-label" id="load-status">Loading footprint...</div>
   </div>
 
   <div class="panel">
     <!-- Address -->
     <div class="p-section">
-      <div class="p-hd">Demo Property</div>
-      <div class="p-title">70 Nithdale Road</div>
-      <div class="p-sub">London SE18 3PD · Semi-detached · 2 storeys</div>
+      <div class="p-hd">Property</div>
+      <div class="p-title" id="prop-title">70 Nithdale Road</div>
+      <div class="p-sub" id="prop-sub">London SE18 3PD</div>
+    </div>
+
+    <!-- Roof intelligence -->
+    <div class="p-section">
+      <div class="p-hd">Roof Intelligence</div>
+      <div id="roof-info" style="display:none"></div>
     </div>
 
     <!-- Verdict -->
@@ -201,53 +215,148 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 </div>
 
 <script>
-// ── Property geometry (70 Nithdale Road SE18 - approximate demo) ─────────────
-// Semi-detached: ~5m wide, ~8m deep original, ~18m garden
-// Orientation: house faces roughly north, garden extends south
+// -- Property geometry - dynamically loaded from OS NGD ------------------------
+// Real building footprint, ridge height, eaves height and pitch from OS API.
+// Falls back to approximate rectangle if OS NGD returns nothing.
 
-const BASE_LNG = 0.0694;
-const BASE_LAT = 51.4867;
+const M_LAT = 0.000009;   // 1m in latitude degrees (~51.5N)
+const M_LNG = 0.0000143;  // 1m in longitude degrees (~51.5N)
 
-// Conversion: metres to degrees (approximate at 51.5°N)
-const M_LAT = 0.000009; // 1m in latitude degrees
-const M_LNG = 0.0000143; // 1m in longitude degrees
+// State - populated from OS NGD response
+let SITE_POLYGON = null;   // real footprint coords [[lng,lat],...]
+let BASE_LNG = 0.0694;
+let BASE_LAT = 51.4867;
+let HOUSE_W = 5;
+let HOUSE_D = 8;
+let HOUSE_H = 7.2;
+let HOUSE_EAVES = 4.5;
+let HOUSE_PITCH = null;    // degrees, null if unknown
+let GARDEN_D = 18;
 
-// House dimensions
-const HOUSE_W = 5; // metres wide
-const HOUSE_D = 8; // metres original depth
-const HOUSE_H = 7.2; // metres to ridge
-const HOUSE_EAVES = 4.5; // metres to eaves
-const GARDEN_D = 18; // metres garden behind house
+// Convert OS NGD polygon coords to [[lng,lat],...] ring
+function toRing(coords) { return coords.concat([coords[0]]); }
+
+// Rough bounding box approach: estimate width/depth from polygon extents
+function polygonDimensions(ring) {
+  const lngs = ring.map(c=>c[0]), lats = ring.map(c=>c[1]);
+  const w = (Math.max(...lngs)-Math.min(...lngs))*69500;
+  const d = (Math.max(...lats)-Math.min(...lats))*111320;
+  return { w: parseFloat(w.toFixed(1)), d: parseFloat(d.toFixed(1)),
+           cLng: (Math.min(...lngs)+Math.max(...lngs))/2,
+           cLat: (Math.min(...lats)+Math.max(...lats))/2 };
+}
+
+// Roof info panel update
+function updateRoofPanel(props) {
+  const el = document.getElementById('roof-info');
+  if (!el) return;
+  if (props._roofPitchDeg) {
+    const pitchDeg = props._roofPitchDeg;
+    const ridge = props._roofRidge, eaves = props._roofEaves;
+    const rise = props._roofRise;
+    // Loft volume indicator - Class B limit: 40m3 terraced/semi, 50m3 detached
+    const footprintM2 = props._area || (HOUSE_W * HOUSE_D);
+    const halfSpan = HOUSE_W / 2;
+    const loftVol = Math.round((0.5 * halfSpan * rise * (HOUSE_D || HOUSE_D)) );
+    const pdLimit = 40; // assume semi/terraced
+    const remaining = Math.max(0, pdLimit - loftVol);
+    el.innerHTML = `
+      <div class="roof-row"><span class="roof-key">Roof pitch</span><span class="roof-val accent">${pitchDeg}&deg;</span></div>
+      <div class="roof-row"><span class="roof-key">Ridge height</span><span class="roof-val">${ridge}m</span></div>
+      <div class="roof-row"><span class="roof-key">Eaves height</span><span class="roof-val">${eaves}m</span></div>
+      <div class="roof-row"><span class="roof-key">Rise</span><span class="roof-val">${rise}m</span></div>
+      <div class="roof-row"><span class="roof-key">Loft volume (est.)</span><span class="roof-val">${loftVol}m&sup3;</span></div>
+      <div class="roof-row"><span class="roof-key">Class B remaining</span><span class="roof-val ${remaining>10?'green':'amber'}">${remaining}m&sup3; of ${pdLimit}m&sup3;</span></div>
+      <div class="roof-note">Pitch: a ${pitchDeg}&deg; roof ${pitchDeg>=35?'gives good loft volume':'may limit usable headroom'}. ${pitchDeg>=35?'Standard dormer or full hip-to-gable works well.':'Hip-to-gable may be the better strategy.'}</div>
+    `;
+    el.style.display = 'block';
+  } else {
+    el.innerHTML = '<div class="roof-row"><span class="roof-key">Roof data</span><span class="roof-val" style="color:var(--text3)">Not available from OS NGD</span></div>';
+    el.style.display = 'block';
+  }
+}
+
+// Utility: build a rectangle polygon from anchor corner + dimensions (for extension proposals)
+function makeRect(anchorLng, anchorLat, widthM, depthM) {
+  const lng0 = anchorLng, lat0 = anchorLat;
+  const lng1 = anchorLng + widthM * M_LNG;
+  const lat1 = anchorLat - depthM * M_LAT;
+  return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+}
 
 // Current mode
 let currentMode = 'rear';
 
-// Build polygon from anchor + dimensions
-function makeRect(anchorLng, anchorLat, widthM, depthM, offsetLngM = 0, offsetLatM = 0) {
-  const lng0 = anchorLng + offsetLngM * M_LNG;
-  const lat0 = anchorLat + offsetLatM * M_LAT;
-  const lng1 = lng0 + widthM * M_LNG;
-  const lat1 = lat0 - depthM * M_LAT; // south
-  return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+let cfg;
+async function loadBuilding(lat, lng) {
+  const status = document.getElementById('load-status');
+  if (status) status.textContent = 'Loading real building footprint from OS NGD...';
+  try {
+    const fc = await fetch(`/api/os-buildings?lat=${lat}&lng=${lng}&buf=0.0003`).then(r=>r.json());
+    const best = (fc.features||[]).find(f=>f.properties._selected) || fc.features?.[0];
+    if (best && best.geometry && best.geometry.coordinates?.[0]?.length > 3) {
+      const ring = best.geometry.coordinates[0];
+      SITE_POLYGON = ring;
+      const dim = polygonDimensions(ring);
+      BASE_LNG = dim.cLng;
+      BASE_LAT = dim.cLat;
+      HOUSE_W = dim.w;
+      HOUSE_D = dim.d;
+      if (best.properties._heightMax) HOUSE_H = parseFloat(best.properties._heightMax.toFixed(1));
+      if (best.properties._heightRoofBase) HOUSE_EAVES = parseFloat(best.properties._heightRoofBase.toFixed(1));
+      if (best.properties._roofPitchDeg) HOUSE_PITCH = best.properties._roofPitchDeg;
+      if (status) status.textContent = 'Real footprint loaded - ' + Math.round(best.properties._area||0) + 'm² · ' + HOUSE_W.toFixed(0) + 'm wide · ridge ' + HOUSE_H + 'm · eaves ' + HOUSE_EAVES + 'm' + (HOUSE_PITCH ? ' · pitch ' + HOUSE_PITCH + '°' : '');
+      updateRoofPanel(best.properties);
+      return ring;
+    }
+  } catch(e) { console.warn('OS NGD failed:', e); }
+  if (status) status.textContent = 'OS NGD unavailable - using approximate rectangle';
+  return null;
 }
 
-// House polygon - centred around BASE point (front-left corner)
-const houseCoords = makeRect(BASE_LNG, BASE_LAT, HOUSE_W, HOUSE_D);
-const gardenCoords = makeRect(BASE_LNG, BASE_LAT - HOUSE_D * M_LAT, HOUSE_W, GARDEN_D);
-
-let cfg;
 async function initMap() {
   cfg = await fetch('/api/config').then(r => r.json());
   mapboxgl.accessToken = cfg.mapboxToken;
 
+  // Geocode address from URL param or use default
+  const urlAddr = new URLSearchParams(window.location.search).get('address');
+  let initLat = BASE_LAT, initLng = BASE_LNG;
+  if (urlAddr) {
+    try {
+      const geo = await fetch(`/api/geocode?address=${encodeURIComponent(urlAddr)}`).then(r=>r.json());
+      if (geo.lat && geo.lng) { initLat = geo.lat; initLng = geo.lng; BASE_LAT = initLat; BASE_LNG = initLng; }
+    } catch(e) {}
+  }
+
+  // Load real OS NGD footprint
+  await loadBuilding(initLat, initLng);
+
+  // Use real polygon if available, else rectangle fallback
+  const houseCoords = SITE_POLYGON || makeRectFallback();
+  const gardenCoords = makeGardenFallback();
+
   const map = window._map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v11',
-    center: [BASE_LNG + (HOUSE_W / 2) * M_LNG, BASE_LAT - (HOUSE_D / 2 + 4) * M_LAT],
+    center: [BASE_LNG, BASE_LAT],
     zoom: 19,
     pitch: 55,
     bearing: 0
   });
+
+  // Store for massing updates
+  window._houseCoords = houseCoords;
+
+  function makeRectFallback() {
+    const lng0=BASE_LNG-HOUSE_W/2*M_LNG, lat0=BASE_LAT+HOUSE_D/2*M_LAT;
+    const lng1=BASE_LNG+HOUSE_W/2*M_LNG, lat1=BASE_LAT-HOUSE_D/2*M_LAT;
+    return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+  }
+  function makeGardenFallback() {
+    const lng0=BASE_LNG-HOUSE_W/2*M_LNG, lat0=BASE_LAT-HOUSE_D/2*M_LAT;
+    const lng1=BASE_LNG+HOUSE_W/2*M_LNG, lat1=lat0-GARDEN_D*M_LAT;
+    return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+  }
 
   map.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-left');
 
@@ -382,7 +491,7 @@ function updateRear(map) {
     sub = `${depth.toFixed(1)}m depth needs Neighbour Consultation`;
     noteClass = 'amber';
     noteText = `Depth of ${depth.toFixed(1)}m exceeds the 3m standard PD limit for a semi-detached. You need Prior Approval under the Neighbour Consultation Scheme. LPA notifies neighbours; 42 days for objections. Fee: ~£120.`;
-    rules.push({icon:'⚠',text:`Depth ${depth.toFixed(1)}m — Prior Approval required (3-6m band)`});
+    rules.push({icon:'⚠',text:`Depth ${depth.toFixed(1)}m -- Prior Approval required (3-6m band)`});
     rules.push({icon:'✓',text:`Under ${maxPA}m Prior Approval maximum ✓`});
   } else {
     verdict = 'Permitted Development';
@@ -394,7 +503,7 @@ function updateRear(map) {
   }
 
   rules.push({icon: height<=HOUSE_EAVES?'✓':'✗', text:`Height ${height.toFixed(1)}m vs eaves ${HOUSE_EAVES}m`});
-  rules.push({icon:'✓', text:'Single storey — materials to match'});
+  rules.push({icon:'✓', text:'Single storey -- materials to match'});
 
   // Update verdict UI
   document.getElementById('verdict-dot').style.background = color;
@@ -504,7 +613,7 @@ function updateOutbuilding(map) {
   document.getElementById('verdict-dot').style.background = color;
   document.getElementById('verdict-label').style.color = color;
   document.getElementById('verdict-label').textContent = verdict;
-  document.getElementById('verdict-sub').textContent = verdict === 'Permitted Development' ? 'Within outbuilding PD rules' : 'Exceeds PD limits — planning required';
+  document.getElementById('verdict-sub').textContent = verdict === 'Permitted Development' ? 'Within outbuilding PD rules' : 'Exceeds PD limits -- planning required';
   document.getElementById('class-note').className = 'class-note ' + noteClass;
   document.getElementById('class-note').textContent = exceedsH
     ? `Height of ${obh.toFixed(1)}m exceeds the 2.5m limit when within 2m of the boundary.`
@@ -514,9 +623,9 @@ function updateOutbuilding(map) {
 
   document.getElementById('rule-list').innerHTML = [
     {icon:!exceedsArea?'✓':'✗', text:`Area ${OB_AREA.toFixed(0)}m² within 50% curtilage (max ~${Math.round(maxArea)}m²)`},
-    {icon:!exceedsH?'✓':'✗', text:`Height ${obh.toFixed(1)}m — 2.5m limit within 2m of boundary`},
+    {icon:!exceedsH?'✓':'✗', text:`Height ${obh.toFixed(1)}m -- 2.5m limit within 2m of boundary`},
     {icon:'✓', text:'Behind principal elevation ✓'},
-    {icon:'✓', text:'Incidental use — home office / studio ✓'},
+    {icon:'✓', text:'Incidental use -- home office / studio ✓'},
   ].map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
 
   document.getElementById('dim-gf').textContent = OB_AREA.toFixed(1);

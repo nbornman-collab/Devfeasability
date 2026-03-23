@@ -687,14 +687,39 @@ app.get('/api/os-buildings', async (req, res) => {
         // Does this building contain the query point?
         f.properties._contains = pip(qLng, qLat, ring);
         // Pass through OS height fields for 3D extrusion
-        // RelativeHeightMaximum = height above ground (metres)
-        // RelativeHeightMinimum = base above ground (0 for ground-level, >0 for elevated)
+        // OS NGD height fields (all in metres above ground):
+        // RelativeHeightMaximum  = ridge height (highest point)
+        // RelativeHeightRoofBase = eaves height (base of roof / top of walls)
+        // RelativeHeightMinimum  = base height (0 for ground-level)
         const p = f.properties;
-        f.properties._heightMax = p.RelativeHeightMaximum || p.relativeheightmaximum || p.heightMax || null;
-        f.properties._heightMin = p.RelativeHeightMinimum || p.relativeheightminimum || p.heightMin || 0;
+        f.properties._heightMax     = p.RelativeHeightMaximum  || p.relativeheightmaximum  || null;
+        f.properties._heightRoofBase= p.RelativeHeightRoofBase || p.relativeheightroofbase || null;
+        f.properties._heightMin     = p.RelativeHeightMinimum  || p.relativeheightminimum  || 0;
+
+        // Roof pitch calculation (requires ridge + eaves + half-span from footprint)
+        if (f.properties._heightMax && f.properties._heightRoofBase && f.properties._area) {
+          const rise = f.properties._heightMax - f.properties._heightRoofBase;
+          // Approximate half-span from area (sqrt gives rough side length for rectangular buildings)
+          const ring = f.geometry.coordinates[0] || [];
+          let maxSpan = 0;
+          for (let i = 0; i < ring.length - 1; i++) {
+            const dx = (ring[i+1][0] - ring[i][0]) * 69500;
+            const dy = (ring[i+1][1] - ring[i][1]) * 111320;
+            maxSpan = Math.max(maxSpan, Math.sqrt(dx*dx + dy*dy));
+          }
+          const halfSpan = maxSpan / 2;
+          if (rise > 0 && halfSpan > 0) {
+            f.properties._roofPitchDeg = Math.round(Math.atan(rise / halfSpan) * 180 / Math.PI);
+            f.properties._roofRise = parseFloat(rise.toFixed(2));
+            f.properties._roofEaves = parseFloat(f.properties._heightRoofBase.toFixed(2));
+            f.properties._roofRidge = parseFloat(f.properties._heightMax.toFixed(2));
+          }
+        }
+
         // Estimated existing floors and GIA
         if (f.properties._heightMax && f.properties._area) {
-          const floors = Math.round(f.properties._heightMax / 3.5);
+          const ftf = f.properties._heightRoofBase || f.properties._heightMax;
+          const floors = Math.round(ftf / 3.15); // 3.15m residential FTF
           f.properties._estFloors = floors;
           f.properties._estGIA = Math.round(f.properties._area * floors);
         }
