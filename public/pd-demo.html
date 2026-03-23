@@ -54,6 +54,15 @@ html,body{font-family:var(--sans);background:var(--bg);color:var(--ink);height:1
 .panel{width:360px;flex-shrink:0;background:var(--bg);border-left:1px solid var(--rule);overflow-y:auto;display:flex;flex-direction:column}
 
 /* -- PANEL SECTIONS --------------------------------------------------------- */
+
+/* T1-style hero strip */
+.p-hero{padding:16px 20px;border-bottom:1px solid var(--rule);background:var(--bg)}
+.p-hero-addr{font:700 15px var(--sans);color:var(--ink);letter-spacing:-.3px;margin-bottom:2px}
+.p-hero-sub{font:400 11px var(--sans);color:var(--ink3);margin-bottom:12px}
+.p-hero-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.p-hero-stat{background:var(--bg2);border-radius:7px;padding:8px 6px;text-align:center}
+.p-hero-num{font:700 16px var(--mono);color:var(--ink);letter-spacing:-.5px;line-height:1;margin-bottom:2px}
+.p-hero-lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--ink3)}
 .p-section{padding:16px 20px;border-bottom:1px solid var(--rule)}
 .p-hd{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.4px;color:var(--ink3);margin-bottom:10px}
 .p-title{font:700 15px var(--sans);color:var(--ink);letter-spacing:-.3px;margin-bottom:2px}
@@ -171,17 +180,34 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
   </div>
 
   <div class="panel">
-    <!-- Address -->
-    <div class="p-section">
-      <div class="p-hd">Property</div>
-      <div class="p-title" id="prop-title">70 Nithdale Road</div>
-      <div class="p-sub" id="prop-sub">London SE18 3PD</div>
+    <!-- Hero: address + key numbers -->
+    <div class="p-hero">
+      <div class="p-hero-addr" id="prop-title">70 Nithdale Road</div>
+      <div class="p-hero-sub" id="prop-sub">London SE18 3PD · Loading data...</div>
+      <div class="p-hero-strip">
+        <div class="p-hero-stat">
+          <div class="p-hero-num" id="hero-pitch">--</div>
+          <div class="p-hero-lbl">Roof pitch</div>
+        </div>
+        <div class="p-hero-stat">
+          <div class="p-hero-num" id="hero-ridge">--</div>
+          <div class="p-hero-lbl">Ridge ht</div>
+        </div>
+        <div class="p-hero-stat">
+          <div class="p-hero-num" id="hero-eaves">--</div>
+          <div class="p-hero-lbl">Eaves ht</div>
+        </div>
+        <div class="p-hero-stat">
+          <div class="p-hero-num" id="hero-loft">--</div>
+          <div class="p-hero-lbl">Loft vol</div>
+        </div>
+      </div>
     </div>
 
-    <!-- Roof intelligence -->
-    <div class="p-section">
-      <div class="p-hd">Roof Intelligence</div>
-      <div id="roof-info" style="display:none"></div>
+    <!-- Roof intelligence (collapsible) -->
+    <div class="p-section" id="roof-section" style="display:none">
+      <div class="p-hd">Roof analysis</div>
+      <div id="roof-info"></div>
     </div>
 
     <!-- Extension cards -->
@@ -191,7 +217,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <!-- Rear extension -->
       <div class="ext-card">
         <div class="ext-card-header" onclick="toggleExt('rear',this)">
-          <input type="checkbox" id="chk-rear" onclick="event.stopPropagation();toggleExt('rear',this.closest('.ext-card-header'))">
+          <input type="checkbox" id="chk-rear" onclick="event.stopPropagation();toggleExt('rear',null)">
           <span class="ext-card-title">Rear extension</span>
           <span class="ext-dims" id="dims-rear">-</span>
           <span class="ext-badge inactive" id="badge-rear">off</span>
@@ -218,7 +244,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <!-- Dormer -->
       <div class="ext-card">
         <div class="ext-card-header" onclick="toggleExt('dormer',this)">
-          <input type="checkbox" id="chk-dormer" onclick="event.stopPropagation();toggleExt('dormer',this.closest('.ext-card-header'))">
+          <input type="checkbox" id="chk-dormer" onclick="event.stopPropagation();toggleExt('dormer',null)">
           <span class="ext-card-title">Loft dormer</span>
           <span class="ext-dims" id="dims-dormer">-</span>
           <span class="ext-badge inactive" id="badge-dormer">off</span>
@@ -239,7 +265,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <!-- Outbuilding -->
       <div class="ext-card">
         <div class="ext-card-header" onclick="toggleExt('ob',this)">
-          <input type="checkbox" id="chk-ob" onclick="event.stopPropagation();toggleExt('ob',this.closest('.ext-card-header'))">
+          <input type="checkbox" id="chk-ob" onclick="event.stopPropagation();toggleExt('ob',null)">
           <span class="ext-card-title">Outbuilding</span>
           <span class="ext-dims" id="dims-ob">-</span>
           <span class="ext-badge inactive" id="badge-ob">off</span>
@@ -265,7 +291,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <!-- Wrap-around -->
       <div class="ext-card">
         <div class="ext-card-header" onclick="toggleExt('wrap',this)">
-          <input type="checkbox" id="chk-wrap" onclick="event.stopPropagation();toggleExt('wrap',this.closest('.ext-card-header'))">
+          <input type="checkbox" id="chk-wrap" onclick="event.stopPropagation();toggleExt('wrap',null)">
           <span class="ext-card-title">Wrap-around (L-shape)</span>
           <span class="ext-dims" id="dims-wrap">-</span>
           <span class="ext-badge inactive" id="badge-wrap">off</span>
@@ -344,6 +370,28 @@ function polygonDimensions(ring) {
 // Roof info panel update
 function updateRoofPanel(props) {
   const el = document.getElementById('roof-info');
+  // Always update hero strip numbers regardless of roof data
+  if (props._roofPitchDeg) {
+    document.getElementById('hero-pitch').textContent = props._roofPitchDeg + '°';
+  }
+  if (props._roofRidge) document.getElementById('hero-ridge').textContent = props._roofRidge + 'm';
+  if (props._roofEaves || props._heightRoofBase) {
+    const e = props._roofEaves || parseFloat((props._heightRoofBase||0).toFixed(1));
+    document.getElementById('hero-eaves').textContent = e + 'm';
+  }
+  // Loft volume estimate for hero
+  if (props._roofPitchDeg && props._roofRise) {
+    const halfSpan = HOUSE_W / 2;
+    const loftVol = Math.round(0.5 * halfSpan * props._roofRise * HOUSE_D);
+    document.getElementById('hero-loft').textContent = loftVol + 'm³';
+  }
+  // Also update property sub
+  if (props._area) {
+    const sub = document.getElementById('prop-sub');
+    if (sub) sub.textContent = sub.textContent.replace('Loading data...', Math.round(props._area) + 'm² footprint');
+  }
+  // Roof section
+  document.getElementById('roof-section').style.display = 'block';
   if (!el) return;
   if (props._roofPitchDeg) {
     const pitchDeg = props._roofPitchDeg;
@@ -516,6 +564,12 @@ async function initMap() {
   const urlAddr = new URLSearchParams(window.location.search).get('address');
   const addrInput = document.getElementById('nav-addr');
   if (addrInput) addrInput.value = urlAddr || '70 Nithdale Road, London SE18 3PD';
+  // Set hero address from input value
+  const heroTitle = document.getElementById('prop-title');
+  if (heroTitle) {
+    const displayAddr = urlAddr || '70 Nithdale Road';
+    heroTitle.textContent = displayAddr.split(',')[0];
+  }
 
   // Init address autocomplete
   initAutocomplete(cfg.mapboxToken);
@@ -563,7 +617,7 @@ async function initMap() {
 
   map.on('load', () => {
     // Standard style renders high-quality 3D buildings natively - set to dusk for depth
-    map.setConfigProperty('basemap', 'lightPreset', 'day');
+    map.setConfigProperty('basemap', 'lightPreset', 'dawn');
     map.setConfigProperty('basemap', 'showRoadLabels', false);
     map.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
     map.setConfigProperty('basemap', 'showTransitLabels', false);
