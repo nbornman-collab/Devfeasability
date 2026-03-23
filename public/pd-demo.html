@@ -3,104 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PD Massing Demo · D/A</title>
+<title>PD & Extensions · D/A</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --sans:'Inter',sans-serif;--mono:'DM Mono',monospace;
-  --green:#16a34a;--green-lt:#f0fdf4;--green-bd:#bbf7d0;
-  --amber:#d97706;--amber-lt:#fffbeb;--amber-bd:#fde68a;
-  --red:#dc2626;--red-lt:#fef2f2;--red-bd:#fecaca;
-  --blue:#1d4ed8;--text:#0f172a;--text2:#374151;--text3:#6b7280;--text4:#9ca3af;
-  --border:#e5e7eb;--surface:#fff;--surface2:#f9fafb;
+  --bg:#f2f1ed; --bg2:#e8e7e2;
+  --ink:#111110; --ink2:#555550; --ink3:#999990;
+  --accent:#e07b2a; --accent-bg:#fdf3ea;
+  --rule:rgba(17,17,16,.1);
+  --green:#16a34a; --green-lt:#f0fdf4; --green-bd:#bbf7d0;
+  --amber-v:#d97706; --amber-lt:#fffbeb; --amber-bd:#fde68a;
+  --red:#dc2626; --red-lt:#fef2f2; --red-bd:#fecaca;
+  --sans:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
+  --nav-h:48px;
 }
-html,body{font-family:var(--sans);background:#0a0c14;height:100%;overflow:hidden}
-nav{position:fixed;top:0;left:0;right:0;z-index:300;height:52px;display:flex;align-items:center;gap:12px;padding:0 20px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
-.nav-search-wrap{display:flex;flex:1;gap:8px;align-items:center;max-width:500px}
-.nav-logo{font:800 17px var(--sans);letter-spacing:-.5px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:4px}
-.slash{color:var(--blue)}
-.nav-back{font:500 12px var(--sans);color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:5px}
-.nav-back:hover{color:var(--text)}
-.nav-tag{font:600 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;background:#f0fdf4;color:var(--green);border:1px solid var(--green-bd);padding:3px 8px;border-radius:4px}
+html,body{font-family:var(--sans);background:var(--bg);color:var(--ink);height:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
 
-/* Layout: fixed 50/50 */
-.layout{position:fixed;top:52px;left:0;right:0;bottom:0;display:flex}
+/* -- NAV -------------------------------------------------------------------- */
+.da-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--bg);border-bottom:1px solid var(--rule);display:flex;align-items:center;padding:0 24px;z-index:300;gap:0}
+.da-nav-logo{font:800 17px var(--sans);letter-spacing:-.5px;text-decoration:none;color:var(--ink);display:flex;align-items:center;flex-shrink:0}
+.da-nav-logo .sl{color:var(--accent)}
+.nav-sep{width:1px;height:20px;background:var(--rule);margin:0 16px;flex-shrink:0}
+.nav-tagline{font:400 11px var(--sans);color:var(--ink3);letter-spacing:.3px;flex-shrink:0}
+
+/* Address search (center of nav) */
+.nav-search{position:relative;flex:1;max-width:480px;margin:0 20px}
+.nav-search input{width:100%;padding:8px 14px;background:var(--bg2);border:1px solid var(--rule);border-radius:6px;font:400 12px var(--sans);color:var(--ink);outline:none;transition:border .15s}
+.nav-search input:focus{border-color:var(--accent);background:#fff}
+.nav-search input::placeholder{color:var(--ink3)}
+/* Autocomplete dropdown */
+.ac-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid var(--rule);border-radius:7px;box-shadow:0 8px 24px rgba(0,0,0,.1);z-index:400;overflow:hidden;display:none}
+.ac-dropdown.open{display:block}
+.ac-item{padding:10px 14px;font:400 12px var(--sans);color:var(--ink2);cursor:pointer;border-bottom:1px solid var(--rule);line-height:1.4}
+.ac-item:last-child{border-bottom:none}
+.ac-item:hover,.ac-item.focused{background:var(--accent-bg);color:var(--ink)}
+.ac-item strong{color:var(--ink);font-weight:600}
+
+.da-nav-links{display:flex;gap:20px;margin-left:auto;flex-shrink:0}
+.da-nav-link{font:500 12px var(--sans);color:var(--ink3);text-decoration:none;transition:color .1s}
+.da-nav-link:hover,.da-nav-link.active{color:var(--ink)}
+.da-nav-link.active{border-bottom:1.5px solid var(--accent);padding-bottom:1px}
+
+/* -- LAYOUT ----------------------------------------------------------------- */
+.layout{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;display:flex}
 #map{flex:1;height:100%}
-.panel{width:360px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.panel{width:360px;flex-shrink:0;background:var(--bg);border-left:1px solid var(--rule);overflow-y:auto;display:flex;flex-direction:column}
 
-/* Panel sections */
-.p-section{padding:16px 18px;border-bottom:1px solid var(--border)}
-.p-hd{font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:var(--text4);margin-bottom:12px}
-.roof-row{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0;border-bottom:1px solid var(--border)}
+/* -- PANEL SECTIONS --------------------------------------------------------- */
+.p-section{padding:16px 20px;border-bottom:1px solid var(--rule)}
+.p-hd{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.4px;color:var(--ink3);margin-bottom:10px}
+.p-title{font:700 15px var(--sans);color:var(--ink);letter-spacing:-.3px;margin-bottom:2px}
+.p-sub{font:400 11px var(--sans);color:var(--ink3);line-height:1.5}
+
+/* Roof rows */
+.roof-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--rule)}
 .roof-row:last-of-type{border-bottom:none}
-.roof-key{font:400 11px var(--sans);color:var(--text3)}
-.roof-val{font:700 12px var(--mono);color:var(--text)}
-.roof-val.accent{color:var(--blue)}
+.roof-key{font:400 11px var(--sans);color:var(--ink3)}
+.roof-val{font:600 12px var(--mono);color:var(--ink)}
+.roof-val.accent{color:var(--accent)}
 .roof-val.green{color:var(--green)}
-.roof-val.amber{color:var(--amber,#f59e0b)}
-.roof-note{font:400 10px/1.6 var(--sans);color:var(--text3);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
-.p-title{font:800 16px var(--sans);color:var(--text);letter-spacing:-.3px;margin-bottom:2px}
-.p-sub{font:400 11px var(--sans);color:var(--text3);line-height:1.5}
+.roof-val.amber{color:var(--amber-v)}
+.roof-note{font:400 10px/1.65 var(--sans);color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px solid var(--rule)}
 
 /* Verdict badge */
-.verdict-badge{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin-bottom:0}
+.verdict-badge{display:flex;align-items:center;gap:10px;padding:10px 0}
 .verdict-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .verdict-label{font:700 13px var(--sans)}
-.verdict-sub{font:400 11px var(--sans);color:var(--text3);margin-top:2px}
+.verdict-sub{font:400 11px var(--sans);color:var(--ink3);margin-top:1px}
 
 /* Mode tabs */
-.mode-tabs{display:flex;gap:0;background:var(--surface2);border-radius:7px;padding:3px;margin-bottom:12px}
-.mode-tab{flex:1;padding:7px 6px;font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.8px;border-radius:5px;border:none;background:none;cursor:pointer;color:var(--text4);transition:all .15s;text-align:center}
-.mode-tab.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.mode-tabs{display:flex;gap:0;background:var(--bg2);border-radius:7px;padding:3px;margin-bottom:14px}
+.mode-tab{flex:1;padding:7px 6px;font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.8px;border-radius:5px;border:none;background:none;cursor:pointer;color:var(--ink3);transition:all .15s;text-align:center}
+.mode-tab.active{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 
 /* Sliders */
-.slider-row{margin-bottom:12px}
+.slider-row{margin-bottom:13px}
 .slider-labels{display:flex;justify-content:space-between;margin-bottom:5px}
-.slider-lbl{font:600 11px var(--sans);color:var(--text2)}
-.slider-val{font:700 12px var(--mono);color:var(--text)}
-input[type=range]{width:100%;height:4px;border-radius:2px;outline:none;-webkit-appearance:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--blue);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
-.slider-scale{display:flex;justify-content:space-between;margin-top:3px;font:400 9px var(--mono);color:var(--text4)}
+.slider-lbl{font:500 11px var(--sans);color:var(--ink2)}
+.slider-val{font:600 12px var(--mono);color:var(--accent)}
+input[type=range]{width:100%;height:3px;border-radius:2px;outline:none;-webkit-appearance:none;cursor:pointer;accent-color:var(--accent);background:var(--bg2)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.slider-scale{display:flex;justify-content:space-between;margin-top:3px;font:400 9px var(--mono);color:var(--ink3)}
 
-/* Dimension readout */
+/* Dimension cards */
 .dim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px}
-.dim-card{background:var(--surface2);border-radius:6px;padding:8px 10px;text-align:center}
-.dim-val{font:700 16px var(--mono);color:var(--text);letter-spacing:-.5px}
-.dim-unit{font:400 10px var(--mono);color:var(--text4)}
-.dim-lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--text4);margin-top:2px}
+.dim-card{background:var(--bg2);border-radius:7px;padding:10px;text-align:center}
+.dim-val{font:700 18px var(--mono);color:var(--ink);letter-spacing:-.5px;line-height:1}
+.dim-unit{font:400 10px var(--mono);color:var(--ink3)}
+.dim-lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:var(--ink3);margin-top:3px}
 
 /* Rule list */
 .rule-list{display:flex;flex-direction:column;gap:5px}
-.rule-row{display:flex;align-items:flex-start;gap:7px;font:400 11px/1.5 var(--sans);color:var(--text2)}
+.rule-row{display:flex;align-items:flex-start;gap:8px;font:400 11px/1.5 var(--sans);color:var(--ink2)}
 .rule-icon{flex-shrink:0;margin-top:1px;font-size:11px}
 
-/* Class notes */
-.class-note{padding:10px 12px;border-radius:6px;font:400 11px/1.6 var(--sans);margin-top:6px}
+/* Class note */
+.class-note{padding:10px 12px;border-radius:6px;font:400 11px/1.6 var(--sans);margin-top:8px}
 .class-note.green{background:var(--green-lt);color:#14532d;border:1px solid var(--green-bd)}
 .class-note.amber{background:var(--amber-lt);color:#78350f;border:1px solid var(--amber-bd)}
 .class-note.red{background:var(--red-lt);color:#7f1d1d;border:1px solid var(--red-bd)}
 
 /* CTA */
-.pd-cta{margin:16px 18px;padding:14px;background:var(--text);border-radius:8px;text-align:center}
+.pd-cta{margin:16px 20px 20px;padding:16px;background:var(--ink);border-radius:8px;text-align:center}
 .pd-cta-title{font:700 13px var(--sans);color:#fff;margin-bottom:4px}
-.pd-cta-sub{font:400 11px var(--sans);color:rgba(255,255,255,.5);margin-bottom:12px}
-.pd-cta-btn{display:block;padding:10px;background:var(--green);color:#fff;font:700 12px var(--sans);border-radius:6px;text-decoration:none;text-align:center}
+.pd-cta-sub{font:400 11px var(--sans);color:rgba(255,255,255,.45);margin-bottom:12px}
+.pd-cta-btn{display:block;padding:10px;background:var(--accent);color:#fff;font:700 12px var(--sans);border-radius:6px;text-decoration:none;text-align:center}
+.pd-cta-btn:hover{opacity:.9}
 
-.map-label{position:absolute;bottom:12px;left:12px;z-index:10;background:rgba(15,23,42,.85);color:rgba(255,255,255,.6);font:500 10px var(--mono);padding:5px 10px;border-radius:5px;pointer-events:none}
+/* Map label */
+.map-label{position:absolute;bottom:12px;left:12px;z-index:10;background:rgba(17,17,16,.75);color:rgba(255,255,255,.65);font:500 10px var(--mono);padding:5px 10px;border-radius:5px;pointer-events:none;backdrop-filter:blur(4px)}
 </style>
 </head>
 <body>
-<nav>
-  <a href="/" class="nav-logo">D<span class="slash">/</span>A</a>
-  <div class="nav-search-wrap">
-    <input id="nav-addr" type="text" placeholder="Enter any UK address..." style="flex:1;padding:6px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:5px;color:#fff;font:400 12px var(--sans);outline:none">
-    <button onclick="searchAddress()" style="padding:6px 14px;background:#3b82f6;border:none;border-radius:5px;color:#fff;font:600 11px var(--sans);cursor:pointer;white-space:nowrap">Load building</button>
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <div class="nav-sep"></div>
+  <span class="nav-tagline">PD &amp; Extensions</span>
+  <div class="nav-search">
+    <input id="nav-addr" type="text" placeholder="Enter any UK address..." autocomplete="off">
+    <div class="ac-dropdown" id="ac-dropdown"></div>
   </div>
-  <a href="/pd" class="nav-back">← PD Checker</a>
+  <div class="da-nav-links">
+    <a class="da-nav-link" href="/discover">Discover</a>
+    <a class="da-nav-link" href="/t1/24-southwark-st">Appraise</a>
+    <a class="da-nav-link active" href="/pd">PD &amp; Extensions</a>
+  </div>
 </nav>
 
 <div class="layout">
@@ -275,7 +306,7 @@ function updateRoofPanel(props) {
     `;
     el.style.display = 'block';
   } else {
-    el.innerHTML = '<div class="roof-row"><span class="roof-key">Roof data</span><span class="roof-val" style="color:var(--text3)">Not available from OS NGD</span></div>';
+    el.innerHTML = '<div class="roof-row"><span class="roof-key">Roof data</span><span class="roof-val" style="color:var(--ink3)">Not available from OS NGD</span></div>';
     el.style.display = 'block';
   }
 }
@@ -291,27 +322,101 @@ function makeRect(anchorLng, anchorLat, widthM, depthM) {
 // Current mode
 let currentMode = 'rear';
 
-// Address search - reload map with new building
-async function searchAddress() {
-  const addr = document.getElementById('nav-addr').value.trim();
-  if (!addr) return;
-  // Geocode via Google Maps API
-  const cfg = await fetch('/api/config').then(r=>r.json());
-  const gkey = cfg.googleMapsKey;
-  if (!gkey) { alert('Google Maps API key not configured'); return; }
-  const geo = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addr)}&key=${gkey}`).then(r=>r.json());
-  if (!geo.results?.length) { alert('Address not found'); return; }
-  const loc = geo.results[0].geometry.location;
-  // Update global coords
-  BASE_LAT = loc.lat; BASE_LNG = loc.lng;
-  // Reload building footprint + redraw map
-  const ring = await loadBuilding(loc.lat, loc.lng);
+// -- Address autocomplete (Mapbox geocoding) ---------------------------------
+let _acToken = null;
+let _acTimer = null;
+
+async function initAutocomplete(token) {
+  _acToken = token;
+  const input = document.getElementById('nav-addr');
+  const dropdown = document.getElementById('ac-dropdown');
+  let focusIdx = -1;
+
+  input.addEventListener('input', () => {
+    clearTimeout(_acTimer);
+    const q = input.value.trim();
+    if (q.length < 3) { dropdown.classList.remove('open'); return; }
+    _acTimer = setTimeout(() => fetchSuggestions(q), 250);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    const items = dropdown.querySelectorAll('.ac-item');
+    if (e.key === 'ArrowDown') { focusIdx = Math.min(focusIdx+1, items.length-1); highlightAc(items, focusIdx); e.preventDefault(); }
+    else if (e.key === 'ArrowUp') { focusIdx = Math.max(focusIdx-1, 0); highlightAc(items, focusIdx); e.preventDefault(); }
+    else if (e.key === 'Enter') {
+      if (focusIdx >= 0 && items[focusIdx]) { items[focusIdx].click(); }
+      else { selectAddress(input.value.trim(), null, null); }
+      e.preventDefault();
+    } else if (e.key === 'Escape') { dropdown.classList.remove('open'); }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-search')) dropdown.classList.remove('open');
+  });
+
+  async function fetchSuggestions(q) {
+    try {
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?country=gb&types=address,place,postcode&autocomplete=true&limit=6&access_token=${_acToken}`;
+      const data = await fetch(url).then(r=>r.json());
+      const features = data.features || [];
+      focusIdx = -1;
+      if (!features.length) { dropdown.classList.remove('open'); return; }
+      dropdown.innerHTML = features.map((f,i) => {
+        const name = f.text || '';
+        const place = f.place_name || '';
+        const rest = place.replace(name, '').replace(/^,\s*/,'');
+        return `<div class="ac-item" data-lat="${f.center[1]}" data-lng="${f.center[0]}" data-place="${place}">
+          <strong>${name}</strong>${rest ? ', '+rest : ''}
+        </div>`;
+      }).join('');
+      dropdown.querySelectorAll('.ac-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const lat = parseFloat(item.dataset.lat);
+          const lng = parseFloat(item.dataset.lng);
+          input.value = item.dataset.place;
+          dropdown.classList.remove('open');
+          selectAddress(item.dataset.place, lat, lng);
+        });
+      });
+      dropdown.classList.add('open');
+    } catch(e) { console.warn('Autocomplete error:', e); }
+  }
+
+  function highlightAc(items, idx) {
+    items.forEach((el,i) => el.classList.toggle('focused', i===idx));
+    if (items[idx]) input.value = items[idx].dataset.place;
+  }
+}
+
+async function selectAddress(addr, lat, lng) {
   const map = window._map;
+  if (!lat || !lng) {
+    // Fallback: geocode the string
+    try {
+      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(addr)}.json?country=gb&limit=1&access_token=${_acToken}`;
+      const data = await fetch(url).then(r=>r.json());
+      if (data.features?.[0]) { lng = data.features[0].center[0]; lat = data.features[0].center[1]; }
+    } catch(e) {}
+  }
+  if (!lat || !lng) { return; }
+  BASE_LAT = lat; BASE_LNG = lng;
+  const ring = await loadBuilding(lat, lng);
   if (!map) return;
-  const houseCoords = ring || makeRectFallback();
+  // makeFallbacks now need updated BASE coords - call after loadBuilding updates them
+  function makeRectFallback2() {
+    const lng0=BASE_LNG-HOUSE_W/2*M_LNG, lat0=BASE_LAT+HOUSE_D/2*M_LAT;
+    const lng1=BASE_LNG+HOUSE_W/2*M_LNG, lat1=BASE_LAT-HOUSE_D/2*M_LAT;
+    return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+  }
+  function makeGardenFallback2() {
+    const lng0=BASE_LNG-HOUSE_W/2*M_LNG, lat0=BASE_LAT-HOUSE_D/2*M_LAT;
+    const lng1=BASE_LNG+HOUSE_W/2*M_LNG, lat1=lat0-GARDEN_D*M_LAT;
+    return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+  }
+  const houseCoords = ring || makeRectFallback2();
   window._houseCoords = houseCoords;
   map.getSource('house').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:HOUSE_H}});
-  map.getSource('garden').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[makeGardenFallback()]}});
+  map.getSource('garden').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[makeGardenFallback2()]}});
   map.flyTo({center:[BASE_LNG,BASE_LAT],zoom:19,pitch:55,duration:1200});
   updateMassing();
 }
@@ -351,8 +456,9 @@ async function initMap() {
   const urlAddr = new URLSearchParams(window.location.search).get('address');
   const addrInput = document.getElementById('nav-addr');
   if (addrInput) addrInput.value = urlAddr || '70 Nithdale Road, London SE18 3PD';
-  // Enter key triggers search
-  if (addrInput) addrInput.addEventListener('keydown', e => { if(e.key==='Enter') searchAddress(); });
+
+  // Init address autocomplete
+  initAutocomplete(cfg.mapboxToken);
 
   // Geocode address from URL param or use default
   let initLat = BASE_LAT, initLng = BASE_LNG;
