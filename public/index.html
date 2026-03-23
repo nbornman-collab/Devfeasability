@@ -63,6 +63,123 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 }
 .nav-cta:hover { background: var(--accent); color: #fff; }
 
+/* ── BURGER MENU ── */
+.burger {
+  background: none; border: none; cursor: pointer; padding: 8px;
+  display: flex; flex-direction: column; gap: 5px; align-items: center;
+  margin-left: 8px;
+}
+.burger span {
+  display: block; width: 20px; height: 1.5px;
+  background: rgba(242,241,237,0.7); transition: background .15s;
+}
+.burger:hover span { background: var(--ink); }
+.burger-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  z-index: 500; opacity: 0; pointer-events: none;
+  transition: opacity .28s;
+}
+.burger-overlay.open { opacity: 1; pointer-events: all; }
+.burger-panel {
+  position: fixed; top: 0; right: 0; width: 300px; height: 100%;
+  background: #0d0d0c; z-index: 501; border-left: 1px solid rgba(242,241,237,.08);
+  transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column; padding: 0;
+}
+.burger-panel.open { transform: translateX(0); }
+.burger-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; border-bottom: 1px solid rgba(242,241,237,.08);
+}
+.burger-logo { font: 800 15px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.burger-logo .sl { color: var(--accent); }
+.burger-close {
+  background: none; border: none; color: var(--ink3); font-size: 18px;
+  cursor: pointer; line-height: 1; transition: color .15s;
+}
+.burger-close:hover { color: var(--ink); }
+.burger-nav {
+  display: flex; flex-direction: column; padding: 32px 24px; gap: 4px; flex: 1;
+}
+.burger-nav a {
+  font: 600 22px var(--sans); color: rgba(242,241,237,.55); text-decoration: none;
+  letter-spacing: -.02em; padding: 10px 0; border-bottom: 1px solid rgba(242,241,237,.06);
+  transition: color .15s;
+}
+.burger-nav a:last-child { border-bottom: none; }
+.burger-nav a:hover { color: var(--ink); }
+.burger-nav a.accent { color: var(--accent); }
+.burger-nav a.accent:hover { color: #c96b1e; }
+.burger-footer {
+  padding: 20px 24px; font: 400 9px var(--sans);
+  letter-spacing: .16em; text-transform: uppercase; color: var(--ink3);
+  border-top: 1px solid rgba(242,241,237,.08);
+}
+
+/* ── PD SECTION ── */
+.pd-section {
+  background: #111110; padding: 72px 64px; position: relative; z-index: 20;
+}
+.pd-inner { max-width: 1100px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.pd-label { font: 700 8px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.pd-heading { font: 800 clamp(26px,2.8vw,38px) var(--sans); color: #f2f1ed; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 16px; }
+.pd-body { font: 400 13px/1.8 var(--sans); color: rgba(242,241,237,.55); margin-bottom: 28px; max-width: 440px; }
+.pd-search-row { display: flex; gap: 10px; margin-bottom: 16px; }
+.pd-input {
+  flex: 1; padding: 13px 16px; background: rgba(242,241,237,.06);
+  border: 1px solid rgba(242,241,237,.18); border-radius: 6px;
+  font: 400 12px var(--sans); color: #f2f1ed; outline: none;
+  transition: border-color .15s;
+}
+.pd-input::placeholder { color: rgba(242,241,237,.3); }
+.pd-input:focus { border-color: var(--accent); }
+.pd-btn {
+  padding: 13px 20px; background: var(--accent); color: #fff;
+  font: 700 10px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  border: none; border-radius: 6px; cursor: pointer; text-decoration: none;
+  white-space: nowrap; transition: background .15s;
+}
+.pd-btn:hover { background: #c96b1e; }
+.pd-types { font: 400 9px var(--sans); color: rgba(242,241,237,.3); letter-spacing: .06em; }
+.pd-types span { color: rgba(242,241,237,.45); }
+.pd-feature-list { display: flex; flex-direction: column; gap: 14px; }
+.pd-feature {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px; background: rgba(242,241,237,.04);
+  border: 1px solid rgba(242,241,237,.07); border-radius: 8px;
+}
+.pd-feature-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.pd-feature-title { font: 700 11px var(--sans); color: #f2f1ed; margin-bottom: 3px; }
+.pd-feature-desc { font: 400 10px/1.6 var(--sans); color: rgba(242,241,237,.45); }
+
+/* ── COST TIERS ── */
+.tiers-section { background: #f2f1ed; padding: 72px 64px; position: relative; z-index: 20; }
+.tiers-label { font: 700 8px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+.tiers-heading { font: 800 clamp(26px,2.8vw,38px) var(--sans); color: #111110; letter-spacing: -.03em; margin-bottom: 40px; }
+.tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; max-width: 960px; }
+.tier-card {
+  padding: 28px 24px; background: #fff;
+  border: 1px solid rgba(17,17,16,.08); border-radius: 10px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.tier-card.featured { border-color: var(--accent); background: #fdf3ea; }
+.tier-name { font: 700 9px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: #999990; }
+.tier-card.featured .tier-name { color: var(--accent); }
+.tier-price { font: 800 28px var(--mono); color: #111110; letter-spacing: -.03em; line-height: 1; }
+.tier-divider { height: 1px; background: rgba(17,17,16,.08); margin: 4px 0; }
+.tier-desc { font: 400 11px/1.7 var(--sans); color: #555550; flex: 1; }
+.tier-items { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.tier-items li { font: 400 10px var(--sans); color: #555550; }
+.tier-items li::before { content: '→ '; color: var(--accent); font-weight: 700; }
+.tier-cta-link {
+  display: inline-block; margin-top: 8px;
+  font: 700 9px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  color: #111110; text-decoration: none; border-bottom: 1.5px solid rgba(17,17,16,.2);
+  padding-bottom: 1px; transition: border-color .15s, color .15s;
+}
+.tier-cta-link:hover { color: var(--accent); border-color: var(--accent); }
+.tier-card.featured .tier-cta-link { color: var(--accent); border-color: var(--accent); }
+
 /* ── HERO CONTENT ── */
 .hero-wrap { height: 100vh; position: relative; }
 .hero {
@@ -235,8 +352,28 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
     <a class="nav-link" href="/discover">Discover</a>
     <a class="nav-link" href="/t2/24-southwark-st">Appraise</a>
     <a class="nav-cta" href="/discover">Explore Sites →</a>
+    <button class="burger" id="burger" aria-label="Menu" onclick="openMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- Burger menu -->
+<div class="burger-overlay" id="burger-overlay" onclick="closeMenu()"></div>
+<div class="burger-panel" id="burger-panel">
+  <div class="burger-header">
+    <span class="burger-logo">D<span class="sl">/</span>A</span>
+    <button class="burger-close" onclick="closeMenu()">✕</button>
+  </div>
+  <nav class="burger-nav">
+    <a href="/">Home</a>
+    <a href="/discover">Discover</a>
+    <a href="/t2/24-southwark-st">Appraise</a>
+    <a href="/pd" class="accent">PD &amp; Extensions</a>
+    <a href="mailto:hello@devfeasibility.com">Contact</a>
+  </nav>
+  <div class="burger-footer">Development &middot; Planning &middot; Architecture</div>
+</div>
 
 <div class="hero">
   <div class="hero-label">London Development Intelligence</div>
@@ -298,6 +435,9 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
 </div><!-- /hero-wrap -->
 
+<!-- var(--accent) available from here on (light sections) -->
+<style>:root { --accent: #e07b2a; --sans: 'Inter',sans-serif; --mono: 'JetBrains Mono',monospace; }</style>
+
 <!-- Below fold: narrative + discovery modes -->
 <div class="below-fold">
   <div class="below-fold-grid">
@@ -343,6 +483,101 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
         </div>
         <div class="mode-card-arrow">→</div>
       </a>
+    </div>
+  </div>
+</div>
+
+<!-- PD & Extensions section -->
+<div class="pd-section">
+  <div class="pd-inner">
+    <div>
+      <div class="pd-label">PD &amp; Extensions</div>
+      <h2 class="pd-heading">What can you build without planning permission?</h2>
+      <p class="pd-body">Enter your address. Get a full architectural breakdown of your Permitted Development rights - massing envelope, Approved Documents in plain English, Article 4 check, Prior Approval flags, cost ranges and next steps. What your architect would tell you in the first meeting.</p>
+      <div class="pd-search-row">
+        <input class="pd-input" type="text" placeholder="Enter your property address or postcode..." id="pd-addr-input">
+        <a class="pd-btn" href="/pd" id="pd-addr-btn">Check &rarr;</a>
+      </div>
+      <div class="pd-types">
+        <span>Rear extensions</span> &middot; <span>Loft conversions</span> &middot; <span>Side returns</span> &middot; <span>Upward extensions</span> &middot; <span>Outbuildings</span>
+      </div>
+    </div>
+    <div class="pd-feature-list">
+      <div class="pd-feature">
+        <div class="pd-feature-icon">&#x1F4D0;</div>
+        <div>
+          <div class="pd-feature-title">Massing envelope</div>
+          <div class="pd-feature-desc">Maximum PD footprint and height shown as a 3D model on your actual property. See what you can build before calling anyone.</div>
+        </div>
+      </div>
+      <div class="pd-feature">
+        <div class="pd-feature-icon">&#x1F4CB;</div>
+        <div>
+          <div class="pd-feature-title">Approved Documents - plain English</div>
+          <div class="pd-feature-desc">Part L, Part O, Part B, Part M - what the building regs actually mean for your project, with cost implications.</div>
+        </div>
+      </div>
+      <div class="pd-feature">
+        <div class="pd-feature-icon">&#x1F5FA;&#xFE0F;</div>
+        <div>
+          <div class="pd-feature-title">Article 4 + local plan check</div>
+          <div class="pd-feature-desc">National PD rules are often wrong for London. We check your specific borough's Article 4 directions, conservation area status and local plan overrides.</div>
+        </div>
+      </div>
+      <div class="pd-feature">
+        <div class="pd-feature-icon">&#x1F4B7;</div>
+        <div>
+          <div class="pd-feature-title">London cost ranges</div>
+          <div class="pd-feature-desc">Dormer loft £55-85k. Rear extension £35-65k. Side return £45-85k. Upward extension £120-200k. With honest caveats - party wall, structural, M&amp;E.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cost tiers -->
+<div class="tiers-section">
+  <div class="tiers-label">Pricing</div>
+  <h2 class="tiers-heading">Three ways in.</h2>
+  <div class="tiers-grid">
+    <div class="tier-card">
+      <div class="tier-name">Discover</div>
+      <div class="tier-price">Free</div>
+      <div class="tier-divider"></div>
+      <div class="tier-desc">155 ranked London underutilised sites. Score, verdict, intelligence hooks. Always free.</div>
+      <ul class="tier-items">
+        <li>London Top 100 sites</li>
+        <li>Development score + verdict</li>
+        <li>Planning appetite signal</li>
+        <li>Intelligence hook preview</li>
+      </ul>
+      <a class="tier-cta-link" href="/discover">Explore sites &rarr;</a>
+    </div>
+    <div class="tier-card featured">
+      <div class="tier-name">Appraise</div>
+      <div class="tier-price">Per site</div>
+      <div class="tier-divider"></div>
+      <div class="tier-desc">Full development intelligence - planning, heritage, massing, financials - in one page. Know before you bid.</div>
+      <ul class="tier-items">
+        <li>Full D/P/A analysis</li>
+        <li>Planning precedents</li>
+        <li>3D massing + scenarios</li>
+        <li>Financial model + IRR</li>
+      </ul>
+      <a class="tier-cta-link" href="/t2/24-southwark-st">See a sample &rarr;</a>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name">PD &amp; Extensions</div>
+      <div class="tier-price">£99<span style="font:400 13px 'Inter',sans-serif;color:#999990"> /report</span></div>
+      <div class="tier-divider"></div>
+      <div class="tier-desc">Permitted Development analysis for residential properties. What your architect would tell you in the first meeting.</div>
+      <ul class="tier-items">
+        <li>Massing envelope (3D)</li>
+        <li>Article 4 + local plan check</li>
+        <li>Approved Documents guide</li>
+        <li>London cost ranges</li>
+      </ul>
+      <a class="tier-cta-link" href="/pd">Check your property &rarr;</a>
     </div>
   </div>
 </div>
@@ -412,6 +647,35 @@ fetch('/api/config').then(r=>r.json()).then(cfg => {
     })();
   });
 });
+
+// ── Burger menu ───────────────────────────────────────────────────────────────
+function openMenu() {
+  document.getElementById('burger-panel').classList.add('open');
+  document.getElementById('burger-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu() {
+  document.getElementById('burger-panel').classList.remove('open');
+  document.getElementById('burger-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+// ── PD address search passthrough ─────────────────────────────────────────────
+const pdInput = document.getElementById('pd-addr-input');
+const pdBtn = document.getElementById('pd-addr-btn');
+if (pdInput && pdBtn) {
+  pdInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const addr = encodeURIComponent(pdInput.value.trim());
+      if (addr) window.location.href = `/pd?address=${addr}`;
+    }
+  });
+  pdBtn.addEventListener('click', e => {
+    const addr = encodeURIComponent(pdInput.value.trim());
+    if (addr) { e.preventDefault(); window.location.href = `/pd?address=${addr}`; }
+  });
+}
 </script>
 </body>
 </html>
