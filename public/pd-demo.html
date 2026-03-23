@@ -198,8 +198,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <div class="p-hero-sub" id="prop-sub">London SE18 3PD · Loading data...</div>
       <div class="p-hero-strip">
         <div class="p-hero-stat">
-          <div class="p-hero-num" id="hero-pitch">--</div>
-          <div class="p-hero-lbl">Roof pitch</div>
+          <div style="display:flex;align-items:baseline;justify-content:center;gap:2px"><input id="hero-pitch" type="number" min="5" max="60" value="" placeholder="--" style="width:42px;font:700 16px var(--mono);color:var(--accent);background:none;border:none;border-bottom:1.5px solid var(--accent);text-align:center;outline:none;padding:0" oninput="overridePitch(this.value)" title="Edit to override OS data"><span style="font:600 10px var(--mono);color:var(--ink3);">°</span></div>
+          <div class="p-hero-lbl">Pitch <span style="color:var(--accent);font-size:8px">(edit)</span></div>
         </div>
         <div class="p-hero-stat">
           <div class="p-hero-num" id="hero-ridge">--</div>
@@ -650,6 +650,15 @@ function generateSynthesis() {
   section.style.display = 'block';
 }
 
+
+// Allow user to override OS pitch data (OS NGD can be inaccurate for complex roofs)
+function overridePitch(val) {
+  const deg = parseFloat(val);
+  if (!isNaN(deg) && deg > 5 && deg < 65) {
+    HOUSE_PITCH = deg;
+    generateSynthesis();
+  }
+}
 
 async function initMap() {
   cfg = await fetch('/api/config').then(r => r.json());

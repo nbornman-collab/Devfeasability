@@ -699,15 +699,23 @@ app.get('/api/os-buildings', async (req, res) => {
         // Roof pitch calculation (requires ridge + eaves + half-span from footprint)
         if (f.properties._heightMax && f.properties._heightRoofBase && f.properties._area) {
           const rise = f.properties._heightMax - f.properties._heightRoofBase;
-          // Approximate half-span from area (sqrt gives rough side length for rectangular buildings)
+          // Span = WIDTH of building (short axis), not length.
+          // Ridge runs along the long axis, so pitch = arctan(rise / half-short-dimension).
           const ring = f.geometry.coordinates[0] || [];
-          let maxSpan = 0;
+          let maxEdge = 0, minEdge = Infinity;
           for (let i = 0; i < ring.length - 1; i++) {
             const dx = (ring[i+1][0] - ring[i][0]) * 69500;
             const dy = (ring[i+1][1] - ring[i][1]) * 111320;
-            maxSpan = Math.max(maxSpan, Math.sqrt(dx*dx + dy*dy));
+            const len = Math.sqrt(dx*dx + dy*dy);
+            if (len > 0.5) { // ignore trivial edges (corners)
+              maxEdge = Math.max(maxEdge, len);
+              minEdge = Math.min(minEdge, len);
+            }
           }
-          const halfSpan = maxSpan / 2;
+          // Use shortest principal dimension as span (perpendicular to ridge)
+          // Fallback to sqrt(area) if polygon is complex / non-rectangular
+          const shortSpan = minEdge < Infinity ? minEdge : Math.sqrt(f.properties._area || 50);
+          const halfSpan = shortSpan / 2;
           if (rise > 0 && halfSpan > 0) {
             f.properties._roofPitchDeg = Math.round(Math.atan(rise / halfSpan) * 180 / Math.PI);
             f.properties._roofRise = parseFloat(rise.toFixed(2));
