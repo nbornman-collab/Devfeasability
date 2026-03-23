@@ -19,7 +19,8 @@
   --border:#e5e7eb;--surface:#fff;--surface2:#f9fafb;
 }
 html,body{font-family:var(--sans);background:#0a0c14;height:100%;overflow:hidden}
-nav{position:fixed;top:0;left:0;right:0;z-index:300;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:52px;display:flex;align-items:center;gap:12px;padding:0 20px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--border)}
+.nav-search-wrap{display:flex;flex:1;gap:8px;align-items:center;max-width:500px}
 .nav-logo{font:800 17px var(--sans);letter-spacing:-.5px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:4px}
 .slash{color:var(--blue)}
 .nav-back{font:500 12px var(--sans);color:var(--text3);text-decoration:none;display:flex;align-items:center;gap:5px}
@@ -95,7 +96,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 <body>
 <nav>
   <a href="/" class="nav-logo">D<span class="slash">/</span>A</a>
-  <span class="nav-tag">PD Massing Demo</span>
+  <div class="nav-search-wrap">
+    <input id="nav-addr" type="text" placeholder="Enter any UK address..." style="flex:1;padding:6px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:5px;color:#fff;font:400 12px var(--sans);outline:none">
+    <button onclick="searchAddress()" style="padding:6px 14px;background:#3b82f6;border:none;border-radius:5px;color:#fff;font:600 11px var(--sans);cursor:pointer;white-space:nowrap">Load building</button>
+  </div>
   <a href="/pd" class="nav-back">← PD Checker</a>
 </nav>
 
@@ -224,8 +228,8 @@ const M_LNG = 0.0000143;  // 1m in longitude degrees (~51.5N)
 
 // State - populated from OS NGD response
 let SITE_POLYGON = null;   // real footprint coords [[lng,lat],...]
-let BASE_LNG = 0.0694;
-let BASE_LAT = 51.4867;
+let BASE_LNG = 0.07258;   // 70 Nithdale Road SE18 (Google geocoded)
+let BASE_LAT = 51.47777;
 let HOUSE_W = 5;
 let HOUSE_D = 8;
 let HOUSE_H = 7.2;
@@ -287,6 +291,31 @@ function makeRect(anchorLng, anchorLat, widthM, depthM) {
 // Current mode
 let currentMode = 'rear';
 
+// Address search - reload map with new building
+async function searchAddress() {
+  const addr = document.getElementById('nav-addr').value.trim();
+  if (!addr) return;
+  // Geocode via Google Maps API
+  const cfg = await fetch('/api/config').then(r=>r.json());
+  const gkey = cfg.googleMapsKey;
+  if (!gkey) { alert('Google Maps API key not configured'); return; }
+  const geo = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(addr)}&key=${gkey}`).then(r=>r.json());
+  if (!geo.results?.length) { alert('Address not found'); return; }
+  const loc = geo.results[0].geometry.location;
+  // Update global coords
+  BASE_LAT = loc.lat; BASE_LNG = loc.lng;
+  // Reload building footprint + redraw map
+  const ring = await loadBuilding(loc.lat, loc.lng);
+  const map = window._map;
+  if (!map) return;
+  const houseCoords = ring || makeRectFallback();
+  window._houseCoords = houseCoords;
+  map.getSource('house').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:HOUSE_H}});
+  map.getSource('garden').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[makeGardenFallback()]}});
+  map.flyTo({center:[BASE_LNG,BASE_LAT],zoom:19,pitch:55,duration:1200});
+  updateMassing();
+}
+
 let cfg;
 async function loadBuilding(lat, lng) {
   const status = document.getElementById('load-status');
@@ -318,8 +347,14 @@ async function initMap() {
   cfg = await fetch('/api/config').then(r => r.json());
   mapboxgl.accessToken = cfg.mapboxToken;
 
-  // Geocode address from URL param or use default
+  // Prepopulate address input with URL param or default
   const urlAddr = new URLSearchParams(window.location.search).get('address');
+  const addrInput = document.getElementById('nav-addr');
+  if (addrInput) addrInput.value = urlAddr || '70 Nithdale Road, London SE18 3PD';
+  // Enter key triggers search
+  if (addrInput) addrInput.addEventListener('keydown', e => { if(e.key==='Enter') searchAddress(); });
+
+  // Geocode address from URL param or use default
   let initLat = BASE_LAT, initLng = BASE_LNG;
   if (urlAddr) {
     try {
