@@ -153,6 +153,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 .pd-cta-btn{display:block;padding:10px;background:var(--accent);color:#fff;font:700 12px var(--sans);border-radius:6px;text-decoration:none;text-align:center}
 .pd-cta-btn:hover{opacity:.9}
 
+/* Synthesis hooks (T1-style) */
+.synth-section{padding:16px 20px;border-bottom:1px solid var(--rule)}
+.synth-hook{border-left:3px solid var(--accent);padding:10px 12px;margin-bottom:10px;background:var(--accent-bg);border-radius:0 6px 6px 0}
+.synth-hook:last-child{margin-bottom:0}
+.synth-hook-q{font:600 12px var(--sans);color:var(--ink);margin-bottom:4px;line-height:1.4}
+.synth-hook-a{font:400 11px/1.6 var(--sans);color:var(--ink2)}
+.synth-hook-cta{display:inline-block;margin-top:6px;font:600 10px var(--sans);color:var(--accent);text-decoration:none;text-transform:uppercase;letter-spacing:.5px}
+.synth-hook.amber{border-left-color:var(--amber-v);background:var(--amber-lt)}
+.synth-hook.red{border-left-color:var(--red);background:var(--red-lt)}
+.synth-hook.red .synth-hook-q{color:#7f1d1d}
+.synth-hook.amber .synth-hook-q{color:#78350f}
+
 /* Map label */
 .map-label{position:absolute;bottom:12px;left:12px;z-index:10;background:rgba(17,17,16,.75);color:rgba(255,255,255,.65);font:500 10px var(--mono);padding:5px 10px;border-radius:5px;pointer-events:none;backdrop-filter:blur(4px)}
 </style>
@@ -210,9 +222,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <div id="roof-info"></div>
     </div>
 
+    <!-- Intelligence synthesis -->
+    <div class="synth-section" id="synth-section" style="display:none">
+      <div class="p-hd">Three things to know</div>
+      <div id="synth-hooks"></div>
+    </div>
+
     <!-- Extension cards -->
     <div class="p-section">
-      <div class="p-hd">Select extensions to model</div>
+      <div class="p-hd">Model your scheme</div>
 
       <!-- Rear extension -->
       <div class="ext-card">
@@ -526,6 +544,7 @@ async function selectAddress(addr, lat, lng) {
   map.getSource('house').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:HOUSE_H}});
   map.getSource('garden').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[makeGardenFallback2()]}});
   map.flyTo({center:[BASE_LNG,BASE_LAT],zoom:19,pitch:55,duration:1200});
+  generateSynthesis();
   updateMassing();
 }
 
@@ -556,6 +575,82 @@ async function loadBuilding(lat, lng) {
   return null;
 }
 
+// Generate 3 intelligence hooks from loaded property data
+function generateSynthesis() {
+  const section = document.getElementById('synth-section');
+  const container = document.getElementById('synth-hooks');
+  if (!section || !container) return;
+
+  const hooks = [];
+
+  // -- Hook 1: Roof opportunity -----------------------------------------------
+  if (HOUSE_PITCH && HOUSE_EAVES && HOUSE_H) {
+    const halfSpan = HOUSE_W / 2;
+    const rise = HOUSE_H - HOUSE_EAVES;
+    const loftVol = Math.round(0.5 * halfSpan * rise * HOUSE_D);
+    const pdLimit = 40;
+    const remaining = Math.max(0, pdLimit - loftVol);
+
+    if (HOUSE_PITCH >= 38) {
+      hooks.push({
+        q: `Your ${HOUSE_PITCH}° roof has room to work with`,
+        a: `Estimated loft volume is ${loftVol}m³ against a ${pdLimit}m³ Class B allowance - leaving ${remaining}m³ of PD headroom. A rear dormer could add a full bedroom without planning permission. The question is whether the staircase position works with your existing layout.`,
+        cls: ''
+      });
+    } else if (HOUSE_PITCH >= 30) {
+      hooks.push({
+        q: `A ${HOUSE_PITCH}° pitch is workable - but tight`,
+        a: `Loft volume of ${loftVol}m³ is within the ${pdLimit}m³ PD limit, but headroom at the eaves will be marginal. A hip-to-gable conversion to raise the ridge first may be worth considering before adding a dormer - it fundamentally changes what the loft can become.`,
+        cls: 'amber'
+      });
+    } else {
+      hooks.push({
+        q: `A ${HOUSE_PITCH}° pitch limits loft potential`,
+        a: `Shallow pitched roofs make loft conversions difficult. Usable headroom over 2.0m is unlikely without significant structural work. The roof may need rebuilding to make this viable - which takes it well outside PD rights.`,
+        cls: 'amber'
+      });
+    }
+  } else {
+    hooks.push({
+      q: 'Roof pitch data not yet loaded',
+      a: 'Search your address to load OS NGD building data. Roof pitch, eaves height and ridge height will determine what the loft can realistically become.',
+      cls: 'amber'
+    });
+  }
+
+  // -- Hook 2: Ground floor extension path -----------------------------------
+  const rearPD = 3; // semi/terraced PD limit
+  const rearPA = 6;
+  const rearPDArea = (HOUSE_W * rearPD).toFixed(0);
+  const rearPAArea = (HOUSE_W * rearPA).toFixed(0);
+
+  hooks.push({
+    q: `You can add up to ${rearPDArea}m² at the rear without planning`,
+    a: `A ${rearPD}m deep single-storey rear extension (${rearPDArea}m² at ${HOUSE_W.toFixed(0)}m wide) is permitted development for a terraced or semi-detached house. Extending to ${rearPA}m depth (${rearPAArea}m²) is possible with Prior Approval - a neighbour consultation, ~£120 fee, 42-day decision window. Use the sliders below to model which path fits your brief.`,
+    cls: ''
+  });
+
+  // -- Hook 3: The constraint to check first --------------------------------
+  hooks.push({
+    q: 'One thing to check before anything else',
+    a: 'Article 4 Directions remove PD rights in designated areas - common in London conservation areas and some local authority zones. If this address falls within one, all or part of the PD rights above may not apply. Check the ' + (window._lpa || 'local planning authority') + ' planning portal before instructing a builder or architect.',
+    cls: 'red',
+    cta: 'Check on Planning Portal →',
+    ctaHref: 'https://www.planningportal.co.uk/planning/planning-applications/do-you-need-permission'
+  });
+
+  container.innerHTML = hooks.map(h => `
+    <div class="synth-hook ${h.cls||''}">
+      <div class="synth-hook-q">${h.q}</div>
+      <div class="synth-hook-a">${h.a}</div>
+      ${h.cta ? `<a class="synth-hook-cta" href="${h.ctaHref}" target="_blank">${h.cta}</a>` : ''}
+    </div>
+  `).join('');
+
+  section.style.display = 'block';
+}
+
+
 async function initMap() {
   cfg = await fetch('/api/config').then(r => r.json());
   mapboxgl.accessToken = cfg.mapboxToken;
@@ -585,6 +680,7 @@ async function initMap() {
 
   // Load real OS NGD footprint
   await loadBuilding(initLat, initLng);
+  generateSynthesis();  // Generate intelligence hooks from loaded data
 
   // Use real polygon if available, else rectangle fallback
   const houseCoords = SITE_POLYGON || makeRectFallback();
