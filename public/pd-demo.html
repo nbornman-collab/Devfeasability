@@ -109,6 +109,36 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 
 /* CTA */
 .pd-cta{margin:16px 20px 20px;padding:16px;background:var(--ink);border-radius:8px;text-align:center}
+
+/* Extension accordion cards */
+.ext-card{border:1px solid var(--rule);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.ext-card-header{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;user-select:none;background:var(--bg);transition:background .1s}
+.ext-card-header:hover{background:var(--bg2)}
+.ext-card-header input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);flex-shrink:0;cursor:pointer}
+.ext-card-title{font:600 12px var(--sans);color:var(--ink);flex:1}
+.ext-badge{font:600 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;padding:2px 7px;border-radius:10px;flex-shrink:0}
+.ext-badge.green{background:var(--green-lt);color:#14532d}
+.ext-badge.amber{background:var(--amber-lt);color:#78350f}
+.ext-badge.red{background:var(--red-lt);color:#7f1d1d}
+.ext-badge.inactive{background:var(--bg2);color:var(--ink3)}
+.ext-dims{font:600 11px var(--mono);color:var(--ink3);flex-shrink:0;text-align:right}
+.ext-body{display:none;padding:12px 14px 14px;border-top:1px solid var(--rule);background:var(--bg)}
+.ext-body.open{display:block}
+.ext-warn{font:400 10px/1.6 var(--sans);color:#7f1d1d;margin-bottom:10px;padding:8px 10px;background:var(--red-lt);border:1px solid var(--red-bd);border-radius:6px}
+
+/* Combined totals */
+.totals-strip{background:var(--ink);border-radius:8px;padding:14px;margin:0 20px 6px}
+.totals-hd{font:700 9px var(--sans);text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.4);margin-bottom:10px}
+.totals-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.totals-cell{text-align:center}
+.totals-val{font:700 20px var(--mono);color:#fff;letter-spacing:-.5px;line-height:1}
+.totals-unit{font:400 9px var(--mono);color:rgba(255,255,255,.45)}
+.totals-lbl{font:500 9px var(--sans);text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.35);margin-top:3px}
+.totals-verdict{font:600 11px var(--sans);padding:7px 10px;border-radius:6px;text-align:center}
+.totals-verdict.green{background:#15803d;color:#fff}
+.totals-verdict.amber{background:#b45309;color:#fff}
+.totals-verdict.red{background:#b91c1c;color:#fff}
+.totals-verdict.inactive{background:rgba(255,255,255,.08);color:rgba(255,255,255,.3)}
 .pd-cta-title{font:700 13px var(--sans);color:#fff;margin-bottom:4px}
 .pd-cta-sub{font:400 11px var(--sans);color:rgba(255,255,255,.45);margin-bottom:12px}
 .pd-cta-btn{display:block;padding:10px;background:var(--accent);color:#fff;font:700 12px var(--sans);border-radius:6px;text-decoration:none;text-align:center}
@@ -154,113 +184,120 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <div id="roof-info" style="display:none"></div>
     </div>
 
-    <!-- Verdict -->
+    <!-- Extension cards -->
     <div class="p-section">
-      <div class="verdict-badge" id="verdict-badge">
-        <div class="verdict-dot" id="verdict-dot" style="background:var(--green)"></div>
-        <div>
-          <div class="verdict-label" id="verdict-label" style="color:var(--green)">Permitted Development</div>
-          <div class="verdict-sub" id="verdict-sub">No planning permission required</div>
+      <div class="p-hd">Select extensions to model</div>
+
+      <!-- Rear extension -->
+      <div class="ext-card">
+        <div class="ext-card-header" onclick="toggleExt('rear',this)">
+          <input type="checkbox" id="chk-rear" onclick="event.stopPropagation();toggleExt('rear',this.closest('.ext-card-header'))">
+          <span class="ext-card-title">Rear extension</span>
+          <span class="ext-dims" id="dims-rear">-</span>
+          <span class="ext-badge inactive" id="badge-rear">off</span>
+        </div>
+        <div class="ext-body" id="body-rear">
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Depth</span><span class="slider-val" id="val-depth">3.0m</span></div>
+            <input type="range" id="sl-depth" min="1" max="8" step="0.5" value="3" oninput="updateMassing()">
+            <div class="slider-scale"><span>1m</span><span>3m PD</span><span>6m PA</span><span>8m</span></div>
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Width</span><span class="slider-val" id="val-width">4.0m</span></div>
+            <input type="range" id="sl-width" min="2" max="5" step="0.5" value="4" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Height</span><span class="slider-val" id="val-height">3.0m</span></div>
+            <input type="range" id="sl-height" min="2.5" max="4" step="0.1" value="3" oninput="updateMassing()">
+            <div class="slider-scale"><span>2.5m</span><span>3m</span><span>4m eaves limit</span></div>
+          </div>
+          <div class="rule-list" id="rules-rear"></div>
+        </div>
+      </div>
+
+      <!-- Dormer -->
+      <div class="ext-card">
+        <div class="ext-card-header" onclick="toggleExt('dormer',this)">
+          <input type="checkbox" id="chk-dormer" onclick="event.stopPropagation();toggleExt('dormer',this.closest('.ext-card-header'))">
+          <span class="ext-card-title">Loft dormer</span>
+          <span class="ext-dims" id="dims-dormer">-</span>
+          <span class="ext-badge inactive" id="badge-dormer">off</span>
+        </div>
+        <div class="ext-body" id="body-dormer">
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Width</span><span class="slider-val" id="val-dwidth">2.5m</span></div>
+            <input type="range" id="sl-dwidth" min="1" max="4" step="0.5" value="2.5" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Projection</span><span class="slider-val" id="val-dproj">1.0m</span></div>
+            <input type="range" id="sl-dproj" min="0.5" max="2" step="0.25" value="1" oninput="updateMassing()">
+          </div>
+          <div class="rule-list" id="rules-dormer"></div>
+        </div>
+      </div>
+
+      <!-- Outbuilding -->
+      <div class="ext-card">
+        <div class="ext-card-header" onclick="toggleExt('ob',this)">
+          <input type="checkbox" id="chk-ob" onclick="event.stopPropagation();toggleExt('ob',this.closest('.ext-card-header'))">
+          <span class="ext-card-title">Outbuilding</span>
+          <span class="ext-dims" id="dims-ob">-</span>
+          <span class="ext-badge inactive" id="badge-ob">off</span>
+        </div>
+        <div class="ext-body" id="body-ob">
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Width</span><span class="slider-val" id="val-obw">4.0m</span></div>
+            <input type="range" id="sl-obw" min="2" max="8" step="0.5" value="4" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Depth</span><span class="slider-val" id="val-obd">3.0m</span></div>
+            <input type="range" id="sl-obd" min="2" max="6" step="0.5" value="3" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Height</span><span class="slider-val" id="val-obh">2.5m</span></div>
+            <input type="range" id="sl-obh" min="2" max="4" step="0.1" value="2.5" oninput="updateMassing()">
+            <div class="slider-scale"><span>2m</span><span>2.5m limit (near boundary)</span><span>4m</span></div>
+          </div>
+          <div class="rule-list" id="rules-ob"></div>
+        </div>
+      </div>
+
+      <!-- Wrap-around -->
+      <div class="ext-card">
+        <div class="ext-card-header" onclick="toggleExt('wrap',this)">
+          <input type="checkbox" id="chk-wrap" onclick="event.stopPropagation();toggleExt('wrap',this.closest('.ext-card-header'))">
+          <span class="ext-card-title">Wrap-around (L-shape)</span>
+          <span class="ext-dims" id="dims-wrap">-</span>
+          <span class="ext-badge inactive" id="badge-wrap">off</span>
+        </div>
+        <div class="ext-body" id="body-wrap">
+          <div class="ext-warn">Connected L-shape always requires <strong>full planning permission</strong> - joining side + rear voids PD rights.</div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Rear depth</span><span class="slider-val" id="val-wdepth">3.0m</span></div>
+            <input type="range" id="sl-wdepth" min="1" max="6" step="0.5" value="3" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Side return width</span><span class="slider-val" id="val-srw">1.0m</span></div>
+            <input type="range" id="sl-srw" min="0.5" max="2.5" step="0.1" value="1" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Height</span><span class="slider-val" id="val-wht">3.0m</span></div>
+            <input type="range" id="sl-wht" min="2.5" max="4" step="0.1" value="3" oninput="updateMassing()">
+          </div>
+          <div class="rule-list" id="rules-wrap"></div>
         </div>
       </div>
     </div>
 
-    <!-- Mode tabs -->
-    <div class="p-section">
-      <div class="mode-tabs">
-        <button class="mode-tab active" onclick="setMode('rear')">Rear Ext</button>
-        <button class="mode-tab" onclick="setMode('dormer')">Dormer</button>
-        <button class="mode-tab" onclick="setMode('outbuilding')">Outbuilding</button>
-        <button class="mode-tab" onclick="setMode('wrap')">Wrap</button>
+    <!-- Combined totals -->
+    <div class="totals-strip" id="totals-strip" style="display:none">
+      <div class="totals-hd">Combined scheme</div>
+      <div class="totals-grid">
+        <div class="totals-cell"><div class="totals-val" id="tot-gfa">0</div><div class="totals-unit">m²</div><div class="totals-lbl">Floor area</div></div>
+        <div class="totals-cell"><div class="totals-val" id="tot-vol">0</div><div class="totals-unit">m³</div><div class="totals-lbl">Volume</div></div>
+        <div class="totals-cell"><div class="totals-val" id="tot-count">0</div><div class="totals-unit">types</div><div class="totals-lbl">Active</div></div>
       </div>
-
-      <!-- Rear extension controls -->
-      <div id="ctrl-rear">
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Extension depth</span><span class="slider-val" id="val-depth">3.0m</span></div>
-          <input type="range" id="sl-depth" min="1" max="8" step="0.5" value="3" oninput="updateMassing()">
-          <div class="slider-scale"><span>1m</span><span>3m</span><span>4m PD limit</span><span>6m PA</span><span>8m max</span></div>
-        </div>
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Extension width</span><span class="slider-val" id="val-width">4.0m</span></div>
-          <input type="range" id="sl-width" min="2" max="5" step="0.5" value="4" oninput="updateMassing()">
-          <div class="slider-scale"><span>2m</span><span>3.5m</span><span>5m</span></div>
-        </div>
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Ridge height</span><span class="slider-val" id="val-height">3.0m</span></div>
-          <input type="range" id="sl-height" min="2.5" max="4" step="0.1" value="3" oninput="updateMassing()">
-          <div class="slider-scale"><span>2.5m</span><span>3.0m</span><span>4.0m eaves limit</span></div>
-        </div>
-      </div>
-
-      <!-- Dormer controls -->
-      <div id="ctrl-dormer" style="display:none">
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Dormer width</span><span class="slider-val" id="val-dwidth">2.5m</span></div>
-          <input type="range" id="sl-dwidth" min="1" max="4" step="0.5" value="2.5" oninput="updateMassing()">
-          <div class="slider-scale"><span>1m</span><span>2.5m</span><span>4m</span></div>
-        </div>
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Dormer projection</span><span class="slider-val" id="val-dproj">1.0m</span></div>
-          <input type="range" id="sl-dproj" min="0.5" max="2" step="0.25" value="1" oninput="updateMassing()">
-        </div>
-      </div>
-
-      <!-- Outbuilding controls -->
-      <div id="ctrl-outbuilding" style="display:none">
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Width</span><span class="slider-val" id="val-obw">4.0m</span></div>
-          <input type="range" id="sl-obw" min="2" max="8" step="0.5" value="4" oninput="updateMassing()">
-        </div>
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Depth</span><span class="slider-val" id="val-obd">3.0m</span></div>
-          <input type="range" id="sl-obd" min="2" max="6" step="0.5" value="3" oninput="updateMassing()">
-        </div>
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Height</span><span class="slider-val" id="val-obh">2.5m</span></div>
-          <input type="range" id="sl-obh" min="2" max="4" step="0.1" value="2.5" oninput="updateMassing()">
-          <div class="slider-scale"><span>2m</span><span>2.5m boundary limit</span><span>4m max</span></div>
-        </div>
-      </div>
-
-      <!-- Wrap-around controls -->
-      <div id="ctrl-wrap" style="display:none">
-        <div style="font:400 10px/1.6 var(--sans);color:#7f1d1d;margin-bottom:10px;padding:8px 10px;background:var(--red-lt);border:1px solid var(--red-bd);border-radius:6px;">
-          A connected L-shape always requires <strong>full planning permission</strong> - joining side and rear voids PD rights. Use the sliders to size your envelope. Alternative: phase the build (side first under PD, rear second separately).
-        </div>
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Rear depth</span><span class="slider-val" id="val-wdepth">3.0m</span></div>
-          <input type="range" id="sl-wdepth" min="1" max="6" step="0.5" value="3" oninput="updateMassing()">
-          <div class="slider-scale"><span>1m</span><span>3m PD</span><span>6m PA max</span></div>
-        </div>
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Side return width</span><span class="slider-val" id="val-srw">1.0m</span></div>
-          <input type="range" id="sl-srw" min="0.5" max="2.5" step="0.1" value="1" oninput="updateMassing()">
-          <div class="slider-scale"><span>0.5m</span><span>1m typical</span><span>2.5m</span></div>
-        </div>
-        <div class="slider-row">
-          <div class="slider-labels"><span class="slider-lbl">Height</span><span class="slider-val" id="val-wht">3.0m</span></div>
-          <input type="range" id="sl-wht" min="2.5" max="4" step="0.1" value="3" oninput="updateMassing()">
-          <div class="slider-scale"><span>2.5m</span><span>3.0m</span><span>4.0m eaves limit</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Dimensions -->
-    <div class="p-section">
-      <div class="p-hd">Proposed envelope</div>
-      <div class="dim-grid">
-        <div class="dim-card"><div class="dim-val" id="dim-gf">12.0</div><div class="dim-unit">m²</div><div class="dim-lbl">Floor area</div></div>
-        <div class="dim-card"><div class="dim-val" id="dim-ht">3.0</div><div class="dim-unit">m</div><div class="dim-lbl">Height</div></div>
-        <div class="dim-card"><div class="dim-val" id="dim-vol">36</div><div class="dim-unit">m³</div><div class="dim-lbl">Volume</div></div>
-      </div>
-    </div>
-
-    <!-- Rules -->
-    <div class="p-section">
-      <div class="p-hd">PD Rules check</div>
-      <div class="rule-list" id="rule-list"></div>
-      <div class="class-note green" id="class-note">Within standard permitted development limits. No planning application required.</div>
+      <div class="totals-verdict inactive" id="tot-verdict">Tick an extension to begin</div>
     </div>
 
     <!-- CTA -->
@@ -342,8 +379,8 @@ function makeRect(anchorLng, anchorLat, widthM, depthM) {
   return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
 }
 
-// Current mode
-let currentMode = 'rear';
+// Active extensions (multi-select)
+const activeExts = new Set();
 
 // -- Address autocomplete (Mapbox geocoding) ---------------------------------
 let _acToken = null;
@@ -577,37 +614,107 @@ async function initMap() {
     map.addSource('max-env', {type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
     map.addLayer({id:'max-env-line',slot:'top',type:'line',source:'max-env',paint:{'line-color':'#4ade80','line-width':1,'line-dasharray':[2,2],'line-opacity':0.4}});
 
+    // Outbuilding source (separate from rear extension)
+    map.addSource('src-ob',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}}});
+    map.addLayer({id:'ob-3d',slot:'top',type:'fill-extrusion',source:'src-ob',paint:{'fill-extrusion-color':'#3b82f6','fill-extrusion-height':['get','height'],'fill-extrusion-base':0,'fill-extrusion-opacity':0.85}});
+    map.addLayer({id:'ob-top',slot:'top',type:'line',source:'src-ob',paint:{'line-color':'#93c5fd','line-width':2}});
+
+    // Wrap-around source (L-shape, always planning)
+    map.addSource('src-wrap',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}}});
+    map.addLayer({id:'wrap-3d',slot:'top',type:'fill-extrusion',source:'src-wrap',paint:{'fill-extrusion-color':'#a855f7','fill-extrusion-height':['get','height'],'fill-extrusion-base':0,'fill-extrusion-opacity':0.75}});
+
     updateMassing();
   });
 }
 
-function setMode(mode) {
-  currentMode = mode;
-  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('ctrl-rear').style.display = mode==='rear'?'block':'none';
-  document.getElementById('ctrl-dormer').style.display = mode==='dormer'?'block':'none';
-  document.getElementById('ctrl-outbuilding').style.display = mode==='outbuilding'?'block':'none';
-  document.getElementById('ctrl-wrap').style.display = mode==='wrap'?'block':'none';
-  // Hide all proposal layers
-  const map = window._map;
-  if(!map||!map.isStyleLoaded()) return;
-  const showRear = mode==='rear'||mode==='wrap';
-  map.setLayoutProperty('ext-3d','visibility',showRear?'visible':'none');
-  map.setLayoutProperty('ext-top','visibility',showRear?'visible':'none');
-  map.setLayoutProperty('dormer-3d','visibility',mode==='dormer'?'visible':'none');
-  map.setLayoutProperty('max-env-line','visibility','visible');
+function toggleExt(type, header) {
+  const chk = document.getElementById('chk-' + type);
+  // If header was clicked (not checkbox directly), toggle the checkbox
+  if (header) chk.checked = !chk.checked;
+  const body = document.getElementById('body-' + type);
+  if (chk.checked) {
+    activeExts.add(type);
+    body.classList.add('open');
+  } else {
+    activeExts.delete(type);
+    body.classList.remove('open');
+    clearMassing(type);
+  }
   updateMassing();
+}
+
+function clearMassing(type) {
+  const map = window._map;
+  if (!map || !map.isStyleLoaded()) return;
+  const empty = {type:'FeatureCollection',features:[]};
+  if (type === 'rear') {
+    map.getSource('extension').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}});
+    map.setLayoutProperty('ext-3d','visibility','none');
+    map.setLayoutProperty('ext-top','visibility','none');
+  } else if (type === 'dormer') {
+    map.getSource('dormer').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0,base:0}});
+    map.setLayoutProperty('dormer-3d','visibility','none');
+  } else if (type === 'ob') {
+    map.getSource('src-ob').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}});
+    map.setLayoutProperty('ob-3d','visibility','none');
+    map.setLayoutProperty('ob-top','visibility','none');
+  } else if (type === 'wrap') {
+    map.getSource('src-wrap').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}});
+    map.setLayoutProperty('wrap-3d','visibility','none');
+  }
+  document.getElementById('dims-' + type).textContent = '-';
+  document.getElementById('badge-' + type).className = 'ext-badge inactive';
+  document.getElementById('badge-' + type).textContent = 'off';
+  document.getElementById('rules-' + type).innerHTML = '';
 }
 
 function updateMassing() {
   const map = window._map;
   if(!map||!map.isStyleLoaded()) return;
+  if(activeExts.has('rear')) updateRear(map);
+  if(activeExts.has('dormer')) updateDormer(map);
+  if(activeExts.has('ob')) updateOutbuilding(map);
+  if(activeExts.has('wrap')) updateWrap(map);
+  updateCombinedTotals();
+}
 
-  if(currentMode === 'rear') updateRear(map);
-  else if(currentMode === 'wrap') updateWrap(map);
-  else if(currentMode === 'dormer') updateDormer(map);
-  else if(currentMode === 'outbuilding') updateOutbuilding(map);
+function updateCombinedTotals() {
+  const strip = document.getElementById('totals-strip');
+  const count = activeExts.size;
+  if (count === 0) { strip.style.display = 'none'; return; }
+  strip.style.display = 'block';
+  document.getElementById('tot-count').textContent = count;
+
+  let totalGFA = 0, totalVol = 0;
+  let worstClass = 'green'; // green < amber < red
+
+  const extClasses = {};
+  activeExts.forEach(type => {
+    const badge = document.getElementById('badge-' + type);
+    if (badge) {
+      const cl = badge.classList.contains('green') ? 'green'
+               : badge.classList.contains('amber') ? 'amber'
+               : badge.classList.contains('red')   ? 'red' : 'green';
+      extClasses[type] = cl;
+      if (cl === 'red') worstClass = 'red';
+      else if (cl === 'amber' && worstClass !== 'red') worstClass = 'amber';
+    }
+    // Add GFA from dims display (parse from text)
+    const dimsEl = document.getElementById('dims-' + type);
+    if (dimsEl && dimsEl.textContent !== '-') {
+      const m = dimsEl.textContent.match(/([\d.]+)m².*?([\d.]+)m³/);
+      if (m) { totalGFA += parseFloat(m[1]); totalVol += parseFloat(m[2]); }
+    }
+  });
+
+  document.getElementById('tot-gfa').textContent = totalGFA.toFixed(1);
+  document.getElementById('tot-vol').textContent = Math.round(totalVol);
+
+  const verdictEl = document.getElementById('tot-verdict');
+  verdictEl.className = 'totals-verdict ' + worstClass;
+  verdictEl.textContent = worstClass === 'green' ? 'Full scheme within Permitted Development'
+    : worstClass === 'amber' ? 'Prior Approval needed for part of scheme'
+    : 'Planning Permission required for part of scheme';
 }
 
 function updateRear(map) {
@@ -662,20 +769,14 @@ function updateRear(map) {
   rules.push({icon:'✓', text:'Single storey -- materials to match'});
 
   // Update verdict UI
-  document.getElementById('verdict-dot').style.background = color;
-  document.getElementById('verdict-label').style.color = color;
-  document.getElementById('verdict-label').textContent = verdict;
-  document.getElementById('verdict-sub').textContent = sub;
-  document.getElementById('class-note').className = 'class-note ' + noteClass;
-  document.getElementById('class-note').textContent = noteText;
-  document.getElementById('rule-list').innerHTML = rules.map(r => `<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
-
-  // Dimensions
   const area = (depth * width).toFixed(1);
   const vol = Math.round(depth * width * height);
-  document.getElementById('dim-gf').textContent = area;
-  document.getElementById('dim-ht').textContent = height.toFixed(1);
-  document.getElementById('dim-vol').textContent = vol;
+  // Badge + dims
+  const badge = document.getElementById('badge-rear');
+  badge.className = 'ext-badge ' + noteClass;
+  badge.textContent = verdict === 'Permitted Development' ? 'PD' : verdict === 'Prior Approval Needed' ? 'PA' : 'Planning';
+  document.getElementById('dims-rear').textContent = area + 'm² / ' + vol + 'm³';
+  document.getElementById('rules-rear').innerHTML = rules.map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
 
   // Update colour of extrusion
   const extColor = noteClass==='green'?'#16a34a':noteClass==='amber'?'#d97706':'#dc2626';
@@ -718,25 +819,18 @@ function updateDormer(map) {
   const color = overVol ? 'var(--red)' : 'var(--green)';
   const noteClass = overVol ? 'red' : 'green';
 
-  document.getElementById('verdict-dot').style.background = color;
-  document.getElementById('verdict-label').style.color = color;
-  document.getElementById('verdict-label').textContent = verdict;
-  document.getElementById('verdict-sub').textContent = overVol ? `Volume ${vol.toFixed(0)}m³ exceeds 40m³ limit` : 'Rear dormer within PD limits';
-  document.getElementById('class-note').className = 'class-note ' + noteClass;
-  document.getElementById('class-note').textContent = overVol
-    ? `Volume of ${vol.toFixed(0)}m³ exceeds the 40m³ PD limit for this property. Reduce the width or projection.`
-    : `Rear dormer of ${vol.toFixed(0)}m³ is within the 40m³ permitted development allowance. No planning required.`;
-
-  document.getElementById('rule-list').innerHTML = [
+  const badgeD = document.getElementById('badge-dormer');
+  badgeD.className = 'ext-badge ' + noteClass;
+  badgeD.textContent = !overVol ? 'PD' : 'Planning';
+  document.getElementById('dims-dormer').textContent = (dwidth*dproj).toFixed(1) + 'm² / ' + vol.toFixed(0) + 'm³';
+  document.getElementById('rules-dormer').innerHTML = [
     {icon:!onFront?'✓':'✗', text:'Rear elevation only (not facing highway)'},
     {icon:!overVol?'✓':'✗', text:`Volume ${vol.toFixed(0)}m³ vs 40m³ limit`},
     {icon:'✓', text:'Set back 20cm from eaves ✓'},
     {icon:'✓', text:'Not exceeding ridge height ✓'},
   ].map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
 
-  document.getElementById('dim-gf').textContent = (dwidth*dproj).toFixed(1);
-  document.getElementById('dim-ht').textContent = (dormerH-dormerBase).toFixed(1);
-  document.getElementById('dim-vol').textContent = vol.toFixed(0);
+
 
   map.getSource('dormer').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[dormerCoords]},properties:{height:dormerH,base:dormerBase}});
   map.setLayoutProperty('dormer-3d','visibility','visible');
@@ -766,37 +860,26 @@ function updateOutbuilding(map) {
   const color = (exceedsArea||exceedsH)?'var(--red)':'var(--green)';
   const noteClass = (exceedsArea||exceedsH)?'red':'green';
 
-  document.getElementById('verdict-dot').style.background = color;
-  document.getElementById('verdict-label').style.color = color;
-  document.getElementById('verdict-label').textContent = verdict;
-  document.getElementById('verdict-sub').textContent = verdict === 'Permitted Development' ? 'Within outbuilding PD rules' : 'Exceeds PD limits -- planning required';
-  document.getElementById('class-note').className = 'class-note ' + noteClass;
-  document.getElementById('class-note').textContent = exceedsH
-    ? `Height of ${obh.toFixed(1)}m exceeds the 2.5m limit when within 2m of the boundary.`
-    : exceedsArea
-    ? `Outbuilding area of ${OB_AREA.toFixed(0)}m² exceeds 50% curtilage limit for this garden.`
-    : `Outbuilding ${obw}×${obd}m at ${obh}m is within PD limits. Class E permitted.`;
-
-  document.getElementById('rule-list').innerHTML = [
+  const badgeOB = document.getElementById('badge-ob');
+  badgeOB.className = 'ext-badge ' + noteClass;
+  badgeOB.textContent = noteClass === 'green' ? 'PD' : 'Planning';
+  document.getElementById('dims-ob').textContent = OB_AREA.toFixed(1) + 'm² / ' + Math.round(OB_AREA*obh) + 'm³';
+  document.getElementById('rules-ob').innerHTML = [
     {icon:!exceedsArea?'✓':'✗', text:`Area ${OB_AREA.toFixed(0)}m² within 50% curtilage (max ~${Math.round(maxArea)}m²)`},
     {icon:!exceedsH?'✓':'✗', text:`Height ${obh.toFixed(1)}m -- 2.5m limit within 2m of boundary`},
     {icon:'✓', text:'Behind principal elevation ✓'},
     {icon:'✓', text:'Incidental use -- home office / studio ✓'},
   ].map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
 
-  document.getElementById('dim-gf').textContent = OB_AREA.toFixed(1);
-  document.getElementById('dim-ht').textContent = obh.toFixed(1);
-  document.getElementById('dim-vol').textContent = Math.round(OB_AREA * obh);
+
 
   // Position outbuilding in garden, offset from house
   const obLat = BASE_LAT - (HOUSE_D + 5) * M_LAT; // 5m into garden
   const obLng = BASE_LNG + 0.5 * M_LNG; // slight offset
   const obCoords = makeRect(obLng, obLat, obw, obd);
-  map.getSource('extension').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[obCoords]},properties:{height:obh}});
-  map.setLayoutProperty('ext-3d','visibility','visible');
-  map.setLayoutProperty('ext-top','visibility','visible');
-  map.setLayoutProperty('dormer-3d','visibility','none');
-  map.setPaintProperty('ext-3d','fill-extrusion-color', noteClass==='green'?'#16a34a':'#dc2626');
+  map.getSource('src-ob').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[obCoords]},properties:{height:obh}});
+  map.setLayoutProperty('ob-3d','visibility','visible');
+  map.setLayoutProperty('ob-top','visibility','visible');
   map.getSource('max-env').setData({type:'FeatureCollection',features:[]});
 }
 
@@ -851,22 +934,15 @@ function updateWrap(map) {
     {icon:'ℹ', text:'Alternative: Phase build -- side PD first, rear PD second'},
   ];
 
-  document.getElementById('verdict-dot').style.background = color;
-  document.getElementById('verdict-label').style.color = color;
-  document.getElementById('verdict-label').textContent = verdict;
-  document.getElementById('verdict-sub').textContent = sub;
-  document.getElementById('class-note').className = 'class-note ' + noteClass;
-  document.getElementById('class-note').textContent = noteText;
-  document.getElementById('rule-list').innerHTML = rules.map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
-
-  // Dimensions -- L-shape floor area = rear full width + side return (minus overlap)
   const rearArea  = HOUSE_W * depth;
   const srArea    = srw * depth;
   const totalArea = rearArea + srArea;
   const vol = Math.round(totalArea * height);
-  document.getElementById('dim-gf').textContent = totalArea.toFixed(1);
-  document.getElementById('dim-ht').textContent = height.toFixed(1);
-  document.getElementById('dim-vol').textContent = vol;
+  const badgeW = document.getElementById('badge-wrap');
+  badgeW.className = 'ext-badge red';
+  badgeW.textContent = 'Planning';
+  document.getElementById('dims-wrap').textContent = totalArea.toFixed(1) + 'm² / ' + vol + 'm³';
+  document.getElementById('rules-wrap').innerHTML = rules.map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
 
   // Build L-shape polygon
   // House rear sits at rearLat; side return extends to the LEFT (typical)
@@ -886,12 +962,8 @@ function updateWrap(map) {
   ];
 
   const extColor = noteClass==='green'?'#16a34a':noteClass==='amber'?'#d97706':'#dc2626';
-  map.setPaintProperty('ext-3d','fill-extrusion-color', extColor);
-  map.setPaintProperty('ext-3d','fill-extrusion-height', height);
-  map.getSource('extension').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[lShape]},properties:{height}});
-  map.setLayoutProperty('ext-3d','visibility','visible');
-  map.setLayoutProperty('ext-top','visibility','visible');
-  map.setLayoutProperty('dormer-3d','visibility','none');
+  map.getSource('src-wrap').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[lShape]},properties:{height}});
+  map.setLayoutProperty('wrap-3d','visibility','visible');
   map.getSource('max-env').setData({type:'FeatureCollection',features:[]});
 }
 
