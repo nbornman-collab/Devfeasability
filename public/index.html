@@ -631,7 +631,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg => {
   mapboxgl.accessToken = cfg.mapboxToken;
   const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/standard',
     center: [-0.090, 51.505],
     zoom: 11.5, pitch: 55, bearing: 0,
     interactive: false,
@@ -639,7 +639,8 @@ fetch('/api/config').then(r=>r.json()).then(cfg => {
   });
   // Slow rotation
   let bearing = 0;
-  map.on('load', () => {
+  map.on('style.load', () => {
+    map.setConfigProperty('basemap', 'lightPreset', 'night');
     (function rotate() {
       bearing = (bearing + 0.04) % 360;
       map.setBearing(bearing);

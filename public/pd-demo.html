@@ -337,7 +337,7 @@ async function initMap() {
 
   const map = window._map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/standard',
     center: [BASE_LNG, BASE_LAT],
     zoom: 19,
     pitch: 55,
@@ -361,33 +361,19 @@ async function initMap() {
   map.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-left');
 
   map.on('load', () => {
-    // Context 3D buildings (dim)
-    const layers = map.getStyle().layers;
-    const labelLayerId = layers.find(l => l.type === 'symbol' && l.layout['text-field'])?.id;
-    map.addLayer({
-      id: 'ctx-buildings',
-      source: 'composite',
-      'source-layer': 'building',
-      filter: ['==', 'extrude', 'true'],
-      type: 'fill-extrusion',
-      minzoom: 14,
-      paint: {
-        'fill-extrusion-color': '#1e293b',
-        'fill-extrusion-height': ['get', 'height'],
-        'fill-extrusion-base': ['get', 'min_height'],
-        'fill-extrusion-opacity': 0.5
-      }
-    }, labelLayerId);
+    // Standard style renders high-quality 3D buildings natively - set to dusk for depth
+    map.setConfigProperty('basemap', 'lightPreset', 'dusk');
 
     // Garden outline
     map.addSource('garden', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[gardenCoords]}}});
-    map.addLayer({id:'garden-fill',type:'fill',source:'garden',paint:{'fill-color':'#14532d','fill-opacity':0.2}});
-    map.addLayer({id:'garden-line',type:'line',source:'garden',paint:{'line-color':'#166534','line-width':1,'line-dasharray':[3,2]}});
+    map.addLayer({id:'garden-fill',slot:'top',type:'fill',source:'garden',paint:{'fill-color':'#14532d','fill-opacity':0.2}});
+    map.addLayer({id:'garden-line',slot:'top',type:'line',source:'garden',paint:{'line-color':'#166534','line-width':1,'line-dasharray':[3,2]}});
 
     // House (existing)
     map.addSource('house', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:HOUSE_H}}});
     map.addLayer({
       id: 'house-3d',
+      slot: 'top',
       type: 'fill-extrusion',
       source: 'house',
       paint: {
@@ -414,15 +400,15 @@ async function initMap() {
         'fill-extrusion-opacity': 0.85
       }
     });
-    map.addLayer({id:'ext-top',type:'line',source:'extension',paint:{'line-color':'#4ade80','line-width':2}});
+    map.addLayer({id:'ext-top',slot:'top',type:'line',source:'extension',paint:{'line-color':'#4ade80','line-width':2}});
 
     // Dormer source (added on roof level)
     map.addSource('dormer', {type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0,base:0}}});
-    map.addLayer({id:'dormer-3d',type:'fill-extrusion',source:'dormer',paint:{'fill-extrusion-color':'#f59e0b','fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','base'],'fill-extrusion-opacity':0.85}});
+    map.addLayer({id:'dormer-3d',slot:'top',type:'fill-extrusion',source:'dormer',paint:{'fill-extrusion-color':'#f59e0b','fill-extrusion-height':['get','height'],'fill-extrusion-base':['get','base'],'fill-extrusion-opacity':0.85}});
 
     // Max envelope guide (dashed)
     map.addSource('max-env', {type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
-    map.addLayer({id:'max-env-line',type:'line',source:'max-env',paint:{'line-color':'#4ade80','line-width':1,'line-dasharray':[2,2],'line-opacity':0.4}});
+    map.addLayer({id:'max-env-line',slot:'top',type:'line',source:'max-env',paint:{'line-color':'#4ade80','line-width':1,'line-dasharray':[2,2],'line-opacity':0.4}});
 
     updateMassing();
   });

@@ -1090,19 +1090,20 @@ function initMap(token) {
   MAPBOX_TOKEN = token;
   MAP = new mapboxgl.Map({
     container: 'map-canvas',
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/standard',
     center: [-0.090, 51.505],
     zoom: 11.5, pitch: 0, bearing: 0,
     attributionControl: false, antialias: true
   });
   MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
-  MAP.on('load', () => {
+  MAP.on('style.load', () => {
+    // Standard style - dark night preset for our design language
+    MAP.setConfigProperty('basemap', 'lightPreset', 'night');
+    MAP.setConfigProperty('basemap', 'showRoadLabels', true);
     // Offset center to account for 50% right panel
     const panelW = Math.round(window.innerWidth * 0.5);
     MAP.setPadding({top:60, bottom:60, left:20, right:panelW});
     MAP.setCenter([-0.090, 51.505]);
-    // dark-v11 roads are clean - no label scrubbing needed
-    // 3D massing removed from browse mode (dark-v11, flat 2D)
     addSiteMarkers();
     // addBoroughOutlines(); // removed until accurate GLA polygon data available
   });
@@ -1128,12 +1129,12 @@ function addSiteMarkers() {
   }
   MAP.addSource('sites',{type:'geojson',data:geojson});
   // White ring
-  MAP.addLayer({id:'sites-ring',type:'circle',source:'sites',paint:{
+  MAP.addLayer({id:'sites-ring',type:'circle',source:'sites',slot:'top',paint:{
     'circle-radius':['+',['get','r'],3],
     'circle-color':'#ffffff','circle-opacity':0.95
   }});
   // Colour dot
-  MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',paint:{
+  MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',slot:'top',paint:{
     'circle-radius':['get','r'],
     'circle-color':['get','color'],'circle-opacity':0.95
   }});
