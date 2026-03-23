@@ -722,6 +722,47 @@ const C_HIGH=[
 let activeIdx = 0;
 const COLS = ['#059669','#4f46e5','#d97706'];
 
+// Developer scale context
+let devScaleOverride = null;
+function getDevScale() {
+  if (devScaleOverride) return devScaleOverride;
+  return ['small','mid','large'][activeIdx];
+}
+function setDevScale(v) {
+  devScaleOverride = (devScaleOverride === v) ? null : v; // toggle off if same
+  render();
+}
+
+const SCALE_CONTEXT = {
+  small: {
+    label: 'Small developer',
+    tdc: '~£2-8M TDC',
+    finance: 'At this scale, finance is typically <strong>bridging or mezzanine</strong> (8-9% pa), often drawn in full on day 1 rather than against an S-curve. Senior debt facilities are harder to secure below ~£5M TDC - factor this into your cost of capital. Arrangement fee (~1-1.5% of facility) not shown in pro forma above.',
+    fees: '<strong>Professional fees at 15-18%</strong> of construction are realistic at this scale - minimum fees apply regardless of project value. Architect, SE, M&E, QS, PM. Planning consultant often adds a further 2-3% not captured in the standard fees %.',
+    s106: '<strong>Affordable housing threshold:</strong> most London boroughs trigger at 10+ units (some at 6+). Below threshold - no affordable obligation, but CIL still applies in full. If you are near the threshold, the commuted sum route is often available and worth modelling.',
+    programme: 'A <strong>2-year programme</strong> is realistic at this scale. No EIA required. Planning period 12-18 months - delegated decision likely if no CA or listed building constraints.',
+    gap: 'Note: SDLT on land acquisition and land bid price are not modelled above. RLV = maximum you can pay for the site at target profit.'
+  },
+  mid: {
+    label: 'Mid-scale developer',
+    tdc: '~£8-35M TDC',
+    finance: 'Senior debt is the standard route at this scale, typically <strong>55-65% LTC at 7-8% pa</strong>, drawn against an S-curve (hence the ÷2 approximation above). Mezzanine may sit above senior if equity is constrained. Arrangement fee (~1-1.5%) not shown.',
+    fees: '<strong>Professional fees at 12-15%</strong> of construction. Full consultant team: architect, SE, M&E, QS, PM, planning consultant, CDM coordinator. Heritage, transport, and daylight consultants add further cost if triggered - these are separate from the % above.',
+    s106: '<strong>Affordable housing obligation applies</strong> at this scale (35% by habitable room, London Plan Policy H6). On-site provision vs commuted sum is a planning negotiation - commuted sum is often accepted where on-site delivery is impractical. Model both and understand the GDV impact.',
+    programme: 'Programme of <strong>2-3 years</strong>. EIA may be required depending on height and borough. GLA Stage 1 referral triggers at 150+ units or 30+ storeys - check early.',
+    gap: 'Note: SDLT, planning period finance (pre-construction equity), and let-up period (6-12 months post-PC) are not modelled above.'
+  },
+  large: {
+    label: 'Large / institutional developer',
+    tdc: '£35M+ TDC',
+    finance: 'Senior debt at <strong>60% LTC, 7-7.5% pa</strong>, S-curve drawdown. The ÷2 approximation above is standard for single-period models - a monthly cashflow model will give a more accurate finance cost on a 3-4 year programme. Arrangement fee, exit fee, and monitoring surveyor costs not modelled.',
+    fees: '<strong>Professional fees at 10-12%</strong> of construction. Economies of scale on large schemes, but pre-application studies (TVIA, wind, daylight BRE, heritage) sit outside this % and can add £100-300K depending on planning complexity.',
+    s106: '<strong>Full S106 strategy required.</strong> Affordable housing, CIL, transport contributions, public realm, employment and skills - all negotiated as part of the s106 agreement. Commuted sum vs on-site affordable is a GLA policy matter at this scale (fast-track route requires 35% affordable on-site).',
+    programme: 'Programme of <strong>3-4+ years</strong>. EIA standard. GLA referral certain. LVMF assessment, wind microclimate, and Design Review Panel all add programme. Planning period alone is 24-36 months at tower scale.',
+    gap: 'Note: planning period finance, let-up period (12-18 months post-PC), exit costs, and monthly cashflow are not modelled. This is a single-period residual - suitable for screening, not for full investment committee.'
+  }
+};
+
 function go(idx){
   activeIdx=idx;
   window._activeScen=idx;
@@ -847,10 +888,38 @@ function render(){
     ${mkG(C_BASE,'Triggers at Base · 14F / 50m+',1,'var(--base)')}
     ${mkG(C_HIGH,'Triggers at High · 22F',2,'var(--hi)')}`;
 
-  // Narrative
+  // Narrative + scale context
+  const sc = SCALE_CONTEXT[getDevScale()];
+  const autoScale = ['small','mid','large'][activeIdx];
+  const isAuto = !devScaleOverride;
   document.getElementById('narrative-section').innerHTML=`
     <div class="sec-head">Scenario Assessment - ${s.label}</div>
-    <div class="narrative">${s.narrative}</div>`;
+    <div class="narrative">${s.narrative}</div>
+    <div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+        <span style="font:600 9px var(--sans);text-transform:uppercase;letter-spacing:2px;color:var(--t3)">Developer context</span>
+        ${['small','mid','large'].map(v=>{
+          const active = getDevScale()===v;
+          const isAutoMatch = isAuto && autoScale===v;
+          return `<button onclick="setDevScale('${v}')" style="padding:4px 10px;border-radius:4px;border:1px solid ${active?'var(--text)':'var(--border)'};background:${active?'var(--text)':'transparent'};color:${active?'var(--bg)':'var(--t2)'};font:600 9px var(--sans);text-transform:uppercase;letter-spacing:1px;cursor:pointer">${v==='small'?'Small':v==='mid'?'Mid':'Large'}${isAutoMatch?' (auto)':''}</button>`;
+        }).join('')}
+        ${!isAuto?`<button onclick="setDevScale(null)" style="padding:4px 8px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--t3);font:500 9px var(--sans);cursor:pointer">reset to auto</button>`:''}
+      </div>
+      <div style="font:700 10px var(--sans);text-transform:uppercase;letter-spacing:1.5px;color:var(--t2);margin-bottom:10px">${sc.label} - ${sc.tdc}</div>
+      <div style="display:grid;gap:8px">
+        ${[
+          {label:'Finance', text: sc.finance},
+          {label:'Professional fees', text: sc.fees},
+          {label:'S106 / Affordable', text: sc.s106},
+          {label:'Programme', text: sc.programme},
+          {label:'Model gaps', text: sc.gap}
+        ].map(row=>`
+          <div style="display:grid;grid-template-columns:110px 1fr;gap:8px;font:400 11px/1.65 var(--sans)">
+            <span style="font:600 10px var(--sans);color:var(--t3);text-transform:uppercase;letter-spacing:.8px;padding-top:2px">${row.label}</span>
+            <span style="color:var(--t2)">${row.text}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
 }
 
 // ── Vertical bars ──────────────────────────────────────────────────

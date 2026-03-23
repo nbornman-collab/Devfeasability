@@ -440,6 +440,33 @@ Server proxy: `/api/gla-planning?lat=&lng=`
 
 ---
 
+## DEVELOPER SCALE CONTEXT (locked 2026-03-23)
+
+Narrative commentary adapts to the scale of developer viewing the report.
+
+**Scale derivation:**
+- Default: auto-derived from active scenario (Lo = small, Base = mid, Hi = large)
+- Override: user can manually select Small / Mid / Large via toggle pill row
+- Override persists across scenario switches until cleared
+- Toggle shows auto-derived value in muted text when in auto mode
+
+**Scale bands and language register:**
+
+| Scale | TDC band | Finance | Fees | S106 / Affordable | Programme |
+|-------|----------|---------|------|-------------------|-----------|
+| small | ~£2-8M | Bridging / mezzanine, 8-9%, draw on day 1 | 15-18% (min fees apply) | 10-unit threshold, commuted sum route | 2yr, no EIA |
+| mid | ~£8-35M | Senior debt + mez, 7-8%, S-curve | 12-15%, full consultant team | Affordable obligation likely, on-site vs commuted sum | EIA may apply |
+| large | £35M+ | Senior debt, 7-7.5%, S-curve | 10-12%, economies of scale | S106 negotiated, full affordable strategy | GLA referral likely |
+
+**Implementation:**
+- `devScaleOverride` variable: null = auto
+- `getDevScale()` returns override if set, else derives from `activeIdx`
+- Scale context block appended to narrative section in `render()` - additive only
+- No financial calc changes. No scoring changes. No map code.
+- Roll out to 24SS first, then all sites on approval.
+
+---
+
 ## CONTRACTOR RULES
 
 - NDA + IP assignment required before repo access
