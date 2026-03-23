@@ -216,11 +216,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       </div>
     </div>
 
-    <!-- Roof intelligence (collapsible) -->
-    <div class="p-section" id="roof-section" style="display:none">
-      <div class="p-hd">Roof analysis</div>
-      <div id="roof-info"></div>
-    </div>
+    <!-- Roof intelligence data (hidden - feeds hero strip only) -->
+    <div id="roof-info" style="display:none"></div>
 
     <!-- Intelligence synthesis -->
     <div class="synth-section" id="synth-section" style="display:none">
@@ -408,8 +405,6 @@ function updateRoofPanel(props) {
     const sub = document.getElementById('prop-sub');
     if (sub) sub.textContent = sub.textContent.replace('Loading data...', Math.round(props._area) + 'm² footprint');
   }
-  // Roof section
-  document.getElementById('roof-section').style.display = 'block';
   if (!el) return;
   if (props._roofPitchDeg) {
     const pitchDeg = props._roofPitchDeg;
