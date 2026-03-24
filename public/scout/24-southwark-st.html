@@ -537,6 +537,63 @@ body {
       </div>
     </div>
 
+    <!-- 04 Massing + Financials -->
+    <div class="intel-section" id="sec-04">
+      <div class="intel-header" onclick="toggleSection(this)">
+        <div class="intel-title-wrap">
+          <span class="intel-num">04</span>
+          <span class="intel-title">Massing + Financials</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="intel-score-pill" id="s04-badge" style="background:var(--accent-bg);color:var(--accent)">—</span>
+          <span class="intel-chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="intel-body open" id="g-s04-body">
+
+        <!-- Scenario tabs -->
+        <div style="display:flex;border-bottom:1px solid var(--rule);margin:0 -16px;padding:0 16px">
+          <button class="s04-stab active" data-idx="0" onclick="s04go(0)" style="flex:1;padding:10px 6px;border:none;border-bottom:2px solid var(--accent);background:none;font:700 12px var(--sans);color:var(--accent);cursor:pointer">Low</button>
+          <button class="s04-stab" data-idx="1" onclick="s04go(1)" style="flex:1;padding:10px 6px;border:none;border-bottom:2px solid transparent;background:none;font:700 12px var(--sans);color:var(--ink3);cursor:pointer">Base</button>
+          <button class="s04-stab" data-idx="2" onclick="s04go(2)" style="flex:1;padding:10px 6px;border:none;border-bottom:2px solid transparent;background:none;font:700 12px var(--sans);color:var(--ink3);cursor:pointer">High</button>
+        </div>
+
+        <!-- Key numbers strip -->
+        <div id="s04-metrics" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:14px 0"></div>
+
+        <!-- Scenario narrative -->
+        <div id="s04-narrative" style="font:400 11px/1.7 var(--sans);color:var(--ink2);padding:10px 12px;background:var(--bg2);border-radius:6px;margin-bottom:14px"></div>
+
+        <!-- Assumptions (collapsible) -->
+        <details style="margin-bottom:12px;border:1px solid var(--rule);border-radius:6px;overflow:hidden">
+          <summary style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);padding:10px 14px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--bg2)">
+            Assumptions
+            <span id="s04-assump-summary" style="font:400 10px var(--sans);text-transform:none;letter-spacing:0;color:var(--ink3)">ERV £700 · Yield 4.75%</span>
+          </summary>
+          <div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>ERV (£/m²)</span><span id="s04-sv-erv">700</span></div><input type="range" id="s04-sl-erv" min="500" max="1200" step="25" value="700" oninput="s04Slider('erv',+this.value)" style="width:100%;accent-color:var(--accent)"><div style="display:flex;justify-content:space-between;font:400 9px var(--sans);color:var(--ink3)"><span>£500</span><span>£1,200</span></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Net Yield (%)</span><span id="s04-sv-niy">4.75</span></div><input type="range" id="s04-sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="s04Slider('niy',+this.value)" style="width:100%;accent-color:var(--accent)"><div style="display:flex;justify-content:space-between;font:400 9px var(--sans);color:var(--ink3)"><span>3.5%</span><span>7.5%</span></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Build Cost (£/m²)</span><span id="s04-sv-cost">4,200</span></div><input type="range" id="s04-sl-cost" min="3000" max="8000" step="100" value="4200" oninput="s04Slider('cost',+this.value)" style="width:100%;accent-color:var(--accent)"><div style="display:flex;justify-content:space-between;font:400 9px var(--sans);color:var(--ink3)"><span>£3k</span><span>£8k</span></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>S106 (£k)</span><span id="s04-sv-s106">500</span></div><input type="range" id="s04-sl-s106" min="0" max="3000" step="50" value="500" oninput="s04Slider('s106',+this.value)" style="width:100%;accent-color:var(--accent)"><div style="display:flex;justify-content:space-between;font:400 9px var(--sans);color:var(--ink3)"><span>£0</span><span>£3M</span></div></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Target Profit (%)</span><span id="s04-sv-poc">20</span></div><input type="range" id="s04-sl-poc" min="10" max="30" step="1" value="20" oninput="s04Slider('poc',+this.value)" style="width:100%;accent-color:var(--accent)"><div style="display:flex;justify-content:space-between;font:400 9px var(--sans);color:var(--ink3)"><span>10%</span><span>30%</span></div></div>
+            <button onclick="s04Reset()" style="font:500 10px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline;text-align:right">Reset defaults</button>
+          </div>
+        </details>
+
+        <!-- Pro forma table -->
+        <div id="s04-proforma" style="font:400 11px var(--sans);color:var(--ink2)"></div>
+
+        <!-- RLV callout -->
+        <div id="s04-rlv" style="margin-top:12px;padding:12px;background:var(--accent-bg);border-radius:6px;border-left:3px solid var(--accent)"></div>
+
+        <!-- Link to Full Insight -->
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule);text-align:center">
+          <a href="/t2/24-southwark-st" style="font:600 11px var(--sans);color:var(--accent);text-decoration:none">Full massing explorer + sensitivity analysis - Full Insight &#8594;</a>
+        </div>
+
+      </div>
+    </div>
+
   </div><!-- /col-right -->
 
 </div><!-- /page -->
@@ -548,6 +605,143 @@ const ADDRESS = '24 Southwark Street, London SE1 0SW';
 let PLOT_AREA = 1575;
 const EXISTING_EUV = 22000000;
 const CENTROID = [-0.091522, 51.504909];
+
+// ── Section 04 - Massing + Financials ─────────────────────────────────────────
+const S04_DEFS = {erv:700, niy:4.75, cost:4200, s106:500, poc:20};
+let S04 = {...S04_DEFS};
+const S04_SCENARIOS = [
+  {key:'lo',label:'Low',floors:8,podF:5,twrF:3,twrPct:0.70,eff:0.83,costFactor:0.88,
+   narrative:'Full plate to 5F matching the Bankside commercial cornice. Tower steps back above L5, 70% coverage. Single staircase compliant sub-18m tower element. Lowest programme risk - 2 year build. <strong>Best margin efficiency</strong> - the return curve peaks near 8-9F in the Bankside CAZ.'},
+  {key:'base',label:'Base',floors:10,podF:5,twrF:5,twrPct:0.65,eff:0.81,costFactor:1.00,
+   narrative:'5F podium holds Bankside street cornice. Tower adds 5F at 65% coverage above. Pre-app views assessment required re Tate Modern sightlines (220m W). Single staircase compliant throughout. Strong precedent at this height on Southwark Street. <strong>Absolute profit peaks near this scenario.</strong>'},
+  {key:'hi',label:'High',floors:12,podF:4,twrF:8,twrPct:0.60,eff:0.79,costFactor:1.18,
+   narrative:'Lower 4F podium activates public realm at ground. 8F tower at 60% coverage - maximum height for this Bankside CAZ position without a tall buildings policy trigger. LVMF assessment required. Highest GDV but <strong>margin % falls</strong> as construction cost and programme compound.'},
+];
+const S04_MARKET = {cilNia:200,demo:1500000,fees:0.13,contg:0.075,finRate:0.075,ltc:0.60,rfMo:12,ltMo:120,progYrs:{lo:2.0,base:2.5,hi:3.0}};
+let s04Idx = 0;
+
+function s04calc() {
+  S04_SCENARIOS.forEach(sc => {
+    sc.costGsm = Math.round(S04.cost * sc.costFactor);
+    const podGIA = PLOT_AREA * 1.0 * sc.podF;
+    const twrGIA = PLOT_AREA * sc.twrPct * sc.twrF;
+    sc.gea = Math.round(podGIA + twrGIA);
+    sc.nia = Math.round(sc.gea * sc.eff);
+    const grossErv = sc.nia * S04.erv;
+    const effErv = grossErv * (1 - S04_MARKET.rfMo / S04_MARKET.ltMo);
+    sc.gdv = Math.round(effErv / (S04.niy / 100));
+    sc.constCost = Math.round(sc.gea * sc.costGsm);
+    sc.fees = Math.round(sc.constCost * S04_MARKET.fees);
+    sc.contg = Math.round(sc.constCost * S04_MARKET.contg);
+    sc.cil = Math.round(sc.nia * S04_MARKET.cilNia);
+    sc.letting = Math.round(grossErv * 0.15);
+    const preFin = sc.constCost + sc.fees + sc.contg + sc.cil + sc.letting + S04.s106*1000 + S04_MARKET.demo;
+    const prog = S04_MARKET.progYrs[sc.key];
+    sc.finance = Math.round(preFin * S04_MARKET.ltc * S04_MARKET.finRate * (prog/2));
+    sc.tdc = Math.round(preFin + sc.finance);
+    sc.profit = sc.gdv - sc.tdc;
+    sc.poc = (sc.profit / sc.tdc * 100).toFixed(1);
+    sc.rlv = Math.round(sc.gdv - sc.tdc * (1 + S04.poc/100));
+  });
+}
+s04calc();
+
+function s04render() {
+  const sc = S04_SCENARIOS[s04Idx];
+  const f = n => (n||0).toLocaleString('en-GB');
+  const fm = n => '£' + (Math.abs(n) >= 1e6 ? (n/1e6).toFixed(1)+'M' : f(n));
+
+  // Tabs
+  document.querySelectorAll('.s04-stab').forEach((b,i) => {
+    const active = i === s04Idx;
+    b.style.borderBottomColor = active ? 'var(--accent)' : 'transparent';
+    b.style.color = active ? 'var(--accent)' : 'var(--ink3)';
+    b.style.fontWeight = active ? '700' : '500';
+  });
+
+  // Badge
+  const badge = document.getElementById('s04-badge');
+  if (badge) badge.textContent = `${sc.floors}F · ${fm(sc.gdv)}`;
+
+  // Metrics strip
+  const metrics = document.getElementById('s04-metrics');
+  if (metrics) metrics.innerHTML = [
+    {l:'GDV', v: fm(sc.gdv), c:'var(--accent)'},
+    {l:'NIA', v: `${f(sc.nia)}m²`, c:'var(--ink)'},
+    {l:'Profit on Cost', v: `${sc.poc}%`, c: parseFloat(sc.poc) >= parseFloat(S04.poc) ? '#16a34a' : '#dc2626'},
+    {l:'Total Dev Cost', v: fm(sc.tdc), c:'var(--ink)'},
+    {l:'RLV', v: fm(sc.rlv), c: sc.rlv > 0 ? '#16a34a' : '#dc2626'},
+    {l:'Floors', v: `${sc.floors}F`, c:'var(--ink)'},
+  ].map(m => `<div style="background:var(--bg2);border-radius:6px;padding:8px 6px;text-align:center"><div style="font:700 13px var(--mono);color:${m.c};letter-spacing:-.3px">${m.v}</div><div style="font:500 8px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-top:2px">${m.l}</div></div>`).join('');
+
+  // Narrative
+  const narr = document.getElementById('s04-narrative');
+  if (narr) narr.innerHTML = sc.narrative || '';
+
+  // Assumption summary
+  const asum = document.getElementById('s04-assump-summary');
+  if (asum) asum.textContent = `ERV £${S04.erv} · Yield ${S04.niy}%`;
+
+  // Pro forma
+  const pf = document.getElementById('s04-proforma');
+  if (pf) {
+    const rows = [
+      {l:'Gross Development Value', v: fm(sc.gdv), bold:true, sep:true},
+      {l:'Net Internal Area', v: `${f(sc.nia)} m²`, small:true},
+      {l:'GEA', v: `${f(sc.gea)} m²`, small:true},
+      {l:'', v:''},
+      {l:'Construction', v: fm(sc.constCost), bold:true},
+      {l:'Professional fees (13%)', v: fm(sc.fees), small:true},
+      {l:'Contingency (7.5%)', v: fm(sc.contg), small:true},
+      {l:'CIL', v: fm(sc.cil), small:true},
+      {l:'Letting fees', v: fm(sc.letting), small:true},
+      {l:'S106', v: `£${S04.s106}k`, small:true},
+      {l:'Demolition', v: fm(S04_MARKET.demo), small:true},
+      {l:'Finance', v: fm(sc.finance), small:true},
+      {l:'Total Dev Cost', v: fm(sc.tdc), bold:true, sep:true},
+      {l:'', v:''},
+      {l:'Profit', v: fm(sc.profit), bold:true, col: parseFloat(sc.poc) >= S04.poc ? '#16a34a' : '#dc2626'},
+      {l:'Profit on Cost', v: `${sc.poc}%`, bold:true, col: parseFloat(sc.poc) >= S04.poc ? '#16a34a' : '#dc2626'},
+    ];
+    pf.innerHTML = `<table style="width:100%;border-collapse:collapse">${rows.map(r => r.l === '' ? '<tr><td style="padding:3px 0" colspan="2"></td></tr>' : `<tr style="${r.sep ? 'border-top:1px solid var(--rule)' : ''}"><td style="padding:4px 0;font:${r.bold ? '600' : '400'} ${r.small ? '10px' : '11px'} var(--sans);color:${r.col || (r.small ? 'var(--ink3)' : 'var(--ink)')}">${r.l}</td><td style="text-align:right;font:${r.bold ? '700' : '400'} ${r.small ? '10px' : '11px'} var(--mono);color:${r.col || (r.small ? 'var(--ink3)' : 'var(--ink)')}">${r.v}</td></tr>`).join('')}</table>`;
+  }
+
+  // RLV callout
+  const rlvEl = document.getElementById('s04-rlv');
+  if (rlvEl) {
+    const rlvPos = sc.rlv > 0;
+    rlvEl.style.background = rlvPos ? 'var(--accent-bg)' : '#fef2f2';
+    rlvEl.style.borderLeftColor = rlvPos ? 'var(--accent)' : '#dc2626';
+    rlvEl.innerHTML = `<div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:${rlvPos ? 'var(--accent)' : '#dc2626'};margin-bottom:4px">Residual Land Value at ${S04.poc}% Target Profit</div><div style="font:700 16px var(--mono);color:${rlvPos ? 'var(--ink)' : '#dc2626'}">${fm(sc.rlv)}</div><div style="font:400 10px var(--sans);color:var(--ink3);margin-top:3px">Maximum you can pay for this site and hit target return${rlvPos ? '.' : ' - scheme does not stack at target profit.'}</div>`;
+  }
+}
+s04render();
+
+function s04go(idx) {
+  s04Idx = idx;
+  s04render();
+}
+
+function s04Slider(key, v) {
+  S04[key] = v;
+  const sv = document.getElementById(`s04-sv-${key}`);
+  const labels = {erv: v, niy: v, cost: Number(v).toLocaleString(), s106: v, poc: v};
+  if (sv) sv.textContent = labels[key];
+  s04calc();
+  s04render();
+}
+
+function s04Reset() {
+  S04 = {...S04_DEFS};
+  ['erv','niy','cost','s106','poc'].forEach(k => {
+    const sl = document.getElementById(`s04-sl-${k}`);
+    const sv = document.getElementById(`s04-sv-${k}`);
+    if (sl) sl.value = S04_DEFS[k];
+    if (sv) sv.textContent = k === 'cost' ? Number(S04_DEFS[k]).toLocaleString() : S04_DEFS[k];
+  });
+  s04calc();
+  s04render();
+}
 
 // ── Toggle sections ───────────────────────────────────────────────────────────
 function toggleSection(header) {
