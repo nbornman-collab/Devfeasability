@@ -976,3 +976,58 @@ app.post('/api/generate-render', express.json({ limit: '10mb' }), async (req, re
 });
 
 app.listen(PORT, () => console.log(`DevFeasibility v4.3 (London) running on port ${PORT}`));
+
+// ── Companies House API ─────────────────────────────────────────────────────
+app.get('/api/company/:number', async (req, res) => {
+  const CH_KEY = process.env.COMPANIES_HOUSE_API_KEY || '0bc63988-71f1-4bf5-bc42-26a393b96ebb';
+  const { number } = req.params;
+  if (!number || !/^\d{6,8}$/.test(number)) return res.status(400).json({ error: 'Invalid company number' });
+  try {
+    const auth = Buffer.from(CH_KEY + ':').toString('base64');
+    const r = await fetch(`https://api.company-information.service.gov.uk/company/${number.padStart(8,'0')}`, {
+      headers: { 'Authorization': `Basic ${auth}` }
+    });
+    if (!r.ok) return res.status(r.status).json({ error: `CH API ${r.status}` });
+    const d = await r.json();
+    res.json({
+      name: d.company_name,
+      number: d.company_number,
+      status: d.company_status,
+      type: d.type,
+      incorporated: d.date_of_creation,
+      address: d.registered_office_address,
+      sicCodes: d.sic_codes,
+      accounts: d.accounts,
+      lastAccounts: d.accounts?.last_accounts?.made_up_to
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Company officers (directors)
+app.get('/api/company/:number/officers', async (req, res) => {
+  const CH_KEY = process.env.COMPANIES_HOUSE_API_KEY || '0bc63988-71f1-4bf5-bc42-26a393b96ebb';
+  const { number } = req.params;
+  if (!number || !/^\d{6,8}$/.test(number)) return res.status(400).json({ error: 'Invalid company number' });
+  try {
+    const auth = Buffer.from(CH_KEY + ':').toString('base64');
+    const r = await fetch(`https://api.company-information.service.gov.uk/company/${number.padStart(8,'0')}/officers`, {
+      headers: { 'Authorization': `Basic ${auth}` }
+    });
+    if (!r.ok) return res.status(r.status).json({ error: `CH API ${r.status}` });
+    const d = await r.json();
+    res.json({
+      total: d.total_results,
+      officers: (d.items || []).map(o => ({
+        name: o.name,
+        role: o.officer_role,
+        appointed: o.appointed_on,
+        resigned: o.resigned_on || null,
+        nationality: o.nationality
+      }))
+    });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
