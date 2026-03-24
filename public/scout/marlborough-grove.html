@@ -523,7 +523,7 @@ try { mixpanel.track('Page View', {page: window.location.pathname, borough: docu
 
 <script>
 const LAT = 51.504909, LNG = -0.091522;
-const ADDRESS = 'Marlborough Grove and St James Road, London SE1 0SW';
+const ADDRESS = 'Marlborough Grove and St James Road, London SW1A 1BA';
 let PLOT_AREA=1575;
 const EXISTING_EUV = 22000000;
 
@@ -733,7 +733,7 @@ async function loadAll(){
     fetch(`/api/listed-buildings?lat=${LAT}&lng=${LNG}&radius=200`).then(r=>r.json()),
     fetch(`/api/planning-apps?lat=${LAT}&lng=${LNG}&krad=0.3`).then(r=>r.json()),
     fetch(`/api/context-buildings?lat=${LAT}&lng=${LNG}&radius=300`).then(r=>r.json()),
-    fetch(`/api/epc?postcode=SE1+0SW`).then(r=>r.json()),
+    fetch(`/api/epc?postcode=SW1A+1BA`).then(r=>r.json()),
   ]);
   if(flood.status==='fulfilled'){
     const fz=flood.value.floodZone??1;
