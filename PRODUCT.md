@@ -228,3 +228,98 @@ Focus panel transformed from data display to conversion mechanic:
 - **Dom H.** (Planning Consultant): T0 must create a question, not answer it. Score + verdict + OA flag = enough. Full analysis = paid. Single gate fixes the perceived value gap.
 - **Yemi A.** (Architect): Intel + massing + financials on one page. 3D massing inline preferred. Print-ready working document.
 - **Rachel V.** (PropTech Investor): Sequence matters: T0 enrichment first (fast, high ROI), T1 merger second (slower). Do not launch merged T1 until genuinely complete.
+
+---
+
+## PD Checker - Separate Product Strand (LOCKED - 🦞 2026-03-24)
+
+### Different product, different customer, different psychology
+
+PD Checker is NOT a sub-feature of D/A. It is a parallel product strand with its own funnel, pricing, and customer psychology. It shares the D/A brand and technical infrastructure but targets a fundamentally different buyer.
+
+### Two customers
+
+**1. Mum and pop (consumer - primary volume)**
+- About to spend £50-80k of life savings on an extension
+- Don't speak planning language (GPDO, Prior Approval, Article 4 mean nothing)
+- Terrified of getting it wrong, getting refused, or enforcement action
+- Found you on Google at 10pm searching "can I extend my semi-detached house"
+- Need certainty before they commit money
+- Buy once, never return (one house, one extension)
+
+**2. The pro (residential architect/builder - subscription)**
+- Does 5+ extensions per month
+- Already knows the rules - buying SPEED, not knowledge
+- Answers a client question in 2 minutes instead of 2 hours
+- Found you through industry word-of-mouth
+- Repeat buyer, subscription candidate
+
+### Psychology: anxiety reduction, not competence attraction
+
+D/A sells to professionals through demonstrated competence (Zeigarnik, information gap).
+PD sells to consumers through anxiety reduction and partial certainty.
+
+The fear is the hook:
+- "What if I spend £50k and it gets refused?"
+- "What if the council serves enforcement?"
+- "Dave the builder says it's fine - but is it?"
+
+### PD desire chain (T0 equivalent)
+
+1. **Type your address** - emotional connection: "they know MY house"
+2. **PD Rights status** - "Available ✓" or "Restricted ⚠" (reduces or heightens anxiety)
+3. **Massing envelope** - 3D shape showing maximum PD volume on THEIR house (creates vision)
+4. **The catch** - "Specific rules for your house determine exactly how much" (information gap)
+5. **Gate** - £149 for the full report
+
+### PD 3-sentence hook (different from D/A)
+
+1. **Certainty signal**: "Your PD rights are intact / restricted" (reduces anxiety)
+2. **Vision**: the envelope showing what's possible (creates excitement)
+3. **The gap**: "But there are specific rules for YOUR house" (the itch)
+
+### What PD T0 shows freely
+- PD rights status (available / restricted / removed)
+- Article 4 flag (yes/no, which classes affected)
+- Conservation area flag
+- 3D massing envelope (the SHAPE of what's possible, not dimensions)
+- One-line summary in plain English
+
+### What PD T0 does NOT show (paid report)
+- Exact dimensional limits per GPDO class
+- Prior Approval requirements (neighbour consultation, conditions)
+- Building Regulations cost implications (Part B, L, M, O in plain language)
+- Wrap-around rules and phased build strategy
+- What needs planning permission vs PD vs Prior Approval (the ladder)
+- Cost estimates for each extension type
+- Plain English: what you can build, what you need permission for, what it'll roughly cost
+
+### PD pricing (LOCKED)
+
+| Tier | Price | Buyer | What they get |
+|---|---|---|---|
+| **Free check** | £0 | Everyone | Address → PD status + Article 4 flag. One line. Funnel entry. |
+| **Full report** | **£149** | Mum and pop | All GPDO classes, dimensions, PA requirements, Building Regs, cost estimates, plain English |
+| **5-pack** | £120 each (£595) | Small practices | For architects/builders doing several extensions |
+| **Pro monthly** | **£249/month** | Practices | Unlimited reports. For firms doing 5+ extensions/month |
+
+£149 not £120: signals professional service, not discount product. 5-pack makes volume buyers feel smart.
+
+### PD language rule
+
+The report speaks mum's language, not planning language.
+- Bad: "GPDO Schedule 2 Part 1 Class A permits a single-storey rear extension not exceeding 4m from the rear wall"
+- Good: "You can extend the back of your house by up to 4 metres without planning permission. That's roughly enough for a kitchen-diner."
+
+### Launch timing
+
+PD launches AFTER D/A has 10+ paying customers (estimated Month 4-5 post-ILR).
+Reason: different marketing (SEO/Google Ads vs relationships), different support burden (homeowners ask basic questions). Splitting focus before D/A is proven risks both.
+
+Exception: the free PD check can go live earlier as a passive funnel builder and SEO play (3-6 months to rank on Google).
+
+### PD to commission pipeline (future - T4)
+
+PD report → homeowner needs drawings → "Need an architect? D/A Studio designs extensions."
+The PD report is a lead generation tool for architectural commissions.
+This is the T4 strand from the original product model. Do not build until PD has 100+ paid reports.
