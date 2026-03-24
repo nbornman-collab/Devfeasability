@@ -55,6 +55,15 @@ html,body{font-family:var(--sans);background:var(--bg);color:var(--ink);height:1
 
 /* -- PANEL SECTIONS --------------------------------------------------------- */
 
+
+/* Illuminated zone overlays */
+@keyframes zone-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 0.85; }
+}
+.zone-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.zone-pill{display:flex;align-items:center;gap:5px;font:500 10px var(--sans);color:var(--ink2);padding:3px 8px;border-radius:10px;background:var(--bg2)}
+.zone-dot{width:8px;height:8px;border-radius:50%}
 /* T1-style hero strip */
 .p-hero{padding:16px 20px;border-bottom:1px solid var(--rule);background:var(--bg)}
 .p-hero-addr{font:700 15px var(--sans);color:var(--ink);letter-spacing:-.3px;margin-bottom:2px}
@@ -768,6 +777,25 @@ async function initMap() {
     map.addSource('max-env', {type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
     map.addLayer({id:'max-env-line',slot:'top',type:'line',source:'max-env',paint:{'line-color':'#4ade80','line-width':1,'line-dasharray':[2,2],'line-opacity':0.4}});
 
+    // Illuminated potential zones (2D ground-level glows, no float issue)
+    map.addSource('zone-rear',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
+    map.addLayer({id:'zone-rear-fill',slot:'top',type:'fill',source:'zone-rear',
+      paint:{'fill-color':'#e07b2a','fill-opacity':['interpolate',['linear'],['zoom'],17,0,18,0.35,19,0.55]}});
+    map.addLayer({id:'zone-rear-line',slot:'top',type:'line',source:'zone-rear',
+      paint:{'line-color':'#e07b2a','line-width':2,'line-opacity':0.9}});
+
+    map.addSource('zone-ob',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
+    map.addLayer({id:'zone-ob-fill',slot:'top',type:'fill',source:'zone-ob',
+      paint:{'fill-color':'#3b82f6','fill-opacity':['interpolate',['linear'],['zoom'],17,0,18,0.3,19,0.5]}});
+    map.addLayer({id:'zone-ob-line',slot:'top',type:'line',source:'zone-ob',
+      paint:{'line-color':'#3b82f6','line-width':2,'line-opacity':0.9}});
+
+    map.addSource('zone-wrap',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
+    map.addLayer({id:'zone-wrap-fill',slot:'top',type:'fill',source:'zone-wrap',
+      paint:{'fill-color':'#a855f7','fill-opacity':['interpolate',['linear'],['zoom'],17,0,18,0.3,19,0.45]}});
+    map.addLayer({id:'zone-wrap-line',slot:'top',type:'line',source:'zone-wrap',
+      paint:{'line-color':'#a855f7','line-width':2,'line-opacity':0.9}});
+
     // Outbuilding source (separate from rear extension)
     map.addSource('src-ob',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}}});
     map.addLayer({id:'ob-3d',slot:'top',type:'fill-extrusion',source:'src-ob',paint:{'fill-extrusion-color':'#3b82f6','fill-extrusion-height':['get','height'],'fill-extrusion-base':0,'fill-extrusion-opacity':0.85}});
@@ -812,9 +840,11 @@ function clearMassing(type) {
     map.getSource('src-ob').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}});
     map.setLayoutProperty('ob-3d','visibility','none');
     map.setLayoutProperty('ob-top','visibility','none');
+    map.getSource('zone-ob').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}});
   } else if (type === 'wrap') {
     map.getSource('src-wrap').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}});
     map.setLayoutProperty('wrap-3d','visibility','none');
+    map.getSource('zone-wrap').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}});
   }
   document.getElementById('dims-' + type).textContent = '-';
   document.getElementById('badge-' + type).className = 'ext-badge inactive';
@@ -944,6 +974,8 @@ function updateRear(map) {
   map.setLayoutProperty('ext-3d','visibility','visible');
   map.setLayoutProperty('ext-top','visibility','visible');
   map.setLayoutProperty('dormer-3d','visibility','none');
+  // Illuminated zone: ground-level potential footprint
+  map.getSource('zone-rear').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[extCoords]}});
 
   // Max envelope guide (6m depth full width)
   const maxEnvCoords = makeRect(BASE_LNG, rearLat, HOUSE_W, maxPA);
@@ -1034,6 +1066,7 @@ function updateOutbuilding(map) {
   map.getSource('src-ob').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[obCoords]},properties:{height:obh}});
   map.setLayoutProperty('ob-3d','visibility','visible');
   map.setLayoutProperty('ob-top','visibility','visible');
+  map.getSource('zone-ob').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[obCoords]}});
   map.getSource('max-env').setData({type:'FeatureCollection',features:[]});
 }
 
@@ -1118,6 +1151,7 @@ function updateWrap(map) {
   const extColor = noteClass==='green'?'#16a34a':noteClass==='amber'?'#d97706':'#dc2626';
   map.getSource('src-wrap').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[lShape]},properties:{height}});
   map.setLayoutProperty('wrap-3d','visibility','visible');
+  map.getSource('zone-wrap').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[lShape]}});
   map.getSource('max-env').setData({type:'FeatureCollection',features:[]});
 }
 
