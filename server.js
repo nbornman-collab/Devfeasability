@@ -758,7 +758,7 @@ app.get('/api/os-buildings', async (req, res) => {
 
 // ── EPC API — floor area for any UK building (commercial + residential) ──
 // EPC API - old service (Basic auth) + new service (Bearer token)
-// Old: epc.opendatacommunities.org (Basic auth with email + key - both keys now dead)
+// Old: epc.opendatacommunities.org (Basic auth with email + key - CONFIRMED WORKING 2026-03-24)
 // New: get-energy-performance-data.communities.gov.uk (Bearer token - API not yet live as of 2026-03-24)
 // EPC_BEARER_TOKEN (new service, saved for when API goes live): pI98EtYLD2gvVS5lkcfRoAYYRvxh3kIOAzHmDY8h16t2oRMRtkCOf8vpECIrEHao
 const EPC_EMAIL = process.env.EPC_EMAIL || 'nbornman@gmail.com';
