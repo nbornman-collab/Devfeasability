@@ -772,8 +772,8 @@ app.get('/api/epc', async (req, res) => {
   const endpoint = (type === 'domestic') ? 'domestic' : 'non-domestic';
   let query = '';
   if (uprn) query = `uprn=${uprn}`;
-  else if (postcode) query = `postcode=${encodeURIComponent(postcode)}&size=5`;
-  else if (address) query = `address=${encodeURIComponent(address)}&size=5`;
+  else if (postcode) query = `postcode=${encodeURIComponent(postcode)}&size=25`;
+  else if (address) query = `address=${encodeURIComponent(address)}&size=10`;
   else return res.status(400).json({ error: 'address, postcode or uprn required' });
 
   try {
@@ -786,15 +786,19 @@ app.get('/api/epc', async (req, res) => {
     const data = await r.json();
     // EPC API returns {column-names:[...], rows:[{...}]}
     const rows = data.rows || data.certificates || [];
-    const results = rows.slice(0, 5).map(row => ({
+    const results = rows.map(row => ({
       address: row['address'] || [row['address1'],row['address2'],row['address3']].filter(Boolean).join(', '),
       postcode: row['postcode'],
       uprn: row['uprn'],
+      lmkKey: row['lmk-key'],
       floorArea: parseFloat(row['floor-area'] || row['total-floor-area'] || 0),
       epcRating: row['asset-rating-band'] || row['current-energy-rating'],
-      assetRating: row['asset-rating'],
+      assetRating: parseInt(row['asset-rating'] || row['current-energy-efficiency'] || 0),
       lodgementDate: row['lodgement-date'] || row['lodgement-datetime'],
       propertyType: row['property-type'],
+      buildingLevel: row['building-level'],
+      existingBenchmark: parseInt(row['existing-stock-benchmark'] || 0),
+      transactionType: row['transaction-type'] || '',
       floorAreaUnit: 'm²'
     })).filter(r => r.floorArea > 0);
     res.json({ results, count: results.length });
