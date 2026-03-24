@@ -764,16 +764,94 @@ app.get('/api/os-buildings', async (req, res) => {
 const EPC_EMAIL = process.env.EPC_EMAIL || 'nbornman@gmail.com';
 const EPC_API_KEY = process.env.EPC_API_KEY || 'c471dfb99d2721e8ed59b70630fcb36bedad2714';
 
+// ── EPC Rule Engine: address matching + deduplication ──────────────────────
+// Locked 2026-03-24. Three rules:
+//   1. No fallback: if no address match → return empty, never sum whole postcode
+//   2. Sort by lodgementDate DESC before dedup (most recent cert wins)
+//   3. Address match requires BOTH house number AND street keyword
+function epcMatchSite(certs, targetAddr) {
+  if (!targetAddr || !certs.length) return certs; // no filter requested → return all
+
+  const norm = s => s.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim();
+  const target = norm(targetAddr);
+
+  // Extract house numbers: "24" from "24 Southwark Street", "128","170" from "128-170 Bishopsgate"
+  const numMatches = target.match(/\b(\d+(?:\s*-\s*\d+)?)\b/g) || [];
+  const houseNums = [];
+  for (const nm of numMatches) {
+    houseNums.push(nm.replace(/\s/g, ''));
+    // Also split ranges: "128-170" → ["128", "170"]
+    if (nm.includes('-')) nm.split('-').forEach(n => houseNums.push(n.trim()));
+  }
+
+  // Extract street keyword: longest non-trivial word from address (skip numbers, "street", "road", "london" etc)
+  const STOP = new Set(['street','st','road','rd','lane','ln','way','place','pl','square','sq',
+    'avenue','ave','court','ct','drive','dr','close','cl','crescent','cres','terrace','row',
+    'london','floor','ground','first','second','third','fourth','fifth','unit','suite',
+    'basement','the','and','of','at','in','to']);
+  const words = target.split(/[\s,]+/).filter(w => w.length > 2 && !STOP.has(w) && !/^\d/.test(w));
+  const streetKw = words.sort((a, b) => b.length - a.length)[0] || '';
+
+  if (!houseNums.length && !streetKw) return certs;
+
+  // Match: cert address must contain at least one house number AND the street keyword
+  const matched = certs.filter(c => {
+    const ca = norm(c.address);
+    const hasNum = houseNums.length === 0 || houseNums.some(n => {
+      // Match "24" as word boundary: "24 " or "24," or "-24" or "24-"
+      return new RegExp(`\\b${n}\\b`).test(ca);
+    });
+    const hasStreet = !streetKw || ca.includes(streetKw);
+    return hasNum && hasStreet;
+  });
+
+  return matched; // may be empty → caller shows nothing
+}
+
+function epcDedup(certs) {
+  // Sort by lodgement date DESC → most recent first
+  const sorted = [...certs].sort((a, b) => (b.lodgementDate || '').localeCompare(a.lodgementDate || ''));
+  // Deduplicate by normalised address + propertyType → keep most recent
+  const seen = new Set();
+  return sorted.filter(c => {
+    const key = c.address.toLowerCase().replace(/[^a-z0-9]/g, '') + '|' + (c.propertyType || '');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function epcAggregate(certs) {
+  const deduped = epcDedup(certs);
+  const totalGia = deduped.reduce((s, c) => s + c.floorArea, 0);
+  const ratings = deduped.filter(c => c.epcRating).map(c => c.epcRating);
+  const worstRating = ratings.sort().reverse()[0] || null;
+  const bestRating = ratings.sort()[0] || null;
+  const toLet = deduped.filter(c => /to let/i.test(c.transactionType)).length;
+  const avgBenchmark = deduped.length > 0
+    ? Math.round(deduped.reduce((s, c) => s + (c.existingBenchmark || 0), 0) / deduped.length)
+    : 0;
+  return {
+    totalGia,
+    certCount: deduped.length,
+    worstRating,
+    bestRating,
+    toLet,
+    avgBenchmark,
+    certs: deduped
+  };
+}
+
 app.get('/api/epc', async (req, res) => {
-  const { address, postcode, uprn, type } = req.query;
+  const { address, postcode, uprn, type, filterAddress } = req.query;
   if (!EPC_EMAIL || !EPC_API_KEY) return res.status(503).json({ error: 'EPC credentials not configured', hint: 'Set EPC_EMAIL and EPC_API_KEY' });
 
   const auth = Buffer.from(`${EPC_EMAIL}:${EPC_API_KEY}`).toString('base64');
   const endpoint = (type === 'domestic') ? 'domestic' : 'non-domestic';
   let query = '';
   if (uprn) query = `uprn=${uprn}`;
-  else if (postcode) query = `postcode=${encodeURIComponent(postcode)}&size=25`;
-  else if (address) query = `address=${encodeURIComponent(address)}&size=10`;
+  else if (postcode) query = `postcode=${encodeURIComponent(postcode)}&size=50`;
+  else if (address) query = `address=${encodeURIComponent(address)}&size=25`;
   else return res.status(400).json({ error: 'address, postcode or uprn required' });
 
   try {
@@ -784,9 +862,8 @@ app.get('/api/epc', async (req, res) => {
     });
     if (!r.ok) return res.status(r.status).json({ error: `EPC API ${r.status}` });
     const data = await r.json();
-    // EPC API returns {column-names:[...], rows:[{...}]}
     const rows = data.rows || data.certificates || [];
-    const results = rows.map(row => ({
+    const allCerts = rows.map(row => ({
       address: row['address'] || [row['address1'],row['address2'],row['address3']].filter(Boolean).join(', '),
       postcode: row['postcode'],
       uprn: row['uprn'],
@@ -801,7 +878,30 @@ app.get('/api/epc', async (req, res) => {
       transactionType: row['transaction-type'] || '',
       floorAreaUnit: 'm²'
     })).filter(r => r.floorArea > 0);
-    res.json({ results, count: results.length });
+
+    // Apply site-specific filtering if filterAddress provided
+    const matched = filterAddress ? epcMatchSite(allCerts, filterAddress) : allCerts;
+
+    // If filtering was requested but returned nothing → return empty (Rule 1: no fallback)
+    if (filterAddress && matched.length === 0) {
+      return res.json({ results: [], count: 0, aggregate: null, filtered: true, rawCount: allCerts.length });
+    }
+
+    const agg = epcAggregate(matched);
+    res.json({
+      results: agg.certs,
+      count: agg.certCount,
+      aggregate: {
+        totalGia: agg.totalGia,
+        certCount: agg.certCount,
+        worstRating: agg.worstRating,
+        bestRating: agg.bestRating,
+        toLet: agg.toLet,
+        avgBenchmark: agg.avgBenchmark
+      },
+      filtered: !!filterAddress,
+      rawCount: allCerts.length
+    });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }

@@ -1020,7 +1020,7 @@ async function loadAll(){
     fetch(`/api/listed-buildings?lat=${LAT}&lng=${LNG}&radius=200`).then(r=>r.json()),
     fetch(`/api/planning-apps?lat=${LAT}&lng=${LNG}&krad=0.3`).then(r=>r.json()),
     fetch(`/api/context-buildings?lat=${LAT}&lng=${LNG}&radius=300`).then(r=>r.json()),
-    fetch(`/api/epc?postcode=SE1+0SW`).then(r=>r.json()),
+    fetch(`/api/epc?postcode=SE1+0SW&filterAddress=${encodeURIComponent('24 Southwark Street')}`).then(r=>r.json()),
   ]);
   if(flood.status==='fulfilled'){
     const fz=flood.value.floodZone??1;
@@ -1037,47 +1037,22 @@ async function loadAll(){
   }
   buildHeights((ctx.status==='fulfilled'?ctx.value.elements:[])||[]);
   buildApps((apps.status==='fulfilled'?apps.value.results:[])||[]);
-  if(epc.status==='fulfilled'&&epc.value.results&&epc.value.results.length){
-    const all=epc.value.results;
-    // Filter to certs most likely on this site by address keyword
-    const siteKeywords=['24 southwark','24-southwark'];
-    const siteMatches=all.filter(r=>siteKeywords.some(k=>r.address.toLowerCase().includes(k)));
-    const certs=siteMatches.length>0?siteMatches:all;
-    // Deduplicate: keep most recent cert per lmk-key (in case of renewals, same address appears twice)
-    const seen=new Set();
-    const deduped=certs.filter(r=>{
-      // Use address+propertyType as dedup key, keep highest lodgement date
-      const k=r.address.toLowerCase()+r.propertyType;
-      if(seen.has(k))return false; seen.add(k); return true;
-    });
-    const totalGia=deduped.reduce((s,r)=>s+r.floorArea,0);
-    // Best (lowest number = better) rating across certs
-    const ratings=deduped.filter(r=>r.epcRating).map(r=>r.epcRating);
-    const worstRating=ratings.sort().reverse()[0]||'—';
-    const bestRating=ratings.sort()[0]||'—';
-    // Vacancy signal
-    const toLet=deduped.filter(r=>r.transactionType&&r.transactionType.toLowerCase().includes('to let')).length;
-    if(totalGia>0){
-      const far=(totalGia/PLOT_AREA).toFixed(1);
-      set('epc-gia',totalGia.toLocaleString()+' m² ('+deduped.length+' cert'+(deduped.length!==1?'s':'')+')');
-      set('current-far',far+'×');
-      const epcSec=document.getElementById('epc-section');
-      if(epcSec){
-        epcSec.style.display='block';
-        // Inject rating breakdown if space
-        const ratingEl=epcSec.querySelector('.epc-rating-detail');
-        if(!ratingEl){
-          const d=document.createElement('div');
-          d.className='epc-rating-detail';
-          d.style.cssText='margin-top:8px;font:400 10px var(--sans);color:var(--ink3);line-height:1.6';
-          const ratingColor={'A':'#16a34a','B':'#22c55e','C':'#84cc16','D':'#eab308','E':'#f97316','F':'#ef4444','G':'#dc2626'};
-          const col=ratingColor[worstRating]||'var(--ink3)';
-          d.innerHTML=`<span>EPC band: <strong style="color:${col}">${worstRating}</strong></span>`+
-            (toLet>0?`<span style="margin-left:10px">⚬ ${toLet} unit${toLet>1?'s':''} currently to let</span>`:'')+
-            `<span style="margin-left:10px;display:block;margin-top:2px">Existing stock benchmark: ${deduped[0]&&deduped[0].existingBenchmark?deduped[0].existingBenchmark+' (typical)':''}</span>`;
-          epcSec.appendChild(d);
-        }
-      }
+  if(epc.status==='fulfilled'&&epc.value.aggregate&&epc.value.aggregate.totalGia>0){
+    const a=epc.value.aggregate;
+    const far=(a.totalGia/PLOT_AREA).toFixed(1);
+    set('epc-gia',a.totalGia.toLocaleString()+' m² ('+a.certCount+' cert'+(a.certCount!==1?'s':'')+')');
+    set('current-far',far+'×');
+    const epcSec=document.getElementById('epc-section');
+    if(epcSec){
+      epcSec.style.display='block';
+      const ratingColor={'A':'#16a34a','B':'#22c55e','C':'#84cc16','D':'#eab308','E':'#f97316','F':'#ef4444','G':'#dc2626'};
+      const col=ratingColor[a.worstRating]||'var(--ink3)';
+      const d=document.createElement('div');
+      d.style.cssText='margin-top:8px;font:400 10px var(--sans);color:var(--ink3);line-height:1.6';
+      d.innerHTML=`<span>EPC band: <strong style="color:${col}">${a.worstRating}</strong></span>`+
+        (a.toLet>0?`<span style="margin-left:10px">⚬ ${a.toLet} unit${a.toLet>1?'s':''} currently to let</span>`:'')+
+        (a.avgBenchmark>0?`<span style="display:block;margin-top:2px">Existing stock benchmark: ${a.avgBenchmark} (typical)</span>`:'');
+      epcSec.appendChild(d);
     }
   }
 }
