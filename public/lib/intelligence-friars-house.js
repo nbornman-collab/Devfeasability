@@ -82,7 +82,7 @@ const SITE_INTELLIGENCE = {
       insight: 'A 0.52ha office complex in SE1 CAZ is likely to have a complex ownership structure - corporate freehold with occupier leases, or potentially multiple freehold interests. This is the primary risk factor and the critical gate before T2 appraisal. HMLR title register search required. Score conservatively penalised until verified. If single freehold: score upgrades to 8.5. If multiple titles: complex assembly required.'
     },
     transport: {
-      label: 'Station Gravity',
+      label: 'Transport Links',
       score: 9.0, weight: 0.5,
       ptal: '6a',
       stations: 4,

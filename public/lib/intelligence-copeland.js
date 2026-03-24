@@ -59,7 +59,7 @@ const SITE_INTELLIGENCE = {
       insight: 'Industrial park - potentially multiple industrial unit leaseholders. Freehold owner likely a property company or pension fund. Checked Companies House: ownership unclear - HMLR verification required. If single freehold: clean assembly. If multiple freeholds: complex.'
     },
     transport: {
-      label: 'Station Gravity',
+      label: 'Transport Links',
       score: 7.0, weight: 0.5,
       ptal: '3',
       insight: 'PTAL 3. Peckham Rye station (Overground) 750m. Bus-served. Below the SE1 corridor for connectivity but acceptable for residential. Elizabeth line at Canada Water (Jubilee/Overground interchange) 2km east.'

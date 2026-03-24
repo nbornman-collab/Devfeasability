@@ -24,6 +24,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 5.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Central London Bridge address - prime institutional ownership. Likely complex leasehold with major corporate occupiers. High acquisition cost reflects development potential." },
-    transport: { label: 'Station Gravity', score: 9.5, weight: 0.5, ptal: '6b', insight: "PTAL 6b. London Bridge (Northern/Jubilee + National Rail) 100m - one of the best-connected addresses in London. Exceptional transport score." }
+    transport: { label: 'Transport Links', score: 9.5, weight: 0.5, ptal: '6b', insight: "PTAL 6b. London Bridge (Northern/Jubilee + National Rail) 100m - one of the best-connected addresses in London. Exceptional transport score." }
   }
 };

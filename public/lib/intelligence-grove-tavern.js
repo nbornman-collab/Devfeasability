@@ -59,7 +59,7 @@ const SITE_INTELLIGENCE = {
       insight: 'Pub operator likely a tenancy under a pub company freeholder (e.g. Punch, Admiral, or independent). Freeholder is likely a property investor. Pub company freeholds are routinely traded - acquisition achievable at market. 4 major apps suggest prior development enquiry.'
     },
     transport: {
-      label: 'Station Gravity',
+      label: 'Transport Links',
       score: 6.5, weight: 0.5,
       ptal: '2',
       insight: 'PTAL 2. Moderate connectivity. East Dulwich station (Overground) 450m. Bus-served. Predominantly residential catchment - lower transport score appropriate for residential use.'

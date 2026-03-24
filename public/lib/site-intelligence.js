@@ -62,7 +62,7 @@ function renderIntelligenceT1(si) {
     { key:'acquisition', label:'Title Stack', f:F.acquisition,
       primary: (F.acquisition.titles===1?'Single title':(F.acquisition.titles||1)+' titles') + ' · ' + (F.acquisition.tenure||'Freehold'),
       secondary: (F.acquisition.encumbrances||'No known encumbrances') },
-    { key:'transport',   label:'Station Gravity',    f:F.transport,   primary: 'PTAL '+F.transport.ptal,                    secondary: F.transport.stations+' stations within 500m' },
+    { key:'transport',   label:'Transport Links',    f:F.transport,   primary: 'PTAL '+F.transport.ptal,                    secondary: F.transport.stations+' stations within 500m' },
   ];
 
   const cols = factors.map(({label, f, primary, secondary}) => {
@@ -114,7 +114,7 @@ function renderIntelligenceT2(si) {
     ['Planning Appetite',F.momentum.cluster+' - '+((F.momentum.consents||0)+' consents nearby'),  F.momentum.score],
     ['Heritage Shadow',  (F.heritage.statutory&&F.heritage.statutory.primary?F.heritage.statutory.primary.name+' GrII '+F.heritage.statutory.primary.dist_m+'m':F.heritage_framework&&F.heritage_framework.verdict?'See verdict below':'No constraints noted'), F.heritage.score],
     ['Title Stack',      (F.acquisition.titles||1)+' title - '+(F.acquisition.tenure||'Freehold')+(F.acquisition.owner?' - '+F.acquisition.owner:''), F.acquisition.score],
-    ['Station Gravity',  'PTAL '+(F.transport.ptal||'-')+' - '+(F.transport.stations||0)+' stations within 500m', F.transport.score],
+    ['Transport Links',  'PTAL '+(F.transport.ptal||'-')+' - '+(F.transport.stations||0)+' stations within 500m', F.transport.score],
   ].map(([label, val, sc]) => {
     const col = sc >= 7.5 ? '#059669' : sc >= 5 ? '#d97706' : '#dc2626';
     return `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid #f3f4f6;gap:12px">

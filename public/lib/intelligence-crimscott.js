@@ -24,6 +24,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 6.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "University/institutional occupied - likely leasehold under a property investor. Institutional disposal achievable. 65 apps suggests well-understood site." },
-    transport: { label: 'Station Gravity', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. London Bridge (National Rail + Tube) 1km. Bermondsey (Jubilee) 600m. Borough (Northern) 700m." }
+    transport: { label: 'Transport Links', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. London Bridge (National Rail + Tube) 1km. Bermondsey (Jubilee) 600m. Borough (Northern) 700m." }
   }
 };

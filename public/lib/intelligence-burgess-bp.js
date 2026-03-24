@@ -23,6 +23,6 @@ const SITE_INTELLIGENCE = {
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 6.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Business park - multiple unit leaseholders under single freeholder. Freehold acquisition required then managed vacancy. Complex but achievable." },
-    transport: { label: 'Station Gravity', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Denmark Hill (Overground/Thameslink) 800m. Buses. Lower transport score - residential-appropriate." }
+    transport: { label: 'Transport Links', score: 7.0, weight: 0.5, ptal: '3', insight: "PTAL 3. Denmark Hill (Overground/Thameslink) 800m. Buses. Lower transport score - residential-appropriate." }
   }
 };
