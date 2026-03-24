@@ -332,6 +332,37 @@ PD envelope is simpler geometry than commercial massing - contractor delivers it
 - Blog content targeting homeowner search intent (3-6 month ranking horizon)
 - The free check uses wireframe massing (Mapbox 3D) until contractor delivers photorealistic CesiumJS version
 
+### Extension Value Calculator (🦞 locked 2026-03-24)
+
+The viral entry point. "How much is your extension worth?"
+
+Input: address + extension type
+Output: estimated build cost, estimated value uplift, net gain, PD status
+
+This is the screenshot that goes in every WhatsApp group. Pure financial motivation - requires zero planning knowledge to understand.
+
+**Data sources:**
+- Property price: Land Registry Price Paid (free, public)
+- House price per m²: postcode-level from Land Registry
+- Extension cost per m²: regional averages (BCIS simplified)
+- Value uplift: house price/m² × 0.5-0.7 multiplier (extensions add ~50-70% of per-m² house value)
+- PD maximum m²: already calculated in pd-demo
+
+**API endpoint (to build):**
+`GET /api/extension-value?address=...` → `{ maxPdArea, buildCost, valueUplift, netGain, pdStatus }`
+
+**Priority:** build alongside free PD check. Same funnel entry point. The value calculator is the hook, the PD check is the substance.
+
+### Estate Agent Distribution (Year 2 - long lead)
+
+Rightmove/Zoopla listing integration: "This property has ~£55k of untapped extension potential."
+
+Agent gets a sales tool (house sells faster). D/A gets distribution into every property search.
+
+Widget or API embed on listings. Agent doesn't pay - D/A gets the lead.
+
+Requires: proven product, brand recognition, partnership conversation. Not before 200+ PD reports sold.
+
 ### PD to commission pipeline (future - T4)
 
 PD report → homeowner needs drawings → "Need an architect? D/A Studio designs extensions."
