@@ -214,6 +214,56 @@ Subscription tier: do not design for now.
 
 ---
 
+## T0/T1 INFORMATION ARCHITECTURE (🦞 locked 2026-03-24)
+
+### T0 principle: attraction through demonstrated competence
+
+T0 is generous with insight. It does NOT withhold or tease.
+Every data point shown freely OPENS a question the user didn't have before.
+The report (T1) answers those questions.
+
+T0 lets you ASSESS a site. T1 lets you ACT on it.
+If a user can make a go/no-go decision AND know their next step from T0 alone, T0 is showing too much.
+
+### Three entry points to T0 (all land at same site view)
+
+1. London Top 100 / Borough Top 25 (showmanship, ranked leaderboard)
+2. Enter a postcode (direct search)
+3. Click around the map (browse/discover)
+
+### T0 shows freely (each creates a question)
+
+- Score /100 + verdict badge → "Why this score? What drags it down?"
+- Est. GDV → "Does it stack? What's the margin?"
+- Planning appetite score → "What precedents? What got refused?"
+- Heritage tier label → "Navigable HOW? What's the strategy?"
+- Added floors count → "What massing? Podium + tower? What efficiency?"
+- 3 visible factor bars (relative fill) → "What about the 3 locked ones?"
+- 3-sentence analyst hook:
+  - Sentence 1: opportunity signal (engagement)
+  - Sentence 2: constraint tension (doubt)
+  - Sentence 3: unresolved question (the itch - Zeigarnik open loop)
+- Borough, address, basic context
+
+### T0 NEVER shows (resolution is paid)
+
+- Planning precedent refs (AP/ numbers, committee decisions, approval details)
+- Heritage strategy or mitigation approach
+- Architecture constraints / Building Regs (Part B/M/L/O)
+- Financial model, pro forma, IRR, RLV, profit on cost
+- Massing scenarios, 3D model, floor plate options
+- Comparable evidence or specific data sources
+- Anything sufficient to ACT (not just assess)
+
+### T1 principle: the feast
+
+Every question T0 opened, T1 closes with evidence.
+"Rocketship level insight" - so good the user keeps coming back.
+Each section triangulates >= 2 data sources.
+Sections: 01 Development Scope → 02 Planning Realm → 03 Architecture + Massing → 04 Massing + Financials.
+
+---
+
 ## T2 ABSORBED INTO T1 (🦞 locked 2026-03-22)
 
 T2 as standalone URL is deprecated (kept live for 24SS demo only).

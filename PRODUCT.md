@@ -1,6 +1,6 @@
 # PRODUCT.md - D/A Product Direction
-*Locked: 2026-03-22. Last updated: 2026-03-22 (evening).*
-*Validated by virtual user panel (5 personas: dev manager, acquisitions analyst, planning consultant, architect, PropTech investor).*
+*Locked: 2026-03-22. Last updated: 2026-03-24 (evening).*
+*Validated by virtual user panel (5 personas). T0/T1 information architecture locked 2026-03-24 with psychology framework.*
 
 ---
 
@@ -52,7 +52,25 @@ Full-viewport dark London map (dark-v11, pitch 55, slow rotation).
 
 ## T0 - Discover (`/discover`)
 
-**Goal:** create desire, not satisfy it. Show enough to create a question. The report answers it.
+### Purpose (LOCKED - 🦞 2026-03-24)
+
+T0 is the art of attraction. It does NOT withhold or tease - it demonstrates genuine intelligence depth. Every data point shown freely is chosen because it OPENS a question the user didn't have before. The report answers those questions.
+
+**The psychology:**
+- **Zeigarnik Effect**: unfinished questions stay open in the brain. Sentence 3 of the analyst hook is always an unresolved question. The user physically cannot forget it.
+- **Information Gap Theory** (Loewenstein): curiosity is triggered by showing enough that the user realises there's MORE they don't know. T0 expands what you want to know - it doesn't contract what you can see.
+- **Competence attraction**: 3 lines of D/P/A commentary prove the system understands the site. "They know their shit" is the most powerful B2B conversion signal. More powerful than any locked padlock.
+- **Reciprocity**: give real value freely. The user feels the quality. Paying feels like a fair exchange, not a toll.
+
+**The rule: T0 is generous with insight. But every insight opens a door you can only walk through in T1.**
+
+### Three entry points (all lead to T0 site view)
+
+1. **London Top 100 / Borough Top 25** - showmanship, ranked leaderboard. Mostly spectacle - and it should be.
+2. **Enter a postcode** - direct search. User knows their site, wants intelligence on it.
+3. **Click around the map** - browse/discover. Serendipitous exploration.
+
+All three land at the same T0 site-level view within `/discover`.
 
 ### Current state (live)
 - 155 verified London underutilised sites: Southwark (57) + City of London (24) + Hackney (39)
@@ -61,43 +79,78 @@ Full-viewport dark London map (dark-v11, pitch 55, slow rotation).
 - Ranking: score desc → GDV desc → plotM2 desc → planScore desc → alphabetical (no tied ranks)
 - Ribbon: Total GDV + Floor Area NIA (live sum from site data)
 
-### Site Focus panel (what T0 shows - free)
+### T0 site view - what it shows and WHY
+
+Every item creates a specific question answered in T1:
+
+| T0 shows (free) | Question it creates (resolved in T1) |
+|---|---|
+| Score 84/100 + verdict badge | "Why 84? What drags it down? What lifts it?" |
+| Est. GDV £45M | "Does the scheme actually stack? What's the profit margin? At what yield?" |
+| Planning appetite 8.5/10 | "What precedents? Which specific approvals? What got refused nearby?" |
+| Heritage: Navigable | "Navigable HOW? What's the strategy? What height does heritage cap?" |
+| +4F additional floors | "What massing? Podium + tower? What efficiency? Single or dual staircase?" |
+| 3 visible factor bars | "What about the 3 locked ones? Are they the ones that kill the deal?" |
+| Analyst hook sentence 1 (opportunity) | Engagement: "this is real" |
+| Analyst hook sentence 2 (constraint) | Doubt: "but there's a complication..." |
+| Analyst hook sentence 3 (unresolved question) | The itch: an open loop the brain cannot close without the report |
+
+### T0 site view - implementation
+
 - Square satellite thumbnail (180x180, Mapbox static)
 - Score + verdict pill + address + borough chip
-- 6 metrics: GDV / added floors / new NIA / planning score / plot area / heritage risk
-- **Analyst hook:** 3-sentence site-specific paragraph (opportunity signal + constraint tension + unresolved question)
-- **Teased factor bars:** 3 visible (Planning Appetite, Available Sky, Rent Headroom) + 3 locked (Heritage Shadow, Title Complexity, Transport Position) showing bar height but no score
+- 6 headline metrics: GDV / added floors / new NIA / planning score / plot area / heritage tier
+- **Analyst hook (3 sentences):** opportunity signal → constraint tension → unresolved question. Each sentence escalates desire. By sentence 3 the user has an open loop.
+- **Teased factor bars:** 3 visible (Planning Appetite, Available Sky, Rent Headroom) with relative fill + 3 locked (Heritage Shadow, Title Complexity, Transport Position) showing bar hint but no score
 - **Specific CTA:** "See why this scores X/100 → +XF · planning precedents · does it stack at current land value?"
 
-### What T0 does NOT show (paid only)
-- Planning analysis and precedents
-- Heritage risk strategy
-- Architecture constraints and Building Regs analysis
-- Financial model / pro forma / IRR
-- Massing scenarios and 3D model
+### What T0 does NOT show (the line - LOCKED)
+
+The line is not about quantity. It's about RESOLUTION. T0 raises questions. T1 resolves them.
+
+**Never in T0:**
+- Planning precedent references (AP/ numbers, specific approval details, committee decisions)
+- Heritage strategy or mitigation approach ("navigable" yes, "here's how to navigate it" no)
+- Architecture constraints analysis or Building Regs (Part B/M/L/O)
+- Financial model, pro forma, IRR, RLV, profit on cost, scenario modelling
+- Massing scenarios, 3D model, floor plate options
+- Comparable evidence or specific data sources
+- Anything that lets you ACT on the site (T0 lets you ASSESS, T1 lets you ACT)
+
+**The test:** if a user can make a go/no-go decision AND know their next step from T0 alone, T0 is showing too much. T0 should create confident interest, not confident action.
 
 ---
 
 ## T1 - Appraise (single paid page)
 
+### Purpose (LOCKED - 🦞 2026-03-24)
+
+T1 is the feast. Every question T0 opened, T1 closes with evidence. The user doesn't feel tricked - they feel rewarded. The insight matches or exceeds what T0 promised.
+
+**"Rocketship level insight"** - the page must be so good the user keeps coming back. Not just data - synthesised intelligence that saves them weeks of consultant time. Every section triangulates >= 2 data sources into a conclusion neither alone could produce.
+
 ### Right panel structure (scroll order)
 1. **Site Header** - address, chips, tags
-2. **01 Development Scope** - max floors, GDV, ERV, NIA, return curve
-3. **02 Planning Realm** - appetite score, OA, constraints, flags, precedents
-4. **03 Architecture + Massing** - heritage tier, heights, Part B/M/L/O refs
-5. **04 Massing + Financials** *(absorbs T2)* - 3D map inline, scenario tabs, sliders, pro forma, IRR, RLV
+2. **01 Development Scope** - max floors, GDV, ERV, NIA, EPC (live from API), return curve, existing GIA + FAR
+3. **02 Planning Realm** - appetite score, OA, constraints, flags, specific precedents (AP/ refs), planning history
+4. **03 Architecture + Massing** - heritage tier + strategy, heights context, Part B/BSA, Part M2, Part L2, Part O
+5. **04 Massing + Financials** *(absorbs T2)* - scenario tabs (Low/Base/High), assumption sliders, full pro forma, RLV, 3D massing inline
 
 ### Left panel structure
 - Hero: score + verdict + metrics grid (6 metrics)
 - 2D/3D site map (boundary, existing + proposed massing)
-- Factor bars (6 intelligence factors)
+- Factor bars (all 6 intelligence factors, full scores)
 
-### Current rollout status
-- 64 pages total in `/public/scout/`
-- 24SS pilot rebuilt with new design (off-white/amber tokens, new layout)
-- `/test/t1-redesign.html` = canonical review URL for all visual work
-- Remaining 63 pages: old design, rollout pending Nic sign-off on test page
-- Section 04 (Massing + Financials): not yet built
+### T1 resolves every T0 question
+
+| T0 question | T1 resolution |
+|---|---|
+| "Why 84?" | Full factor breakdown with scores + methodology |
+| "Does it stack?" | Pro forma: GDV - TDC = profit, IRR, RLV at target margin |
+| "What precedents?" | Specific AP/ refs, approval details, committee decisions |
+| "Heritage - how?" | Strategy section: views analysis, daylight, height cap reasoning |
+| "What massing?" | 3 scenarios with floor plates, efficiency, staircase analysis |
+| "Locked factors?" | All 6 bars visible with full scores and context |
 
 ### Massing note
 3D massing viewer in section 04 is inline, not full-screen. User sketches alongside it.
@@ -107,20 +160,27 @@ Full-viewport dark London map (dark-v11, pitch 55, slow rotation).
 ## Build Sequence (LOCKED)
 
 **Phase 1 - T0 enrichment** ✅ DONE
-- Intelligence hook (analyst paragraph per site)
+- Intelligence hook (analyst paragraph per site, 3 sentences with open loop)
 - Teased factor bars (3 visible / 3 locked)
 - Specific score-personalised CTA
 - Homepage D/P/A pillars, cycling hero text, discovery mode cards
+- Analyst hook enriched with real planning data (owner, refs, application counts) - commit `0db3f03`
 
-**Phase 2 - T1 visual rollout** - IN PROGRESS
+**Phase 2 - T1 pilot + EPC** ✅ DONE (24SS)
+- Pilot page: `/t1/24-southwark-st` rebuilt with new design tokens
+- Section 04 (Massing + Financials) built inline - commit `04018ba`
+- EPC rule engine: server-side address matching + dedup + aggregation - commit `f1b5d98`
+- EPC wired to all 63 T1 pages with real postcodes - commit `3a701be`
+
+**Phase 3 - T1 visual rollout** - NEXT
 - Test page confirmed: `/test/t1-redesign.html`
-- Pilot page: `/t1/24-southwark-st`
-- 63 pages remaining: surgical rollout, one file at a time, after Nic confirms test page
+- 63 pages remaining: HTML structure update (not just token swap)
+- Surgical rollout after Nic confirms test page matches product rules
 
-**Phase 3 - T2 absorption into T1**
-- Add section 04 (Massing + Financials) to T1 right panel
-- 3D massing inline, scenario sliders, pro forma
-- Do NOT launch until genuinely complete - half-baked massing on a paid page kills trust
+**Phase 4 - Pay gate infrastructure**
+- Stripe / auth / token system
+- T0 CTA → payment flow → T1 unlock
+- Do NOT launch T1 publicly until gate is in place (currently open URLs)
 
 ---
 
