@@ -5,33 +5,35 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Abellio Walworth Bus Depot - Appraise</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <script src="/lib/site-intelligence.js"></script>
 <script src="/lib/intelligence-abellio.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --sans:'Inter',sans-serif;
-  --mono:'DM Mono',monospace;
-  --blue:#1d4ed8;
-  --blue-lt:#eff6ff;
-  --orange:#ea580c;
-  --green:#16a34a;
-  --red:#dc2626;
-  --amber:#d97706;
-  --text:#0f172a;
-  --text2:#374151;
-  --text3:#6b7280;
-  --text4:#9ca3af;
-  --border:#e5e7eb;
-  --border2:#f3f4f6;
-  --surface:#fff;
-  --surface2:#f9fafb;
-  --panel-w:50%;
+:root {
+  --bg:        #f2f1ed;
+  --bg2:       #e8e7e2;
+  --ink:       #111110;
+  --ink2:      #555550;
+  --ink3:      #999990;
+  --accent:    #e07b2a;
+  --accent-bg: #fdf3ea;
+  --rule:      rgba(17,17,16,.1);
+  --sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Mono', monospace;
+  --nav-h: 48px;
+  --panel-w: 50%;
 }
-html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html,body { height: 100%; overflow: hidden; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
 
 /* ── 50/50 SPLIT LAYOUT ── */
 #map{position:fixed;top:52px;left:0;width:var(--panel-w);height:calc(100% - 52px);z-index:0}
@@ -40,7 +42,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
 /* Left data panel */
 #right-panel{
   position:fixed;right:0;top:52px;bottom:0;width:var(--panel-w);
-  background:var(--surface);border-left:1px solid var(--border);
+  background:var(--bg);border-left:1px solid var(--rule);
   z-index:30;overflow-y:auto;display:flex;flex-direction:column;
 }
 #right-panel::-webkit-scrollbar{width:3px}
@@ -239,7 +241,7 @@ html,body{height:100%;overflow:hidden;background:#e8eaed;font-family:var(--sans)
   backdrop-filter:blur(12px);
 }
 .da-nav-logo{font:800 17px Inter,sans-serif;letter-spacing:-0.5px;text-decoration:none;color:#0f172a;display:flex;flex-direction:column;align-items:flex-start;gap:1px}
-.da-nav-logo .sl{color:#1d4ed8}
+.da-nav-logo .sl{color:var(--accent)}
 .da-nav-links{display:flex;align-items:center;gap:2px}
 .da-nav-link{
   font:500 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.4px;
