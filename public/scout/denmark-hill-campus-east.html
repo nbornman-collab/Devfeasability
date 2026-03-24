@@ -733,7 +733,7 @@ async function loadAll(){
     fetch(`/api/listed-buildings?lat=${LAT}&lng=${LNG}&radius=200`).then(r=>r.json()),
     fetch(`/api/planning-apps?lat=${LAT}&lng=${LNG}&krad=0.3`).then(r=>r.json()),
     fetch(`/api/context-buildings?lat=${LAT}&lng=${LNG}&radius=300`).then(r=>r.json()),
-    fetch(`/api/epc?postcode=SE5+8EJ`).then(r=>r.json()),
+    fetch(`/api/epc?postcode=SE5+8EJ&filterAddress=Denmark+Hill+Campus+East`).then(r=>r.json()),
   ]);
   if(flood.status==='fulfilled'){
     const fz=flood.value.floodZone??1;
