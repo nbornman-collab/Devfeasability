@@ -589,9 +589,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
       <div class="hero-stat-sub">Verified London opportunities</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-label">Total GDV</div>
+      <div class="hero-stat-label">Est. GDV</div>
       <div class="hero-stat-value accent" id="stat-gdv">—</div>
-      <div class="hero-stat-sub">Combined development value</div>
+      <div class="hero-stat-sub">Modelled development value</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-label">Floor Area</div>
@@ -1014,7 +1014,7 @@ function openFocus(site) {
   const heritRisk = site.heritTier==='blocking'?'🔴 High':site.heritTier==='navigable'?'🟡 Navigable':'🟢 Low';
   const planRisk = site.planScore>=7?'🟢 Favourable':site.planScore>=5?'🟡 Neutral':'🔴 Resistant';
   document.getElementById('focus-metrics').innerHTML = `
-    <div class="focus-metric"><div class="focus-metric-val accent">£${site.gdvEst}M</div><div class="focus-metric-lbl">GDV potential</div></div>
+    <div class="focus-metric"><div class="focus-metric-val accent">£${(site.gdvEst*0.8).toFixed(0)}-${(site.gdvEst*1.2).toFixed(0)}M</div><div class="focus-metric-lbl">Est. GDV range</div></div>
     <div class="focus-metric"><div class="focus-metric-val">+${addF}F</div><div class="focus-metric-lbl">Added floors</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${addNIA.toLocaleString()}m²</div><div class="focus-metric-lbl">New NIA</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${ervStr}</div><div class="focus-metric-lbl">Est. ERV</div></div>
