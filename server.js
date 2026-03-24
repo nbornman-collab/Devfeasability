@@ -801,7 +801,7 @@ function epcMatchSite(certs, targetAddr) {
       // Match "24" as word boundary: "24 " or "24," or "-24" or "24-"
       return new RegExp(`\\b${n}\\b`).test(ca);
     });
-    const hasStreet = !streetKw || ca.includes(streetKw);
+    const hasStreet = !streetKw || new RegExp(`\\b${streetKw}\\b`).test(ca);
     return hasNum && hasStreet;
   });
 
@@ -825,8 +825,8 @@ function epcAggregate(certs) {
   const deduped = epcDedup(certs);
   const totalGia = deduped.reduce((s, c) => s + c.floorArea, 0);
   const ratings = deduped.filter(c => c.epcRating).map(c => c.epcRating);
-  const worstRating = ratings.sort().reverse()[0] || null;
-  const bestRating = ratings.sort()[0] || null;
+  const worstRating = [...ratings].sort().reverse()[0] || null;
+  const bestRating = [...ratings].sort()[0] || null;
   const toLet = deduped.filter(c => /to let/i.test(c.transactionType)).length;
   const avgBenchmark = deduped.length > 0
     ? Math.round(deduped.reduce((s, c) => s + (c.existingBenchmark || 0), 0) / deduped.length)
