@@ -730,6 +730,9 @@ function normaliseSite(s, idx) {
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
     ptal, maxFloors, plotM2, gdvEst, planScore, heritTier,
     offMarket: s.offMarket||'unknown',
+    owner: s.owner||null,
+    planning: s.planning||null,
+    hmlr: s.hmlr||null,
   };
 }
 
@@ -908,39 +911,65 @@ function render() {
 // ── Analyst hook generator ────────────────────────────────────────────────────
 function analystHook(s) {
   const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
+  const p = s.planning || {};
   const sentences = [];
 
-  // 1. Opening: the planning opportunity signal
+  // 1. Planning signal - use real data where available
+  const hasRealRef = p.recentRef && /AP\/|\/\d{4}\//.test(p.recentRef);
+  const totalApps = p.total || 0;
+  const hasMajor = p.majorCount > 0;
+
   if (s.inOA && s.planScore >= 7) {
-    sentences.push(`${s.borough}'s Opportunity Area mandate is <strong>actively driving intensification</strong> at this scale - the LPA has been approving comparable massing in this corridor, and the policy framework expects it.`);
-  } else if (s.inCAZ && s.planScore >= 6) {
-    sentences.push(`CAZ designation creates an <strong>intensification imperative</strong> that ${s.borough} has been honouring in recent decisions - comparable schemes have landed approvals on near-identical plots within the last 18 months.`);
+    const oaFrame = s.borough === 'City of London'
+      ? 'City Cluster intensification mandate'
+      : s.borough === 'Hackney'
+      ? 'Hackney Central/Shoreditch OA growth corridor'
+      : 'London Bridge/Bankside Opportunity Area mandate';
+    sentences.push(`${oaFrame} is <strong>actively backing intensification</strong> at this scale - Policy SD1 of the London Plan 2021 requires the LPA to facilitate not resist, and comparable schemes in this corridor have landed consent.`);
+  } else if (s.inCAZ && hasMajor) {
+    sentences.push(`CAZ designation plus <strong>${p.majorCount} major application${p.majorCount>1?'s':''} on record</strong> signals an active planning history - the site has already attracted developer attention at this scale, which cuts both ways on consent confidence.`);
+  } else if (s.inCAZ) {
+    sentences.push(`CAZ intensification policy applies. ${totalApps > 10 ? `<strong>${totalApps} planning applications on record</strong> - the site has been looked at` : 'Limited planning history'} - the question is whether the development plan allocation supports the use class being targeted.`);
   } else if (s.planScore >= 8) {
-    sentences.push(`Planning appetite here is <strong>genuinely strong</strong> - a ${s.planScore}/10 reflects a corridor where the LPA has been approving at this massing scale and the development plan allocation supports the use.`);
+    const refNote = hasRealRef ? ` Most recent application <strong>${p.recentRef}</strong> confirms active developer interest.` : '';
+    sentences.push(`Planning appetite is <strong>genuinely strong at ${s.planScore}/10</strong> - the LPA has been approving at this massing scale and the allocation supports the use.${refNote}`);
   } else if (s.planScore <= 4) {
-    sentences.push(`Planning appetite is <strong>resistant</strong> - but the constraints are specific and the allocation language in the ${s.borough} development plan leaves a window for a well-argued scheme with the right architect.`);
+    sentences.push(`Planning appetite is <strong>resistant</strong> - but the constraints are specific and the development plan leaves a window for a well-argued scheme.${totalApps > 0 ? ` ${totalApps} prior applications suggest others have tried.` : ''}`);
   } else {
-    sentences.push(`The planning position is <strong>nuanced</strong> - not a straightforward approval, but precedent in this postcode suggests the right massing strategy can thread the policy needle.`);
+    sentences.push(`Planning position is <strong>nuanced</strong>.${totalApps > 5 ? ` ${totalApps} applications on record - the site has a history.` : ''} The right massing strategy can thread the policy needle, but the comparable approvals in this postcode are what determine confidence.`);
   }
 
-  // 2. Heritage / architectural tension
-  if (s.heritTier === 'blocking') {
-    sentences.push(`Heritage is the <strong>dominant constraint</strong>. Listed building context creates a hard massing ceiling - the question is whether the development value survives the reduced envelope, or whether a landmark design argument opens the door.`);
-  } else if (s.inCons) {
-    sentences.push(`The conservation area overlay is the <strong>key architectural test</strong>. Massing above the parapet line will trigger a detailed character assessment - the precedent case within this CA is mixed and will be determinative.`);
-  } else if (s.heritTier === 'navigable') {
-    sentences.push(`Heritage requires careful management but isn't a blocker. A <strong>views analysis and daylight study</strong> will be the gateway to securing the upper floors - the question is how much they give back.`);
+  // 2. Ownership / title signal - use real data
+  if (s.owner && s.owner !== 'Unknown' && s.owner !== 'PLACEHOLDER') {
+    const ownerType = /PLC|LIMITED|LTD|LLP|LLC/i.test(s.owner) ? 'corporate' : /Council|Authority|NHS|Crown/i.test(s.owner) ? 'public sector' : 'private';
+    if (ownerType === 'public sector') {
+      sentences.push(`<strong>${s.owner}</strong> is the registered owner - public sector disposal processes are slower but title is typically clean and acquirable.`);
+    } else if (ownerType === 'corporate') {
+      sentences.push(`Registered to <strong>${s.owner}</strong> - corporate freehold. ${s.heritTier === 'blocking' ? 'Heritage is the dominant constraint here, not title.' : 'Single title. The question is appetite to sell and at what basis.'}`);
+    } else {
+      sentences.push(`${s.heritTier !== 'manageable' ? `Heritage is the key design challenge.` : `The massing envelope has room.`} ${s.inCons ? `Conservation area overlay will drive the architectural strategy - massing above the parapet line requires a character-led design argument.` : `No on-site listed building constraint - the planning fight is on policy grounds, which is the more manageable problem.`}`);
+    }
   } else {
-    sentences.push(`Heritage position is <strong>clean</strong> - no listed constraints within the relevant envelope. The massing question is driven by planning policy rather than heritage sensitivity, which is the better problem to have.`);
+    // Fallback to heritage signal
+    if (s.heritTier === 'blocking') {
+      sentences.push(`Heritage is the <strong>dominant constraint</strong>. Listed building context creates a hard massing ceiling - the question is whether development value survives the reduced envelope.`);
+    } else if (s.inCons) {
+      sentences.push(`Conservation area overlay is the <strong>key architectural test</strong>. Massing above the parapet line triggers a character assessment - precedent within this CA will be determinative.`);
+    } else if (s.heritTier === 'navigable') {
+      sentences.push(`Heritage requires careful management but isn't a blocker. A views analysis and daylight study will be the gateway to securing the upper floors.`);
+    } else {
+      sentences.push(`Heritage position is <strong>clean</strong> - no listed constraints within the relevant envelope. The massing question is driven by planning policy, which is the better problem to have.`);
+    }
   }
 
-  // 3. The unresolved question - creates desire to pay
-  if (s.gdvEst >= 100) {
-    sentences.push(`At <strong>£${s.gdvEst}M GDV</strong> the development value is substantial - but the residual land value depends entirely on whether planning is secured without a viability negotiation stripping the return. That calculation requires the full planning and financial model.`);
-  } else if (addF >= 8) {
-    sentences.push(`The <strong>+${addF} floor uplift</strong> is the value driver - but whether that massing secures planning intact, or gets negotiated down, turns on three or four specific comparable approvals that aren't in the public record without digging.`);
+  // 3. The specific unresolved question
+  const gdv = parseFloat(s.gdvEst);
+  if (gdv >= 150) {
+    sentences.push(`At an <strong>estimated £${gdv}M GDV</strong>, residual land value is the pivotal number - and it turns entirely on the affordable housing obligation and whether the viability argument holds under scrutiny. That calculation requires the full financial model.`);
+  } else if (gdv >= 50) {
+    sentences.push(`The <strong>+${addF} floor uplift</strong> is the value driver - but whether that massing secures planning intact, or gets negotiated down under the density matrix, turns on three or four specific comparable approvals that aren't in the public record without digging.`);
   } else {
-    sentences.push(`Whether this <strong>stacks at current land values</strong> depends on planning risk premium and affordable housing obligations - neither of which can be modelled without the full precedent and policy analysis.`);
+    sentences.push(`Whether this <strong>stacks at current land values</strong> depends on planning risk premium and affordable housing obligations - neither can be modelled without the full precedent and policy analysis in the report.`);
   }
 
   return sentences.join(' ');
