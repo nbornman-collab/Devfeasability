@@ -318,6 +318,20 @@ Reason: different marketing (SEO/Google Ads vs relationships), different support
 
 Exception: the free PD check can go live earlier as a passive funnel builder and SEO play (3-6 months to rank on Google).
 
+### Parallel workstreams
+
+**Contractor (CesiumJS/geometry)** builds both in same engagement:
+1. Commercial massing engine (D/A T1 section 04) - CesiumJS + Google Photorealistic Tiles
+2. PD massing envelope - same tech stack, residential footprint from OS NGD, GPDO max volume per class
+
+PD envelope is simpler geometry than commercial massing - contractor delivers it as part of scope, not a separate engagement.
+
+**Ace + Nic** cook SEO while contractor builds:
+- Landing pages: "can I extend my house", "permitted development rights [borough]", "do I need planning permission for an extension"
+- Free PD check page (address → status → wireframe envelope) goes live as passive funnel
+- Blog content targeting homeowner search intent (3-6 month ranking horizon)
+- The free check uses wireframe massing (Mapbox 3D) until contractor delivers photorealistic CesiumJS version
+
 ### PD to commission pipeline (future - T4)
 
 PD report → homeowner needs drawings → "Need an architect? D/A Studio designs extensions."
