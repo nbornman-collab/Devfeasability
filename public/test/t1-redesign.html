@@ -69,8 +69,10 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .map-canvas { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; }
 .map-canvas #map { width: 100%; height: 100%; }
 
-/* -- LEFT COLUMN (overlays map) -- */
-.col-left { position: absolute; top: 0; left: 0; width: 50%; bottom: 0; z-index: 5; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); border-right: 1px solid var(--rule); }
+/* -- LEFT COLUMN (overlays map - transparent middle so map shows through) -- */
+.col-left { position: absolute; top: 0; left: 0; width: 50%; bottom: 0; z-index: 5; display: flex; flex-direction: column; overflow: hidden; background: transparent; border-right: 1px solid rgba(17,17,16,.1); }
+.hero { background: var(--bg); }
+.bottom-panel { background: var(--bg); }
 
 /* HERO: score + existing vs proposed */
 .hero { padding: 20px 28px 16px; border-bottom: 1px solid var(--rule); display: flex; gap: 20px; align-items: stretch; flex-shrink: 0; }
@@ -95,9 +97,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .comp-num.green { color: #15803d; }
 .comp-label { font-size: 8px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); }
 
-/* MAP PANEL (left column, hidden - map is now full bleed) */
-.map-panel { display: none; }
-.map-panel-label { display: none; }
+/* MAP WINDOW (left column - transparent window shows full-bleed map) */
+.map-window { flex: 1; position: relative; background: transparent; min-height: 0; }
+.map-window-label { position: absolute; top: 12px; left: 14px; z-index: 5; font: 700 9px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); text-shadow: 0 1px 3px rgba(0,0,0,.3); pointer-events: none; }
 
 /* BOTTOM PANEL (below map) - scenario controls */
 .bottom-panel { flex-shrink: 0; border-top: 2px solid var(--accent); background: var(--bg); max-height: 280px; overflow-y: auto; }
@@ -314,8 +316,10 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
       </div>
     </div>
 
-    <!-- Map panel placeholder (map is now full-bleed) -->
-    <div class="map-panel"></div>
+    <!-- Map window (transparent - shows full-bleed map behind) -->
+    <div class="map-window">
+      <div class="map-window-label">24 Southwark Street - SE1</div>
+    </div>
 
     <!-- Bottom panel: scenario controls + sliders -->
     <div class="bottom-panel">
@@ -646,16 +650,28 @@ function populatePage(si) {
     ).join('');
   }
 
-  // -- Synthesis (Development gets a stronger lead) --
+  // -- Synthesis (Development gets a stronger lead with ownership) --
   const sd = document.getElementById('synth-dev');
   if (sd) {
     const baseSynth = typeof synthesisDevScope === 'function' ? synthesisDevScope(si) : '';
     const upliftPct = Math.round((baseSc.nia - existNIA) / existNIA * 100);
     const pocCol = parseFloat(baseSc.poc) >= S04.poc ? '#16a34a' : '#dc2626';
-    // Lead with the hard numbers, then the synthesis voice
-    sd.innerHTML = `<div style="font:700 14px var(--sans);color:var(--ink);line-height:1.3;margin-bottom:10px">
+    const acq = F.acquisition || {};
+    const ownerName = acq.owner || 'Unknown';
+    const tenure = acq.tenure || 'Unknown';
+    const ownerInsight = acq.insight || '';
+    // Ownership chain block
+    const ownerBlock = `<div style="margin-bottom:14px;padding:12px 14px;background:var(--bg2);border-radius:8px;border-left:3px solid #15803d">
+      <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:#15803d;margin-bottom:4px">Ownership</div>
+      <div style="font:700 13px var(--sans);color:var(--ink);margin-bottom:2px">${ownerName}</div>
+      <div style="font:500 10px var(--sans);color:var(--ink2);margin-bottom:6px">${tenure} - ${acq.titles||1} title${(acq.titles||1)>1?'s':''} - ${acq.jurisdiction||'England and Wales'}</div>
+      ${ownerInsight ? '<div style="font:400 11px/1.65 var(--sans);color:var(--ink2)">'+ownerInsight+'</div>' : ''}
+    </div>`;
+    // Lead with the hard numbers, then ownership, then synthesis voice
+    sd.innerHTML = `<div style="font:700 14px var(--sans);color:var(--ink);line-height:1.3;margin-bottom:12px">
       ${existF}F existing to ${baseSc.floors}F proposed - ${f(baseSc.nia)}m\u00B2 NIA (+${upliftPct}%) producing <span style="color:var(--accent)">${fm(baseSc.gdv)}</span> at <span style="color:${pocCol}">${baseSc.poc}% PoC</span>.
     </div>
+    ${ownerBlock}
     <div style="font:400 12px/1.75 var(--sans);color:var(--ink2)">${baseSynth}</div>`;
   }
   if (typeof synthesisPlanning === 'function') { const sp = document.getElementById('synth-plan'); if (sp) sp.innerHTML = synthesisPlanning(si); }
@@ -1089,12 +1105,14 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   const map = new mapboxgl.Map({
     container:'map',
     style: 'mapbox://styles/mapbox/standard',
-    center: CENTROID, zoom: 17.2, pitch: 58, bearing: -20,
+    center: [-0.0912, 51.5050], zoom: 17, pitch: 58, bearing: -20,
     interactive: true, attributionControl: false, antialias: true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
 
   MAP_REF = map;
+  // Offset center slightly right so massing is prominent in both halves
+  map.on('load', () => { map.setPadding({left: 0, right: 0, top: 0, bottom: 0}); });
   map.on('style.load', () => {
     map.setConfigProperty('basemap', 'lightPreset', 'dawn');
     // Context buildings: force off-white tint via Standard style config
