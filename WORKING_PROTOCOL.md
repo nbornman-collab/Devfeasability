@@ -276,10 +276,66 @@ Do not invest further in `/t2/` as a product URL.
 
 - **Homepage**: dark-v11 vector, pitch 55, slow bearing rotation, interactive:false
 - **Discover (T0)**: dark-v11 vector, pitch 0 browse / pitch 52 site focus flyTo
-- **T1 (Appraise)**: light-v11, pitch 0, zoom 17.5, 3D massing layers
+- **T1 (Appraise)**: standard + dawn, pitch 58, zoom 17.5, bearing -20, 3D massing layers
 - **T2 (Full Insight)**: satellite-streets-v12, pitch 60, 3D massing layers
 
 Locked camera values - do not change without explicit instruction.
+
+---
+
+## HERITAGE MASSING RULES (locked 2026-03-25)
+
+**Conservative over bold. Always. No exceptions.**
+
+The product must NEVER suggest demolishing or extruding through a building with heritage character. One screenshot comparing our proposed massing to a real building kills the brand.
+
+### The Default Position
+
+**Pre-1930 in reasonable structural condition = RETAIN AND ADAPT.**
+
+The burden of proof is on demolition, not retention. This mirrors the current planning and sustainability climate (NPPF paras 205-209, London Plan SI2, LETI, Southwark P8+P69). A Whole Life Carbon assessment will almost always favour keeping what's there.
+
+### 5 Heritage Response Types
+
+| Type | Name | Trigger | Massing Rule |
+|------|------|---------|-------------|
+| 1 | UNRESTRICTED | Post-1980, no listing, no CA, no character | Full-plate extrusion |
+| 2 | CONTEXTUAL | Post-war (1930-1980), or in CA buffer | Full extrusion, material response, +2% cost |
+| 3 | RETAIN_AND_ADAPT | Pre-1930 reasonable condition (DEFAULT) | Keep existing, add 2-3F with 1.5m setback from primary facades |
+| 4 | FACADE_RETENTION | Structurally compromised with valuable facade, or Grade II with no interior significance | Facade kept, 2m setback above, +15% cost, -5% NIA, +3 months |
+| 5 | FULL_CONSERVATION | Grade I/II*, WHS buffer | No vertical extension |
+
+### Classification Priority
+
+1. Grade I / II* / WHS buffer → FULL_CONSERVATION (always)
+2. Pre-1930, reasonable condition → RETAIN_AND_ADAPT (default)
+3. Grade II, any age → RETAIN_AND_ADAPT (unless structurally impossible → FACADE_RETENTION)
+4. CA positive contributor → RETAIN_AND_ADAPT
+5. Pre-1930, structurally compromised → FACADE_RETENTION (if facade has value) or CONTEXTUAL
+6. Post-war in CA → CONTEXTUAL
+7. Post-1980, nothing special → UNRESTRICTED
+
+### Cost Model Adjustments
+
+| Type | Cost Multiplier | NIA Efficiency | Upper Floor Coverage | Programme Add |
+|------|----------------|---------------|---------------------|--------------|
+| 1 | 1.00 | 0% | 100% | 0 |
+| 2 | 1.02 | 0% | 100% | 0 |
+| 3 | Split: retrofit existing at £1,800-2,500/m2 + new above at £4,000-5,500/m2 | -3% | 65-80% (setback) | 0 (often shorter) |
+| 4 | 1.15 | -5% | 60-75% | +3 months |
+| 5 | N/A | N/A | N/A | N/A |
+
+### Massing Visual Rules
+
+- Type 3+: Upper floors MUST visually step back from existing building line
+- Existing building renders as amber extrusion (retained)
+- Additional floors render at REDUCED footprint with visible setback
+- Setback = 1.5m from primary facades (Type 3), 2.0m (Type 4)
+- Degree conversion: 1.5m ~ 0.0000135 degrees longitude at London latitude
+
+### Full Reference
+
+See `references/heritage-massing-rules.md` for complete framework with precedents, policy citations, and implementation details.
 
 ---
 
