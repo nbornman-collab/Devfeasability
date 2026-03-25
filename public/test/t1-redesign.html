@@ -213,13 +213,14 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .s04-stab.active { border-bottom-color: var(--accent); color: var(--accent); }
 
 /* SCENARIO FULL-SCREEN MODE */
-.scenario-overlay { position: fixed; top: var(--nav-h); right: 0; width: 50%; bottom: 0; z-index: 50; background: var(--bg); transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; overflow: hidden; }
-.scenario-overlay.open { transform: translateX(0); }
-.so-exit { position: absolute; top: 12px; right: 16px; z-index: 55; background: rgba(17,17,16,.06); border: none; border-radius: 6px; padding: 6px 14px; font: 600 10px var(--sans); letter-spacing: .06em; color: var(--ink2); cursor: pointer; transition: all .15s; backdrop-filter: blur(8px); }
-.so-exit:hover { background: rgba(17,17,16,.12); color: var(--ink); }
-.so-map { height: 180px; flex-shrink: 0; position: relative; background: var(--bg2); overflow: hidden; }
-.so-map canvas { width: 100%; height: 100%; }
-.so-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.scenario-overlay { position: fixed; top: var(--nav-h); right: 0; width: 50%; bottom: 0; z-index: 50; background: var(--bg); display: none; flex-direction: column; overflow: hidden; }
+.scenario-overlay.open { display: flex; animation: soSlideIn .3s cubic-bezier(.4,0,.2,1); }
+@keyframes soSlideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+.so-exit { position: absolute; top: 12px; right: 16px; z-index: 55; background: rgba(17,17,16,.08); border: none; border-radius: 6px; padding: 7px 16px; font: 700 10px var(--sans); letter-spacing: .06em; color: var(--ink2); cursor: pointer; transition: all .15s; backdrop-filter: blur(8px); }
+.so-exit:hover { background: rgba(17,17,16,.15); color: var(--ink); }
+.so-map-slot { height: 200px; flex-shrink: 0; position: relative; background: var(--bg2); overflow: hidden; border-bottom: 2px solid var(--accent); }
+.so-map-slot #map { width: 100%; height: 100%; }
+.so-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #ebebE6; }
 .so-header { padding: 20px 28px 16px; border-bottom: 2px solid var(--accent); }
 .so-scenario-name { font: 800 clamp(20px,3vw,32px) var(--sans); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
 .so-scenario-sub { font: 500 11px var(--sans); color: var(--ink3); margin-top: 4px; }
@@ -464,8 +465,10 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 
   <!-- SCENARIO FULL-SCREEN OVERLAY -->
   <div class="scenario-overlay" id="scenario-overlay">
-    <button class="so-exit" onclick="exitScenarioMode()">&larr; Back to Overview</button>
-    <div class="so-map" id="so-map-mini"></div>
+    <button class="so-exit" onclick="exitScenarioMode()">&#x2715; Close</button>
+    <div class="so-map-slot" id="so-map-slot">
+      <!-- Map element moves here when scenario mode is active -->
+    </div>
     <div class="so-body" id="so-body">
       <!-- Populated by enterScenarioMode() -->
     </div>
@@ -906,18 +909,23 @@ function enterScenarioMode() {
   scenarioModeActive = true;
   const ol = document.getElementById('scenario-overlay');
   if (ol) ol.classList.add('open');
+  // Move map into overlay strip
+  const mapEl = document.getElementById('map');
+  const slot = document.getElementById('so-map-slot');
+  if (mapEl && slot) slot.appendChild(mapEl);
   renderScenarioMode();
-  // Clone map into mini viewport
-  if (MAP_REF) {
-    setTimeout(() => MAP_REF.resize(), 350);
-  }
+  if (MAP_REF) setTimeout(() => { MAP_REF.resize(); MAP_REF.setZoom(16.8); MAP_REF.setPitch(62); }, 50);
 }
 
 function exitScenarioMode() {
   scenarioModeActive = false;
   const ol = document.getElementById('scenario-overlay');
   if (ol) ol.classList.remove('open');
-  if (MAP_REF) setTimeout(() => MAP_REF.resize(), 350);
+  // Move map back to left column
+  const mapEl = document.getElementById('map');
+  const panel = document.querySelector('.map-panel');
+  if (mapEl && panel) panel.appendChild(mapEl);
+  if (MAP_REF) setTimeout(() => { MAP_REF.resize(); MAP_REF.setZoom(17.2); MAP_REF.setPitch(58); }, 50);
 }
 
 function renderScenarioMode() {
@@ -984,13 +992,13 @@ function renderScenarioMode() {
   if (!body) return;
 
   body.innerHTML = `
-    <!-- Scenario tabs -->
-    <div style="display:flex;border-bottom:1px solid var(--rule)">${tabsHtml}</div>
+    <!-- Scenario tabs (Chrome-style) -->
+    <div style="display:flex;background:var(--bg2);flex-shrink:0">${tabsHtml}</div>
 
-    <!-- Header -->
+    <!-- Header strip -->
     <div class="so-header">
-      <div class="so-scenario-name">${sc.label} Scenario - ${sc.floors} Floors</div>
-      <div class="so-scenario-sub">${sc.floors * FTF}m proposed height - ${f(sc.gea)} m\u00B2 GEA - ${Math.round(sc.eff*100)}% efficiency</div>
+      <div class="so-scenario-name">${sc.label} Scenario</div>
+      <div class="so-scenario-sub">${sc.floors} floors - ${sc.floors * FTF}m - ${f(sc.gea)}m\u00B2 GEA - ${Math.round(sc.eff*100)}% efficiency - ${S04_MARKET.progYrs[sc.key]}yr programme</div>
     </div>
 
     <!-- Key metrics grid -->
@@ -999,44 +1007,62 @@ function renderScenarioMode() {
       <div class="so-card"><div class="so-card-val" style="color:${pocCol}">${sc.poc}%</div><div class="so-card-label">Profit on Cost</div></div>
       <div class="so-card"><div class="so-card-val" style="color:${rlvPos?'#16a34a':'#dc2626'}">${fm(sc.rlv)}</div><div class="so-card-label">Residual Land Value</div></div>
       <div class="so-card"><div class="so-card-val">${f(sc.nia)}m\u00B2</div><div class="so-card-label">Net Internal Area</div></div>
-      <div class="so-card"><div class="so-card-val">+${sc.floors-existF}F</div><div class="so-card-label">Additional Floors</div></div>
-      <div class="so-card"><div class="so-card-val" style="color:#16a34a">+${upliftPct}%</div><div class="so-card-label">Area Uplift</div></div>
+      <div class="so-card"><div class="so-card-val">${fm(sc.tdc)}</div><div class="so-card-label">Total Dev Cost</div></div>
+      <div class="so-card"><div class="so-card-val" style="color:#16a34a">+${upliftPct}%</div><div class="so-card-label">Area Uplift (${existF}F \u2192 ${sc.floors}F)</div></div>
     </div>
 
-    <!-- Development narrative -->
-    <div class="so-section">
-      <div class="so-section-title">Development</div>
-      <div class="so-narrative">${sc.narrative}</div>
-      ${pfHtml}
-      <div class="so-rlv-block" style="border-left-color:${rlvPos?'var(--accent)':'#dc2626'};background:${rlvPos?'var(--accent-bg)':'#fef2f2'}">
-        <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:${rlvPos?'var(--accent)':'#dc2626'};margin-bottom:4px">RLV at ${S04.poc}% Target</div>
-        <div style="font:800 20px var(--mono);color:${rlvPos?'var(--ink)':'#dc2626'}">${fm(sc.rlv)}</div>
-        <div style="font:400 10px var(--sans);color:var(--ink3);margin-top:3px">${rlvPos ? 'Maximum site price to achieve target return.' : 'Scheme does not stack at target profit.'}</div>
+    <!-- DEVELOPMENT glass panel -->
+    <div class="glass-panel" style="margin:12px 16px">
+      <div style="padding:16px 20px">
+        <div class="so-section-title">Development</div>
+        <div class="so-narrative">${sc.narrative}</div>
+        ${pfHtml}
+        <div class="so-rlv-block" style="margin-top:16px;border-left-color:${rlvPos?'var(--accent)':'#dc2626'};background:${rlvPos?'var(--accent-bg)':'#fef2f2'}">
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:${rlvPos?'var(--accent)':'#dc2626'};margin-bottom:4px">RLV at ${S04.poc}% Target</div>
+          <div style="font:800 22px var(--mono);color:${rlvPos?'var(--ink)':'#dc2626'};letter-spacing:-.5px">${fm(sc.rlv)}</div>
+          <div style="font:400 10px var(--sans);color:var(--ink3);margin-top:3px">${rlvPos ? 'Maximum site price to achieve target return.' : 'Scheme does not stack at target profit.'}</div>
+        </div>
+      </div>
+      <!-- Sliders inline -->
+      <div style="padding:12px 20px 16px;border-top:1px solid var(--rule)">
+        <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+          Assumptions
+          <button onclick="s04Reset();renderScenarioMode()" style="font:500 9px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline;text-transform:none;letter-spacing:0">Reset</button>
+        </div>
+        ${slidersHtml}
       </div>
     </div>
 
-    <!-- Assumptions / sliders -->
-    <div class="so-section">
-      <div class="so-section-title">Assumptions</div>
-      ${slidersHtml}
-      <div style="text-align:right;margin-top:6px"><button onclick="s04Reset();renderScenarioMode()" style="font:500 9px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset defaults</button></div>
-    </div>
-
-    <!-- Planning (scenario-relevant) -->
-    <div class="so-section">
-      <div class="so-section-title">Planning</div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        ${sc.floors >= 10 ? '<div style="font:400 11px/1.6 var(--sans);color:var(--ink2);padding:8px 12px;background:var(--bg2);border-radius:6px">At '+sc.floors+'F ('+sc.floors*FTF+'m), this scenario '+(sc.floors>=12?'triggers the tall buildings policy. LVMF views assessment mandatory. GLA Stage II likely.':'requires pre-app views assessment re Tate Modern sightlines (220m W). Single staircase compliant throughout.')+'</div>' : '<div style="font:400 11px/1.6 var(--sans);color:var(--ink2);padding:8px 12px;background:var(--bg2);border-radius:6px">At '+sc.floors+'F ('+sc.floors*FTF+'m), this scenario sits comfortably below the tall buildings threshold. Strong precedent on Southwark Street at this height.</div>'}
-        <div style="font:400 11px/1.6 var(--sans);color:var(--ink2);padding:8px 12px;background:var(--bg2);border-radius:6px">Planning Appetite: ${(mom.score||5).toFixed(1)}/10 - ${mom.consents||0} consents within 700m. ${mom.opportunity_area ? mom.opportunity_area.name + ' OA provides intensification policy support.' : ''}</div>
+    <!-- PLANNING glass panel -->
+    <div class="glass-panel" style="margin:0 16px 12px">
+      <div style="padding:16px 20px">
+        <div class="so-section-title">Planning</div>
+        <div style="font:700 13px var(--sans);color:var(--ink);margin-bottom:8px;line-height:1.3">${sc.floors >= 12 ? 'Tall buildings policy triggered at '+sc.floors+'F ('+sc.floors*FTF+'m)' : sc.floors >= 10 ? 'Pre-app views assessment required at '+sc.floors+'F' : 'Below tall buildings threshold at '+sc.floors+'F'}</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${sc.floors >= 12 ? '<div style="font:400 11px/1.65 var(--sans);color:var(--ink2);padding:10px 14px;background:rgba(224,123,42,.06);border-left:3px solid var(--accent);border-radius:0 6px 6px 0">At '+sc.floors*FTF+'m, LVMF views assessment is mandatory. GLA Stage II referral likely. The design argument needs to demonstrate exceptional public benefit to justify this height in the Bankside context. Programme adds 6-9 months for GLA process.</div>' : sc.floors >= 10 ? '<div style="font:400 11px/1.65 var(--sans);color:var(--ink2);padding:10px 14px;background:rgba(224,123,42,.06);border-left:3px solid var(--accent);border-radius:0 6px 6px 0">Tate Modern sightlines (220m W) require views assessment in the DAS. Single staircase compliant throughout. Strong precedent at this height on Southwark Street - Liberty of Southwark approved at similar massing 2021.</div>' : '<div style="font:400 11px/1.65 var(--sans);color:var(--ink2);padding:10px 14px;background:rgba(22,163,74,.06);border-left:3px solid #16a34a;border-radius:0 6px 6px 0">Sits comfortably within the prevailing street context. No tall buildings policy trigger. Single staircase compliant. The planning conversation is about design quality, not whether height is appropriate.</div>'}
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="padding:8px 12px;background:var(--bg2);border-radius:6px"><div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);margin-bottom:2px">Appetite</div><div style="font:700 14px var(--mono);color:var(--ink)">${(mom.score||5).toFixed(1)}/10</div></div>
+            <div style="padding:8px 12px;background:var(--bg2);border-radius:6px"><div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);margin-bottom:2px">Consents</div><div style="font:700 14px var(--mono);color:var(--ink)">${mom.consents||0} nearby</div></div>
+          </div>
+          ${mom.opportunity_area ? '<div style="padding:8px 12px;background:var(--accent-bg);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;font:500 11px var(--sans);color:var(--ink2)"><strong style="color:var(--accent)">'+mom.opportunity_area.name+'</strong> - London Plan Policy SD1 intensification support</div>' : ''}
+        </div>
       </div>
     </div>
 
-    <!-- Architecture (scenario-relevant) -->
-    <div class="so-section">
-      <div class="so-section-title">Architecture</div>
-      <div style="display:flex;flex-direction:column;gap:6px">
-        <div style="font:400 11px/1.6 var(--sans);color:var(--ink2);padding:8px 12px;background:var(--bg2);border-radius:6px">Massing: ${sc.podF}F full-plate podium + ${sc.twrF}F tower at ${Math.round(sc.twrPct*100)}% coverage. Core: ${Math.round(grossPlate*0.22)}m\u00B2 (22% of ${grossPlate}m\u00B2 plate). Net-to-gross: ${Math.round(sc.eff*100)}%.</div>
-        <div style="font:400 11px/1.6 var(--sans);color:var(--ink2);padding:8px 12px;background:var(--bg2);border-radius:6px">BSA / Part B: ${bsaLabel}. Heritage tier: ${tier}. Programme: ${S04_MARKET.progYrs[sc.key]} years.</div>
+    <!-- ARCHITECTURE glass panel -->
+    <div class="glass-panel" style="margin:0 16px 12px">
+      <div style="padding:16px 20px">
+        <div class="so-section-title">Architecture</div>
+        <div style="font:700 13px var(--sans);color:var(--ink);margin-bottom:8px;line-height:1.3">${sc.podF}F podium + ${sc.twrF}F tower at ${Math.round(sc.twrPct*100)}% coverage</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+          <div style="padding:8px 12px;background:var(--bg2);border-radius:6px"><div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);margin-bottom:2px">Core</div><div style="font:700 12px var(--mono);color:var(--ink)">${Math.round(grossPlate*0.22)}m\u00B2</div><div style="font:400 8px var(--sans);color:var(--ink3)">22% of plate</div></div>
+          <div style="padding:8px 12px;background:var(--bg2);border-radius:6px"><div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);margin-bottom:2px">Efficiency</div><div style="font:700 12px var(--mono);color:var(--ink)">${Math.round(sc.eff*100)}%</div><div style="font:400 8px var(--sans);color:var(--ink3)">net-to-gross</div></div>
+          <div style="padding:8px 12px;background:var(--bg2);border-radius:6px"><div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);margin-bottom:2px">Heritage</div><div style="font:700 12px var(--mono);color:var(--ink)">${tier}</div><div style="font:400 8px var(--sans);color:var(--ink3)">constraint tier</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font:400 11px/1.65 var(--sans);color:var(--ink2);padding:10px 14px;background:var(--bg2);border-radius:6px"><strong>BSA / Part B:</strong> ${bsaLabel}. ${maxH >= 30 ? 'Second staircase adds ~280-340m\u00B2 NIA per floor and ~\u00A31.2-1.5M to construction cost.' : maxH >= 18 ? 'Enhanced fire strategy required but single staircase compliant.' : 'Standard fire strategy.'}</div>
+          <div style="font:400 11px/1.65 var(--sans);color:var(--ink2);padding:10px 14px;background:var(--bg2);border-radius:6px"><strong>Programme:</strong> ${S04_MARKET.progYrs[sc.key]} year build. ${sc.key==='hi' ? 'Longest programme - cost and finance compound at this scale.' : sc.key==='lo' ? 'Shortest programme - lowest finance exposure.' : 'Mid-range programme - balance of scale and risk.'}</div>
+        </div>
       </div>
     </div>
 
