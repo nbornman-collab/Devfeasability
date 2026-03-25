@@ -63,19 +63,25 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .burger-footer { padding:18px 22px; font:400 10px var(--sans); letter-spacing:.16em; text-transform:uppercase; color:rgba(242,241,237,.45); border-top:1px solid rgba(242,241,237,.08); }
 
 /* -- LAYOUT -- */
-.page { position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; }
+.page { position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; }
 
-/* -- MAP: full bleed behind everything -- */
-.map-canvas { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; }
-.map-canvas #map { width: 100%; height: 100%; }
+/* UNIFIED BANNER (full width, above map) */
+.unified-banner { flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border-bottom: 2px solid var(--accent); z-index: 10; }
+.banner-left { display: flex; gap: 20px; align-items: stretch; padding: 20px 28px 16px; border-right: 1px solid var(--rule); }
+.banner-right { padding: 16px 24px 14px; display: flex; flex-direction: column; justify-content: center; }
 
-/* -- LEFT COLUMN (overlays map - transparent middle so map shows through) -- */
-.col-left { position: absolute; top: 0; left: 0; width: 50%; bottom: 0; z-index: 5; display: flex; flex-direction: column; overflow: hidden; background: transparent; border-right: 1px solid rgba(17,17,16,.1); }
-.hero { background: var(--bg); }
-.scenario-panel { background: var(--bg); }
+/* MAIN AREA (below banner) */
+.main-area { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; position: relative; }
 
-/* HERO: score + existing vs proposed */
-.hero { padding: 20px 28px 16px; border-bottom: 2px solid var(--accent); display: flex; gap: 20px; align-items: stretch; flex-shrink: 0; }
+/* -- MAP: full bleed left half -- */
+.map-half { position: relative; z-index: 1; }
+.map-half #map { width: 100%; height: 100%; }
+
+/* -- LEFT OVERLAY (scenario panel floats over map) -- */
+.left-overlay { position: absolute; top: 0; left: 0; width: 50%; bottom: 0; z-index: 5; pointer-events: none; display: flex; flex-direction: column; padding: 12px; }
+.left-overlay > * { pointer-events: auto; }
+
+/* HERO SCORE BLOCK (inside banner-left) */
 .hero-score-block { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; min-width: 90px; border-right: 1px solid var(--rule); padding-right: 20px; }
 .hero-label { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); display: flex; align-items: center; gap: 5px; }
 .hero-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); display: inline-block; flex-shrink: 0; }
@@ -97,12 +103,8 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .comp-num.green { color: #15803d; }
 .comp-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); }
 
-/* SCENARIO PANEL (below hero, above map - floating glass) */
-.scenario-panel { flex-shrink: 0; margin: 12px; background: rgba(255,255,255,.55); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.75); border-radius: 12px; box-shadow: 0 2px 16px rgba(17,17,16,.06), inset 0 1px 0 rgba(255,255,255,.9); max-height: 320px; overflow-y: auto; overflow-x: hidden; }
-
-/* MAP WINDOW (left column bottom - transparent, shows full-bleed map) */
-.map-window { flex: 1; position: relative; background: transparent; min-height: 0; }
-.map-window-label { position: absolute; top: 12px; left: 14px; z-index: 5; font: 700 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.8); text-shadow: 0 1px 4px rgba(0,0,0,.4); pointer-events: none; }
+/* SCENARIO PANEL (floating glass over map) */
+.scenario-panel { background: rgba(255,255,255,.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.8); border-radius: 12px; box-shadow: 0 4px 20px rgba(17,17,16,.1), inset 0 1px 0 rgba(255,255,255,.9); max-height: 340px; overflow-y: auto; overflow-x: hidden; flex-shrink: 0; }
 .scenario-tabs { display: flex; gap: 0; padding: 0; background: var(--bg2); }
 .sc-tab { flex: 1; padding: 16px 10px 12px; border: none; border-bottom: 3px solid transparent; background: transparent; font: 800 18px var(--sans); letter-spacing: -.02em; color: var(--ink2); cursor: pointer; transition: all .18s; position: relative; text-align: center; }
 .sc-tab:hover { color: var(--ink); background: rgba(17,17,16,.03); }
@@ -127,14 +129,13 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .factor-bar.high { background: var(--accent); }
 .factor-score { font-size: 13px; font-weight: 700; color: var(--ink); width: 30px; text-align: right; flex-shrink: 0; }
 
-/* -- RIGHT COLUMN (overlays map - transparent bg so map bleeds through) -- */
-.col-right { position: absolute; top: 0; right: 0; width: 50%; bottom: 0; z-index: 10; overflow-y: auto; -webkit-overflow-scrolling: touch; background: transparent; }
+/* -- RIGHT COLUMN (scrollable, transparent over map) -- */
+.col-right { overflow-y: auto; -webkit-overflow-scrolling: touch; background: transparent; z-index: 5; }
 
-/* SITE HEADER (section 00) - STICKY above map */
-.site-header { padding: 16px 24px 14px; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 20; background: rgba(242,241,237,.97); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
-.site-address { font: 800 clamp(20px,2.5vw,28px) var(--sans); color: var(--ink); letter-spacing: -.02em; line-height: 1.1; margin-bottom: 8px; }
+/* SITE HEADER (inside banner-right) */
+.site-address { font: 800 clamp(22px,2.5vw,28px) var(--sans); color: var(--ink); letter-spacing: -.02em; line-height: 1.1; margin-bottom: 10px; }
 .site-header-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 6px; }
-.site-header-row-label { font: 700 10px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); min-width: 140px; flex-shrink: 0; }
+.site-header-row-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); min-width: 150px; flex-shrink: 0; }
 .site-tags { display: flex; gap: 5px; flex-wrap: wrap; }
 .tag { font: 700 11px var(--mono); letter-spacing: .03em; text-transform: uppercase; color: var(--ink); background: rgba(17,17,16,.06); border: none; padding: 5px 12px; border-radius: 4px; white-space: nowrap; }
 .tag.accent-tag { background: var(--accent-bg); color: var(--accent); }
@@ -311,16 +312,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 
 <div class="page">
 
-  <!-- MAP: full bleed behind everything -->
-  <div class="map-canvas">
-    <div id="map"></div>
-  </div>
-
-  <!-- LEFT COLUMN -->
-  <div class="col-left">
-
-    <!-- Hero: score + existing vs proposed comparison -->
-    <div class="hero">
+  <!-- UNIFIED BANNER (full width) -->
+  <div class="unified-banner">
+    <div class="banner-left">
       <div class="hero-score-block">
         <div class="hero-label"><span class="hero-dot"></span>Development Score</div>
         <div class="hero-number" id="sum-score">-</div>
@@ -331,51 +325,50 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
         <!-- Populated by JS: existing / proposed / delta -->
       </div>
     </div>
-
-    <!-- Scenario controls (between hero and map) -->
-    <div class="scenario-panel">
-      <div class="scenario-tabs" id="sc-tabs">
-        <button class="sc-tab active" onclick="s04go(0)">Low<span class="sc-tab-sub">8 Floors</span></button>
-        <button class="sc-tab" onclick="s04go(1)">Base<span class="sc-tab-sub">10 Floors</span></button>
-        <button class="sc-tab" onclick="s04go(2)">High<span class="sc-tab-sub">12 Floors</span></button>
-      </div>
-      <div class="sc-metrics" id="sc-metrics"></div>
-      <div id="sc-sliders" style="padding:4px 0 8px">
-        <div class="slider-row"><span class="slider-label">ERV</span><input type="range" id="s04-sl-erv" min="500" max="1200" step="25" value="700" oninput="s04Slider('erv',+this.value)"><span class="slider-val" id="s04-sv-erv">&pound;700</span></div>
-        <div class="slider-row"><span class="slider-label">Yield</span><input type="range" id="s04-sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="s04Slider('niy',+this.value)"><span class="slider-val" id="s04-sv-niy">4.75%</span></div>
-        <div class="slider-row"><span class="slider-label">Build Cost</span><input type="range" id="s04-sl-cost" min="3000" max="8000" step="100" value="4200" oninput="s04Slider('cost',+this.value)"><span class="slider-val" id="s04-sv-cost">&pound;4,200</span></div>
-        <div class="slider-row"><span class="slider-label">S106</span><input type="range" id="s04-sl-s106" min="0" max="3000" step="50" value="500" oninput="s04Slider('s106',+this.value)"><span class="slider-val" id="s04-sv-s106">&pound;500k</span></div>
-        <div class="slider-row"><span class="slider-label">Profit %</span><input type="range" id="s04-sl-poc" min="10" max="30" step="1" value="20" oninput="s04Slider('poc',+this.value)"><span class="slider-val" id="s04-sv-poc">20%</span></div>
-        <div style="text-align:right;padding:0 14px 4px"><button onclick="s04Reset()" style="font:500 10px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset</button></div>
-      </div>
-    </div>
-
-    <!-- Map window (bottom of left column - transparent, map bleeds through) -->
-    <div class="map-window">
-      <div class="map-window-label">24 Southwark Street</div>
-    </div>
-
-  </div>
-
-  <!-- RIGHT COLUMN -->
-  <div class="col-right">
-
-    <!-- 00 Site Introduction -->
-    <div class="site-header">
+    <div class="banner-right">
       <div class="site-address" id="sum-name">24 Southwark Street</div>
       <div class="site-header-row" id="ownership-row">
-        <span class="site-header-row-label">Ownership Structure</span>
-        <div class="site-tags" id="ownership-chips">
-          <!-- Populated by JS: tenure tags + owner name -->
-        </div>
+        <span class="site-header-row-label">Ownership</span>
+        <div class="site-tags" id="ownership-chips"></div>
       </div>
       <div class="site-header-row" id="building-row">
         <span class="site-header-row-label">Existing Building</span>
-        <div class="site-tags" id="building-chips">
-          <!-- Populated by JS: floors, height, plot, NIA, ERV -->
-        </div>
+        <div class="site-tags" id="building-chips"></div>
       </div>
     </div>
+  </div>
+
+  <!-- MAIN AREA: map left + right panel -->
+  <div class="main-area">
+
+    <!-- Map (left half, interactive) -->
+    <div class="map-half">
+      <div id="map"></div>
+    </div>
+
+    <!-- Scenario panel floats over map -->
+    <div class="left-overlay">
+      <div class="scenario-panel">
+        <div class="scenario-tabs" id="sc-tabs">
+          <button class="sc-tab active" onclick="s04go(0)">Low<span class="sc-tab-sub">8 Floors</span></button>
+          <button class="sc-tab" onclick="s04go(1)">Base<span class="sc-tab-sub">10 Floors</span></button>
+          <button class="sc-tab" onclick="s04go(2)">High<span class="sc-tab-sub">12 Floors</span></button>
+        </div>
+        <div class="sc-metrics" id="sc-metrics"></div>
+        <div id="sc-sliders" style="padding:4px 0 8px">
+          <div class="slider-row"><span class="slider-label">ERV</span><input type="range" id="s04-sl-erv" min="500" max="1200" step="25" value="700" oninput="s04Slider('erv',+this.value)"><span class="slider-val" id="s04-sv-erv">&pound;700</span></div>
+          <div class="slider-row"><span class="slider-label">Yield</span><input type="range" id="s04-sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="s04Slider('niy',+this.value)"><span class="slider-val" id="s04-sv-niy">4.75%</span></div>
+          <div class="slider-row"><span class="slider-label">Build Cost</span><input type="range" id="s04-sl-cost" min="3000" max="8000" step="100" value="4200" oninput="s04Slider('cost',+this.value)"><span class="slider-val" id="s04-sv-cost">&pound;4,200</span></div>
+          <div class="slider-row"><span class="slider-label">S106</span><input type="range" id="s04-sl-s106" min="0" max="3000" step="50" value="500" oninput="s04Slider('s106',+this.value)"><span class="slider-val" id="s04-sv-s106">&pound;500k</span></div>
+          <div class="slider-row"><span class="slider-label">Profit %</span><input type="range" id="s04-sl-poc" min="10" max="30" step="1" value="20" oninput="s04Slider('poc',+this.value)"><span class="slider-val" id="s04-sv-poc">20%</span></div>
+          <div style="text-align:right;padding:0 14px 4px"><button onclick="s04Reset()" style="font:500 11px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset</button></div>
+        </div>
+      </div>
+      <div style="flex:1"></div><!-- spacer lets map show below panel -->
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col-right">
 
     <!-- 01 DEVELOPMENT SCOPE -->
     <div class="glass-panel">
@@ -705,12 +698,9 @@ function populatePage(si) {
       <div style="font:500 12px var(--sans);color:var(--ink2);margin-bottom:6px">${tenure} - ${acq.titles||1} title${(acq.titles||1)>1?'s':''} - ${acq.jurisdiction||'England and Wales'}</div>
       ${ownerInsight ? '<div style="font:400 13px/1.7 var(--sans);color:var(--ink2)">'+ownerInsight+'</div>' : ''}
     </div>`;
-    // Lead with the hard numbers, then ownership, then synthesis voice
-    sd.innerHTML = `<div style="font:700 16px var(--sans);color:var(--ink);line-height:1.3;margin-bottom:14px">
-      ${existF}F existing to ${baseSc.floors}F proposed - ${f(baseSc.nia)}m\u00B2 NIA (+${upliftPct}%) producing <span style="color:var(--accent)">${fm(baseSc.gdv)}</span> at <span style="color:${pocCol}">${baseSc.poc}% PoC</span>.
-    </div>
-    ${ownerBlock}
-    <div style="font:400 12px/1.75 var(--sans);color:var(--ink2)">${baseSynth}</div>`;
+    // Ownership leads, then synthesis (no duplicate numbers - already in banner)
+    sd.innerHTML = `${ownerBlock}
+    <div style="font:400 14px/1.75 var(--sans);color:var(--ink2)">${baseSynth}</div>`;
   }
   if (typeof synthesisPlanning === 'function') { const sp = document.getElementById('synth-plan'); if (sp) sp.innerHTML = synthesisPlanning(si); }
   if (typeof synthesisArchitecture === 'function') { const sa = document.getElementById('synth-arch'); if (sa) sa.innerHTML = synthesisArchitecture(si); }
@@ -979,10 +969,10 @@ function exitScenarioMode() {
   scenarioModeActive = false;
   document.getElementById('scenario-scrim')?.classList.remove('open');
   document.getElementById('scenario-modal')?.classList.remove('open');
-  // Move map back to full-bleed canvas
+  // Move map back to left half
   const mapEl = document.getElementById('map');
-  const canvas = document.querySelector('.map-canvas');
-  if (mapEl && canvas) canvas.appendChild(mapEl);
+  const mapHalf = document.querySelector('.map-half');
+  if (mapEl && mapHalf) mapHalf.appendChild(mapEl);
   if (MAP_REF) setTimeout(() => { MAP_REF.resize(); MAP_REF.setZoom(17.5); MAP_REF.setPitch(58); MAP_REF.setBearing(-20); }, 100);
 }
 
@@ -1132,24 +1122,9 @@ function renderScenarioMode() {
 const _s04go_orig = s04go;
 // (s04go already defined above, so we enhance it)
 
-// -- Align amber line: match right header height to left hero --
-function alignAmberLine() {
-  const hero = document.querySelector('.hero');
-  const header = document.querySelector('.site-header');
-  if (hero && header) {
-    header.style.minHeight = hero.offsetHeight + 'px';
-    header.style.display = 'flex';
-    header.style.flexDirection = 'column';
-    header.style.justifyContent = 'center';
-  }
-}
-
 // -- Init --
 if (typeof SITE_INTELLIGENCE !== 'undefined') populatePage(SITE_INTELLIGENCE);
 s04render();
-// Align after content renders
-setTimeout(alignAmberLine, 100);
-window.addEventListener('resize', alignAmberLine);
 
 // -- Map (standard + dawn) --
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
