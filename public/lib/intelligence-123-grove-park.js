@@ -17,7 +17,10 @@ const SITE_INTELLIGENCE = {
     heritage: { label: 'Heritage Shadow', score: 8.5, weight: 1.5, insight: "No heritage constraints." },
 
     heritage_framework: {
-      tier: 'clean',
+      tier: 'manageable',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [],
+      nhle_adjacent: ['Numbers 124-125 incl balustraded wall (GrII, 1385590)'],
       score: 8.5,
       verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'

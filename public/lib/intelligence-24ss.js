@@ -55,22 +55,27 @@ const SITE_INTELLIGENCE = {
         era: 'Victorian',
         material: 'London stock brick',
         historic_use: 'Ex-industrial/commercial',
-        ndha_risk: 'Medium',
+        nhle_on_site: { name: 'The Hop Exchange', grade: 'II', list_entry: 1385923, url: 'https://historicengland.org.uk/listing/the-list/list-entry/1385923' },
+        nhle_adjacent: ['1-11 Park Street (GrII, 1385749)', '5 Stoney Street (GrII, 1385937)', 'The Wheatsheaf PH (GrII, 1385938)'],
+        ndha_risk: null,
         locally_listed: false,
         conservation_area: false,
+        listed_building: 'II',
         article4: 'Confirm - Southwark has extensive Article 4 directions',
         facade_retention_likely: true,
         realistic_scenario: '2-3 set-back floors above retained parapet. Full clearance requires pre-app and strong design justification.',
         comparable_consent: 'Liberty of Southwark, 15 Southwark Street - same street, same typology, approved 2021'
       },
-      insight: 'Score 6.0 - constrained, not blocked. Statutory heritage is manageable: OXO Tower (Grade II) is 200m west at low height, Borough Market 400m SE. The real constraint is the building itself: Victorian stock brick ex-industrial fabric on Southwark Street, which Southwark Council designates as NDHA under Local Plan Policy P8. The precedent is clear and positive - Liberty at 15 Southwark Street (same street, 2021 consent) achieved heritage restoration + office intensification. What IS achievable: 2-3 set-back floors above the retained parapet line, boutique office character, rooftop terrace. Additional constraint confirmed: LVMF Wider Setting Consultation Area 1A.2 (Alexandra Palace to St Paul\'s) - views assessment required. At 8-12F this is unlikely to be blocking. What is NOT supported by precedent: full clearance and rebuild at maximum plot coverage. Design strategy must lead with the Victorian brick character - not fight it.'
+      insight: 'Score 5.5 - this is a Grade II listed building. The Hop Exchange (NHLE 1385923) was built in 1867 by R.H. Moore and listed in 1970. Active LBC consent (25/AP/2351) granted for internal refurbishment - strip-back works on site as of March 2026. This is not an NDHA - it is a statutory listed building. Development strategy is fixed: retain the existing fabric and add floors above with mandatory setback. Adjacent heritage context: 1-11 Park Street (GrII, 1385749), The Wheatsheaf PH (GrII, 1385938), 5 Stoney Street (GrII, 1385937). Also within LVMF Wider Setting Consultation Area 1A.2 (Alexandra Palace to St Paul\'s). What IS achievable: retrofit of existing floors + 2-3 set-back floors above retained parapet. What is NOT achievable: demolition, full clearance, or unsympathetic rooftop addition. NHLE verified 2026-03-25.'
     },
 
     heritage_framework: {
-      tier: 'manageable',
-      score: 7.5,
-      verdict: 'NDHA character. Victorian facade likely retained at lower floors. Set-back upper floors achievable. OA designation provides GLA backing. No on-site listed building - OXO Tower (GrII, 200m) is context not constraint.',
-      rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
+      tier: 'RETAIN_AND_ADAPT',
+      nhle_verified: true,
+      nhle_date: '2026-03-25',
+      score: 5.5,
+      verdict: 'Grade II listed building (The Hop Exchange, NHLE 1385923, listed 1970). Active LBC consent 25/AP/2351 for internal refurbishment - strip-back works currently on site. Development strategy: retain and adapt. Existing 6 floors retrofitted, 2-3 floors added above with minimum 1.5m setback from primary Southwark Street facade. Full demolition is not a viable option under any scenario. LVMF Wider Setting Consultation Area 1A.2 applies. OA designation (London Bridge/Bankside) provides GLA backing for quality-led extension above retained fabric.',
+      rocketship: 'Rocketship path: Listed building = heritage officer engagement at pre-app is mandatory. Retention + rooftop extension with exceptional design quality. OA designation unlocks Mayoral weight behind the scheme if design is exemplary.'
     },
     acquisition: {
       label: 'Title Stack',

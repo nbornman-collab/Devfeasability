@@ -65,7 +65,10 @@ const SITE_INTELLIGENCE = {
     },
 
     heritage_framework: {
-      tier: 'clean',
+      tier: 'RETAIN_AND_ADAPT',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [{ name: "LLOYD'S BUILDING", grade: 'II', list_entry: 1359206 }],
+      nhle_adjacent: ["Lloyd's Building (GrI, 1405493)", "139-144 Leadenhall St EC3 (GrII, 1359207)", "147-148 Leadenhall St (GrII, 1252039)"],
       score: 8.5,
       verdict: 'EC3 cluster. Leadenhall Building (Cheesegrater, 2014) adjacent. Monument viewing corridor: confirm alignment. No CA on site. Cluster designation is the primary planning context.',
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'

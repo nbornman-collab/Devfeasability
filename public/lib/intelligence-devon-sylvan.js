@@ -17,7 +17,10 @@ const SITE_INTELLIGENCE = {
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "No heritage in SE15 industrial zone." },
 
     heritage_framework: {
-      tier: 'clean',
+      tier: 'RETAIN_AND_ADAPT',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [{ name: 'Gasholder No.13, Old Kent Road former gasworks', grade: 'II', list_entry: 1446329 }],
+      nhle_adjacent: [],
       score: 9.0,
       verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'

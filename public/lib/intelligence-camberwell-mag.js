@@ -17,7 +17,10 @@ const SITE_INTELLIGENCE = {
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: "Magistrates court may have local architectural interest. Camberwell Green Conservation Area 300m. Heritage manageable but design-sensitive." },
 
     heritage_framework: {
-      tier: 'manageable',
+      tier: 'RETAIN_AND_ADAPT',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [{ name: 'NUMBER 15 AND ATTACHED RAILINGS', grade: 'II', list_entry: 1378399 }, { name: 'FORMER LONDON COUNTY BANK', grade: 'II', list_entry: 1378400 }],
+      nhle_adjacent: ['323 Camberwell New Road (GrII, 1378446)'],
       score: 7.5,
       verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'

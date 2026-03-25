@@ -22,7 +22,10 @@ const SITE_INTELLIGENCE = {
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: 'St George`s Circus is a heritage gateway - circular road layout has conservation interest. Listed buildings within 300m: Bethlem Museum (Grade II). Heritage sensitivity present but not at a level to preclude 12-14F.' },
 
     heritage_framework: {
-      tier: 'manageable',
+      tier: 'navigable',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [],
+      nhle_adjacent: ['Obelisk at St George\'s Circus (GrII*, 1385642)'],
       score: 7.0,
       verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'

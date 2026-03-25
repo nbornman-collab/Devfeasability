@@ -65,7 +65,10 @@ const SITE_INTELLIGENCE = {
     },
 
     heritage_framework: {
-      tier: 'clean',
+      tier: 'manageable',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [],
+      nhle_adjacent: ['2 Drinking Fountains/3 Overthrows/Lanterns (GrII, 1359170)', 'Bishopsgate Parish Memorial (GrII, 1433405)'],
       score: 8.5,
       verdict: 'EC2 Tall Building Zone. 22 Bishopsgate 278m directly adjacent confirms cluster consent appetite. No direct CA. Design quality within cluster context is the test.',
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'

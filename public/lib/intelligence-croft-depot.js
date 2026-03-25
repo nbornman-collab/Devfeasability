@@ -18,7 +18,10 @@ const SITE_INTELLIGENCE = {
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "No heritage constraints in SE8 industrial zone. Clean heritage profile." },
 
     heritage_framework: {
-      tier: 'clean',
+      tier: 'manageable',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [],
+      nhle_adjacent: ['2-3 Canal Grove (GrII, 1378454)', '4-6 Canal Grove (GrII, 1378455)', 'Gas Standard/Electric Light (GrII, 1378458)'],
       score: 9.0,
       verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'

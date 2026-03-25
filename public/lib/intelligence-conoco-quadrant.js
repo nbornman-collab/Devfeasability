@@ -17,7 +17,10 @@ const SITE_INTELLIGENCE = {
     heritage: { label: 'Heritage Shadow', score: 7.0, weight: 1.5, insight: "Some heritage. South Bank edge. Manageable." },
 
     heritage_framework: {
-      tier: 'manageable',
+      tier: 'RETAIN_AND_ADAPT',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [{ name: 'STOKE NEWINGTON LIBRARY', grade: 'II', list_entry: 1390563 }],
+      nhle_adjacent: ['Stoke Newington Municipal Buildings (GrII, 1253465)'],
       score: 7.0,
       verdict: 'Moderate heritage context. Pre-app engagement with heritage officer recommended. Design quality is the primary currency here.',
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'

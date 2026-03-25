@@ -65,7 +65,10 @@ const SITE_INTELLIGENCE = {
     },
 
     heritage_framework: {
-      tier: 'manageable',
+      tier: 'navigable',
+      nhle_verified: true, nhle_date: '2026-03-25',
+      nhle_on_site: [],
+      nhle_adjacent: ['Lutyens House (GrII*, 1064691)'],
       score: 7.5,
       verdict: 'TfL oversite. Small footprint. Moorfields/London Wall context is post-war commercial - limited heritage constraint. EC2 cluster consent precedent nearby.',
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
