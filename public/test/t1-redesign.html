@@ -63,10 +63,14 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .burger-footer { padding:18px 22px; font:400 8px var(--sans); letter-spacing:.16em; text-transform:uppercase; color:rgba(242,241,237,.45); border-top:1px solid rgba(242,241,237,.08); }
 
 /* -- LAYOUT -- */
-.page { position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; }
+.page { position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; }
 
-/* -- LEFT COLUMN -- */
-.col-left { border-right: 1px solid var(--rule); display: flex; flex-direction: column; overflow: hidden; height: 100%; }
+/* -- MAP: full bleed behind everything -- */
+.map-canvas { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; }
+.map-canvas #map { width: 100%; height: 100%; }
+
+/* -- LEFT COLUMN (overlays map) -- */
+.col-left { position: absolute; top: 0; left: 0; width: 50%; bottom: 0; z-index: 5; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); border-right: 1px solid var(--rule); }
 
 /* HERO: score + existing vs proposed */
 .hero { padding: 20px 28px 16px; border-bottom: 1px solid var(--rule); display: flex; gap: 20px; align-items: stretch; flex-shrink: 0; }
@@ -91,10 +95,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .comp-num.green { color: #15803d; }
 .comp-label { font-size: 8px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); }
 
-/* MAP */
-.map-panel { flex: 1; position: relative; background: var(--bg2); min-height: 0; overflow: hidden; }
-.map-panel-label { position: absolute; top: 12px; left: 14px; z-index: 5; font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); background: rgba(242,241,237,.85); padding: 3px 7px; border-radius: 4px; backdrop-filter: blur(8px); }
-#map { width: 100%; height: 100%; }
+/* MAP PANEL (left column, hidden - map is now full bleed) */
+.map-panel { display: none; }
+.map-panel-label { display: none; }
 
 /* BOTTOM PANEL (below map) - scenario controls */
 .bottom-panel { flex-shrink: 0; border-top: 2px solid var(--accent); background: var(--bg); max-height: 280px; overflow-y: auto; }
@@ -122,15 +125,16 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .factor-bar.high { background: var(--accent); }
 .factor-score { font-size: 10px; font-weight: 700; color: var(--ink); width: 24px; text-align: right; flex-shrink: 0; }
 
-/* -- RIGHT COLUMN -- */
-.col-right { overflow-y: auto; height: 100%; -webkit-overflow-scrolling: touch; background: #ebebE6; }
+/* -- RIGHT COLUMN (overlays map - transparent bg so map bleeds through) -- */
+.col-right { position: absolute; top: 0; right: 0; width: 50%; bottom: 0; z-index: 10; overflow-y: auto; -webkit-overflow-scrolling: touch; background: transparent; }
 
-/* SITE HEADER (section 00) - STICKY */
-.site-header { padding: 16px 28px 12px; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 10; background: var(--bg); }
-.site-address { font: 800 clamp(16px,2vw,22px) var(--sans); color: var(--ink); letter-spacing: -.02em; line-height: 1.1; margin-bottom: 8px; }
+/* SITE HEADER (section 00) - STICKY above map */
+.site-header { padding: 14px 24px 10px; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 20; background: rgba(242,241,237,.97); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.site-address { font: 800 clamp(18px,2.2vw,24px) var(--sans); color: var(--ink); letter-spacing: -.02em; line-height: 1.1; margin-bottom: 6px; }
 .site-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-.tag { font: 700 8px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink2); background: var(--bg2); border: none; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+.tag { font: 700 10px var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink); background: rgba(17,17,16,.06); border: none; padding: 4px 10px; border-radius: 4px; white-space: nowrap; }
 .tag.accent-tag { background: var(--accent-bg); color: var(--accent); }
+.tag.owner-tag { background: rgba(21,128,61,.08); color: #15803d; font-weight: 800; }
 
 /* GLASS PANELS */
 .glass-panel { margin: 12px 16px; padding: 0; background: rgba(255,255,255,.60); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 2px 16px rgba(17,17,16,.06), inset 0 1px 0 rgba(255,255,255,.9); border-radius: 12px; overflow: hidden; }
@@ -218,7 +222,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 @keyframes soSlideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
 .so-exit { position: absolute; top: 12px; right: 16px; z-index: 55; background: rgba(17,17,16,.08); border: none; border-radius: 6px; padding: 7px 16px; font: 700 10px var(--sans); letter-spacing: .06em; color: var(--ink2); cursor: pointer; transition: all .15s; backdrop-filter: blur(8px); }
 .so-exit:hover { background: rgba(17,17,16,.15); color: var(--ink); }
-.so-map-slot { height: 200px; flex-shrink: 0; position: relative; background: var(--bg2); overflow: hidden; border-bottom: 2px solid var(--accent); }
+.so-map-slot { width: 100%; aspect-ratio: 4/3; max-height: 45vh; flex-shrink: 0; position: relative; background: var(--bg2); overflow: hidden; border-bottom: 2px solid var(--accent); }
 .so-map-slot #map { width: 100%; height: 100%; }
 .so-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #ebebE6; }
 .so-header { padding: 20px 28px 16px; border-bottom: 2px solid var(--accent); }
@@ -289,6 +293,11 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 
 <div class="page">
 
+  <!-- MAP: full bleed behind everything -->
+  <div class="map-canvas">
+    <div id="map"></div>
+  </div>
+
   <!-- LEFT COLUMN -->
   <div class="col-left">
 
@@ -305,11 +314,8 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
       </div>
     </div>
 
-    <!-- Map (standard + dawn) -->
-    <div class="map-panel">
-      <div class="map-panel-label">Site Location - 24 Southwark Street</div>
-      <div id="map"></div>
-    </div>
+    <!-- Map panel placeholder (map is now full-bleed) -->
+    <div class="map-panel"></div>
 
     <!-- Bottom panel: scenario controls + sliders -->
     <div class="bottom-panel">
@@ -338,7 +344,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
     <div class="site-header">
       <div class="site-address" id="sum-name">24 Southwark Street</div>
       <div class="site-tags" id="sum-chips">
-        <!-- Populated by JS with real existing building data as biscuits -->
+        <!-- Populated by JS: ownership leads, then building data -->
       </div>
     </div>
 
@@ -620,25 +626,23 @@ function populatePage(si) {
   html('g-plan-badge', 'Appetite ' + planScore.toFixed(1) + '/10');
   html('g-arch-badge', 'Heritage: ' + (tier.charAt(0).toUpperCase()+tier.slice(1)) + ' - ' + maxH + 'm');
 
-  // -- Biscuit chips (existing building info under site name) --
+  // -- Biscuit chips (bold, no address/postcode - ownership leads) --
   const chipsEl = document.getElementById('sum-chips');
   if (chipsEl) {
     const owner = (F.acquisition && F.acquisition.owner) || null;
     const tenure = (F.acquisition && F.acquisition.tenure) || null;
     const isOA = !!(mom.opportunity_area);
     const chips = [
-      {text: 'SE1 0SW'},
-      {text: 'Southwark'},
+      owner ? {text: owner, cls: 'owner-tag'} : null,
+      tenure ? {text: tenure} : null,
       {text: existF + 'F existing - ' + existM + 'm'},
       {text: f(plotM2) + 'm\u00B2 plot'},
-      {text: 'NIA/floor ' + f(niaFloor) + 'm\u00B2'},
+      {text: f(niaFloor) + 'm\u00B2/floor NIA'},
       {text: '&pound;' + f(erv) + '/m\u00B2 ERV'},
-      tenure ? {text: tenure} : null,
-      owner ? {text: owner, style: 'max-width:200px;overflow:hidden;text-overflow:ellipsis'} : null,
       isOA ? {text: 'Opportunity Area', accent: true} : null,
     ].filter(Boolean);
     chipsEl.innerHTML = chips.map(c =>
-      `<span class="tag${c.accent?' accent-tag':''}"${c.style?' style="'+c.style+'"':''}>${c.text}</span>`
+      `<span class="tag${c.accent?' accent-tag':''}${c.cls?' '+c.cls:''}">${c.text}</span>`
     ).join('');
   }
 
@@ -909,23 +913,23 @@ function enterScenarioMode() {
   scenarioModeActive = true;
   const ol = document.getElementById('scenario-overlay');
   if (ol) ol.classList.add('open');
-  // Move map into overlay strip
+  // Move map into overlay 4:3 slot
   const mapEl = document.getElementById('map');
   const slot = document.getElementById('so-map-slot');
   if (mapEl && slot) slot.appendChild(mapEl);
   renderScenarioMode();
-  if (MAP_REF) setTimeout(() => { MAP_REF.resize(); MAP_REF.setZoom(16.8); MAP_REF.setPitch(62); }, 50);
+  if (MAP_REF) setTimeout(() => { MAP_REF.resize(); MAP_REF.setZoom(17); MAP_REF.setPitch(60); MAP_REF.setBearing(-15); }, 80);
 }
 
 function exitScenarioMode() {
   scenarioModeActive = false;
   const ol = document.getElementById('scenario-overlay');
   if (ol) ol.classList.remove('open');
-  // Move map back to left column
+  // Move map back to full-bleed canvas
   const mapEl = document.getElementById('map');
-  const panel = document.querySelector('.map-panel');
-  if (mapEl && panel) panel.appendChild(mapEl);
-  if (MAP_REF) setTimeout(() => { MAP_REF.resize(); MAP_REF.setZoom(17.2); MAP_REF.setPitch(58); }, 50);
+  const canvas = document.querySelector('.map-canvas');
+  if (mapEl && canvas) canvas.appendChild(mapEl);
+  if (MAP_REF) setTimeout(() => { MAP_REF.resize(); MAP_REF.setZoom(17.2); MAP_REF.setPitch(58); MAP_REF.setBearing(-20); }, 80);
 }
 
 function renderScenarioMode() {
