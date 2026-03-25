@@ -97,18 +97,21 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 #map { width: 100%; height: 100%; }
 
 /* BOTTOM PANEL (below map) - scenario controls */
-.bottom-panel { flex-shrink: 0; border-top: 1px solid var(--rule); background: var(--bg); max-height: 260px; overflow-y: auto; }
-.scenario-tabs { display: flex; border-bottom: 1px solid var(--rule); }
-.sc-tab { flex: 1; padding: 8px 6px; border: none; border-bottom: 2px solid transparent; background: none; font: 700 11px var(--sans); color: var(--ink3); cursor: pointer; transition: all .15s; }
-.sc-tab.active { border-bottom-color: var(--accent); color: var(--accent); }
-.sc-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; padding: 8px 14px; }
-.sc-metric { background: var(--bg2); border-radius: 4px; padding: 6px 4px; text-align: center; }
-.sc-metric-val { font: 700 12px var(--mono); letter-spacing: -.3px; }
-.sc-metric-label { font: 500 7px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-top: 1px; }
+.bottom-panel { flex-shrink: 0; border-top: 2px solid var(--accent); background: var(--bg); max-height: 280px; overflow-y: auto; }
+.scenario-tabs { display: flex; gap: 0; padding: 0; background: var(--bg2); }
+.sc-tab { flex: 1; padding: 14px 8px 10px; border: none; border-bottom: 3px solid transparent; background: var(--bg2); font: 800 14px var(--sans); letter-spacing: -.02em; color: var(--ink3); cursor: pointer; transition: all .18s; position: relative; text-align: center; }
+.sc-tab:hover { color: var(--ink2); background: var(--bg); }
+.sc-tab.active { border-bottom-color: var(--accent); color: var(--accent); background: var(--bg); box-shadow: 0 -1px 0 var(--rule); }
+.sc-tab .sc-tab-sub { display: block; font: 500 9px var(--mono); letter-spacing: 0; color: var(--ink3); margin-top: 2px; }
+.sc-tab.active .sc-tab-sub { color: var(--accent); opacity: .7; }
+.sc-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; padding: 10px 14px; }
+.sc-metric { background: var(--bg2); border-radius: 6px; padding: 8px 6px; text-align: center; }
+.sc-metric-val { font: 800 16px var(--mono); letter-spacing: -.5px; }
+.sc-metric-label { font: 600 8px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--ink3); margin-top: 2px; }
 .slider-row { display: flex; align-items: center; gap: 8px; padding: 3px 14px; }
-.slider-label { font: 500 9px var(--sans); color: var(--ink2); width: 80px; flex-shrink: 0; }
-.slider-val { font: 600 9px var(--mono); color: var(--ink); width: 45px; text-align: right; flex-shrink: 0; }
-.slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 16px; }
+.slider-label { font: 600 9px var(--sans); color: var(--ink2); width: 80px; flex-shrink: 0; }
+.slider-val { font: 700 9px var(--mono); color: var(--ink); width: 48px; text-align: right; flex-shrink: 0; }
+.slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 18px; }
 
 /* FACTOR BARS (in right panel now) */
 .factor-row { display: flex; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--rule); gap: 10px; }
@@ -120,35 +123,45 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .factor-score { font-size: 10px; font-weight: 700; color: var(--ink); width: 24px; text-align: right; flex-shrink: 0; }
 
 /* -- RIGHT COLUMN -- */
-.col-right { overflow-y: auto; height: 100%; -webkit-overflow-scrolling: touch; }
+.col-right { overflow-y: auto; height: 100%; -webkit-overflow-scrolling: touch; background: #ebebE6; }
 
-/* SITE HEADER (section 00) */
-.site-header { padding: 28px 32px 20px; border-bottom: 1px solid var(--rule); }
-.site-address { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -.01em; line-height: 1.2; margin-bottom: 10px; }
-.site-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tag { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); border: 1px solid var(--rule); padding: 3px 8px; border-radius: 20px; }
-.tag.accent-tag { border-color: var(--accent); color: var(--accent); }
+/* SITE HEADER (section 00) - STICKY */
+.site-header { padding: 16px 28px 12px; border-bottom: 2px solid var(--accent); position: sticky; top: 0; z-index: 10; background: var(--bg); }
+.site-address { font: 800 clamp(16px,2vw,22px) var(--sans); color: var(--ink); letter-spacing: -.02em; line-height: 1.1; margin-bottom: 8px; }
+.site-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag { font: 700 8px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink2); background: var(--bg2); border: none; padding: 3px 8px; border-radius: 3px; white-space: nowrap; }
+.tag.accent-tag { background: var(--accent-bg); color: var(--accent); }
+
+/* GLASS PANELS */
+.glass-panel { margin: 12px 16px; padding: 0; background: rgba(255,255,255,.60); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 2px 16px rgba(17,17,16,.06), inset 0 1px 0 rgba(255,255,255,.9); border-radius: 12px; overflow: hidden; }
 
 /* INTEL SECTIONS */
-.intel-section { border-bottom: 1px solid var(--rule); }
-.intel-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; cursor: pointer; user-select: none; }
+.intel-section { /* now inside glass panels */ }
+.intel-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; cursor: pointer; user-select: none; }
 .intel-header:hover { background: rgba(17,17,16,.02); }
 .intel-title-wrap { display: flex; align-items: center; gap: 10px; }
-.intel-num { font-size: 9px; font-weight: 700; letter-spacing: .12em; color: var(--accent); }
-.intel-title { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
-.intel-score-pill { font-size: 10px; font-weight: 600; color: var(--ink3); letter-spacing: .03em; }
+.intel-num { font: 800 11px var(--mono); color: var(--accent); }
+.intel-title { font: 800 13px var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
+.intel-score-pill { font: 600 10px var(--mono); color: var(--ink3); letter-spacing: .03em; }
 .intel-chevron { font-size: 10px; color: var(--ink3); transition: transform .2s; }
-.intel-body { padding: 0 32px 24px; display: none; }
+.intel-body { padding: 0 24px 20px; display: none; }
 .intel-body.open { display: block; }
 
-/* DATA ROWS */
-.data-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--rule); gap: 16px; }
+/* TYPE HIERARCHY: XL / L / M / S */
+.type-xl { font: 800 clamp(18px,2.5vw,28px) var(--sans); color: var(--ink); letter-spacing: -.03em; line-height: 1.1; }
+.type-l  { font: 700 14px var(--sans); color: var(--ink); letter-spacing: -.01em; line-height: 1.3; }
+.type-m  { font: 500 11px var(--sans); color: var(--ink2); line-height: 1.65; }
+.type-s  { font: 600 9px var(--sans); text-transform: uppercase; letter-spacing: .14em; color: var(--ink3); }
+.section-label { font: 700 9px var(--sans); text-transform: uppercase; letter-spacing: .15em; color: var(--ink3); margin-bottom: 8px; }
+
+/* DATA ROWS - tighter */
+.data-row { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; border-bottom: 1px dotted rgba(17,17,16,.08); gap: 8px; }
 .data-row:last-of-type { border-bottom: none; }
-.data-key { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); flex-shrink: 0; }
-.data-val { font-size: 12px; font-weight: 600; color: var(--ink); text-align: right; }
+.data-key { font: 500 10px var(--sans); color: var(--ink3); flex: 1; min-width: 0; }
+.data-val { font: 600 11px var(--mono); color: var(--ink); text-align: right; flex-shrink: 0; white-space: nowrap; }
 
 /* SYNTHESIS */
-.synth { font-size: 12px; line-height: 1.75; color: var(--ink2); margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--rule); border-left: 3px solid var(--accent-bg); padding-left: 12px; }
+.synth { font: 400 12px/1.75 var(--sans); color: var(--ink2); margin-top: 14px; padding: 12px 14px; border-left: 3px solid var(--accent); background: rgba(224,123,42,.04); border-radius: 0 6px 6px 0; }
 
 /* OA BANNER */
 .oa-banner { margin-bottom: 14px; padding: 10px 14px; background: var(--accent-bg); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
@@ -268,9 +281,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
     <!-- Bottom panel: scenario controls + sliders -->
     <div class="bottom-panel">
       <div class="scenario-tabs" id="sc-tabs">
-        <button class="sc-tab active" onclick="s04go(0)">Low (8F)</button>
-        <button class="sc-tab" onclick="s04go(1)">Base (10F)</button>
-        <button class="sc-tab" onclick="s04go(2)">High (12F)</button>
+        <button class="sc-tab active" onclick="s04go(0)">Low<span class="sc-tab-sub">8 Floors</span></button>
+        <button class="sc-tab" onclick="s04go(1)">Base<span class="sc-tab-sub">10 Floors</span></button>
+        <button class="sc-tab" onclick="s04go(2)">High<span class="sc-tab-sub">12 Floors</span></button>
       </div>
       <div class="sc-metrics" id="sc-metrics"></div>
       <div id="sc-sliders" style="padding:4px 0 8px">
@@ -297,6 +310,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
     </div>
 
     <!-- 01 Development Scope (includes financials) -->
+    <div class="glass-panel">
     <div class="intel-section">
       <div class="intel-header" onclick="toggleSection(this)">
         <div class="intel-title-wrap">
@@ -321,10 +335,17 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
           <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:6px">EPC Certificate Data</div>
           <div id="epc-rows"></div>
         </div>
-        <!-- Return curve -->
+        <!-- Return curve + complementary metrics -->
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)">
-          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:10px">Return Curve <span style="font-weight:400;color:var(--ink3)" id="margin-delta"></span></div>
-          <svg id="teaser-curve" width="100%" height="120" viewBox="0 0 380 120" preserveAspectRatio="none"></svg>
+          <div class="section-label">Return Curve <span style="font-weight:400" id="margin-delta"></span></div>
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="flex:0 0 200px">
+              <svg id="teaser-curve" width="200" height="160" viewBox="0 0 200 160"></svg>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-top:8px" id="curve-companion">
+              <!-- Populated by JS: key metrics beside the curve -->
+            </div>
+          </div>
         </div>
         <!-- Financial model (was Section 04) -->
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)">
@@ -336,7 +357,10 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
       </div>
     </div>
 
+    </div><!-- /glass-panel 01 -->
+
     <!-- 02 Planning Realm -->
+    <div class="glass-panel">
     <div class="intel-section">
       <div class="intel-header" onclick="toggleSection(this)">
         <div class="intel-title-wrap">
@@ -367,7 +391,10 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
       </div>
     </div>
 
+    </div><!-- /glass-panel 02 -->
+
     <!-- 03 Architecture + Massing -->
+    <div class="glass-panel">
     <div class="intel-section">
       <div class="intel-header" onclick="toggleSection(this)">
         <div class="intel-title-wrap">
@@ -397,7 +424,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
       </div>
     </div>
 
+    </div><!-- /glass-panel 03 -->
     <!-- Section 04 absorbed into 01 Development Scope above -->
+    <div style="height:24px"></div>
 
   </div>
 </div>
@@ -630,9 +659,11 @@ function populatePage(si) {
 function s04render() {
   const sc = S04_SCENARIOS[s04Idx];
 
-  // Bottom panel tabs
+  // Bottom panel tabs - update sub-labels with live GDV
   document.querySelectorAll('.sc-tab').forEach((b,i) => {
     b.classList.toggle('active', i === s04Idx);
+    const sub = b.querySelector('.sc-tab-sub');
+    if (sub) sub.textContent = S04_SCENARIOS[i].floors + 'F - ' + fm(S04_SCENARIOS[i].gdv);
   });
 
   // Bottom panel metrics
@@ -671,7 +702,7 @@ function s04render() {
     {l:'Profit', v: fm(sc.profit), bold:true, col: parseFloat(sc.poc) >= S04.poc ? '#16a34a' : '#dc2626'},
     {l:'Profit on Cost', v: sc.poc+'%', bold:true, col: parseFloat(sc.poc) >= S04.poc ? '#16a34a' : '#dc2626'},
   ];
-  html('s04-proforma', `<table style="width:100%;border-collapse:collapse">${rows.map(r => r.l==='' ? '<tr><td style="padding:3px 0" colspan="2"></td></tr>' : `<tr style="${r.sep?'border-top:1px solid var(--rule)':''}"><td style="padding:4px 0;font:${r.bold?'600':'400'} ${r.small?'10px':'11px'} var(--sans);color:${r.col||(r.small?'var(--ink3)':'var(--ink)')}">${r.l}</td><td style="text-align:right;font:${r.bold?'700':'400'} ${r.small?'10px':'11px'} var(--mono);color:${r.col||(r.small?'var(--ink3)':'var(--ink)')}">${r.v}</td></tr>`).join('')}</table>`);
+  html('s04-proforma', `<table style="width:100%;border-collapse:collapse;table-layout:fixed">${rows.map(r => r.l==='' ? '<tr><td style="padding:2px 0" colspan="2"></td></tr>' : `<tr style="${r.sep?'border-top:1px solid var(--rule);padding-top:4px':''}"><td style="padding:3px 0 3px 0;font:${r.bold?'600':'400'} ${r.small?'9px':'11px'} var(--sans);color:${r.col||(r.small?'var(--ink3)':'var(--ink)')};width:68%">${r.l}</td><td style="text-align:right;padding:3px 0;font:${r.bold?'700':'400'} ${r.small?'9px':'11px'} var(--mono);color:${r.col||(r.small?'var(--ink3)':'var(--ink)')};width:32%;white-space:nowrap">${r.v}</td></tr>`).join('')}</table>`);
 
   // RLV callout
   const rlvPos = sc.rlv > 0;
@@ -746,36 +777,50 @@ function s04Reset() {
   s04calc(); s04render();
 }
 
-// -- Return curve (dynamic, updates with scenarios) --
+// -- Return curve (square, 200x160, with companion panel) --
 function renderReturnCurve() {
-  const pts_data = S04_SCENARIOS.map(sc => ({ floors: sc.floors, poc: parseFloat(sc.poc), gdv: sc.gdv, rlv: sc.rlv }));
-  const W=380, H=110;
-  const minPoc = Math.min(...pts_data.map(p=>p.poc)) - 2;
-  const maxPoc = Math.max(...pts_data.map(p=>p.poc)) + 2;
+  const pts_data = S04_SCENARIOS.map(sc => ({ floors: sc.floors, poc: parseFloat(sc.poc), gdv: sc.gdv, rlv: sc.rlv, tdc: sc.tdc }));
+  const W=200, H=160, PAD=28;
+  const minPoc = Math.min(...pts_data.map(p=>p.poc)) - 3;
+  const maxPoc = Math.max(...pts_data.map(p=>p.poc)) + 3;
   const range = Math.max(maxPoc - minPoc, 5);
   const pts = pts_data.map((p,i) => {
-    const x = 40 + i * (W-80)/2;
-    const y = H - 30 - ((p.poc - minPoc) / range) * (H - 50);
-    return x+','+Math.max(15, Math.min(H-30, y)).toFixed(0);
+    const x = PAD + i * (W - PAD*2) / (pts_data.length - 1);
+    const y = H - PAD - 14 - ((p.poc - minPoc) / range) * (H - PAD*2 - 14);
+    return x.toFixed(0)+','+Math.max(PAD, Math.min(H-PAD-14, y)).toFixed(0);
   }).join(' ');
-  set('margin-delta', '- ' + fm(Math.max(...pts_data.map(p=>p.gdv)) - Math.min(...pts_data.map(p=>p.gdv))) + ' GDV range');
+
+  const sc = S04_SCENARIOS[s04Idx];
+  set('margin-delta', '');
+
   const tsvg = document.getElementById('teaser-curve');
   if (tsvg) tsvg.innerHTML = `
-    <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    ${pts_data.map((_,i)=>{
-      const[x,y]=pts.split(' ')[i].split(',');
+    <polyline points="${pts}" fill="none" stroke="rgba(17,17,16,.12)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts_data.map((_,i) => {
+      const [x,y] = pts.split(' ')[i].split(',');
       const active = i === s04Idx;
-      const r = active ? 7 : 5;
-      const col = active ? 'var(--accent)' : 'var(--ink3)';
-      return `<circle cx="${x}" cy="${y}" r="${r}" fill="${col}" stroke="var(--bg)" stroke-width="2"/>
-        <text x="${x}" y="${parseInt(y)-14}" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="700" fill="var(--ink)">${pts_data[i].poc}%</text>
-        <text x="${x}" y="${parseInt(y)-3}" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--ink3)">PoC</text>`;
-    }).join('')}
-    ${pts_data.map((_,i)=>{
-      const x=40+i*(W-80)/2;
-      return `<text x="${x}" y="${H-5}" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="var(--ink2)">${pts_data[i].floors}F</text>
-        <text x="${x}" y="${H+7}" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--ink3)">${fm(pts_data[i].gdv)} GDV</text>`;
+      return `
+        <line x1="${x}" y1="${y}" x2="${x}" y2="${H-14}" stroke="rgba(17,17,16,.06)" stroke-width="1" stroke-dasharray="2,3"/>
+        <circle cx="${x}" cy="${y}" r="${active?8:5}" fill="${active?'var(--accent)':'var(--bg2)'}" stroke="${active?'var(--accent)':'rgba(17,17,16,.2)'}" stroke-width="${active?0:1.5}"/>
+        <text x="${x}" y="${parseInt(y)-13}" text-anchor="middle" font-family="JetBrains Mono" font-size="${active?13:10}" font-weight="${active?800:600}" fill="${active?'var(--ink)':'var(--ink3)'}">${pts_data[i].poc}%</text>
+        <text x="${x}" y="${H-3}" text-anchor="middle" font-family="Inter" font-size="8" font-weight="600" fill="${active?'var(--accent)':'var(--ink3)'}">${pts_data[i].floors}F</text>`;
     }).join('')}`;
+
+  // Companion: key metrics beside the curve
+  const comp = document.getElementById('curve-companion');
+  if (comp) {
+    const gdvRange = fm(Math.max(...pts_data.map(p=>p.gdv)) - Math.min(...pts_data.map(p=>p.gdv)));
+    comp.innerHTML = `
+      <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);margin-bottom:2px">Active scenario</div>
+      <div style="font:800 20px var(--mono);color:var(--accent);letter-spacing:-.5px;line-height:1">${sc.poc}%</div>
+      <div style="font:600 9px var(--sans);color:var(--ink3);margin-bottom:12px">Profit on cost</div>
+      <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);margin-bottom:2px">GDV</div>
+      <div style="font:700 13px var(--mono);color:var(--ink);letter-spacing:-.3px">${fm(sc.gdv)}</div>
+      <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);margin-top:10px;margin-bottom:2px">TDC</div>
+      <div style="font:700 13px var(--mono);color:var(--ink2);letter-spacing:-.3px">${fm(sc.tdc)}</div>
+      <div style="font:600 8px var(--sans);text-transform:uppercase;letter-spacing:.14em;color:var(--ink3);margin-top:10px;margin-bottom:2px">GDV range</div>
+      <div style="font:600 10px var(--mono);color:var(--ink3)">${gdvRange}</div>`;
+  }
 }
 renderReturnCurve();
 
@@ -810,7 +855,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   const map = new mapboxgl.Map({
     container:'map',
     style: 'mapbox://styles/mapbox/standard',
-    center: CENTROID, zoom: 16.5, pitch: 52, bearing: 5,
+    center: CENTROID, zoom: 17.2, pitch: 58, bearing: -20,
     interactive: true, attributionControl: false, antialias: true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
@@ -818,8 +863,9 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   MAP_REF = map;
   map.on('style.load', () => {
     map.setConfigProperty('basemap', 'lightPreset', 'dawn');
-    // Context buildings: muted off-white
-    try { map.setPaintProperty('building', 'fill-extrusion-color', '#e8e6e0'); map.setPaintProperty('building', 'fill-extrusion-opacity', 0.25); } catch(e) {}
+    // Context buildings: force off-white tint via Standard style config
+    try { map.setConfigProperty('basemap', 'colorBuildings', '#e5e3dc'); } catch(e) {}
+    try { map.setConfigProperty('basemap', 'show3dObjects', true); } catch(e) {}
 
     // Site polygon + massing
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
