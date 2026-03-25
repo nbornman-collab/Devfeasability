@@ -339,6 +339,48 @@ See `references/heritage-massing-rules.md` for complete framework with precedent
 
 ---
 
+## NHLE VERIFICATION - MANDATORY (locked 2026-03-25)
+
+**No site ships without NHLE verification. No exceptions. Ever.**
+
+Heritage data must come from the National Heritage List for England (NHLE), not inference.
+
+### The Rule
+
+Before any intelligence file is created or updated:
+1. Run `python3 scripts/nhle-heritage-check.py --site <name>`
+2. Every listed building within 50m must be recorded in the intelligence file
+3. `nhle_verified: true` and `nhle_date` must be present in `heritage_framework`
+4. Heritage tier must be AT LEAST the minimum tier implied by NHLE results
+
+### Minimum tier by NHLE result
+
+| NHLE finding | Minimum tier |
+|-------------|-------------|
+| Grade I or II* ON-SITE | FULL_CONSERVATION |
+| Grade II ON-SITE | RETAIN_AND_ADAPT |
+| Grade I or II* ADJACENT (15-50m) | navigable |
+| Grade II ADJACENT (15-50m) | manageable |
+| Nothing within 50m | clean (permitted) |
+
+### API (free, no auth required)
+
+```
+https://services-eu1.arcgis.com/ZOdPfBS3aqqDYPUQ/ArcGIS/rest/services/
+National_Heritage_List_for_England_NHLE_v02_VIEW/FeatureServer/0/query
+?geometry=<lng>,<lat>&geometryType=esriGeometryPoint&inSR=4326
+&spatialRel=esriSpatialRelIntersects&distance=50&units=esriSRUnit_Meter
+&outFields=Name,Grade,ListEntry&f=json
+```
+
+### Why this exists (2026-03-25)
+
+24 Southwark Street (The Hop Exchange) was marked as NDHA in the intelligence data. It is Grade II listed (NHLE 1385923, listed 1970). An audit of all 61 sites found 10 critical mismatches including listed buildings ON-SITE being marked "clean". All fixed in commit 29a60fa.
+
+This is a **fatal product wound** if shown publicly. One screenshot of our massing on a beloved listed building and the product is dead.
+
+---
+
 ## 3D MAP - HIGH RISK RULES
 
 Before editing any map or 3D code:
