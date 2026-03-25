@@ -359,13 +359,26 @@ Side-by-side comparison of 2-3 appraised sites. Development, Planning, Architect
 
 **Access rule:** unlocks automatically when a user has paid for 2+ site reports. No extra charge. Pure retention incentive - motivates buying more reports.
 
-**What it shows:**
+**Three layers of Compare commentary:**
+
+1. **Verdict** (the headline) - one sentence, no hedging. "Site B is the strongest play. Higher GDV than A, faster consent path than C, and the only site where RLV stays positive across all three scenarios."
+
+2. **Factor-by-factor delta** (the evidence) - each of the 6 factors compared across sites, triangulated. Not "A scores 8, B scores 6" but why it matters: "Sky: A has 3 more addable floors than B, but B's heritage position is clean vs A's manageable - B gets there faster with less design risk." Every comparison crosses D/P/A boundaries.
+
+3. **Risk matrix** (the thing nobody else does) - stress-test all sites with the same headwinds:
+   - Which site stacks at 25% profit? Which one dies?
+   - Which survives a 15% ERV drop?
+   - Which has the shortest consent timeline?
+   - Which has the cleanest title (fewest acquisition hurdles)?
+   - A developer doesn't just want the best site in fair weather - they want the one that still works when the market turns.
+
+**What it shows (data layer):**
 - Score, verdict, GDV, PoC%, RLV side by side
 - Factor bars comparison (6 factors per site, stacked)
 - Massing comparison (floors, NIA, efficiency, height)
+- Return curves overlaid on single chart
 - Planning appetite + key constraints delta
 - Heritage tier comparison
-- Return curves overlaid
 
 **Priority:** do not build until T1 is solid across all sites. The comparison only works if individual reports are bulletproof. Design after 20+ paid reports sold.
 
