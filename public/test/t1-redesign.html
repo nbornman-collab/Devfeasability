@@ -497,7 +497,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 
 
   <!-- SCENARIO MODE - FULL VIEWPORT SPLIT -->
-  <div class="scenario-scrim" id="scenario-scrim"></div>
+  <div class="scenario-scrim" id="scenario-scrim" onclick="exitScenarioMode()"></div>
   <div class="scenario-modal" id="scenario-modal">
     <div class="so-map-slot" id="so-map-slot">
       <!-- Map moves here -->
@@ -569,7 +569,7 @@ const dr = (k,v) => `<div class="data-row"><span class="data-key">${k}</span><sp
 
 function openBurger(){ document.getElementById('burger-panel').classList.add('open'); document.getElementById('burger-overlay').classList.add('open'); }
 function closeBurger(){ document.getElementById('burger-panel').classList.remove('open'); document.getElementById('burger-overlay').classList.remove('open'); }
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBurger()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(scenarioModeActive)exitScenarioMode();closeBurger();}});
 
 function toggleSection(header) {
   const body = header.nextElementSibling;
@@ -1131,9 +1131,24 @@ function renderScenarioMode() {
 const _s04go_orig = s04go;
 // (s04go already defined above, so we enhance it)
 
+// -- Align amber line: match right header height to left hero --
+function alignAmberLine() {
+  const hero = document.querySelector('.hero');
+  const header = document.querySelector('.site-header');
+  if (hero && header) {
+    header.style.minHeight = hero.offsetHeight + 'px';
+    header.style.display = 'flex';
+    header.style.flexDirection = 'column';
+    header.style.justifyContent = 'center';
+  }
+}
+
 // -- Init --
 if (typeof SITE_INTELLIGENCE !== 'undefined') populatePage(SITE_INTELLIGENCE);
 s04render();
+// Align after content renders
+setTimeout(alignAmberLine, 100);
+window.addEventListener('resize', alignAmberLine);
 
 // -- Map (standard + dawn) --
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
