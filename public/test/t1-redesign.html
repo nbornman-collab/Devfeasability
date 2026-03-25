@@ -151,7 +151,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .intel-num { font: 800 16px var(--mono); color: var(--accent); }
 .intel-title { font: 800 20px var(--sans); letter-spacing: .02em; text-transform: uppercase; color: var(--ink); }
 .intel-score-pill { font: 600 11px var(--mono); color: var(--ink3); letter-spacing: .03em; }
-.intel-chevron { font-size: 14px; color: var(--ink3); transition: transform .2s; }
+.intel-chevron { font-size: 20px; color: var(--ink); transition: transform .2s; font-weight: 700; }
 .intel-body { padding: 0 24px 24px; display: none; }
 .intel-body.open { display: block; padding-top: 16px; }
 
@@ -235,13 +235,14 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .scenario-scrim { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.7); display: none; }
 .scenario-scrim.open { display: block; animation: scrimFadeIn .2s ease-out; }
 @keyframes scrimFadeIn { from { opacity:0; } to { opacity:1; } }
-.scenario-modal { position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; z-index: 101; display: none; grid-template-columns: 1fr 1fr; overflow: hidden; }
-.scenario-modal.open { display: grid; }
+.scenario-modal { position: fixed; top: calc(var(--nav-h) + 20px); left: 3%; right: 3%; bottom: 20px; z-index: 101; display: none; grid-template-columns: 1fr 1fr; overflow: hidden; border-radius: 16px; box-shadow: 0 32px 100px rgba(0,0,0,.5); }
+.scenario-modal.open { display: grid; animation: modalSlideUp .25s ease-out; }
+@keyframes modalSlideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 .so-exit { position: absolute; top: 14px; left: 50%; margin-left: 14px; z-index: 55; background: rgba(242,241,237,.9); border: none; border-radius: 8px; padding: 8px 18px; font: 700 12px var(--sans); letter-spacing: .04em; color: var(--ink2); cursor: pointer; transition: all .15s; backdrop-filter: blur(8px); }
 .so-exit:hover { background: rgba(242,241,237,1); color: var(--ink); }
-.so-map-slot { position: relative; background: var(--bg2); overflow: hidden; }
+.so-map-slot { position: relative; background: var(--bg2); overflow: hidden; border-radius: 16px 0 0 16px; }
 .so-map-slot #map { width: 100%; height: 100%; }
-.so-body { overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg); }
+.so-body { overflow-y: auto; -webkit-overflow-scrolling: touch; background: var(--bg); border-radius: 0 16px 16px 0; }
 .so-header { padding: 20px 28px 16px; border-bottom: 1px solid var(--rule); }
 .so-scenario-name { font: 800 clamp(22px,3vw,36px) var(--sans); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
 .so-scenario-sub { font: 500 12px var(--sans); color: var(--ink3); margin-top: 6px; }
@@ -401,7 +402,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
           <div class="sub-section">
             <div class="sub-label">Return Curve</div>
             <div style="display:flex;gap:20px;align-items:flex-start">
-              <svg id="teaser-curve" width="260" height="220" viewBox="0 0 260 220" style="flex-shrink:0"></svg>
+              <svg id="teaser-curve" width="340" height="280" viewBox="0 0 340 280" style="flex-shrink:0"></svg>
               <div id="curve-companion" style="flex:1;display:flex;flex-direction:column;gap:10px;padding-top:8px"></div>
             </div>
           </div>
@@ -895,7 +896,7 @@ function s04Reset() {
 // -- Return curve (square, 200x160, with companion panel) --
 function renderReturnCurve() {
   const pts_data = S04_SCENARIOS.map(sc => ({ floors: sc.floors, poc: parseFloat(sc.poc), gdv: sc.gdv, rlv: sc.rlv, tdc: sc.tdc }));
-  const W=260, H=220, PAD=36;
+  const W=340, H=280, PAD=44;
   const minPoc = Math.min(...pts_data.map(p=>p.poc)) - 3;
   const maxPoc = Math.max(...pts_data.map(p=>p.poc)) + 3;
   const range = Math.max(maxPoc - minPoc, 5);
@@ -926,15 +927,15 @@ function renderReturnCurve() {
   if (comp) {
     const gdvRange = fm(Math.max(...pts_data.map(p=>p.gdv)) - Math.min(...pts_data.map(p=>p.gdv)));
     comp.innerHTML = `
-      <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:2px">Active scenario</div>
-      <div style="font:800 24px var(--mono);color:var(--accent);letter-spacing:-.5px;line-height:1">${sc.poc}%</div>
-      <div style="font:600 12px var(--sans);color:var(--ink3);margin-bottom:12px">Profit on cost</div>
-      <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:2px">GDV</div>
-      <div style="font:700 16px var(--mono);color:var(--ink);letter-spacing:-.3px">${fm(sc.gdv)}</div>
-      <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-top:10px;margin-bottom:2px">TDC</div>
-      <div style="font:700 16px var(--mono);color:var(--ink2);letter-spacing:-.3px">${fm(sc.tdc)}</div>
-      <div style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-top:10px;margin-bottom:2px">GDV range</div>
-      <div style="font:600 12px var(--mono);color:var(--ink3)">${gdvRange}</div>`;
+      <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:4px">Active scenario</div>
+      <div style="font:800 clamp(28px,4vw,36px) var(--mono);color:var(--accent);letter-spacing:-.5px;line-height:1">${sc.poc}%</div>
+      <div style="font:600 13px var(--sans);color:var(--ink3);margin-bottom:16px">Profit on cost</div>
+      <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:4px">GDV</div>
+      <div style="font:700 clamp(18px,2.5vw,24px) var(--mono);color:var(--ink);letter-spacing:-.3px">${fm(sc.gdv)}</div>
+      <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-top:14px;margin-bottom:4px">TDC</div>
+      <div style="font:700 clamp(18px,2.5vw,24px) var(--mono);color:var(--ink2);letter-spacing:-.3px">${fm(sc.tdc)}</div>
+      <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-top:14px;margin-bottom:4px">GDV range</div>
+      <div style="font:700 16px var(--mono);color:var(--ink3)">${gdvRange}</div>`;
   }
 }
 renderReturnCurve();
@@ -1167,9 +1168,21 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   map.on('load', () => { map.setPadding({left: 0, right: 0, top: 0, bottom: 0}); });
   map.on('style.load', () => {
     map.setConfigProperty('basemap', 'lightPreset', 'dawn');
-    // Context buildings: force off-white tint via Standard style config
-    try { map.setConfigProperty('basemap', 'colorBuildings', '#e5e3dc'); } catch(e) {}
+    // Buildings: off-white, ground light grey
+    try { map.setConfigProperty('basemap', 'showPlaceLabels', true); } catch(e) {}
     try { map.setConfigProperty('basemap', 'show3dObjects', true); } catch(e) {}
+    // Override Standard style 3D building color via paint property
+    try {
+      map.setPaintProperty('building-extrusion', 'fill-extrusion-color', '#e8e6e0');
+      map.setPaintProperty('building-extrusion', 'fill-extrusion-opacity', 0.85);
+    } catch(e) {}
+    // Try alternative layer names
+    try { map.setPaintProperty('building', 'fill-extrusion-color', '#e8e6e0'); } catch(e) {}
+    try { map.setPaintProperty('3d-buildings', 'fill-extrusion-color', '#e8e6e0'); } catch(e) {}
+    try { map.setPaintProperty('building-models', 'fill-extrusion-color', '#e8e6e0'); } catch(e) {}
+    // Ground color
+    try { map.setPaintProperty('land', 'background-color', '#dfddd7'); } catch(e) {}
+    try { map.setPaintProperty('landcover', 'fill-color', '#dfddd7'); } catch(e) {}
 
     // Site polygon + massing
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
@@ -1184,11 +1197,12 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
         paint:{'fill-extrusion-color':'rgba(255,255,255,0.6)','fill-extrusion-height':h,'fill-extrusion-base':h-0.12,'fill-extrusion-opacity':0.9}});
     }
 
-    map.once('idle', () => {
-      if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
-        map.getSource('site-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[SITE_INTELLIGENCE.polygon]}});
-      }
-    });
+    // Set polygon immediately - don't wait for idle
+    if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
+      map.getSource('site-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[SITE_INTELLIGENCE.polygon]}});
+    }
+    // Also update massing to current scenario
+    setTimeout(() => updateMassing(S04_SCENARIOS[s04Idx]), 200);
 
     // HMLR click
     map.on('click', async(e) => {
