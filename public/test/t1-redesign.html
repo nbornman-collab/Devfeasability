@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T1 Redesign - 24 Southwark Street | D/A</title>
+<title>24 Southwark Street - Appraise | D/A</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -11,7 +11,7 @@
 <script src="/lib/intelligence-24ss.js"></script>
 <script src="/lib/site-intelligence.js"></script>
 <style>
-/* ── TOKENS ─────────────────────────────────────────── */
+/* -- TOKENS -- */
 :root {
   --bg:        #f2f1ed;
   --bg2:       #e8e7e2;
@@ -27,262 +27,129 @@
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html,body { height: 100%; overflow: hidden; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--sans);
-  -webkit-font-smoothing: antialiased;
-}
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 
-/* ── NAV ────────────────────────────────────────────── */
+/* -- NAV -- */
 .da-nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  height: var(--nav-h);
-  background: var(--bg);
-  border-bottom: 1px solid var(--rule);
-  display: flex; align-items: center;
-  padding: 0 24px;
-  z-index: 200;
-  gap: 20px;
+  position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+  background: var(--bg); border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center; padding: 0 24px; z-index: 200; gap: 20px;
 }
-.da-nav-logo {
-  font-size: 13px; font-weight: 800; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--ink);
-  text-decoration: none; flex-shrink: 0;
-}
+.da-nav-logo { font-size: 13px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); text-decoration: none; flex-shrink: 0; }
 .da-nav-logo .sl { color: var(--accent); }
 .nav-sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
-.nav-site {
-  font-size: 11px; color: var(--ink3); letter-spacing: .03em;
-  flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
+.nav-site { font-size: 11px; color: var(--ink3); letter-spacing: .03em; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .da-nav-links { display: flex; gap: 20px; margin-left: auto; flex-shrink: 0; }
-.da-nav-link {
-  font-size: 11px; font-weight: 600; letter-spacing: .1em;
-  text-transform: uppercase; color: var(--ink3); text-decoration: none;
-  transition: color .15s;
-}
+.da-nav-link { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color .15s; }
 .da-nav-link:hover, .da-nav-link.active { color: var(--ink); }
 .da-nav-link.active { border-bottom: 1.5px solid var(--accent); padding-bottom: 1px; }
+.da-burger { background:none; border:none; cursor:pointer; display:flex; flex-direction:column; gap:4px; padding:8px; margin-left:4px; }
+.da-burger span { display:block; width:18px; height:1.5px; background:var(--ink3); transition:background .15s; }
+.da-burger:hover span { background:var(--ink); }
 
-/* ── LAYOUT ─────────────────────────────────────────── */
-.page {
-  position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
+/* -- BURGER -- */
+.burger-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:500; opacity:0; pointer-events:none; transition:opacity .28s; }
+.burger-overlay.open { opacity:1; pointer-events:all; }
+.burger-panel { position:fixed; top:0; right:0; width:280px; height:100%; background:#0d0d0c; z-index:501; border-left:1px solid rgba(242,241,237,.08); transform:translateX(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
+.burger-panel.open { transform:translateX(0); }
+.burger-header { display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid rgba(242,241,237,.08); }
+.burger-logo { font:800 14px var(--mono); color:#f2f1ed; }
+.burger-close { background:none; border:none; color:rgba(242,241,237,.45); font-size:16px; cursor:pointer; transition:color .15s; }
+.burger-close:hover { color:#f2f1ed; }
+.burger-nav { display:flex; flex-direction:column; padding:28px 22px; gap:2px; flex:1; }
+.burger-nav a { font:600 20px var(--sans); color:rgba(242,241,237,.5); text-decoration:none; padding:9px 0; border-bottom:1px solid rgba(242,241,237,.06); transition:color .15s; letter-spacing:-.02em; }
+.burger-nav a:last-child { border-bottom:none; }
+.burger-nav a:hover { color:#f2f1ed; }
+.burger-footer { padding:18px 22px; font:400 8px var(--sans); letter-spacing:.16em; text-transform:uppercase; color:rgba(242,241,237,.45); border-top:1px solid rgba(242,241,237,.08); }
 
-/* ── LEFT COLUMN ────────────────────────────────────── */
-.col-left {
-  border-right: 1px solid var(--rule);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  height: 100%;
-}
+/* -- LAYOUT -- */
+.page { position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; }
 
-/* HERO SCORE */
-.hero {
-  padding: 20px 28px 16px;
-  border-bottom: 1px solid var(--rule);
-  display: flex;
-  gap: 20px;
-  align-items: stretch;
-  flex-shrink: 0;
-}
-.hero-score-block {
-  display: flex; flex-direction: column; gap: 6px;
-  flex-shrink: 0; min-width: 90px;
-  border-right: 1px solid var(--rule);
-  padding-right: 20px;
-}
-.hero-label {
-  font-size: 9px; font-weight: 700; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--ink3);
-  display: flex; align-items: center; gap: 5px;
-}
-.hero-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--accent); display: inline-block; flex-shrink: 0;
-}
-.hero-number {
-  font-size: clamp(52px,7vw,84px);
-  font-weight: 800; line-height: .9;
-  color: var(--ink); letter-spacing: -.03em;
-}
-.verdict-pill {
-  font-size: 9px; font-weight: 700; letter-spacing: .1em;
-  text-transform: uppercase;
-  background: var(--ink); color: var(--bg);
-  padding: 3px 8px; border-radius: 20px;
-  align-self: flex-start; white-space: nowrap;
-}
+/* -- LEFT COLUMN -- */
+.col-left { border-right: 1px solid var(--rule); display: flex; flex-direction: column; overflow: hidden; height: 100%; }
+
+/* HERO: score + existing vs proposed */
+.hero { padding: 20px 28px 16px; border-bottom: 1px solid var(--rule); display: flex; gap: 20px; align-items: stretch; flex-shrink: 0; }
+.hero-score-block { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; min-width: 90px; border-right: 1px solid var(--rule); padding-right: 20px; }
+.hero-label { font-size: 9px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--ink3); display: flex; align-items: center; gap: 5px; }
+.hero-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); display: inline-block; flex-shrink: 0; }
+.hero-number { font-size: clamp(52px,7vw,84px); font-weight: 800; line-height: .9; color: var(--ink); letter-spacing: -.03em; }
+.verdict-pill { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--ink); color: var(--bg); padding: 3px 8px; border-radius: 20px; align-self: flex-start; white-space: nowrap; }
 .verdict-pill.green { background: #15803d; }
 .verdict-pill.amber { background: #b45309; }
 .verdict-pill.red   { background: #b91c1c; }
-.hero-sub {
-  font-size: 9px; color: var(--ink3); line-height: 1.4;
-}
+.hero-sub { font-size: 9px; color: var(--ink3); line-height: 1.4; }
 
-/* METRICS GRID */
-.metrics-block {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px 14px;
-  align-content: center;
-}
-.metric { display: flex; flex-direction: column; gap: 2px; }
-.metric-label {
-  font-size: 8px; font-weight: 700; letter-spacing: .15em;
-  text-transform: uppercase; color: var(--ink3);
-}
-.metric-value {
-  font-size: 17px; font-weight: 800; color: var(--ink);
-  letter-spacing: -.02em; line-height: 1.1;
-}
-.metric-value.accent { color: var(--accent); }
-.metric-sub { font-size: 9px; color: var(--ink3); }
+/* COMPARISON STRIP: existing vs proposed vs delta */
+.comparison-strip { flex: 1; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; align-content: center; }
+.comp-col { display: flex; flex-direction: column; gap: 6px; padding: 0 10px; }
+.comp-col:not(:last-child) { border-right: 1px solid var(--rule); }
+.comp-col-label { font-size: 8px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--ink3); margin-bottom: 2px; }
+.comp-row { display: flex; flex-direction: column; gap: 1px; }
+.comp-num { font-size: 14px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; line-height: 1.1; }
+.comp-num.accent { color: var(--accent); }
+.comp-num.green { color: #15803d; }
+.comp-label { font-size: 8px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); }
 
 /* MAP */
-.map-panel {
-  flex: 1;
-  position: relative;
-  background: var(--bg2);
-  min-height: 0;
-  overflow: hidden;
-}
-.map-panel-label {
-  position: absolute; top: 12px; left: 14px; z-index: 5;
-  font-size: 9px; font-weight: 700; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--ink3);
-  background: var(--bg); padding: 3px 7px; border-radius: 4px;
-}
+.map-panel { flex: 1; position: relative; background: var(--bg2); min-height: 0; overflow: hidden; }
+.map-panel-label { position: absolute; top: 12px; left: 14px; z-index: 5; font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); background: rgba(242,241,237,.85); padding: 3px 7px; border-radius: 4px; backdrop-filter: blur(8px); }
 #map { width: 100%; height: 100%; }
 
 /* FACTOR BARS */
-.factors-block {
-  flex-shrink: 0;
-  padding: 14px 20px;
-  border-top: 1px solid var(--rule);
-}
-.factors-title {
-  font-size: 9px; font-weight: 700; letter-spacing: .15em;
-  text-transform: uppercase; color: var(--ink3); margin-bottom: 10px;
-}
-.factor-row {
-  display: flex; align-items: center;
-  padding: 5px 0;
-  border-bottom: 1px solid var(--rule);
-  gap: 10px;
-}
+.factors-block { flex-shrink: 0; padding: 14px 20px; border-top: 1px solid var(--rule); }
+.factors-title { font-size: 9px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px; }
+.factor-row { display: flex; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--rule); gap: 10px; }
 .factor-row:last-child { border-bottom: none; }
-.factor-name {
-  font-size: 10px; font-weight: 500; color: var(--ink2);
-  flex: 1; min-width: 0;
-}
-.factor-bar-wrap {
-  width: 60px; height: 2px; background: var(--rule);
-  border-radius: 2px; overflow: hidden; flex-shrink: 0;
-}
+.factor-name { font-size: 10px; font-weight: 500; color: var(--ink2); flex: 1; min-width: 0; }
+.factor-bar-wrap { width: 60px; height: 2px; background: var(--rule); border-radius: 2px; overflow: hidden; flex-shrink: 0; }
 .factor-bar { height: 100%; background: var(--ink3); border-radius: 2px; }
 .factor-bar.high { background: var(--accent); }
-.factor-score {
-  font-size: 10px; font-weight: 700; color: var(--ink);
-  width: 24px; text-align: right; flex-shrink: 0;
-}
+.factor-score { font-size: 10px; font-weight: 700; color: var(--ink); width: 24px; text-align: right; flex-shrink: 0; }
 
-/* ── RIGHT COLUMN ───────────────────────────────────── */
-.col-right {
-  overflow-y: auto;
-  height: 100%;
-  -webkit-overflow-scrolling: touch;
-}
+/* -- RIGHT COLUMN -- */
+.col-right { overflow-y: auto; height: 100%; -webkit-overflow-scrolling: touch; }
 
-/* SITE HEADER */
-.site-header {
-  padding: 28px 32px 20px;
-  border-bottom: 1px solid var(--rule);
-}
-.site-address {
-  font-size: 20px; font-weight: 700; color: var(--ink);
-  letter-spacing: -.01em; line-height: 1.2; margin-bottom: 10px;
-}
+/* SITE HEADER (section 00) */
+.site-header { padding: 28px 32px 20px; border-bottom: 1px solid var(--rule); }
+.site-address { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -.01em; line-height: 1.2; margin-bottom: 10px; }
 .site-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.tag {
-  font-size: 9px; font-weight: 700; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--ink2);
-  border: 1px solid var(--rule); padding: 3px 8px; border-radius: 20px;
-}
+.tag { font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); border: 1px solid var(--rule); padding: 3px 8px; border-radius: 20px; }
 .tag.accent-tag { border-color: var(--accent); color: var(--accent); }
 
 /* INTEL SECTIONS */
 .intel-section { border-bottom: 1px solid var(--rule); }
-.intel-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 32px;
-  cursor: pointer; user-select: none;
-}
+.intel-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; cursor: pointer; user-select: none; }
 .intel-header:hover { background: rgba(17,17,16,.02); }
 .intel-title-wrap { display: flex; align-items: center; gap: 10px; }
-.intel-num {
-  font-size: 9px; font-weight: 700; letter-spacing: .12em;
-  color: var(--accent);
-}
-.intel-title {
-  font-size: 11px; font-weight: 700; letter-spacing: .06em;
-  text-transform: uppercase; color: var(--ink);
-}
-.intel-score-pill {
-  font-size: 10px; font-weight: 600; color: var(--ink3); letter-spacing: .03em;
-}
+.intel-num { font-size: 9px; font-weight: 700; letter-spacing: .12em; color: var(--accent); }
+.intel-title { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
+.intel-score-pill { font-size: 10px; font-weight: 600; color: var(--ink3); letter-spacing: .03em; }
 .intel-chevron { font-size: 10px; color: var(--ink3); transition: transform .2s; }
 .intel-body { padding: 0 32px 24px; display: none; }
 .intel-body.open { display: block; }
 
 /* DATA ROWS */
-.data-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 7px 0; border-bottom: 1px solid var(--rule); gap: 16px;
-}
+.data-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--rule); gap: 16px; }
 .data-row:last-of-type { border-bottom: none; }
-.data-key {
-  font-size: 10px; font-weight: 600; letter-spacing: .08em;
-  text-transform: uppercase; color: var(--ink3); flex-shrink: 0;
-}
+.data-key { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); flex-shrink: 0; }
 .data-val { font-size: 12px; font-weight: 600; color: var(--ink); text-align: right; }
 
 /* SYNTHESIS */
-.synth {
-  font-size: 12px; line-height: 1.75; color: var(--ink2);
-  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--rule);
-  border-left: 3px solid var(--accent-bg);
-  padding-left: 12px;
-}
+.synth { font-size: 12px; line-height: 1.75; color: var(--ink2); margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--rule); border-left: 3px solid var(--accent-bg); padding-left: 12px; }
 
 /* OA BANNER */
-.oa-banner {
-  margin-bottom: 14px; padding: 10px 14px;
-  background: var(--accent-bg);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 6px 6px 0;
-}
-.oa-label {
-  font-size: 9px; font-weight: 700; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--accent); margin-bottom: 3px;
-}
+.oa-banner { margin-bottom: 14px; padding: 10px 14px; background: var(--accent-bg); border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
+.oa-label { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
 .oa-name { font-size: 11px; font-weight: 600; color: var(--ink); }
 .oa-detail { font-size: 10px; color: var(--ink2); margin-top: 2px; }
 
 /* PRECEDENTS */
-.precedent {
-  margin-top: 10px; padding: 10px 12px;
-  background: var(--bg2); border-radius: 6px;
-}
+.precedent { margin-top: 10px; padding: 10px 12px; background: var(--bg2); border-radius: 6px; }
 .precedent-name { font-size: 10px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
 .precedent-detail { font-size: 10px; color: var(--ink2); line-height: 1.5; }
 
-/* PLANNING FLAGS (compact) */
+/* PLANNING FLAGS */
 .flag-row { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--rule); }
 .flag-row:last-child { border-bottom: none; }
 .flag-sym { width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; font:700 9px var(--sans); flex-shrink:0; margin-top:1px; }
@@ -306,18 +173,19 @@ body {
 
 /* HEIGHT BARS */
 .hb-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
-.hb-label { font:400 9px var(--sans); color:var(--ink3); width:120px; truncate:ellipsis; overflow:hidden; white-space:nowrap; flex-shrink:0; }
+.hb-label { font:400 9px var(--sans); color:var(--ink3); width:120px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; flex-shrink:0; }
 .hb-track { flex:1; height:4px; background:var(--rule); border-radius:2px; overflow:hidden; }
 .hb-fill { height:100%; border-radius:2px; transition:width .3s; }
 .hb-val { font:600 9px var(--mono); color:var(--ink); width:32px; text-align:right; flex-shrink:0; }
 
-/* CAPACITY BARS */
-.cap-bar-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-
-/* HMLR PANEL */
+/* HMLR */
 #hmlr-panel { font-size:10px; color:var(--ink2); padding:10px 0; }
 .hmlr-title-row { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
 .hmlr-title-no { font:700 12px var(--mono); color:var(--accent); }
+
+/* SECTION 04 SCENARIO TABS */
+.s04-stab { flex:1; padding:10px 6px; border:none; border-bottom:2px solid transparent; background:none; font:700 12px var(--sans); color:var(--ink3); cursor:pointer; transition: all .15s; }
+.s04-stab.active { border-bottom-color: var(--accent); color: var(--accent); }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
@@ -326,6 +194,7 @@ body {
   .col-left { height:auto; }
   .col-right { height:auto; }
   .map-panel { min-height: 280px; }
+  .comparison-strip { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -335,60 +204,67 @@ body {
 <nav class="da-nav">
   <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
   <div class="nav-sep"></div>
-  <span class="nav-site" id="nav-site-addr">24 Southwark Street · SE1 0SW · Southwark</span>
+  <span class="nav-site" id="nav-site-addr">24 Southwark Street - SE1 0SW - Southwark</span>
   <div class="da-nav-links">
     <a class="da-nav-link" href="/discover">Discover</a>
-    <a class="da-nav-link active" href="/t1/24-southwark-st">Appraise</a>
-    <a class="da-nav-link" href="/t2/24-southwark-st">Full Insight (legacy)</a>
+    <a class="da-nav-link active">Appraise</a>
+    <button class="da-burger" aria-label="Menu" onclick="openBurger()"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
+<!-- Burger -->
+<div class="burger-overlay" id="burger-overlay" onclick="closeBurger()"></div>
+<div class="burger-panel" id="burger-panel">
+  <div class="burger-header">
+    <span class="burger-logo">D<span style="color:#e07b2a">/</span>A</span>
+    <button class="burger-close" onclick="closeBurger()">&#x2715;</button>
+  </div>
+  <nav class="burger-nav">
+    <a href="/">Home</a>
+    <a href="/discover">Discover</a>
+    <a href="/scout/24-southwark-st.html">Appraise</a>
+    <a href="/pd" style="color:#e07b2a">PD &amp; Extensions</a>
+    <a href="mailto:hello@devfeasibility.com">Contact</a>
+  </nav>
+  <div class="burger-footer">Development - Planning - Architecture</div>
+</div>
+
 <div class="page">
 
-  <!-- ── LEFT COLUMN ──────────────────────────────────── -->
+  <!-- LEFT COLUMN -->
   <div class="col-left">
 
-    <!-- Hero: score + metrics side by side -->
+    <!-- Hero: score + existing vs proposed comparison -->
     <div class="hero">
       <div class="hero-score-block">
         <div class="hero-label"><span class="hero-dot"></span>Development Score</div>
-        <div class="hero-number" id="sum-score">—</div>
-        <div id="sum-verdict-wrap">
-          <span class="verdict-pill amber">Loading...</span>
-        </div>
+        <div class="hero-number" id="sum-score">-</div>
+        <div id="sum-verdict-wrap"><span class="verdict-pill amber">Loading...</span></div>
         <div class="hero-sub" id="hero-sub-text">Score /100</div>
       </div>
-      <div class="metrics-block" id="metrics-dynamic">
-        <!-- Populated by JS -->
-        <div class="metric"><div class="metric-label">Floors</div><div class="metric-value">—</div></div>
-        <div class="metric"><div class="metric-label">GDV Est.</div><div class="metric-value accent">—</div></div>
-        <div class="metric"><div class="metric-label">ERV</div><div class="metric-value">—</div></div>
-        <div class="metric"><div class="metric-label">Area Uplift</div><div class="metric-value">—</div></div>
-        <div class="metric"><div class="metric-label">Net Yield</div><div class="metric-value">—</div></div>
-        <div class="metric"><div class="metric-label">Plot Area</div><div class="metric-value">—</div></div>
+      <div class="comparison-strip" id="comparison-strip">
+        <!-- Populated by JS: existing / proposed / delta -->
       </div>
     </div>
 
-    <!-- Map -->
+    <!-- Map (standard + dawn) -->
     <div class="map-panel">
-      <div class="map-panel-label">Site Location · 24 Southwark Street</div>
+      <div class="map-panel-label">Site Location - 24 Southwark Street</div>
       <div id="map"></div>
     </div>
 
     <!-- Factor bars -->
     <div class="factors-block">
       <div class="factors-title">Intelligence Factors</div>
-      <div id="factor-bars-mount">
-        <!-- Populated by JS -->
-      </div>
+      <div id="factor-bars-mount"></div>
     </div>
 
-  </div><!-- /col-left -->
+  </div>
 
-  <!-- ── RIGHT COLUMN ─────────────────────────────────── -->
+  <!-- RIGHT COLUMN -->
   <div class="col-right">
 
-    <!-- Site header -->
+    <!-- 00 Site Introduction -->
     <div class="site-header">
       <div class="site-address" id="sum-name">24 Southwark Street</div>
       <div class="site-tags" id="sum-chips">
@@ -408,21 +284,29 @@ body {
           <span class="intel-title">Development Scope</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px">
-          <span class="intel-score-pill" id="g-dev-badge">—</span>
+          <span class="intel-score-pill" id="g-dev-badge">-</span>
           <span class="intel-chevron">&#9660;</span>
         </div>
       </div>
       <div class="intel-body open" id="g-dev-body">
-        <!-- Data rows injected by populateSummary() -->
-        <div id="dev-data-rows"></div>
-        <p class="synth" id="synth-dev">Analysing...</p>
-        <div id="dev-numbers-mount"></div>
-        <!-- EPC / Area -->
-        <div id="epc-section" style="margin-top:14px;display:none">
-          <div class="data-row"><span class="data-key">Current GIA (EPC)</span><span class="data-val" id="epc-gia">—</span></div>
-          <div class="data-row"><span class="data-key">Current FAR</span><span class="data-val" id="current-far">—</span></div>
+        <!-- Existing building -->
+        <div id="existing-block" style="margin-bottom:14px">
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">Existing Building</div>
+          <div id="existing-rows"></div>
         </div>
-        <!-- Teaser curve -->
+        <!-- Proposed development -->
+        <div id="proposed-block" style="margin-bottom:14px">
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:8px">Proposed Development</div>
+          <div id="proposed-rows"></div>
+        </div>
+        <!-- EPC data (injected when API returns) -->
+        <div id="epc-section" style="display:none;margin-bottom:14px;padding:10px 12px;background:var(--bg2);border-radius:6px">
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:6px">EPC Certificate Data</div>
+          <div id="epc-rows"></div>
+        </div>
+        <!-- Synthesis -->
+        <p class="synth" id="synth-dev">Analysing...</p>
+        <!-- Return curve -->
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)">
           <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">Return Curve <span style="font-weight:400;color:var(--ink3)" id="margin-delta"></span></div>
           <svg id="teaser-curve" width="100%" height="70" viewBox="0 0 380 70" preserveAspectRatio="none"></svg>
@@ -438,29 +322,24 @@ body {
           <span class="intel-title">Planning Realm</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px">
-          <span class="intel-score-pill" id="g-plan-badge">—</span>
+          <span class="intel-score-pill" id="g-plan-badge">-</span>
           <span class="intel-chevron">&#9660;</span>
         </div>
       </div>
       <div class="intel-body open" id="g-plan-body">
-        <!-- Data rows injected by populateSummary() -->
         <div id="plan-data-rows"></div>
         <p class="synth" id="synth-plan">Analysing...</p>
         <div id="oa-implications-mount"></div>
         <div id="lpa-commentary-mount" style="margin-top:8px"></div>
         <div id="gla-stage2-mount" style="margin-top:6px"></div>
-        <!-- Planning flags -->
+        <!-- Flags -->
         <div id="planning-flags-section" style="margin-top:14px">
-          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">
-            Constraints &amp; Flags <span id="flags-badge" style="font-weight:400"></span>
-          </div>
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">Constraints &amp; Flags <span id="flags-badge" style="font-weight:400"></span></div>
           <div id="flags-body"></div>
         </div>
-        <!-- Planning applications -->
+        <!-- Planning apps -->
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)">
-          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">
-            Planning Applications <span id="apps-count" style="font-weight:400;color:var(--ink3)"></span>
-          </div>
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">Planning Applications <span id="apps-count" style="font-weight:400;color:var(--ink3)"></span></div>
           <div id="apps-list"></div>
         </div>
       </div>
@@ -474,17 +353,16 @@ body {
           <span class="intel-title">Architecture + Massing</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px">
-          <span class="intel-score-pill" id="g-arch-badge">—</span>
+          <span class="intel-score-pill" id="g-arch-badge">-</span>
           <span class="intel-chevron">&#9660;</span>
         </div>
       </div>
       <div class="intel-body open" id="g-arch-body">
-        <!-- Data rows injected by populateSummary() -->
         <div id="arch-data-rows"></div>
         <p class="synth" id="synth-arch">Analysing...</p>
         <div id="heritage-risk-mount" style="margin-top:10px"></div>
         <div id="strategy-mount" style="margin-top:10px"></div>
-        <!-- Heights context -->
+        <!-- Heights -->
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)">
           <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:10px">Height Context</div>
           <div id="heights-body"></div>
@@ -497,19 +375,121 @@ body {
       </div>
     </div>
 
-  </div><!-- /col-right -->
+    <!-- 04 Financial Model -->
+    <div class="intel-section" id="sec-04">
+      <div class="intel-header" onclick="toggleSection(this)">
+        <div class="intel-title-wrap">
+          <span class="intel-num">04</span>
+          <span class="intel-title">Financial Model</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="intel-score-pill" id="s04-badge" style="background:var(--accent-bg);color:var(--accent)">-</span>
+          <span class="intel-chevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="intel-body open" id="g-s04-body">
 
-</div><!-- /page -->
+        <!-- Scenario tabs -->
+        <div style="display:flex;border-bottom:1px solid var(--rule);margin:0 -16px;padding:0 16px">
+          <button class="s04-stab active" data-idx="0" onclick="s04go(0)">Low</button>
+          <button class="s04-stab" data-idx="1" onclick="s04go(1)">Base</button>
+          <button class="s04-stab" data-idx="2" onclick="s04go(2)">High</button>
+        </div>
+
+        <!-- Key numbers -->
+        <div id="s04-metrics" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:14px 0"></div>
+
+        <!-- Narrative -->
+        <div id="s04-narrative" style="font:400 11px/1.7 var(--sans);color:var(--ink2);padding:10px 12px;background:var(--bg2);border-radius:6px;margin-bottom:14px"></div>
+
+        <!-- Assumptions (collapsible) -->
+        <details style="margin-bottom:12px;border:1px solid var(--rule);border-radius:6px;overflow:hidden">
+          <summary style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);padding:10px 14px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--bg2)">
+            Assumptions
+            <span id="s04-assump-summary" style="font:400 10px var(--sans);text-transform:none;letter-spacing:0;color:var(--ink3)">ERV &pound;700 - Yield 4.75%</span>
+          </summary>
+          <div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>ERV (&pound;/m&sup2;)</span><span id="s04-sv-erv">700</span></div><input type="range" id="s04-sl-erv" min="500" max="1200" step="25" value="700" oninput="s04Slider('erv',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Net Yield (%)</span><span id="s04-sv-niy">4.75</span></div><input type="range" id="s04-sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="s04Slider('niy',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Build Cost (&pound;/m&sup2;)</span><span id="s04-sv-cost">4,200</span></div><input type="range" id="s04-sl-cost" min="3000" max="8000" step="100" value="4200" oninput="s04Slider('cost',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>S106 (&pound;k)</span><span id="s04-sv-s106">500</span></div><input type="range" id="s04-sl-s106" min="0" max="3000" step="50" value="500" oninput="s04Slider('s106',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
+            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Target Profit (%)</span><span id="s04-sv-poc">20</span></div><input type="range" id="s04-sl-poc" min="10" max="30" step="1" value="20" oninput="s04Slider('poc',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
+            <button onclick="s04Reset()" style="font:500 10px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline;text-align:right">Reset defaults</button>
+          </div>
+        </details>
+
+        <!-- Pro forma -->
+        <div id="s04-proforma" style="font:400 11px var(--sans);color:var(--ink2)"></div>
+
+        <!-- RLV callout -->
+        <div id="s04-rlv" style="margin-top:12px;padding:12px;background:var(--accent-bg);border-radius:6px;border-left:3px solid var(--accent)"></div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <script>
-// ── Site constants ────────────────────────────────────────────────────────────
+// -- Site constants --
 const LAT = 51.504909, LNG = -0.091522;
 const ADDRESS = '24 Southwark Street, London SE1 0SW';
 let PLOT_AREA = 1575;
 const EXISTING_EUV = 22000000;
 const CENTROID = [-0.091522, 51.504909];
+const FTF = 4.0;
 
-// ── Toggle sections ───────────────────────────────────────────────────────────
+// -- Section 04 engine (SINGLE SOURCE OF TRUTH for all financials) --
+const S04_DEFS = {erv:700, niy:4.75, cost:4200, s106:500, poc:20};
+let S04 = {...S04_DEFS};
+const S04_SCENARIOS = [
+  {key:'lo',label:'Low',floors:8,podF:5,twrF:3,twrPct:0.70,eff:0.83,costFactor:0.88,
+   narrative:'Full plate to 5F matching the Bankside commercial cornice. Tower steps back above L5, 70% coverage. Single staircase compliant sub-18m tower element. Lowest programme risk - 2 year build. <strong>Best margin efficiency</strong> - the return curve peaks near 8-9F in the Bankside CAZ.'},
+  {key:'base',label:'Base',floors:10,podF:5,twrF:5,twrPct:0.65,eff:0.81,costFactor:1.00,
+   narrative:'5F podium holds Bankside street cornice. Tower adds 5F at 65% coverage above. Pre-app views assessment required re Tate Modern sightlines (220m W). Single staircase compliant throughout. Strong precedent at this height on Southwark Street. <strong>Absolute profit peaks near this scenario.</strong>'},
+  {key:'hi',label:'High',floors:12,podF:4,twrF:8,twrPct:0.60,eff:0.79,costFactor:1.18,
+   narrative:'Lower 4F podium activates public realm at ground. 8F tower at 60% coverage - maximum height for this Bankside CAZ position without a tall buildings policy trigger. LVMF assessment required. Highest GDV but <strong>margin % falls</strong> as construction cost and programme compound.'},
+];
+const S04_MARKET = {cilNia:200,demo:1500000,fees:0.13,contg:0.075,finRate:0.075,ltc:0.60,rfMo:12,ltMo:120,progYrs:{lo:2.0,base:2.5,hi:3.0}};
+let s04Idx = 0;
+
+function s04calc() {
+  S04_SCENARIOS.forEach(sc => {
+    sc.costGsm = Math.round(S04.cost * sc.costFactor);
+    const podGIA = PLOT_AREA * 1.0 * sc.podF;
+    const twrGIA = PLOT_AREA * sc.twrPct * sc.twrF;
+    sc.gea = Math.round(podGIA + twrGIA);
+    sc.nia = Math.round(sc.gea * sc.eff);
+    const grossErv = sc.nia * S04.erv;
+    const effErv = grossErv * (1 - S04_MARKET.rfMo / S04_MARKET.ltMo);
+    sc.gdv = Math.round(effErv / (S04.niy / 100));
+    sc.constCost = Math.round(sc.gea * sc.costGsm);
+    sc.fees = Math.round(sc.constCost * S04_MARKET.fees);
+    sc.contg = Math.round(sc.constCost * S04_MARKET.contg);
+    sc.cil = Math.round(sc.nia * S04_MARKET.cilNia);
+    sc.letting = Math.round(grossErv * 0.15);
+    const preFin = sc.constCost + sc.fees + sc.contg + sc.cil + sc.letting + S04.s106*1000 + S04_MARKET.demo;
+    const prog = S04_MARKET.progYrs[sc.key];
+    sc.finance = Math.round(preFin * S04_MARKET.ltc * S04_MARKET.finRate * (prog/2));
+    sc.tdc = Math.round(preFin + sc.finance);
+    sc.profit = sc.gdv - sc.tdc;
+    sc.poc = (sc.profit / sc.tdc * 100).toFixed(1);
+    sc.rlv = Math.round(sc.gdv - sc.tdc * (1 + S04.poc/100));
+  });
+}
+s04calc();
+
+// -- Helpers --
+const f = n => (n||0).toLocaleString('en-GB');
+const fm = n => '£' + (Math.abs(n) >= 1e6 ? (n/1e6).toFixed(1)+'M' : f(n));
+const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+const html = (id,v) => { const el=document.getElementById(id); if(el) el.innerHTML=v; };
+const dr = (k,v) => `<div class="data-row"><span class="data-key">${k}</span><span class="data-val">${v}</span></div>`;
+
+function openBurger(){ document.getElementById('burger-panel').classList.add('open'); document.getElementById('burger-overlay').classList.add('open'); }
+function closeBurger(){ document.getElementById('burger-panel').classList.remove('open'); document.getElementById('burger-overlay').classList.remove('open'); }
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBurger()});
+
 function toggleSection(header) {
   const body = header.nextElementSibling;
   const chevron = header.querySelector('.intel-chevron');
@@ -518,8 +498,8 @@ function toggleSection(header) {
   chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
 }
 
-// ── Populate new-design elements from SITE_INTELLIGENCE ──────────────────────
-function populateNewDesign(si) {
+// -- Populate from SITE_INTELLIGENCE --
+function populatePage(si) {
   if (!si) return;
   const F = si.factors || {};
   const s = si.site || {};
@@ -530,327 +510,415 @@ function populateNewDesign(si) {
   const maxH = s.max_h || s.h || 40;
   const plotM2 = s.plot_m2 || s.plot_area || PLOT_AREA;
   const erv = val.new_build_rent || val.erv || 700;
-  const niy = 4.75;
+  const existM = (F.sky && F.sky.existing_m) || 0;
+  const existF = existM > 0 ? Math.max(1, Math.round(existM / FTF)) : 0;
+  const addF = Math.max(0, maxF - existF);
+
+  // Use Section 04 base scenario for consistent numbers
+  const baseSc = S04_SCENARIOS[1]; // base scenario
   const grossPlate = Math.round(plotM2 * 0.42);
   const coreM2 = Math.round(grossPlate * 0.22);
   const niaFloor = grossPlate - coreM2;
-  const FTF = 4.0;
-  const existF = (si.site && si.factors && si.factors.sky && si.factors.sky.existing_m)
-    ? Math.max(1, Math.round(si.factors.sky.existing_m / FTF)) : 0;
-  const addF = Math.max(0, maxF - existF);
-  const gdvEst = ((niaFloor * maxF * erv) / 1e6).toFixed(1);
   const existNIA = Math.round(niaFloor * Math.max(existF, 1));
-  const propNIA = Math.round(niaFloor * maxF);
-  const areaUplift = existNIA > 0 ? Math.round((propNIA - existNIA) / existNIA * 100) : 0;
+
   const score = typeof computeSiteScore === 'function' ? computeSiteScore(si) : 70;
 
-  // Score
-  const heroNum = document.getElementById('sum-score');
-  if (heroNum) heroNum.textContent = score;
+  // -- Score + verdict --
+  set('sum-score', score);
+  const tier = hf.tier || 'manageable';
+  const pillClass = (tier === 'blocking' && score < 50) ? 'red' : score >= 80 ? 'green' : score >= 55 ? 'amber' : 'red';
+  const pillText = score >= 80 ? 'Top Opportunity' : score >= 70 ? 'Strong Opportunity' : score >= 55 ? 'Credible Opportunity' : 'Due Diligence';
+  html('sum-verdict-wrap', `<span class="verdict-pill ${pillClass}">${pillText}</span>`);
+  set('hero-sub-text', score + '/100 - Heritage: ' + tier.charAt(0).toUpperCase() + tier.slice(1));
 
-  // Verdict pill
-  const vw = document.getElementById('sum-verdict-wrap');
-  if (vw) {
-    const tier = hf.tier || 'manageable';
-    const pillClass = (tier === 'blocking' && score < 50) ? 'red' : score >= 80 ? 'green' : score >= 55 ? 'amber' : 'red';
-    const pillText = score >= 80 ? 'Top Opportunity' : score >= 70 ? 'Strong Opportunity' : score >= 55 ? 'Credible Opportunity' : 'Due Diligence';
-    vw.innerHTML = `<span class="verdict-pill ${pillClass}">${pillText}</span>`;
-    const sub = document.getElementById('hero-sub-text');
-    if (sub) sub.textContent = score + '/100 · Heritage: ' + tier.charAt(0).toUpperCase() + tier.slice(1);
-  }
-
-  // Metrics grid
-  const md = document.getElementById('metrics-dynamic');
-  if (md) {
-    const floorsHtml = existF > 0
-      ? `${existF}<span style="font-size:.55em;font-weight:500;color:var(--ink3)"> ex</span> + ${addF}<span style="font-size:.55em;font-weight:500;color:var(--ink3)">F</span>`
-      : maxF + 'F';
-    md.innerHTML = `
-      <div class="metric"><div class="metric-label">Floors</div><div class="metric-value">${floorsHtml}</div><div class="metric-sub">existing + additional</div></div>
-      <div class="metric"><div class="metric-label">GDV Est.</div><div class="metric-value accent">£${gdvEst}M</div><div class="metric-sub">gross development value</div></div>
-      <div class="metric"><div class="metric-label">ERV</div><div class="metric-value">£${erv}</div><div class="metric-sub">per m² NIA</div></div>
-      <div class="metric"><div class="metric-label">Area Uplift</div><div class="metric-value" style="color:#15803d">+${areaUplift}<span style="font-size:.6em">%</span></div><div class="metric-sub">vs existing NIA</div></div>
-      <div class="metric"><div class="metric-label">Net Yield</div><div class="metric-value">${niy}<span style="font-size:.55em;font-weight:500">%</span></div><div class="metric-sub">CAZ prime</div></div>
-      <div class="metric"><div class="metric-label">Plot Area</div><div class="metric-value">${plotM2.toLocaleString()}</div><div class="metric-sub">m²</div></div>
+  // -- Comparison strip: existing / proposed / delta --
+  const compEl = document.getElementById('comparison-strip');
+  if (compEl) {
+    compEl.innerHTML = `
+      <div class="comp-col">
+        <div class="comp-col-label">Existing</div>
+        <div class="comp-row"><div class="comp-num">${existF}F</div><div class="comp-label">Floors</div></div>
+        <div class="comp-row"><div class="comp-num">${f(existNIA)}m&sup2;</div><div class="comp-label">Est. NIA</div></div>
+        <div class="comp-row"><div class="comp-num">${existM}m</div><div class="comp-label">Height</div></div>
+      </div>
+      <div class="comp-col">
+        <div class="comp-col-label">Proposed (base)</div>
+        <div class="comp-row"><div class="comp-num accent">${baseSc.floors}F</div><div class="comp-label">Floors</div></div>
+        <div class="comp-row"><div class="comp-num accent">${f(baseSc.nia)}m&sup2;</div><div class="comp-label">NIA</div></div>
+        <div class="comp-row"><div class="comp-num accent">${fm(baseSc.gdv)}</div><div class="comp-label">Est. GDV</div></div>
+      </div>
+      <div class="comp-col">
+        <div class="comp-col-label">Delta</div>
+        <div class="comp-row"><div class="comp-num green">+${addF}F</div><div class="comp-label">Additional</div></div>
+        <div class="comp-row"><div class="comp-num green">+${f(baseSc.nia - existNIA)}m&sup2;</div><div class="comp-label">Uplift NIA</div></div>
+        <div class="comp-row"><div class="comp-num green">+${Math.round((baseSc.nia - existNIA) / existNIA * 100)}%</div><div class="comp-label">Area Uplift</div></div>
+      </div>
     `;
   }
 
-  // Factor bars
+  // -- Factor bars --
   const fbm = document.getElementById('factor-bars-mount');
   if (fbm) {
-    const FACTOR_LABELS = {
-      sky:'Available Sky', value:'Rent Headroom', momentum:'Planning Appetite',
-      heritage:'Heritage Shadow', acquisition:'Title Stack', transport:'Transport Links'
-    };
-    fbm.innerHTML = Object.entries(F).map(([k, f]) => {
-      const sc = typeof f === 'object' ? (f.score || 0) : f;
-      const pct = Math.round(sc / 10 * 100);
-      const high = sc >= 7 ? ' high' : '';
-      const label = FACTOR_LABELS[k] || k;
-      return `<div class="factor-row">
-        <span class="factor-name">${label}</span>
-        <div class="factor-bar-wrap"><div class="factor-bar${high}" style="width:${pct}%"></div></div>
-        <span class="factor-score">${typeof sc === 'number' ? sc.toFixed(1) : sc}</span>
-      </div>`;
+    const LABELS = {sky:'Available Sky', value:'Rent Headroom', momentum:'Planning Appetite', heritage:'Heritage Shadow', acquisition:'Title Stack', transport:'Transport Links'};
+    fbm.innerHTML = Object.entries(F).map(([k, fv]) => {
+      if (k === 'heritage_framework') return '';
+      const sc2 = typeof fv === 'object' ? (fv.score || 0) : fv;
+      const pct = Math.round(sc2 / 10 * 100);
+      const high = sc2 >= 7 ? ' high' : '';
+      return `<div class="factor-row"><span class="factor-name">${LABELS[k]||k}</span><div class="factor-bar-wrap"><div class="factor-bar${high}" style="width:${pct}%"></div></div><span class="factor-score">${typeof sc2==='number'?sc2.toFixed(1):sc2}</span></div>`;
     }).join('');
   }
 
-  // Section badges
+  // -- Section badges --
+  html('g-dev-badge', baseSc.floors + 'F - ' + fm(baseSc.gdv) + ' GDV');
   const planScore = mom.score || 5;
-  const devBadge = document.getElementById('g-dev-badge');
-  if (devBadge) devBadge.textContent = maxF + 'F · £' + gdvEst + 'M GDV';
-  const planBadge = document.getElementById('g-plan-badge');
-  if (planBadge) planBadge.textContent = 'Appetite ' + planScore.toFixed(1) + '/10';
-  const archBadge = document.getElementById('g-arch-badge');
-  const heritTier = (hf.tier || 'manageable');
-  if (archBadge) archBadge.textContent = 'Heritage: ' + heritTier.charAt(0).toUpperCase() + heritTier.slice(1) + ' · ' + maxH + 'm';
+  html('g-plan-badge', 'Appetite ' + planScore.toFixed(1) + '/10');
+  html('g-arch-badge', 'Heritage: ' + (tier.charAt(0).toUpperCase()+tier.slice(1)) + ' - ' + maxH + 'm');
 
-  // Synthesis
-  if (typeof synthesisDevScope === 'function') {
-    const sd = document.getElementById('synth-dev'); if (sd) sd.innerHTML = synthesisDevScope(si);
-  }
-  if (typeof synthesisPlanning === 'function') {
-    const sp = document.getElementById('synth-plan'); if (sp) sp.innerHTML = synthesisPlanning(si);
-  }
-  if (typeof synthesisArchitecture === 'function') {
-    const sa = document.getElementById('synth-arch'); if (sa) sa.innerHTML = synthesisArchitecture(si);
+  // -- 01 Existing building --
+  const exRows = document.getElementById('existing-rows');
+  if (exRows) {
+    exRows.innerHTML =
+      dr('Existing Floors', existF + 'F (' + existM + 'm)') +
+      dr('Est. Existing NIA', f(existNIA) + ' m&sup2;') +
+      dr('Current Use', 'Office / commercial') +
+      dr('FAR', (existNIA / plotM2).toFixed(1) + '&times;') +
+      dr('Owner', (F.acquisition && F.acquisition.owner) || '-') +
+      dr('Tenure', (F.acquisition && F.acquisition.tenure) || '-');
   }
 
-  // Data rows - Development
-  const devDR = document.getElementById('dev-data-rows');
-  if (devDR) {
-    const dr = (k,v) => `<div class="data-row"><span class="data-key">${k}</span><span class="data-val">${v}</span></div>`;
-    devDR.innerHTML = dr('Max Floors', maxF + 'F') + dr('Max Height', maxH + 'm AOD') +
-      dr('Gross Plate', grossPlate + 'm²') + dr('Core (22%)', coreM2 + 'm²') +
-      dr('NIA / Floor', niaFloor + 'm²') + dr('Efficiency', '~78%');
+  // -- 01 Proposed development (from base scenario) --
+  const prRows = document.getElementById('proposed-rows');
+  if (prRows) {
+    prRows.innerHTML =
+      dr('Proposed Floors', baseSc.floors + 'F') +
+      dr('GEA', f(baseSc.gea) + ' m&sup2;') +
+      dr('NIA', f(baseSc.nia) + ' m&sup2;') +
+      dr('Gross Plate', f(grossPlate) + ' m&sup2;') +
+      dr('Core (22%)', f(coreM2) + ' m&sup2;') +
+      dr('NIA / Floor', f(niaFloor) + ' m&sup2;') +
+      dr('Efficiency', Math.round(baseSc.eff * 100) + '%') +
+      dr('ERV', '&pound;' + f(erv) + '/m&sup2;') +
+      dr('Est. GDV', fm(baseSc.gdv)) +
+      dr('Area Uplift', '+' + Math.round((baseSc.nia - existNIA)/existNIA*100) + '%');
   }
 
-  // Data rows - Planning
+  // -- Synthesis --
+  if (typeof synthesisDevScope === 'function') { const sd = document.getElementById('synth-dev'); if (sd) sd.innerHTML = synthesisDevScope(si); }
+  if (typeof synthesisPlanning === 'function') { const sp = document.getElementById('synth-plan'); if (sp) sp.innerHTML = synthesisPlanning(si); }
+  if (typeof synthesisArchitecture === 'function') { const sa = document.getElementById('synth-arch'); if (sa) sa.innerHTML = synthesisArchitecture(si); }
+
+  // -- 02 Planning data rows --
   const planDR = document.getElementById('plan-data-rows');
   if (planDR) {
-    const dr = (k,v) => `<div class="data-row"><span class="data-key">${k}</span><span class="data-val">${v}</span></div>`;
     const oa = mom.opportunity_area;
-    const oaBannerHtml = oa ? `<div class="oa-banner"><div class="oa-label">Opportunity Area</div><div class="oa-name">${oa.name}</div><div class="oa-detail">${oa.ref || ''} · ${oa.jobs_target || ''} jobs target</div></div>` : '';
-    planDR.innerHTML = oaBannerHtml +
+    const oaBanner = oa ? `<div class="oa-banner"><div class="oa-label">Opportunity Area</div><div class="oa-name">${oa.name}</div><div class="oa-detail">${oa.ref||''} - ${oa.jobs_target||''} jobs target</div></div>` : '';
+    planDR.innerHTML = oaBanner +
       dr('Planning Appetite', planScore.toFixed(1) + ' / 10') +
       dr('Consents Nearby', (mom.consents || 0) + ' within 700m') +
       dr('Opportunity Area', oa ? oa.name : 'None designated') +
       dr('Conservation Area', s.conservation_area ? 'Yes' : 'No') +
       dr('Article 4', s.article4 ? 'Yes' : 'No') +
       dr('LPA', 'London Borough of Southwark');
-    // Precedents
-    const precs = (mom.precedents || []).slice(0, 2);
-    planDR.innerHTML += precs.map(p => `<div class="precedent"><div class="precedent-name">${p.name}</div><div class="precedent-detail">${p.ref || ''} · ${p.outcome || ''}</div></div>`).join('');
+    const precs = (mom.precedents || []).slice(0, 3);
+    planDR.innerHTML += precs.map(p => `<div class="precedent"><div class="precedent-name">${p.name}</div><div class="precedent-detail">${p.ref||''} - ${p.outcome||''}</div></div>`).join('');
   }
 
-  // Data rows - Architecture
+  // -- 03 Architecture data rows --
   const archDR = document.getElementById('arch-data-rows');
   if (archDR) {
-    const dr = (k,v) => `<div class="data-row"><span class="data-key">${k}</span><span class="data-val">${v}</span></div>`;
     const bsaLabel = maxH >= 50 || maxF >= 16 ? '50m+ - HRB regime (BSA 2022)' :
-      maxH >= 30 || maxF >= 10 ? '30m+ - second staircase mandatory (~£1.2-1.5M, 280-340m² NIA)' :
+      maxH >= 30 || maxF >= 10 ? '30m+ - second staircase mandatory (~&pound;1.2-1.5M, 280-340m&sup2; NIA)' :
       maxH >= 18 || maxF >= 6 ? '18m+ - enhanced fire strategy (Part B2)' : 'Below 18m';
     const liftCount = maxF >= 11 ? 3 : maxF >= 6 ? 2 : 1;
     const liftExtra = (maxH >= 30 || maxF >= 10) ? ' + second bank (BSA 30m+)' : '';
-    const isGLAScheme = !!(mom.opportunity_area) || plotM2 >= 1000;
-    archDR.innerHTML = dr('Heritage Tier', heritTier.charAt(0).toUpperCase() + heritTier.slice(1)) +
+    const isGLA = !!(mom.opportunity_area) || plotM2 >= 1000;
+    archDR.innerHTML =
+      dr('Heritage Tier', tier.charAt(0).toUpperCase() + tier.slice(1)) +
       dr('Max Height', maxH + 'm AOD') +
-      dr('NIA / Floor', niaFloor + 'm² (~78% net-to-gross)') +
-      dr('Core Allocation', coreM2 + 'm² (22% of plate)') +
-      dr('Min Lease Span', '7m clear on min 2 faces (Part A)') +
+      dr('NIA / Floor', niaFloor + 'm&sup2; (~78% net-to-gross)') +
+      dr('Core Allocation', coreM2 + 'm&sup2; (22% of plate)') +
+      dr('Min Lease Span', '7m clear on min 2 faces') +
       dr('Part B / BSA 2022', bsaLabel) +
-      dr('Part M2 - Lifts', liftCount + ' lift' + (liftCount > 1 ? 's' : '') + ' min (Part M2 §3.5)' + liftExtra) +
-      dr('Part L2 - Energy', isGLAScheme ? 'BREEAM Excellent required (GLA Energy SPG) ~£50/m²' : 'BREEAM Very Good min');
-    if (maxF >= 8) archDR.innerHTML += dr('Part O - Overheating', 'Dynamic thermal modelling if resi component (CIBSE TM52)');
+      dr('Part M2 - Lifts', liftCount + ' lift' + (liftCount>1?'s':'') + ' min' + liftExtra) +
+      dr('Part L2 - Energy', isGLA ? 'BREEAM Excellent required (GLA) ~&pound;50/m&sup2;' : 'BREEAM Very Good min');
+    if (maxF >= 8) archDR.innerHTML += dr('Part O - Overheating', 'Dynamic thermal modelling if resi component');
   }
 
-  // Heritage + strategy mounts
+  // -- Render mounts --
   setTimeout(() => {
     const hrm = document.getElementById('heritage-risk-mount');
     if (hrm && typeof renderHeritageRisk === 'function') hrm.innerHTML = renderHeritageRisk(si);
     const sm = document.getElementById('strategy-mount');
     if (sm && typeof renderSiteStrategy === 'function') sm.innerHTML = renderSiteStrategy(si);
-    const oaMount = document.getElementById('oa-implications-mount');
-    if (oaMount && typeof renderOAImplications === 'function') oaMount.innerHTML = renderOAImplications(si);
-    const lpaMount = document.getElementById('lpa-commentary-mount');
-    if (lpaMount && typeof renderLPACommentary === 'function') lpaMount.innerHTML = renderLPACommentary(si);
-    const glaMount = document.getElementById('gla-stage2-mount');
-    if (glaMount && typeof renderGLAStage2 === 'function') glaMount.innerHTML = renderGLAStage2(si);
+    const oaM = document.getElementById('oa-implications-mount');
+    if (oaM && typeof renderOAImplications === 'function') oaM.innerHTML = renderOAImplications(si);
+    const lpaM = document.getElementById('lpa-commentary-mount');
+    if (lpaM && typeof renderLPACommentary === 'function') lpaM.innerHTML = renderLPACommentary(si);
+    const glaM = document.getElementById('gla-stage2-mount');
+    if (glaM && typeof renderGLAStage2 === 'function') glaM.innerHTML = renderGLAStage2(si);
   }, 50);
 }
 
-// ── GDV scenarios ─────────────────────────────────────────────────────────────
-const GDV_OPTS = [
-  {floors:8,  podF:5, twrF:3, twrPct:0.70, cov:1.0, nia:0.83, erv:650, niy:0.0525, rf:12, lt:120},
-  {floors:10, podF:5, twrF:5, twrPct:0.65, cov:1.0, nia:0.81, erv:700, niy:0.0500, rf:12, lt:120},
-  {floors:12, podF:4, twrF:8, twrPct:0.60, cov:1.0, nia:0.79, erv:775, niy:0.0475, rf:12, lt:120},
-];
-const KNOWN_HEIGHTS=[
-  {name:'The Shard',h:310},{name:'One Blackfriars',h:163},{name:'Blackfriars Circus',h:85},
-  {name:'240 Blackfriars Rd',h:55},{name:'Tate Modern',h:65},{name:'OXO Tower',h:37},
-];
+// -- Section 04 render --
+function s04render() {
+  const sc = S04_SCENARIOS[s04Idx];
 
-function fmtM(v){return '£'+Math.round(v/1e6)+'M';}
-function fmtK(v){return (v/1000).toFixed(1).replace(/\.0$/,'')+'k m²';}
-function set(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
-function html(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
-
-// ── Return curve ──────────────────────────────────────────────────────────────
-(function(){
-  const gdvs = GDV_OPTS.map(o=>{
-    const gea=(PLOT_AREA*o.cov*o.podF)+(PLOT_AREA*o.twrPct*o.twrF);
-    const nia=gea*o.nia;
-    const gdv=nia*o.erv*(1-o.rf/o.lt)/o.niy;
-    const cc=gea*5000;
-    const tdc=cc*(1+0.13+0.075)+nia*200+gdv*0.015+2750000;
-    const poc=(gdv-tdc)/tdc*100;
-    return {gdv,nia,poc};
+  // Tabs
+  document.querySelectorAll('.s04-stab').forEach((b,i) => {
+    b.classList.toggle('active', i === s04Idx);
   });
-  const margins=GDV_OPTS.map((o,i)=>gdvs[i].gdv-gdvs[i].gdv*(1-gdvs[i].poc/100));
-  const mDelta=Math.round(Math.abs(Math.max(...margins)-Math.min(...margins))/1e6);
-  set('margin-delta','· £'+mDelta+'M range');
-  const W=380,H=65;
-  const pts=GDV_OPTS.map((o,i)=>{
-    const x=20+i*(W-40)/2;
-    const poc=gdvs[i].poc;
-    const y=H-10-(poc-20)/(50-20)*(H-20);
-    return `${x},${Math.max(5,Math.min(H-10,y)).toFixed(0)}`;
-  }).join(' ');
-  const tsvg=document.getElementById('teaser-curve');
-  if(tsvg) tsvg.innerHTML=`
-    <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    ${GDV_OPTS.map((_,i)=>{const[x,y]=pts.split(' ')[i].split(',');return`<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)"/>`;}).join('')}
-    <text x="20" y="${H+2}" font-family="Inter" font-size="8" fill="var(--ink3)">Option 1</text>
-    <text x="${W/2}" y="${H+2}" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--ink3)">Option 2</text>
-    <text x="${W-20}" y="${H+2}" text-anchor="end" font-family="Inter" font-size="8" fill="var(--ink3)">Option 3</text>`;
-})();
 
-// ── Main init ─────────────────────────────────────────────────────────────────
-if (typeof SITE_INTELLIGENCE !== 'undefined') {
-  populateNewDesign(SITE_INTELLIGENCE);
+  // Badge
+  set('s04-badge', sc.floors + 'F - ' + fm(sc.gdv));
+
+  // Metrics strip
+  html('s04-metrics', [
+    {l:'GDV', v: fm(sc.gdv), c:'var(--accent)'},
+    {l:'NIA', v: f(sc.nia)+'m\u00B2', c:'var(--ink)'},
+    {l:'Profit on Cost', v: sc.poc+'%', c: parseFloat(sc.poc) >= parseFloat(S04.poc) ? '#16a34a' : '#dc2626'},
+    {l:'Total Dev Cost', v: fm(sc.tdc), c:'var(--ink)'},
+    {l:'RLV', v: fm(sc.rlv), c: sc.rlv > 0 ? '#16a34a' : '#dc2626'},
+    {l:'Floors', v: sc.floors+'F', c:'var(--ink)'},
+  ].map(m => `<div style="background:var(--bg2);border-radius:6px;padding:8px 6px;text-align:center"><div style="font:700 13px var(--mono);color:${m.c};letter-spacing:-.3px">${m.v}</div><div style="font:500 8px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-top:2px">${m.l}</div></div>`).join(''));
+
+  // Narrative
+  html('s04-narrative', sc.narrative || '');
+
+  // Assumption summary
+  set('s04-assump-summary', 'ERV \u00A3' + S04.erv + ' - Yield ' + S04.niy + '%');
+
+  // Pro forma
+  const rows = [
+    {l:'Gross Development Value', v: fm(sc.gdv), bold:true, sep:true},
+    {l:'Net Internal Area', v: f(sc.nia)+' m\u00B2', small:true},
+    {l:'GEA', v: f(sc.gea)+' m\u00B2', small:true},
+    {l:'', v:''},
+    {l:'Construction', v: fm(sc.constCost), bold:true},
+    {l:'Professional fees (13%)', v: fm(sc.fees), small:true},
+    {l:'Contingency (7.5%)', v: fm(sc.contg), small:true},
+    {l:'CIL', v: fm(sc.cil), small:true},
+    {l:'Letting fees', v: fm(sc.letting), small:true},
+    {l:'S106', v: '\u00A3'+S04.s106+'k', small:true},
+    {l:'Demolition', v: fm(S04_MARKET.demo), small:true},
+    {l:'Finance', v: fm(sc.finance), small:true},
+    {l:'Total Dev Cost', v: fm(sc.tdc), bold:true, sep:true},
+    {l:'', v:''},
+    {l:'Profit', v: fm(sc.profit), bold:true, col: parseFloat(sc.poc) >= S04.poc ? '#16a34a' : '#dc2626'},
+    {l:'Profit on Cost', v: sc.poc+'%', bold:true, col: parseFloat(sc.poc) >= S04.poc ? '#16a34a' : '#dc2626'},
+  ];
+  html('s04-proforma', `<table style="width:100%;border-collapse:collapse">${rows.map(r => r.l==='' ? '<tr><td style="padding:3px 0" colspan="2"></td></tr>' : `<tr style="${r.sep?'border-top:1px solid var(--rule)':''}"><td style="padding:4px 0;font:${r.bold?'600':'400'} ${r.small?'10px':'11px'} var(--sans);color:${r.col||(r.small?'var(--ink3)':'var(--ink)')}">${r.l}</td><td style="text-align:right;font:${r.bold?'700':'400'} ${r.small?'10px':'11px'} var(--mono);color:${r.col||(r.small?'var(--ink3)':'var(--ink)')}">${r.v}</td></tr>`).join('')}</table>`);
+
+  // RLV callout
+  const rlvPos = sc.rlv > 0;
+  const rlvEl = document.getElementById('s04-rlv');
+  if (rlvEl) {
+    rlvEl.style.background = rlvPos ? 'var(--accent-bg)' : '#fef2f2';
+    rlvEl.style.borderLeftColor = rlvPos ? 'var(--accent)' : '#dc2626';
+    rlvEl.innerHTML = `<div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:${rlvPos?'var(--accent)':'#dc2626'};margin-bottom:4px">Residual Land Value at ${S04.poc}% Target Profit</div><div style="font:700 16px var(--mono);color:${rlvPos?'var(--ink)':'#dc2626'}">${fm(sc.rlv)}</div><div style="font:400 10px var(--sans);color:var(--ink3);margin-top:3px">Maximum you can pay for this site and hit target return${rlvPos?'.':' - scheme does not stack at target profit.'}</div>`;
+  }
+
+  // Update comparison strip to match active scenario
+  updateComparisonForScenario(sc);
 }
 
-// ── Map ───────────────────────────────────────────────────────────────────────
-let SITE_POLYGON = null;
+function updateComparisonForScenario(sc) {
+  const si = typeof SITE_INTELLIGENCE !== 'undefined' ? SITE_INTELLIGENCE : null;
+  if (!si) return;
+  const existM = (si.factors && si.factors.sky && si.factors.sky.existing_m) || 0;
+  const existF = existM > 0 ? Math.max(1, Math.round(existM / FTF)) : 0;
+  const grossPlate = Math.round(PLOT_AREA * 0.42);
+  const niaFloor = grossPlate - Math.round(grossPlate * 0.22);
+  const existNIA = Math.round(niaFloor * Math.max(existF, 1));
+
+  const compEl = document.getElementById('comparison-strip');
+  if (compEl) {
+    compEl.innerHTML = `
+      <div class="comp-col">
+        <div class="comp-col-label">Existing</div>
+        <div class="comp-row"><div class="comp-num">${existF}F</div><div class="comp-label">Floors</div></div>
+        <div class="comp-row"><div class="comp-num">${f(existNIA)}m\u00B2</div><div class="comp-label">Est. NIA</div></div>
+        <div class="comp-row"><div class="comp-num">${existM}m</div><div class="comp-label">Height</div></div>
+      </div>
+      <div class="comp-col">
+        <div class="comp-col-label">Proposed (${sc.label.toLowerCase()})</div>
+        <div class="comp-row"><div class="comp-num accent">${sc.floors}F</div><div class="comp-label">Floors</div></div>
+        <div class="comp-row"><div class="comp-num accent">${f(sc.nia)}m\u00B2</div><div class="comp-label">NIA</div></div>
+        <div class="comp-row"><div class="comp-num accent">${fm(sc.gdv)}</div><div class="comp-label">Est. GDV</div></div>
+      </div>
+      <div class="comp-col">
+        <div class="comp-col-label">Delta</div>
+        <div class="comp-row"><div class="comp-num green">+${sc.floors - existF}F</div><div class="comp-label">Additional</div></div>
+        <div class="comp-row"><div class="comp-num green">+${f(sc.nia - existNIA)}m\u00B2</div><div class="comp-label">Uplift NIA</div></div>
+        <div class="comp-row"><div class="comp-num green">+${Math.round((sc.nia - existNIA)/existNIA*100)}%</div><div class="comp-label">Area Uplift</div></div>
+      </div>
+    `;
+  }
+}
+
+function s04go(idx) { s04Idx = idx; s04calc(); s04render(); }
+function s04Slider(key, v) {
+  S04[key] = v;
+  const sv = document.getElementById('s04-sv-'+key);
+  const labels = {erv:v, niy:v, cost:Number(v).toLocaleString(), s106:v, poc:v};
+  if (sv) sv.textContent = labels[key];
+  s04calc(); s04render();
+}
+function s04Reset() {
+  S04 = {...S04_DEFS};
+  ['erv','niy','cost','s106','poc'].forEach(k => {
+    const sl = document.getElementById('s04-sl-'+k);
+    const sv = document.getElementById('s04-sv-'+k);
+    if (sl) sl.value = S04_DEFS[k];
+    if (sv) sv.textContent = k==='cost' ? Number(S04_DEFS[k]).toLocaleString() : S04_DEFS[k];
+  });
+  s04calc(); s04render();
+}
+
+// -- Return curve --
+(function(){
+  const pts_data = S04_SCENARIOS.map(sc => {
+    return { floors: sc.floors, poc: parseFloat(sc.poc), gdv: sc.gdv };
+  });
+  const W=380, H=65;
+  const minPoc = Math.min(...pts_data.map(p=>p.poc));
+  const maxPoc = Math.max(...pts_data.map(p=>p.poc));
+  const range = Math.max(maxPoc - minPoc, 5);
+  const pts = pts_data.map((p,i) => {
+    const x = 20 + i * (W-40)/2;
+    const y = H - 10 - ((p.poc - minPoc + 2) / (range + 4)) * (H - 20);
+    return x+','+Math.max(5, Math.min(H-10, y)).toFixed(0);
+  }).join(' ');
+  set('margin-delta', '- ' + fm(Math.max(...pts_data.map(p=>p.gdv)) - Math.min(...pts_data.map(p=>p.gdv))) + ' GDV range');
+  const tsvg = document.getElementById('teaser-curve');
+  if (tsvg) tsvg.innerHTML = `
+    <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts_data.map((_,i)=>{const[x,y]=pts.split(' ')[i].split(',');return`<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)"/><text x="${x}" y="${parseInt(y)-8}" text-anchor="middle" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="var(--ink)">${pts_data[i].poc}%</text>`;}).join('')}
+    ${pts_data.map((_,i)=>{const x=20+i*(W-40)/2;return`<text x="${x}" y="${H+2}" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--ink3)">${pts_data[i].floors}F</text>`;}).join('')}`;
+})();
+
+// -- Init --
+if (typeof SITE_INTELLIGENCE !== 'undefined') populatePage(SITE_INTELLIGENCE);
+s04render();
+
+// -- Map (standard + dawn) --
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
   if (!cfg || !cfg.mapboxToken) return;
   mapboxgl.accessToken = cfg.mapboxToken;
   const map = new mapboxgl.Map({
-    container:'map', style:'mapbox://styles/mapbox/light-v11',
-    center:CENTROID, zoom:17.5, pitch:52, bearing:5,
-    interactive:true, attributionControl:false, antialias:true
+    container:'map',
+    style: 'mapbox://styles/mapbox/standard',
+    center: CENTROID, zoom: 17.5, pitch: 52, bearing: 5,
+    interactive: true, attributionControl: false, antialias: true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
-  map.on('load',()=>{
-    map.addLayer({
-      id:'buildings-3d',source:'composite','source-layer':'building',
-      filter:['==','extrude','true'],type:'fill-extrusion',minzoom:14,
-      paint:{
-        'fill-extrusion-color':'#d4d7df',
-        'fill-extrusion-height':['interpolate',['linear'],['zoom'],15,0,15.05,['get','height']],
-        'fill-extrusion-base':['interpolate',['linear'],['zoom'],15,0,15.05,['get','min_height']],
-        'fill-extrusion-opacity':0.20
+
+  map.on('style.load', () => {
+    map.setConfigProperty('basemap', 'lightPreset', 'dawn');
+
+    // Site polygon + massing
+    map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
+    map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
+      paint:{'fill-extrusion-color':'#b45309','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.90}});
+    map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
+      paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.70}});
+
+    map.once('idle', () => {
+      if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
+        map.getSource('site-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[SITE_INTELLIGENCE.polygon]}});
       }
     });
-    map.addSource('site-poly',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}});
-    map.addLayer({id:'site-existing',type:'fill-extrusion',source:'site-poly',paint:{
-      'fill-extrusion-color':'#b45309','fill-extrusion-height':24.8,
-      'fill-extrusion-base':0,'fill-extrusion-opacity':0.90}});
-    map.addLayer({id:'site-massing',type:'fill-extrusion',source:'site-poly',paint:{
-      'fill-extrusion-color':'#059669','fill-extrusion-height':42.0,
-      'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.70}});
-    map.once('idle',()=>{
-      if(typeof SITE_INTELLIGENCE!=='undefined'&&SITE_INTELLIGENCE.polygon&&SITE_INTELLIGENCE.polygon.length>3){
-        map.getSource('site-poly').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_INTELLIGENCE.polygon]}});
-      }
-    });
-    map.on('click',async(e)=>{
-      const {lng,lat}=e.lngLat;
-      try{
-        const r=await fetch(`/api/hmlr-tile/click?lat=${lat}&lng=${lng}`);
-        const d=await r.json();
-        if(d&&d.title_number){
-          const panel=document.getElementById('hmlr-panel');
-          if(panel) panel.innerHTML=`<div class="hmlr-title-row"><span class="hmlr-title-no">${d.title_number}</span><span style="font:500 9px var(--mono);color:var(--ink3)">${d.tenure||'—'}</span></div><div style="font:600 11px var(--sans);color:var(--ink)">${d.proprietor||d.owner||'Unknown'}</div><div style="font:400 10px var(--sans);color:var(--ink3)">${d.address||''}</div>`;
+
+    // HMLR click
+    map.on('click', async(e) => {
+      const {lng,lat} = e.lngLat;
+      try {
+        const r = await fetch('/api/hmlr-tile/click?lat='+lat+'&lng='+lng);
+        const d = await r.json();
+        if (d && d.title_number) {
+          html('hmlr-panel', `<div class="hmlr-title-row"><span class="hmlr-title-no">${d.title_number}</span><span style="font:500 9px var(--mono);color:var(--ink3)">${d.tenure||'-'}</span></div><div style="font:600 11px var(--sans);color:var(--ink)">${d.proprietor||d.owner||'Unknown'}</div><div style="font:400 10px var(--sans);color:var(--ink3)">${d.address||''}</div>`);
         }
-      }catch(e2){console.warn('HMLR:',e2.message);}
+      } catch(e2) { console.warn('HMLR:', e2.message); }
     });
   });
-}).catch(e=>console.warn('Config fetch failed:',e.message));
+}).catch(e => console.warn('Config fetch failed:', e.message));
 
-// ── Live API data ─────────────────────────────────────────────────────────────
-async function loadAll(){
-  const [flood,ptal,listed,apps,ctx,epc]=await Promise.allSettled([
-    fetch(`/api/flood-zone?lat=${LAT}&lng=${LNG}`).then(r=>r.json()),
-    fetch(`/api/ptal?lat=${LAT}&lng=${LNG}`).then(r=>r.json()),
-    fetch(`/api/listed-buildings?lat=${LAT}&lng=${LNG}&radius=200`).then(r=>r.json()),
-    fetch(`/api/planning-apps?lat=${LAT}&lng=${LNG}&krad=0.3`).then(r=>r.json()),
-    fetch(`/api/context-buildings?lat=${LAT}&lng=${LNG}&radius=300`).then(r=>r.json()),
-    fetch(`/api/epc?postcode=SE1+0SW`).then(r=>r.json()),
+// -- Live API data --
+async function loadAll() {
+  const [flood,ptal,listed,apps,ctx,epc] = await Promise.allSettled([
+    fetch('/api/flood-zone?lat='+LAT+'&lng='+LNG).then(r=>r.json()),
+    fetch('/api/ptal?lat='+LAT+'&lng='+LNG).then(r=>r.json()),
+    fetch('/api/listed-buildings?lat='+LAT+'&lng='+LNG+'&radius=200').then(r=>r.json()),
+    fetch('/api/planning-apps?lat='+LAT+'&lng='+LNG+'&krad=0.3').then(r=>r.json()),
+    fetch('/api/context-buildings?lat='+LAT+'&lng='+LNG+'&radius=300').then(r=>r.json()),
+    fetch('/api/epc?postcode=SE1+0SW&filterAddress='+encodeURIComponent('24 Southwark Street')).then(r=>r.json()),
   ]);
-  if(flood.status==='fulfilled'){
-    const fz=flood.value.floodZone??1;
-    buildFlags(flood,listed.status==='fulfilled'?(listed.value.elements||[]).filter(e=>e.tags):[]);
-  } else {
-    buildFlags({status:'fulfilled',value:{floodZone:1}},[]);
+
+  buildFlags(flood, listed.status==='fulfilled' ? (listed.value.elements||[]).filter(e=>e.tags) : []);
+
+  if (ptal.status==='fulfilled' && ptal.value.ptal != null) {
+    const band = ptal.value.ptal>=5?'6a':ptal.value.ptal>=4?'5':ptal.value.ptal>=3?'4':'3';
+    set('nav-site-addr', ADDRESS + ' - PTAL ' + band);
   }
-  if(ptal.status==='fulfilled'&&ptal.value.ptal!=null){
-    const p=ptal.value;
-    const band=p.ptal>=5?'6a':p.ptal>=4?'5':p.ptal>=3?'4':'3';
-    // Update nav site info
-    const navSite=document.getElementById('nav-site-addr');
-    if(navSite) navSite.textContent=ADDRESS+' · PTAL '+band;
-  }
-  buildHeights((ctx.status==='fulfilled'?ctx.value.elements:[])||[]);
-  buildApps((apps.status==='fulfilled'?apps.value.results:[])||[]);
-  if(epc.status==='fulfilled'&&epc.value.results&&epc.value.results.length){
-    const best=epc.value.results[0];
-    const gia=best.floorArea;
-    if(gia>0){
-      const far=(gia/PLOT_AREA).toFixed(1);
-      set('epc-gia',gia.toLocaleString()+' m²');
-      set('current-far',far+'×');
-      const epcSec=document.getElementById('epc-section');
-      if(epcSec) epcSec.style.display='block';
+
+  buildHeights((ctx.status==='fulfilled' ? ctx.value.elements : []) || []);
+  buildApps((apps.status==='fulfilled' ? apps.value.results : []) || []);
+
+  // EPC data - show when available
+  if (epc.status==='fulfilled' && epc.value.aggregate && epc.value.aggregate.totalGia > 0) {
+    const a = epc.value.aggregate;
+    const epcSec = document.getElementById('epc-section');
+    if (epcSec) {
+      epcSec.style.display = 'block';
+      const ratingColor = {'A':'#16a34a','B':'#22c55e','C':'#84cc16','D':'#eab308','E':'#f97316','F':'#ef4444','G':'#dc2626'};
+      const col = ratingColor[a.worstRating] || 'var(--ink3)';
+      html('epc-rows',
+        dr('Certified GIA', f(a.totalGia) + ' m\u00B2 (' + a.certCount + ' cert' + (a.certCount!==1?'s':'') + ')') +
+        dr('Current FAR', (a.totalGia/PLOT_AREA).toFixed(1) + '\u00D7') +
+        dr('EPC Band', '<span style="color:'+col+';font-weight:700">'+a.worstRating+'</span>') +
+        (a.toLet > 0 ? dr('Vacancy Signal', a.toLet + ' unit' + (a.toLet>1?'s':'') + ' to let') : '')
+      );
     }
   }
 }
 
-function buildFlags(flood,listedEls){
-  const fz=flood.status==='fulfilled'?(flood.value.floodZone??1):1;
-  const flags=[
-    fz===1?{icon:'ok',sym:'✓',title:'Flood Zone 1 - Low Risk',desc:'No sequential test required.'}
-      :fz===2?{icon:'warn',sym:'⚠',title:'Flood Zone 2 - Medium Risk',desc:'Sequential test and FRA required.'}
-      :{icon:'risk',sym:'✕',title:'Flood Zone 3 - High Risk',desc:'Exception test mandatory.'},
-    {icon:'ok',sym:'✓',title:'London Bridge/Bankside Opportunity Area',desc:'London Plan 2021 Policy SD1. 5,500 jobs target. Mayoral backing for intensification. LPA required to facilitate.'},
-    {icon:'info',sym:'i',title:'Bankside CAZ - Commercial Intensification',desc:'Southwark Core Strategy supports office intensification. No tall buildings policy - height above surroundings requires justification.'},
+function buildFlags(flood, listedEls) {
+  const fz = flood.status==='fulfilled' ? (flood.value.floodZone??1) : 1;
+  const flags = [
+    fz===1 ? {icon:'ok',sym:'\u2713',title:'Flood Zone 1 - Low Risk',desc:'No sequential test required.'}
+      : fz===2 ? {icon:'warn',sym:'\u26A0',title:'Flood Zone 2 - Medium Risk',desc:'Sequential test and FRA required.'}
+      : {icon:'risk',sym:'\u2715',title:'Flood Zone 3 - High Risk',desc:'Exception test mandatory.'},
+    {icon:'ok',sym:'\u2713',title:'London Bridge/Bankside Opportunity Area',desc:'London Plan 2021 Policy SD1. 5,500 jobs target. Mayoral backing for intensification.'},
+    {icon:'info',sym:'i',title:'Bankside CAZ - Commercial Intensification',desc:'Southwark Core Strategy supports office intensification.'},
     {icon:'info',sym:'i',title:'Tate Modern - Grade II* Listed (220m W)',desc:'Setting of listed building is a material consideration. VIA required in DAS.'},
-    {icon:'ok',sym:'✓',title:'Conservation Area - Not Applicable',desc:'Site is not within a designated conservation area.'},
-    {icon:'warn',sym:'⚠',title:'LVMF - Wider Setting Consultation Area 1A.2',desc:'Site falls within LVMF Protected Vista 1A.2. Views assessment mandatory - not blocking at 8-12F but a required consideration.'},
-    {icon:'warn',sym:'⚠',title:'Non-Designated Heritage Asset - Victorian Fabric',desc:'Victorian stock brick character identified under Local Plan Policy P8. Facade retention or set-back upper floors is the realistic strategy. Pre-app essential.'},
-    {icon:'info',sym:'i',title:'Article 4 Direction - Check Required',desc:'Southwark has extensive Article 4 directions. Confirm no Article 4 applies before assuming PD fallback.'},
+    {icon:'ok',sym:'\u2713',title:'Conservation Area - Not Applicable',desc:'Site is not within a designated conservation area.'},
+    {icon:'warn',sym:'\u26A0',title:'LVMF - Wider Setting Consultation Area 1A.2',desc:'Site falls within LVMF Protected Vista 1A.2. Views assessment mandatory.'},
+    {icon:'warn',sym:'\u26A0',title:'Non-Designated Heritage Asset - Victorian Fabric',desc:'Victorian stock brick character identified under Local Plan Policy P8.'},
+    {icon:'info',sym:'i',title:'Article 4 Direction - Check Required',desc:'Southwark has extensive Article 4 directions.'},
   ];
-  if(listedEls.length>0) flags.splice(2,0,{icon:'warn',sym:'⚠',title:`${listedEls.length} Listed Building${listedEls.length>1?'s':''} within 200m`,desc:'Setting is a material consideration for each asset.'});
-  const risks=flags.filter(f=>f.icon==='risk').length, warns=flags.filter(f=>f.icon==='warn').length, oks=flags.filter(f=>f.icon==='ok').length;
-  const badge=document.getElementById('flags-badge');
-  if(badge){badge.textContent=`${risks} risk · ${warns} advisory · ${oks} clear`;badge.style.color=risks>0?'#dc2626':warns>0?'#d97706':'#16a34a';}
-  html('flags-body',flags.map(f=>`<div class="flag-row"><div class="flag-sym ${f.icon}">${f.sym}</div><div><div class="flag-title">${f.title}</div><div class="flag-desc">${f.desc}</div></div></div>`).join(''));
+  if (listedEls.length>0) flags.splice(2,0,{icon:'warn',sym:'\u26A0',title:listedEls.length+' Listed Building'+(listedEls.length>1?'s':'')+' within 200m',desc:'Setting is a material consideration.'});
+  const risks=flags.filter(f2=>f2.icon==='risk').length, warns=flags.filter(f2=>f2.icon==='warn').length, oks=flags.filter(f2=>f2.icon==='ok').length;
+  html('flags-badge', risks+' risk - '+warns+' advisory - '+oks+' clear');
+  document.getElementById('flags-badge').style.color = risks>0?'#dc2626':warns>0?'#d97706':'#16a34a';
+  html('flags-body', flags.map(f2=>`<div class="flag-row"><div class="flag-sym ${f2.icon}">${f2.sym}</div><div><div class="flag-title">${f2.title}</div><div class="flag-desc">${f2.desc}</div></div></div>`).join(''));
 }
 
-function buildHeights(osmEls){
-  const osmH=osmEls.filter(e=>e.tags&&(e.tags.height||e.tags['building:levels'])).map(e=>({name:e.tags.name||'Bldg',h:parseFloat(e.tags.height)||(parseFloat(e.tags['building:levels'])||1)*4.0})).filter(e=>e.h>20);
-  const kn=KNOWN_HEIGHTS.map(k=>k.name.toLowerCase());
-  const merged=[...KNOWN_HEIGHTS,...osmH.filter(b=>!kn.includes(b.name.toLowerCase()))].sort((a,b)=>b.h-a.h).slice(0,8);
-  const maxH=Math.max(...merged.map(b=>b.h),100);
-  html('heights-body',`<div>${merged.map(b=>{const pct=Math.round(b.h/maxH*100);const col=b.h>=200?'var(--ink)':b.h>=100?'var(--accent)':b.h>=50?'#d97706':'var(--rule)';return`<div class="hb-row"><div class="hb-label" title="${b.name}">${b.name}</div><div class="hb-track"><div class="hb-fill" style="width:${pct}%;background:${col}"></div></div><div class="hb-val">${b.h}m</div></div>`;}).join('')}</div>`);
+const KNOWN_HEIGHTS=[{name:'The Shard',h:310},{name:'One Blackfriars',h:163},{name:'Blackfriars Circus',h:85},{name:'240 Blackfriars Rd',h:55},{name:'Tate Modern',h:65},{name:'OXO Tower',h:37}];
+
+function buildHeights(osmEls) {
+  const osmH = osmEls.filter(e=>e.tags&&(e.tags.height||e.tags['building:levels'])).map(e=>({name:e.tags.name||'Bldg',h:parseFloat(e.tags.height)||(parseFloat(e.tags['building:levels'])||1)*4.0})).filter(e=>e.h>20);
+  const kn = KNOWN_HEIGHTS.map(k=>k.name.toLowerCase());
+  const merged = [...KNOWN_HEIGHTS,...osmH.filter(b=>!kn.includes(b.name.toLowerCase()))].sort((a,b)=>b.h-a.h).slice(0,8);
+  const maxH = Math.max(...merged.map(b=>b.h),100);
+  html('heights-body', merged.map(b=>{const pct=Math.round(b.h/maxH*100);const col=b.h>=200?'var(--ink)':b.h>=100?'var(--accent)':b.h>=50?'#d97706':'var(--rule)';return`<div class="hb-row"><div class="hb-label" title="${b.name}">${b.name}</div><div class="hb-track"><div class="hb-fill" style="width:${pct}%;background:${col}"></div></div><div class="hb-val">${b.h}m</div></div>`;}).join(''));
 }
 
-function buildApps(apps){
-  set('apps-count','· '+apps.length+' found');
-  if(!apps.length){html('apps-list','<div style="font:400 10px var(--sans);color:var(--ink3)">No recent applications found.</div>');return;}
-  html('apps-list',apps.slice(0,15).map(a=>{
-    const sc=/appro|grant/i.test(a.status)?'approved':/refus|reject/i.test(a.status)?'refused':'pending';
-    return`<div class="app-item"><div class="app-ref">${a.reference||'—'}<span class="app-status ${sc}">${a.status||'Pending'}</span></div><div class="app-desc">${(a.description||'').slice(0,120)}${(a.description||'').length>120?'...':''}</div><div class="app-meta">${a.distance?`<span>${a.distance}m</span>`:''}<span>${a.decidedDate||a.startDate||''}</span></div></div>`;
+function buildApps(apps) {
+  set('apps-count', '- '+apps.length+' found');
+  if (!apps.length) { html('apps-list','<div style="font:400 10px var(--sans);color:var(--ink3)">No recent applications found.</div>'); return; }
+  html('apps-list', apps.slice(0,15).map(a=>{
+    const sc2=/appro|grant/i.test(a.status)?'approved':/refus|reject/i.test(a.status)?'refused':'pending';
+    return`<div class="app-item"><div class="app-ref">${a.reference||'-'}<span class="app-status ${sc2}">${a.status||'Pending'}</span></div><div class="app-desc">${(a.description||'').slice(0,120)}${(a.description||'').length>120?'...':''}</div><div class="app-meta">${a.distance?'<span>'+a.distance+'m</span>':''}<span>${a.decidedDate||a.startDate||''}</span></div></div>`;
   }).join(''));
 }
 
