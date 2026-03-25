@@ -353,6 +353,22 @@ This is the screenshot that goes in every WhatsApp group. Pure financial motivat
 
 **Priority:** build alongside free PD check. Same funnel entry point. The value calculator is the hook, the PD check is the substance.
 
+### Site Compare (future - unlocks at 2+ purchased reports)
+
+Side-by-side comparison of 2-3 appraised sites. Development, Planning, Architecture data normalised across sites in a single view. The tool an investment committee screenshots.
+
+**Access rule:** unlocks automatically when a user has paid for 2+ site reports. No extra charge. Pure retention incentive - motivates buying more reports.
+
+**What it shows:**
+- Score, verdict, GDV, PoC%, RLV side by side
+- Factor bars comparison (6 factors per site, stacked)
+- Massing comparison (floors, NIA, efficiency, height)
+- Planning appetite + key constraints delta
+- Heritage tier comparison
+- Return curves overlaid
+
+**Priority:** do not build until T1 is solid across all sites. The comparison only works if individual reports are bulletproof. Design after 20+ paid reports sold.
+
 ### Estate Agent Distribution (Year 2 - long lead)
 
 Rightmove/Zoopla listing integration: "This property has ~£55k of untapped extension potential."
