@@ -20,27 +20,32 @@ Every site gets classified into one of these based on building age, listing stat
 - **Cost impact:** +2% facade treatment premium
 - **Examples:** 1960s commercial blocks, brutalist structures (unless locally listed)
 
-### Type 3: SETBACK REQUIRED
-- **Trigger:** Pre-war (pre-1945) OR in Conservation Area OR locally listed OR identified as non-designated heritage asset (NDHA)
-- **Massing rule:** New floors above existing parapet/roofline MUST set back minimum 1.5m from primary facades (street-facing). Secondary facades: 1.0m minimum.
-- **How it works:** Podium floors match existing footprint. Tower/upper floors use reduced footprint = `polygon inset by setback distance on facade sides`.
-- **Coverage reduction:** Typically 15-25% loss of upper floor plate vs full polygon
-- **Cost impact:** +5% construction cost (structural transfer, irregular floorplates)
-- **NIA impact:** -3% efficiency (irregular plates where new meets old)
-- **Examples:** Victorian commercial buildings outside CA, inter-war warehouses, identified NDHAs
+### Type 3: RETAIN AND ADAPT (default for pre-1930 in reasonable condition)
+- **Trigger:** Pre-1930 building in reasonable structural condition, regardless of listing status. This is now the DEFAULT response for anything with heritage character. The sustainability climate (GLA Whole Life Carbon, Southwark P69, LETI guidance) means the planning officer's starting position is "prove why you can't keep this building."
+- **Massing rule:** Existing structure retained and adapted. Roof extension permitted (typically 2-3 floors max) with mandatory setback of 1.5-2.0m from primary facades. New floors must be visually subservient - lightweight materials (zinc, glass, metal cladding), recessive colour palette. No increase to existing footprint at ground.
+- **What this means for our model:** The existing building NIA is KEPT and UPGRADED, not demolished and rebuilt. Additional floors are the uplift, not the whole scheme.
+- **Coverage reduction:** Upper floors 65-80% of existing footprint (setback)
+- **Cost model:** Split into two: (a) retrofit of existing floors at £1,800-2,500/m2, (b) new floors above at £4,000-5,500/m2. Blended rate is LOWER than full new-build.
+- **Embodied carbon advantage:** 50-70% lower WLC than demolish-and-rebuild. This is a material planning consideration.
+- **NIA impact:** Existing floors keep current efficiency (often lower, 70-75%). New floors above achieve 80%+.
+- **Programme:** Often SHORTER than new-build (no demolition, no facade propping)
+- **Planning advantage:** Strong. Aligns with every policy direction. Much easier pre-app conversation.
+- **Examples:** Most Victorian commercial buildings in Bankside, Borough, Bermondsey. Most inter-war warehouse conversions.
 
-### Type 4: FACADE RETENTION
-- **Trigger:** Grade II listed OR in Conservation Area with "positive contributor" status OR Victorian/Edwardian with significant architectural detail (ornamental stonework, terracotta, decorative brickwork)
-- **Massing rule:** Primary facade(s) retained in situ. New structure built behind facade with minimum 300mm cavity. Upper floors set back minimum 2.0m from retained facade line. Roof addition must be "subservient" (typically lightweight, recessive materials - zinc/glass).
+### Type 4: FACADE RETENTION (last resort before demolition)
+- **Trigger:** Building too structurally compromised or functionally obsolete for Type 3, but facade has heritage/streetscape value that must be preserved. OR Grade II listed where interior has no significance. This is a HARDER sell than it used to be - the sustainability argument cuts against gutting a building just to keep its face.
+- **Planning reality:** You now need a Whole Life Carbon assessment showing that facade retention + new-build produces better outcomes than retrofit. Many LPAs are pushing back on facade retention as performative conservation.
+- **Massing rule:** Primary facade(s) retained in situ. New structure behind with 300mm cavity. Upper floors set back 2.0m minimum. Roof must be subservient.
 - **Coverage reduction:** 25-40% loss of upper floor plate
-- **Cost impact:** +12-18% construction cost (temporary works, propping, structural interface)
+- **Cost impact:** +12-18% construction cost (propping, structural interface, monitoring)
 - **Programme impact:** +3-4 months
 - **NIA impact:** -5% efficiency
 - **Cost breakdown:**
   - Temporary facade propping: £400-600/m2 of retained facade area
   - Structural interface (new frame to old facade): £150-250/m2 GIA
+  - Whole Life Carbon assessment: £25-40k
   - Survey/monitoring during works: £50-80k fixed
-- **Examples:** 24 Southwark Street (Victorian stock brick commercial), many Bankside/Borough High St buildings
+- **Examples:** Severely deteriorated listed buildings, some fire-damaged structures
 
 ### Type 5: FULL CONSERVATION
 - **Trigger:** Grade I or II* listed OR within World Heritage Site buffer OR Scheduled Ancient Monument
@@ -57,33 +62,42 @@ Every site gets classified into one of these based on building age, listing stat
 function classifyHeritage(site) {
   // Hard classifications first
   if (site.listing === 'I' || site.listing === 'II*' || site.whs_buffer) return 'FULL_CONSERVATION';
-  if (site.listing === 'II') return 'FACADE_RETENTION';
   
-  // Conservation Area + positive contributor
-  if (site.conservation_area && site.ca_positive_contributor) return 'FACADE_RETENTION';
-  
-  // Age-based with character assessment
+  // The key threshold: pre-1930 in reasonable condition = RETAIN AND ADAPT
+  // This is the sustainability-first default. Burden of proof is on demolition.
   const age = estimateBuildingAge(site);
+  const isPreWar = ['georgian','victorian','edwardian','interwar'].includes(age) || site.build_year < 1930;
   
-  if (age === 'victorian' || age === 'edwardian' || age === 'georgian') {
-    // Victorian+ with significant detail = facade retention
-    if (site.architectural_detail >= 2) return 'FACADE_RETENTION'; // ornamental stonework, terracotta, decorative brick
-    // Victorian+ without major detail = setback
-    return 'SETBACK';
+  if (isPreWar && site.structural_condition !== 'poor') {
+    // Pre-1930 building in OK condition: retain and adapt is the default
+    return 'RETAIN_AND_ADAPT';
   }
   
-  if (age === 'interwar') return 'SETBACK';
-  if (age === 'pre-war') return 'SETBACK'; // catch-all pre-1945
+  // Pre-1930 but structurally compromised: facade retention if facade has value
+  if (isPreWar && site.structural_condition === 'poor') {
+    if (site.listing === 'II' || site.facade_significance >= 2) return 'FACADE_RETENTION';
+    return 'CONTEXTUAL'; // truly derelict with no facade value
+  }
   
-  // Conservation Area but modern building
-  if (site.conservation_area) return 'CONTEXTUAL';
+  // Listed Grade II (any age): retain and adapt unless structurally impossible
+  if (site.listing === 'II') {
+    return site.structural_condition === 'poor' ? 'FACADE_RETENTION' : 'RETAIN_AND_ADAPT';
+  }
   
-  // Post-war
-  if (age === 'postwar') return 'CONTEXTUAL';
+  // Conservation Area
+  if (site.conservation_area) {
+    if (site.ca_positive_contributor) return 'RETAIN_AND_ADAPT';
+    return 'CONTEXTUAL';
+  }
+  
+  // Post-war (1930-1980)
+  if (age === 'postwar' || (site.build_year >= 1930 && site.build_year < 1980)) return 'CONTEXTUAL';
   
   return 'UNRESTRICTED';
 }
 ```
+
+**Key principle:** Pre-1930 in reasonable condition = RETAIN AND ADAPT. Always. The burden is on the developer to prove why demolition is justified, not on the heritage officer to prove why it shouldn't be demolished. The sustainability climate has flipped this.
 
 ## Building Age Estimation
 
@@ -132,18 +146,27 @@ The cost engine needs these additions per heritage type:
 
 ## Impact on 24 Southwark Street
 
-**Current classification:** `manageable` (Type 3 equivalent)
-**Proposed classification:** `FACADE_RETENTION` (Type 4)
+**Current classification:** `manageable` (assumed full new-build)
+**Proposed classification:** `RETAIN_AND_ADAPT` (Type 3)
 
-**Why:** Victorian commercial building (c.1885), stock brick with some decorative detailing, Bankside context with strong character. Even though not listed, any developer proposing demolition or unsympathetic rooftop addition would face P8 refusal from Southwark.
+**Why:** Victorian commercial building (c.1885), stock brick, solid structural condition (RREEF maintained as income asset). In the current sustainability climate, any pre-app conversation starts with "why can't you keep this building?" The answer for 24SS is: you can, and you should. Retrofit the existing floors, add 3-4 floors above with setback.
 
-**Impact on numbers (Base scenario):**
-- Upper floor coverage: 65% (was assumed 65% for tower, but now podium floors also affected)
-- Cost multiplier: 1.15 (was 1.00)
-- NIA efficiency: 0.76 (was 0.81)
-- Programme: +3 months → finance cost increases
-- Estimated GDV impact: -8-12%
-- Estimated PoC impact: -3-5 points
+**What changes:**
+- **Existing 6 floors:** Retrofitted, not demolished. Cost: ~£2,200/m2 (not £4,200)
+- **Additional floors above:** 3-4 max (not 4-6), set back 1.5m from primary facades
+- **Upper floor plate:** ~65-75% of existing footprint (setback reduces plate)
+- **Total proposed:** 9-10F max (not 10-12F)
+- **Embodied carbon:** 50-60% lower than demolish-and-rebuild scenario
+- **Planning advantage:** Massive. Aligns with Southwark P8, P69. Pre-app conversation is about design quality, not principle.
+
+**Impact on Base scenario numbers:**
+- GDV: Lower (fewer new floors, smaller upper plates)
+- Construction: Lower blended rate (retrofit existing + new above)
+- PoC: May actually IMPROVE because cost drops faster than revenue
+- RLV: Likely similar or better (lower TDC offsets lower GDV)
+- Programme: Shorter (no demolition phase)
+
+**The honest conclusion:** Retain-and-adapt is not just the heritage-compliant answer - it may be the better financial answer too. Lower risk, faster consent, shorter programme, lower embodied carbon (which is now a marketing advantage for occupier ESG requirements).
 
 ## Massing Visual Changes
 
