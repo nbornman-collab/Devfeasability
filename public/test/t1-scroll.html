@@ -26,8 +26,25 @@
   --nav-h: 56px;
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; cursor: none; }
+
+/* -- SCROLL PROGRESS BAR -- */
+.scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 300; width: 0%; transition: none; }
+
+/* -- CUSTOM CURSOR -- */
+.cursor { position: fixed; width: 20px; height: 20px; border: 2px solid var(--accent); border-radius: 50%;
+  pointer-events: none; z-index: 9999; transition: transform .15s, opacity .15s; mix-blend-mode: difference;
+  transform: translate(-50%, -50%); }
+.cursor.hover { transform: translate(-50%, -50%) scale(2.5); opacity: .5; }
+
+/* -- PROGRESS DOTS -- */
+.progress-dots { position: fixed; right: 24px; top: 50%; transform: translateY(-50%); z-index: 250;
+  display: flex; flex-direction: column; gap: 14px; }
+.progress-dot { width: 10px; height: 10px; border-radius: 50%; background: #ccc; cursor: pointer;
+  transition: background .3s, transform .3s; border: none; padding: 0; }
+.progress-dot.active { background: var(--accent); transform: scale(1.3); }
+.progress-dot:hover { background: var(--accent); opacity: .7; }
 
 /* -- NAV -- */
 nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 200;
@@ -42,11 +59,12 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 
 /* -- SECTIONS -- */
 .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
-  padding: 120px 0; position: relative; }
+  padding: 160px 0; position: relative; scroll-snap-align: start; }
 .section-inner { max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 40px; }
 
 /* -- HERO (section 0) -- */
-.hero-section { min-height: 100vh; position: relative; overflow: hidden; padding: 0; }
+.hero-section { min-height: 100vh; position: relative; overflow: hidden; padding: 0; scroll-snap-align: start; }
+.hero-spacer { height: 50vh; position: relative; z-index: -1; }
 .hero-map { position: absolute; inset: 0; z-index: 0; }
 .hero-map #map { width: 100%; height: 100%; }
 .hero-scrim { position: absolute; inset: 0; z-index: 1;
@@ -73,12 +91,12 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 /* -- TYPOGRAPHY -- */
 .section-label { font: 700 13px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 14px; }
 .section-title { font: 800 clamp(28px,4vw,48px)/1.1 var(--sans); color: var(--ink); letter-spacing: -.03em; margin-bottom: 20px; }
-.section-body { font: 400 18px/1.8 var(--sans); color: var(--ink2); max-width: 720px; }
+.section-body { font: 400 18px/1.8 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
 
 /* -- DATA CARDS -- */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 40px; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-top: 40px; }
 .card { background: rgba(255,255,255,.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.8);
-  border-radius: 16px; padding: 28px; transition: transform .3s, box-shadow .3s; }
+  border-radius: 16px; padding: 36px; transition: transform .3s, box-shadow .3s; }
 .card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,.06); }
 .card-label { font: 700 13px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 10px; }
 .card-value { font: 800 clamp(32px,4vw,48px) var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
@@ -90,7 +108,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 /* -- COMPARISON STRIP -- */
 .comp-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule);
   border-radius: 16px; overflow: hidden; margin-top: 40px; }
-.comp-col { background: rgba(255,255,255,.5); padding: 28px 24px; backdrop-filter: blur(16px); }
+.comp-col { background: rgba(255,255,255,.5); padding: 36px 30px; backdrop-filter: blur(16px); }
 .comp-col-title { font: 700 13px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 16px; }
 .comp-row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; }
 .comp-key { font: 500 15px var(--sans); color: var(--ink3); }
@@ -123,7 +141,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 .proforma tr.accent td { color: var(--accent); font-weight: 700; }
 
 /* -- FACTOR BARS -- */
-.factor-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+.factor-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; }
 .factor-name { font: 600 15px var(--sans); color: var(--ink2); width: 180px; flex-shrink: 0; }
 .factor-bar-wrap { flex: 1; height: 8px; background: var(--bg2); border-radius: 4px; overflow: hidden; }
 .factor-bar { height: 100%; background: var(--accent); border-radius: 4px; transition: width 1s cubic-bezier(.16,1,.3,1); }
@@ -132,7 +150,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 
 /* -- GLASS PANEL (larger sections) -- */
 .glass { background: rgba(255,255,255,.55); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.8);
-  border-radius: 20px; padding: 40px; margin-top: 40px; }
+  border-radius: 20px; padding: 52px; margin-top: 40px; }
 
 /* -- PRECEDENT CARDS -- */
 .precedent { padding: 16px 0; border-bottom: 1px solid var(--rule); }
@@ -170,7 +188,21 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 .footer { padding: 60px 40px; text-align: center; }
 .footer-text { font: 400 13px var(--sans); color: var(--ink3); }
 
+/* -- SELF-DRAWING SVG -- */
+.return-curve-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+.return-curve-path.draw { transition: stroke-dashoffset 1.2s ease-in-out; stroke-dashoffset: 0; }
+
 /* -- MOBILE -- */
+/* -- PREFERS REDUCED MOTION -- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-snap-type: none; scroll-behavior: auto; }
+  .cursor { display: none !important; }
+  body { cursor: auto; }
+  .factor-bar { transition: none; }
+  .card { transition: none; }
+}
+
 @media (max-width: 768px) {
   .section-inner { padding: 0 20px; }
   .card-grid { grid-template-columns: 1fr; }
@@ -179,10 +211,39 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
   .arch-grid { grid-template-columns: 1fr 1fr; }
   nav { padding: 0 16px; }
   .hero-content { padding: 0 20px 40px; }
+  .cursor, .progress-dots { display: none !important; }
+  body { cursor: auto; }
+  .progress-dots { display: none; }
+}
+
+/* -- PREFERS REDUCED MOTION -- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  html { scroll-snap-type: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .cursor { display: none !important; }
+  body { cursor: auto; }
+  .return-curve-path { stroke-dashoffset: 0 !important; stroke-dasharray: none !important; }
 }
 </style>
 </head>
 <body>
+
+<!-- SCROLL PROGRESS BAR -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="custom-cursor"></div>
+
+<!-- PROGRESS DOTS -->
+<div class="progress-dots" id="progress-dots">
+  <button class="progress-dot active" data-target="overview" aria-label="Overview"></button>
+  <button class="progress-dot" data-target="development" aria-label="Development"></button>
+  <button class="progress-dot" data-target="scenarios" aria-label="Scenarios"></button>
+  <button class="progress-dot" data-target="planning" aria-label="Planning"></button>
+  <button class="progress-dot" data-target="architecture" aria-label="Architecture"></button>
+</div>
 
 <!-- NAV (frosted, fixed) -->
 <nav>
@@ -213,6 +274,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
   </div>
   <div class="hero-scroll-hint">Scroll to explore &#8595;</div>
 </section>
+
+<!-- HERO SPACER for sticky map effect -->
+<div class="hero-spacer" id="hero-spacer"></div>
 
 <!-- SECTION 1: DEVELOPMENT OVERVIEW -->
 <section class="section" id="development">
@@ -280,6 +344,16 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
       </div>
       <div class="proforma" id="proforma"></div>
       <div class="rlv-block" id="rlv-block"></div>
+      <!-- Return curve SVG - self-drawing -->
+      <svg id="return-curve-svg" viewBox="0 0 500 200" style="width:100%;height:auto;margin-top:32px;overflow:visible" aria-label="Return curve">
+        <defs><linearGradient id="curve-grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#dc2626"/><stop offset="50%" style="stop-color:#e07b2a"/><stop offset="100%" style="stop-color:#16a34a"/></linearGradient></defs>
+        <line x1="40" y1="10" x2="40" y2="180" stroke="#ddd" stroke-width="1"/>
+        <line x1="40" y1="180" x2="490" y2="180" stroke="#ddd" stroke-width="1"/>
+        <text x="20" y="100" fill="#6a6a65" font-size="10" font-family="var(--sans)" text-anchor="middle" transform="rotate(-90,20,100)">Return %</text>
+        <text x="265" y="198" fill="#6a6a65" font-size="10" font-family="var(--sans)" text-anchor="middle">Density (floors)</text>
+        <path class="return-curve-path" id="return-curve-path" d="M 60 170 Q 120 165 180 140 Q 240 100 300 60 Q 360 35 400 45 Q 440 60 470 90" fill="none" stroke="url(#curve-grad)" stroke-width="3" stroke-linecap="round"/>
+        <circle id="return-curve-dot" cx="300" cy="60" r="5" fill="var(--accent)" opacity="0"/>
+      </svg>
     </div>
   </div>
 </section>
@@ -677,6 +751,260 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
     setTimeout(() => updateMassing(S04_SCENARIOS[s04Idx]), 200);
   });
 }).catch(e => console.warn('Config:', e.message));
+
+// ============================================================
+// AWARD-GRADE ENHANCEMENTS
+// ============================================================
+
+// -- 1. CUSTOM CURSOR --
+(function() {
+  const cursor = document.getElementById('custom-cursor');
+  if (!cursor || window.matchMedia('(max-width:768px)').matches) return;
+  const interactives = 'a, button, .card, .sc-tab, .nav-links a, input[type=range], .progress-dot';
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(interactives)) cursor.classList.add('hover');
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(interactives)) cursor.classList.remove('hover');
+  });
+})();
+
+// -- 2. NUMBER COUNT-UP ANIMATIONS --
+(function() {
+  function parseValue(text) {
+    const clean = text.replace(/[£$,\s]/g, '');
+    if (clean.endsWith('M')) return { num: parseFloat(clean) * 1e6, suffix: '', prefix: '\u00A3', divisor: 1e6, dp: 1, mSuffix: 'M' };
+    if (clean.endsWith('%')) return { num: parseFloat(clean), suffix: '%', prefix: '', divisor: 1, dp: 1, mSuffix: '' };
+    if (clean.includes('m\u00B2') || text.includes('m²')) {
+      return { num: parseFloat(clean.replace('m²','').replace('m\u00B2','')), suffix: 'm\u00B2', prefix: '', divisor: 1, dp: 0, mSuffix: '' };
+    }
+    const n = parseFloat(clean);
+    if (isNaN(n)) return null;
+    return { num: n, suffix: '', prefix: text.startsWith('\u00A3') || text.startsWith('£') ? '\u00A3' : '', divisor: 1, dp: 0, mSuffix: '' };
+  }
+
+  function animateCount(el, targetText, duration) {
+    const parsed = parseValue(targetText);
+    if (!parsed || isNaN(parsed.num)) return;
+    const target = parsed.num;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      const current = target * ease;
+      if (parsed.mSuffix === 'M') {
+        el.textContent = parsed.prefix + (current / parsed.divisor).toFixed(parsed.dp) + parsed.mSuffix;
+      } else if (parsed.suffix === '%') {
+        el.textContent = parsed.prefix + current.toFixed(parsed.dp) + parsed.suffix;
+      } else {
+        el.textContent = parsed.prefix + Math.round(current).toLocaleString('en-GB') + parsed.suffix;
+      }
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = targetText;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target._counted) {
+        entry.target._counted = true;
+        const finalText = entry.target.textContent;
+        entry.target._finalText = finalText;
+        animateCount(entry.target, finalText, 800);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  // Observe card values after render
+  const origS04render = window.s04render;
+  if (typeof origS04render === 'function') {
+    // We'll set up observation after DOM population - see MutationObserver below
+  }
+
+  // Watch for card-value elements being added
+  const cardObserverMO = new MutationObserver(() => {
+    document.querySelectorAll('.card-value, .hero-score, .comp-val').forEach(el => {
+      if (!el._countObserved) {
+        el._countObserved = true;
+        countObserver.observe(el);
+      }
+    });
+  });
+  cardObserverMO.observe(document.body, { childList: true, subtree: true });
+})();
+
+// -- 4. PROGRESS DOTS --
+(function() {
+  const dots = document.querySelectorAll('.progress-dot');
+  const sectionIds = ['overview','development','scenarios','planning','architecture'];
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = dot.dataset.target;
+      const el = document.getElementById(target);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  function updateDots() {
+    let current = 0;
+    sectionIds.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - window.innerHeight * 0.4) current = i;
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+  window.addEventListener('scroll', updateDots, { passive: true });
+})();
+
+// -- 6. CARD HOVER TILT --
+(function() {
+  if (window.matchMedia('(max-width:768px)').matches) return;
+  document.addEventListener('mousemove', e => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateX(${-y * 4}deg) rotateY(${x * 4}deg) translateY(-2px)`;
+  });
+  document.addEventListener('mouseleave', e => {
+    const card = e.target.closest && e.target.closest('.card');
+    if (card) card.style.transform = '';
+  }, true);
+  document.addEventListener('mouseout', e => {
+    if (e.target.classList && e.target.classList.contains('card')) {
+      e.target.style.transform = '';
+    }
+  });
+})();
+
+// -- 7. SCROLL-LINKED STICKY MAP --
+(function() {
+  const heroSection = document.querySelector('.hero-section');
+  const heroMap = document.querySelector('.hero-map');
+  if (!heroSection || !heroMap) return;
+
+  function updateStickyMap() {
+    const scrollY = window.scrollY;
+    const heroH = heroSection.offsetHeight;
+    const spacerEnd = heroH + window.innerHeight * 0.5;
+
+    if (scrollY > heroH && scrollY < spacerEnd) {
+      // Map parallaxes upward at 0.5x
+      const delta = scrollY - heroH;
+      heroMap.style.position = 'fixed';
+      heroMap.style.top = '0';
+      heroMap.style.left = '0';
+      heroMap.style.right = '0';
+      heroMap.style.bottom = '0';
+      heroMap.style.transform = `translateY(${-delta * 0.5}px)`;
+      heroMap.style.zIndex = '0';
+    } else if (scrollY <= heroH) {
+      heroMap.style.position = 'absolute';
+      heroMap.style.transform = '';
+    } else {
+      heroMap.style.position = 'absolute';
+      heroMap.style.transform = `translateY(${-(spacerEnd - heroH) * 0.5}px)`;
+    }
+  }
+  window.addEventListener('scroll', updateStickyMap, { passive: true });
+})();
+
+// -- 8. NUMBER MORPHING ON SCENARIO CHANGE --
+(function() {
+  function morphNumber(el, fromText, toText, duration) {
+    const parseNum = t => {
+      const clean = t.replace(/[£$,%\s]/g, '').replace('M','');
+      return parseFloat(clean.replace(/,/g, ''));
+    };
+    const fromN = parseNum(fromText);
+    const toN = parseNum(toText);
+    if (isNaN(fromN) || isNaN(toN) || fromN === toN) { el.textContent = toText; return; }
+
+    const isM = toText.includes('M');
+    const isPct = toText.includes('%');
+    const hasP = toText.includes('\u00A3') || toText.includes('£');
+    const start = performance.now();
+
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+      const current = fromN + (toN - fromN) * ease;
+      if (isM) el.textContent = (hasP ? '\u00A3' : '') + current.toFixed(1) + 'M';
+      else if (isPct) el.textContent = current.toFixed(1) + '%';
+      else el.textContent = (hasP ? '\u00A3' : '') + Math.round(current).toLocaleString('en-GB');
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = toText;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Override s04go to morph numbers
+  const origS04go = window.s04go;
+  window.s04go = function(idx) {
+    // Capture current values
+    const oldCards = document.querySelectorAll('#sc-cards .card-value');
+    const oldTexts = Array.from(oldCards).map(el => el.textContent);
+
+    // Call original
+    origS04go(idx);
+
+    // Morph new values
+    const newCards = document.querySelectorAll('#sc-cards .card-value');
+    newCards.forEach((el, i) => {
+      if (oldTexts[i] && el.textContent !== oldTexts[i]) {
+        const newText = el.textContent;
+        morphNumber(el, oldTexts[i], newText, 400);
+      }
+    });
+  };
+})();
+
+// -- 10. SCROLL PROGRESS BAR --
+(function() {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+    bar.style.width = pct + '%';
+  }, { passive: true });
+})();
+
+// -- 11. RETURN CURVE SELF-DRAWING --
+(function() {
+  const svg = document.getElementById('return-curve-svg');
+  const path = document.getElementById('return-curve-path');
+  const dot = document.getElementById('return-curve-dot');
+  if (!svg || !path) return;
+
+  // Set the actual path length
+  const pathLength = path.getTotalLength();
+  path.style.strokeDasharray = pathLength;
+  path.style.strokeDashoffset = pathLength;
+
+  const curveObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !svg._drawn) {
+        svg._drawn = true;
+        // Trigger the draw
+        path.style.transition = 'stroke-dashoffset 1.2s ease-in-out';
+        path.style.strokeDashoffset = '0';
+        // Animate the dot after curve draws
+        if (dot) {
+          setTimeout(() => { dot.style.transition = 'opacity .3s'; dot.style.opacity = '1'; }, 1200);
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+  curveObserver.observe(svg);
+})();
 </script>
 </body>
 </html>
