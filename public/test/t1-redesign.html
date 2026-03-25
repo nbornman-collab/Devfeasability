@@ -96,9 +96,21 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .map-panel-label { position: absolute; top: 12px; left: 14px; z-index: 5; font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); background: rgba(242,241,237,.85); padding: 3px 7px; border-radius: 4px; backdrop-filter: blur(8px); }
 #map { width: 100%; height: 100%; }
 
-/* FACTOR BARS */
-.factors-block { flex-shrink: 0; padding: 14px 20px; border-top: 1px solid var(--rule); }
-.factors-title { font-size: 9px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px; }
+/* BOTTOM PANEL (below map) - scenario controls */
+.bottom-panel { flex-shrink: 0; border-top: 1px solid var(--rule); background: var(--bg); max-height: 260px; overflow-y: auto; }
+.scenario-tabs { display: flex; border-bottom: 1px solid var(--rule); }
+.sc-tab { flex: 1; padding: 8px 6px; border: none; border-bottom: 2px solid transparent; background: none; font: 700 11px var(--sans); color: var(--ink3); cursor: pointer; transition: all .15s; }
+.sc-tab.active { border-bottom-color: var(--accent); color: var(--accent); }
+.sc-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; padding: 8px 14px; }
+.sc-metric { background: var(--bg2); border-radius: 4px; padding: 6px 4px; text-align: center; }
+.sc-metric-val { font: 700 12px var(--mono); letter-spacing: -.3px; }
+.sc-metric-label { font: 500 7px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-top: 1px; }
+.slider-row { display: flex; align-items: center; gap: 8px; padding: 3px 14px; }
+.slider-label { font: 500 9px var(--sans); color: var(--ink2); width: 80px; flex-shrink: 0; }
+.slider-val { font: 600 9px var(--mono); color: var(--ink); width: 45px; text-align: right; flex-shrink: 0; }
+.slider-row input[type=range] { flex: 1; accent-color: var(--accent); height: 16px; }
+
+/* FACTOR BARS (in right panel now) */
 .factor-row { display: flex; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--rule); gap: 10px; }
 .factor-row:last-child { border-bottom: none; }
 .factor-name { font-size: 10px; font-weight: 500; color: var(--ink2); flex: 1; min-width: 0; }
@@ -253,10 +265,22 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
       <div id="map"></div>
     </div>
 
-    <!-- Factor bars -->
-    <div class="factors-block">
-      <div class="factors-title">Intelligence Factors</div>
-      <div id="factor-bars-mount"></div>
+    <!-- Bottom panel: scenario controls + sliders -->
+    <div class="bottom-panel">
+      <div class="scenario-tabs" id="sc-tabs">
+        <button class="sc-tab active" onclick="s04go(0)">Low (8F)</button>
+        <button class="sc-tab" onclick="s04go(1)">Base (10F)</button>
+        <button class="sc-tab" onclick="s04go(2)">High (12F)</button>
+      </div>
+      <div class="sc-metrics" id="sc-metrics"></div>
+      <div id="sc-sliders" style="padding:4px 0 8px">
+        <div class="slider-row"><span class="slider-label">ERV</span><input type="range" id="s04-sl-erv" min="500" max="1200" step="25" value="700" oninput="s04Slider('erv',+this.value)"><span class="slider-val" id="s04-sv-erv">&pound;700</span></div>
+        <div class="slider-row"><span class="slider-label">Yield</span><input type="range" id="s04-sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="s04Slider('niy',+this.value)"><span class="slider-val" id="s04-sv-niy">4.75%</span></div>
+        <div class="slider-row"><span class="slider-label">Build Cost</span><input type="range" id="s04-sl-cost" min="3000" max="8000" step="100" value="4200" oninput="s04Slider('cost',+this.value)"><span class="slider-val" id="s04-sv-cost">&pound;4,200</span></div>
+        <div class="slider-row"><span class="slider-label">S106</span><input type="range" id="s04-sl-s106" min="0" max="3000" step="50" value="500" oninput="s04Slider('s106',+this.value)"><span class="slider-val" id="s04-sv-s106">&pound;500k</span></div>
+        <div class="slider-row"><span class="slider-label">Profit %</span><input type="range" id="s04-sl-poc" min="10" max="30" step="1" value="20" oninput="s04Slider('poc',+this.value)"><span class="slider-val" id="s04-sv-poc">20%</span></div>
+        <div style="text-align:right;padding:0 14px 4px"><button onclick="s04Reset()" style="font:500 9px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset</button></div>
+      </div>
     </div>
 
   </div>
@@ -289,27 +313,24 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
         </div>
       </div>
       <div class="intel-body open" id="g-dev-body">
-        <!-- Existing building -->
-        <div id="existing-block" style="margin-bottom:14px">
-          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">Existing Building</div>
-          <div id="existing-rows"></div>
-        </div>
-        <!-- Proposed development -->
-        <div id="proposed-block" style="margin-bottom:14px">
-          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--accent);margin-bottom:8px">Proposed Development</div>
-          <div id="proposed-rows"></div>
-        </div>
+        <!-- Key site data (not duplicated from hero) -->
+        <div id="dev-data-rows"></div>
         <!-- EPC data (injected when API returns) -->
-        <div id="epc-section" style="display:none;margin-bottom:14px;padding:10px 12px;background:var(--bg2);border-radius:6px">
+        <div id="epc-section" style="display:none;margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:6px">
           <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:6px">EPC Certificate Data</div>
           <div id="epc-rows"></div>
         </div>
+        <!-- Factor bars -->
+        <div style="margin-top:14px">
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">Intelligence Factors</div>
+          <div id="factor-bars-mount"></div>
+        </div>
         <!-- Synthesis -->
         <p class="synth" id="synth-dev">Analysing...</p>
-        <!-- Return curve -->
+        <!-- Return curve (bigger, legible) -->
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)">
-          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">Return Curve <span style="font-weight:400;color:var(--ink3)" id="margin-delta"></span></div>
-          <svg id="teaser-curve" width="100%" height="70" viewBox="0 0 380 70" preserveAspectRatio="none"></svg>
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:10px">Return Curve <span style="font-weight:400;color:var(--ink3)" id="margin-delta"></span></div>
+          <svg id="teaser-curve" width="100%" height="120" viewBox="0 0 380 120" preserveAspectRatio="none"></svg>
         </div>
       </div>
     </div>
@@ -375,7 +396,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
       </div>
     </div>
 
-    <!-- 04 Financial Model -->
+    <!-- 04 Financial Model (pro forma + RLV in right panel, controls on left) -->
     <div class="intel-section" id="sec-04">
       <div class="intel-header" onclick="toggleSection(this)">
         <div class="intel-title-wrap">
@@ -388,42 +409,12 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
         </div>
       </div>
       <div class="intel-body open" id="g-s04-body">
-
-        <!-- Scenario tabs -->
-        <div style="display:flex;border-bottom:1px solid var(--rule);margin:0 -16px;padding:0 16px">
-          <button class="s04-stab active" data-idx="0" onclick="s04go(0)">Low</button>
-          <button class="s04-stab" data-idx="1" onclick="s04go(1)">Base</button>
-          <button class="s04-stab" data-idx="2" onclick="s04go(2)">High</button>
-        </div>
-
-        <!-- Key numbers -->
-        <div id="s04-metrics" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:14px 0"></div>
-
         <!-- Narrative -->
         <div id="s04-narrative" style="font:400 11px/1.7 var(--sans);color:var(--ink2);padding:10px 12px;background:var(--bg2);border-radius:6px;margin-bottom:14px"></div>
-
-        <!-- Assumptions (collapsible) -->
-        <details style="margin-bottom:12px;border:1px solid var(--rule);border-radius:6px;overflow:hidden">
-          <summary style="font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);padding:10px 14px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--bg2)">
-            Assumptions
-            <span id="s04-assump-summary" style="font:400 10px var(--sans);text-transform:none;letter-spacing:0;color:var(--ink3)">ERV &pound;700 - Yield 4.75%</span>
-          </summary>
-          <div style="padding:12px 14px;display:flex;flex-direction:column;gap:10px">
-            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>ERV (&pound;/m&sup2;)</span><span id="s04-sv-erv">700</span></div><input type="range" id="s04-sl-erv" min="500" max="1200" step="25" value="700" oninput="s04Slider('erv',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
-            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Net Yield (%)</span><span id="s04-sv-niy">4.75</span></div><input type="range" id="s04-sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="s04Slider('niy',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
-            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Build Cost (&pound;/m&sup2;)</span><span id="s04-sv-cost">4,200</span></div><input type="range" id="s04-sl-cost" min="3000" max="8000" step="100" value="4200" oninput="s04Slider('cost',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
-            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>S106 (&pound;k)</span><span id="s04-sv-s106">500</span></div><input type="range" id="s04-sl-s106" min="0" max="3000" step="50" value="500" oninput="s04Slider('s106',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
-            <div><div style="display:flex;justify-content:space-between;font:500 10px var(--sans);color:var(--ink2);margin-bottom:4px"><span>Target Profit (%)</span><span id="s04-sv-poc">20</span></div><input type="range" id="s04-sl-poc" min="10" max="30" step="1" value="20" oninput="s04Slider('poc',+this.value)" style="width:100%;accent-color:var(--accent)"></div>
-            <button onclick="s04Reset()" style="font:500 10px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline;text-align:right">Reset defaults</button>
-          </div>
-        </details>
-
         <!-- Pro forma -->
         <div id="s04-proforma" style="font:400 11px var(--sans);color:var(--ink2)"></div>
-
         <!-- RLV callout -->
         <div id="s04-rlv" style="margin-top:12px;padding:12px;background:var(--accent-bg);border-radius:6px;border-left:3px solid var(--accent)"></div>
-
       </div>
     </div>
 
@@ -575,32 +566,18 @@ function populatePage(si) {
   html('g-plan-badge', 'Appetite ' + planScore.toFixed(1) + '/10');
   html('g-arch-badge', 'Heritage: ' + (tier.charAt(0).toUpperCase()+tier.slice(1)) + ' - ' + maxH + 'm');
 
-  // -- 01 Existing building --
-  const exRows = document.getElementById('existing-rows');
-  if (exRows) {
-    exRows.innerHTML =
-      dr('Existing Floors', existF + 'F (' + existM + 'm)') +
-      dr('Est. Existing NIA', f(existNIA) + ' m&sup2;') +
-      dr('Current Use', 'Office / commercial') +
-      dr('FAR', (existNIA / plotM2).toFixed(1) + '&times;') +
+  // -- 01 Key site data (non-duplicating) --
+  const devDR = document.getElementById('dev-data-rows');
+  if (devDR) {
+    devDR.innerHTML =
+      dr('Plot Area', f(plotM2) + ' m&sup2;') +
       dr('Owner', (F.acquisition && F.acquisition.owner) || '-') +
-      dr('Tenure', (F.acquisition && F.acquisition.tenure) || '-');
-  }
-
-  // -- 01 Proposed development (from base scenario) --
-  const prRows = document.getElementById('proposed-rows');
-  if (prRows) {
-    prRows.innerHTML =
-      dr('Proposed Floors', baseSc.floors + 'F') +
-      dr('GEA', f(baseSc.gea) + ' m&sup2;') +
-      dr('NIA', f(baseSc.nia) + ' m&sup2;') +
+      dr('Tenure', (F.acquisition && F.acquisition.tenure) || '-') +
       dr('Gross Plate', f(grossPlate) + ' m&sup2;') +
       dr('Core (22%)', f(coreM2) + ' m&sup2;') +
       dr('NIA / Floor', f(niaFloor) + ' m&sup2;') +
-      dr('Efficiency', Math.round(baseSc.eff * 100) + '%') +
-      dr('ERV', '&pound;' + f(erv) + '/m&sup2;') +
-      dr('Est. GDV', fm(baseSc.gdv)) +
-      dr('Area Uplift', '+' + Math.round((baseSc.nia - existNIA)/existNIA*100) + '%');
+      dr('ERV', '&pound;' + f(erv) + '/m&sup2; NIA') +
+      dr('Net Yield', '4.75% (CAZ prime)');
   }
 
   // -- Synthesis --
@@ -664,23 +641,20 @@ function populatePage(si) {
 function s04render() {
   const sc = S04_SCENARIOS[s04Idx];
 
-  // Tabs
-  document.querySelectorAll('.s04-stab').forEach((b,i) => {
+  // Bottom panel tabs
+  document.querySelectorAll('.sc-tab').forEach((b,i) => {
     b.classList.toggle('active', i === s04Idx);
   });
 
-  // Badge
-  set('s04-badge', sc.floors + 'F - ' + fm(sc.gdv));
-
-  // Metrics strip
-  html('s04-metrics', [
+  // Bottom panel metrics
+  html('sc-metrics', [
     {l:'GDV', v: fm(sc.gdv), c:'var(--accent)'},
-    {l:'NIA', v: f(sc.nia)+'m\u00B2', c:'var(--ink)'},
-    {l:'Profit on Cost', v: sc.poc+'%', c: parseFloat(sc.poc) >= parseFloat(S04.poc) ? '#16a34a' : '#dc2626'},
-    {l:'Total Dev Cost', v: fm(sc.tdc), c:'var(--ink)'},
+    {l:'Profit', v: sc.poc+'%', c: parseFloat(sc.poc) >= parseFloat(S04.poc) ? '#16a34a' : '#dc2626'},
     {l:'RLV', v: fm(sc.rlv), c: sc.rlv > 0 ? '#16a34a' : '#dc2626'},
-    {l:'Floors', v: sc.floors+'F', c:'var(--ink)'},
-  ].map(m => `<div style="background:var(--bg2);border-radius:6px;padding:8px 6px;text-align:center"><div style="font:700 13px var(--mono);color:${m.c};letter-spacing:-.3px">${m.v}</div><div style="font:500 8px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-top:2px">${m.l}</div></div>`).join(''));
+  ].map(m => `<div class="sc-metric"><div class="sc-metric-val" style="color:${m.c}">${m.v}</div><div class="sc-metric-label">${m.l}</div></div>`).join(''));
+
+  // Right panel badge
+  set('s04-badge', sc.floors + 'F - ' + fm(sc.gdv));
 
   // Narrative
   html('s04-narrative', sc.narrative || '');
@@ -720,6 +694,12 @@ function s04render() {
 
   // Update comparison strip to match active scenario
   updateComparisonForScenario(sc);
+
+  // Update return curve highlight
+  renderReturnCurve();
+
+  // Update map massing height
+  updateMassing(sc);
 }
 
 function updateComparisonForScenario(sc) {
@@ -747,10 +727,10 @@ function updateComparisonForScenario(sc) {
         <div class="comp-row"><div class="comp-num accent">${fm(sc.gdv)}</div><div class="comp-label">Est. GDV</div></div>
       </div>
       <div class="comp-col">
-        <div class="comp-col-label">Delta</div>
+        <div class="comp-col-label">Uplift</div>
         <div class="comp-row"><div class="comp-num green">+${sc.floors - existF}F</div><div class="comp-label">Additional</div></div>
-        <div class="comp-row"><div class="comp-num green">+${f(sc.nia - existNIA)}m\u00B2</div><div class="comp-label">Uplift NIA</div></div>
-        <div class="comp-row"><div class="comp-num green">+${Math.round((sc.nia - existNIA)/existNIA*100)}%</div><div class="comp-label">Area Uplift</div></div>
+        <div class="comp-row"><div class="comp-num green">+${f(sc.nia - existNIA)}m\u00B2</div><div class="comp-label">NIA Uplift</div></div>
+        <div class="comp-row"><div class="comp-num green">+${Math.round((sc.nia - existNIA)/existNIA*100)}%</div><div class="comp-label">Area</div></div>
       </div>
     `;
   }
@@ -760,42 +740,67 @@ function s04go(idx) { s04Idx = idx; s04calc(); s04render(); }
 function s04Slider(key, v) {
   S04[key] = v;
   const sv = document.getElementById('s04-sv-'+key);
-  const labels = {erv:v, niy:v, cost:Number(v).toLocaleString(), s106:v, poc:v};
+  const labels = {erv:'\u00A3'+v, niy:v+'%', cost:'\u00A3'+Number(v).toLocaleString(), s106:'\u00A3'+v+'k', poc:v+'%'};
   if (sv) sv.textContent = labels[key];
   s04calc(); s04render();
 }
 function s04Reset() {
   S04 = {...S04_DEFS};
+  const fmts = {erv:v=>'\u00A3'+v, niy:v=>v+'%', cost:v=>'\u00A3'+Number(v).toLocaleString(), s106:v=>'\u00A3'+v+'k', poc:v=>v+'%'};
   ['erv','niy','cost','s106','poc'].forEach(k => {
     const sl = document.getElementById('s04-sl-'+k);
     const sv = document.getElementById('s04-sv-'+k);
     if (sl) sl.value = S04_DEFS[k];
-    if (sv) sv.textContent = k==='cost' ? Number(S04_DEFS[k]).toLocaleString() : S04_DEFS[k];
+    if (sv) sv.textContent = fmts[k](S04_DEFS[k]);
   });
   s04calc(); s04render();
 }
 
-// -- Return curve --
-(function(){
-  const pts_data = S04_SCENARIOS.map(sc => {
-    return { floors: sc.floors, poc: parseFloat(sc.poc), gdv: sc.gdv };
-  });
-  const W=380, H=65;
-  const minPoc = Math.min(...pts_data.map(p=>p.poc));
-  const maxPoc = Math.max(...pts_data.map(p=>p.poc));
+// -- Return curve (dynamic, updates with scenarios) --
+function renderReturnCurve() {
+  const pts_data = S04_SCENARIOS.map(sc => ({ floors: sc.floors, poc: parseFloat(sc.poc), gdv: sc.gdv, rlv: sc.rlv }));
+  const W=380, H=110;
+  const minPoc = Math.min(...pts_data.map(p=>p.poc)) - 2;
+  const maxPoc = Math.max(...pts_data.map(p=>p.poc)) + 2;
   const range = Math.max(maxPoc - minPoc, 5);
   const pts = pts_data.map((p,i) => {
-    const x = 20 + i * (W-40)/2;
-    const y = H - 10 - ((p.poc - minPoc + 2) / (range + 4)) * (H - 20);
-    return x+','+Math.max(5, Math.min(H-10, y)).toFixed(0);
+    const x = 40 + i * (W-80)/2;
+    const y = H - 30 - ((p.poc - minPoc) / range) * (H - 50);
+    return x+','+Math.max(15, Math.min(H-30, y)).toFixed(0);
   }).join(' ');
   set('margin-delta', '- ' + fm(Math.max(...pts_data.map(p=>p.gdv)) - Math.min(...pts_data.map(p=>p.gdv))) + ' GDV range');
   const tsvg = document.getElementById('teaser-curve');
   if (tsvg) tsvg.innerHTML = `
-    <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    ${pts_data.map((_,i)=>{const[x,y]=pts.split(' ')[i].split(',');return`<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)"/><text x="${x}" y="${parseInt(y)-8}" text-anchor="middle" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="var(--ink)">${pts_data[i].poc}%</text>`;}).join('')}
-    ${pts_data.map((_,i)=>{const x=20+i*(W-40)/2;return`<text x="${x}" y="${H+2}" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--ink3)">${pts_data[i].floors}F</text>`;}).join('')}`;
-})();
+    <polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts_data.map((_,i)=>{
+      const[x,y]=pts.split(' ')[i].split(',');
+      const active = i === s04Idx;
+      const r = active ? 7 : 5;
+      const col = active ? 'var(--accent)' : 'var(--ink3)';
+      return `<circle cx="${x}" cy="${y}" r="${r}" fill="${col}" stroke="var(--bg)" stroke-width="2"/>
+        <text x="${x}" y="${parseInt(y)-14}" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="700" fill="var(--ink)">${pts_data[i].poc}%</text>
+        <text x="${x}" y="${parseInt(y)-3}" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--ink3)">PoC</text>`;
+    }).join('')}
+    ${pts_data.map((_,i)=>{
+      const x=40+i*(W-80)/2;
+      return `<text x="${x}" y="${H-5}" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="600" fill="var(--ink2)">${pts_data[i].floors}F</text>
+        <text x="${x}" y="${H+7}" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--ink3)">${fm(pts_data[i].gdv)} GDV</text>`;
+    }).join('')}`;
+}
+renderReturnCurve();
+
+// -- Massing update (wires scenario to map extrusion heights) --
+let MAP_REF = null;
+function updateMassing(sc) {
+  if (!MAP_REF) return;
+  const existH = 24.8; // existing height for 24SS
+  const proposedH = sc.floors * FTF;
+  try {
+    MAP_REF.setPaintProperty('site-existing', 'fill-extrusion-height', existH);
+    MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-height', proposedH);
+    MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-base', existH);
+  } catch(e) { /* map not ready */ }
+}
 
 // -- Init --
 if (typeof SITE_INTELLIGENCE !== 'undefined') populatePage(SITE_INTELLIGENCE);
@@ -813,6 +818,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
 
+  MAP_REF = map;
   map.on('style.load', () => {
     map.setConfigProperty('basemap', 'lightPreset', 'dawn');
 
@@ -916,10 +922,14 @@ function buildHeights(osmEls) {
 function buildApps(apps) {
   set('apps-count', '- '+apps.length+' found');
   if (!apps.length) { html('apps-list','<div style="font:400 10px var(--sans);color:var(--ink3)">No recent applications found.</div>'); return; }
-  html('apps-list', apps.slice(0,15).map(a=>{
+  const renderApp = a => {
     const sc2=/appro|grant/i.test(a.status)?'approved':/refus|reject/i.test(a.status)?'refused':'pending';
     return`<div class="app-item"><div class="app-ref">${a.reference||'-'}<span class="app-status ${sc2}">${a.status||'Pending'}</span></div><div class="app-desc">${(a.description||'').slice(0,120)}${(a.description||'').length>120?'...':''}</div><div class="app-meta">${a.distance?'<span>'+a.distance+'m</span>':''}<span>${a.decidedDate||a.startDate||''}</span></div></div>`;
-  }).join(''));
+  };
+  const first3 = apps.slice(0,3).map(renderApp).join('');
+  const rest = apps.slice(3,15).map(renderApp).join('');
+  const expandBtn = apps.length > 3 ? `<div id="apps-expand" style="margin-top:6px"><button onclick="document.getElementById('apps-rest').style.display='block';this.parentElement.style.display='none'" style="font:500 10px var(--sans);color:var(--accent);background:none;border:none;cursor:pointer;text-decoration:underline">Show all ${apps.length} applications</button></div>` : '';
+  html('apps-list', first3 + `<div id="apps-rest" style="display:none">${rest}</div>` + expandBtn);
 }
 
 loadAll();
