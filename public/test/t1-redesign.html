@@ -292,15 +292,11 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
     <div class="site-header">
       <div class="site-address" id="sum-name">24 Southwark Street</div>
       <div class="site-tags" id="sum-chips">
-        <span class="tag">SE1 0SW</span>
-        <span class="tag">Southwark</span>
-        <span class="tag">Office-Led</span>
-        <span class="tag">Brownfield</span>
-        <span class="tag accent-tag">Opportunity Area</span>
+        <!-- Populated by JS with real existing building data as biscuits -->
       </div>
     </div>
 
-    <!-- 01 Development Scope -->
+    <!-- 01 Development Scope (includes financials) -->
     <div class="intel-section">
       <div class="intel-header" onclick="toggleSection(this)">
         <div class="intel-title-wrap">
@@ -313,24 +309,29 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
         </div>
       </div>
       <div class="intel-body open" id="g-dev-body">
-        <!-- Key site data (not duplicated from hero) -->
-        <div id="dev-data-rows"></div>
-        <!-- EPC data (injected when API returns) -->
-        <div id="epc-section" style="display:none;margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:6px">
-          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:6px">EPC Certificate Data</div>
-          <div id="epc-rows"></div>
-        </div>
+        <!-- Synthesis leads -->
+        <p class="synth" id="synth-dev">Analysing...</p>
         <!-- Factor bars -->
         <div style="margin-top:14px">
           <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:8px">Intelligence Factors</div>
           <div id="factor-bars-mount"></div>
         </div>
-        <!-- Synthesis -->
-        <p class="synth" id="synth-dev">Analysing...</p>
-        <!-- Return curve (bigger, legible) -->
+        <!-- EPC data (injected when API returns) -->
+        <div id="epc-section" style="display:none;margin-top:12px;padding:10px 12px;background:var(--bg2);border-radius:6px">
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:6px">EPC Certificate Data</div>
+          <div id="epc-rows"></div>
+        </div>
+        <!-- Return curve -->
         <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)">
           <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:10px">Return Curve <span style="font-weight:400;color:var(--ink3)" id="margin-delta"></span></div>
           <svg id="teaser-curve" width="100%" height="120" viewBox="0 0 380 120" preserveAspectRatio="none"></svg>
+        </div>
+        <!-- Financial model (was Section 04) -->
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule)">
+          <div style="font:700 9px var(--sans);text-transform:uppercase;letter-spacing:.15em;color:var(--ink3);margin-bottom:10px">Pro Forma (<span id="s04-scenario-label">Base</span>)</div>
+          <div id="s04-narrative" style="font:400 11px/1.7 var(--sans);color:var(--ink2);padding:10px 12px;background:var(--bg2);border-radius:6px;margin-bottom:14px"></div>
+          <div id="s04-proforma" style="font:400 11px var(--sans);color:var(--ink2)"></div>
+          <div id="s04-rlv" style="margin-top:12px;padding:12px;background:var(--accent-bg);border-radius:6px;border-left:3px solid var(--accent)"></div>
         </div>
       </div>
     </div>
@@ -396,27 +397,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
       </div>
     </div>
 
-    <!-- 04 Financial Model (pro forma + RLV in right panel, controls on left) -->
-    <div class="intel-section" id="sec-04">
-      <div class="intel-header" onclick="toggleSection(this)">
-        <div class="intel-title-wrap">
-          <span class="intel-num">04</span>
-          <span class="intel-title">Financial Model</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <span class="intel-score-pill" id="s04-badge" style="background:var(--accent-bg);color:var(--accent)">-</span>
-          <span class="intel-chevron">&#9660;</span>
-        </div>
-      </div>
-      <div class="intel-body open" id="g-s04-body">
-        <!-- Narrative -->
-        <div id="s04-narrative" style="font:400 11px/1.7 var(--sans);color:var(--ink2);padding:10px 12px;background:var(--bg2);border-radius:6px;margin-bottom:14px"></div>
-        <!-- Pro forma -->
-        <div id="s04-proforma" style="font:400 11px var(--sans);color:var(--ink2)"></div>
-        <!-- RLV callout -->
-        <div id="s04-rlv" style="margin-top:12px;padding:12px;background:var(--accent-bg);border-radius:6px;border-left:3px solid var(--accent)"></div>
-      </div>
-    </div>
+    <!-- Section 04 absorbed into 01 Development Scope above -->
 
   </div>
 </div>
@@ -561,23 +542,31 @@ function populatePage(si) {
   }
 
   // -- Section badges --
-  html('g-dev-badge', baseSc.floors + 'F - ' + fm(baseSc.gdv) + ' GDV');
+  html('g-dev-badge', baseSc.floors + 'F - ' + fm(baseSc.gdv) + ' - ' + baseSc.poc + '% PoC');
   const planScore = mom.score || 5;
   html('g-plan-badge', 'Appetite ' + planScore.toFixed(1) + '/10');
   html('g-arch-badge', 'Heritage: ' + (tier.charAt(0).toUpperCase()+tier.slice(1)) + ' - ' + maxH + 'm');
 
-  // -- 01 Key site data (non-duplicating) --
-  const devDR = document.getElementById('dev-data-rows');
-  if (devDR) {
-    devDR.innerHTML =
-      dr('Plot Area', f(plotM2) + ' m&sup2;') +
-      dr('Owner', (F.acquisition && F.acquisition.owner) || '-') +
-      dr('Tenure', (F.acquisition && F.acquisition.tenure) || '-') +
-      dr('Gross Plate', f(grossPlate) + ' m&sup2;') +
-      dr('Core (22%)', f(coreM2) + ' m&sup2;') +
-      dr('NIA / Floor', f(niaFloor) + ' m&sup2;') +
-      dr('ERV', '&pound;' + f(erv) + '/m&sup2; NIA') +
-      dr('Net Yield', '4.75% (CAZ prime)');
+  // -- Biscuit chips (existing building info under site name) --
+  const chipsEl = document.getElementById('sum-chips');
+  if (chipsEl) {
+    const owner = (F.acquisition && F.acquisition.owner) || null;
+    const tenure = (F.acquisition && F.acquisition.tenure) || null;
+    const isOA = !!(mom.opportunity_area);
+    const chips = [
+      {text: 'SE1 0SW'},
+      {text: 'Southwark'},
+      {text: existF + 'F existing - ' + existM + 'm'},
+      {text: f(plotM2) + 'm\u00B2 plot'},
+      {text: 'NIA/floor ' + f(niaFloor) + 'm\u00B2'},
+      {text: '&pound;' + f(erv) + '/m\u00B2 ERV'},
+      tenure ? {text: tenure} : null,
+      owner ? {text: owner, style: 'max-width:200px;overflow:hidden;text-overflow:ellipsis'} : null,
+      isOA ? {text: 'Opportunity Area', accent: true} : null,
+    ].filter(Boolean);
+    chipsEl.innerHTML = chips.map(c =>
+      `<span class="tag${c.accent?' accent-tag':''}"${c.style?' style="'+c.style+'"':''}>${c.text}</span>`
+    ).join('');
   }
 
   // -- Synthesis --
@@ -653,8 +642,9 @@ function s04render() {
     {l:'RLV', v: fm(sc.rlv), c: sc.rlv > 0 ? '#16a34a' : '#dc2626'},
   ].map(m => `<div class="sc-metric"><div class="sc-metric-val" style="color:${m.c}">${m.v}</div><div class="sc-metric-label">${m.l}</div></div>`).join(''));
 
-  // Right panel badge
+  // Right panel badge + scenario label
   set('s04-badge', sc.floors + 'F - ' + fm(sc.gdv));
+  set('s04-scenario-label', sc.label + ' - ' + sc.floors + 'F');
 
   // Narrative
   html('s04-narrative', sc.narrative || '');
@@ -793,12 +783,19 @@ renderReturnCurve();
 let MAP_REF = null;
 function updateMassing(sc) {
   if (!MAP_REF) return;
-  const existH = 24.8; // existing height for 24SS
+  const existH = 24.8;
   const proposedH = sc.floors * FTF;
+  const addFloors = sc.floors - Math.round(existH / FTF);
   try {
     MAP_REF.setPaintProperty('site-existing', 'fill-extrusion-height', existH);
     MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-height', proposedH);
     MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-base', existH);
+    // Show/hide floor lines based on scenario height
+    for (let fl = 1; fl <= 15; fl++) {
+      const flH = existH + (fl * FTF);
+      const vis = flH <= proposedH ? 'visible' : 'none';
+      try { MAP_REF.setLayoutProperty('floor-line-'+fl, 'visibility', vis); } catch(e2) {}
+    }
   } catch(e) { /* map not ready */ }
 }
 
@@ -813,7 +810,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   const map = new mapboxgl.Map({
     container:'map',
     style: 'mapbox://styles/mapbox/standard',
-    center: CENTROID, zoom: 17.5, pitch: 52, bearing: 5,
+    center: CENTROID, zoom: 16.5, pitch: 52, bearing: 5,
     interactive: true, attributionControl: false, antialias: true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
@@ -821,6 +818,8 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   MAP_REF = map;
   map.on('style.load', () => {
     map.setConfigProperty('basemap', 'lightPreset', 'dawn');
+    // Context buildings: muted off-white
+    try { map.setPaintProperty('building', 'fill-extrusion-color', '#e8e6e0'); map.setPaintProperty('building', 'fill-extrusion-opacity', 0.25); } catch(e) {}
 
     // Site polygon + massing
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
@@ -828,6 +827,12 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
       paint:{'fill-extrusion-color':'#b45309','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.90}});
     map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
       paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.70}});
+    // Floor lines (white bands at each floor level)
+    for (let fl = 1; fl <= 15; fl++) {
+      const h = 24.8 + (fl * FTF);
+      map.addLayer({id:'floor-line-'+fl, type:'fill-extrusion', source:'site-poly', slot:'top',
+        paint:{'fill-extrusion-color':'rgba(255,255,255,0.6)','fill-extrusion-height':h,'fill-extrusion-base':h-0.12,'fill-extrusion-opacity':0.9}});
+    }
 
     map.once('idle', () => {
       if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
