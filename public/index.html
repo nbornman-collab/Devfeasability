@@ -313,10 +313,13 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .hero {
   position: absolute; inset: 0; z-index: 10;
   display: flex; flex-direction: column;
-  align-items: flex-start; justify-content: space-between;
-  padding: 80px 64px 100px;
+  align-items: flex-start; justify-content: flex-end;
+  padding: 0 64px 100px;
 }
-.hero-top { display: flex; flex-direction: column; gap: 0; padding-top: 8px; }
+.hero-top { 
+  position: absolute; top: 72px; left: 64px; right: 64px;
+  display: flex; flex-direction: column; gap: 0;
+}
 .hero-bottom-content { display: flex; flex-direction: column; align-items: flex-start; }
 
 /* ── BELOW FOLD ── */
@@ -558,7 +561,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
   <!-- BOTTOM: title + sub + CTAs -->
   <div class="hero-bottom-content">
-    <h1 class="hero-title">In-depth feasibility analysis<span id="hero-dots">.</span><br><em>Before you <span id="hero-cycle">bid.</span></em></h1>
+    <h1 class="hero-title">In-depth feasibility analysis<span id="hero-dots">.</span><br><em id="hero-cycle">Before you bid.</em></h1>
     <p class="hero-sub">200+ factors. Triangulated. Site-specific. Structured.<br>Development intelligence for London.</p>
     <div class="hero-ctas">
       <a class="btn-primary" href="/discover">Discover Sites &rarr;</a>
@@ -850,12 +853,17 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 <script>
 // ── Hero text cycle + dots animation ─────────────────────────────────────────
 (function() {
-  const phrases = ['appoint.', 'go to feasibility.', 'go to planning.', 'bid.', 'build.'];
+  const phrases = [
+    'Before you appoint.',
+    'Before you go to planning.',
+    'Before you bid.',
+    'Before you build.',
+    'Before you bid.'
+  ];
   const cycleEl = document.getElementById('hero-cycle');
   const dotsEl = document.getElementById('hero-dots');
   if (!cycleEl) return;
 
-  // Animate dots: . → .. → ... then trigger cycle
   function animateDots(cb) {
     if (!dotsEl) { cb(); return; }
     var steps = ['.', '..', '...'];
@@ -863,36 +871,28 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
     var t = setInterval(function() {
       dotsEl.textContent = steps[i];
       i++;
-      if (i >= steps.length) {
-        clearInterval(t);
-        setTimeout(cb, 300);
-      }
-    }, 220);
+      if (i >= steps.length) { clearInterval(t); setTimeout(cb, 200); }
+    }, 200);
   }
 
-  let idx = 0, loops = 0;
+  var idx = 0, loops = 0;
 
   function cycleNext() {
-    // Fade out current word
     cycleEl.classList.add('out');
-    // Animate dots while word is hidden
     setTimeout(function() {
       animateDots(function() {
         idx = (idx + 1) % phrases.length;
         if (idx === 0) loops++;
         cycleEl.textContent = phrases[idx];
         cycleEl.classList.remove('out');
-        dotsEl && (dotsEl.textContent = '.');
-        // Stop after 2 full loops, settle on 'bid.'
-        if (!(loops >= 2 && phrases[idx] === 'bid.')) {
-          setTimeout(cycleNext, 2800);
-        }
+        if (dotsEl) dotsEl.textContent = '.';
+        var settle = loops >= 1 && phrases[idx] === 'Before you bid.' && idx === phrases.length - 1;
+        if (!settle) setTimeout(cycleNext, 2600);
       });
     }, 380);
   }
 
-  // Start after 2s
-  setTimeout(cycleNext, 2000);
+  setTimeout(cycleNext, 2200);
 })();
 
 // Load total GDV from site data
