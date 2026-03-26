@@ -119,7 +119,8 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
 /* ── PD SECTION ── */
 .pd-section {
-  background: #111110; padding: 72px 64px; position: relative; z-index: 20; text-align: center;
+  background: #111110; padding: 100px 64px; position: relative; z-index: 20; text-align: center;
+  border-radius: 32px 32px 0 0; margin-top: -32px;
 }
 .pd-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; text-align: left; }
 .pd-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
@@ -159,10 +160,26 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .pd-feature-title { font: 700 20px var(--sans); color: #f2f1ed; margin-bottom: 3px; }
 .pd-feature-desc { font: 400 18px/1.6 var(--sans); color: rgba(242,241,237,.45); }
 
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .12s; }
+.reveal-delay-2 { transition-delay: .24s; }
+.reveal-delay-3 { transition-delay: .36s; }
+
+/* ── FILLETED SECTIONS ── */
+.section-fillet {
+  border-radius: 32px 32px 0 0; margin-top: -32px; position: relative;
+}
+
 /* ── TENSION SECTION ── */
 .tension-section {
   background: #f2f1ed; padding: 120px 64px; text-align: center;
   position: relative; z-index: 20;
+  border-radius: 32px 32px 0 0; margin-top: -32px;
 }
 .tension-inner { max-width: 900px; margin: 0 auto; }
 .tension-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
@@ -177,6 +194,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .dpa-section {
   background: #111110; padding: 120px 64px; text-align: center;
   position: relative; z-index: 20;
+  border-radius: 32px 32px 0 0; margin-top: -32px;
 }
 .dpa-section-inner { max-width: 1200px; margin: 0 auto; }
 .dpa-section-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
@@ -214,9 +232,9 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
 /* ── PROOF SECTION ── */
 .proof-section {
-  background: #111110; padding: 120px 64px; text-align: center;
+  background: #0d0d0c; padding: 120px 64px; text-align: center;
   position: relative; z-index: 20;
-  border-top: 1px solid rgba(242,241,237,.06);
+  border-radius: 32px 32px 0 0; margin-top: -32px;
 }
 .proof-inner { max-width: 1100px; margin: 0 auto; }
 .proof-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
@@ -254,7 +272,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .proof-cta-sub { font: 400 17px var(--sans); color: rgba(242,241,237,.35); margin-top: 16px; }
 
 /* ── COST TIERS ── */
-.tiers-section { background: #111110; padding: 72px 64px; position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.tiers-section { background: #0d0d0c; padding: 100px 64px; position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 32px 32px 0 0; margin-top: -32px; }
 .tiers-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
 .tiers-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #f2f1ed; letter-spacing: -.03em; margin-bottom: 40px; }
 .tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 1080px; }
@@ -589,8 +607,8 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
   <!-- Intro -->
   <div class="intro-strip">
-    <div class="intro-strip-label">What we do</div>
-    <h2 class="intro-strip-heading">London's underutilised sites.<br><em>Ranked. Scored. Ready.</em></h2>
+    <div class="intro-strip-label reveal">What we do</div>
+    <h2 class="intro-strip-heading reveal reveal-delay-1">London's underutilised sites.<br><em>Ranked. Scored. Ready.</em></h2>
     <p class="intro-strip-body">
       Across London, thousands of sites are <strong>structurally underused</strong> - surface car parks in Zone 1, low-rise industrial land with residential pressure above, single-storey buildings in high-density corridors. D/A triangulates <strong>200+ factors</strong> across Development, Planning and Architecture and synthesises it into structured intelligence specific to that site, that postcode, that planning authority.
     </p>
@@ -636,20 +654,20 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 <!-- TENSION: The problem -->
 <div class="tension-section">
   <div class="tension-inner">
-    <div class="tension-label">The Problem</div>
-    <h2 class="tension-heading">Most sites look the same<br><em>until you look properly.</em></h2>
-    <p class="tension-body">A site that scores clean on heritage has a Grade I listed building 8 metres from the boundary. A site that looks complicated has three approved precedents within 200 metres. The difference between a deal and a write-off is usually information - and most people are working from the wrong data, too late.</p>
+    <div class="tension-label reveal">The Problem</div>
+    <h2 class="tension-heading reveal reveal-delay-1">Most sites look the same<br><em>until you look properly.</em></h2>
+    <p class="tension-body reveal reveal-delay-2">A site that scores clean on heritage has a Grade I listed building 8 metres from the boundary. A site that looks complicated has three approved precedents within 200 metres. The difference between a deal and a write-off is usually information - and most people are working from the wrong data, too late.</p>
   </div>
 </div>
 
 <!-- D/P/A FRAMEWORK -->
 <div class="dpa-section">
   <div class="dpa-section-inner">
-    <div class="dpa-section-label">The Intelligence Framework</div>
-    <h2 class="dpa-section-heading">Development. Planning. Architecture.</h2>
-    <p class="dpa-section-sub">Most tools answer one question. D/A answers three simultaneously - and the intersection is where every deal lives or dies.</p>
+    <div class="dpa-section-label reveal">The Intelligence Framework</div>
+    <h2 class="dpa-section-heading reveal reveal-delay-1">Development. Planning. Architecture.</h2>
+    <p class="dpa-section-sub reveal reveal-delay-2">Most tools answer one question. D/A answers three simultaneously - and the intersection is where every deal lives or dies.</p>
     <div class="dpa-framework-grid">
-      <div class="dpa-fw-col">
+      <div class="dpa-fw-col reveal">
         <div class="dpa-fw-watermark">D</div>
         <div class="dpa-fw-accent"></div>
         <div class="dpa-fw-title">Development</div>
@@ -663,7 +681,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
           <span class="dpa-fw-tag">Lo / Base / Hi</span>
         </div>
       </div>
-      <div class="dpa-fw-col">
+      <div class="dpa-fw-col reveal">
         <div class="dpa-fw-watermark">P</div>
         <div class="dpa-fw-accent"></div>
         <div class="dpa-fw-title">Planning</div>
@@ -677,7 +695,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
           <span class="dpa-fw-tag">GLA referral</span>
         </div>
       </div>
-      <div class="dpa-fw-col">
+      <div class="dpa-fw-col reveal">
         <div class="dpa-fw-watermark">A</div>
         <div class="dpa-fw-accent"></div>
         <div class="dpa-fw-title">Architecture</div>
@@ -698,10 +716,10 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 <!-- PROOF: 24SS sample -->
 <div class="proof-section">
   <div class="proof-inner">
-    <div class="proof-label">Live Example - 24 Southwark Street, SE1 0SW</div>
-    <h2 class="proof-address">Grade II listed. Opportunity Area.<br><em>Here is what the intelligence says.</em></h2>
+    <div class="proof-label reveal">Live Example - 24 Southwark Street, SE1 0SW</div>
+    <h2 class="proof-address reveal reveal-delay-1">Grade II listed. Opportunity Area.<br><em>Here is what the intelligence says.</em></h2>
     <p class="proof-sub">Base scenario · 10 floors · The Hop Exchange, London Bridge &amp; Borough &amp; Bankside OA</p>
-    <div class="proof-metrics">
+    <div class="proof-metrics reveal reveal-delay-2">
       <div class="proof-metric">
         <div class="proof-metric-label">Development Score</div>
         <div class="proof-metric-val accent">70<span style="font-size:28px;opacity:.4;font-weight:400">/100</span></div>
@@ -932,6 +950,19 @@ if (pdInput && pdBtn) {
     if (addr) { e.preventDefault(); window.location.href = `/pd?address=${addr}`; }
   });
 }
+
+// -- Scroll reveal observer --
+(function() {
+  const obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+})();
 </script>
 </body>
 </html>
