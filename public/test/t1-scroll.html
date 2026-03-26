@@ -75,6 +75,40 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 .hero-metric-val.red { color: #f87171; }
 .hero-metric-label { font: 500 11px var(--sans); color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
 
+/* -- SCENARIO MATRIX -- */
+.matrix-wrap { border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.8); }
+.matrix-table { width: 100%; border-collapse: collapse; }
+.matrix-table th, .matrix-table td { padding: 14px 16px; text-align: center; vertical-align: middle; }
+.matrix-table thead th { background: rgba(255,255,255,.7); backdrop-filter: blur(16px);
+  font: 800 20px var(--sans); color: var(--ink); letter-spacing: -.02em; padding: 20px 16px; }
+.matrix-table thead th:first-child { text-align: left; font: 600 12px var(--sans); text-transform: uppercase;
+  letter-spacing: .1em; color: var(--ink3); }
+.matrix-table thead th .th-floors { font: 500 13px var(--mono); color: var(--ink3); margin-top: 2px; }
+.matrix-table tbody td { font: 500 15px var(--sans); color: var(--ink2); border-top: 1px solid rgba(0,0,0,.04); }
+.matrix-table tbody td:first-child { text-align: left; font: 600 13px var(--sans); color: var(--ink3);
+  text-transform: uppercase; letter-spacing: .06em; background: rgba(255,255,255,.3); }
+.matrix-table tbody td:not(:first-child) { background: rgba(255,255,255,.5); }
+.matrix-group-header td { background: rgba(91,122,157,.08) !important; font: 700 11px var(--sans) !important;
+  text-transform: uppercase !important; letter-spacing: .12em !important; color: var(--accent) !important;
+  padding: 10px 16px !important; text-align: left !important; }
+.matrix-val { font: 700 18px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.matrix-val.hero { font-size: 24px; }
+.matrix-pill { display: inline-block; padding: 4px 10px; border-radius: 6px; font: 700 12px var(--sans); }
+.matrix-pill.green { background: #dcfce7; color: #16a34a; }
+.matrix-pill.amber { background: #fef3c7; color: #b45309; }
+.matrix-pill.red { background: #fee2e2; color: #dc2626; }
+.matrix-pill.blue { background: #e0f2fe; color: #0369a1; }
+
+/* -- CONSEQUENCE STRIP -- */
+.conseq-row { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,.04); }
+.conseq-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font: 700 12px var(--sans); flex-shrink: 0; }
+.conseq-icon.green { background: #dcfce7; color: #16a34a; }
+.conseq-icon.amber { background: #fef3c7; color: #b45309; }
+.conseq-icon.red { background: #fee2e2; color: #dc2626; }
+.conseq-text { font: 500 14px var(--sans); color: var(--ink2); }
+.conseq-text strong { color: var(--ink); }
+
 /* -- SECTIONS -- */
 .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
   padding: 160px 0; position: relative; scroll-snap-align: start; }
@@ -373,21 +407,32 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
   </div>
 </section>
 
-<!-- SECTION 2: SCENARIO EXPLORER -->
+<!-- SECTION 2: SCENARIO COMPARISON MATRIX -->
 <section class="section" id="scenarios" style="background: var(--bg2);">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-label">02 - Financial Model</div>
-      <div class="section-title">Three scenarios. Real numbers.</div>
-      <div class="section-body">Adjust assumptions with the sliders. Every number recalculates live.</div>
+      <div class="section-label">02 - Scenario Matrix</div>
+      <div class="section-title">Three densities. Every consequence.</div>
+      <div class="section-body">Each column is a complete picture - not just what it costs, but what it triggers.</div>
     </div>
 
+    <!-- THE MATRIX -->
     <div class="reveal reveal-delay-1" style="margin-top:40px">
+      <div class="matrix-wrap" id="scenario-matrix">
+        <!-- populated by JS: buildMatrix() -->
+      </div>
+    </div>
+
+    <!-- Consequence strip (Option B mock) -->
+    <div class="reveal reveal-delay-2" style="margin-top:48px">
+      <div class="section-label">Active Scenario Detail</div>
       <div class="scenario-tabs" id="sc-tabs">
         <button class="sc-tab active" onclick="s04go(0)">Low<span class="sc-tab-floors">8 Floors</span></button>
         <button class="sc-tab" onclick="s04go(1)">Base<span class="sc-tab-floors">10 Floors</span></button>
         <button class="sc-tab" onclick="s04go(2)">High<span class="sc-tab-floors">12 Floors</span></button>
       </div>
+      <!-- Consequence strip under active tab -->
+      <div id="consequence-strip" style="margin-top:16px"></div>
     </div>
 
     <!-- Key metrics cards -->
@@ -726,13 +771,13 @@ function s04render() {
   });
 }
 
-function s04go(idx) { s04Idx = idx; s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics(); document.querySelectorAll('.hero-sc-tab').forEach((b,i) => b.classList.toggle('active', i === idx)); }
+function s04go(idx) { s04Idx = idx; s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics(); buildMatrix(); updateConsequenceStrip(); document.querySelectorAll('.hero-sc-tab').forEach((b,i) => b.classList.toggle('active', i === idx)); }
 function s04Slider(key, v) {
   S04[key] = v;
   const fmts = {erv:v2=>'\u00A3'+v2, niy:v2=>v2+'%', cost:v2=>'\u00A3'+Number(v2).toLocaleString(), s106:v2=>'\u00A3'+v2+'k', poc:v2=>v2+'%'};
   const sv = document.getElementById('sv-'+key);
   if (sv) sv.textContent = fmts[key](v);
-  s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]);
+  s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); buildMatrix(); updateConsequenceStrip(); updateHeroMetrics();
 }
 function s04Reset() {
   S04 = {...S04_DEFS};
@@ -740,7 +785,7 @@ function s04Reset() {
     const sl = document.getElementById('sl-'+k);
     if (sl) sl.value = S04_DEFS[k];
   });
-  s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics();
+  s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics(); buildMatrix(); updateConsequenceStrip();
 }
 
 // -- Hero Scenario Switcher --
@@ -767,6 +812,76 @@ function heroScGo(idx) {
   s04render();
   updateMassing(S04_SCENARIOS[s04Idx]);
   updateHeroMetrics();
+}
+
+// -- Scenario Comparison Matrix --
+function scenarioMeta(sc) {
+  const h = sc.floors * 3.6;
+  const bsa = h >= 50 ? {label:'HRB Regime', pill:'red'} : h >= 30 ? {label:'Dual Staircase', pill:'amber'} : {label:'Single Staircase', pill:'green'};
+  const lifts = sc.floors >= 11 ? 3 : sc.floors >= 6 ? 2 : 1;
+  const corePct = h >= 30 ? 25 : 22;
+  const costM2 = h >= 30 ? 4800 : 4200;
+  // LVMF / planning thresholds (simplified for 24SS context)
+  const lvmf = sc.floors <= 8 ? {label:'Clear', pill:'green'} : sc.floors <= 10 ? {label:'Manageable', pill:'amber'} : {label:'Challenged', pill:'red'};
+  const planApp = sc.floors <= 8 ? {label:'Strong precedent', pill:'green'} : sc.floors <= 10 ? {label:'Within envelope', pill:'amber'} : {label:'Above comfort', pill:'red'};
+  const heritage = sc.floors <= 8 ? {label:'Comfortable', pill:'green'} : sc.floors <= 10 ? {label:'Navigable', pill:'amber'} : {label:'Pushback likely', pill:'red'};
+  const fireStrat = h >= 50 ? {label:'Full HRB', pill:'red'} : h >= 30 ? {label:'Enhanced Part B', pill:'amber'} : {label:'Standard Part B', pill:'green'};
+  return {bsa, lifts, corePct, costM2, lvmf, planApp, heritage, fireStrat};
+}
+
+function buildMatrix() {
+  s04calc();
+  const rows = [];
+  const scs = S04_SCENARIOS;
+  const metas = scs.map(scenarioMeta);
+
+  function pill(m) { return `<span class="matrix-pill ${m.pill}">${m.label}</span>`; }
+  function val(v, cls) { return `<span class="matrix-val${cls?' '+cls:''}">${v}</span>`; }
+
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Financial</td></tr>`);
+  rows.push(`<tr><td>Est. GDV</td>${scs.map(sc => `<td>${val(fm(sc.gdv),'hero')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Profit on Cost</td>${scs.map(sc => `<td>${val(sc.poc+'%', parseFloat(sc.poc)>=S04.poc?'':'')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>RLV</td>${scs.map(sc => `<td>${val(fm(sc.rlv))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Total Dev Cost</td>${scs.map(sc => `<td>${val(fm(sc.tdc))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Dev Profit</td>${scs.map(sc => `<td>${val(fm(sc.profit))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>NIA</td>${scs.map(sc => `<td>${val(f(sc.nia)+'m\u00B2')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Cost / m\u00B2</td>${metas.map(m => `<td>${val('\u00A3'+f(m.costM2))}</td>`).join('')}</tr>`);
+
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Planning</td></tr>`);
+  rows.push(`<tr><td>LVMF Impact</td>${metas.map(m => `<td>${pill(m.lvmf)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Planning Appetite</td>${metas.map(m => `<td>${pill(m.planApp)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Heritage Response</td>${metas.map(m => `<td>${pill(m.heritage)}</td>`).join('')}</tr>`);
+
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Architecture</td></tr>`);
+  rows.push(`<tr><td>BSA Regime</td>${metas.map(m => `<td>${pill(m.bsa)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Fire Strategy</td>${metas.map(m => `<td>${pill(m.fireStrat)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Lifts Required</td>${metas.map(m => `<td>${val(m.lifts)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Core %</td>${metas.map(m => `<td>${val(m.corePct+'%')}</td>`).join('')}</tr>`);
+
+  html('scenario-matrix', `<table class="matrix-table">
+    <thead><tr>
+      <th></th>
+      ${scs.map(sc => `<th>${sc.label}<div class="th-floors">${sc.floors} Floors - ${Math.round(sc.floors*3.6)}m</div></th>`).join('')}
+    </tr></thead>
+    <tbody>${rows.join('')}</tbody>
+  </table>`);
+}
+
+// -- Consequence Strip (Option B) --
+function updateConsequenceStrip() {
+  const sc = S04_SCENARIOS[s04Idx];
+  const m = scenarioMeta(sc);
+  const items = [
+    {icon: m.bsa.pill, text: `<strong>BSA:</strong> ${m.bsa.label}${m.bsa.pill !== 'green' ? ' - adds ~280-340m\u00B2 core per floor' : ''}`},
+    {icon: m.lvmf.pill, text: `<strong>LVMF:</strong> ${m.lvmf.label}${m.lvmf.pill === 'red' ? ' - strategic view corridor constrained' : ''}`},
+    {icon: m.planApp.pill, text: `<strong>Planning:</strong> ${m.planApp.label}${m.planApp.pill === 'red' ? ' - expect GLA Stage II scrutiny' : ''}`},
+    {icon: m.heritage.pill, text: `<strong>Heritage:</strong> ${m.heritage.label}${m.heritage.pill === 'red' ? ' - SPAB/Victorian Society likely objection' : ''}`},
+    {icon: m.fireStrat.pill, text: `<strong>Fire:</strong> ${m.fireStrat.label} - ${m.lifts} lift${m.lifts>1?'s':''}, ${m.corePct}% core`},
+    {icon: parseFloat(sc.poc) >= S04.poc ? 'green' : 'red', text: `<strong>Return:</strong> ${sc.poc}% PoC ${parseFloat(sc.poc) >= S04.poc ? '(above' : '(below'} ${S04.poc}% target)`}
+  ];
+  html('consequence-strip', items.map(it =>
+    `<div class="conseq-row"><div class="conseq-icon ${it.icon}">${it.icon==='green'?'\u2713':it.icon==='amber'?'\u26A0':'\u2717'}</div><div class="conseq-text">${it.text}</div></div>`
+  ).join(''));
 }
 
 // -- Perspective Modes --
@@ -828,6 +943,8 @@ function updateMassing(sc) {
 if (typeof SITE_INTELLIGENCE !== 'undefined') populatePage(SITE_INTELLIGENCE);
 s04render();
 updateHeroMetrics();
+buildMatrix();
+updateConsequenceStrip();
 
 // Flags (simplified for now)
 function buildFlags() {
