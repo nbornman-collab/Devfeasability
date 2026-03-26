@@ -5,18 +5,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>D/A — London Development Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --sans: 'Inter', sans-serif;
+  --display: 'Instrument Serif', Georgia, serif;
   --mono: 'JetBrains Mono', monospace;
   --ink:  #f2f1ed;
   --ink2: rgba(242,241,237,0.7);
   --ink3: rgba(242,241,237,0.45);
-  --accent: #e07b2a;
+  --accent: #b8845c;
   --bg-dark: #111110;
 }
 html { scroll-behavior: smooth; }
@@ -109,7 +110,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .burger-nav a:last-child { border-bottom: none; }
 .burger-nav a:hover { color: var(--ink); }
 .burger-nav a.accent { color: var(--accent); }
-.burger-nav a.accent:hover { color: #c96b1e; }
+.burger-nav a.accent:hover { color: #a07450; }
 .burger-footer {
   padding: 20px 24px; font: 400 9px var(--sans);
   letter-spacing: .16em; text-transform: uppercase; color: var(--ink3);
@@ -122,8 +123,8 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 }
 .pd-inner { max-width: 1100px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
 .pd-label { font: 700 8px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-.pd-heading { font: 800 clamp(26px,2.8vw,38px) var(--sans); color: #f2f1ed; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 16px; }
-.pd-body { font: 400 13px/1.8 var(--sans); color: rgba(242,241,237,.55); margin-bottom: 28px; max-width: 440px; }
+.pd-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #f2f1ed; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 16px; }
+.pd-body { font: 400 15px/1.9 var(--sans); color: rgba(242,241,237,.55); margin-bottom: 28px; max-width: 440px; }
 .pd-search-row { display: flex; gap: 10px; margin-bottom: 16px; }
 .pd-input {
   flex: 1; padding: 13px 16px; background: rgba(242,241,237,.06);
@@ -139,7 +140,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   border: none; border-radius: 6px; cursor: pointer; text-decoration: none;
   white-space: nowrap; transition: background .15s;
 }
-.pd-btn:hover { background: #c96b1e; }
+.pd-btn:hover { background: #a07450; }
 .pd-types { font: 400 9px var(--sans); color: rgba(242,241,237,.3); letter-spacing: .06em; }
 .pd-types span { color: rgba(242,241,237,.45); }
 .pd-feature-list { display: flex; flex-direction: column; gap: 14px; }
@@ -155,7 +156,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 /* ── COST TIERS ── */
 .tiers-section { background: #f2f1ed; padding: 72px 64px; position: relative; z-index: 20; }
 .tiers-label { font: 700 8px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-.tiers-heading { font: 800 clamp(26px,2.8vw,38px) var(--sans); color: #111110; letter-spacing: -.03em; margin-bottom: 40px; }
+.tiers-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #111110; letter-spacing: -.03em; margin-bottom: 40px; }
 .tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; max-width: 960px; }
 .tier-card {
   padding: 28px 24px; background: #fff;
@@ -203,15 +204,15 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 }
 .below-fold-label {
   font: 700 8px var(--sans-light, 'Inter', sans-serif); letter-spacing: .22em; text-transform: uppercase;
-  color: #e07b2a; margin-bottom: 16px;
+  color: #b8845c; margin-bottom: 16px;
 }
 .below-fold-heading {
-  font: 800 clamp(28px,3vw,42px) 'Inter', sans-serif;
+  font: 400 clamp(28px,3vw,42px) 'Instrument Serif', Georgia, serif;
   color: #111110; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 20px;
 }
-.below-fold-heading em { font-style: normal; color: #e07b2a; }
+.below-fold-heading em { font-style: normal; color: #b8845c; }
 .below-fold-body {
-  font: 400 14px/1.8 'Inter', sans-serif; color: #555550; max-width: 420px;
+  font: 400 16px/1.9 'Inter', sans-serif; color: #555550; max-width: 420px;
 }
 .below-fold-body strong { font-weight: 700; color: #111110; }
 
@@ -225,7 +226,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   cursor: pointer;
 }
 .mode-card:hover {
-  border-color: #e07b2a;
+  border-color: #b8845c;
   box-shadow: 0 4px 20px rgba(224,123,42,.12);
   transform: translateX(3px);
 }
@@ -233,7 +234,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   font: 800 18px 'JetBrains Mono', monospace;
   color: #e8e7e2; flex-shrink: 0; width: 28px; letter-spacing: -.02em;
 }
-.mode-card:hover .mode-card-num { color: #e07b2a; }
+.mode-card:hover .mode-card-num { color: #b8845c; }
 .mode-card-body { flex: 1; }
 .mode-card-title {
   font: 700 13px 'Inter', sans-serif; color: #111110;
@@ -243,13 +244,13 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .mode-card-arrow {
   font-size: 16px; color: #d4d3cf; transition: color .15s, transform .15s;
 }
-.mode-card:hover .mode-card-arrow { color: #e07b2a; transform: translateX(3px); }
+.mode-card:hover .mode-card-arrow { color: #b8845c; transform: translateX(3px); }
 .hero-label {
   font: 700 9px var(--sans); letter-spacing: .24em; text-transform: uppercase;
   color: var(--accent); margin-bottom: 20px;
 }
 .hero-title {
-  font: 900 clamp(48px,6.5vw,96px) var(--sans);
+  font: 400 clamp(48px,6.5vw,96px) var(--display);
   color: var(--ink); letter-spacing: -.04em; line-height: .95;
   margin-bottom: 24px;
 }
@@ -281,7 +282,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   padding: 16px 32px; border-radius: 6px; transition: background .15s, transform .15s;
   display: inline-block;
 }
-.btn-primary:hover { background: #c96b1e; transform: translateY(-1px); }
+.btn-primary:hover { background: #a07450; transform: translateY(-1px); }
 
 /* Cycling hero text */
 #hero-cycle {
@@ -436,7 +437,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 </div><!-- /hero-wrap -->
 
 <!-- var(--accent) available from here on (light sections) -->
-<style>:root { --accent: #e07b2a; --sans: 'Inter',sans-serif; --mono: 'JetBrains Mono',monospace; }</style>
+<style>:root { --accent: #b8845c; --sans: 'Inter',sans-serif; --mono: 'JetBrains Mono',monospace; }</style>
 
 <!-- Below fold: narrative + discovery modes -->
 <div class="below-fold">
