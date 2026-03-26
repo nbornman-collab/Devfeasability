@@ -318,10 +318,13 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   display: flex; flex-direction: column; gap: 0;
 }
 .hero-bottom-content {
-  position: absolute; top: 50%; left: 64px;
+  position: absolute; top: 50%; left: 64px; right: 64px;
   transform: translateY(-50%);
   display: flex; flex-direction: column; align-items: flex-start;
-  max-width: 760px;
+}
+.hero-footer {
+  position: absolute; bottom: 72px; left: 64px;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 20px;
 }
 
 /* ── BELOW FOLD ── */
@@ -440,10 +443,11 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   color: var(--accent); margin-bottom: 20px;
 }
 .hero-title {
-  font: 400 clamp(48px,6.5vw,96px) var(--display);
-  color: var(--ink); letter-spacing: -.04em; line-height: .95;
-  margin-bottom: 24px;
+  font: 400 clamp(36px,5vw,80px) var(--display);
+  color: var(--ink); letter-spacing: -.04em; line-height: 1.05;
+  margin-bottom: 0;
 }
+.hero-title .hero-line1 { display: block; white-space: nowrap; }
 .hero-title em { font-style: normal; color: var(--accent); }
 .hero-sub {
   font: 400 clamp(14px,1.4vw,18px) var(--sans);
@@ -602,9 +606,16 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
     </div>
   </div>
 
-  <!-- BOTTOM: title + sub + CTAs -->
+  <!-- CENTER: title only -->
   <div class="hero-bottom-content">
-    <h1 class="hero-title">In-depth feasibility analysis...<br><em id="hero-cycle">Before you bid.</em></h1>
+    <h1 class="hero-title">
+      <span class="hero-line1">In-depth feasibility analysis...</span>
+      <em id="hero-cycle">Before you bid.</em>
+    </h1>
+  </div>
+
+  <!-- BOTTOM: sub + CTAs -->
+  <div class="hero-footer">
     <p class="hero-sub">200+ factors. Triangulated. Site-specific. Structured.<br>Development intelligence for London.</p>
     <div class="hero-ctas">
       <a class="btn-primary" href="/discover">Discover Sites &rarr;</a>
@@ -648,7 +659,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   <!-- Intro -->
   <div class="intro-strip">
     <div class="intro-strip-label reveal">What we do</div>
-    <h2 class="intro-strip-heading reveal reveal-delay-1">London's underutilised sites.<br><em>Evaluated - Ranked - Modelled.</em></h2>
+    <h2 class="intro-strip-heading reveal reveal-delay-1">London's underutilised sites.<br><em>Evaluated / Ranked / Modelled.</em></h2>
     <p class="intro-strip-body">
       Across London, thousands of sites are <strong>structurally underused</strong> - surface car parks in Zone 1, low-rise industrial land with residential pressure above, single-storey buildings in high-density corridors. D/A triangulates <strong>200+ factors</strong> across Development, Planning and Architecture and synthesises it into structured intelligence specific to that site, that postcode, that planning authority.
     </p>
