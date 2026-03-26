@@ -170,7 +170,12 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .tier-card:hover { border-color: rgba(242,241,237,.2); background: rgba(242,241,237,.07); }
 .tier-card.featured { border-color: var(--accent); background: rgba(184,132,92,.08); }
 .tier-card.featured:hover { background: rgba(184,132,92,.12); }
-.tier-name { font: 700 20px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: rgba(242,241,237,.45); }
+.tier-name { font: 700 20px var(--sans); letter-spacing: .01em; color: #f2f1ed; }
+.tier-name-sub { font: 400 13px var(--sans); letter-spacing: .08em; color: rgba(242,241,237,.5); margin-top: 2px; text-transform: none; }
+.tier-alt-prices { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+.tier-alt-row { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid rgba(242,241,237,.08); padding-top: 6px; }
+.tier-alt-label { font: 400 13px var(--sans); color: rgba(242,241,237,.5); }
+.tier-alt-price { font: 700 18px var(--mono); color: rgba(242,241,237,.8); }
 .tier-card.featured .tier-name { color: var(--accent); }
 .tier-price { font: 800 36px var(--mono); color: #f2f1ed; letter-spacing: -.03em; line-height: 1; }
 .tier-divider { height: 1px; background: rgba(242,241,237,.08); margin: 4px 0; }
@@ -561,29 +566,39 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
       <a class="tier-cta-link" href="/discover">Explore sites &rarr;</a>
     </div>
     <div class="tier-card featured">
-      <div class="tier-name">Appraise</div>
-      <div class="tier-price">£120<span style="font:400 14px 'Inter',sans-serif;color:#999990"> /report</span> <span style="font:400 14px 'Inter',sans-serif;color:#999990;text-decoration:line-through">£249</span></div>
+      <div class="tier-name">Development Appraisal</div>
+      <div class="tier-name-sub">Full Site Intelligence</div>
+      <div class="tier-price">£120<span style="font:400 14px 'Inter',sans-serif;color:#999990"> /report</span> <span style="font:400 13px 'Inter',sans-serif;color:#999990;text-decoration:line-through">£249</span></div>
       <div class="tier-divider"></div>
-      <div class="tier-desc">Full development intelligence - planning, heritage, massing, financials - in one page. Know before you bid.</div>
+      <div class="tier-desc">Planning, heritage, massing and financials in one page. Know before you bid.</div>
       <ul class="tier-items">
         <li>Full D/P/A analysis</li>
         <li>Planning precedents</li>
         <li>3D massing + scenarios</li>
         <li>Financial model + IRR</li>
       </ul>
+      <div class="tier-alt-prices">
+        <div class="tier-alt-row"><span class="tier-alt-label">5-site pack</span><span class="tier-alt-price">£199 <span style="font-size:13px;font-weight:400;text-decoration:line-through;color:rgba(242,241,237,.4)">£249</span> each</span></div>
+        <div class="tier-alt-row"><span class="tier-alt-label">Professional (annual)</span><span class="tier-alt-price">£299<span style="font-size:13px;font-weight:400">/mo</span></span></div>
+      </div>
       <a class="tier-cta-link" href="/test/t1-scroll">See a sample &rarr;</a>
     </div>
     <div class="tier-card">
-      <div class="tier-name">PD &amp; Extensions</div>
+      <div class="tier-name">Home Extension Checker</div>
+      <div class="tier-name-sub">PD &amp; Extension Report</div>
       <div class="tier-price">£99<span style="font:400 13px 'Inter',sans-serif;color:#999990"> /report</span> <span style="font:400 13px 'Inter',sans-serif;color:#999990;text-decoration:line-through">£120</span></div>
       <div class="tier-divider"></div>
-      <div class="tier-desc">Permitted Development analysis for residential properties. What your architect would tell you in the first meeting.</div>
+      <div class="tier-desc">Your full Permitted Development rights, Article 4 check, 3D envelope and cost ranges. Instant.</div>
       <ul class="tier-items">
         <li>Massing envelope (3D)</li>
         <li>Article 4 + local plan check</li>
         <li>Approved Documents guide</li>
         <li>London cost ranges</li>
       </ul>
+      <div class="tier-alt-prices">
+        <div class="tier-alt-row"><span class="tier-alt-label">Professional (monthly)</span><span class="tier-alt-price">£199<span style="font-size:13px;font-weight:400">/mo</span></span></div>
+        <div class="tier-alt-row"><span class="tier-alt-label">Professional (annual)</span><span class="tier-alt-price">£149<span style="font-size:13px;font-weight:400">/mo</span></span></div>
+      </div>
       <a class="tier-cta-link" href="/pd">Check your property &rarr;</a>
     </div>
   </div>
