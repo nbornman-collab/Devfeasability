@@ -473,6 +473,12 @@ input[type=range]::-moz-range-progress { background: var(--accent2); border-radi
     </div>
 
     <!-- Sliders -->
+    <div class="reveal reveal-delay-2" style="margin-top:48px;margin-bottom:4px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <div class="section-label" style="margin-bottom:0">Adjust Assumptions</div>
+        <div style="font:400 13px var(--sans);color:var(--ink3)">Edit any value - numbers update live</div>
+      </div>
+    </div>
     <div class="slider-group reveal reveal-delay-2" id="sc-sliders">
       <div class="slider-item"><div class="slider-label">ERV (per m&sup2;) <span class="slider-val" id="sv-erv">&pound;700</span></div><input type="range" id="sl-erv" min="500" max="1200" step="25" value="700" oninput="s04Slider('erv',+this.value)"></div>
       <div class="slider-item"><div class="slider-label">Net Yield <span class="slider-val" id="sv-niy">4.75%</span></div><input type="range" id="sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="s04Slider('niy',+this.value)"></div>
