@@ -40,7 +40,7 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .cursor.hover { transform: translate(-50%, -50%) scale(2.5); opacity: .5; }
 
 /* -- PROGRESS DOTS -- */
-.progress-dots { position: fixed; right: 24px; top: 50%; transform: translateY(-50%); z-index: 250;
+.progress-dots { position: fixed; left: 24px; top: 50%; transform: translateY(-50%); z-index: 250;
   display: flex; flex-direction: column; gap: 14px; }
 .progress-dot { width: 10px; height: 10px; border-radius: 50%; background: #ccc; cursor: pointer;
   transition: background .3s, transform .3s; border: none; padding: 0; }
@@ -305,8 +305,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
   <button class="progress-dot active" data-target="overview" aria-label="Overview"></button>
   <button class="progress-dot" data-target="development" aria-label="Development"></button>
   <button class="progress-dot" data-target="scenarios" aria-label="Scenarios"></button>
-  <button class="progress-dot" data-target="planning" aria-label="Planning"></button>
   <button class="progress-dot" data-target="architecture" aria-label="Architecture"></button>
+  <button class="progress-dot" data-target="planning" aria-label="Planning"></button>
 </div>
 
 <!-- NAV (frosted, fixed) -->
@@ -316,8 +316,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
     <a href="#overview" class="active">Overview</a>
     <a href="#development">Development</a>
     <a href="#scenarios">Scenarios</a>
-    <a href="#planning">Planning</a>
     <a href="#architecture">Architecture</a>
+    <a href="#planning">Planning</a>
   </div>
 </nav>
 
@@ -334,11 +334,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="4" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="20"/><line x1="4" y1="12" x2="2" y2="12"/><line x1="22" y1="12" x2="20" y2="12"/></svg>
       <span>Aerial</span>
     </button>
-    <button class="persp-btn active" id="persp-plan" title="Plan" onclick="setPerspective('plan')">
+    <button class="persp-btn" id="persp-plan" title="Plan" onclick="setPerspective('plan')">
       <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
       <span>Plan</span>
     </button>
-    <button class="persp-btn" id="persp-axo" title="Axonometric" onclick="setPerspective('axo')">
+    <button class="persp-btn active" id="persp-axo" title="Axonometric" onclick="setPerspective('axo')">
       <svg viewBox="0 0 24 24"><path d="M3 17l9 5 9-5V7l-9-5-9 5z"/><line x1="12" y1="22" x2="12" y2="12"/><line x1="3" y1="7" x2="12" y2="12"/><line x1="21" y1="7" x2="12" y2="12"/></svg>
       <span>Axo</span>
     </button>
@@ -474,36 +474,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
   </div>
 </section>
 
-<!-- SECTION 3: PLANNING -->
-<section class="section" id="planning">
-  <div class="section-inner">
-    <div class="reveal">
-      <div class="section-label">03 - Planning</div>
-      <div class="section-title" id="plan-title">Strong precedent. Clear pathway.</div>
-    </div>
-    <div class="reveal reveal-delay-1">
-      <div class="section-body" id="plan-synthesis"></div>
-    </div>
-
-    <!-- Flags -->
-    <div class="glass reveal reveal-delay-2">
-      <div class="section-label">Site Constraints &amp; Flags</div>
-      <div id="flags-body"></div>
-    </div>
-
-    <!-- Precedents -->
-    <div class="glass reveal reveal-delay-3">
-      <div class="section-label">Planning Precedents</div>
-      <div id="precedents-body"></div>
-    </div>
-  </div>
-</section>
-
-<!-- SECTION 4: ARCHITECTURE -->
+<!-- SECTION 3: ARCHITECTURE (above Planning - physical before regulatory) -->
 <section class="section" id="architecture" style="background: var(--bg2);">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-label">04 - Architecture</div>
+      <div class="section-label">03 - Architecture</div>
       <div class="section-title" id="arch-title">Heritage-led. Code-compliant.</div>
     </div>
     <div class="reveal reveal-delay-1">
@@ -524,6 +499,40 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
     <div class="glass reveal">
       <div class="section-label">Height Context</div>
       <div id="heights-body"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: PLANNING -->
+<section class="section" id="planning">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">04 - Planning</div>
+      <div class="section-title" id="plan-title">Strong precedent. Clear pathway.</div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="section-body" id="plan-synthesis"></div>
+    </div>
+
+    <!-- Flags -->
+    <div class="glass reveal reveal-delay-2">
+      <div class="section-label">Site Constraints &amp; Flags</div>
+      <div id="flags-body"></div>
+    </div>
+
+    <!-- Precedents -->
+    <div class="glass reveal reveal-delay-3">
+      <div class="section-label">Planning Precedents</div>
+      <div id="precedents-body"></div>
+    </div>
+
+    <!-- Planning applications link -->
+    <div class="glass reveal" style="margin-top:24px; text-align:center; padding:28px">
+      <div class="section-label" style="margin-bottom:8px">Full Planning History</div>
+      <div style="font:400 15px var(--sans);color:var(--ink2);margin-bottom:16px">300+ applications analysed across the borough</div>
+      <a href="#" id="planning-apps-link" style="font:600 14px var(--sans);color:var(--accent);text-decoration:none;padding:12px 24px;border:1px solid var(--accent);border-radius:8px;display:inline-block;transition:all .2s"
+         onmouseover="this.style.background='var(--accent)';this.style.color='#fff'"
+         onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">View All Applications &rarr;</a>
     </div>
   </div>
 </section>
@@ -892,7 +901,7 @@ const PERSPECTIVES = {
   elevation: { pitch: 80, zoom: 18.5, bearing: -20,  duration: 1500 },
   street:    { pitch: 75, zoom: 19,   bearing: 30,   duration: 1800 }
 };
-let currentPersp = 'plan';
+let currentPersp = 'axo';
 
 function setPerspective(mode) {
   if (!MAP_REF) return;
@@ -976,7 +985,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   mapboxgl.accessToken = cfg.mapboxToken;
   const map = new mapboxgl.Map({
     container:'map', style:'mapbox://styles/mapbox/standard',
-    center: CENTROID, zoom: 18, pitch: 0, bearing: -20,
+    center: CENTROID, zoom: 17.2, pitch: 60, bearing: -20,
     interactive: true, attributionControl: false, antialias: true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
@@ -1093,7 +1102,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 // -- 4. PROGRESS DOTS --
 (function() {
   const dots = document.querySelectorAll('.progress-dot');
-  const sectionIds = ['overview','development','scenarios','planning','architecture'];
+  const sectionIds = ['overview','development','scenarios','architecture','planning'];
 
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
