@@ -553,7 +553,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   <span class="nav-tagline">Development Intelligence · London</span>
   <div class="da-nav-links">
     <a class="da-nav-link active" href="/discover">Discover</a>
-    <a class="da-nav-link" href="/scout/24-southwark-st.html">Appraise</a>
+    <a class="da-nav-link" href="/test/t1-scroll">Appraise</a>
     <button class="da-burger" id="da-burger" aria-label="Menu" onclick="openBurger()">
       <span></span><span></span><span></span>
     </button>
@@ -570,7 +570,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   <nav class="burger-nav">
     <a href="/">Home</a>
     <a href="/discover">Discover</a>
-    <a href="/scout/24-southwark-st.html">Appraise</a>
+    <a href="/test/t1-scroll">Appraise</a>
     <a href="/pd" style="color:var(--accent)">PD &amp; Extensions</a>
     <a href="mailto:hello@devfeasibility.com">Contact</a>
   </nav>
@@ -707,7 +707,7 @@ const boroughShort = b => {
   if (l.includes('hackney')) return 'Hackney';
   return b;
 };
-const scoreColor  = s => s >= 80 ? '#15803d' : s >= 65 ? '#e07b2a' : s >= 50 ? '#b45309' : '#999990';
+const scoreColor  = s => s >= 80 ? '#15803d' : s >= 65 ? '#b8845c' : s >= 50 ? '#b45309' : '#999990';
 
 function normaliseSite(s, idx) {
   const borough = s.borough || 'London';
