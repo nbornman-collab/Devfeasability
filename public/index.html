@@ -144,7 +144,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .pd-btn:hover { background: #a07450; }
 .pd-types { font: 400 18px var(--sans); color: rgba(242,241,237,.3); letter-spacing: .06em; }
 .pd-types span { color: rgba(242,241,237,.45); }
-.pd-feature-list { display: flex; flex-direction: column; gap: 14px; }
+.pd-feature-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .pd-feature {
   display: flex; gap: 14px; align-items: flex-start;
   padding: 16px; background: rgba(242,241,237,.04);
@@ -588,19 +588,19 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   <!-- Stats bar -->
   <div class="stats-bar">
     <div class="stats-bar-item">
-      <div class="stats-bar-num" id="h-sites2">155</div>
+      <div class="stats-bar-num tick-up" id="h-sites2">155</div>
       <div class="stats-bar-label">Verified sites</div>
     </div>
     <div class="stats-bar-item">
-      <div class="stats-bar-num accent" id="h-gdv2">£8.2B</div>
+      <div class="stats-bar-num accent tick-up" id="h-gdv2">£8.2B</div>
       <div class="stats-bar-label">Total GDV potential</div>
     </div>
     <div class="stats-bar-item">
-      <div class="stats-bar-num">200+</div>
+      <div class="stats-bar-num tick-up">200+</div>
       <div class="stats-bar-label">Factors per site</div>
     </div>
     <div class="stats-bar-item">
-      <div class="stats-bar-num">3</div>
+      <div class="stats-bar-num tick-up">3</div>
       <div class="stats-bar-label">London boroughs</div>
     </div>
   </div>
@@ -722,17 +722,17 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
     <div class="proof-metrics reveal reveal-delay-2">
       <div class="proof-metric">
         <div class="proof-metric-label">Development Score</div>
-        <div class="proof-metric-val accent">70<span style="font-size:28px;opacity:.4;font-weight:400">/100</span></div>
+        <div class="proof-metric-val accent"><span class="tick-up">70</span><span style="font-size:28px;opacity:.4;font-weight:400">/100</span></div>
         <div class="proof-metric-sub">Strong opportunity</div>
       </div>
       <div class="proof-metric">
         <div class="proof-metric-label">Estimated GDV</div>
-        <div class="proof-metric-val">£68.4M</div>
+        <div class="proof-metric-val tick-up">£68.4M</div>
         <div class="proof-metric-sub">Base scenario, 10F</div>
       </div>
       <div class="proof-metric">
         <div class="proof-metric-label">Target Profit on Cost</div>
-        <div class="proof-metric-val">20%</div>
+        <div class="proof-metric-val tick-up">20%</div>
         <div class="proof-metric-sub">Threshold met - base</div>
       </div>
       <div class="proof-metric">
@@ -962,6 +962,52 @@ if (pdInput && pdBtn) {
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+})();
+
+// -- Number ticker on scroll --
+(function() {
+  function tickUp(el) {
+    var raw = el.textContent.trim();
+    var prefix = '';
+    var suffix = '';
+    var hasDecimal = false;
+    var dp = 0;
+    // Extract prefix (£)
+    if (raw.startsWith('\u00A3')) { prefix = '\u00A3'; raw = raw.slice(1); }
+    // Extract suffix (B, M, +, /100, %)
+    var suffixMatch = raw.match(/(B|M|%|\+|\/100)$/);
+    if (suffixMatch) { suffix = suffixMatch[0]; raw = raw.slice(0, -suffix.length); }
+    var target = parseFloat(raw);
+    if (isNaN(target)) return;
+    if (raw.includes('.')) { dp = raw.split('.')[1].length; hasDecimal = true; }
+
+    var duration = 800;
+    var start = performance.now();
+    function frame(now) {
+      var t = Math.min((now - start) / duration, 1);
+      var ease = 1 - Math.pow(1 - t, 3);
+      var current = target * ease;
+      if (hasDecimal) {
+        el.textContent = prefix + current.toFixed(dp) + suffix;
+      } else {
+        el.textContent = prefix + Math.round(current) + suffix;
+      }
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    el.textContent = prefix + '0' + suffix;
+    requestAnimationFrame(frame);
+  }
+
+  var tickObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        tickUp(entry.target);
+        tickObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.tick-up').forEach(function(el) { tickObs.observe(el); });
 })();
 </script>
 </body>
