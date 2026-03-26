@@ -588,27 +588,27 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   <div class="discover-hero" id="hero-stats">
     <div class="hero-stat">
       <div class="hero-stat-label">Sites Tracked</div>
-      <div class="hero-stat-value" id="stat-total">—</div>
+      <div class="hero-stat-value" id="stat-total">-</div>
       <div class="hero-stat-sub">Verified London opportunities</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-label">Est. GDV</div>
-      <div class="hero-stat-value accent" id="stat-gdv">—</div>
+      <div class="hero-stat-value accent" id="stat-gdv">-</div>
       <div class="hero-stat-sub">Modelled development value</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-label">Floor Area</div>
-      <div class="hero-stat-value" id="stat-nia">—</div>
+      <div class="hero-stat-value" id="stat-nia">-</div>
       <div class="hero-stat-sub">Potential new NIA</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-label">OA Designated</div>
-      <div class="hero-stat-value" id="stat-oa">—</div>
+      <div class="hero-stat-value" id="stat-oa">-</div>
       <div class="hero-stat-sub">Opportunity Area sites</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-label">Reports Live</div>
-      <div class="hero-stat-value" id="stat-t1">—</div>
+      <div class="hero-stat-value" id="stat-t1">-</div>
       <div class="hero-stat-sub">Full appraisals available</div>
     </div>
   </div>
@@ -639,7 +639,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
     <!-- List header -->
     <div class="list-header">
       <span class="list-header-label" id="list-label">London Top 100</span>
-      <span class="list-count" id="list-count">—</span>
+      <span class="list-count" id="list-count">-</span>
     </div>
 
     <!-- Site list -->
@@ -654,18 +654,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
       </button>
       <div class="focus-top">
         <div class="focus-sat-wrap" id="focus-visual">
-          <div class="focus-sat-placeholder" id="focus-sat-ph">—</div>
+          <div class="focus-sat-placeholder" id="focus-sat-ph">-</div>
         </div>
         <div class="focus-header">
           <div class="focus-score-row">
-            <div class="focus-score-num" id="focus-score">—</div>
+            <div class="focus-score-num" id="focus-score">-</div>
             <div class="focus-score-right">
-              <span class="focus-verdict" id="focus-verdict">—</span>
+              <span class="focus-verdict" id="focus-verdict">-</span>
               <span class="focus-score-sub" id="focus-score-sub">Score /100</span>
             </div>
           </div>
-          <div class="focus-name" id="focus-name">—</div>
-          <div class="focus-addr" id="focus-addr">—</div>
+          <div class="focus-name" id="focus-name">-</div>
+          <div class="focus-addr" id="focus-addr">-</div>
           <div class="focus-chips" id="focus-chips"></div>
         </div>
       </div>
@@ -892,7 +892,7 @@ function render() {
           <div class="card-address">${s.address}</div>
           <div class="card-borough-row"><span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span></div>
           <div class="card-chips"><span class="verdict-pill ${vc}">${vl}</span>${otherChips}</div>
-
+          ${s.desc ? `<div class="card-summary">${s.desc}</div>` : ''}
         </div>
         <div class="card-score-col">
           <div class="card-score-num">${s.score}</div>
@@ -1001,7 +1001,7 @@ function factorBars(s) {
       <div class="focus-factor-row">
         <div class="focus-factor-name locked">${f.name}</div>
         <div class="focus-factor-bar"><div class="focus-factor-fill locked"></div></div>
-        <div class="focus-factor-score locked">—</div>
+        <div class="focus-factor-score locked">-</div>
       </div>`),
   ];
   return rows.join('');
