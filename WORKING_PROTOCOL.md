@@ -672,3 +672,56 @@ The following parameters are NOT currently in the scoring/rules engine but MUST 
 
 ### CONTEXT FLAGS (informational, no score impact)
 10. **Current planning status** - Already refused? Consented? Under appeal? Pre-app submitted?
+
+---
+
+## EXTENDED INTELLIGENCE FILE SCHEMA (2026-03-26)
+
+Added from NicInSources parameterisation framework. These fields live outside the 6-factor scoring engine - they are screening flags, cost modifiers, and workflow triggers.
+
+### `environment` block
+- `flood_zone` (1/2/3) - EA Flood Map for Planning
+- `surface_water_risk` (low/medium/high) - EA RoFSW
+- `historic_landfill` (boolean) + `historic_landfill_proximity_m`
+- `contamination_screening` (low/medium/high) + note
+- `strategic_noise` (low/moderate/high) - Defra Round 4 (2022)
+- `air_quality.aqma` (boolean) + `aqma_name` + note
+
+### `ecology` block
+- `bng_mandatory` (boolean) - all new permissions from Feb 2024
+- `bng_cost_estimate_low` / `bng_cost_estimate_high` (GBP)
+- `designated_sites_within_500m` (array)
+- `tpo_on_site` / `tpo_adjacent` (boolean)
+- `protected_species_risk` (low/medium/high)
+
+### `sustainability` block
+- `wlc_required` (boolean) - GLA WLC Guidance for referable schemes
+- `circular_economy_required` (boolean) - GLA CES Guidance
+- `energy_planning.part_l` / `.be_seen` / `.breeam_target` / `.breeam_cost_uplift_per_sqm`
+- `epc_existing.rating` / `.floor_area_m2` / `.lodgement_date`
+
+### `policy_designations` block
+- `opportunity_area` (object with name/ref/targets)
+- `caz` (boolean)
+- `sil` (boolean)
+- `tall_building_zone` (boolean) + `tall_building_threshold_m`
+- `article4_directions` (array of strings)
+- `locally_listed` (boolean)
+
+### `delivery` block
+- `fire_statement_required` (boolean) - London Plan Policy D12
+- `bsr_gateway` (boolean) - BSR Higher-Risk Building regime
+- `eia_required` (boolean)
+- `gla_referral` (boolean)
+- `pre_commencement_gates` (array of strings)
+- `estimated_pre_app_cost` (low/high GBP)
+- `estimated_planning_duration_months` (low/high)
+
+### Evidence hierarchy rule
+Every parameter must be classified as one of:
+1. **Hard rule** - deterministic from authoritative source (flood zone, listed status)
+2. **Screening flag** - strong official evidence, not final conclusion (contamination, noise)
+3. **Workflow trigger** - requires survey/expert/search (heritage statement, fire strategy, GI)
+4. **Informational context** - useful but not decisive (EPC, PTAL, precedent count)
+
+Never present screening flags as definitive compliance. The platform structures evidence and generates workflow tasks - it does not replace professional judgment.
