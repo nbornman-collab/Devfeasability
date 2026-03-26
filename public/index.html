@@ -272,42 +272,41 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .proof-cta-sub { font: 400 17px var(--sans); color: rgba(242,241,237,.35); margin-top: 16px; }
 
 /* ── COST TIERS ── */
-.tiers-section { background: #0d0d0c; padding: 100px 64px; position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 32px 32px 0 0; margin-top: -32px; }
-.tiers-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-.tiers-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #f2f1ed; letter-spacing: -.03em; margin-bottom: 40px; }
+.tiers-section { background: var(--accent); padding: 100px 64px; position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 32px 32px 0 0; margin-top: -32px; }
+.tiers-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.65); margin-bottom: 14px; }
+.tiers-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #fff; letter-spacing: -.03em; margin-bottom: 40px; }
 .tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 1080px; }
 .tier-card {
   padding: 36px 32px;
-  background: rgba(242,241,237,.04);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(242,241,237,.1); border-radius: 16px;
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 16px;
   display: flex; flex-direction: column; gap: 14px;
   transition: border-color .2s, background .2s;
 }
-.tier-card:hover { border-color: rgba(242,241,237,.2); background: rgba(242,241,237,.07); }
-.tier-card.featured { border-color: var(--accent); background: rgba(184,132,92,.08); }
-.tier-card.featured:hover { background: rgba(184,132,92,.12); }
-.tier-name { font: 700 20px var(--sans); letter-spacing: .01em; color: #f2f1ed; }
-.tier-name-sub { font: 400 13px var(--sans); letter-spacing: .08em; color: rgba(242,241,237,.5); margin-top: 2px; text-transform: none; }
+.tier-card:hover { border-color: rgba(255,255,255,.35); background: rgba(0,0,0,.25); }
+.tier-card.featured { border-color: #fff; background: rgba(0,0,0,.28); }
+.tier-card.featured:hover { background: rgba(0,0,0,.35); }
+.tier-name { font: 700 20px var(--sans); letter-spacing: .01em; color: #fff; }
+.tier-name-sub { font: 400 13px var(--sans); letter-spacing: .08em; color: rgba(255,255,255,.6); margin-top: 2px; text-transform: none; }
 .tier-alt-prices { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
-.tier-alt-row { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid rgba(242,241,237,.08); padding-top: 6px; }
-.tier-alt-label { font: 400 13px var(--sans); color: rgba(242,241,237,.5); }
-.tier-alt-price { font: 700 18px var(--mono); color: rgba(242,241,237,.8); }
-.tier-card.featured .tier-name { color: var(--accent); }
-.tier-price { font: 800 36px var(--mono); color: #f2f1ed; letter-spacing: -.03em; line-height: 1; }
-.tier-divider { height: 1px; background: rgba(242,241,237,.08); margin: 4px 0; }
-.tier-desc { font: 400 18px/1.7 var(--sans); color: rgba(242,241,237,.5); flex: 1; }
+.tier-alt-row { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid rgba(255,255,255,.12); padding-top: 6px; }
+.tier-alt-label { font: 400 13px var(--sans); color: rgba(255,255,255,.6); }
+.tier-alt-price { font: 700 18px var(--mono); color: rgba(255,255,255,.9); }
+.tier-card.featured .tier-name { color: #fff; }
+.tier-price { font: 800 36px var(--mono); color: #fff; letter-spacing: -.03em; line-height: 1; }
+.tier-divider { height: 1px; background: rgba(255,255,255,.12); margin: 4px 0; }
+.tier-desc { font: 400 18px/1.7 var(--sans); color: rgba(255,255,255,.7); flex: 1; }
 .tier-items { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-.tier-items li { font: 400 18px var(--sans); color: rgba(242,241,237,.45); }
-.tier-items li::before { content: '→ '; color: var(--accent); font-weight: 700; }
+.tier-items li { font: 400 18px var(--sans); color: rgba(255,255,255,.65); }
+.tier-items li::before { content: '→ '; color: #fff; font-weight: 700; }
 .tier-cta-link {
   display: inline-block; margin-top: 8px;
   font: 700 20px var(--sans); letter-spacing: .12em; text-transform: uppercase;
-  color: rgba(242,241,237,.7); text-decoration: none; border-bottom: 1.5px solid rgba(242,241,237,.2);
+  color: rgba(255,255,255,.8); text-decoration: none; border-bottom: 1.5px solid rgba(255,255,255,.3);
   padding-bottom: 1px; transition: border-color .15s, color .15s;
 }
-.tier-cta-link:hover { color: var(--accent); border-color: var(--accent); }
-.tier-card.featured .tier-cta-link { color: var(--accent); border-color: var(--accent); }
+.tier-cta-link:hover { color: #fff; border-color: #fff; }
+.tier-card.featured .tier-cta-link { color: #fff; border-color: #fff; }
 
 /* ── HERO CONTENT ── */
 .hero-wrap { height: 100vh; position: relative; }
