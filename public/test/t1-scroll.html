@@ -238,31 +238,17 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
   transition: border-color .2s;
 }
 .slider-item:hover { border-color: rgba(184,132,92,.3); }
-.slider-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
-.slider-val { font: 800 16px var(--mono); color: var(--accent2); letter-spacing: -.02em; }
-/* Track */
-input[type=range] {
-  width: 100%; height: 6px; -webkit-appearance: none; appearance: none; outline: none;
-  border-radius: 3px; cursor: pointer;
-  background: linear-gradient(to right, var(--accent2) 0%, var(--accent2) var(--fill,50%), var(--bg2) var(--fill,50%), var(--bg2) 100%);
+.slider-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; }
+.slider-val { font: 800 18px var(--mono); color: var(--accent2); letter-spacing: -.02em; }
+/* Ruler canvas slider */
+.ruler-wrap { position: relative; width: 100%; height: 64px; cursor: grab; user-select: none; touch-action: none; }
+.ruler-wrap:active { cursor: grabbing; }
+.ruler-canvas { display: block; width: 100%; height: 100%; border-radius: 8px; }
+/* Hidden range - still used for value tracking */
+input[type=range].ruler-input {
+  position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%;
+  cursor: inherit; margin: 0; pointer-events: none;
 }
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
-  background: #fff; border: 2.5px solid var(--accent2); cursor: grab;
-  box-shadow: 0 2px 12px rgba(184,132,92,.25), 0 0 0 4px rgba(184,132,92,.08);
-  transition: box-shadow .2s, transform .15s;
-}
-input[type=range]::-webkit-slider-thumb:hover {
-  box-shadow: 0 2px 16px rgba(184,132,92,.35), 0 0 0 6px rgba(184,132,92,.12);
-  transform: scale(1.1);
-}
-input[type=range]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(.95); }
-input[type=range]::-moz-range-thumb {
-  width: 22px; height: 22px; border-radius: 50%; background: #fff;
-  border: 2.5px solid var(--accent2); cursor: grab;
-  box-shadow: 0 2px 12px rgba(184,132,92,.25);
-}
-input[type=range]::-moz-range-progress { background: var(--accent2); border-radius: 3px; height: 6px; }
 
 /* -- PRO FORMA TABLE -- */
 .proforma { margin-top: 32px; }
@@ -566,11 +552,11 @@ input[type=range]::-moz-range-progress { background: var(--accent2); border-radi
       </div>
     </div>
     <div class="slider-group reveal reveal-delay-2" id="sc-sliders">
-      <div class="slider-item"><div class="slider-label">ERV (per m&sup2;) <span class="slider-val" id="sv-erv">&pound;700</span></div><input type="range" id="sl-erv" min="500" max="1200" step="25" value="700" oninput="s04Slider('erv',+this.value)"></div>
-      <div class="slider-item"><div class="slider-label">Net Yield <span class="slider-val" id="sv-niy">4.75%</span></div><input type="range" id="sl-niy" min="3.5" max="7.5" step="0.25" value="4.75" oninput="s04Slider('niy',+this.value)"></div>
-      <div class="slider-item"><div class="slider-label">Build Cost <span class="slider-val" id="sv-cost">&pound;4,200</span></div><input type="range" id="sl-cost" min="3000" max="8000" step="100" value="4200" oninput="s04Slider('cost',+this.value)"></div>
-      <div class="slider-item"><div class="slider-label">S106 <span class="slider-val" id="sv-s106">&pound;500k</span></div><input type="range" id="sl-s106" min="0" max="3000" step="50" value="500" oninput="s04Slider('s106',+this.value)"></div>
-      <div class="slider-item"><div class="slider-label">Target Profit <span class="slider-val" id="sv-poc">20%</span></div><input type="range" id="sl-poc" min="10" max="30" step="1" value="20" oninput="s04Slider('poc',+this.value)"></div>
+      <div class="slider-item"><div class="slider-label">ERV (per m²) <span class="slider-val" id="sv-erv">£700</span></div><div class="ruler-wrap" data-id="sl-erv" data-min="500" data-max="1200" data-step="25" data-default="700" data-val="700"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item"><div class="slider-label">Net Yield <span class="slider-val" id="sv-niy">4.75%</span></div><div class="ruler-wrap" data-id="sl-niy" data-min="3.5" data-max="7.5" data-step="0.25" data-default="4.75" data-val="4.75"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item"><div class="slider-label">Build Cost <span class="slider-val" id="sv-cost">£4,200</span></div><div class="ruler-wrap" data-id="sl-cost" data-min="3000" data-max="8000" data-step="100" data-default="4200" data-val="4200"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item"><div class="slider-label">S106 <span class="slider-val" id="sv-s106">£500k</span></div><div class="ruler-wrap" data-id="sl-s106" data-min="0" data-max="3000" data-step="50" data-default="500" data-val="500"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item"><div class="slider-label">Target Profit <span class="slider-val" id="sv-poc">20%</span></div><div class="ruler-wrap" data-id="sl-poc" data-min="10" data-max="30" data-step="1" data-default="20" data-val="20"><canvas class="ruler-canvas"></canvas></div></div>
       <div class="slider-item" style="display:flex;align-items:center;justify-content:center">
         <button onclick="s04Reset()" style="font:500 13px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset assumptions</button>
       </div>
@@ -920,10 +906,11 @@ function s04Slider(key, v) {
 }
 function s04Reset() {
   S04 = {...S04_DEFS};
-  ['erv','niy','cost','s106','poc'].forEach(k => {
-    const sl = document.getElementById('sl-'+k);
-    if (sl) sl.value = S04_DEFS[k];
+  // Reset ruler wraps to defaults
+  document.querySelectorAll('.ruler-wrap').forEach(w => {
+    w.dataset.val = w.dataset.default;
   });
+  if (typeof window.redrawRulers === 'function') window.redrawRulers();
   s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics(); buildMatrix(); updateConsequenceStrip();
 }
 
@@ -1288,16 +1275,145 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 // AWARD-GRADE ENHANCEMENTS
 // ============================================================
 
-// -- 1. SLIDER FILL TRACK (CSS variable approach) --
+// -- 1. RULER CANVAS SLIDERS --
 (function() {
-  function updateFill(sl) {
-    const pct = (sl.value - sl.min) / (sl.max - sl.min) * 100;
-    sl.style.setProperty('--fill', pct + '%');
+  const TICK_COUNT = 48;
+  const COLOR_ACTIVE = '#111110';
+  const COLOR_INACTIVE = 'rgba(17,17,16,0.18)';
+  const COLOR_DEFAULT_LINE = '#b8845c'; // copper for default marker
+
+  function drawRuler(wrap) {
+    const canvas = wrap.querySelector('.ruler-canvas');
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const W = wrap.offsetWidth;
+    const H = 64;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, W, H);
+
+    const min = parseFloat(wrap.dataset.min);
+    const max = parseFloat(wrap.dataset.max);
+    const val = parseFloat(wrap.dataset.val);
+    const def = parseFloat(wrap.dataset.default);
+    const pct = (val - min) / (max - min);
+    const defPct = (def - min) / (max - min);
+    const curX = pct * W;
+    const defX = defPct * W;
+
+    // Draw ticks
+    const tickW = 3;
+    const gap = (W - TICK_COUNT * tickW) / (TICK_COUNT - 1);
+    for (let i = 0; i < TICK_COUNT; i++) {
+      const x = i * (tickW + gap);
+      const tickPct = i / (TICK_COUNT - 1);
+      const active = tickPct <= pct;
+      // Height variation: alternating tall/short like a ruler
+      const isMajor = i % 4 === 0;
+      const isMid = i % 2 === 0;
+      const tickH = isMajor ? H * 0.85 : isMid ? H * 0.65 : H * 0.45;
+      const y = H - tickH;
+      ctx.fillStyle = active ? COLOR_ACTIVE : COLOR_INACTIVE;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(x, y, tickW, tickH, [2, 2, 1, 1]) : ctx.rect(x, y, tickW, tickH);
+      ctx.fill();
+    }
+
+    // Default position line (copper)
+    ctx.save();
+    ctx.strokeStyle = COLOR_DEFAULT_LINE;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(defX, 0);
+    ctx.lineTo(defX, H);
+    ctx.stroke();
+    ctx.restore();
+
+    // Default label
+    ctx.save();
+    ctx.font = '500 9px Inter, sans-serif';
+    ctx.fillStyle = COLOR_DEFAULT_LINE;
+    ctx.textAlign = defPct > 0.8 ? 'right' : 'center';
+    ctx.fillText('default', defPct > 0.8 ? defX - 4 : defX, 10);
+    ctx.restore();
+
+    // Current position line (dark)
+    ctx.save();
+    ctx.strokeStyle = '#111110';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(curX, 0);
+    ctx.lineTo(curX, H);
+    ctx.stroke();
+    ctx.restore();
   }
-  document.querySelectorAll('input[type=range]').forEach(sl => {
-    updateFill(sl);
-    sl.addEventListener('input', () => updateFill(sl));
-  });
+
+  function initRuler(wrap) {
+    drawRuler(wrap);
+
+    function pointerMove(e) {
+      const rect = wrap.getBoundingClientRect();
+      const min = parseFloat(wrap.dataset.min);
+      const max = parseFloat(wrap.dataset.max);
+      const step = parseFloat(wrap.dataset.step);
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      let val = min + pct * (max - min);
+      val = Math.round(val / step) * step;
+      val = Math.max(min, Math.min(max, val));
+      // Round to avoid float drift
+      val = parseFloat(val.toFixed(10));
+      wrap.dataset.val = val;
+      drawRuler(wrap);
+      // Fire the s04Slider update
+      const id = wrap.dataset.id;
+      const key = id.replace('sl-','');
+      if (typeof s04Slider === 'function') s04Slider(key, val);
+    }
+
+    let dragging = false;
+    wrap.addEventListener('pointerdown', e => {
+      dragging = true;
+      wrap.setPointerCapture(e.pointerId);
+      pointerMove(e);
+    });
+    wrap.addEventListener('pointermove', e => { if (dragging) pointerMove(e); });
+    wrap.addEventListener('pointerup', () => { dragging = false; });
+    wrap.addEventListener('pointercancel', () => { dragging = false; });
+
+    // Double-click to reset to default
+    wrap.addEventListener('dblclick', () => {
+      wrap.dataset.val = wrap.dataset.default;
+      drawRuler(wrap);
+      const key = wrap.dataset.id.replace('sl-','');
+      if (typeof s04Slider === 'function') s04Slider(key, parseFloat(wrap.dataset.default));
+    });
+  }
+
+  // Init all ruler wraps after DOM ready
+  function initAll() {
+    document.querySelectorAll('.ruler-wrap').forEach(w => initRuler(w));
+    // Redraw on resize
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.ruler-wrap').forEach(w => drawRuler(w));
+    });
+  }
+
+  // Expose redraw for reset button
+  window.redrawRulers = function() {
+    document.querySelectorAll('.ruler-wrap').forEach(w => {
+      w.dataset.val = w.dataset.default;
+      drawRuler(w);
+    });
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll);
+  else initAll();
 })();
 
 // -- 2. NUMBER COUNT-UP ANIMATIONS --
