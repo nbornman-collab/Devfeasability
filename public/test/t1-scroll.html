@@ -29,24 +29,33 @@
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
-body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; cursor: none; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 
 /* -- SCROLL PROGRESS BAR -- */
 .scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 300; width: 0%; transition: none; }
 
-/* -- CUSTOM CURSOR -- */
-.cursor { position: fixed; width: 20px; height: 20px; border: 2px solid var(--accent); border-radius: 50%;
-  pointer-events: none; z-index: 9999; transition: transform .15s, opacity .15s; mix-blend-mode: difference;
-  transform: translate(-50%, -50%); }
-.cursor.hover { transform: translate(-50%, -50%) scale(2.5); opacity: .5; }
+/* -- CUSTOM CURSOR (removed - invasive for professional users) -- */
 
 /* -- PROGRESS DOTS -- */
-.progress-dots { position: fixed; left: 24px; top: 50%; transform: translateY(-50%); z-index: 250;
-  display: flex; flex-direction: column; gap: 14px; }
-.progress-dot { width: 10px; height: 10px; border-radius: 50%; background: #ccc; cursor: pointer;
-  transition: background .3s, transform .3s; border: none; padding: 0; }
-.progress-dot.active { background: var(--accent); transform: scale(1.3); }
-.progress-dot:hover { background: var(--accent); opacity: .7; }
+.progress-dots { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 250;
+  display: flex; flex-direction: column; gap: 20px; }
+.progress-dot {
+  display: flex; align-items: center; gap: 8px;
+  background: none; border: none; padding: 0; cursor: pointer;
+}
+.progress-dot-circle {
+  width: 8px; height: 8px; border-radius: 50%; background: rgba(17,17,16,.2);
+  transition: background .3s, transform .3s; flex-shrink: 0;
+}
+.progress-dot-label {
+  font: 600 9px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(17,17,16,.3); transition: color .3s; white-space: nowrap;
+  opacity: 0; transform: translateX(-4px); transition: opacity .3s, transform .3s;
+}
+.progress-dot.active .progress-dot-circle { background: var(--accent); transform: scale(1.4); }
+.progress-dot.active .progress-dot-label { opacity: 1; transform: translateX(0); color: var(--accent); }
+.progress-dot:hover .progress-dot-circle { background: var(--accent); opacity: .7; }
+.progress-dot:hover .progress-dot-label { opacity: .6; transform: translateX(0); }
 
 /* -- NAV -- */
 nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 200;
@@ -190,11 +199,37 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 
 /* -- SLIDERS -- */
 .slider-group { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
-.slider-item { background: rgba(255,255,255,.5); border-radius: 12px; padding: 16px 20px; }
-.slider-label { font: 600 13px var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); margin-bottom: 10px; display: flex; justify-content: space-between; }
-.slider-val { font: 700 15px var(--mono); color: var(--accent2); }
-input[type=range] { width: 100%; height: 4px; -webkit-appearance: none; appearance: none; background: var(--bg2); border-radius: 2px; outline: none; }
-input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent2); cursor: pointer; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.slider-item {
+  background: rgba(255,255,255,.65); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.8); border-radius: 14px; padding: 20px 24px;
+  transition: border-color .2s;
+}
+.slider-item:hover { border-color: rgba(184,132,92,.3); }
+.slider-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
+.slider-val { font: 800 16px var(--mono); color: var(--accent2); letter-spacing: -.02em; }
+/* Track */
+input[type=range] {
+  width: 100%; height: 6px; -webkit-appearance: none; appearance: none; outline: none;
+  border-radius: 3px; cursor: pointer;
+  background: linear-gradient(to right, var(--accent2) 0%, var(--accent2) var(--fill,50%), var(--bg2) var(--fill,50%), var(--bg2) 100%);
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+  background: #fff; border: 2.5px solid var(--accent2); cursor: grab;
+  box-shadow: 0 2px 12px rgba(184,132,92,.25), 0 0 0 4px rgba(184,132,92,.08);
+  transition: box-shadow .2s, transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:hover {
+  box-shadow: 0 2px 16px rgba(184,132,92,.35), 0 0 0 6px rgba(184,132,92,.12);
+  transform: scale(1.1);
+}
+input[type=range]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(.95); }
+input[type=range]::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%; background: #fff;
+  border: 2.5px solid var(--accent2); cursor: grab;
+  box-shadow: 0 2px 12px rgba(184,132,92,.25);
+}
+input[type=range]::-moz-range-progress { background: var(--accent2); border-radius: 3px; height: 6px; }
 
 /* -- PRO FORMA TABLE -- */
 .proforma { margin-top: 32px; }
@@ -208,9 +243,21 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 /* -- FACTOR BARS -- */
 .factor-row { display: flex; align-items: center; gap: 12px; padding: 14px 0; }
 .factor-name { font: 600 15px var(--sans); color: var(--ink2); width: 180px; flex-shrink: 0; }
-.factor-bar-wrap { flex: 1; height: 8px; background: var(--bg2); border-radius: 4px; overflow: hidden; }
-.factor-bar { height: 100%; background: var(--accent); border-radius: 4px; transition: width 1s cubic-bezier(.16,1,.3,1); }
-.factor-bar.high { background: #16a34a; }
+.factor-bar-wrap { flex: 1; height: 6px; background: rgba(17,17,16,.08); border-radius: 3px; overflow: visible; position: relative; }
+.factor-bar {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent2) 100%);
+  transition: width 1s cubic-bezier(.16,1,.3,1);
+  position: relative;
+}
+.factor-bar::after {
+  content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%);
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent2); border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+.factor-bar.high { background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%); }
+.factor-bar.high::after { background: #16a34a; }
 .factor-score { font: 700 16px var(--mono); color: var(--ink); width: 40px; text-align: right; }
 
 /* -- GLASS PANEL (larger sections) -- */
@@ -276,9 +323,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
   .arch-grid { grid-template-columns: 1fr 1fr; }
   nav { padding: 0 16px; }
   .hero-content { padding: 0 20px 40px; }
-  .cursor, .progress-dots { display: none !important; }
-  body { cursor: auto; }
-  .progress-dots { display: none; }
+  .progress-dots { display: none !important; }
 }
 
 /* -- PREFERS REDUCED MOTION -- */
@@ -287,8 +332,6 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
     transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
   html { scroll-snap-type: none !important; }
   .reveal { opacity: 1; transform: none; }
-  .cursor { display: none !important; }
-  body { cursor: auto; }
   .return-curve-path { stroke-dashoffset: 0 !important; stroke-dasharray: none !important; }
 }
 </style>
@@ -298,16 +341,13 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 <!-- SCROLL PROGRESS BAR -->
 <div class="scroll-progress" id="scroll-progress"></div>
 
-<!-- CUSTOM CURSOR -->
-<div class="cursor" id="custom-cursor"></div>
-
 <!-- PROGRESS DOTS -->
 <div class="progress-dots" id="progress-dots">
-  <button class="progress-dot active" data-target="overview" aria-label="Overview"></button>
-  <button class="progress-dot" data-target="development" aria-label="Development"></button>
-  <button class="progress-dot" data-target="scenarios" aria-label="Scenarios"></button>
-  <button class="progress-dot" data-target="architecture" aria-label="Architecture"></button>
-  <button class="progress-dot" data-target="planning" aria-label="Planning"></button>
+  <button class="progress-dot active" data-target="overview"><div class="progress-dot-circle"></div><span class="progress-dot-label">Overview</span></button>
+  <button class="progress-dot" data-target="development"><div class="progress-dot-circle"></div><span class="progress-dot-label">01 Dev</span></button>
+  <button class="progress-dot" data-target="scenarios"><div class="progress-dot-circle"></div><span class="progress-dot-label">02 Scenarios</span></button>
+  <button class="progress-dot" data-target="architecture"><div class="progress-dot-circle"></div><span class="progress-dot-label">03 Architecture</span></button>
+  <button class="progress-dot" data-target="planning"><div class="progress-dot-circle"></div><span class="progress-dot-label">04 Planning</span></button>
 </div>
 
 <!-- NAV (frosted, fixed) -->
@@ -1023,20 +1063,15 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 // AWARD-GRADE ENHANCEMENTS
 // ============================================================
 
-// -- 1. CUSTOM CURSOR --
+// -- 1. SLIDER FILL TRACK (CSS variable approach) --
 (function() {
-  const cursor = document.getElementById('custom-cursor');
-  if (!cursor || window.matchMedia('(max-width:768px)').matches) return;
-  const interactives = 'a, button, .card, .sc-tab, .nav-links a, input[type=range], .progress-dot';
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-  });
-  document.addEventListener('mouseover', e => {
-    if (e.target.closest(interactives)) cursor.classList.add('hover');
-  });
-  document.addEventListener('mouseout', e => {
-    if (e.target.closest(interactives)) cursor.classList.remove('hover');
+  function updateFill(sl) {
+    const pct = (sl.value - sl.min) / (sl.max - sl.min) * 100;
+    sl.style.setProperty('--fill', pct + '%');
+  }
+  document.querySelectorAll('input[type=range]').forEach(sl => {
+    updateFill(sl);
+    sl.addEventListener('input', () => updateFill(sl));
   });
 })();
 
