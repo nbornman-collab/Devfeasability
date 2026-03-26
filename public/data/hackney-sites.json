@@ -2764,7 +2764,8 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "deliveryFlag": "station-oversite"
     },
     {
       "name": "339-357 Mare Street, 6-18 Amhurst Road (Marks and Spencer) (Mixed Residential/Non-Residential)",
@@ -3320,7 +3321,8 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "deliveryFlag": "station-oversite"
     },
     {
       "name": "Birkbeck Mews (Mixed Residential/Non-Residential)",

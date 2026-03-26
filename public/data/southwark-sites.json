@@ -33,7 +33,9 @@
         "note": "No major applications. 27 minor apps. Site has no live consent - clean slate."
       },
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Scoring puts this in the top tier for the borough."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Scoring puts this in the top tier for the borough.",
+      "plot": 33613,
+      "plotEstimated": true
     },
     {
       "name": "24 Southwark Street",
@@ -88,7 +90,9 @@
         "note": "81 apps. Victorian building, original consent pre-digital records. Most recent activity: conditions discharge 2025."
       },
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33613,
+      "plotEstimated": true
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
@@ -125,7 +129,9 @@
       },
       "coordSource": "google-geocode",
       "offMarket": "medium",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33639,
+      "plotEstimated": true
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -162,7 +168,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33645,
+      "plotEstimated": true
     },
     {
       "name": "Tower Workshops",
@@ -198,7 +206,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Tower Workshops, 58 Riley Rd, London SE1 3DG, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "Kinglake Street Garages",
@@ -235,7 +245,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33622,
+      "plotEstimated": true
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
@@ -272,7 +284,9 @@
       },
       "coordSource": "google-geocode",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33624,
+      "plotEstimated": true
     },
     {
       "name": "Salisbury estate car park",
@@ -309,7 +323,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33626,
+      "plotEstimated": true
     },
     {
       "name": "Croft Street Depot",
@@ -346,7 +362,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33628,
+      "plotEstimated": true
     },
     {
       "name": "Abellio Walworth Depot",
@@ -383,7 +401,9 @@
       },
       "coordSource": "google-geocode",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33626,
+      "plotEstimated": true
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -442,7 +462,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33630,
+      "plotEstimated": true
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -501,7 +523,9 @@
       },
       "coordSource": "google-geocode",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33658,
+      "plotEstimated": true
     },
     {
       "name": "Camberwell Bus Garage",
@@ -537,7 +561,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "20 Warner Rd, London SE5 9LU, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "plot": 33636,
+      "plotEstimated": true
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -572,7 +598,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "plot": 33585,
+      "plotEstimated": true
     },
     {
       "name": "Burgess Business Park",
@@ -612,7 +640,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
+      "plot": 33604,
+      "plotEstimated": true
     },
     {
       "name": "Blackpool Road Business Park",
@@ -647,7 +677,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -687,7 +719,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33650,
+      "plotEstimated": true
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -723,7 +757,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "City Business Centre, Lower Rd, London SE16 2XB, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "Aylesbury Phase 2",
@@ -758,7 +794,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33599,
+      "plotEstimated": true
     },
     {
       "name": "Aylesbury Phase 3",
@@ -794,7 +832,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Aylesbury Rd, London SE17, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33626,
+      "plotEstimated": true
     },
     {
       "name": "Aylesbury Phase 2",
@@ -829,7 +869,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33599,
+      "plotEstimated": true
     },
     {
       "name": "123 Grove Park",
@@ -882,7 +924,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33640,
+      "plotEstimated": true
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -917,7 +961,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33626,
+      "plotEstimated": true
     },
     {
       "name": "Aylesbury Plot 18",
@@ -952,7 +998,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33626,
+      "plotEstimated": true
     },
     {
       "name": "Aylesbury Site 7",
@@ -999,7 +1047,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33613,
+      "plotEstimated": true
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
@@ -1039,7 +1089,9 @@
       },
       "coordSource": "google-geocode",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33649,
+      "plotEstimated": true
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -1098,7 +1150,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33645,
+      "plotEstimated": true
     },
     {
       "name": "62-67 Park Street",
@@ -1157,7 +1211,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33611,
+      "plotEstimated": true
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
@@ -1216,7 +1272,9 @@
       },
       "coordSource": "google-geocode",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33611,
+      "plotEstimated": true
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -1252,7 +1310,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Peckham Bus Station, London SE15 5EF, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33636,
+      "plotEstimated": true
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
@@ -1288,7 +1348,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "214 Norwood Rd, Norwood, London SE27 9AW, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33662,
+      "plotEstimated": true
     },
     {
       "name": "London Bridge Health Cluster",
@@ -1324,7 +1386,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "1a Newcomen St, London SE1 1YR, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33614,
+      "plotEstimated": true
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -1370,20 +1434,22 @@
           {
             "ref": "17/07968/FULL",
             "date": "2017-09-05",
-            "desc": "Partial demolition and redevelopment behind retained fa\u00e7ades of three buildings ",
+            "desc": "Partial demolition and redevelopment behind retained façades of three buildings ",
             "decision": "Application Permitted"
           },
           {
             "ref": "17/07969/LBC",
             "date": "2017-09-05",
-            "desc": "Partial demolition and redevelopment behind retained fa\u00e7ades of three buildings ",
+            "desc": "Partial demolition and redevelopment behind retained façades of three buildings ",
             "decision": "Application Permitted"
           }
         ]
       },
       "coordSource": "intelligence-file",
       "offMarket": "low",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33611,
+      "plotEstimated": true
     },
     {
       "name": "Landmark Court",
@@ -1418,7 +1484,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33613,
+      "plotEstimated": true
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
@@ -1454,7 +1522,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Fenning St & St Thomas St, London SE1 9GP, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33615,
+      "plotEstimated": true
     },
     {
       "name": "Mandela Way",
@@ -1494,7 +1564,9 @@
       },
       "coordSource": "google-geocode",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33622,
+      "plotEstimated": true
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -1534,7 +1606,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33643,
+      "plotEstimated": true
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
@@ -1574,7 +1648,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33617,
+      "plotEstimated": true
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -1609,7 +1685,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33619,
+      "plotEstimated": true
     },
     {
       "name": "Bricklayers Arms",
@@ -1645,7 +1723,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Bricklayers Arms, London SE1, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33621,
+      "plotEstimated": true
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -1685,7 +1765,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33621,
+      "plotEstimated": true
     },
     {
       "name": "636 Old Kent Road",
@@ -1725,10 +1807,12 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33628,
+      "plotEstimated": true
     },
     {
-      "name": "Marlborough Grove and St James\u2019s Road",
+      "name": "Marlborough Grove and St James’s Road",
       "address": "",
       "borough": "Southwark",
       "lat": 51.5045,
@@ -1765,7 +1849,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33613,
+      "plotEstimated": true
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -1805,7 +1891,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33630,
+      "plotEstimated": true
     },
     {
       "name": "4/12 Albany Road",
@@ -1845,7 +1933,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33630,
+      "plotEstimated": true
     },
     {
       "name": "200 Great Dover Street",
@@ -1885,7 +1975,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33616,
+      "plotEstimated": true
     },
     {
       "name": "7-14 Great Dover Street",
@@ -1925,7 +2017,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33617,
+      "plotEstimated": true
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -1960,7 +2054,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33613,
+      "plotEstimated": true
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
@@ -2000,7 +2096,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33617,
+      "plotEstimated": true
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
@@ -2040,7 +2138,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "Aylesbury Phase 1",
@@ -2075,7 +2175,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33613,
+      "plotEstimated": true
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
@@ -2115,7 +2217,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "Newington Triangle",
@@ -2155,7 +2259,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33589,
+      "plotEstimated": true
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
@@ -2195,7 +2301,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33615,
+      "plotEstimated": true
     },
     {
       "name": "49 Lomond Grove",
@@ -2235,7 +2343,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33632,
+      "plotEstimated": true
     },
     {
       "name": "99 Lomond Grove",
@@ -2275,7 +2385,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33634,
+      "plotEstimated": true
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -2311,7 +2423,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Blackfriars Rd & Meymott St, London SE1 8NL, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33613,
+      "plotEstimated": true
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -2351,7 +2465,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33631,
+      "plotEstimated": true
     },
     {
       "name": "London Fire and Emergency Planning Authority",
@@ -2386,7 +2502,9 @@
       },
       "coordSource": "mapbox-fallback-suspect",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33585,
+      "plotEstimated": true
     },
     {
       "name": "London Southbank University Quarter",
@@ -2422,7 +2540,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "103 Borough Rd, London SE1 0AA, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -2462,7 +2582,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33636,
+      "plotEstimated": true
     },
     {
       "name": "1-5 Westminster Bridge Road",
@@ -2502,7 +2624,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -2542,7 +2666,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33615,
+      "plotEstimated": true
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -2578,7 +2704,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Paris Gardens, 6 Paris Garden, London SE1 8ND, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33612,
+      "plotEstimated": true
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -2618,7 +2746,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33612,
+      "plotEstimated": true
     },
     {
       "name": "63-85 Newington Causeway",
@@ -2658,7 +2788,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -2698,7 +2830,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33601,
+      "plotEstimated": true
     },
     {
       "name": "Denmark Hill Campus East",
@@ -2738,7 +2872,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33641,
+      "plotEstimated": true
     },
     {
       "name": "Camberwell Green Magistrates Court",
@@ -2778,7 +2914,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33635,
+      "plotEstimated": true
     },
     {
       "name": "Chambers Wharf",
@@ -2818,7 +2956,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33608,
+      "plotEstimated": true
     },
     {
       "name": "Bath Trading Estate",
@@ -2853,7 +2993,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33624,
+      "plotEstimated": true
     },
     {
       "name": "Goose Green Trading Estate",
@@ -2889,7 +3031,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Goose Green Trading Estate, 47 E Dulwich Rd, London SE22 9BN, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33645,
+      "plotEstimated": true
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -2929,7 +3073,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33614,
+      "plotEstimated": true
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -2969,7 +3115,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33630,
+      "plotEstimated": true
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -3009,7 +3157,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33629,
+      "plotEstimated": true
     },
     {
       "name": "Former Southern Railway Stables",
@@ -3045,7 +3195,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Southern Rail Stables, St James's Rd, London SE1 5US, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33626,
+      "plotEstimated": true
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -3081,7 +3233,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Penarth St & Hatcham Rd, London SE15 1TW, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33629,
+      "plotEstimated": true
     },
     {
       "name": "Rotherhite Gasometer",
@@ -3117,7 +3271,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Rotherhithe, London SE16, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33619,
+      "plotEstimated": true
     },
     {
       "name": "Camberwell Station",
@@ -3153,7 +3309,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Camberwell Station Rd, London SE5, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33636,
+      "plotEstimated": true
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -3193,7 +3351,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33571,
+      "plotEstimated": true
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -3233,7 +3393,9 @@
       },
       "coordSource": "google-geocode",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33615,
+      "plotEstimated": true
     },
     {
       "name": "Valmar Trading Estate",
@@ -3269,7 +3431,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "Valmar Trading Estate, Valmar Rd, London SE5 9NW, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33637,
+      "plotEstimated": true
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -3309,7 +3473,9 @@
       },
       "coordSource": "intelligence-file",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33597,
+      "plotEstimated": true
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -3349,7 +3515,9 @@
       },
       "coordSource": "osm-polygon-centroid",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33617,
+      "plotEstimated": true
     },
     {
       "name": "330-344 Walworth Road",
@@ -3389,7 +3557,9 @@
       },
       "coordSource": "mapbox-geocoded",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33627,
+      "plotEstimated": true
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -3425,7 +3595,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "13 Amelia St, London SE17 3PY, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33624,
+      "plotEstimated": true
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -3465,7 +3637,9 @@
       },
       "coordSource": "mapbox-geocoded",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33625,
+      "plotEstimated": true
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
@@ -3505,10 +3679,12 @@
       },
       "coordSource": "mapbox-geocoded",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33597,
+      "plotEstimated": true
     },
     {
-      "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
+      "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert’s Close",
       "address": "",
       "borough": "Southwark",
       "lat": 51.498403,
@@ -3545,7 +3721,9 @@
       },
       "coordSource": "mapbox-geocoded",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33618,
+      "plotEstimated": true
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -3585,10 +3763,12 @@
       },
       "coordSource": "mapbox-geocoded",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33623,
+      "plotEstimated": true
     },
     {
-      "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
+      "name": "760, 812 Old Kent Road (Toys’r’us store), and 840 Old Kent Road (Aldi store)",
       "address": "",
       "borough": "Southwark",
       "lat": 51.47982,
@@ -3625,7 +3805,9 @@
       },
       "coordSource": "mapbox-geocoded",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33632,
+      "plotEstimated": true
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
@@ -3665,7 +3847,9 @@
       },
       "coordSource": "mapbox-geocoded",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33616,
+      "plotEstimated": true
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -3701,7 +3885,9 @@
       "coordSource": "google-geocode",
       "geocode_addr": "264 Walworth Rd, London SE17 2DL, UK",
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "plot": 33626,
+      "plotEstimated": true
     }
   ],
   "total": 93

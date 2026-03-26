@@ -28,7 +28,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "Liverpool Street station supersite"
+      "desc": "Liverpool Street station supersite",
+      "deliveryFlag": "station-oversite"
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -391,36 +392,6 @@
       "desc": "5000m\u00b2 office site with planning context for 25F/100m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
     },
     {
-      "name": "Liverpool Street Station Air Rights",
-      "address": "Liverpool Street, EC2M 7PY",
-      "lat": 51.517466,
-      "lng": -0.082636,
-      "use": "office",
-      "plot": 12000,
-      "h": 30,
-      "mh": 200,
-      "mf": 50,
-      "ptal": "6b",
-      "sky": 9.0,
-      "val": 10.0,
-      "mom": 10.0,
-      "her": 7.0,
-      "acq": 4.0,
-      "tra": 10.0,
-      "verified": true,
-      "notes": "NR/TfL air rights - maximum density zone",
-      "score": 84,
-      "coordSource": "google-geocode",
-      "slug": "liverpool-street-station-air-rights",
-      "t1": "/t1/liverpool-street-station-air-rights",
-      "source": "GLA + Corporation of London",
-      "offMarket": "high",
-      "flags": {
-        "inBrownfield": false
-      },
-      "desc": "NR/TfL air rights - maximum density zone"
-    },
-    {
       "name": "100 Leadenhall Street",
       "address": "100 Leadenhall Street, EC3A 3BP",
       "lat": 51.513637,
@@ -538,7 +509,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "TfL oversite - station air rights"
+      "desc": "TfL oversite - station air rights",
+      "deliveryFlag": "station-oversite"
     },
     {
       "name": "Moorgate Station Oversite",
@@ -568,7 +540,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "5000m\u00b2 office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "5000m\u00b2 office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "deliveryFlag": "station-oversite"
     },
     {
       "name": "Smithfield Market, EC1",
@@ -692,5 +665,5 @@
     }
   ],
   "borough": "City of London",
-  "total": 23
+  "total": 22
 }

@@ -639,3 +639,27 @@ Narrative commentary adapts to the scale of developer viewing the report.
 2. Nic approves
 3. Update file, commit, show exactly what changed
 4. No silent edits to this protocol. Ever.
+
+---
+
+## MISSING PARAMETERS - RULES ENGINE GAPS (2026-03-26)
+
+The following parameters are NOT currently in the scoring/rules engine but MUST be before any public launch:
+
+### BLOCKERS (score should be capped or site removed)
+1. **Public realm / open space** - plazas, pedestrian areas, public gardens. If site IS public realm -> REMOVE
+2. **Operational infrastructure** - active stations, substations, pumping stations. If operational -> score cap 50 + "Delivery: 10+ years" flag
+3. **Protected open space (MOL)** - Metropolitan Open Land is untouchable -> REMOVE
+4. **Active social housing** - Council estates with Section 105 ballot requirement -> score cap 40
+
+### HEAVY PENALTIES (score modifier -15 to -25)
+5. **Land ownership: NR/TfL/Crown Estate** - 3-5 year deal minimum. Apply -20 penalty + "Complex Acquisition" flag
+6. **Infrastructure safeguarding** - Crossrail 2, Bakerloo Line Extension, Thames Tideway zones. Apply -15 penalty
+7. **Already consented / under construction** - Not an "opportunity" -> flag as "In Progress" or remove
+
+### COST PENALTIES (affect GDV/RLV, not score directly)
+8. **Contamination risk** - Former gas works, petrol stations, industrial. Add remediation cost £500k-£5M to TDC
+9. **Plot area = 0** - 132/155 sites have no plot area. WITHOUT plot area, GDV is fabricated. MUST backfill before launch.
+
+### CONTEXT FLAGS (informational, no score impact)
+10. **Current planning status** - Already refused? Consented? Under appeal? Pre-app submitted?
