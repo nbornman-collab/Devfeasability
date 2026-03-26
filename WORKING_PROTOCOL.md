@@ -742,3 +742,21 @@ Global text size rules - apply to ALL pages, no exceptions:
 
 **No text smaller than 11px anywhere on the product surface.**
 **No text smaller than 14px for body copy or functional labels.**
+
+---
+
+## CONTRAST RULES (locked 2026-03-26)
+
+### Dark backgrounds (dark sections, glass cards, map overlays)
+- Body text: minimum `rgba(255,255,255,0.65)` — never below 65% opacity
+- Secondary/labels: minimum `rgba(255,255,255,0.50)`
+- Tertiary/decorative: minimum `rgba(255,255,255,0.40)` — only for non-readable UI elements
+- **Ban: any rgba opacity below 0.65 on readable text**
+
+### Light backgrounds (cream/white sections)
+- Body text: minimum `--ink2: #3a3a38` — never lighter
+- Secondary: minimum `--ink3: #6a6a65` — never lighter
+- **Ban: any grey hex lighter than #6a6a65 on light backgrounds**
+
+### Enforcement
+After reset: grep audit across all files flagging opacity < 0.65 on dark backgrounds and hex greys lighter than #6a6a65 on light backgrounds. Fix all violations in one pass.
