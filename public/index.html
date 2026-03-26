@@ -358,6 +358,46 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .intro-strip-body strong { font-weight: 700; color: #f2f1ed; }
 
 /* Discovery mode cards - full width slabs */
+/* ── MODE CARD DROPDOWNS ── */
+.mode-card-expand {
+  display: none; padding: 16px 0 20px 64px; border-top: 1px solid rgba(242,241,237,.06);
+}
+.mode-card-expand.open { display: block; }
+.borough-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+.borough-pill {
+  padding: 10px 20px; border: 1px solid rgba(242,241,237,.15); border-radius: 100px;
+  font: 600 14px var(--sans); color: rgba(242,241,237,.7); cursor: pointer;
+  text-decoration: none; transition: border-color .15s, color .15s, background .15s;
+}
+.borough-pill:hover { border-color: var(--accent); color: var(--accent); background: rgba(184,132,92,.08); }
+.mode-addr-wrap { position: relative; max-width: 480px; }
+.mode-addr-input {
+  width: 100%; padding: 12px 20px; background: rgba(242,241,237,.06);
+  border: 1px solid rgba(242,241,237,.15); border-radius: 10px;
+  font: 400 18px var(--sans); color: #f2f1ed; outline: none;
+  box-sizing: border-box;
+}
+.mode-addr-input::placeholder { color: rgba(242,241,237,.3); }
+.mode-addr-input:focus { border-color: var(--accent); }
+.mode-addr-suggestions {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  background: #1c1c1a; border: 1px solid rgba(242,241,237,.12); border-radius: 10px;
+  overflow: hidden; display: none; z-index: 50;
+}
+.mode-addr-suggestions.open { display: block; }
+.mode-addr-suggestion {
+  padding: 12px 20px; font: 400 16px var(--sans); color: rgba(242,241,237,.8);
+  cursor: pointer; border-bottom: 1px solid rgba(242,241,237,.06); transition: background .1s;
+}
+.mode-addr-suggestion:last-child { border-bottom: none; }
+.mode-addr-suggestion:hover { background: rgba(184,132,92,.12); color: #f2f1ed; }
+.coming-soon-badge {
+  display: inline-block; padding: 4px 12px; border-radius: 100px;
+  background: rgba(242,241,237,.08); border: 1px solid rgba(242,241,237,.12);
+  font: 600 11px var(--sans); letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(242,241,237,.4);
+}
+
 .mode-cards { display: flex; flex-direction: column; gap: 0; padding: 48px 64px 80px; max-width: 1100px; margin: 0 auto; }
 .mode-card {
   display: flex; align-items: center; gap: 32px;
@@ -613,7 +653,8 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
   <!-- Discovery mode cards -->
   <div class="mode-cards">
-    <a class="mode-card" href="/discover?mode=top100">
+    <!-- 01: straight to Discover -->
+    <a class="mode-card" href="/discover">
       <div class="mode-card-num">01</div>
       <div class="mode-card-body">
         <div class="mode-card-title">London Top 100 Underutilised Sites</div>
@@ -621,30 +662,52 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
       </div>
       <div class="mode-card-arrow">→</div>
     </a>
-    <a class="mode-card" href="/discover?mode=borough">
-      <div class="mode-card-num">02</div>
-      <div class="mode-card-body">
-        <div class="mode-card-title">Borough Top 25 Underutilised Sites</div>
-        <div class="mode-card-sub">Filter by Southwark · City of London · Hackney</div>
+
+    <!-- 02: borough dropdown -->
+    <div class="mode-card" id="mc-borough" style="cursor:pointer;flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;width:100%;" onclick="toggleModeCard('borough')">
+        <div class="mode-card-num">02</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">Borough Top 25 Underutilised Sites</div>
+          <div class="mode-card-sub">Southwark · City of London · Hackney</div>
+        </div>
+        <div class="mode-card-arrow" id="mc-borough-arrow">↓</div>
       </div>
-      <div class="mode-card-arrow">→</div>
-    </a>
-    <a class="mode-card" href="/discover?mode=search">
-      <div class="mode-card-num">03</div>
-      <div class="mode-card-body">
-        <div class="mode-card-title">Search by Address</div>
-        <div class="mode-card-sub">Type a street or postcode · find nearby scored sites</div>
+      <div class="mode-card-expand" id="mc-borough-expand">
+        <div class="borough-pills">
+          <a class="borough-pill" href="/discover?borough=southwark">Southwark</a>
+          <a class="borough-pill" href="/discover?borough=city-of-london">City of London</a>
+          <a class="borough-pill" href="/discover?borough=hackney">Hackney</a>
+        </div>
       </div>
-      <div class="mode-card-arrow">→</div>
-    </a>
-    <a class="mode-card" href="/discover">
+    </div>
+
+    <!-- 03: address search dropdown -->
+    <div class="mode-card" id="mc-search" style="cursor:pointer;flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;width:100%;" onclick="toggleModeCard('search')">
+        <div class="mode-card-num">03</div>
+        <div class="mode-card-body">
+          <div class="mode-card-title">Search by Address</div>
+          <div class="mode-card-sub">Type a street or postcode · predictive suggestions</div>
+        </div>
+        <div class="mode-card-arrow" id="mc-search-arrow">↓</div>
+      </div>
+      <div class="mode-card-expand" id="mc-search-expand">
+        <div class="mode-addr-wrap">
+          <input class="mode-addr-input" id="mc-addr-input" type="text" placeholder="e.g. Blackfriars Road, SE1..." autocomplete="off">
+          <div class="mode-addr-suggestions" id="mc-addr-suggestions"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04: coming soon -->
+    <div class="mode-card" style="opacity:.5;cursor:default;">
       <div class="mode-card-num">04</div>
       <div class="mode-card-body">
-        <div class="mode-card-title">Browse the Intelligence Map</div>
+        <div class="mode-card-title">Browse the Intelligence Map &nbsp;<span class="coming-soon-badge">Coming Soon</span></div>
         <div class="mode-card-sub">Click any site · see the score · unlock the full appraisal</div>
       </div>
-      <div class="mode-card-arrow">→</div>
-    </a>
+    </div>
   </div>
 </div>
 
@@ -966,6 +1029,106 @@ if (pdInput && pdBtn) {
     if (addr) { e.preventDefault(); window.location.href = `/pd?address=${addr}`; }
   });
 }
+
+// -- Mode card toggles --
+function toggleModeCard(id) {
+  var expand = document.getElementById('mc-' + id + '-expand');
+  var arrow = document.getElementById('mc-' + id + '-arrow');
+  if (!expand) return;
+  var isOpen = expand.classList.contains('open');
+  // Close all first
+  ['borough','search'].forEach(function(k) {
+    var e = document.getElementById('mc-' + k + '-expand');
+    var a = document.getElementById('mc-' + k + '-arrow');
+    if (e) e.classList.remove('open');
+    if (a) a.textContent = '↓';
+  });
+  if (!isOpen) {
+    expand.classList.add('open');
+    if (arrow) arrow.textContent = '↑';
+    if (id === 'search') {
+      setTimeout(function() {
+        var inp = document.getElementById('mc-addr-input');
+        if (inp) inp.focus();
+      }, 100);
+    }
+  }
+}
+
+// -- Address predictive search (Google Places) --
+(function() {
+  var input = document.getElementById('mc-addr-input');
+  var suggestions = document.getElementById('mc-addr-suggestions');
+  if (!input || !suggestions) return;
+  var autocomplete, sessionToken;
+
+  function initAutocomplete() {
+    if (!window.google || !window.google.maps || !window.google.maps.places) return;
+    autocomplete = new google.maps.places.AutocompleteService();
+    sessionToken = new google.maps.places.AutocompleteSessionToken();
+  }
+
+  function renderSuggestions(preds) {
+    suggestions.innerHTML = '';
+    if (!preds || !preds.length) { suggestions.classList.remove('open'); return; }
+    preds.forEach(function(p) {
+      var el = document.createElement('div');
+      el.className = 'mode-addr-suggestion';
+      el.textContent = p.description;
+      el.addEventListener('click', function() {
+        input.value = p.description;
+        suggestions.classList.remove('open');
+        var q = encodeURIComponent(p.description);
+        window.location.href = '/discover?address=' + q;
+      });
+      suggestions.appendChild(el);
+    });
+    suggestions.classList.add('open');
+  }
+
+  input.addEventListener('input', function() {
+    var val = input.value.trim();
+    if (val.length < 3) { suggestions.classList.remove('open'); return; }
+    if (autocomplete) {
+      autocomplete.getPlacePredictions({
+        input: val,
+        componentRestrictions: { country: 'gb' },
+        sessionToken: sessionToken,
+        types: ['address','geocode']
+      }, function(preds, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          renderSuggestions(preds.slice(0, 4));
+        }
+      });
+    } else {
+      // Fallback: no Google Maps loaded yet - try loading
+      initAutocomplete();
+    }
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      var val = input.value.trim();
+      if (val) window.location.href = '/discover?address=' + encodeURIComponent(val);
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!suggestions.contains(e.target) && e.target !== input) {
+      suggestions.classList.remove('open');
+    }
+  });
+
+  // Load Google Maps Places if not already loaded
+  fetch('/api/config').then(function(r) { return r.json(); }).then(function(cfg) {
+    if (!cfg.googleMapsKey) return;
+    if (window.google && window.google.maps) { initAutocomplete(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=' + cfg.googleMapsKey + '&libraries=places&callback=_mcGoogleReady';
+    window._mcGoogleReady = function() { initAutocomplete(); };
+    document.head.appendChild(s);
+  }).catch(function() {});
+})();
 
 // -- Scroll reveal observer --
 (function() {
