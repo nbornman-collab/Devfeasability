@@ -347,7 +347,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 <nav class="nav">
   <div style="display:flex;align-items:baseline;gap:0">
     <a href="/" class="nav-logo">D<span class="sl">/</span>A</a>
-    <span class="nav-logo-sub">Development Intelligence</span>
+    <span class="nav-logo-sub">Development / Architecture</span>
   </div>
   <div class="nav-links">
     <a class="nav-link" href="/discover">Discover</a>
@@ -383,7 +383,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
       <div class="dpa-letter">D</div>
       <div class="dpa-text">
         <div class="dpa-name">Development</div>
-        <div class="dpa-desc">Massing · GDV · NIA</div>
+        <div class="dpa-desc">Available Sky · Rent Headroom · Title Stack</div>
       </div>
     </div>
     <div class="dpa-sep">/</div>
@@ -391,7 +391,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
       <div class="dpa-letter">P</div>
       <div class="dpa-text">
         <div class="dpa-name">Planning</div>
-        <div class="dpa-desc">Appetite · Precedent · Risk</div>
+        <div class="dpa-desc">Planning Appetite · Precedent · Policy</div>
       </div>
     </div>
     <div class="dpa-sep">/</div>
@@ -399,12 +399,12 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
       <div class="dpa-letter">A</div>
       <div class="dpa-text">
         <div class="dpa-name">Architecture</div>
-        <div class="dpa-desc">Heritage · Massing · Constraints</div>
+        <div class="dpa-desc">Heritage Shadow · BSA · Massing</div>
       </div>
     </div>
   </div>
   <h1 class="hero-title">Know every site.<br><em>Before you <span id="hero-cycle">bid.</span></em></h1>
-  <p class="hero-sub">200+ factors across Development, Planning and Architecture - triangulated, site-specific, structured. Not a site-finder. Development intelligence.</p>
+  <p class="hero-sub">200+ factors. Triangulated. Site-specific. Structured. Not a site-finder - development intelligence for London.</p>
   <div class="hero-stats">
     <div class="hero-stat">
       <div class="hero-stat-num" id="h-sites">155</div>
@@ -419,7 +419,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
       <div class="hero-stat-label">London boroughs</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-num">100</div>
+      <div class="hero-stat-num" id="h-scored">100</div>
       <div class="hero-stat-label">Scored &amp; ranked</div>
     </div>
   </div>
@@ -569,7 +569,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
     </div>
     <div class="tier-card">
       <div class="tier-name">PD &amp; Extensions</div>
-      <div class="tier-price">£99<span style="font:400 13px 'Inter',sans-serif;color:#999990"> /report</span></div>
+      <div class="tier-price">£120<span style="font:400 13px 'Inter',sans-serif;color:#999990"> /report</span></div>
       <div class="tier-divider"></div>
       <div class="tier-desc">Permitted Development analysis for residential properties. What your architect would tell you in the first meeting.</div>
       <ul class="tier-items">
@@ -624,6 +624,8 @@ Promise.all([
   const str = total>=1000 ? `£${(total/1000).toFixed(1)}B` : `£${Math.round(total)}M`;
   document.getElementById('h-gdv').textContent = str;
   document.getElementById('h-sites').textContent = all.length;
+  const scored = all.filter(x => x.score || x.developmentScore).length;
+  document.getElementById('h-scored').textContent = scored || all.length;
 }).catch(()=>{});
 
 // Map
