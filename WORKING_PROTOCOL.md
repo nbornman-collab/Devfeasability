@@ -760,3 +760,11 @@ Global text size rules - apply to ALL pages, no exceptions:
 
 ### Enforcement
 After reset: grep audit across all files flagging opacity < 0.65 on dark backgrounds and hex greys lighter than #6a6a65 on light backgrounds. Fix all violations in one pass.
+
+---
+
+## BISCUIT (MONOSPACE) FONT RULE (locked 2026-03-26)
+
+- Minimum monospace (`var(--mono)`, JetBrains Mono) font size: **18px**
+- Applies to all metric values, scores, prices, financial figures
+- No mono text smaller than 18px anywhere on the product surface
