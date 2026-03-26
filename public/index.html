@@ -446,8 +446,8 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 }
 .hero-title em { font-style: normal; color: var(--accent); }
 .hero-sub {
-  font: 400 clamp(14px,1.4vw,20px) var(--sans);
-  color: var(--ink2); line-height: 1.6; margin-bottom: 36px;
+  font: 400 clamp(14px,1.4vw,18px) var(--sans);
+  color: rgba(242,241,237,0.35); line-height: 1.6; margin-bottom: 28px;
   max-width: 520px;
 }
 .hero-stats {
@@ -468,11 +468,11 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .hero-ctas { display: flex; gap: 12px; align-items: center; }
 .btn-primary {
   font: 700 11px var(--sans); letter-spacing: .12em; text-transform: uppercase;
-  background: var(--accent); color: #fff; text-decoration: none;
-  padding: 16px 32px; border-radius: 6px; transition: background .15s, transform .15s;
+  background: rgba(184,132,92,0.75); color: rgba(255,255,255,0.85); text-decoration: none;
+  padding: 14px 28px; border-radius: 6px; transition: background .15s, transform .15s;
   display: inline-block;
 }
-.btn-primary:hover { background: #a07450; transform: translateY(-1px); }
+.btn-primary:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
 
 /* Cycling hero text */
 #hero-cycle {
@@ -490,11 +490,11 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 }
 .btn-ghost {
   font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ink2); text-decoration: none; padding: 16px 24px;
-  border: 1px solid rgba(242,241,237,0.25); border-radius: 6px;
+  color: rgba(242,241,237,0.35); text-decoration: none; padding: 14px 24px;
+  border: 1px solid rgba(242,241,237,0.12); border-radius: 6px;
   transition: border-color .15s, color .15s;
 }
-.btn-ghost:hover { border-color: rgba(242,241,237,0.6); color: var(--ink); }
+.btn-ghost:hover { border-color: rgba(242,241,237,0.4); color: rgba(242,241,237,0.7); }
 
 /* ── BOTTOM STRIP ── */
 .hero-bottom {
@@ -604,7 +604,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
   <!-- BOTTOM: title + sub + CTAs -->
   <div class="hero-bottom-content">
-    <h1 class="hero-title">In-depth feasibility analysis.<br><em id="hero-cycle">Before you bid.</em></h1>
+    <h1 class="hero-title">In-depth feasibility analysis...<br><em id="hero-cycle">Before you bid.</em></h1>
     <p class="hero-sub">200+ factors. Triangulated. Site-specific. Structured.<br>Development intelligence for London.</p>
     <div class="hero-ctas">
       <a class="btn-primary" href="/discover">Discover Sites &rarr;</a>
