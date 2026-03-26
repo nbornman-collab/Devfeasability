@@ -326,7 +326,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 <section class="hero-section" id="overview">
   <div class="hero-map">
     <div id="map"></div>
-    <div id="streetview-overlay" style="position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;opacity:0;pointer-events:none;transition:opacity .6s"></div>
+    <div id="streetview-overlay" style="position:absolute;inset:0;z-index:1;opacity:0;pointer-events:none;transition:opacity .6s;background:#111"></div>
   </div>
   <div class="hero-scrim"></div>
   <!-- Perspective controls -->
@@ -933,8 +933,14 @@ function setPerspective(mode) {
   // Street View = show Google Street View image overlay
   const svOverlay = document.getElementById('streetview-overlay');
   if (mode === 'street' && svOverlay) {
-    const svUrl = 'https://maps.googleapis.com/maps/api/streetview?size=1200x800&location=' + LAT + ',' + LNG + '&fov=90&heading=200&pitch=10&key=AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI';
-    svOverlay.style.backgroundImage = 'url(' + svUrl + ')';
+    // Interactive Google Street View embed
+    if (!svOverlay.querySelector('iframe')) {
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'width:100%;height:100%;border:none';
+      iframe.src = 'https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI&location=' + LAT + ',' + LNG + '&heading=200&pitch=10&fov=90';
+      iframe.allow = 'accelerometer; gyroscope';
+      svOverlay.appendChild(iframe);
+    }
     svOverlay.style.opacity = '1';
     svOverlay.style.pointerEvents = 'auto';
   } else if (svOverlay) {
@@ -1010,7 +1016,9 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
     center: CENTROID, zoom: 17.2, pitch: 60, bearing: -20,
     interactive: true, attributionControl: false, antialias: true
   });
-  map.addControl(new mapboxgl.NavigationControl({showCompass:false}),'top-right');
+  map.addControl(new mapboxgl.NavigationControl({showCompass:true}),'top-left');
+  map.dragRotate.enable();
+  map.touchZoomRotate.enableRotation();
   MAP_REF = map;
 
   map.on('style.load', () => {
