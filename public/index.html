@@ -933,7 +933,6 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   var phrases = [
     'Before you appoint.',
     'Before you go to planning.',
-    'Before you bid.',
     'Before you bid.'
   ];
   var cycleEl = document.getElementById('hero-cycle');
@@ -947,7 +946,8 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
       if (idx === 0) loops++;
       cycleEl.textContent = phrases[idx];
       cycleEl.classList.remove('out');
-      var settle = loops >= 1 && idx === phrases.length - 1;
+      // Settle on 'Before you bid.' after one full loop
+      var settle = loops >= 1 && phrases[idx] === 'Before you bid.';
       if (!settle) setTimeout(cycleNext, 2600);
     }, 380);
   }
