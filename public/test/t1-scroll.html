@@ -808,9 +808,9 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
     map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'#b45309','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.90}});
+      paint:{'fill-extrusion-color':'#8a9ba8','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.88}});
     map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'#059669','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.70}});
+      paint:{'fill-extrusion-color':'#8a9ba8','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.88}});
     for (let fl = 1; fl <= 15; fl++) {
       const h = 24.8 + (fl * FTF);
       map.addLayer({id:'floor-line-'+fl, type:'fill-extrusion', source:'site-poly', slot:'top',
