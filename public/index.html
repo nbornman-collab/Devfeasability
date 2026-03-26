@@ -149,9 +149,84 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   padding: 16px; background: rgba(242,241,237,.04);
   border: 1px solid rgba(242,241,237,.07); border-radius: 8px;
 }
-.pd-feature-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.pd-feature-icon { 
+  font-size: 22px; flex-shrink: 0; 
+  width: 48px; height: 48px; 
+  background: rgba(184,132,92,.12); border: 1px solid rgba(184,132,92,.2);
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
 .pd-feature-title { font: 700 20px var(--sans); color: #f2f1ed; margin-bottom: 3px; }
 .pd-feature-desc { font: 400 18px/1.6 var(--sans); color: rgba(242,241,237,.45); }
+
+/* ── TENSION SECTION ── */
+.tension-section {
+  background: #f2f1ed; padding: 100px 64px; text-align: center;
+}
+.tension-inner { max-width: 820px; margin: 0 auto; }
+.tension-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+.tension-heading { font: 400 clamp(32px,4.5vw,58px)/1.1 'Instrument Serif', Georgia, serif; color: #111110; letter-spacing: -.03em; margin-bottom: 28px; }
+.tension-body { font: 400 20px/1.8 var(--sans); color: var(--ink2); max-width: 680px; margin: 0 auto; }
+
+/* ── D/P/A FRAMEWORK SECTION ── */
+.dpa-section {
+  background: #111110; padding: 100px 64px; text-align: center;
+}
+.dpa-section-inner { max-width: 1100px; margin: 0 auto; }
+.dpa-section-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+.dpa-section-heading { font: 400 clamp(28px,3.5vw,48px)/1.1 'Instrument Serif', Georgia, serif; color: #f2f1ed; letter-spacing: -.03em; margin-bottom: 16px; }
+.dpa-section-sub { font: 400 20px/1.7 var(--sans); color: rgba(242,241,237,.6); max-width: 620px; margin: 0 auto 64px; }
+.dpa-framework-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.dpa-fw-col {
+  background: rgba(242,241,237,.04); border: 1px solid rgba(242,241,237,.08);
+  padding: 40px 36px; text-align: left;
+}
+.dpa-fw-col:first-child { border-radius: 12px 0 0 12px; }
+.dpa-fw-col:last-child { border-radius: 0 12px 12px 0; }
+.dpa-fw-letter {
+  font: 900 64px var(--mono); color: var(--accent); letter-spacing: -.05em;
+  line-height: 1; margin-bottom: 16px; opacity: .35;
+}
+.dpa-fw-title { font: 700 22px var(--sans); color: #f2f1ed; margin-bottom: 8px; }
+.dpa-fw-sub { font: 400 13px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+.dpa-fw-body { font: 400 18px/1.7 var(--sans); color: rgba(242,241,237,.65); margin-bottom: 24px; }
+.dpa-fw-items { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.dpa-fw-items li { font: 400 16px var(--sans); color: rgba(242,241,237,.45); padding-left: 16px; position: relative; }
+.dpa-fw-items li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+/* ── PROOF SECTION ── */
+.proof-section {
+  background: #f2f1ed; padding: 100px 64px; text-align: center;
+}
+.proof-inner { max-width: 1000px; margin: 0 auto; }
+.proof-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+.proof-heading { font: 400 clamp(28px,3.5vw,48px)/1.1 'Instrument Serif', Georgia, serif; color: #111110; letter-spacing: -.03em; margin-bottom: 16px; }
+.proof-sub { font: 400 20px/1.7 var(--sans); color: var(--ink2); max-width: 580px; margin: 0 auto 48px; }
+.proof-card {
+  background: #111110; border-radius: 20px; padding: 48px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+  text-align: left; position: relative; overflow: hidden;
+}
+.proof-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(184,132,92,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.proof-metric { padding: 0 32px; border-right: 1px solid rgba(242,241,237,.08); }
+.proof-metric:first-child { padding-left: 0; }
+.proof-metric:last-child { border-right: none; }
+.proof-metric-label { font: 700 11px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: rgba(242,241,237,.45); margin-bottom: 8px; }
+.proof-metric-val { font: 800 clamp(28px,3vw,42px) var(--mono); color: #fff; letter-spacing: -.04em; line-height: 1; margin-bottom: 4px; }
+.proof-metric-sub { font: 400 15px var(--sans); color: rgba(242,241,237,.45); }
+.proof-cta { margin-top: 36px; }
+.proof-cta a { 
+  display: inline-block; padding: 16px 36px;
+  background: var(--accent); color: #fff; text-decoration: none;
+  font: 700 13px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  border-radius: 8px; transition: background .15s;
+}
+.proof-cta a:hover { background: #a07450; }
+.proof-cta-sub { font: 400 15px var(--sans); color: var(--ink3); margin-top: 12px; }
 
 /* ── COST TIERS ── */
 .tiers-section { background: #111110; padding: 72px 64px; position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; text-align: center; }
@@ -499,13 +574,102 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   </div>
 </div>
 
+<!-- TENSION: The problem -->
+<div class="tension-section">
+  <div class="tension-inner">
+    <div class="tension-label">The Problem</div>
+    <h2 class="tension-heading">Most sites look the same<br><em>until you look properly.</em></h2>
+    <p class="tension-body">A site that scores clean on heritage has a Grade I listed building 8 metres from the boundary. A site that looks complicated has three approved precedents within 200 metres. The difference between a deal and a write-off is usually information - and most people are working from the wrong data, too late.</p>
+  </div>
+</div>
+
+<!-- D/P/A FRAMEWORK -->
+<div class="dpa-section">
+  <div class="dpa-section-inner">
+    <div class="dpa-section-label">The Intelligence Framework</div>
+    <h2 class="dpa-section-heading">Development. Planning. Architecture.<br><em>Triangulated.</em></h2>
+    <p class="dpa-section-sub">Most tools give you one angle. D/A gives you three - and what they say together is more valuable than any one alone.</p>
+    <div class="dpa-framework-grid">
+      <div class="dpa-fw-col">
+        <div class="dpa-fw-letter">D</div>
+        <div class="dpa-fw-title">Development</div>
+        <div class="dpa-fw-sub">Financial viability</div>
+        <p class="dpa-fw-body">Can the numbers work? GDV modelled against real build costs, yield assumptions, S106 obligations and profit thresholds. Three scenarios. Live sliders.</p>
+        <ul class="dpa-fw-items">
+          <li>Gross Development Value</li>
+          <li>Residual Land Value</li>
+          <li>Build cost benchmarks</li>
+          <li>S106 &amp; CIL obligations</li>
+          <li>Lo / Base / Hi scenarios</li>
+        </ul>
+      </div>
+      <div class="dpa-fw-col">
+        <div class="dpa-fw-letter">P</div>
+        <div class="dpa-fw-title">Planning</div>
+        <div class="dpa-fw-sub">Policy &amp; appetite</div>
+        <p class="dpa-fw-body">What will the LPA actually permit? Heritage constraints, policy designations, OA allocation, Article 4 directions, GLA referral triggers and verified planning precedents within 500m.</p>
+        <ul class="dpa-fw-items">
+          <li>Heritage tier (NHLE verified)</li>
+          <li>Planning appetite score</li>
+          <li>Opportunity Area designation</li>
+          <li>Verified precedents</li>
+          <li>Delivery flags &amp; gates</li>
+        </ul>
+      </div>
+      <div class="dpa-fw-col">
+        <div class="dpa-fw-letter">A</div>
+        <div class="dpa-fw-title">Architecture</div>
+        <div class="dpa-fw-sub">Massing &amp; delivery</div>
+        <p class="dpa-fw-body">What can actually be built? Massing envelope against site constraints, GIA/NIA efficiency, core strategy, floor count scenarios and BSA/fire compliance gating.</p>
+        <ul class="dpa-fw-items">
+          <li>3D massing + floor count scenarios</li>
+          <li>GIA / NIA / efficiency</li>
+          <li>Core strategy &amp; lease span</li>
+          <li>BNG &amp; sustainability gates</li>
+          <li>BSA &amp; fire statement triggers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROOF: 24SS sample -->
+<div class="proof-section">
+  <div class="proof-inner">
+    <div class="proof-label">Live Example</div>
+    <h2 class="proof-heading">24 Southwark Street, SE1.<br><em>This is what you get.</em></h2>
+    <p class="proof-sub">Grade II listed. Opportunity Area. 10-floor base scenario. Here is what the D/A intelligence file says.</p>
+    <div class="proof-card">
+      <div class="proof-metric">
+        <div class="proof-metric-label">Development Score</div>
+        <div class="proof-metric-val">70<span style="font-size:24px;opacity:.5">/100</span></div>
+        <div class="proof-metric-sub">Strong opportunity</div>
+      </div>
+      <div class="proof-metric">
+        <div class="proof-metric-label">Estimated GDV</div>
+        <div class="proof-metric-val">£68.4M</div>
+        <div class="proof-metric-sub">Base scenario, 10 floors</div>
+      </div>
+      <div class="proof-metric">
+        <div class="proof-metric-label">Heritage Tier</div>
+        <div class="proof-metric-val" style="font-size:22px;letter-spacing:-.02em">RETAIN</div>
+        <div class="proof-metric-sub">Grade II listed on-site</div>
+      </div>
+    </div>
+    <div class="proof-cta">
+      <a href="/test/t1-scroll">See the full appraisal &rarr;</a>
+      <p class="proof-cta-sub">Full D/P/A intelligence - planning, heritage, massing, financials</p>
+    </div>
+  </div>
+</div>
+
 <!-- PD & Extensions section -->
 <div class="pd-section">
   <div class="pd-inner">
     <div>
-      <div class="pd-label">PD &amp; Extensions</div>
-      <h2 class="pd-heading">What can you build without planning permission?</h2>
-      <p class="pd-body">Enter your address. Get a full architectural breakdown of your Permitted Development rights - massing envelope, Approved Documents in plain English, Article 4 check, Prior Approval flags, cost ranges and next steps. What your architect would tell you in the first meeting.</p>
+      <div class="pd-label">Home Extension Checker</div>
+      <h2 class="pd-heading">What can you build<br>without planning permission?</h2>
+      <p class="pd-body">Enter your address. Get a full architectural breakdown of your Permitted Development rights - 3D massing envelope, Approved Documents in plain English, Article 4 check, Prior Approval flags, London cost ranges and next steps. What your architect would tell you in the first meeting - instant, for a fraction of the cost.</p>
       <div class="pd-search-row">
         <input class="pd-input" type="text" placeholder="Enter your property address or postcode..." id="pd-addr-input">
         <a class="pd-btn" href="/pd" id="pd-addr-btn">Check &rarr;</a>
