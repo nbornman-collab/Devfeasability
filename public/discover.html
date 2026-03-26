@@ -544,7 +544,161 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .popup-score-row { display: flex; align-items: baseline; gap: 6px; margin-top: 5px; }
 .popup-score { font: 800 22px var(--mono); color: var(--ink); letter-spacing: -.02em; }
 .popup-verdict { font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
-.popup-addr { font: 400 9px var(--sans); color: var(--ink3); margin-top: 3px; }
+.popup-addr { font: 400 13px var(--sans); color: var(--ink3); margin-top: 3px; }
+
+/* ── MASSING POPUP (90vh, 16:9) ── */
+.mass-scrim {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.65); backdrop-filter: blur(6px);
+  display: none; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .25s ease;
+}
+.mass-scrim.open { display: flex; opacity: 1; }
+.mass-modal {
+  width: 90vw; height: 90vh; max-width: 1600px;
+  background: #111110; border-radius: 20px; overflow: hidden;
+  display: flex; position: relative;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
+}
+.mass-close {
+  position: absolute; top: 16px; right: 20px; z-index: 10;
+  background: rgba(255,255,255,.1); border: none; color: rgba(255,255,255,.7);
+  width: 36px; height: 36px; border-radius: 50%; font-size: 18px;
+  cursor: pointer; transition: background .15s, color .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.mass-close:hover { background: rgba(255,255,255,.2); color: #fff; }
+
+/* Left: 3D / Street View canvas */
+.mass-canvas {
+  flex: 1; position: relative; min-width: 0;
+}
+.mass-map-wrap {
+  position: absolute; inset: 0;
+}
+.mass-map-wrap canvas, .mass-map-wrap .mapboxgl-map { width: 100% !important; height: 100% !important; }
+.mass-sv-wrap {
+  position: absolute; inset: 0; display: none; background: #000;
+}
+.mass-sv-wrap.active { display: block; }
+
+/* View toggle (3D / Street View) */
+.mass-view-toggle {
+  position: absolute; bottom: 20px; left: 20px; z-index: 10;
+  display: flex; gap: 0; border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.2);
+}
+.mass-view-btn {
+  padding: 10px 18px; background: rgba(0,0,0,.5); backdrop-filter: blur(8px);
+  border: none; color: rgba(255,255,255,.6); font: 600 11px var(--sans);
+  letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.mass-view-btn.active { background: var(--accent); color: #fff; }
+.mass-view-btn:hover:not(.active) { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); }
+
+/* Scenario tabs overlay */
+.mass-scenario-tabs {
+  position: absolute; top: 20px; left: 20px; z-index: 10;
+  display: flex; gap: 0; border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.2);
+}
+.mass-sc-tab {
+  padding: 12px 20px; background: rgba(0,0,0,.5); backdrop-filter: blur(8px);
+  border: none; color: rgba(255,255,255,.55); cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  transition: background .15s, color .15s; min-width: 72px;
+}
+.mass-sc-tab.active { background: var(--accent); color: #fff; }
+.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.1); }
+.mass-sc-label { font: 700 13px var(--sans); letter-spacing: .06em; }
+.mass-sc-floors { font: 500 18px var(--mono); letter-spacing: -.02em; }
+
+/* Right: info strip */
+.mass-info {
+  width: 320px; flex-shrink: 0; background: #111110;
+  border-left: 1px solid rgba(255,255,255,.08);
+  padding: 32px 28px; display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.mass-site-name {
+  font: 400 24px/1.2 'Instrument Serif', Georgia, serif;
+  color: #f2f1ed; margin-bottom: 4px;
+}
+.mass-site-addr {
+  font: 400 14px var(--sans); color: rgba(255,255,255,.5);
+  margin-bottom: 16px;
+}
+.mass-score-row {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px;
+}
+.mass-score-num {
+  font: 800 36px var(--mono); color: var(--accent); letter-spacing: -.03em;
+}
+.mass-score-label {
+  font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+}
+.mass-verdict {
+  font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px; color: #fff; display: inline-block;
+  margin-bottom: 20px;
+}
+.mass-verdict.green { background: var(--green); }
+.mass-verdict.amber { background: var(--amber); }
+.mass-verdict.red { background: var(--red); }
+
+.mass-divider {
+  height: 1px; background: rgba(255,255,255,.08); margin: 16px 0;
+}
+
+/* Metrics grid */
+.mass-metrics {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-bottom: 20px;
+}
+.mass-metric-val {
+  font: 700 20px var(--mono); color: #f2f1ed; letter-spacing: -.01em;
+}
+.mass-metric-val.accent { color: var(--accent); }
+.mass-metric-lbl {
+  font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.4); margin-top: 2px;
+}
+
+/* Gated rows */
+.mass-gated {
+  display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;
+}
+.mass-gated-row {
+  display: flex; align-items: center; gap: 8px;
+  font: 600 11px var(--sans); letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+}
+.mass-gated-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.2); flex-shrink: 0;
+}
+.mass-gated-line {
+  flex: 1; height: 1px; background: rgba(255,255,255,.08);
+}
+
+/* CTA */
+.mass-cta {
+  display: block; text-align: center; padding: 14px 24px;
+  background: var(--accent); color: #fff; text-decoration: none;
+  font: 700 11px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  border-radius: 8px; transition: background .15s; margin-top: auto;
+}
+.mass-cta:hover { background: #a07450; }
+.mass-cta.locked {
+  background: rgba(255,255,255,.06); color: rgba(255,255,255,.3);
+  pointer-events: none;
+}
+.mass-cta-sub {
+  display: block; font: 400 13px var(--sans); letter-spacing: 0;
+  text-transform: none; color: rgba(255,255,255,.5); margin-top: 6px;
+}
 </style>
 </head>
 <body>
@@ -1303,6 +1457,421 @@ Promise.all([
   }
   if (cfg?.mapboxToken) initMap(cfg.mapboxToken);
 });
+// ── MASSING POPUP ─────────────────────────────────────────────────────────────
+var massMap = null;
+var massSite = null;
+var massScenario = 'base';
+var massGoogleLoaded = false;
+var massSV = null;
+
+function openMassPopup(site) {
+  massSite = site;
+  massScenario = 'base';
+  var scrim = document.getElementById('mass-scrim');
+  if (!scrim) return;
+  scrim.classList.add('open');
+  // Slight delay to allow CSS transition
+  setTimeout(function() { scrim.style.opacity = '1'; }, 10);
+  document.body.style.overflow = 'hidden';
+
+  // Populate info
+  var vc = verdictClass(site.score);
+  var vl = verdictLabel(site.score);
+  var existF = Math.max(1, Math.round(site.maxFloors * 0.45));
+  var scenarios = massingScenarios(site);
+  var base = scenarios.base;
+
+  document.getElementById('mass-name').textContent = site.name;
+  document.getElementById('mass-addr').textContent = site.address + ' · ' + site.borough;
+  document.getElementById('mass-score').textContent = site.score;
+  document.getElementById('mass-score-lbl').textContent = '/100';
+  var vEl = document.getElementById('mass-verdict');
+  vEl.textContent = vl; vEl.className = 'mass-verdict ' + vc;
+
+  updateMassMetrics(base, site);
+  updateMassScenarioTabs(scenarios);
+
+  // Show 3D view by default
+  document.getElementById('mass-sv').classList.remove('active');
+  document.querySelectorAll('.mass-view-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.view === '3d');
+  });
+
+  // Init or update 3D map
+  initMassMap(site, scenarios);
+}
+
+function closeMassPopup() {
+  var scrim = document.getElementById('mass-scrim');
+  if (!scrim) return;
+  scrim.style.opacity = '0';
+  setTimeout(function() { scrim.classList.remove('open'); }, 250);
+  document.body.style.overflow = '';
+  if (massMap) { massMap.remove(); massMap = null; }
+  massSite = null;
+}
+
+function massingScenarios(site) {
+  var maxF = site.maxFloors || 8;
+  var existF = Math.max(1, Math.round(maxF * 0.45));
+  var plotM2 = site.plotM2 || 500;
+  var coverage = 0.75;
+  var eff = 0.78;
+  var coreRatio = 0.22;
+
+  // Heritage drives form
+  var podiumPct = site.heritTier === 'blocking' ? 0.5
+    : site.heritTier === 'navigable' ? 0.6 : 0.8;
+  var towerSetback = site.heritTier === 'blocking' ? 3
+    : site.heritTier === 'navigable' ? 1.5 : 0;
+
+  function scenario(label, floors) {
+    var podF = Math.round(floors * podiumPct);
+    var twrF = floors - podF;
+    var podFP = plotM2 * coverage;
+    var twrFP = podFP * (site.heritTier === 'blocking' ? 0.45 : site.heritTier === 'navigable' ? 0.55 : 0.85);
+    var giaTotal = (podFP * podF) + (twrFP * twrF);
+    var niaTotal = giaTotal * eff;
+    var addedF = floors - existF;
+    var addedNIA = Math.max(0, niaTotal - (podFP * existF * eff));
+    return {
+      label: label, floors: floors, podF: podF, twrF: twrF,
+      podFP: Math.round(podFP), twrFP: Math.round(twrFP),
+      giaTotal: Math.round(giaTotal), niaTotal: Math.round(niaTotal),
+      addedF: addedF, addedNIA: Math.round(addedNIA),
+      towerSetback: towerSetback, existF: existF
+    };
+  }
+
+  return {
+    lo: scenario('Low', Math.max(existF + 1, Math.round(maxF * 0.6))),
+    base: scenario('Base', Math.max(existF + 2, Math.round(maxF * 0.8))),
+    hi: scenario('High', maxF)
+  };
+}
+
+function updateMassMetrics(sc, site) {
+  var erv = site.borough === 'City of London' ? 85 : site.inCAZ ? 72 : 55;
+  var gdvLo = ((sc.niaTotal * erv * 10.7639 / 0.0475) / 1e6 * 0.85).toFixed(0);
+  var gdvHi = ((sc.niaTotal * erv * 10.7639 / 0.0475) / 1e6 * 1.15).toFixed(0);
+  document.getElementById('mass-metrics').innerHTML = [
+    metricHTML('£' + gdvLo + '-' + gdvHi + 'M', 'Est. GDV range', true),
+    metricHTML('+' + sc.addedF + 'F', 'Added floors', false),
+    metricHTML(sc.addedNIA.toLocaleString() + 'm\u00B2', 'New NIA', false),
+    metricHTML(sc.floors + 'F', 'Total floors', false),
+    metricHTML(sc.giaTotal.toLocaleString() + 'm\u00B2', 'Total GIA', false),
+    metricHTML(Math.round(sc.niaTotal / sc.giaTotal * 100) + '%', 'Eff (NIA/GIA)', false),
+  ].join('');
+
+  // Update CTA
+  document.getElementById('mass-cta').innerHTML = site.t1
+    ? '<a class="mass-cta" href="' + site.t1 + '">Unlock full appraisal \u2192<span class="mass-cta-sub">Score breakdown \u00B7 precedent analysis \u00B7 financial model</span></a>'
+    : '<span class="mass-cta locked">Full appraisal coming soon</span>';
+}
+
+function metricHTML(val, lbl, accent) {
+  return '<div class="mass-metric"><div class="mass-metric-val' + (accent ? ' accent' : '') + '">' + val + '</div><div class="mass-metric-lbl">' + lbl + '</div></div>';
+}
+
+function updateMassScenarioTabs(scenarios) {
+  var keys = ['lo','base','hi'];
+  var labels = {lo:'Low',base:'Base',hi:'High'};
+  keys.forEach(function(k) {
+    var tab = document.getElementById('mass-tab-' + k);
+    if (!tab) return;
+    tab.querySelector('.mass-sc-floors').textContent = scenarios[k].floors + 'F';
+    tab.classList.toggle('active', k === massScenario);
+  });
+}
+
+function switchMassScenario(key) {
+  massScenario = key;
+  if (!massSite) return;
+  var scenarios = massingScenarios(massSite);
+  var sc = scenarios[key];
+  updateMassMetrics(sc, massSite);
+  updateMassScenarioTabs(scenarios);
+  // Update 3D massing
+  if (massMap) updateMassingLayers(massMap, massSite, sc);
+}
+
+function switchMassView(view) {
+  document.querySelectorAll('.mass-view-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.view === view);
+  });
+  if (view === 'sv') {
+    document.getElementById('mass-sv').classList.add('active');
+    initStreetView();
+  } else {
+    document.getElementById('mass-sv').classList.remove('active');
+  }
+}
+
+function initMassMap(site, scenarios) {
+  if (massMap) { massMap.remove(); massMap = null; }
+  if (!MAPBOX_TOKEN) return;
+  var container = document.getElementById('mass-3d');
+  massMap = new mapboxgl.Map({
+    container: container,
+    style: 'mapbox://styles/mapbox/standard',
+    center: [site.lng, site.lat],
+    zoom: 17.5, pitch: 60, bearing: -30,
+    attributionControl: false, antialias: true
+  });
+  massMap.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-right');
+  massMap.dragRotate.enable();
+  massMap.touchZoomRotate.enable();
+
+  massMap.on('style.load', function() {
+    massMap.setConfigProperty('basemap', 'lightPreset', 'dusk');
+    massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+    massMap.setConfigProperty('basemap', 'showTransitLabels', false);
+    var sc = scenarios[massScenario];
+    addMassingLayers(massMap, site, sc);
+  });
+}
+
+function siteRect(site) {
+  // Generate a rectangle from plot area centered on lat/lng
+  var area = site.plotM2 || 500;
+  var side = Math.sqrt(area);
+  var latD = (side / 2) / 111320;
+  var lngD = (side / 2) / (111320 * Math.cos(site.lat * Math.PI / 180));
+  var c = [site.lng, site.lat];
+  return [
+    [c[0] - lngD, c[1] - latD],
+    [c[0] + lngD, c[1] - latD],
+    [c[0] + lngD, c[1] + latD],
+    [c[0] - lngD, c[1] + latD],
+    [c[0] - lngD, c[1] - latD]
+  ];
+}
+
+function insetRect(coords, metres) {
+  var c = [(coords[0][0]+coords[2][0])/2, (coords[0][1]+coords[2][1])/2];
+  var factor = metres / 111320;
+  return coords.map(function(p) {
+    var dx = p[0] - c[0];
+    var dy = p[1] - c[1];
+    var dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist === 0) return p;
+    var shrink = Math.max(0, dist - factor) / dist;
+    return [c[0] + dx * shrink, c[1] + dy * shrink];
+  });
+}
+
+function addMassingLayers(map, site, sc) {
+  var rect = siteRect(site);
+  var floorH = 3.2;
+  var existH = sc.existF * floorH;
+  var totalH = sc.floors * floorH;
+  var podH = sc.podF * floorH;
+  var twrCoords = sc.towerSetback > 0 ? insetRect(rect, sc.towerSetback) : rect;
+
+  // Site outline
+  map.addSource('mass-site', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [rect] } }
+  });
+  map.addLayer({
+    id: 'mass-site-outline', type: 'line', source: 'mass-site',
+    paint: { 'line-color': '#fff', 'line-width': 1.5, 'line-opacity': 0.4, 'line-dasharray': [3, 2] }
+  });
+
+  // Existing building (dark)
+  map.addSource('mass-existing', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [rect] },
+      properties: { height: existH, base: 0 } }
+  });
+  map.addLayer({
+    id: 'mass-existing-3d', type: 'fill-extrusion', source: 'mass-existing',
+    paint: {
+      'fill-extrusion-color': '#555550',
+      'fill-extrusion-height': existH,
+      'fill-extrusion-base': 0,
+      'fill-extrusion-opacity': 0.4
+    }
+  });
+
+  // Podium (copper, from existing height to podium height)
+  if (podH > existH) {
+    map.addSource('mass-podium', {
+      type: 'geojson',
+      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [rect] },
+        properties: { height: podH, base: existH } }
+    });
+    map.addLayer({
+      id: 'mass-podium-3d', type: 'fill-extrusion', source: 'mass-podium',
+      paint: {
+        'fill-extrusion-color': '#ffffff',
+        'fill-extrusion-height': podH,
+        'fill-extrusion-base': existH,
+        'fill-extrusion-opacity': 0.7
+      }
+    });
+  }
+
+  // Tower (white, from podium to total)
+  if (totalH > podH) {
+    map.addSource('mass-tower', {
+      type: 'geojson',
+      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [twrCoords] },
+        properties: { height: totalH, base: podH } }
+    });
+    map.addLayer({
+      id: 'mass-tower-3d', type: 'fill-extrusion', source: 'mass-tower',
+      paint: {
+        'fill-extrusion-color': '#ffffff',
+        'fill-extrusion-height': totalH,
+        'fill-extrusion-base': podH,
+        'fill-extrusion-opacity': 0.85
+      }
+    });
+  }
+
+  // Floor lines (thin extrusions at each floor level)
+  var floorLines = [];
+  for (var i = sc.existF + 1; i <= sc.floors; i++) {
+    floorLines.push({
+      type: 'Feature',
+      geometry: { type: 'Polygon', coordinates: [i <= sc.podF ? rect : twrCoords] },
+      properties: { height: i * floorH, base: i * floorH - 0.15 }
+    });
+  }
+  map.addSource('mass-floors', {
+    type: 'geojson',
+    data: { type: 'FeatureCollection', features: floorLines }
+  });
+  map.addLayer({
+    id: 'mass-floor-lines', type: 'fill-extrusion', source: 'mass-floors',
+    paint: {
+      'fill-extrusion-color': 'rgba(184,132,92,0.6)',
+      'fill-extrusion-height': ['get', 'height'],
+      'fill-extrusion-base': ['get', 'base'],
+      'fill-extrusion-opacity': 0.5
+    }
+  });
+}
+
+function updateMassingLayers(map, site, sc) {
+  // Remove old layers and sources
+  ['mass-floor-lines','mass-tower-3d','mass-podium-3d','mass-existing-3d','mass-site-outline'].forEach(function(id) {
+    if (map.getLayer(id)) map.removeLayer(id);
+  });
+  ['mass-floors','mass-tower','mass-podium','mass-existing','mass-site'].forEach(function(id) {
+    if (map.getSource(id)) map.removeSource(id);
+  });
+  addMassingLayers(map, site, sc);
+}
+
+function initStreetView() {
+  if (!massSite) return;
+  var container = document.getElementById('mass-sv');
+  if (!window.google || !window.google.maps) {
+    // Load Google Maps
+    fetch('/api/config').then(function(r) { return r.json(); }).then(function(cfg) {
+      if (!cfg.googleMapsKey) { container.innerHTML = '<div style="padding:40px;color:rgba(255,255,255,.4);font:400 14px var(--sans);">Street View unavailable</div>'; return; }
+      if (window.google && window.google.maps) { buildSV(); return; }
+      var s = document.createElement('script');
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=' + cfg.googleMapsKey + '&callback=_massSVReady';
+      window._massSVReady = function() { buildSV(); };
+      document.head.appendChild(s);
+    });
+    return;
+  }
+  buildSV();
+}
+
+function buildSV() {
+  if (!massSite) return;
+  var container = document.getElementById('mass-sv');
+  container.innerHTML = '';
+  massSV = new google.maps.StreetViewPanorama(container, {
+    position: { lat: massSite.lat, lng: massSite.lng },
+    pov: { heading: 0, pitch: 5 },
+    zoom: 0,
+    addressControl: false,
+    fullscreenControl: false,
+    motionTracking: false,
+    motionTrackingControl: false
+  });
+}
+
+// Wire card click to massing popup instead of focus panel
+var _origCardClick = typeof cardClick === 'function' ? cardClick : null;
+function cardClick(id) {
+  var site = ALL_SITES.find(function(s) { return s.id === id; });
+  if (site) openMassPopup(site);
+}
+
+// Escape to close
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeMassPopup();
+});
+
 </script>
+
+<!-- Massing popup HTML shell -->
+<div class="mass-scrim" id="mass-scrim" onclick="if(event.target===this)closeMassPopup();">
+  <div class="mass-modal">
+    <button class="mass-close" onclick="closeMassPopup();">&times;</button>
+
+    <!-- Left: 3D canvas + Street View -->
+    <div class="mass-canvas">
+      <div class="mass-map-wrap" id="mass-3d"></div>
+      <div class="mass-sv-wrap" id="mass-sv"></div>
+
+      <!-- Scenario tabs -->
+      <div class="mass-scenario-tabs">
+        <button class="mass-sc-tab active" id="mass-tab-lo" onclick="switchMassScenario('lo')">
+          <span class="mass-sc-label">Low</span>
+          <span class="mass-sc-floors">6F</span>
+        </button>
+        <button class="mass-sc-tab active" id="mass-tab-base" onclick="switchMassScenario('base')">
+          <span class="mass-sc-label">Base</span>
+          <span class="mass-sc-floors">8F</span>
+        </button>
+        <button class="mass-sc-tab" id="mass-tab-hi" onclick="switchMassScenario('hi')">
+          <span class="mass-sc-label">High</span>
+          <span class="mass-sc-floors">10F</span>
+        </button>
+      </div>
+
+      <!-- View toggle -->
+      <div class="mass-view-toggle">
+        <button class="mass-view-btn active" data-view="3d" onclick="switchMassView('3d')">3D Massing</button>
+        <button class="mass-view-btn" data-view="sv" onclick="switchMassView('sv')">Street View</button>
+      </div>
+    </div>
+
+    <!-- Right: info strip -->
+    <div class="mass-info">
+      <div class="mass-site-name" id="mass-name"></div>
+      <div class="mass-site-addr" id="mass-addr"></div>
+      <div class="mass-score-row">
+        <span class="mass-score-num" id="mass-score"></span>
+        <span class="mass-score-label" id="mass-score-lbl">/100</span>
+      </div>
+      <div id="mass-verdict" class="mass-verdict green"></div>
+
+      <div class="mass-divider"></div>
+
+      <div class="mass-metrics" id="mass-metrics"></div>
+
+      <div class="mass-divider"></div>
+
+      <div class="mass-gated">
+        <div class="mass-gated-row"><span class="mass-gated-dot"></span>Heritage shadow analysis<span class="mass-gated-line"></span></div>
+        <div class="mass-gated-row"><span class="mass-gated-dot"></span>Title complexity assessment<span class="mass-gated-line"></span></div>
+        <div class="mass-gated-row"><span class="mass-gated-dot"></span>Planning precedent detail<span class="mass-gated-line"></span></div>
+        <div class="mass-gated-row"><span class="mass-gated-dot"></span>Financial model + residual<span class="mass-gated-line"></span></div>
+        <div class="mass-gated-row"><span class="mass-gated-dot"></span>Comparable approvals analysis<span class="mass-gated-line"></span></div>
+      </div>
+
+      <div id="mass-cta"></div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
