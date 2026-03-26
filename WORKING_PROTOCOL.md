@@ -47,6 +47,15 @@ No task is complete until:
 - **Borough names** not in top ribbon - Discover dropdown only.
 - **PD Check** not in D/A main nav.
 
+## ARCHITECTURAL RULES (Developer-Focused) - locked 2026-03-26
+
+These apply to all data presentation across T1, T2, intelligence files, and any UI showing area or efficiency data:
+
+- **GIA and NIA always presented side by side.** Never show one without the other.
+- **Efficiency always shown as a percentage**, clearly defined as NIA / GIA. Label must read "Efficiency (NIA/GIA)" or equivalent - never just "efficiency" without definition.
+- **Core and service areas always broken out as percentages.** Never refer to "core" alone without a number. State both core % and services % separately if data is available.
+- **Always use "floorplate"** - not "plate", not "floor plate" (two words), not "gross plate". Consistent throughout all UI and copy.
+
 ---
 
 ## STEP 0 - READ & PLAN CONFIRMATION (MANDATORY)

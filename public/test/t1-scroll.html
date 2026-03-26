@@ -699,8 +699,9 @@ function populatePage(si) {
     <div class="comp-col">
       <div class="comp-col-title">Proposed (base)</div>
       <div class="comp-row"><span class="comp-key">Floors</span><span class="comp-val accent">${baseSc.floors}F</span></div>
+      <div class="comp-row"><span class="comp-key">GIA</span><span class="comp-val accent">${f(baseSc.gea)}m\u00B2</span></div>
       <div class="comp-row"><span class="comp-key">NIA</span><span class="comp-val accent">${f(baseSc.nia)}m\u00B2</span></div>
-      <div class="comp-row"><span class="comp-key">Est. GDV</span><span class="comp-val accent">${fm(baseSc.gdv)}</span></div>
+      <div class="comp-row"><span class="comp-key">Efficiency</span><span class="comp-val accent">${Math.round(baseSc.eff*100)}%</span></div>
     </div>
     <div class="comp-col">
       <div class="comp-col-title">Uplift</div>
@@ -731,13 +732,14 @@ function populatePage(si) {
   const archSynth = typeof synthesisArchitecture === 'function' ? synthesisArchitecture(si) : '';
   html('arch-synthesis', archSynth);
   const coreM2 = Math.round(grossPlate * 0.22);
+  const corePct = Math.round(coreM2 / grossPlate * 100);
   html('arch-grid', `
-    <div class="arch-cell"><div class="arch-cell-label">Core</div><div class="arch-cell-val">${coreM2}m\u00B2</div><div class="arch-cell-sub">22% of plate</div></div>
-    <div class="arch-cell"><div class="arch-cell-label">Efficiency</div><div class="arch-cell-val">${Math.round(baseSc.eff*100)}%</div><div class="arch-cell-sub">net-to-gross</div></div>
-    <div class="arch-cell"><div class="arch-cell-label">Heritage</div><div class="arch-cell-val">${tier}</div><div class="arch-cell-sub">response type</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Floorplate GIA</div><div class="arch-cell-val">${f(grossPlate)}m\u00B2</div><div class="arch-cell-sub">gross per floor</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Floorplate NIA</div><div class="arch-cell-val">${f(niaFloor)}m\u00B2</div><div class="arch-cell-sub">net per floor</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Efficiency (NIA/GIA)</div><div class="arch-cell-val">${Math.round(baseSc.eff*100)}%</div><div class="arch-cell-sub">net-to-gross</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Core Area</div><div class="arch-cell-val">${coreM2}m\u00B2</div><div class="arch-cell-sub">${corePct}% of floorplate GIA</div></div>
     <div class="arch-cell"><div class="arch-cell-label">Max Height</div><div class="arch-cell-val">${maxH}m</div><div class="arch-cell-sub">AOD</div></div>
-    <div class="arch-cell"><div class="arch-cell-label">Lease Span</div><div class="arch-cell-val">7m</div><div class="arch-cell-sub">min clear, 2 faces</div></div>
-    <div class="arch-cell"><div class="arch-cell-label">NIA/Floor</div><div class="arch-cell-val">${f(niaFloor)}m\u00B2</div><div class="arch-cell-sub">per floor</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Lease Span</div><div class="arch-cell-val">7m min</div><div class="arch-cell-sub">clear, 2 faces</div></div>
   `);
 
   // Building regs
@@ -894,8 +896,10 @@ function buildMatrix() {
   rows.push(`<tr><td>RLV</td>${scs.map(sc => `<td>${val(fm(sc.rlv))}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Total Dev Cost</td>${scs.map(sc => `<td>${val(fm(sc.tdc))}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Dev Profit</td>${scs.map(sc => `<td>${val(fm(sc.profit))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>GIA</td>${scs.map(sc => `<td>${val(f(sc.gea)+'m\u00B2')}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>NIA</td>${scs.map(sc => `<td>${val(f(sc.nia)+'m\u00B2')}</td>`).join('')}</tr>`);
-  rows.push(`<tr><td>Cost / m\u00B2</td>${metas.map(m => `<td>${val('\u00A3'+f(m.costM2))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Efficiency (NIA/GIA)</td>${scs.map(sc => `<td>${val(Math.round(sc.eff*100)+'%')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Cost / m\u00B2 GIA</td>${metas.map(m => `<td>${val('\u00A3'+f(m.costM2))}</td>`).join('')}</tr>`);
 
   rows.push(`<tr class="matrix-group-header"><td colspan="4">Planning</td></tr>`);
   rows.push(`<tr><td>LVMF Impact</td>${metas.map(m => `<td>${pill(m.lvmf)}</td>`).join('')}</tr>`);
