@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>24 Southwark Street - Appraise | D/A</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <script src="/lib/intelligence-24ss.js"></script>
@@ -20,9 +20,10 @@
   --ink3:      #6a6a65;
   --accent:    #5b7a9d;
   --accent-bg: #f0f4f8;
-  --accent2:   #b07a56;
+  --accent2:   #b8845c;
   --rule:      rgba(17,17,16,.1);
   --sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --display: 'Instrument Serif', Georgia, serif;
   --mono: 'JetBrains Mono', 'Fira Mono', monospace;
   --nav-h: 56px;
 }
@@ -121,7 +122,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 .hero-scrim { position: absolute; inset: 0; z-index: 1;
   background: linear-gradient(180deg, rgba(17,17,16,.08) 0%, rgba(17,17,16,.02) 40%, rgba(17,17,16,.5) 85%, rgba(17,17,16,.8) 100%); }
 .hero-content { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; padding: 0 40px 60px; }
-.hero-address { font: 800 clamp(36px,5vw,64px)/1 var(--sans); color: #fff; letter-spacing: -.04em; margin-bottom: 16px; }
+.hero-address { font: 400 clamp(40px,6vw,72px)/1 var(--display); color: #fff; letter-spacing: -.02em; margin-bottom: 16px; }
 .hero-sub { font: 500 18px var(--sans); color: rgba(255,255,255,.7); margin-bottom: 24px; }
 .hero-score-row { display: flex; align-items: center; gap: 20px; }
 .hero-score { font: 900 clamp(48px,7vw,80px) var(--mono); color: var(--accent2); letter-spacing: -.05em; line-height: .85; }
@@ -154,14 +155,14 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 
 /* -- TYPOGRAPHY -- */
 .section-label { font: 700 13px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 14px; }
-.section-title { font: 800 clamp(28px,4vw,48px)/1.1 var(--sans); color: var(--ink); letter-spacing: -.03em; margin-bottom: 20px; }
+.section-title { font: 400 clamp(32px,5vw,56px)/1.1 var(--display); color: var(--ink); letter-spacing: -.02em; margin-bottom: 20px; }
 .section-body { font: 400 18px/1.8 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
 
 /* -- DATA CARDS -- */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-top: 40px; }
 .card { background: rgba(255,255,255,.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.8);
   border-radius: 16px; padding: 36px; transition: transform .3s, box-shadow .3s; }
-.card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,.06); }
+.card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(91,122,157,.12), 0 0 0 1px rgba(91,122,157,.08); }
 .card-label { font: 700 13px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 10px; }
 .card-value { font: 800 clamp(32px,4vw,48px) var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
 .card-value.accent { color: var(--accent2); }
@@ -538,8 +539,17 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 </section>
 
 <!-- FOOTER -->
-<div class="footer">
-  <div class="footer-text">Development feasibility analysis - for professional use only. All values are estimates based on publicly available data. GDV and financial projections are modelled, not guaranteed.</div>
+<div class="footer" style="padding:80px 40px 40px;background:var(--ink);color:rgba(255,255,255,.7)">
+  <div style="max-width:640px;margin:0 auto;text-align:center">
+    <div style="font:400 clamp(24px,3vw,36px) var(--display);color:#fff;margin-bottom:16px">Ready to move on this site?</div>
+    <div style="font:400 15px/1.7 var(--sans);color:rgba(255,255,255,.5);margin-bottom:32px">This appraisal is based on publicly available data and modelled assumptions. Commission a full feasibility study for verified inputs and bespoke massing.</div>
+    <a href="#" style="font:600 14px var(--sans);color:var(--ink);background:#fff;text-decoration:none;padding:14px 32px;border-radius:8px;display:inline-block;transition:all .2s"
+       onmouseover="this.style.background='var(--accent2)';this.style.color='#fff'"
+       onmouseout="this.style.background='#fff';this.style.color='var(--ink)'">Commission Full Study &rarr;</a>
+  </div>
+  <div style="margin-top:60px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);font:400 12px var(--sans);color:rgba(255,255,255,.3);text-align:center">
+    Development feasibility analysis - for professional use only. All values are estimates. GDV and financial projections are modelled, not guaranteed.
+  </div>
 </div>
 
 <script>
@@ -993,8 +1003,23 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
   map.on('style.load', () => {
     map.setConfigProperty('basemap', 'lightPreset', 'dawn');
-    try { map.setPaintProperty('building-extrusion', 'fill-extrusion-color', '#e8e6e0'); } catch(e) {}
-    try { map.setPaintProperty('building-extrusion', 'fill-extrusion-opacity', 0.85); } catch(e) {}
+    // Kill salmon buildings - try every known approach
+    try { map.setConfigProperty('basemap', 'colorBuildings', '#e0e3e8'); } catch(e) {}
+    try { map.setPaintProperty('building-extrusion', 'fill-extrusion-color', '#e0e3e8'); } catch(e) {}
+    try { map.setPaintProperty('building-extrusion', 'fill-extrusion-opacity', 0.6); } catch(e) {}
+    // Standard style internal layers
+    try { map.setPaintProperty('building', 'fill-extrusion-color', '#e0e3e8'); } catch(e) {}
+    try { map.setPaintProperty('building-models', 'model-color', ['match', ['get', 'type'], 'commercial', '#e0e3e8', '#e0e3e8']); } catch(e) {}
+    // Try walking all layers and recolouring anything building-related
+    try {
+      const layers = map.getStyle().layers || [];
+      layers.forEach(l => {
+        if (l.id && (l.id.includes('building') || l.id.includes('Building'))) {
+          try { map.setPaintProperty(l.id, 'fill-extrusion-color', '#e0e3e8'); } catch(e2) {}
+          try { map.setPaintProperty(l.id, 'fill-extrusion-opacity', 0.6); } catch(e2) {}
+        }
+      });
+    } catch(e) {}
 
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
     map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
