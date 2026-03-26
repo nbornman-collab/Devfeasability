@@ -119,9 +119,9 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
 /* ── PD SECTION ── */
 .pd-section {
-  background: #111110; padding: 72px 64px; position: relative; z-index: 20;
+  background: #111110; padding: 72px 64px; position: relative; z-index: 20; text-align: center;
 }
-.pd-inner { max-width: 1100px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.pd-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; text-align: left; }
 .pd-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
 .pd-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #f2f1ed; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 16px; }
 .pd-body { font: 400 18px/1.9 var(--sans); color: rgba(242,241,237,.55); margin-bottom: 28px; max-width: 440px; }
@@ -154,7 +154,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .pd-feature-desc { font: 400 18px/1.6 var(--sans); color: rgba(242,241,237,.45); }
 
 /* ── COST TIERS ── */
-.tiers-section { background: #111110; padding: 72px 64px; position: relative; z-index: 20; }
+.tiers-section { background: #111110; padding: 72px 64px; position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; text-align: center; }
 .tiers-label { font: 700 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
 .tiers-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #f2f1ed; letter-spacing: -.03em; margin-bottom: 40px; }
 .tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; max-width: 960px; }
@@ -197,7 +197,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .hero {
   position: absolute; inset: 0; z-index: 10;
   display: flex; flex-direction: column;
-  align-items: flex-start; justify-content: flex-end;
+  align-items: center; justify-content: flex-end; text-align: center;
   padding: 0 64px 80px;
 }
 
@@ -208,7 +208,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   padding: 72px 64px 80px;
 }
 .below-fold-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1100px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1100px; margin: 0 auto;
 }
 .below-fold-intro {
   display: flex; flex-direction: column; justify-content: center;
