@@ -740,6 +740,7 @@ function populatePage(si) {
   html('precedents-body', precs.length ? precs.map(p => `<div class="precedent"><div class="precedent-name">${p.name}</div><div class="precedent-detail">${p.ref||''} - ${p.outcome||''}</div></div>`).join('') : '<div style="color:var(--ink3)">No precedents loaded.</div>');
 
   // Architecture synthesis - architect's pitch voice
+  const coreM2 = Math.round(grossPlate * 0.22);
   const hResponse = hf.type || 'CONTEXTUAL';
   const isListed = hf.tier === 'full_conservation' || hf.tier === 'retain_and_adapt';
   const dualStair = maxH >= 30;
@@ -757,7 +758,6 @@ function populatePage(si) {
     <p style="margin-bottom:18px">${archMiddle}</p>
     <p>${archEnd}</p>
   `);
-  const coreM2 = Math.round(grossPlate * 0.22);
   html('arch-grid', `
     <div class="arch-cell"><div class="arch-cell-label">Core</div><div class="arch-cell-val">${coreM2}m\u00B2</div><div class="arch-cell-sub">22% of plate</div></div>
     <div class="arch-cell"><div class="arch-cell-label">Efficiency</div><div class="arch-cell-val">${Math.round(baseSc.eff*100)}%</div><div class="arch-cell-sub">net-to-gross</div></div>
