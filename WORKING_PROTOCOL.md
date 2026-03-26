@@ -725,3 +725,20 @@ Every parameter must be classified as one of:
 4. **Informational context** - useful but not decisive (EPC, PTAL, precedent count)
 
 Never present screening flags as definitive compliance. The platform structures evidence and generates workflow tasks - it does not replace professional judgment.
+
+---
+
+## TYPOGRAPHY SCALE (locked 2026-03-26)
+
+Global text size rules - apply to ALL pages, no exceptions:
+
+| Role | Size | Examples |
+|------|------|---------|
+| Eyebrow / section labels | **11px** | PRICING, DISCOVER, PLANNING, ARCHITECTURE |
+| Tier card names, feature types, CTA buttons, nav sub-label | **13px** | "Appraise", "Free", nav tagline |
+| Secondary body, features, labels | **14px minimum** | Body copy, matrix labels, list items |
+| Nav links, subheadings | **18-20px** | Nav, section subheadings |
+| Headings, display, hero | **20px+** | Section headings, hero text |
+
+**No text smaller than 11px anywhere on the product surface.**
+**No text smaller than 14px for body copy or functional labels.**
