@@ -687,11 +687,23 @@ function populatePage(si) {
     return `<div class="factor-row"><span class="factor-name">${LABELS[k]||k}</span><div class="factor-bar-wrap"><div class="factor-bar${sc2>=7?' high':''}" style="width:${pct}%"></div></div><span class="factor-score">${typeof sc2==='number'?sc2.toFixed(1):sc2}</span></div>`;
   }).join(''));
 
-  // Planning
+  // Shared vars for planning + architecture
+  const precs = (mom.precedents || []);
   const precCount = precs.length;
   const hasOA = !!mom.opportunity_area;
   const planScore = F.momentum ? (typeof F.momentum === 'object' ? F.momentum.score : F.momentum) : 6;
+  const coreM2 = Math.round(grossPlate * 0.22);
+  const isListed = tier === 'full_conservation' || tier === 'retain_and_adapt';
+  const dualStair = maxH >= 30;
 
+  // Architecture synthesis
+  html('arch-synthesis', `
+    <p style="margin-bottom:16px">${isListed ? 'Heritage-led scheme. The existing building carries statutory protection - the design starts with retention and adaptation.' : 'No statutory listing. The design can prioritise commercial performance - floor plates, net-to-gross, and occupier appeal.'}</p>
+    <p style="margin-bottom:16px">Gross floor plate of ${f(Math.round(PLOT_AREA * 0.42))}m\u00B2 with a ${coreM2}m\u00B2 core (22%), leaving 7m minimum clear lease span on two faces. ${dualStair ? 'At ' + maxH + 'm, the scheme triggers dual staircase under BSA 2022 - approximately 280-340m\u00B2 additional core per floor.' : 'Below the 30m dual staircase threshold.'} Net-to-gross lands at ${Math.round(baseSc.eff*100)}%.</p>
+    <p>Upper floors should step back 1.5-2.0m from primary facades to reduce visual mass. This strengthens the planning case and improves the streetscape response.</p>
+  `);
+
+  // Planning synthesis
   html('plan-synthesis', `
     <p style="margin-bottom:16px">${hasOA ? 'The site sits within the ' + mom.opportunity_area.name + ', where policy actively supports intensification and increased density.' : 'No Opportunity Area designation. The case rests on design quality, public benefit, and contextual fit.'}</p>
     <p style="margin-bottom:16px">${precCount > 0 ? precCount + ' relevant precedent' + (precCount>1?'s':'') + ' in the immediate area. Over 300 applications across the borough establish a clear pattern for what gets approved and at what scale.' : 'Limited precedent in the immediate area. The borough-wide picture across 300+ applications provides the better read on appetite.'}</p>
@@ -699,19 +711,7 @@ function populatePage(si) {
   `);
 
   // Precedents
-  const precs = (mom.precedents || []);
   html('precedents-body', precs.length ? precs.map(p => `<div class="precedent"><div class="precedent-name">${p.name}</div><div class="precedent-detail">${p.ref||''} - ${p.outcome||''}</div></div>`).join('') : '<div style="color:var(--ink3)">No precedents loaded.</div>');
-
-  // Architecture
-  const coreM2 = Math.round(grossPlate * 0.22);
-  const isListed = tier === 'full_conservation' || tier === 'retain_and_adapt';
-  const dualStair = maxH >= 30;
-
-  html('arch-synthesis', `
-    <p style="margin-bottom:16px">${isListed ? 'Heritage-led scheme. The existing building carries statutory protection - the design starts with retention and adaptation.' : 'No statutory listing. The design can prioritise commercial performance - floor plates, net-to-gross, and occupier appeal.'}</p>
-    <p style="margin-bottom:16px">Gross floor plate of ${f(Math.round(PLOT_AREA * 0.42))}m\u00B2 with a ${coreM2}m\u00B2 core (22%), leaving 7m minimum clear lease span on two faces. ${dualStair ? 'At ' + maxH + 'm, the scheme triggers dual staircase under BSA 2022 - approximately 280-340m\u00B2 additional core per floor.' : 'Below the 30m dual staircase threshold.'} Net-to-gross lands at ${Math.round(baseSc.eff*100)}%.</p>
-    <p>Upper floors should step back 1.5-2.0m from primary facades to reduce visual mass. This strengthens the planning case and improves the streetscape response.</p>
-  `);
   html('arch-grid', `
     <div class="arch-cell"><div class="arch-cell-label">Core</div><div class="arch-cell-val">${coreM2}m\u00B2</div><div class="arch-cell-sub">22% of plate</div></div>
     <div class="arch-cell"><div class="arch-cell-label">Efficiency</div><div class="arch-cell-val">${Math.round(baseSc.eff*100)}%</div><div class="arch-cell-sub">net-to-gross</div></div>
