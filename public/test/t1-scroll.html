@@ -693,6 +693,7 @@ function populatePage(si) {
     <div class="comp-col">
       <div class="comp-col-title">Existing</div>
       <div class="comp-row"><span class="comp-key">Floors</span><span class="comp-val">${existF}F</span></div>
+      <div class="comp-row"><span class="comp-key">Est. GIA</span><span class="comp-val">${f(Math.round(existNIA/0.78))}m\u00B2</span></div>
       <div class="comp-row"><span class="comp-key">Est. NIA</span><span class="comp-val">${f(existNIA)}m\u00B2</span></div>
       <div class="comp-row"><span class="comp-key">Height</span><span class="comp-val">${existM}m</span></div>
     </div>
@@ -746,7 +747,7 @@ function populatePage(si) {
   const bsaLabel = maxH >= 50 ? 'HRB regime (BSA 2022)' : maxH >= 30 ? '2nd staircase mandatory' : maxH >= 18 ? 'Enhanced fire strategy (Part B2)' : 'Below 18m';
   const liftCount = maxF >= 11 ? 3 : maxF >= 6 ? 2 : 1;
   html('regs-body', `
-    <div class="flag-row"><div class="flag-sym ${maxH>=30?'warn':'ok'}">${maxH>=30?'\u26A0':'\u2713'}</div><div><div class="flag-title">Part B / BSA 2022</div><div class="flag-desc">${bsaLabel}${maxH>=30 ? '. Second staircase adds ~280-340m\u00B2 NIA per floor and ~\u00A31.2-1.5M to construction cost.' : '.'}</div></div></div>
+    <div class="flag-row"><div class="flag-sym ${maxH>=30?'warn':'ok'}">${maxH>=30?'\u26A0':'\u2713'}</div><div><div class="flag-title">Part B / BSA 2022</div><div class="flag-desc">${bsaLabel}${maxH>=30 ? '. Second staircase adds ~280-340m\u00B2 GIA per floor and ~\u00A31.2-1.5M to construction cost.' : '.'}</div></div></div>
     <div class="flag-row"><div class="flag-sym info">i</div><div><div class="flag-title">Part M2 - Accessibility</div><div class="flag-desc">${liftCount} lift${liftCount>1?'s':''} minimum required.</div></div></div>
     <div class="flag-row"><div class="flag-sym info">i</div><div><div class="flag-title">Part L2 - Energy</div><div class="flag-desc">${mom.opportunity_area ? 'BREEAM Excellent required (GLA) ~\u00A350/m\u00B2 premium.' : 'BREEAM Very Good minimum.'}</div></div></div>
   `);
@@ -912,12 +913,45 @@ function buildMatrix() {
   rows.push(`<tr><td>Lifts Required</td>${metas.map(m => `<td>${val(m.lifts)}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Core %</td>${metas.map(m => `<td>${val(m.corePct+'%')}</td>`).join('')}</tr>`);
 
+  // Existing building data for comparison column
+  const existFloors = typeof SITE_INTELLIGENCE !== 'undefined' ? Math.round(((SITE_INTELLIGENCE.factors||{}).sky||{}).existing_m||24.8 / FTF) : 7;
+  const existGIA = Math.round(Math.round(PLOT_AREA * 0.42) * existFloors);
+  const existNIATotal = Math.round(existGIA * 0.78);
+
   html('scenario-matrix', `<table class="matrix-table">
     <thead><tr>
       <th></th>
+      <th style="background:rgba(17,17,16,.04)">Existing<div class="th-floors">${existFloors} Floors - 24.8m</div></th>
       ${scs.map(sc => `<th>${sc.label}<div class="th-floors">${sc.floors} Floors - ${Math.round(sc.floors*3.6)}m</div></th>`).join('')}
     </tr></thead>
-    <tbody>${rows.join('')}</tbody>
+    <tbody>${rows.map(r => {
+      // Inject existing column data after first <td>
+      if (r.includes('matrix-group-header')) return r.replace('colspan="4"','colspan="5"');
+      // For each data row, insert existing value after the label cell
+      const existCellMap = {
+        'Est. GDV': '—',
+        'Profit on Cost': '—',
+        'RLV': '—',
+        'Total Dev Cost': '—',
+        'Dev Profit': '—',
+        'GIA': val(f(existGIA)+'m\u00B2'),
+        'NIA': val(f(existNIATotal)+'m\u00B2'),
+        'Efficiency (NIA/GIA)': val('78%'),
+        'Cost / m\u00B2 GIA': '—',
+        'LVMF Impact': '—',
+        'Planning Appetite': '—',
+        'Heritage Response': '—',
+        'BSA Regime': val(existFloors*3.6 >= 30 ? 'Dual Stair' : 'Single Stair'),
+        'Fire Strategy': '—',
+        'Lifts Required': '—',
+        'Core %': val('22%'),
+      };
+      // Find which row this is by its label text
+      const labelMatch = r.match(/<td>([^<]+)<\/td>/);
+      const label = labelMatch ? labelMatch[1] : '';
+      const existVal = existCellMap[label] !== undefined ? existCellMap[label] : '—';
+      return r.replace(/<\/td>(<td>)/, `</td><td style="background:rgba(17,17,16,.025)">${existVal}</td>$1`);
+    }).join('')}</tbody>
   </table>`);
 }
 
@@ -985,8 +1019,8 @@ function updateMassing(sc) {
     MAP_REF.setPaintProperty('site-existing', 'fill-extrusion-height', existH);
     MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-height', proposedH);
     MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-base', existH);
-    for (let fl = 1; fl <= 15; fl++) {
-      const flH = existH + (fl * FTF);
+    for (let fl = 1; fl <= 20; fl++) {
+      const flH = fl * FTF;
       const vis = flH <= proposedH ? 'visible' : 'none';
       try { MAP_REF.setLayoutProperty('floor-line-'+fl, 'visibility', vis); } catch(e) {}
     }
@@ -1045,13 +1079,14 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
     map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'#8a9ba8','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.88}});
+      paint:{'fill-extrusion-color':'rgba(255,255,255,0.92)','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.95}});
     map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'#8a9ba8','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.88}});
-    for (let fl = 1; fl <= 15; fl++) {
-      const h = 24.8 + (fl * FTF);
+      paint:{'fill-extrusion-color':'rgba(255,255,255,0.92)','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.95}});
+    // Floor lines across full height (existing + proposed)
+    for (let fl = 1; fl <= 20; fl++) {
+      const h = fl * FTF;
       map.addLayer({id:'floor-line-'+fl, type:'fill-extrusion', source:'site-poly', slot:'top',
-        paint:{'fill-extrusion-color':'rgba(255,255,255,0.95)','fill-extrusion-height':h,'fill-extrusion-base':h-0.35,'fill-extrusion-opacity':1.0}});
+        paint:{'fill-extrusion-color':'rgba(17,17,16,0.18)','fill-extrusion-height':h,'fill-extrusion-base':h-0.25,'fill-extrusion-opacity':1.0}});
     }
     if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
       map.getSource('site-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[SITE_INTELLIGENCE.polygon]}});
