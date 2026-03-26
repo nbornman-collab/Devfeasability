@@ -81,7 +81,6 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 
 /* -- HERO (section 0) -- */
 .hero-section { min-height: 100vh; position: relative; overflow: hidden; padding: 0; scroll-snap-align: start; }
-.hero-spacer { height: 50vh; position: relative; z-index: -1; }
 .hero-map { position: absolute; inset: 0; z-index: 0; }
 .hero-map #map { width: 100%; height: 100%; }
 .hero-scrim { position: absolute; inset: 0; z-index: 1;
@@ -343,8 +342,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
   <div class="hero-scroll-hint">Scroll to explore &#8595;</div>
 </section>
 
-<!-- HERO SPACER for sticky map effect -->
-<div class="hero-spacer" id="hero-spacer"></div>
+<!-- hero spacer removed -->
 
 <!-- SECTION 1: DEVELOPMENT OVERVIEW -->
 <section class="section" id="development">
@@ -1015,37 +1013,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   });
 })();
 
-// -- 7. SCROLL-LINKED STICKY MAP --
-(function() {
-  const heroSection = document.querySelector('.hero-section');
-  const heroMap = document.querySelector('.hero-map');
-  if (!heroSection || !heroMap) return;
-
-  function updateStickyMap() {
-    const scrollY = window.scrollY;
-    const heroH = heroSection.offsetHeight;
-    const spacerEnd = heroH + window.innerHeight * 0.5;
-
-    if (scrollY > heroH && scrollY < spacerEnd) {
-      // Map parallaxes upward at 0.5x
-      const delta = scrollY - heroH;
-      heroMap.style.position = 'fixed';
-      heroMap.style.top = '0';
-      heroMap.style.left = '0';
-      heroMap.style.right = '0';
-      heroMap.style.bottom = '0';
-      heroMap.style.transform = `translateY(${-delta * 0.5}px)`;
-      heroMap.style.zIndex = '0';
-    } else if (scrollY <= heroH) {
-      heroMap.style.position = 'absolute';
-      heroMap.style.transform = '';
-    } else {
-      heroMap.style.position = 'absolute';
-      heroMap.style.transform = `translateY(${-(spacerEnd - heroH) * 0.5}px)`;
-    }
-  }
-  window.addEventListener('scroll', updateStickyMap, { passive: true });
-})();
+// -- 7. STICKY MAP REMOVED (caused layout chaos) --
 
 // -- 8. NUMBER MORPHING ON SCENARIO CHANGE --
 (function() {
