@@ -158,12 +158,13 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .tiers-label { font: 700 8px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
 .tiers-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #f2f1ed; letter-spacing: -.03em; margin-bottom: 40px; }
 .tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; max-width: 960px; }
+.tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 1080px; }
 .tier-card {
-  padding: 28px 24px;
+  padding: 36px 32px;
   background: rgba(242,241,237,.04);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(242,241,237,.1); border-radius: 14px;
-  display: flex; flex-direction: column; gap: 10px;
+  border: 1px solid rgba(242,241,237,.1); border-radius: 16px;
+  display: flex; flex-direction: column; gap: 14px;
   transition: border-color .2s, background .2s;
 }
 .tier-card:hover { border-color: rgba(242,241,237,.2); background: rgba(242,241,237,.07); }
@@ -171,7 +172,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .tier-card.featured:hover { background: rgba(184,132,92,.12); }
 .tier-name { font: 700 9px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: rgba(242,241,237,.45); }
 .tier-card.featured .tier-name { color: var(--accent); }
-.tier-price { font: 800 28px var(--mono); color: #f2f1ed; letter-spacing: -.03em; line-height: 1; }
+.tier-price { font: 800 36px var(--mono); color: #f2f1ed; letter-spacing: -.03em; line-height: 1; }
 .tier-divider { height: 1px; background: rgba(242,241,237,.08); margin: 4px 0; }
 .tier-desc { font: 400 12px/1.7 var(--sans); color: rgba(242,241,237,.5); flex: 1; }
 .tier-items { list-style: none; display: flex; flex-direction: column; gap: 5px; }
@@ -561,7 +562,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
     </div>
     <div class="tier-card featured">
       <div class="tier-name">Appraise</div>
-      <div class="tier-price">Per site</div>
+      <div class="tier-price">£120<span style="font:400 14px 'Inter',sans-serif;color:#999990"> /report</span></div>
       <div class="tier-divider"></div>
       <div class="tier-desc">Full development intelligence - planning, heritage, massing, financials - in one page. Know before you bid.</div>
       <ul class="tier-items">
