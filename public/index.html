@@ -154,28 +154,33 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .pd-feature-desc { font: 400 10px/1.6 var(--sans); color: rgba(242,241,237,.45); }
 
 /* ── COST TIERS ── */
-.tiers-section { background: #f2f1ed; padding: 72px 64px; position: relative; z-index: 20; }
+.tiers-section { background: #111110; padding: 72px 64px; position: relative; z-index: 20; }
 .tiers-label { font: 700 8px var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
-.tiers-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #111110; letter-spacing: -.03em; margin-bottom: 40px; }
+.tiers-heading { font: 400 clamp(26px,2.8vw,38px) 'Instrument Serif', Georgia, serif; color: #f2f1ed; letter-spacing: -.03em; margin-bottom: 40px; }
 .tiers-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; max-width: 960px; }
 .tier-card {
-  padding: 28px 24px; background: #fff;
-  border: 1px solid rgba(17,17,16,.08); border-radius: 10px;
+  padding: 28px 24px;
+  background: rgba(242,241,237,.04);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(242,241,237,.1); border-radius: 14px;
   display: flex; flex-direction: column; gap: 10px;
+  transition: border-color .2s, background .2s;
 }
-.tier-card.featured { border-color: var(--accent); background: #fdf3ea; }
-.tier-name { font: 700 9px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: #999990; }
+.tier-card:hover { border-color: rgba(242,241,237,.2); background: rgba(242,241,237,.07); }
+.tier-card.featured { border-color: var(--accent); background: rgba(184,132,92,.08); }
+.tier-card.featured:hover { background: rgba(184,132,92,.12); }
+.tier-name { font: 700 9px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: rgba(242,241,237,.45); }
 .tier-card.featured .tier-name { color: var(--accent); }
-.tier-price { font: 800 28px var(--mono); color: #111110; letter-spacing: -.03em; line-height: 1; }
-.tier-divider { height: 1px; background: rgba(17,17,16,.08); margin: 4px 0; }
-.tier-desc { font: 400 11px/1.7 var(--sans); color: #555550; flex: 1; }
+.tier-price { font: 800 28px var(--mono); color: #f2f1ed; letter-spacing: -.03em; line-height: 1; }
+.tier-divider { height: 1px; background: rgba(242,241,237,.08); margin: 4px 0; }
+.tier-desc { font: 400 12px/1.7 var(--sans); color: rgba(242,241,237,.5); flex: 1; }
 .tier-items { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-.tier-items li { font: 400 10px var(--sans); color: #555550; }
+.tier-items li { font: 400 11px var(--sans); color: rgba(242,241,237,.45); }
 .tier-items li::before { content: '→ '; color: var(--accent); font-weight: 700; }
 .tier-cta-link {
   display: inline-block; margin-top: 8px;
   font: 700 9px var(--sans); letter-spacing: .12em; text-transform: uppercase;
-  color: #111110; text-decoration: none; border-bottom: 1.5px solid rgba(17,17,16,.2);
+  color: rgba(242,241,237,.7); text-decoration: none; border-bottom: 1.5px solid rgba(242,241,237,.2);
   padding-bottom: 1px; transition: border-color .15s, color .15s;
 }
 .tier-cta-link:hover { color: var(--accent); border-color: var(--accent); }
