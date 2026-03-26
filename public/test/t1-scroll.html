@@ -85,7 +85,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 .matrix-table thead th:first-child { text-align: left; font: 600 12px var(--sans); text-transform: uppercase;
   letter-spacing: .1em; color: var(--ink3); }
 .matrix-table thead th .th-floors { font: 500 13px var(--mono); color: var(--ink3); margin-top: 2px; }
-.matrix-table tbody td { font: 500 15px var(--sans); color: var(--ink2); border-top: 1px solid rgba(0,0,0,.04); }
+.matrix-table tbody td { font: 500 16px var(--sans); color: var(--ink2); border-top: 1px solid rgba(0,0,0,.04); }
 .matrix-table tbody td:first-child { text-align: left; font: 600 13px var(--sans); color: var(--ink3);
   text-transform: uppercase; letter-spacing: .06em; background: rgba(255,255,255,.3); }
 .matrix-table tbody td:not(:first-child) { background: rgba(255,255,255,.5); }
@@ -107,7 +107,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 .conseq-icon.green { background: #dcfce7; color: #16a34a; }
 .conseq-icon.amber { background: #fef3c7; color: #b45309; }
 .conseq-icon.red { background: #fee2e2; color: #dc2626; }
-.conseq-text { font: 500 14px var(--sans); color: var(--ink2); }
+.conseq-text { font: 500 16px/1.6 var(--sans); color: var(--ink2); }
 .conseq-text strong { color: var(--ink); }
 
 /* -- SECTIONS -- */
@@ -156,7 +156,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 /* -- TYPOGRAPHY -- */
 .section-label { font: 700 13px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 14px; }
 .section-title { font: 400 clamp(32px,5vw,56px)/1.1 var(--display); color: var(--ink); letter-spacing: -.02em; margin-bottom: 20px; }
-.section-body { font: 400 18px/1.8 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
+.section-body { font: 400 20px/1.9 var(--sans); color: var(--ink2); max-width: 760px; margin-bottom: 36px; }
 
 /* -- DATA CARDS -- */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-top: 40px; }
@@ -168,7 +168,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 .card-value.accent { color: var(--accent2); }
 .card-value.green { color: #16a34a; }
 .card-value.red { color: #dc2626; }
-.card-sub { font: 400 14px var(--sans); color: var(--ink3); margin-top: 8px; }
+.card-sub { font: 400 15px/1.6 var(--sans); color: var(--ink3); margin-top: 8px; }
 
 /* -- COMPARISON STRIP -- */
 .comp-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule);
@@ -199,7 +199,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 /* -- PRO FORMA TABLE -- */
 .proforma { margin-top: 32px; }
 .proforma table { width: 100%; border-collapse: collapse; }
-.proforma td { padding: 10px 0; font: 400 15px var(--sans); color: var(--ink2); }
+.proforma td { padding: 12px 0; font: 400 16px var(--sans); color: var(--ink2); }
 .proforma td:last-child { text-align: right; font-family: var(--mono); font-weight: 500; }
 .proforma tr.bold td { font-weight: 700; color: var(--ink); font-size: 17px; }
 .proforma tr.sep td { border-top: 1px solid var(--rule); padding-top: 14px; }
@@ -220,8 +220,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 /* -- PRECEDENT CARDS -- */
 .precedent { padding: 16px 0; border-bottom: 1px solid var(--rule); }
 .precedent:last-child { border-bottom: none; }
-.precedent-name { font: 600 16px var(--sans); color: var(--ink); margin-bottom: 4px; }
-.precedent-detail { font: 400 14px/1.6 var(--sans); color: var(--ink3); }
+.precedent-name { font: 600 17px var(--sans); color: var(--ink); margin-bottom: 4px; }
+.precedent-detail { font: 400 16px/1.7 var(--sans); color: var(--ink3); }
 
 /* -- FLAGS -- */
 .flag-row { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,.04); }
@@ -231,8 +231,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 .flag-sym.warn { background: #fef3c7; color: #d97706; }
 .flag-sym.risk { background: #fee2e2; color: #dc2626; }
 .flag-sym.info { background: var(--bg2); color: var(--ink3); }
-.flag-title { font: 600 16px var(--sans); color: var(--ink); }
-.flag-desc { font: 400 14px/1.7 var(--sans); color: var(--ink3); margin-top: 3px; }
+.flag-title { font: 600 17px var(--sans); color: var(--ink); }
+.flag-desc { font: 400 16px/1.7 var(--sans); color: var(--ink3); margin-top: 3px; }
 
 /* -- INLINE MAP (for scenario section) -- */
 .inline-map { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin-top: 40px; position: relative; }
@@ -388,7 +388,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px;
 <section class="section" id="development">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-label">01 - Development</div>
+      <div class="section-label">01 - Development Scope</div>
       <div class="section-title" id="dev-title">A retain-and-adapt opportunity in the heart of Bankside</div>
     </div>
     <div class="reveal reveal-delay-1">
@@ -650,11 +650,32 @@ function populatePage(si) {
   set('hero-verdict-sub', 'Development Score ' + score + '/100 - Heritage: ' + tier);
   set('hero-sub', (si.borough||'Southwark') + ' - ' + (acq.tenure||'Freehold') + (mom.opportunity_area ? ' - ' + mom.opportunity_area.name : ''));
 
-  // Development synthesis
+  // Development synthesis - narrative voice
   const ownerName = acq.owner || 'Unknown';
   const tenure = acq.tenure || 'Freehold';
-  const devSynth = typeof synthesisDevScope === 'function' ? synthesisDevScope(si) : '';
-  html('dev-synthesis', `<p style="margin-bottom:16px"><strong>${ownerName}</strong> - ${tenure} - ${acq.titles||1} title${(acq.titles||1)>1?'s':''}${acq.jurisdiction ? ' - ' + acq.jurisdiction : ''}</p><p>${devSynth}</p>`);
+  const existGIA = Math.round(existNIA / 0.78);
+  const upliftPct = Math.round((baseSc.nia - existNIA) / existNIA * 100);
+  const oaName = mom.opportunity_area ? mom.opportunity_area.name : null;
+
+  // Beginning: the opening (desire + ownership)
+  const devOpening = oaName
+    ? `This is a ${tenure.toLowerCase()} site in the ${oaName}, one of London's most active development corridors. The current building - ${existF} storeys, approximately ${f(existGIA)}m\u00B2 GIA - is held by <strong>${ownerName}</strong> across ${acq.titles||1} title${(acq.titles||1)>1?'s':''}.`
+    : `A ${tenure.toLowerCase()} site with a ${existF}-storey building totalling approximately ${f(existGIA)}m\u00B2 GIA, held by <strong>${ownerName}</strong>.`;
+
+  // Middle: the assessment
+  const devAssess = `The site has capacity for ${baseSc.floors} storeys under the base scenario, delivering ${f(baseSc.nia)}m\u00B2 NIA - a ${upliftPct}% uplift on current accommodation. At an estimated GDV of ${fm(baseSc.gdv)}, the scheme achieves ${baseSc.poc}% profit on cost with a residual land value of ${fm(baseSc.rlv)}.`;
+
+  // End: the recommendation
+  const pocOkDev = parseFloat(baseSc.poc) >= S04.poc;
+  const devRec = pocOkDev
+    ? `The numbers work. The base case clears the ${S04.poc}% return threshold with room to absorb cost pressure. The low scenario at ${S04_SCENARIOS[0].floors} floors provides a fallback if planning pushes back on height. Worth progressing to detailed feasibility.`
+    : `The base case falls short of the ${S04.poc}% target, but the high scenario at ${S04_SCENARIOS[2].floors} floors recovers viability. The question is whether the planning environment can accommodate that density. Further investigation warranted before committing.`;
+
+  html('dev-synthesis', `
+    <p style="margin-bottom:18px">${devOpening}</p>
+    <p style="margin-bottom:18px">${devAssess}</p>
+    <p>${devRec}</p>
+  `);
 
   // Comparison strip
   const addF = baseSc.floors - existF;
@@ -688,17 +709,54 @@ function populatePage(si) {
     return `<div class="factor-row"><span class="factor-name">${LABELS[k]||k}</span><div class="factor-bar-wrap"><div class="factor-bar${sc2>=7?' high':''}" style="width:${pct}%"></div></div><span class="factor-score">${typeof sc2==='number'?sc2.toFixed(1):sc2}</span></div>`;
   }).join(''));
 
-  // Planning
-  const planSynth = typeof synthesisPlanning === 'function' ? synthesisPlanning(si) : '';
-  html('plan-synthesis', planSynth);
+  // Planning synthesis - in-the-room voice
+  const prec = (mom.precedents || []);
+  const precCount = prec.length;
+  const hasOA = !!mom.opportunity_area;
+  const planScore = F.momentum ? (typeof F.momentum === 'object' ? F.momentum.score : F.momentum) : 6;
+
+  const planOpening = hasOA
+    ? `The planning context here is supportive. The site sits within the ${mom.opportunity_area.name}, where the borough's own policy actively encourages intensification and increased density. That's not ambiguous - it's written into the Local Plan.`
+    : `The planning context is navigable. There's no Opportunity Area designation driving density, which means the case has to be made on its own merits - design quality, public benefit, and contextual fit.`;
+
+  const planMiddle = precCount > 0
+    ? `There are ${precCount} relevant precedent${precCount>1?'s':''} within the immediate area, and over 300 applications across the borough provide a clear picture of what gets approved and at what scale. The pattern is consistent: well-designed schemes that demonstrate heritage sensitivity and public realm contribution are finding their way through committee.`
+    : `Precedent data in this immediate area is thin, which means the application will need to work harder on design justification and public benefit. The borough-wide picture - over 300 applications - gives a clearer read on appetite.`;
+
+  const planEnd = planScore >= 7
+    ? `If you were sitting across from the case officer right now, you'd feel confident. The policy alignment is strong, the precedents support the density, and the heritage response is deliverable. The main risk is timeline, not outcome. Pre-app early, bring a heritage consultant, and this moves.`
+    : planScore >= 5
+    ? `This is a scheme that can get through committee, but it won't sail through. Expect detailed negotiation on height, massing, and heritage impact. The pre-application process matters here - use it to test the upper limit before committing to a formal submission.`
+    : `Honest assessment: this is going to be a fight. The planning environment is cautious, the precedents are mixed, and the heritage context adds friction. That doesn't mean it's impossible - it means the design and public benefit case have to be exceptional. Budget for a longer, more expensive planning process.`;
+
+  html('plan-synthesis', `
+    <p style="margin-bottom:18px">${planOpening}</p>
+    <p style="margin-bottom:18px">${planMiddle}</p>
+    <p>${planEnd}</p>
+  `);
 
   // Precedents
   const precs = (mom.precedents || []);
   html('precedents-body', precs.length ? precs.map(p => `<div class="precedent"><div class="precedent-name">${p.name}</div><div class="precedent-detail">${p.ref||''} - ${p.outcome||''}</div></div>`).join('') : '<div style="color:var(--ink3)">No precedents loaded.</div>');
 
-  // Architecture
-  const archSynth = typeof synthesisArchitecture === 'function' ? synthesisArchitecture(si) : '';
-  html('arch-synthesis', archSynth);
+  // Architecture synthesis - architect's pitch voice
+  const hResponse = hf.type || 'CONTEXTUAL';
+  const isListed = hf.tier === 'full_conservation' || hf.tier === 'retain_and_adapt';
+  const dualStair = maxH >= 30;
+
+  const archOpening = isListed
+    ? `This is a heritage-led scheme. The existing building carries statutory protection, which means the design strategy starts with what you keep, not what you build. That's not a constraint - it's the concept.`
+    : `The site presents a clean architectural proposition. No statutory listing, no facade retention obligation. The design can lead with commercial logic - optimising floor plates, maximising net-to-gross, and delivering a building that works for occupiers from day one.`;
+
+  const archMiddle = `The structural grid supports a gross floor plate of approximately ${f(Math.round(PLOT_AREA * 0.42))}m\u00B2 with a ${coreM2}m\u00B2 core (22% of plate), leaving a minimum 7m clear lease span on at least two faces. ${dualStair ? 'At ' + maxH + 'm, the scheme triggers the dual staircase requirement under the Building Safety Act - adding approximately 280-340m\u00B2 of core per floor and around \u00A31.2-1.5M to construction cost. This isn\'t optional, but it can be designed elegantly.' : 'At ' + maxH + 'm, the building sits below the 30m dual staircase threshold - a significant cost advantage.'} Net-to-gross efficiency lands at ${Math.round(baseSc.eff*100)}%.`;
+
+  const archEnd = `The height context is favourable - surrounding buildings establish a datum that the base scheme sits comfortably within. The upper floors should step back 1.5-2.0m from the primary facades to reduce visual mass and demonstrate contextual sensitivity. This isn't just good design - it's the kind of move that gets a planning committee onside.`;
+
+  html('arch-synthesis', `
+    <p style="margin-bottom:18px">${archOpening}</p>
+    <p style="margin-bottom:18px">${archMiddle}</p>
+    <p>${archEnd}</p>
+  `);
   const coreM2 = Math.round(grossPlate * 0.22);
   html('arch-grid', `
     <div class="arch-cell"><div class="arch-cell-label">Core</div><div class="arch-cell-val">${coreM2}m\u00B2</div><div class="arch-cell-sub">22% of plate</div></div>
@@ -840,12 +898,21 @@ function scenarioMeta(sc) {
   const lifts = sc.floors >= 11 ? 3 : sc.floors >= 6 ? 2 : 1;
   const corePct = h >= 30 ? 25 : 22;
   const costM2 = h >= 30 ? 4800 : 4200;
-  // LVMF / planning thresholds (simplified for 24SS context)
   const lvmf = sc.floors <= 8 ? {label:'Clear', pill:'green'} : sc.floors <= 10 ? {label:'Manageable', pill:'amber'} : {label:'Challenged', pill:'red'};
   const planApp = sc.floors <= 8 ? {label:'Strong precedent', pill:'green'} : sc.floors <= 10 ? {label:'Within envelope', pill:'amber'} : {label:'Above comfort', pill:'red'};
   const heritage = sc.floors <= 8 ? {label:'Comfortable', pill:'green'} : sc.floors <= 10 ? {label:'Navigable', pill:'amber'} : {label:'Pushback likely', pill:'red'};
   const fireStrat = h >= 50 ? {label:'Full HRB', pill:'red'} : h >= 30 ? {label:'Enhanced Part B', pill:'amber'} : {label:'Standard Part B', pill:'green'};
-  return {bsa, lifts, corePct, costM2, lvmf, planApp, heritage, fireStrat};
+  // Additional fields
+  const stairs = h >= 30 ? 2 : 1;
+  const coreArea = Math.round(PLOT_AREA * 0.42 * (corePct/100));
+  const leaseSpan = h >= 30 ? '6.2m' : '7.0m';
+  const programme = sc.key === 'lo' ? '24 months' : sc.key === 'base' ? '30 months' : '36 months';
+  const preApp = sc.floors <= 8 ? {label:'Straightforward', pill:'green'} : sc.floors <= 10 ? {label:'Standard', pill:'blue'} : {label:'GLA referral likely', pill:'amber'};
+  const s106Risk = sc.floors <= 8 ? {label:'Standard', pill:'green'} : sc.floors <= 10 ? {label:'Moderate', pill:'amber'} : {label:'Significant', pill:'red'};
+  const daylight = sc.floors <= 8 ? {label:'Compliant', pill:'green'} : sc.floors <= 10 ? {label:'Borderline', pill:'amber'} : {label:'BRE shortfall likely', pill:'red'};
+  const windImpact = sc.floors <= 10 ? {label:'Standard CFD', pill:'green'} : {label:'Mitigation needed', pill:'amber'};
+  const efficiency = Math.round(sc.eff * 100);
+  return {bsa, lifts, corePct, costM2, lvmf, planApp, heritage, fireStrat, stairs, coreArea, leaseSpan, programme, preApp, s106Risk, daylight, windImpact, efficiency};
 }
 
 function buildMatrix() {
@@ -864,18 +931,28 @@ function buildMatrix() {
   rows.push(`<tr><td>Total Dev Cost</td>${scs.map(sc => `<td>${val(fm(sc.tdc))}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Dev Profit</td>${scs.map(sc => `<td>${val(fm(sc.profit))}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>NIA</td>${scs.map(sc => `<td>${val(f(sc.nia)+'m\u00B2')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>GEA</td>${scs.map(sc => `<td>${val(f(sc.gea)+'m\u00B2')}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Cost / m\u00B2</td>${metas.map(m => `<td>${val('\u00A3'+f(m.costM2))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Programme</td>${metas.map(m => `<td>${val(m.programme)}</td>`).join('')}</tr>`);
 
-  rows.push(`<tr class="matrix-group-header"><td colspan="4">Planning</td></tr>`);
-  rows.push(`<tr><td>LVMF Impact</td>${metas.map(m => `<td>${pill(m.lvmf)}</td>`).join('')}</tr>`);
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Planning &amp; Risk</td></tr>`);
   rows.push(`<tr><td>Planning Appetite</td>${metas.map(m => `<td>${pill(m.planApp)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Pre-App Route</td>${metas.map(m => `<td>${pill(m.preApp)}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Heritage Response</td>${metas.map(m => `<td>${pill(m.heritage)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>LVMF Impact</td>${metas.map(m => `<td>${pill(m.lvmf)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>S106 / CIL Exposure</td>${metas.map(m => `<td>${pill(m.s106Risk)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Daylight / Sunlight</td>${metas.map(m => `<td>${pill(m.daylight)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Wind / Microclimate</td>${metas.map(m => `<td>${pill(m.windImpact)}</td>`).join('')}</tr>`);
 
-  rows.push(`<tr class="matrix-group-header"><td colspan="4">Architecture</td></tr>`);
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Architecture &amp; Engineering</td></tr>`);
   rows.push(`<tr><td>BSA Regime</td>${metas.map(m => `<td>${pill(m.bsa)}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Fire Strategy</td>${metas.map(m => `<td>${pill(m.fireStrat)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Staircases</td>${metas.map(m => `<td>${val(m.stairs)}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Lifts Required</td>${metas.map(m => `<td>${val(m.lifts)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Core Area</td>${metas.map(m => `<td>${val(f(m.coreArea)+'m\u00B2')}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Core %</td>${metas.map(m => `<td>${val(m.corePct+'%')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Clear Lease Span</td>${metas.map(m => `<td>${val(m.leaseSpan)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Net-to-Gross</td>${metas.map(m => `<td>${val(m.efficiency+'%')}</td>`).join('')}</tr>`);
 
   html('scenario-matrix', `<table class="matrix-table">
     <thead><tr>
