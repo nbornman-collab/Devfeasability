@@ -94,5 +94,93 @@ const SITE_INTELLIGENCE = {
       stations: 4,
       insight: 'Excellent transport connectivity. Blackfriars (150m N), Southwark (350m E), London Bridge (500m SE), Borough (450m E). Four Tube/rail stations within 500m is exceptional even by Central London standards. Strong occupier demand driver - Bankside has consistently commanded rental premium since Tate Modern opened.'
     }
+  },
+
+  // -- ENVIRONMENTAL & REGULATORY SCREENING (source docs integration 2026-03-26) --
+  environment: {
+    flood_zone: 1,
+    flood_zone_source: 'EA Flood Map for Planning',
+    surface_water_risk: 'low',
+    surface_water_source: 'EA RoFSW',
+    historic_landfill: false,
+    historic_landfill_proximity_m: null,
+    contamination_screening: 'low',
+    contamination_note: 'No historic landfill within 250m. Former commercial/industrial use - Phase 1 desk study recommended but no red flags.',
+    strategic_noise: 'moderate',
+    strategic_noise_source: 'Defra Round 4 (2022) - Lden 60-65dB road traffic',
+    strategic_noise_note: 'Southwark Street traffic noise. Standard acoustic facade treatment for office use. Not a constraint.',
+    air_quality: {
+      aqma: true,
+      aqma_name: 'Southwark AQMA (borough-wide)',
+      laei_source: 'LAEI 2022',
+      note: 'Borough-wide AQMA. Standard for central London. Mechanical ventilation with filtration on lower floors. Not a material cost uplift for office schemes.'
+    }
+  },
+
+  ecology: {
+    bng_mandatory: true,
+    bng_note: 'Mandatory BNG (10% uplift) applies to all new permissions from Feb 2024. Urban site with minimal existing habitat value - likely to use off-site credits or statutory credits as last resort. Cost estimate: £20-80K for credit purchase + ecology survey (£5-15K). Not a feasibility blocker but a pre-commencement gate.',
+    bng_cost_estimate_low: 25000,
+    bng_cost_estimate_high: 95000,
+    designated_sites_within_500m: [],
+    tpo_on_site: false,
+    tpo_adjacent: false,
+    tpo_note: 'No TPOs identified on or adjacent to site. Urban commercial block - no significant trees.',
+    protected_species_risk: 'low',
+    protected_species_note: 'Low risk. Urban commercial building. Bat survey may be required for roof works on Victorian fabric.'
+  },
+
+  sustainability: {
+    wlc_required: true,
+    wlc_note: 'Whole Life-Cycle Carbon Assessment required for GLA-referable schemes. This scheme is referable (Opportunity Area + height). GLA WLC Guidance (March 2022) template applies.',
+    circular_economy_required: true,
+    circular_economy_note: 'Circular Economy Statement required for GLA-referable schemes. Retention strategy already aligns with CE hierarchy (retain > reuse > recycle).',
+    energy_planning: {
+      part_l: true,
+      be_seen: true,
+      breeam_target: 'Excellent',
+      breeam_cost_uplift_per_sqm: 50,
+      note: 'BREEAM Excellent mandatory in Opportunity Area. Energy Strategy required. Be Seen monitoring post-completion. Estimated uplift: £40-60/sqm GIA.'
+    },
+    epc_existing: {
+      rating: 'D',
+      lodgement_date: '2019-03-15',
+      floor_area_m2: 4200,
+      source: 'EPC Open Data API',
+      note: 'Current EPC D rating. Existing building underperforms for CAZ office stock. Retrofit to B minimum required for lettability; new-build floors will achieve B+ with standard spec.'
+    }
+  },
+
+  policy_designations: {
+    opportunity_area: {
+      name: 'London Bridge, Borough and Bankside',
+      ref: 'London Plan 2021 SD1',
+      homes_target: 4000,
+      jobs_target: 5500
+    },
+    caz: true,
+    caz_note: 'Central Activities Zone - supports commercial intensification',
+    sil: false,
+    tall_building_zone: false,
+    tall_building_threshold_m: 30,
+    tall_building_note: 'Southwark Plan Policy P17: 25-30m threshold. This site does not propose a tall building.',
+    article4_directions: ['Office to residential (Class MA) removed', 'Retail to other Class E restricted in some frontages'],
+    locally_listed: false,
+    locally_listed_note: 'Not on Southwark Local Heritage List. Statutory listing (Grade II) takes precedence.'
+  },
+
+  // -- DELIVERY & PROCESS FLAGS --
+  delivery: {
+    fire_statement_required: true,
+    fire_statement_note: 'London Plan Policy D12 - required for all major developments. Fire Statement to be submitted with planning application.',
+    bsr_gateway: false,
+    bsr_gateway_note: 'Below 18m HRB threshold in proposed scenarios (max ~43m in High scenario). BSR Gateway 2/3 would apply if scheme exceeds 18m residential or 30m any use.',
+    eia_required: false,
+    eia_note: 'Below EIA screening thresholds. Urban development area, not in sensitive location.',
+    gla_referral: true,
+    gla_referral_note: 'Referable to Mayor under Opportunity Area criteria. GLA Stage 1/2 process adds 6-12 weeks to determination.',
+    pre_commencement_gates: ['BNG plan approval', 'Archaeology (watching brief)', 'Construction Management Plan', 'Fire Strategy (detail)'],
+    estimated_pre_app_cost: { low: 60000, high: 120000 },
+    estimated_planning_duration_months: { low: 6, high: 12 }
   }
 };

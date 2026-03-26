@@ -107,6 +107,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 .matrix-pill.green { background: #dcfce7; color: #16a34a; }
 .matrix-pill.amber { background: #fef3c7; color: #b45309; }
 .matrix-pill.red { background: #fee2e2; color: #dc2626; }
+.matrix-pill.blue { background: var(--accent-bg); color: var(--accent); }
 .matrix-pill.blue { background: #e0f2fe; color: #0369a1; }
 
 /* -- CONSEQUENCE STRIP -- */
@@ -913,6 +914,49 @@ function buildMatrix() {
   rows.push(`<tr><td>Lifts Required</td>${metas.map(m => `<td>${val(m.lifts)}</td>`).join('')}</tr>`);
   rows.push(`<tr><td>Core %</td>${metas.map(m => `<td>${val(m.corePct+'%')}</td>`).join('')}</tr>`);
 
+  // Environment & Compliance group (from source docs integration)
+  const SI = SITE_INTELLIGENCE;
+  const env = SI.environment || {};
+  const eco = SI.ecology || {};
+  const sus = SI.sustainability || {};
+  const del = SI.delivery || {};
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Environment & Compliance</td></tr>`);
+
+  // Flood zone
+  const fzPill = (env.flood_zone||1) <= 1 ? {pill:'green',label:'Zone 1 - Low'} : (env.flood_zone||1) === 2 ? {pill:'amber',label:'Zone 2 - Medium'} : {pill:'red',label:'Zone 3 - High'};
+  rows.push(`<tr><td>Flood Risk</td>${scs.map(() => `<td>${pill(fzPill)}</td>`).join('')}</tr>`);
+
+  // BNG
+  if (eco.bng_mandatory) {
+    const bngPill = {pill:'amber',label:'BNG 10% - \u00A3' + ((eco.bng_cost_estimate_low||0)/1000).toFixed(0) + '-' + ((eco.bng_cost_estimate_high||0)/1000).toFixed(0) + 'K'};
+    rows.push(`<tr><td>Biodiversity Net Gain</td>${scs.map(() => `<td>${pill(bngPill)}</td>`).join('')}</tr>`);
+  }
+
+  // GLA Referral
+  if (del.gla_referral) {
+    rows.push(`<tr><td>GLA Referral</td>${scs.map(() => `<td>${pill({pill:'amber',label:'Stage 1/2'})}</td>`).join('')}</tr>`);
+  }
+
+  // Fire Statement
+  if (del.fire_statement_required) {
+    rows.push(`<tr><td>Fire Statement (D12)</td>${scs.map(() => `<td>${pill({pill:'green',label:'Required'})}</td>`).join('')}</tr>`);
+  }
+
+  // BREEAM
+  if (sus.energy_planning && sus.energy_planning.breeam_target) {
+    rows.push(`<tr><td>BREEAM Target</td>${scs.map(() => `<td>${pill({pill:'blue',label:sus.energy_planning.breeam_target + ' ~\u00A3' + (sus.energy_planning.breeam_cost_uplift_per_sqm||50) + '/m\u00B2'})}</td>`).join('')}</tr>`);
+  }
+
+  // WLC + CES
+  if (sus.wlc_required) {
+    rows.push(`<tr><td>WLC / Circular Economy</td>${scs.map(() => `<td>${pill({pill:'blue',label:'Both Required'})}</td>`).join('')}</tr>`);
+  }
+
+  // Pre-commencement gates
+  if (del.pre_commencement_gates && del.pre_commencement_gates.length) {
+    rows.push(`<tr><td>Pre-Start Gates</td>${scs.map(() => `<td><span class="matrix-val">${del.pre_commencement_gates.length} conditions</span></td>`).join('')}</tr>`);
+  }
+
   // Existing building data for comparison column
   const existFloors = typeof SITE_INTELLIGENCE !== 'undefined' ? Math.round(((SITE_INTELLIGENCE.factors||{}).sky||{}).existing_m||24.8 / FTF) : 7;
   const existGIA = Math.round(Math.round(PLOT_AREA * 0.42) * existFloors);
@@ -945,6 +989,13 @@ function buildMatrix() {
         'Fire Strategy': '—',
         'Lifts Required': '—',
         'Core %': val('22%'),
+        'Flood Risk': '—',
+        'Biodiversity Net Gain': '—',
+        'GLA Referral': '—',
+        'Fire Statement (D12)': '—',
+        'BREEAM Target': '—',
+        'WLC / Circular Economy': '—',
+        'Pre-Start Gates': '—',
       };
       // Find which row this is by its label text
       const labelMatch = r.match(/<td>([^<]+)<\/td>/);
@@ -1034,17 +1085,51 @@ updateHeroMetrics();
 buildMatrix();
 updateConsequenceStrip();
 
-// Flags (simplified for now)
+// Flags - data-driven from intelligence file
 function buildFlags() {
-  const flags = [
-    {icon:'ok',sym:'\u2713',title:'Flood Zone 1 - Low Risk',desc:'No sequential test required.'},
-    {icon:'ok',sym:'\u2713',title:'London Bridge/Bankside Opportunity Area',desc:'London Plan 2021 Policy SD1. Mayoral backing for intensification.'},
-    {icon:'warn',sym:'\u26A0',title:'Grade II Listed Building',desc:'The Hop Exchange (NHLE 1385923, 1867). Listed Building Consent required for any works.'},
-    {icon:'warn',sym:'\u26A0',title:'LVMF Wider Setting Consultation Area 1A.2',desc:'Views assessment mandatory.'},
-    {icon:'ok',sym:'\u2713',title:'Not in Conservation Area',desc:'Site is not within a designated conservation area.'},
-    {icon:'info',sym:'i',title:'Adjacent listed buildings within 50m',desc:'1-11 Park Street (GrII), 5 Stoney Street (GrII), The Wheatsheaf PH (GrII).'},
-    {icon:'info',sym:'i',title:'Article 4 Direction - Check Required',desc:'Southwark has extensive Article 4 directions.'},
-  ];
+  const SI = SITE_INTELLIGENCE;
+  const env = SI.environment || {};
+  const eco = SI.ecology || {};
+  const sus = SI.sustainability || {};
+  const pol = SI.policy_designations || {};
+  const del = SI.delivery || {};
+  const her = SI.factors.heritage;
+
+  const flags = [];
+
+  // Planning & Heritage
+  if (pol.opportunity_area) flags.push({icon:'ok',sym:'\u2713',title: pol.opportunity_area.name + ' Opportunity Area',desc:'London Plan 2021 Policy SD1. Mayoral backing for intensification.'});
+  if (pol.caz) flags.push({icon:'ok',sym:'\u2713',title:'Central Activities Zone (CAZ)',desc: pol.caz_note || 'Supports commercial intensification.'});
+  if (her.building_character && her.building_character.listed_building) flags.push({icon:'warn',sym:'\u26A0',title:'Grade ' + her.building_character.listed_building + ' Listed Building',desc: her.statutory.primary.name + ' (NHLE ' + her.building_character.nhle_on_site.list_entry + '). Listed Building Consent required.'});
+  if (her.building_character && her.building_character.conservation_area) flags.push({icon:'warn',sym:'\u26A0',title:'Conservation Area',desc:'Site within designated conservation area.'});
+  else flags.push({icon:'ok',sym:'\u2713',title:'Not in Conservation Area',desc:'Site is not within a designated conservation area.'});
+  if (her.building_character && her.building_character.nhle_adjacent && her.building_character.nhle_adjacent.length) flags.push({icon:'info',sym:'i',title:'Adjacent listed buildings within 50m',desc: her.building_character.nhle_adjacent.join(', ') + '.'});
+  if (pol.article4_directions && pol.article4_directions.length) flags.push({icon:'info',sym:'i',title:'Article 4 Directions Active',desc: pol.article4_directions.join('. ') + '.'});
+  if (pol.locally_listed) flags.push({icon:'warn',sym:'\u26A0',title:'Locally Listed Building',desc: pol.locally_listed_note || 'On borough Local Heritage List. Material planning consideration.'});
+
+  // Environment
+  const fz = env.flood_zone || 1;
+  if (fz <= 1) flags.push({icon:'ok',sym:'\u2713',title:'Flood Zone ' + fz + ' - Low Risk',desc:'No sequential test required.'});
+  else flags.push({icon: fz >= 3 ? 'risk' : 'warn', sym: fz >= 3 ? '\u2717' : '\u26A0', title:'Flood Zone ' + fz, desc: fz >= 3 ? 'Sequential test required. FRA mandatory.' : 'FRA required.'});
+  if (env.historic_landfill) flags.push({icon:'warn',sym:'\u26A0',title:'Historic Landfill within ' + env.historic_landfill_proximity_m + 'm',desc:'Contamination screening required. Phase 1 desk study + potential GI. ' + (env.contamination_note || '')});
+  if (env.air_quality && env.air_quality.aqma) flags.push({icon:'info',sym:'i',title:'Air Quality Management Area',desc: env.air_quality.aqma_name + '. ' + (env.air_quality.note || '')});
+  if (env.surface_water_risk && env.surface_water_risk !== 'low') flags.push({icon:'warn',sym:'\u26A0',title:'Surface Water Flood Risk: ' + env.surface_water_risk,desc:'SuDS strategy and basement risk assessment required.'});
+
+  // Ecology & BNG
+  if (eco.bng_mandatory) flags.push({icon:'info',sym:'i',title:'Biodiversity Net Gain (10% mandatory)',desc: eco.bng_note || 'BNG plan required pre-commencement. Estimated cost: \u00A3' + ((eco.bng_cost_estimate_low||0)/1000).toFixed(0) + '-' + ((eco.bng_cost_estimate_high||0)/1000).toFixed(0) + 'K.'});
+  if (eco.tpo_on_site) flags.push({icon:'warn',sym:'\u26A0',title:'Tree Preservation Order on Site',desc: eco.tpo_note || 'Protected trees may constrain layout.'});
+  if (eco.tpo_adjacent) flags.push({icon:'info',sym:'i',title:'TPO Adjacent to Site',desc: eco.tpo_note || 'Consider root protection areas.'});
+
+  // Sustainability
+  if (sus.wlc_required) flags.push({icon:'info',sym:'i',title:'Whole Life Carbon Assessment Required',desc: sus.wlc_note || 'GLA WLC Guidance applies to referable schemes.'});
+  if (sus.circular_economy_required) flags.push({icon:'info',sym:'i',title:'Circular Economy Statement Required',desc: sus.circular_economy_note || 'GLA CES Guidance applies to referable schemes.'});
+  if (sus.energy_planning && sus.energy_planning.breeam_target) flags.push({icon:'info',sym:'i',title:'BREEAM ' + sus.energy_planning.breeam_target + ' Target',desc: sus.energy_planning.note || ''});
+
+  // Delivery & Process
+  if (del.fire_statement_required) flags.push({icon:'info',sym:'i',title:'Fire Statement Required (Policy D12)',desc: del.fire_statement_note || 'London Plan requirement for major developments.'});
+  if (del.bsr_gateway) flags.push({icon:'warn',sym:'\u26A0',title:'BSR Higher-Risk Building Gateways',desc: del.bsr_gateway_note || 'Gateway 2/3 required. Programme + 6-12 months.'});
+  if (del.gla_referral) flags.push({icon:'info',sym:'i',title:'GLA Referral Required',desc: del.gla_referral_note || 'Mayor Stage 1/2 process.'});
+
   html('flags-body', flags.map(f2=>`<div class="flag-row"><div class="flag-sym ${f2.icon}">${f2.sym}</div><div><div class="flag-title">${f2.title}</div><div class="flag-desc">${f2.desc}</div></div></div>`).join(''));
 }
 buildFlags();
