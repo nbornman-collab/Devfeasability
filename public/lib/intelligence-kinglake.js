@@ -18,12 +18,47 @@ const SITE_INTELLIGENCE = {
     heritage: { label: 'Heritage Shadow', score: 9.0, weight: 1.5, insight: "No heritage constraints in SE17 industrial/residential area." },
 
     heritage_framework: {
-      tier: 'clean',
+      tier: 'UNRESTRICTED',
       score: 9.0,
       verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },
     acquisition: { label: 'Title Stack', score: 8.5, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: "Garages typically single freehold - council or private landlord. 46 planning apps suggests long-established site with clear ownership. Clean acquisition route." },
-    transport: { label: 'Transport Links', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Elephant & Castle 700m. Walworth Road buses. Good SE17 connectivity for residential." }
+    transport: { label: 'Transport Links', score: 8.0, weight: 0.5, ptal: '4', insight: "PTAL 4. Elephant & Castle 700m. Walworth Road buses. Good SE17 connectivity for residential."  }
+  },
+  // -- ENVIRONMENTAL & REGULATORY SCREENING --
+  environment: {
+    flood_zone: 1,
+    surface_water_risk: 'low',
+    historic_landfill: false,
+    contamination_screening: 'low',
+    strategic_noise: 'moderate',
+    air_quality: { aqma: true, aqma_name: 'Southwark AQMA (borough-wide)', note: 'Borough-wide AQMA. Standard for inner London. Not a material cost uplift for commercial schemes.' }
+  },
+  ecology: {
+    bng_mandatory: true,
+    bng_note: 'Mandatory BNG (10% uplift) applies to all new permissions from Feb 2024. Urban site - likely low habitat baseline. Off-site credits or statutory credits. Cost estimate: £20-80K.',
+    bng_cost_estimate_low: 20000,
+    bng_cost_estimate_high: 80000,
+    tpo_on_site: false,
+    tpo_adjacent: false,
+    protected_species_risk: 'low'
+  },
+  sustainability: {
+    wlc_required: false,
+    wlc_note: 'Whole Life-Cycle Carbon Assessment required for GLA-referable schemes. GLA WLC Guidance (March 2022) applies.',
+    circular_economy_required: false,
+    circular_economy_note: 'Circular Economy Statement required for referable schemes. GLA CES Guidance applies.',
+    energy_planning: { breeam_target: 'Excellent', breeam_cost_uplift_per_sqm: 50, note: 'BREEAM Excellent target for OA/major schemes.' }
+  },
+  delivery: {
+    fire_statement_required: true,
+    fire_statement_note: 'London Plan Policy D12 - required for all major developments.',
+    bsr_gateway: false,
+    gla_referral: false,
+    pre_commencement_gates: ['BNG plan approval', 'Construction Management Plan', 'Fire Strategy (detail)'],
+    estimated_pre_app_cost: { low: 40000, high: 100000 },
+    estimated_planning_duration_months: { low: 6, high: 12 }
   }
+
 };

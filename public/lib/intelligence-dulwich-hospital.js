@@ -22,12 +22,47 @@ const SITE_INTELLIGENCE = {
     heritage: { label: 'Heritage Shadow', score: 7.5, weight: 1.5, insight: 'Dulwich Village Conservation Area is 1km south - no direct impact at this location. Victorian hospital buildings may carry local interest designation. Heritage Impact Assessment required but not expected to be fatal constraint.' },
 
     heritage_framework: {
-      tier: 'manageable',
+      tier: 'CONTEXTUAL',
       score: 7.5,
       verdict: 'Conservation area setting. Heritage Impact Assessment required. Design must respond to context. LPA design scrutiny heightened.',
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
     },
     acquisition: { label: 'Title Stack', score: 5.0, weight: 1.5, titles: null, tenure: 'Unknown - HMLR pending', owner: null, insight: 'NHS Southwark - Kings College Hospital NHS Foundation Trust likely freeholder. Public sector disposal: political risk, NHSE valuation requirement, possible community right-to-bid. Complex acquisition - score penalised accordingly. However, NHS estates are routinely disposed: 72 planning apps suggests active engagement.' },
-    transport: { label: 'Transport Links', score: 6.5, weight: 0.5, ptal: '3', insight: 'PTAL 3. East Dulwich station (Overground) 600m. Bus-served. Lower connectivity than SE1 corridor but East Dulwich is highly sought-after residential postcode.' }
+    transport: { label: 'Transport Links', score: 6.5, weight: 0.5, ptal: '3', insight: 'PTAL 3. East Dulwich station (Overground) 600m. Bus-served. Lower connectivity than SE1 corridor but East Dulwich is highly sought-after residential postcode.'  }
+  },
+  // -- ENVIRONMENTAL & REGULATORY SCREENING --
+  environment: {
+    flood_zone: 1,
+    surface_water_risk: 'low',
+    historic_landfill: false,
+    contamination_screening: 'low',
+    strategic_noise: 'moderate',
+    air_quality: { aqma: true, aqma_name: 'Southwark AQMA (borough-wide)', note: 'Borough-wide AQMA. Standard for inner London. Not a material cost uplift for commercial schemes.' }
+  },
+  ecology: {
+    bng_mandatory: true,
+    bng_note: 'Mandatory BNG (10% uplift) applies to all new permissions from Feb 2024. Urban site - likely low habitat baseline. Off-site credits or statutory credits. Cost estimate: £20-80K.',
+    bng_cost_estimate_low: 20000,
+    bng_cost_estimate_high: 80000,
+    tpo_on_site: false,
+    tpo_adjacent: false,
+    protected_species_risk: 'low'
+  },
+  sustainability: {
+    wlc_required: false,
+    wlc_note: 'Whole Life-Cycle Carbon Assessment required for GLA-referable schemes. GLA WLC Guidance (March 2022) applies.',
+    circular_economy_required: false,
+    circular_economy_note: 'Circular Economy Statement required for referable schemes. GLA CES Guidance applies.',
+    energy_planning: { breeam_target: 'Excellent', breeam_cost_uplift_per_sqm: 50, note: 'BREEAM Excellent target for OA/major schemes.' }
+  },
+  delivery: {
+    fire_statement_required: true,
+    fire_statement_note: 'London Plan Policy D12 - required for all major developments.',
+    bsr_gateway: false,
+    gla_referral: false,
+    pre_commencement_gates: ['BNG plan approval', 'Construction Management Plan', 'Fire Strategy (detail)'],
+    estimated_pre_app_cost: { low: 40000, high: 100000 },
+    estimated_planning_duration_months: { low: 6, high: 12 }
   }
+
 };

@@ -65,13 +65,13 @@ const SITE_INTELLIGENCE = {
     },
 
     heritage_framework: {
-      tier: 'RETAIN_AND_ADAPT',
+      tier: 'CONTEXTUAL',
       nhle_verified: true, nhle_date: '2026-03-25',
-      nhle_on_site: [{ name: "LLOYD'S BUILDING", grade: 'II', list_entry: 1359206 }],
-      nhle_adjacent: ["Lloyd's Building (GrI, 1405493)", "139-144 Leadenhall St EC3 (GrII, 1359207)", "147-148 Leadenhall St (GrII, 1252039)"],
-      score: 8.5,
-      verdict: 'EC3 cluster. Leadenhall Building (Cheesegrater, 2014) adjacent. Monument viewing corridor: confirm alignment. No CA on site. Cluster designation is the primary planning context.',
-      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+      nhle_on_site: [],
+      nhle_adjacent: ["Lloyd's Building (GrI, 1405493)", "Lloyd's Building ancillary (GrII, 1359206)", "139-144 Leadenhall St EC3 (GrII, 1359207)", "147-148 Leadenhall St (GrII, 1252039)"],
+      score: 7.0,
+      verdict: 'EC3 cluster. No listed building on the 100 Leadenhall plot itself. Lloyd\'s Building (Grade I, Rogers, 1986) immediately adjacent - heritage officer engagement at pre-app mandatory. Design must demonstrably not harm setting of Lloyd\'s. Leadenhall Building adjacent confirms cluster appetite for exceptional architecture. CONTEXTUAL tier: new development responds to listed setting, no mandatory retention.',
+      rocketship: 'Rocketship conditions present. No listing on site. Lead with bold massing - but it must hold its own next to Lloyd\'s. Design quality is the test.'
     },
     acquisition: {
       label: 'Title Stack',
@@ -102,5 +102,40 @@ const SITE_INTELLIGENCE = {
     caz: true,
     air_rights_type: "airspace",
     score: 82
+  },
+  // -- ENVIRONMENTAL & REGULATORY SCREENING --
+  environment: {
+    flood_zone: 1,
+    surface_water_risk: 'low',
+    historic_landfill: false,
+    contamination_screening: 'low',
+    strategic_noise: 'moderate',
+    air_quality: { aqma: true, aqma_name: 'City of London AQMA (borough-wide)', note: 'Borough-wide AQMA. Standard for inner London. Not a material cost uplift for commercial schemes.' }
+  },
+  ecology: {
+    bng_mandatory: true,
+    bng_note: 'Mandatory BNG (10% uplift) applies to all new permissions from Feb 2024. Urban site - likely low habitat baseline. Off-site credits or statutory credits. Cost estimate: £20-80K.',
+    bng_cost_estimate_low: 20000,
+    bng_cost_estimate_high: 80000,
+    tpo_on_site: false,
+    tpo_adjacent: false,
+    protected_species_risk: 'low'
+  },
+  sustainability: {
+    wlc_required: true,
+    wlc_note: 'Whole Life-Cycle Carbon Assessment required for GLA-referable schemes. GLA WLC Guidance (March 2022) applies.',
+    circular_economy_required: true,
+    circular_economy_note: 'Circular Economy Statement required for referable schemes. GLA CES Guidance applies.',
+    energy_planning: { breeam_target: 'Excellent', breeam_cost_uplift_per_sqm: 50, note: 'BREEAM Excellent target for OA/major schemes.' }
+  },
+  delivery: {
+    fire_statement_required: true,
+    fire_statement_note: 'London Plan Policy D12 - required for all major developments.',
+    bsr_gateway: false,
+    gla_referral: true,
+    pre_commencement_gates: ['BNG plan approval', 'Construction Management Plan', 'Fire Strategy (detail)'],
+    estimated_pre_app_cost: { low: 40000, high: 100000 },
+    estimated_planning_duration_months: { low: 6, high: 12 }
   }
+
 };

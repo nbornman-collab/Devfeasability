@@ -45,7 +45,7 @@ const SITE_INTELLIGENCE = {
     },
 
     heritage_framework: {
-      tier: 'clean',
+      tier: 'UNRESTRICTED',
       score: 9.0,
       verdict: 'Limited heritage constraint. Standard LPA design review. No specialist heritage consultant required at pre-app stage.',
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
@@ -62,7 +62,41 @@ const SITE_INTELLIGENCE = {
       label: 'Transport Links',
       score: 7.0, weight: 0.5,
       ptal: '3',
-      insight: 'PTAL 3. Peckham Rye station (Overground) 750m. Bus-served. Below the SE1 corridor for connectivity but acceptable for residential. Elizabeth line at Canada Water (Jubilee/Overground interchange) 2km east.'
-    }
+      insight: 'PTAL 3. Peckham Rye station (Overground) 750m. Bus-served. Below the SE1 corridor for connectivity but acceptable for residential. Elizabeth line at Canada Water (Jubilee/Overground interchange) 2km east.'  }
+  },
+  // -- ENVIRONMENTAL & REGULATORY SCREENING --
+  environment: {
+    flood_zone: 1,
+    surface_water_risk: 'low',
+    historic_landfill: false,
+    contamination_screening: 'low',
+    strategic_noise: 'moderate',
+    air_quality: { aqma: true, aqma_name: 'Southwark AQMA (borough-wide)', note: 'Borough-wide AQMA. Standard for inner London. Not a material cost uplift for commercial schemes.' }
+  },
+  ecology: {
+    bng_mandatory: true,
+    bng_note: 'Mandatory BNG (10% uplift) applies to all new permissions from Feb 2024. Urban site - likely low habitat baseline. Off-site credits or statutory credits. Cost estimate: £20-80K.',
+    bng_cost_estimate_low: 20000,
+    bng_cost_estimate_high: 80000,
+    tpo_on_site: false,
+    tpo_adjacent: false,
+    protected_species_risk: 'low'
+  },
+  sustainability: {
+    wlc_required: true,
+    wlc_note: 'Whole Life-Cycle Carbon Assessment required for GLA-referable schemes. GLA WLC Guidance (March 2022) applies.',
+    circular_economy_required: true,
+    circular_economy_note: 'Circular Economy Statement required for referable schemes. GLA CES Guidance applies.',
+    energy_planning: { breeam_target: 'Excellent', breeam_cost_uplift_per_sqm: 50, note: 'BREEAM Excellent target for OA/major schemes.' }
+  },
+  delivery: {
+    fire_statement_required: true,
+    fire_statement_note: 'London Plan Policy D12 - required for all major developments.',
+    bsr_gateway: false,
+    gla_referral: true,
+    pre_commencement_gates: ['BNG plan approval', 'Construction Management Plan', 'Fire Strategy (detail)'],
+    estimated_pre_app_cost: { low: 40000, high: 100000 },
+    estimated_planning_duration_months: { low: 6, high: 12 }
   }
+
 };

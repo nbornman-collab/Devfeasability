@@ -66,7 +66,7 @@ const SITE_INTELLIGENCE = {
     },
 
     heritage_framework: {
-      tier: 'manageable',
+      tier: 'CONTEXTUAL',
       score: 8.0,
       verdict: 'Blackfriars Station (GrII) 350m, no on-site listing. SE1 design-led context. Quality architecture is the currency. Heritage not a primary blocker.',
       rocketship: 'Rocketship path: engage heritage officer at pre-app, propose facade retention or contextual response early. OA designation unlocks GLA support to override LPA hesitation.'
@@ -86,7 +86,41 @@ const SITE_INTELLIGENCE = {
       score: 9.0, weight: 0.5,
       ptal: '6a',
       stations: 4,
-      insight: 'Excellent connectivity. Blackfriars (Elizabeth line, Thameslink) 350m north. Southwark (Jubilee) 350m east. Waterloo (National Rail/Tube) 650m west. Borough (Northern) 500m southeast. PTAL 6a - one of the highest transport accessibility ratings in London.'
-    }
+      insight: 'Excellent connectivity. Blackfriars (Elizabeth line, Thameslink) 350m north. Southwark (Jubilee) 350m east. Waterloo (National Rail/Tube) 650m west. Borough (Northern) 500m southeast. PTAL 6a - one of the highest transport accessibility ratings in London.'  }
+  },
+  // -- ENVIRONMENTAL & REGULATORY SCREENING --
+  environment: {
+    flood_zone: 1,
+    surface_water_risk: 'low',
+    historic_landfill: false,
+    contamination_screening: 'low',
+    strategic_noise: 'moderate',
+    air_quality: { aqma: true, aqma_name: 'Southwark AQMA (borough-wide)', note: 'Borough-wide AQMA. Standard for inner London. Not a material cost uplift for commercial schemes.' }
+  },
+  ecology: {
+    bng_mandatory: true,
+    bng_note: 'Mandatory BNG (10% uplift) applies to all new permissions from Feb 2024. Urban site - likely low habitat baseline. Off-site credits or statutory credits. Cost estimate: £20-80K.',
+    bng_cost_estimate_low: 20000,
+    bng_cost_estimate_high: 80000,
+    tpo_on_site: false,
+    tpo_adjacent: false,
+    protected_species_risk: 'low'
+  },
+  sustainability: {
+    wlc_required: true,
+    wlc_note: 'Whole Life-Cycle Carbon Assessment required for GLA-referable schemes. GLA WLC Guidance (March 2022) applies.',
+    circular_economy_required: true,
+    circular_economy_note: 'Circular Economy Statement required for referable schemes. GLA CES Guidance applies.',
+    energy_planning: { breeam_target: 'Excellent', breeam_cost_uplift_per_sqm: 50, note: 'BREEAM Excellent target for OA/major schemes.' }
+  },
+  delivery: {
+    fire_statement_required: true,
+    fire_statement_note: 'London Plan Policy D12 - required for all major developments.',
+    bsr_gateway: false,
+    gla_referral: true,
+    pre_commencement_gates: ['BNG plan approval', 'Construction Management Plan', 'Fire Strategy (detail)'],
+    estimated_pre_app_cost: { low: 40000, high: 100000 },
+    estimated_planning_duration_months: { low: 6, high: 12 }
   }
+
 };

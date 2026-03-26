@@ -339,15 +339,68 @@ input[type=range]::-moz-range-progress { background: var(--accent2); border-radi
 }
 
 @media (max-width: 768px) {
-  .section-inner { padding: 0 20px; }
-  .card-grid { grid-template-columns: 1fr; }
-  .comp-strip { grid-template-columns: 1fr; }
-  .slider-group { grid-template-columns: 1fr; }
-  .arch-grid { grid-template-columns: 1fr 1fr; }
-  .factor-grid { grid-template-columns: 1fr; }
+  /* Nav */
   nav { padding: 0 16px; }
-  .hero-content { padding: 0 20px 40px; }
+  .nav-links { display: none; }
+  .nav-tagline { display: none; }
+
+  /* Progress */
   .progress-dots { display: none !important; }
+
+  /* Sections */
+  .section { padding: 72px 0; }
+  .section-inner { padding: 0 20px; }
+  .section-title { font-size: clamp(24px,6vw,36px); }
+
+  /* Hero */
+  .hero-content { padding: 0 20px 40px; }
+  .hero-address { font-size: 32px; }
+  .hero-strip { flex-wrap: wrap; gap: 12px; }
+  .hero-sc-tabs { flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .hero-sc-tab { padding: 8px 14px; font-size: 13px; }
+  .hero-metrics { flex-wrap: wrap; gap: 16px; }
+
+  /* Matrix - horizontal scroll on mobile */
+  .matrix-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .matrix-table { min-width: 560px; }
+  .matrix-table th, .matrix-table td { padding: 10px 12px; font-size: 13px; }
+
+  /* Cards */
+  .card-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Comparison strip */
+  .comp-strip { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Sliders */
+  .slider-group { grid-template-columns: 1fr; }
+
+  /* Architecture grid */
+  .arch-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Factor bars */
+  .factor-grid { grid-template-columns: 1fr; }
+
+  /* Scenario group */
+  .scenario-group { padding: 20px; border-radius: 14px; }
+  .scenario-tabs { flex-wrap: wrap; gap: 6px; }
+  .sc-tab { min-width: calc(50% - 6px); }
+
+  /* Consequence strip */
+  .conseq-row { flex-wrap: wrap; }
+
+  /* Flags */
+  .flag-row { padding: 10px 0; }
+
+  /* Return curve section */
+  .return-section svg { width: 100%; height: auto; }
+
+  /* Scenario modal */
+  .sc-modal { width: 96%; max-height: 90vh; }
+  .sc-modal-metrics { grid-template-columns: 1fr 1fr; }
+  .sc-modal-map { height: 200px; }
+  .sc-modal-tabs { flex-wrap: wrap; gap: 6px; }
+  .sc-modal-tab { min-width: calc(33% - 6px); font-size: 13px; padding: 10px 8px; }
+  .sc-modal-body { padding: 20px; }
 }
 
 /* -- PREFERS REDUCED MOTION -- */
