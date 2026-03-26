@@ -313,9 +313,11 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .hero {
   position: absolute; inset: 0; z-index: 10;
   display: flex; flex-direction: column;
-  align-items: flex-start; justify-content: flex-end;
-  padding: 0 64px 80px;
+  align-items: flex-start; justify-content: space-between;
+  padding: 80px 64px 100px;
 }
+.hero-top { display: flex; flex-direction: column; gap: 0; padding-top: 8px; }
+.hero-bottom-content { display: flex; flex-direction: column; align-items: flex-start; }
 
 /* ── BELOW FOLD ── */
 .below-fold {
@@ -431,11 +433,15 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 #hero-cycle {
   display: inline-block;
   transition: opacity 0.38s ease, transform 0.38s ease;
-  color: inherit;
+  color: var(--accent);
 }
 #hero-cycle.out {
   opacity: 0;
   transform: translateY(-10px);
+}
+#hero-dots {
+  display: inline-block; color: var(--accent); letter-spacing: .05em;
+  min-width: 1.2em;
 }
 .btn-ghost {
   font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
@@ -520,38 +526,44 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 </div>
 
 <div class="hero">
-  <div class="hero-label">London Development Intelligence</div>
-  <div class="dpa-strip">
-    <div class="dpa-pill">
-      <div class="dpa-letter">D</div>
-      <div class="dpa-text">
-        <div class="dpa-name">Development</div>
-        <div class="dpa-desc">Available Sky · Rent Headroom · Title Stack</div>
+  <!-- TOP: D/P/A pills + label -->
+  <div class="hero-top">
+    <div class="hero-label">London Development Intelligence</div>
+    <div class="dpa-strip">
+      <div class="dpa-pill">
+        <div class="dpa-letter">D</div>
+        <div class="dpa-text">
+          <div class="dpa-name">Development</div>
+          <div class="dpa-desc">Available Sky · Rent Headroom · Title Stack</div>
+        </div>
       </div>
-    </div>
-    <div class="dpa-sep">/</div>
-    <div class="dpa-pill">
-      <div class="dpa-letter">P</div>
-      <div class="dpa-text">
-        <div class="dpa-name">Planning</div>
-        <div class="dpa-desc">Planning Appetite · Precedent · Policy</div>
+      <div class="dpa-sep">/</div>
+      <div class="dpa-pill">
+        <div class="dpa-letter">P</div>
+        <div class="dpa-text">
+          <div class="dpa-name">Planning</div>
+          <div class="dpa-desc">Planning Appetite · Precedent · Policy</div>
+        </div>
       </div>
-    </div>
-    <div class="dpa-sep">/</div>
-    <div class="dpa-pill">
-      <div class="dpa-letter">A</div>
-      <div class="dpa-text">
-        <div class="dpa-name">Architecture</div>
-        <div class="dpa-desc">Heritage Shadow · BSA · Massing</div>
+      <div class="dpa-sep">/</div>
+      <div class="dpa-pill">
+        <div class="dpa-letter">A</div>
+        <div class="dpa-text">
+          <div class="dpa-name">Architecture</div>
+          <div class="dpa-desc">Heritage Shadow · BSA · Massing</div>
+        </div>
       </div>
     </div>
   </div>
-  <h1 class="hero-title">Know every site.<br><em>Before you <span id="hero-cycle">bid.</span></em></h1>
-  <p class="hero-sub">200+ factors. Triangulated. Site-specific. Structured. Not a site-finder - development intelligence for London.</p>
 
-  <div class="hero-ctas">
-    <a class="btn-primary" href="/discover">Discover Sites &rarr;</a>
-    <a class="btn-ghost" href="/test/t1-scroll">See a live Appraisal</a>
+  <!-- BOTTOM: title + sub + CTAs -->
+  <div class="hero-bottom-content">
+    <h1 class="hero-title">In-depth feasibility analysis<span id="hero-dots">.</span><br><em>Before you <span id="hero-cycle">bid.</span></em></h1>
+    <p class="hero-sub">200+ factors. Triangulated. Site-specific. Structured.<br>Development intelligence for London.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="/discover">Discover Sites &rarr;</a>
+      <a class="btn-ghost" href="/test/t1-scroll">See a live Appraisal</a>
+    </div>
   </div>
 </div>
 
@@ -836,29 +848,51 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 </div>
 
 <script>
-// ── Hero text cycle ───────────────────────────────────────────────────────────
+// ── Hero text cycle + dots animation ─────────────────────────────────────────
 (function() {
   const phrases = ['appoint.', 'go to feasibility.', 'go to planning.', 'bid.', 'build.'];
-  const el = document.getElementById('hero-cycle');
-  if (!el) return;
-  let idx = 0, loops = 0, timer;
-  // Start after 1.8s - let the page breathe first
-  setTimeout(() => {
-    timer = setInterval(() => {
-      // Fade out
-      el.classList.add('out');
-      setTimeout(() => {
+  const cycleEl = document.getElementById('hero-cycle');
+  const dotsEl = document.getElementById('hero-dots');
+  if (!cycleEl) return;
+
+  // Animate dots: . → .. → ... then trigger cycle
+  function animateDots(cb) {
+    if (!dotsEl) { cb(); return; }
+    var steps = ['.', '..', '...'];
+    var i = 0;
+    var t = setInterval(function() {
+      dotsEl.textContent = steps[i];
+      i++;
+      if (i >= steps.length) {
+        clearInterval(t);
+        setTimeout(cb, 300);
+      }
+    }, 220);
+  }
+
+  let idx = 0, loops = 0;
+
+  function cycleNext() {
+    // Fade out current word
+    cycleEl.classList.add('out');
+    // Animate dots while word is hidden
+    setTimeout(function() {
+      animateDots(function() {
         idx = (idx + 1) % phrases.length;
         if (idx === 0) loops++;
-        el.textContent = phrases[idx];
-        el.classList.remove('out');
+        cycleEl.textContent = phrases[idx];
+        cycleEl.classList.remove('out');
+        dotsEl && (dotsEl.textContent = '.');
         // Stop after 2 full loops, settle on 'bid.'
-        if (loops >= 2 && phrases[idx] === 'bid.') {
-          clearInterval(timer);
+        if (!(loops >= 2 && phrases[idx] === 'bid.')) {
+          setTimeout(cycleNext, 2800);
         }
-      }, 380);
-    }, 2800);
-  }, 1800);
+      });
+    }, 380);
+  }
+
+  // Start after 2s
+  setTimeout(cycleNext, 2000);
 })();
 
 // Load total GDV from site data
