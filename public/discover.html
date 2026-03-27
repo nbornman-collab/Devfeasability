@@ -660,18 +660,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* Scenario data chip - drops below active tab */
 .mass-sc-chip {
-  position: absolute; top: 70px; left: 16px;
+  position: absolute; top: 70px; left: 50%;
   z-index: 9; display: flex; gap: 0;
   background: rgba(0,0,0,.52); backdrop-filter: blur(20px) saturate(0);
   border: 1px solid rgba(255,255,255,.14); border-radius: 6px; overflow: hidden;
   opacity: 0; pointer-events: none;
-  transition: opacity .2s ease, transform .2s ease;
-  transform: translateY(-6px);
+  transition: opacity .2s ease, transform .2s ease, left .2s ease;
+  transform: translateX(-50%) translateY(-6px);
   white-space: nowrap;
 }
 .mass-sc-chip.visible {
   opacity: 1; pointer-events: auto;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
 .mass-sc-chip-item {
   padding: 8px 16px; border-right: 1px solid rgba(255,255,255,.1);
@@ -1731,6 +1731,18 @@ function updateMassScChip(sc, site) {
   if (addNEl) addNEl.textContent = '+' + (sc.addedNIA || 0).toLocaleString() + 'm²';
   if (htEl) htEl.textContent = '~' + totalH + 'm';
   if (costEl) costEl.textContent = '£' + costM + 'M';
+
+  // Align chip centre under the active tab
+  var activeTab = document.querySelector('.mass-sc-tab.active');
+  var canvas = document.getElementById('mass-3d');
+  if (activeTab && canvas) {
+    var tabRect = activeTab.getBoundingClientRect();
+    var canvasRect = canvas.getBoundingClientRect();
+    var tabCentreX = tabRect.left + tabRect.width / 2 - canvasRect.left;
+    chip.style.left = Math.round(tabCentreX) + 'px';
+    chip.style.top = (tabRect.bottom - canvasRect.top + 8) + 'px';
+  }
+
   chip.classList.remove('visible');
   setTimeout(function() { chip.classList.add('visible'); }, 20);
 }
