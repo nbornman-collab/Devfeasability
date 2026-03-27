@@ -397,9 +397,16 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── SITE CARD ── */
 .site-card {
   border-bottom: 1px solid rgba(17,17,16,.18); cursor: pointer;
-  transition: background .1s;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  position: relative;
 }
-.site-card:hover .card-header { background: var(--bg2); }
+.site-card:hover {
+  background: #f5f3ee;
+  transform: translateX(4px);
+  box-shadow: -4px 0 0 0 var(--accent), 2px 0 16px rgba(0,0,0,.08);
+  z-index: 1;
+}
+.site-card:hover .card-header { background: transparent; }
 .site-card.active .card-header { background: var(--accent-bg); }
 .site-card.active { border-left: 3px solid var(--accent); }
 
@@ -407,15 +414,16 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   padding: 14px 14px 12px; display: flex; gap: 0; align-items: flex-start;
   transition: background .1s;
 }
-/* Rank column - separated by right border */
+/* Rank column */
 .card-rank {
-  font: 600 14px var(--mono); color: var(--ink3); flex-shrink: 0; width: 36px;
-  letter-spacing: .02em; line-height: 1; padding-top: 6px; text-align: right;
+  font: 700 13px var(--mono); color: rgba(17,17,16,.35); flex-shrink: 0; width: 36px;
+  letter-spacing: .04em; line-height: 1; padding-top: 6px; text-align: right;
   padding-right: 12px; margin-right: 14px;
-  border-right: 1px solid var(--rule);
-  transition: color .15s;
+  border-right: 1px solid rgba(17,17,16,.12);
+  transition: color .18s;
 }
-.site-card:hover .card-rank, .site-card.active .card-rank { color: var(--ink2); }
+.site-card:hover .card-rank { color: var(--accent); }
+.site-card.active .card-rank { color: var(--accent); }
 /* Score far right */
 .card-score-col { flex-shrink: 0; text-align: right; width: 52px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 .card-score-num { font: 800 28px var(--mono); color: var(--accent); letter-spacing: -.02em; line-height: 1; }
