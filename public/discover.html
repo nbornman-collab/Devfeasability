@@ -396,7 +396,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* ── SITE CARD ── */
 .site-card {
-  border-bottom: 1px solid var(--rule); cursor: pointer;
+  border-bottom: 1px solid rgba(17,17,16,.18); cursor: pointer;
   transition: background .1s;
 }
 .site-card:hover .card-header { background: var(--bg2); }
@@ -404,16 +404,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .site-card.active { border-left: 3px solid var(--accent); }
 
 .card-header {
-  padding: 12px 14px 10px; display: flex; gap: 10px; align-items: flex-start;
+  padding: 14px 14px 12px; display: flex; gap: 0; align-items: flex-start;
   transition: background .1s;
 }
-/* Big rank - left column */
+/* Rank column - separated by right border */
 .card-rank {
-  font: 800 28px var(--mono); color: var(--ink); flex-shrink: 0; width: 42px;
-  letter-spacing: -.04em; line-height: 1; padding-top: 2px; text-align: right;
+  font: 600 14px var(--mono); color: var(--ink3); flex-shrink: 0; width: 36px;
+  letter-spacing: .02em; line-height: 1; padding-top: 6px; text-align: right;
+  padding-right: 12px; margin-right: 14px;
+  border-right: 1px solid var(--rule);
   transition: color .15s;
 }
-.site-card:hover .card-rank, .site-card.active .card-rank { color: var(--ink3); }
+.site-card:hover .card-rank, .site-card.active .card-rank { color: var(--ink2); }
 /* Score far right */
 .card-score-col { flex-shrink: 0; text-align: right; width: 52px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 .card-score-num { font: 800 28px var(--mono); color: var(--accent); letter-spacing: -.02em; line-height: 1; }
