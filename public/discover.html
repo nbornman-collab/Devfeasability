@@ -682,8 +682,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .mass-verdict {
   font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
-  padding: 4px 10px; border-radius: 20px; color: #fff; display: inline-block;
-  margin-bottom: 20px;
+  padding: 4px 12px; border-radius: 20px; color: #fff; display: inline-block;
+  align-self: flex-start; margin-bottom: 20px;
 }
 .mass-verdict.green { background: var(--green); }
 .mass-verdict.amber { background: var(--amber); }
@@ -1890,13 +1890,35 @@ function initPegman() {
     ghost.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;font-size:32px;transform:translate(-50%,-100%);';
     ghost.textContent = '🚶';
     document.body.appendChild(ghost);
+    // Drop indicator pin on the map
+    var dropPin = document.createElement('div');
+    dropPin.style.cssText = 'position:absolute;z-index:20;pointer-events:none;display:none;transform:translate(-50%,-100%);';
+    dropPin.innerHTML = '<div style="width:20px;height:20px;border-radius:50% 50% 50% 0;background:#b8845c;border:2px solid #fff;transform:rotate(-45deg);box-shadow:0 2px 8px rgba(0,0,0,.4);"></div><div style="width:2px;height:12px;background:#b8845c;margin:0 auto;"></div>';
+    var mapEl2 = document.getElementById('mass-3d');
+    if (mapEl2) { mapEl2.style.position = 'relative'; mapEl2.appendChild(dropPin); }
+
     function onMove(ev) {
       ghost.style.left = ev.clientX + 'px';
       ghost.style.top = ev.clientY + 'px';
+      // Show pin on map when hovering over it
+      var mapEl = document.getElementById('mass-3d');
+      if (mapEl) {
+        var rect = mapEl.getBoundingClientRect();
+        var x = ev.clientX - rect.left;
+        var y = ev.clientY - rect.top;
+        if (x >= 0 && y >= 0 && x <= rect.width && y <= rect.height) {
+          dropPin.style.display = 'block';
+          dropPin.style.left = x + 'px';
+          dropPin.style.top = y + 'px';
+        } else {
+          dropPin.style.display = 'none';
+        }
+      }
     }
     function onUp(ev) {
       btn.classList.remove('dragging');
       document.body.removeChild(ghost);
+      if (dropPin.parentNode) dropPin.parentNode.removeChild(dropPin);
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onUp);
       var mapEl = document.getElementById('mass-3d');
@@ -1921,9 +1943,16 @@ function cardClick(id) {
   if (site) openMassPopup(site);
 }
 
-// Escape to close
+// Escape: first press exits Street View, second press closes popup
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeMassPopup();
+  if (e.key === 'Escape') {
+    var sv = document.getElementById('mass-sv');
+    if (sv && sv.classList.contains('active')) {
+      massExitSV();
+    } else {
+      closeMassPopup();
+    }
+  }
 });
 
 </script>
