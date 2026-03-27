@@ -68,6 +68,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 #map-canvas {
   position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; z-index: 1;
 }
+#map-canvas .mapboxgl-canvas {
+  filter: saturate(0.32) brightness(0.82);
+}
 
 /* ── LEFT OVERLAY (hero stats + borough selector) ── */
 .col-left {
@@ -1427,13 +1430,13 @@ function addSiteMarkers() {
   MAP.addSource('sites',{type:'geojson',data:geojson});
   // White ring
   MAP.addLayer({id:'sites-ring',type:'circle',source:'sites',slot:'top',paint:{
-    'circle-radius':['+',['get','r'],3],
-    'circle-color':'#ffffff','circle-opacity':0.95
+    'circle-radius':['+',['get','r'],3.5],
+    'circle-color':'#ffffff','circle-opacity':1
   }});
   // Colour dot
   MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',slot:'top',paint:{
     'circle-radius':['get','r'],
-    'circle-color':['get','color'],'circle-opacity':0.95
+    'circle-color':['get','color'],'circle-opacity':1
   }});
   MAP.on('click','sites-dot',e=>{
     const id = e.features[0].properties.id;
