@@ -67,9 +67,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── MAP: full canvas behind everything ── */
 #map-canvas {
   position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; z-index: 1;
-  transition: opacity 0.35s ease;
   background: #000;
 }
+#map-fade {
+  position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0;
+  background: #0a0a09; z-index: 2; pointer-events: none;
+  opacity: 0; transition: opacity 0.3s ease;
+}
+#map-fade.active { opacity: 1; }
 
 
 /* ── LEFT OVERLAY (hero stats + borough selector) ── */
@@ -837,6 +842,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 <!-- Full-canvas map (behind all overlays) -->
 <div id="map-canvas"></div>
+<div id="map-fade"></div>
 <div class="map-label">London Development Intelligence</div>
 <div class="map-style-toggle">
   <button class="map-style-btn" data-style="satellite" onclick="switchMapStyle('satellite')">Satellite</button>
@@ -1397,7 +1403,7 @@ function initMap(token) {
     MAP.setCenter([-0.090, 51.505]);
     addSiteMarkers();
     mapStyleSwitching = false;
-    document.getElementById('map-canvas').style.opacity = '1';
+    setTimeout(function() { document.getElementById('map-fade').classList.remove('active'); }, 100);
   });
 
   // Auto-switch style on zoom threshold
@@ -1411,8 +1417,8 @@ function initMap(token) {
       document.querySelectorAll('.map-style-btn').forEach(function(b) {
         b.classList.toggle('active', b.dataset.style === 'satellite');
       });
-      document.getElementById('map-canvas').style.opacity = '0';
-      setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/satellite-streets-v12'); }, 300);
+      document.getElementById('map-fade').classList.add('active');
+      setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/satellite-streets-v12'); }, 320);
     } else if (z < ZOOM_AERIAL_THRESHOLD && currentMapStyle === 'satellite') {
       mapStyleSwitching = true;
       currentMapStyle = 'map';
@@ -1420,8 +1426,8 @@ function initMap(token) {
       document.querySelectorAll('.map-style-btn').forEach(function(b) {
         b.classList.toggle('active', b.dataset.style === 'map');
       });
-      document.getElementById('map-canvas').style.opacity = '0';
-      setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/dark-v11'); }, 300);
+      document.getElementById('map-fade').classList.add('active');
+      setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/dark-v11'); }, 320);
     }
   });
 
@@ -1437,8 +1443,8 @@ function initMap(token) {
     var styleUrl = style === 'satellite'
       ? 'mapbox://styles/mapbox/satellite-streets-v12'
       : 'mapbox://styles/mapbox/dark-v11';
-    document.getElementById('map-canvas').style.opacity = '0';
-    setTimeout(function() { MAP.setStyle(styleUrl); }, 300);
+    document.getElementById('map-fade').classList.add('active');
+    setTimeout(function() { MAP.setStyle(styleUrl); }, 320);
   };
 }
 
