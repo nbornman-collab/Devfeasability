@@ -991,6 +991,13 @@ const boroughShort = b => {
 };
 const scoreColor  = s => s >= 80 ? '#15803d' : s >= 65 ? '#b8845c' : s >= 50 ? '#b45309' : '#999990';
 
+function inferUseType(s) {
+  var text = ((s.desc||'') + ' ' + (s.notes||'') + ' ' + (s.name||'')).toLowerCase();
+  if (/\b(resi|residential|homes|apartments|flats|housing|build to rent|btr|pbsa|student)\b/.test(text)) return 'resi';
+  if (/\b(office|commercial|workspace|co-working|lab|hotel)\b/.test(text)) return 'office';
+  return s.use || 'office'; // default office for London commercial screener
+}
+
 function normaliseSite(s, idx) {
   const borough = s.borough || 'London';
   const ptal = s.flags?.ptal || s.ptal || null;
@@ -1012,6 +1019,7 @@ function normaliseSite(s, idx) {
     score: parseInt(s.score)||0, verified: !!s.verified, t1: s.t1||null,
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
     ptal, maxFloors, plotM2, gdvEst, planScore, heritTier,
+    useType: s.use || inferUseType(s),
     offMarket: s.offMarket||'unknown',
     owner: s.owner||null,
     planning: s.planning||null,
@@ -1470,7 +1478,8 @@ function addSiteMarkers() {
       return {
         type:'Feature',
         geometry:{type:'Point',coordinates:[s.lng,s.lat]},
-        properties:{ id:s.id, score:s.score, name:s.name, color:'#b8845c',
+        properties:{ id:s.id, score:s.score, name:s.name,
+          color: s.useType === 'resi' ? '#b8845c' : '#5ba3a0',
           r: s.score>=85 ? 9.2 : s.score>=70 ? 6.9 : 4.6 }
       };
     })
