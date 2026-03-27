@@ -637,22 +637,23 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* Scenario tabs overlay */
 .mass-scenario-tabs {
-  position: absolute; top: 16px; left: 16px; right: 16px; z-index: 10;
-  display: flex; gap: 0; border-radius: 8px; overflow: hidden;
-  border: 1px solid rgba(255,255,255,.12);
+  position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+  z-index: 10; display: flex; gap: 0; border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.14);
   box-shadow: 0 2px 16px rgba(0,0,0,.4);
+  white-space: nowrap;
 }
 .mass-sc-tab {
-  flex: 1; padding: 10px 16px;
-  background: rgba(14,13,12,.82); backdrop-filter: blur(20px) saturate(0);
-  border: none; border-right: 1px solid rgba(255,255,255,.09);
-  color: rgba(255,255,255,.55); cursor: pointer;
+  padding: 10px 28px;
+  background: rgba(0,0,0,.48); backdrop-filter: blur(24px) saturate(0) brightness(0.6);
+  border: none; border-right: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.6); cursor: pointer;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  transition: background .15s, color .15s;
+  transition: background .15s, color .15s; min-width: 90px;
 }
 .mass-sc-tab:last-child { border-right: none; }
 .mass-sc-tab.active { background: var(--accent); color: #fff; backdrop-filter: none; }
-.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.08); color: rgba(255,255,255,.9); }
+.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.1); color: rgba(255,255,255,.9); }
 .mass-sc-label { font: 700 13px var(--sans); letter-spacing: .06em; }
 .mass-sc-floors { font: 500 18px var(--mono); letter-spacing: -.02em; }
 
