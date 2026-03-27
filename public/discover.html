@@ -1462,77 +1462,38 @@ function initMap(token) {
   };
 }
 
-var siteHtmlMarkers = [];
-
-function removeSiteHtmlMarkers() {
-  siteHtmlMarkers.forEach(function(m) { m.remove(); });
-  siteHtmlMarkers = [];
-}
-
 function addSiteMarkers() {
   if (!MAP || !ALL_SITES.length) return;
-  var isSatellite = currentMapStyle === 'satellite';
-
-  // Remove HTML markers first
-  removeSiteHtmlMarkers();
-
   var geojson = {
     type:'FeatureCollection',
     features: ALL_SITES.map(function(s) {
-      var r = s.score>=85 ? 9.2 : s.score>=70 ? 6.9 : 4.6; // +15%
       return {
         type:'Feature',
         geometry:{type:'Point',coordinates:[s.lng,s.lat]},
-        properties:{ id:s.id, score:s.score, name:s.name, color:'#b8845c', r:r }
+        properties:{ id:s.id, score:s.score, name:s.name, color:'#b8845c',
+          r: s.score>=85 ? 9.2 : s.score>=70 ? 6.9 : 4.6 }
       };
     })
   };
-
-  if (isSatellite) {
-    // Satellite mode: HTML pin markers
-    removeSiteHtmlMarkers();
-    ALL_SITES.forEach(function(s) {
-      var el = document.createElement('div');
-      el.style.cssText = 'width:20px;height:28px;cursor:pointer;';
-      el.innerHTML = '<svg viewBox="0 0 20 28" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.477 0 0 4.477 0 10c0 7.5 10 18 10 18S20 17.5 20 10C20 4.477 15.523 0 10 0z" fill="#b8845c"/><circle cx="10" cy="10" r="4" fill="rgba(255,255,255,0.85)"/></svg>';
-      el.addEventListener('click', function() { cardClick(s.id); });
-      var marker = new mapboxgl.Marker({element: el}).setLngLat([s.lng, s.lat]).addTo(MAP);
-      siteHtmlMarkers.push(marker);
-    });
-    // Remove GL circle layers if they exist
-    ['sites-glow','sites-mid','sites-dot'].forEach(function(id) {
-      if (MAP.getLayer(id)) MAP.removeLayer(id);
-    });
-    if (MAP.getSource('sites')) MAP.removeSource('sites');
-    return;
-  }
-
-  // Dark map mode: glow circle layers (no slot - works on all styles)
   if (MAP.getSource('sites')) {
     MAP.getSource('sites').setData(geojson);
     return;
   }
   MAP.addSource('sites',{type:'geojson',data:geojson});
-  // Outer glow - stretched gradient fades to edge
   MAP.addLayer({id:'sites-glow',type:'circle',source:'sites',paint:{
     'circle-radius':['*',['get','r'],3.5],
     'circle-color':['get','color'],
-    'circle-opacity':0.15,
-    'circle-blur':1.0
+    'circle-opacity':0.15, 'circle-blur':1.0
   }});
-  // Mid halo
   MAP.addLayer({id:'sites-mid',type:'circle',source:'sites',paint:{
     'circle-radius':['*',['get','r'],1.8],
     'circle-color':['get','color'],
-    'circle-opacity':0.38,
-    'circle-blur':0.5
+    'circle-opacity':0.38, 'circle-blur':0.5
   }});
-  // Solid core
   MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',paint:{
     'circle-radius':['get','r'],
     'circle-color':['get','color'],
-    'circle-opacity':0.95,
-    'circle-blur':0
+    'circle-opacity':0.95, 'circle-blur':0
   }});
   MAP.on('click','sites-dot',function(e) {
     var id = e.features[0].properties.id;
