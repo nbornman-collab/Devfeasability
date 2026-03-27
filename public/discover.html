@@ -1481,15 +1481,26 @@ function addSiteMarkers() {
     return;
   }
   MAP.addSource('sites',{type:'geojson',data:geojson});
-  // White ring
-  MAP.addLayer({id:'sites-ring',type:'circle',source:'sites',slot:'top',paint:{
-    'circle-radius':['+',['get','r'],3.5],
-    'circle-color':'#ffffff','circle-opacity':1
+  // Outer glow - soft radial fade
+  MAP.addLayer({id:'sites-glow',type:'circle',source:'sites',slot:'top',paint:{
+    'circle-radius':['*',['get','r'],2.8],
+    'circle-color':['get','color'],
+    'circle-opacity':0.18,
+    'circle-blur':0.8
   }});
-  // Colour dot
+  // Mid halo
+  MAP.addLayer({id:'sites-mid',type:'circle',source:'sites',slot:'top',paint:{
+    'circle-radius':['*',['get','r'],1.5],
+    'circle-color':['get','color'],
+    'circle-opacity':0.45,
+    'circle-blur':0.4
+  }});
+  // Solid core
   MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',slot:'top',paint:{
     'circle-radius':['get','r'],
-    'circle-color':['get','color'],'circle-opacity':1
+    'circle-color':['get','color'],
+    'circle-opacity':0.95,
+    'circle-blur':0
   }});
   MAP.on('click','sites-dot',e=>{
     const id = e.features[0].properties.id;
