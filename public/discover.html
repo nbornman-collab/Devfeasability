@@ -636,58 +636,53 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .mass-sv-back.visible { display: block; }
 
 /* Scenario tabs overlay */
-/* Unified tab card - tabs + data as one object */
+/* Unified tab card */
 .mass-tab-card {
-  position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
-  z-index: 10; border-radius: 10px; overflow: hidden;
-  background: rgba(0,0,0,.35); backdrop-filter: blur(24px) saturate(0);
+  position: absolute; top: 16px; left: 16px;
+  z-index: 10; border-radius: 8px; overflow: hidden;
+  background: rgba(0,0,0,.45); backdrop-filter: blur(24px) saturate(0);
   border: 1px solid rgba(255,255,255,.15);
-  box-shadow: 0 4px 20px rgba(0,0,0,.4);
-  white-space: nowrap; min-width: 340px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.45);
+  min-width: 380px;
 }
-/* Keep old class names for JS compatibility */
 .mass-scenario-tabs {
   display: flex; border-bottom: 1px solid rgba(255,255,255,.1);
 }
 .mass-sc-tab {
-  flex: 1; padding: 12px 24px;
+  flex: 1; padding: 11px 16px;
   background: transparent;
   border: none; border-right: 1px solid rgba(255,255,255,.1);
-  color: rgba(255,255,255,.4); cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  transition: color .15s; position: relative;
+  color: rgba(255,255,255,.35); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 0;
+  transition: background .15s, color .15s; white-space: nowrap;
 }
 .mass-sc-tab:last-child { border-right: none; }
-.mass-sc-tab::after {
-  content: ''; position: absolute; bottom: 0; left: 20%; right: 20%;
-  height: 2px; background: var(--accent); border-radius: 1px 1px 0 0;
-  opacity: 0; transition: opacity .15s;
+.mass-sc-tab.active {
+  background: rgba(255,255,255,.13);
+  color: #fff;
 }
-.mass-sc-tab.active { color: var(--accent); }
-.mass-sc-tab.active::after { opacity: 1; }
-.mass-sc-tab:hover:not(.active) { color: rgba(255,255,255,.8); }
-.mass-sc-label { font: 300 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
-.mass-sc-tab.active .mass-sc-label { font-weight: 600; }
-.mass-sc-floors { font: 400 20px var(--mono); letter-spacing: -.02em; }
-.mass-sc-tab.active .mass-sc-floors { font-weight: 700; }
+.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.06); color: rgba(255,255,255,.7); }
+.mass-sc-label { font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.mass-sc-sep { font: 400 11px var(--sans); color: rgba(255,255,255,.25); margin: 0 6px; }
+.mass-sc-tab.active .mass-sc-sep { color: rgba(255,255,255,.4); }
+.mass-sc-floors { font: 600 11px var(--mono); letter-spacing: .04em; }
 
-/* Data row - bottom of unified card */
+/* Data row */
 .mass-sc-chip {
   display: flex; opacity: 0; pointer-events: none;
-  transition: opacity .25s ease;
-  border-top: 1px solid rgba(255,255,255,.07);
+  transition: opacity .2s ease;
 }
 .mass-sc-chip.visible { opacity: 1; pointer-events: auto; }
 .mass-sc-chip-item {
-  flex: 1; padding: 8px 12px; border-right: 1px solid rgba(255,255,255,.08);
+  flex: 1; padding: 9px 12px; border-right: 1px solid rgba(255,255,255,.08);
   display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
 .mass-sc-chip-item:last-child { border-right: none; }
 .mass-sc-chip-val {
-  font: 600 12px var(--mono); color: rgba(255,255,255,.85); letter-spacing: -.01em;
+  font: 700 12px var(--mono); color: rgba(255,255,255,.9); letter-spacing: -.01em;
 }
 .mass-sc-chip-lbl {
-  font: 500 9px var(--sans); color: rgba(255,255,255,.35); letter-spacing: .07em; text-transform: uppercase;
+  font: 500 9px var(--sans); color: rgba(255,255,255,.35); letter-spacing: .08em; text-transform: uppercase;
 }
 
 /* Right: info strip */
@@ -2052,16 +2047,13 @@ document.addEventListener('keydown', function(e) {
       <div class="mass-tab-card" id="mass-scenario-tabs-wrap">
         <div class="mass-scenario-tabs">
           <button class="mass-sc-tab" id="mass-tab-lo" onclick="switchMassScenario('lo')">
-            <span class="mass-sc-label">Low</span>
-            <span class="mass-sc-floors">6F</span>
+            <span class="mass-sc-label">Low</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-lo">6F</span>
           </button>
           <button class="mass-sc-tab active" id="mass-tab-base" onclick="switchMassScenario('base')">
-            <span class="mass-sc-label">Base</span>
-            <span class="mass-sc-floors">8F</span>
+            <span class="mass-sc-label">Base</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-base">8F</span>
           </button>
           <button class="mass-sc-tab" id="mass-tab-hi" onclick="switchMassScenario('hi')">
-            <span class="mass-sc-label">High</span>
-            <span class="mass-sc-floors">10F</span>
+            <span class="mass-sc-label">High</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-hi">10F</span>
           </button>
         </div>
         <div class="mass-sc-chip" id="mass-sc-chip">
