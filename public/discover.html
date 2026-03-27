@@ -150,9 +150,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   width: 10px; height: 10px; border-radius: 50%;
   box-shadow: 0 0 6px currentColor;
 }
-.map-legend-dot.office { background: #5ba3a0; color: #5ba3a0; }
-.map-legend-dot.resi { background: #b8845c; color: #b8845c; }
-.map-legend-dot.brownfield { background: #8b6cc1; color: #8b6cc1; }
+.map-legend-dot.office { background: #5b7a9d; color: #5b7a9d; }
+.map-legend-dot.resi { background: #c4915a; color: #c4915a; }
+.map-legend-dot.mixed { background: #a07c9e; color: #a07c9e; }
+.map-legend-dot.brownfield { background: #8b7355; color: #8b7355; }
+.map-legend-dot.industrial { background: #7a7a96; color: #7a7a96; }
 
 /* BOROUGH SELECTOR - glass overlay at bottom of map */
 .borough-selector {
@@ -863,6 +865,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   <div class="map-legend">
     <div class="map-legend-item"><div class="map-legend-dot office"></div>Office</div>
     <div class="map-legend-item"><div class="map-legend-dot resi"></div>Residential</div>
+    <div class="map-legend-item"><div class="map-legend-dot mixed"></div>Mixed-use</div>
+    <div class="map-legend-item"><div class="map-legend-dot industrial"></div>Industrial</div>
     <div class="map-legend-item"><div class="map-legend-dot brownfield"></div>Brownfield</div>
   </div>
 </div>
@@ -998,11 +1002,13 @@ const scoreColor  = s => s >= 80 ? '#15803d' : s >= 65 ? '#b8845c' : s >= 50 ? '
 function inferUseType(s) {
   // Use explicit field first
   if (s.use) return s.use;
-  // Infer from name only (desc fields contain boilerplate - unreliable)
   var name = (s.name || s.address || '').toLowerCase();
-  if (/residential|resi|housing|homes|aylesbury|estate|depot.*resi|btr|pbsa|student|wharf.*resi|lodge|library|health centre|bus garage|clapton|hackney|dalston|kingsland|mare street|shoreditch.*resi/.test(name)) return 'resi';
-  if (/mixed residential/.test(name)) return 'resi';
-  if (/mixed non-resid/.test(name)) return 'office';
+  // Industrial
+  if (/industrial|warehouse|depot|trading estate|sidings|gasometer|factory|works\b|yard\b|wharf(?!.*resi)/.test(name)) return 'industrial';
+  // Mixed-use
+  if (/mixed residential|mixed non-resid|mixed use/.test(name)) return 'mixed';
+  // Residential
+  if (/residential|resi|housing|homes|aylesbury|estate(?!.*trading)|btr|pbsa|student|lodge|health centre|bus garage|clapton|hackney|dalston|kingsland|mare street/.test(name)) return 'resi';
   // City of London: almost all office
   if (/leadenhall|bishopsgate|moorgate|fenchurch|cannon street|liverpool street|fleet street|holborn|smithfield|bunhill|blackfriars.*ec|norton folgate|curtain road|worship street|minories|aldgate|trinity square/.test(name)) return 'office';
   return 'office'; // default
@@ -1493,7 +1499,7 @@ function addSiteMarkers() {
         type:'Feature',
         geometry:{type:'Point',coordinates:[s.lng,s.lat]},
         properties:{ id:s.id, score:s.score, name:s.name,
-          color: s.brownfield ? '#8b6cc1' : s.useType === 'resi' ? '#b8845c' : '#5ba3a0',
+          color: s.brownfield ? '#8b7355' : s.useType === 'mixed' ? '#a07c9e' : s.useType === 'industrial' ? '#7a7a96' : s.useType === 'resi' ? '#c4915a' : '#5b7a9d',
           r: 7 }
       };
     })
