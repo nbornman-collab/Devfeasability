@@ -1462,64 +1462,92 @@ function initMap(token) {
   };
 }
 
+var siteHtmlMarkers = [];
+
+function removeSiteHtmlMarkers() {
+  siteHtmlMarkers.forEach(function(m) { m.remove(); });
+  siteHtmlMarkers = [];
+}
+
 function addSiteMarkers() {
   if (!MAP || !ALL_SITES.length) return;
-  const geojson = {
+  var isSatellite = currentMapStyle === 'satellite';
+
+  // Remove HTML markers first
+  removeSiteHtmlMarkers();
+
+  var geojson = {
     type:'FeatureCollection',
-    features: ALL_SITES.map(s=>({
-      type:'Feature',
-      geometry:{type:'Point',coordinates:[s.lng,s.lat]},
-      properties:{
-        id:s.id, score:s.score, name:s.name,
-        color: '#b8845c',
-        r: s.score>=85 ? 8 : s.score>=70 ? 6 : 4,
-      }
-    }))
+    features: ALL_SITES.map(function(s) {
+      var r = s.score>=85 ? 9.2 : s.score>=70 ? 6.9 : 4.6; // +15%
+      return {
+        type:'Feature',
+        geometry:{type:'Point',coordinates:[s.lng,s.lat]},
+        properties:{ id:s.id, score:s.score, name:s.name, color:'#b8845c', r:r }
+      };
+    })
   };
+
+  if (isSatellite) {
+    // Satellite mode: HTML pin markers
+    removeSiteHtmlMarkers();
+    ALL_SITES.forEach(function(s) {
+      var el = document.createElement('div');
+      el.style.cssText = 'width:20px;height:28px;cursor:pointer;';
+      el.innerHTML = '<svg viewBox="0 0 20 28" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C4.477 0 0 4.477 0 10c0 7.5 10 18 10 18S20 17.5 20 10C20 4.477 15.523 0 10 0z" fill="#b8845c"/><circle cx="10" cy="10" r="4" fill="rgba(255,255,255,0.85)"/></svg>';
+      el.addEventListener('click', function() { cardClick(s.id); });
+      var marker = new mapboxgl.Marker({element: el}).setLngLat([s.lng, s.lat]).addTo(MAP);
+      siteHtmlMarkers.push(marker);
+    });
+    // Remove GL circle layers if they exist
+    ['sites-glow','sites-mid','sites-dot'].forEach(function(id) {
+      if (MAP.getLayer(id)) MAP.removeLayer(id);
+    });
+    if (MAP.getSource('sites')) MAP.removeSource('sites');
+    return;
+  }
+
+  // Dark map mode: glow circle layers (no slot - works on all styles)
   if (MAP.getSource('sites')) {
     MAP.getSource('sites').setData(geojson);
     return;
   }
   MAP.addSource('sites',{type:'geojson',data:geojson});
-  // Outer glow - soft radial fade
-  MAP.addLayer({id:'sites-glow',type:'circle',source:'sites',slot:'top',paint:{
-    'circle-radius':['*',['get','r'],2.8],
+  // Outer glow - stretched gradient fades to edge
+  MAP.addLayer({id:'sites-glow',type:'circle',source:'sites',paint:{
+    'circle-radius':['*',['get','r'],3.5],
     'circle-color':['get','color'],
-    'circle-opacity':0.18,
-    'circle-blur':0.8
+    'circle-opacity':0.15,
+    'circle-blur':1.0
   }});
   // Mid halo
-  MAP.addLayer({id:'sites-mid',type:'circle',source:'sites',slot:'top',paint:{
-    'circle-radius':['*',['get','r'],1.5],
+  MAP.addLayer({id:'sites-mid',type:'circle',source:'sites',paint:{
+    'circle-radius':['*',['get','r'],1.8],
     'circle-color':['get','color'],
-    'circle-opacity':0.45,
-    'circle-blur':0.4
+    'circle-opacity':0.38,
+    'circle-blur':0.5
   }});
   // Solid core
-  MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',slot:'top',paint:{
+  MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',paint:{
     'circle-radius':['get','r'],
     'circle-color':['get','color'],
     'circle-opacity':0.95,
     'circle-blur':0
   }});
-  MAP.on('click','sites-dot',e=>{
-    const id = e.features[0].properties.id;
-    // Scroll to card and activate
-    const site = ALL_SITES.find(s=>s.id===id);
+  MAP.on('click','sites-dot',function(e) {
+    var id = e.features[0].properties.id;
+    var site = ALL_SITES.find(function(s){return s.id===id;});
     if (!site) return;
-    // Ensure the site is visible in current mode; if not, switch to borough
-    const visible = filteredSites().find(s=>s.id===id);
+    var visible = filteredSites().find(function(s){return s.id===id;});
     if (!visible) {
       activeBorough = site.borough;
-      document.querySelectorAll('.borough-pill').forEach(p=>p.classList.toggle('active',p.dataset.borough===site.borough));
+      document.querySelectorAll('.borough-pill').forEach(function(p){p.classList.toggle('active',p.dataset.borough===site.borough);});
       setMode('borough');
     }
-    setTimeout(()=>{
-      cardClick(id);
-    },100);
+    setTimeout(function(){ cardClick(id); },100);
   });
-  MAP.on('mouseenter','sites-dot',()=>MAP.getCanvas().style.cursor='pointer');
-  MAP.on('mouseleave','sites-dot',()=>MAP.getCanvas().style.cursor='');
+  MAP.on('mouseenter','sites-dot',function(){MAP.getCanvas().style.cursor='pointer';});
+  MAP.on('mouseleave','sites-dot',function(){MAP.getCanvas().style.cursor='';});
 }
 
 function addBoroughOutlines() {
