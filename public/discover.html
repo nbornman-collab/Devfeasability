@@ -992,10 +992,16 @@ const boroughShort = b => {
 const scoreColor  = s => s >= 80 ? '#15803d' : s >= 65 ? '#b8845c' : s >= 50 ? '#b45309' : '#999990';
 
 function inferUseType(s) {
-  var text = ((s.desc||'') + ' ' + (s.notes||'') + ' ' + (s.name||'')).toLowerCase();
-  if (/\b(resi|residential|homes|apartments|flats|housing|build to rent|btr|pbsa|student)\b/.test(text)) return 'resi';
-  if (/\b(office|commercial|workspace|co-working|lab|hotel)\b/.test(text)) return 'office';
-  return s.use || 'office'; // default office for London commercial screener
+  // Use explicit field first
+  if (s.use) return s.use;
+  // Infer from name only (desc fields contain boilerplate - unreliable)
+  var name = (s.name || s.address || '').toLowerCase();
+  if (/residential|resi|housing|homes|aylesbury|estate|depot.*resi|btr|pbsa|student|wharf.*resi|lodge|library|health centre|bus garage|clapton|hackney|dalston|kingsland|mare street|shoreditch.*resi/.test(name)) return 'resi';
+  if (/mixed residential/.test(name)) return 'resi';
+  if (/mixed non-resid/.test(name)) return 'office';
+  // City of London: almost all office
+  if (/leadenhall|bishopsgate|moorgate|fenchurch|cannon street|liverpool street|fleet street|holborn|smithfield|bunhill|blackfriars.*ec|norton folgate|curtain road|worship street|minories|aldgate|trinity square/.test(name)) return 'office';
+  return 'office'; // default
 }
 
 function normaliseSite(s, idx) {
