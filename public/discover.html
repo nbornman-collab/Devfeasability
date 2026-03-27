@@ -583,7 +583,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .mass-scrim.open { display: flex; opacity: 1; }
 .mass-modal {
-  width: 90vw; height: 90vh; max-width: 1600px;
+  width: 94vw; height: 90vh; max-width: 1800px;
   background: #111110; border-radius: 20px; overflow: hidden;
   display: flex; position: relative;
   box-shadow: 0 32px 80px rgba(0,0,0,.5);
@@ -638,28 +638,29 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* Scenario tabs overlay */
 .mass-scenario-tabs {
   position: absolute; top: 20px; left: 20px; z-index: 10;
-  display: flex; gap: 0; border-radius: 8px; overflow: hidden;
-  border: 1px solid rgba(255,255,255,.2);
+  display: flex; gap: 0; border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.25);
+  backdrop-filter: blur(16px);
 }
 .mass-sc-tab {
-  padding: 12px 20px;
-  background: rgba(17,17,16,.7); backdrop-filter: blur(12px);
-  border: none; border-right: 1px solid rgba(255,255,255,.12);
-  color: rgba(255,255,255,.45); cursor: pointer;
+  padding: 12px 24px;
+  background: transparent;
+  border: none; border-right: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.5); cursor: pointer;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  transition: background .15s, color .15s; min-width: 80px;
+  transition: background .15s, color .15s; min-width: 88px;
 }
 .mass-sc-tab:last-child { border-right: none; }
 .mass-sc-tab.active { background: var(--accent); color: #fff; }
-.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
+.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.08); color: rgba(255,255,255,.85); }
 .mass-sc-label { font: 700 13px var(--sans); letter-spacing: .06em; }
 .mass-sc-floors { font: 500 18px var(--mono); letter-spacing: -.02em; }
 
 /* Right: info strip */
 .mass-info {
-  width: 420px; flex-shrink: 0; background: #111110;
+  width: 480px; flex-shrink: 0; background: #111110;
   border-left: 1px solid rgba(255,255,255,.08);
-  padding: 32px 32px; display: flex; flex-direction: column;
+  padding: 32px 36px; display: flex; flex-direction: column;
   overflow-y: auto;
 }
 .mass-site-name {
@@ -1890,17 +1891,15 @@ function initPegman() {
     ghost.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;font-size:32px;transform:translate(-50%,-100%);';
     ghost.textContent = '🚶';
     document.body.appendChild(ghost);
-    // Drop indicator pin on the map
+    // Drop indicator - fixed position, above everything
     var dropPin = document.createElement('div');
-    dropPin.style.cssText = 'position:absolute;z-index:20;pointer-events:none;display:none;transform:translate(-50%,-100%);';
-    dropPin.innerHTML = '<div style="width:20px;height:20px;border-radius:50% 50% 50% 0;background:#b8845c;border:2px solid #fff;transform:rotate(-45deg);box-shadow:0 2px 8px rgba(0,0,0,.4);"></div><div style="width:2px;height:12px;background:#b8845c;margin:0 auto;"></div>';
-    var mapEl2 = document.getElementById('mass-3d');
-    if (mapEl2) { mapEl2.style.position = 'relative'; mapEl2.appendChild(dropPin); }
+    dropPin.style.cssText = 'position:fixed;z-index:99999;pointer-events:none;display:none;transform:translate(-50%,-100%);';
+    dropPin.innerHTML = '<div style="width:22px;height:22px;border-radius:50% 50% 50% 0;background:#b8845c;border:2.5px solid #fff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5);"></div><div style="width:2px;height:14px;background:#b8845c;margin:0 auto;margin-top:1px;"></div>';
+    document.body.appendChild(dropPin);
 
     function onMove(ev) {
       ghost.style.left = ev.clientX + 'px';
       ghost.style.top = ev.clientY + 'px';
-      // Show pin on map when hovering over it
       var mapEl = document.getElementById('mass-3d');
       if (mapEl) {
         var rect = mapEl.getBoundingClientRect();
@@ -1908,8 +1907,8 @@ function initPegman() {
         var y = ev.clientY - rect.top;
         if (x >= 0 && y >= 0 && x <= rect.width && y <= rect.height) {
           dropPin.style.display = 'block';
-          dropPin.style.left = x + 'px';
-          dropPin.style.top = y + 'px';
+          dropPin.style.left = ev.clientX + 'px';
+          dropPin.style.top = ev.clientY + 'px';
         } else {
           dropPin.style.display = 'none';
         }
@@ -1918,7 +1917,7 @@ function initPegman() {
     function onUp(ev) {
       btn.classList.remove('dragging');
       document.body.removeChild(ghost);
-      if (dropPin.parentNode) dropPin.parentNode.removeChild(dropPin);
+      document.body.removeChild(dropPin);
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseup', onUp);
       var mapEl = document.getElementById('mass-3d');
