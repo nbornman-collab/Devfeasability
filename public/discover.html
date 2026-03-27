@@ -610,20 +610,30 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .mass-sv-wrap.active { display: block; }
 
-/* View toggle (3D / Street View) */
-.mass-view-toggle {
+/* Pegman Street View */
+.mass-pegman-btn {
   position: absolute; bottom: 20px; left: 20px; z-index: 10;
-  display: flex; gap: 0; border-radius: 8px; overflow: hidden;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 8px;
+  background: rgba(17,17,16,.75); backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.7); font: 600 11px var(--sans);
+  letter-spacing: .1em; text-transform: uppercase;
+  cursor: grab; user-select: none; transition: background .15s, color .15s;
 }
-.mass-view-btn {
-  padding: 10px 18px; background: rgba(0,0,0,.5); backdrop-filter: blur(8px);
-  border: none; color: rgba(255,255,255,.6); font: 600 11px var(--sans);
-  letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
-  transition: background .15s, color .15s;
+.mass-pegman-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.mass-pegman-btn.dragging { cursor: grabbing; background: var(--accent); color: #fff; opacity: .85; }
+.mass-pegman-icon { font-size: 18px; }
+.mass-sv-back {
+  position: absolute; top: 20px; right: 20px; z-index: 10;
+  padding: 8px 14px; border-radius: 8px;
+  background: rgba(17,17,16,.75); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.7); font: 600 11px var(--sans);
+  letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; display: none;
 }
-.mass-view-btn.active { background: var(--accent); color: #fff; }
-.mass-view-btn:hover:not(.active) { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); }
+.mass-sv-back.visible { display: block; }
 
 /* Scenario tabs overlay */
 .mass-scenario-tabs {
@@ -632,21 +642,24 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   border: 1px solid rgba(255,255,255,.2);
 }
 .mass-sc-tab {
-  padding: 12px 20px; background: rgba(0,0,0,.5); backdrop-filter: blur(8px);
-  border: none; color: rgba(255,255,255,.55); cursor: pointer;
+  padding: 12px 20px;
+  background: rgba(17,17,16,.7); backdrop-filter: blur(12px);
+  border: none; border-right: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.45); cursor: pointer;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  transition: background .15s, color .15s; min-width: 72px;
+  transition: background .15s, color .15s; min-width: 80px;
 }
+.mass-sc-tab:last-child { border-right: none; }
 .mass-sc-tab.active { background: var(--accent); color: #fff; }
-.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.1); }
+.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
 .mass-sc-label { font: 700 13px var(--sans); letter-spacing: .06em; }
 .mass-sc-floors { font: 500 18px var(--mono); letter-spacing: -.02em; }
 
 /* Right: info strip */
 .mass-info {
-  width: 320px; flex-shrink: 0; background: #111110;
+  width: 420px; flex-shrink: 0; background: #111110;
   border-left: 1px solid rgba(255,255,255,.08);
-  padding: 32px 28px; display: flex; flex-direction: column;
+  padding: 32px 32px; display: flex; flex-direction: column;
   overflow-y: auto;
 }
 .mass-site-name {
@@ -1555,8 +1568,16 @@ function openMassPopup(site) {
     b.classList.toggle('active', b.dataset.view === '3d');
   });
 
+  // Reset SV state
+  document.getElementById('mass-sv').classList.remove('active');
+  document.getElementById('mass-sv-back').classList.remove('visible');
+  document.getElementById('mass-pegman').style.display = 'flex';
+  var tabsWrap = document.getElementById('mass-scenario-tabs-wrap');
+  if (tabsWrap) tabsWrap.style.display = 'flex';
+
   // Init or update 3D map
   initMassMap(site, scenarios);
+  setTimeout(initPegman, 100);
 }
 
 function closeMassPopup() {
@@ -1653,16 +1674,12 @@ function switchMassScenario(key) {
   if (massMap) updateMassingLayers(massMap, massSite, sc);
 }
 
-function switchMassView(view) {
-  document.querySelectorAll('.mass-view-btn').forEach(function(b) {
-    b.classList.toggle('active', b.dataset.view === view);
-  });
-  if (view === 'sv') {
-    document.getElementById('mass-sv').classList.add('active');
-    initStreetView();
-  } else {
-    document.getElementById('mass-sv').classList.remove('active');
-  }
+function massExitSV() {
+  document.getElementById('mass-sv').classList.remove('active');
+  document.getElementById('mass-sv-back').classList.remove('visible');
+  document.getElementById('mass-pegman').style.display = 'flex';
+  var tabsWrap = document.getElementById('mass-scenario-tabs-wrap');
+  if (tabsWrap) tabsWrap.style.display = 'flex';
 }
 
 function initMassMap(site, scenarios) {
@@ -1823,36 +1840,77 @@ function updateMassingLayers(map, site, sc) {
   addMassingLayers(map, site, sc);
 }
 
-function initStreetView() {
-  if (!massSite) return;
-  var container = document.getElementById('mass-sv');
-  if (!window.google || !window.google.maps) {
-    // Load Google Maps
-    fetch('/api/config').then(function(r) { return r.json(); }).then(function(cfg) {
-      if (!cfg.googleMapsKey) { container.innerHTML = '<div style="padding:40px;color:rgba(255,255,255,.4);font:400 14px var(--sans);">Street View unavailable</div>'; return; }
-      if (window.google && window.google.maps) { buildSV(); return; }
-      var s = document.createElement('script');
-      s.src = 'https://maps.googleapis.com/maps/api/js?key=' + cfg.googleMapsKey + '&callback=_massSVReady';
-      window._massSVReady = function() { buildSV(); };
-      document.head.appendChild(s);
-    });
-    return;
-  }
-  buildSV();
-}
-
-function buildSV() {
-  if (!massSite) return;
+function buildSVAt(lat, lng) {
   var container = document.getElementById('mass-sv');
   container.innerHTML = '';
-  massSV = new google.maps.StreetViewPanorama(container, {
-    position: { lat: massSite.lat, lng: massSite.lng },
-    pov: { heading: 0, pitch: 5 },
-    zoom: 0,
-    addressControl: false,
-    fullscreenControl: false,
-    motionTracking: false,
-    motionTrackingControl: false
+
+  function doRender() {
+    var svc = new google.maps.StreetViewService();
+    svc.getPanorama({ location: { lat: lat, lng: lng }, radius: 100 }, function(data, status) {
+      if (status === 'OK') {
+        massSV = new google.maps.StreetViewPanorama(container, {
+          position: { lat: lat, lng: lng },
+          pov: { heading: 0, pitch: 5 },
+          zoom: 0,
+          addressControl: false,
+          fullscreenControl: false,
+          motionTracking: false,
+          motionTrackingControl: false
+        });
+      } else {
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,.4);font:400 14px var(--sans);text-align:center;padding:40px;">No Street View here - try dropping on a nearby road</div>';
+      }
+      container.classList.add('active');
+      document.getElementById('mass-sv-back').classList.add('visible');
+      document.getElementById('mass-pegman').style.display = 'none';
+      var tabsWrap = document.getElementById('mass-scenario-tabs-wrap');
+      if (tabsWrap) tabsWrap.style.display = 'none';
+    });
+  }
+
+  if (window.google && window.google.maps) { doRender(); return; }
+  fetch('/api/config').then(function(r) { return r.json(); }).then(function(cfg) {
+    if (!cfg.googleMapsKey) return;
+    if (window.google && window.google.maps) { doRender(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=' + cfg.googleMapsKey + '&callback=_massPegReady';
+    window._massPegReady = function() { doRender(); };
+    document.head.appendChild(s);
+  });
+}
+
+// Pegman drag-and-drop
+function initPegman() {
+  var btn = document.getElementById('mass-pegman');
+  if (!btn) return;
+  btn.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    btn.classList.add('dragging');
+    var ghost = document.createElement('div');
+    ghost.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;font-size:32px;transform:translate(-50%,-100%);';
+    ghost.textContent = '🚶';
+    document.body.appendChild(ghost);
+    function onMove(ev) {
+      ghost.style.left = ev.clientX + 'px';
+      ghost.style.top = ev.clientY + 'px';
+    }
+    function onUp(ev) {
+      btn.classList.remove('dragging');
+      document.body.removeChild(ghost);
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      var mapEl = document.getElementById('mass-3d');
+      if (!mapEl || !massMap) return;
+      var rect = mapEl.getBoundingClientRect();
+      var x = ev.clientX - rect.left;
+      var y = ev.clientY - rect.top;
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
+      var lngLat = massMap.unproject([x, y]);
+      buildSVAt(lngLat.lat, lngLat.lng);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    onMove(e);
   });
 }
 
@@ -1881,7 +1939,7 @@ document.addEventListener('keydown', function(e) {
       <div class="mass-sv-wrap" id="mass-sv"></div>
 
       <!-- Scenario tabs -->
-      <div class="mass-scenario-tabs">
+      <div class="mass-scenario-tabs" id="mass-scenario-tabs-wrap">
         <button class="mass-sc-tab active" id="mass-tab-lo" onclick="switchMassScenario('lo')">
           <span class="mass-sc-label">Low</span>
           <span class="mass-sc-floors">6F</span>
@@ -1896,11 +1954,11 @@ document.addEventListener('keydown', function(e) {
         </button>
       </div>
 
-      <!-- View toggle -->
-      <div class="mass-view-toggle">
-        <button class="mass-view-btn active" data-view="3d" onclick="switchMassView('3d')">3D Massing</button>
-        <button class="mass-view-btn" data-view="sv" onclick="switchMassView('sv')">Street View</button>
+      <!-- Pegman Street View -->
+      <div class="mass-pegman-btn" id="mass-pegman" title="Drag to view Street View">
+        <span class="mass-pegman-icon">🚶</span>Street View
       </div>
+      <button class="mass-sv-back" id="mass-sv-back" onclick="massExitSV()">← 3D</button>
     </div>
 
     <!-- Right: info strip -->
