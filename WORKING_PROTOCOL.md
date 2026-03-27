@@ -768,3 +768,36 @@ After reset: grep audit across all files flagging opacity < 0.65 on dark backgro
 - Minimum monospace (`var(--mono)`, JetBrains Mono) font size: **18px**
 - Applies to all metric values, scores, prices, financial figures
 - No mono text smaller than 18px anywhere on the product surface
+
+## DISCOVER MASSING POPUP - LOCKED DESIGN (2026-03-27, commit 48a28a4)
+
+**Do not modify popup design without Nic explicit approval.**
+
+### Tab card
+- Single unified dark box: `rgba(0,0,0,.65)` + `1px solid rgba(255,255,255,.1)` - NO backdrop-filter/blur
+- `min-width: 476px`, left-aligned at `top: 16px; left: 16px`
+- Tab format: `LOW - 8F` / `BASE - 11F` / `HIGH - 14F` (single line, label + sep + floors)
+- Active tab: `rgba(255,255,255,.1)` bg + white text + copper inset border `box-shadow: inset 0 0 0 1.5px var(--accent)`
+- Inactive tabs: transparent + `rgba(255,255,255,.35)` text
+- **Copper divider**: `4px solid var(--accent)` between tabs and data row + `drop-shadow(0 3px 8px rgba(184,132,92,.45))`
+- Data row: copper tint bg `rgba(184,132,92,.06)`, shows Added floors / Added NIA / Est. height / Build cost
+- Data row fades in on popup open and on tab switch
+
+### Right panel
+- Width: `480px`, padding `32px 36px`
+- Site name: `36px Instrument Serif`
+- Address: uppercase `13px` sans, `rgba(255,255,255,.45)`
+- Verdict pill: `align-self: flex-start` (not full width)
+- Gated list: 5 items with icon + name + copper "Full report" tag
+
+### Street View (pegman)
+- Drag 🚶 onto map canvas - drop pin (copper teardrop, `position:fixed z-index:99999`) follows cursor
+- On drop: `StreetViewService.getPanorama` with 100m radius, opens in left canvas
+- `← 3D` button at `top: 68px right: 20px` to return
+- Escape key: first press exits SV → back to 3D; second press closes popup
+
+### Scrim
+- Close only on genuine click (mousedown AND mouseup both on scrim) - drag-rotate safe
+
+### Ghosted black standard (approved 2026-03-27)
+All UI overlays on maps use `rgba(0,0,0,.65)` + `1px solid rgba(255,255,255,.1)` - NO glass/blur effects.
