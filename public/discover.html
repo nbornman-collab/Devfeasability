@@ -1442,6 +1442,10 @@ function initMap(token) {
     MAP.setPadding({top:60, bottom:60, left:20, right:panelW});
     MAP.setCenter([-0.090, 51.505]);
     addSiteMarkers();
+    // Hairline white ring on satellite for contrast
+    if (currentMapStyle === 'satellite' && MAP.getLayer('sites-dot')) {
+      MAP.setPaintProperty('sites-dot', 'circle-stroke-width', 1.5);
+    }
     mapStyleSwitching = false;
     setTimeout(function() { document.getElementById('map-fade').classList.remove('active'); }, 100);
   });
@@ -1523,7 +1527,9 @@ function addSiteMarkers() {
   MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',paint:{
     'circle-radius':['get','r'],
     'circle-color':['get','color'],
-    'circle-opacity':0.95, 'circle-blur':0
+    'circle-opacity':0.95, 'circle-blur':0,
+    'circle-stroke-width':0,
+    'circle-stroke-color':'rgba(255,255,255,0.85)'
   }});
   MAP.on('click','sites-dot',function(e) {
     var id = e.features[0].properties.id;
