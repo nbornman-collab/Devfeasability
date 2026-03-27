@@ -1423,6 +1423,7 @@ function initMap(token) {
   // Auto-switch style on zoom threshold
   MAP.on('zoom', function() {
     if (mapStyleSwitching) return;
+    if (!MAP.loaded()) return;
     var z = MAP.getZoom();
     if (z >= ZOOM_AERIAL_THRESHOLD && currentMapStyle === 'map') {
       mapStyleSwitching = true;
@@ -1822,10 +1823,9 @@ function initMassMap(site, scenarios) {
   massMap.touchZoomRotate.enable();
 
   massMap.on('style.load', function() {
-    massMap.setConfigProperty('basemap', 'lightPreset', 'dawn');
+    massMap.setConfigProperty('basemap', 'lightPreset', 'day');
     massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
     massMap.setConfigProperty('basemap', 'showTransitLabels', false);
-    massMap.setConfigProperty('basemap', 'colorBuildings', '#c8c5be');
     var sc = scenarios[massScenario];
     addMassingLayers(massMap, site, sc);
   });
