@@ -133,6 +133,25 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .map-style-btn.active { background: #b8845c; color: #fff; }
 .map-style-btn:hover:not(.active) { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); }
 
+/* MAP LEGEND */
+.map-legend {
+  position: fixed; bottom: 20px; left: 16px; z-index: 7;
+  background: rgba(0,0,0,.65); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 6px; padding: 10px 14px; display: flex; gap: 14px;
+}
+.map-legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font: 500 11px var(--sans); color: rgba(255,255,255,.7);
+  letter-spacing: .04em;
+}
+.map-legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+.map-legend-dot.office { background: #5ba3a0; color: #5ba3a0; }
+.map-legend-dot.resi { background: #b8845c; color: #b8845c; }
+.map-legend-dot.brownfield { background: #8b6cc1; color: #8b6cc1; }
+
 /* BOROUGH SELECTOR - glass overlay at bottom of map */
 .borough-selector {
   flex-shrink: 0;
@@ -838,6 +857,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   <button class="map-style-btn" data-style="satellite" onclick="switchMapStyle('satellite')">Satellite</button>
   <button class="map-style-btn active" data-style="map" onclick="switchMapStyle('map')">Map</button>
 </div>
+<div class="map-legend">
+  <div class="map-legend-item"><div class="map-legend-dot office"></div>Office</div>
+  <div class="map-legend-item"><div class="map-legend-dot resi"></div>Residential</div>
+  <div class="map-legend-item"><div class="map-legend-dot brownfield"></div>Brownfield</div>
+</div>
 
 <!-- Left overlays: hero stats (top) + borough selector (bottom) -->
 <div class="col-left">
@@ -1002,6 +1026,7 @@ function normaliseSite(s, idx) {
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
     ptal, maxFloors, plotM2, gdvEst, planScore, heritTier,
     useType: s.use || inferUseType(s),
+    brownfield: !!(s.brownfield || (s.source && s.source.indexOf('brownfield') !== -1)),
     offMarket: s.offMarket||'unknown',
     owner: s.owner||null,
     planning: s.planning||null,
@@ -1462,7 +1487,7 @@ function addSiteMarkers() {
         type:'Feature',
         geometry:{type:'Point',coordinates:[s.lng,s.lat]},
         properties:{ id:s.id, score:s.score, name:s.name,
-          color: s.useType === 'resi' ? '#b8845c' : '#5ba3a0',
+          color: s.brownfield ? '#8b6cc1' : s.useType === 'resi' ? '#b8845c' : '#5ba3a0',
           r: 7 }
       };
     })
