@@ -1718,14 +1718,19 @@ function switchMassScenario(key) {
 
 function updateMassScChip(sc, site) {
   var chip = document.getElementById('mass-sc-chip');
-  if (!chip) return;
-  var erv = (site.erv || 700);
-  var gdvM = Math.round(sc.niaTotal * erv * 10.7639 / 0.0475 / 1e6);
-  document.getElementById('chip-gia').textContent = Math.round(sc.giaTotal).toLocaleString() + 'm²';
-  document.getElementById('chip-nia').textContent = Math.round(sc.niaTotal).toLocaleString() + 'm²';
-  document.getElementById('chip-eff').textContent = Math.round(sc.niaTotal / sc.giaTotal * 100) + '%';
-  document.getElementById('chip-gdv').textContent = '£' + gdvM + 'M';
-  // Animate in
+  if (!chip || !sc) return;
+  var floorH = 3.8;
+  var totalH = Math.round(sc.floors * floorH);
+  var costPerM2 = 4200;
+  var costM = Math.round(sc.giaTotal * costPerM2 / 1e6);
+  var addFEl = document.getElementById('chip-addf');
+  var addNEl = document.getElementById('chip-addnia');
+  var htEl = document.getElementById('chip-height');
+  var costEl = document.getElementById('chip-cost');
+  if (addFEl) addFEl.textContent = '+' + sc.addedF + 'F';
+  if (addNEl) addNEl.textContent = '+' + (sc.addedNIA || 0).toLocaleString() + 'm²';
+  if (htEl) htEl.textContent = '~' + totalH + 'm';
+  if (costEl) costEl.textContent = '£' + costM + 'M';
   chip.classList.remove('visible');
   setTimeout(function() { chip.classList.add('visible'); }, 20);
 }
@@ -2052,10 +2057,10 @@ document.addEventListener('keydown', function(e) {
           <span class="mass-sc-floors">10F</span>
         </button>
         <div class="mass-sc-chip" id="mass-sc-chip">
-          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-gia">-</span><span class="mass-sc-chip-lbl">GIA</span></div>
-          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-nia">-</span><span class="mass-sc-chip-lbl">NIA</span></div>
-          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-eff">-</span><span class="mass-sc-chip-lbl">Efficiency</span></div>
-          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-gdv">-</span><span class="mass-sc-chip-lbl">Est. GDV</span></div>
+          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addf">-</span><span class="mass-sc-chip-lbl">Added floors</span></div>
+          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addnia">-</span><span class="mass-sc-chip-lbl">Added NIA</span></div>
+          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-height">-</span><span class="mass-sc-chip-lbl">Est. height</span></div>
+          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-cost">-</span><span class="mass-sc-chip-lbl">Build cost</span></div>
         </div>
       </div>
 
