@@ -699,6 +699,19 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   display: block; font: 400 13px var(--sans); letter-spacing: 0;
   text-transform: none; color: rgba(255,255,255,.5); margin-top: 6px;
 }
+/* Analyst hook in popup */
+.mass-hook {
+  background: rgba(184,132,92,.08); border: 1px solid rgba(184,132,92,.2);
+  border-radius: 10px; padding: 16px 18px; margin-bottom: 16px;
+}
+.mass-hook-label {
+  font: 700 11px var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+}
+.mass-hook-text {
+  font: 400 14px/1.7 var(--sans); color: rgba(255,255,255,.75);
+}
+.mass-hook-text strong { color: rgba(255,255,255,.95); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -1491,6 +1504,10 @@ function openMassPopup(site) {
   updateMassMetrics(base, site);
   updateMassScenarioTabs(scenarios);
 
+  // Analyst hook
+  var hookEl = document.getElementById('mass-hook-text');
+  if (hookEl) hookEl.innerHTML = analystHook(site);
+
   // Show 3D view by default
   document.getElementById('mass-sv').classList.remove('active');
   document.querySelectorAll('.mass-view-btn').forEach(function(b) {
@@ -1623,7 +1640,7 @@ function initMassMap(site, scenarios) {
   massMap.touchZoomRotate.enable();
 
   massMap.on('style.load', function() {
-    massMap.setConfigProperty('basemap', 'lightPreset', 'dusk');
+    massMap.setConfigProperty('basemap', 'lightPreset', 'dawn');
     massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
     massMap.setConfigProperty('basemap', 'showTransitLabels', false);
     var sc = scenarios[massScenario];
@@ -1860,6 +1877,11 @@ document.addEventListener('keydown', function(e) {
       <div class="mass-metrics" id="mass-metrics"></div>
 
       <div class="mass-divider"></div>
+
+      <div class="mass-hook">
+        <div class="mass-hook-label">Intelligence Signal</div>
+        <div class="mass-hook-text" id="mass-hook-text"></div>
+      </div>
 
       <div class="mass-gated">
         <div class="mass-gated-row"><span class="mass-gated-dot"></span>Heritage shadow analysis<span class="mass-gated-line"></span></div>
