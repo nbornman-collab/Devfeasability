@@ -660,18 +660,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* Scenario data chip - drops below active tab */
 .mass-sc-chip {
-  position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+  position: absolute; top: calc(100% + 10px); left: 16px;
   z-index: 9; display: flex; gap: 0;
   background: rgba(0,0,0,.52); backdrop-filter: blur(20px) saturate(0);
   border: 1px solid rgba(255,255,255,.14); border-radius: 6px; overflow: hidden;
   opacity: 0; pointer-events: none;
   transition: opacity .2s ease, transform .2s ease;
-  transform: translateX(-50%) translateY(-6px);
+  transform: translateY(-6px);
   white-space: nowrap;
 }
 .mass-sc-chip.visible {
   opacity: 1; pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 .mass-sc-chip-item {
   padding: 8px 16px; border-right: 1px solid rgba(255,255,255,.1);
