@@ -33,9 +33,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── NAV ── */
 .da-nav {
   position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
-  background: rgba(242,241,237,0.97);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(242,241,237,1);
   border-bottom: 1px solid rgba(255,255,255,0.3);
   display: flex; align-items: center; padding: 0 24px; gap: 20px; z-index: 200;
 }
@@ -93,9 +91,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   flex-shrink: 0;
   padding: 16px 20px 14px;
   display: flex; gap: 0; align-items: stretch;
-  background: rgba(242,241,237,0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(242,241,237,1);
   border-bottom: 2px solid rgba(184,132,92,0.18);
 }
 .hero-stat {
@@ -141,9 +137,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .borough-selector {
   flex-shrink: 0;
   padding: 10px 16px 12px;
-  background: rgba(242,241,237,0.90);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(242,241,237,0.98);
   border-top: 1px solid rgba(255,255,255,0.3);
   margin-top: auto;
 }
@@ -174,9 +168,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   width: var(--panel-w); height: calc(100% - var(--nav-h));
   display: flex; flex-direction: column;
   overflow: hidden; z-index: 10;
-  background: rgba(242,241,237,0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(242,241,237,0.98);
   border-left: 1px solid rgba(255,255,255,0.45);
   box-shadow: -4px 0 32px rgba(17,17,16,.10);
 }
@@ -186,9 +178,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   display: none; flex-direction: column;
   position: absolute; inset: 0;
   overflow-y: auto; -webkit-overflow-scrolling: touch;
-  background: rgba(210,205,195,0.97);
-  backdrop-filter: blur(28px) saturate(1.6);
-  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  background: rgba(210,205,195,1);
   animation: panelSlideIn .28s cubic-bezier(.22,1,.36,1);
   z-index: 20;
 }
@@ -585,7 +575,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── MASSING POPUP (90vh, 16:9) ── */
 .mass-scrim {
   position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,.65); backdrop-filter: blur(6px);
+  background: rgba(0,0,0,.65);
   display: none; align-items: center; justify-content: center;
   opacity: 0; transition: opacity .25s ease;
 }
@@ -623,7 +613,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   position: absolute; bottom: 20px; left: 20px; z-index: 10;
   display: flex; align-items: center; gap: 8px;
   padding: 10px 16px; border-radius: 8px;
-  background: rgba(17,17,16,.75); backdrop-filter: blur(10px);
+  background: rgba(0,0,0,.65);
   border: 1px solid rgba(255,255,255,.2);
   color: rgba(255,255,255,.7); font: 600 11px var(--sans);
   letter-spacing: .1em; text-transform: uppercase;
@@ -635,7 +625,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .mass-sv-back {
   position: absolute; top: 68px; right: 20px; z-index: 10;
   padding: 8px 14px; border-radius: 8px;
-  background: rgba(17,17,16,.75); backdrop-filter: blur(10px);
+  background: rgba(0,0,0,.65);
   border: 1px solid rgba(255,255,255,.2);
   color: rgba(255,255,255,.7); font: 600 11px var(--sans);
   letter-spacing: .1em; text-transform: uppercase;
