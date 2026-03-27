@@ -118,8 +118,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   color: rgba(255,255,255,0.7); pointer-events: none;
   text-shadow: 0 1px 4px rgba(0,0,0,.5);
 }
+.map-controls {
+  position: fixed; bottom: 20px; left: 16px; z-index: 7;
+  display: flex; flex-direction: column; gap: 6px;
+}
 .map-style-toggle {
-  position: fixed; top: calc(var(--nav-h) + 12px); right: calc(50% + 12px); z-index: 7;
   display: flex; gap: 0; border-radius: 6px; overflow: hidden;
   border: 1px solid rgba(255,255,255,.15);
   box-shadow: 0 2px 12px rgba(0,0,0,.4);
@@ -135,9 +138,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* MAP LEGEND */
 .map-legend {
-  position: fixed; bottom: 20px; left: 16px; z-index: 7;
   background: rgba(0,0,0,.65); border: 1px solid rgba(255,255,255,.1);
-  border-radius: 6px; padding: 10px 14px; display: flex; gap: 14px;
+  border-radius: 6px; padding: 8px 14px; display: flex; gap: 14px;
 }
 .map-legend-item {
   display: flex; align-items: center; gap: 6px;
@@ -853,14 +855,16 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 <div id="map-canvas"></div>
 <div id="map-fade"></div>
 <div class="map-label">London Development Intelligence</div>
-<div class="map-style-toggle">
-  <button class="map-style-btn" data-style="satellite" onclick="switchMapStyle('satellite')">Satellite</button>
-  <button class="map-style-btn active" data-style="map" onclick="switchMapStyle('map')">Map</button>
-</div>
-<div class="map-legend">
-  <div class="map-legend-item"><div class="map-legend-dot office"></div>Office</div>
-  <div class="map-legend-item"><div class="map-legend-dot resi"></div>Residential</div>
-  <div class="map-legend-item"><div class="map-legend-dot brownfield"></div>Brownfield</div>
+<div class="map-controls">
+  <div class="map-style-toggle">
+    <button class="map-style-btn" data-style="satellite" onclick="switchMapStyle('satellite')">Satellite</button>
+    <button class="map-style-btn active" data-style="map" onclick="switchMapStyle('map')">Map</button>
+  </div>
+  <div class="map-legend">
+    <div class="map-legend-item"><div class="map-legend-dot office"></div>Office</div>
+    <div class="map-legend-item"><div class="map-legend-dot resi"></div>Residential</div>
+    <div class="map-legend-item"><div class="map-legend-dot brownfield"></div>Brownfield</div>
+  </div>
 </div>
 
 <!-- Left overlays: hero stats (top) + borough selector (bottom) -->
