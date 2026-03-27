@@ -854,7 +854,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 <!-- Full-canvas map (behind all overlays) -->
 <div id="map-canvas"></div>
 <div id="map-fade"></div>
-<div class="map-label">London Development Intelligence</div>
+
 <div class="map-controls">
   <div class="map-style-toggle">
     <button class="map-style-btn" data-style="satellite" onclick="switchMapStyle('satellite')">Satellite</button>
@@ -1440,9 +1440,11 @@ function initMap(token) {
   });
 
   // Auto-switch style on zoom threshold
+  var mapInitialised = false;
+  MAP.once('idle', function() { mapInitialised = true; });
   MAP.on('zoom', function() {
     if (mapStyleSwitching) return;
-    if (!MAP.loaded()) return;
+    if (!mapInitialised) return;
     var z = MAP.getZoom();
     if (z >= ZOOM_AERIAL_THRESHOLD && currentMapStyle === 'map') {
       mapStyleSwitching = true;
