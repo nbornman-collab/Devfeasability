@@ -660,7 +660,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* Scenario data chip - drops below active tab */
 .mass-sc-chip {
-  position: absolute; top: calc(100% + 10px); left: 16px;
+  position: absolute; top: 70px; left: 16px;
   z-index: 9; display: flex; gap: 0;
   background: rgba(0,0,0,.52); backdrop-filter: blur(20px) saturate(0);
   border: 1px solid rgba(255,255,255,.14); border-radius: 6px; overflow: hidden;
@@ -2056,12 +2056,12 @@ document.addEventListener('keydown', function(e) {
           <span class="mass-sc-label">High</span>
           <span class="mass-sc-floors">10F</span>
         </button>
-        <div class="mass-sc-chip" id="mass-sc-chip">
-          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addf">-</span><span class="mass-sc-chip-lbl">Added floors</span></div>
-          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addnia">-</span><span class="mass-sc-chip-lbl">Added NIA</span></div>
-          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-height">-</span><span class="mass-sc-chip-lbl">Est. height</span></div>
-          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-cost">-</span><span class="mass-sc-chip-lbl">Build cost</span></div>
-        </div>
+      </div>
+      <div class="mass-sc-chip" id="mass-sc-chip">
+        <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addf">-</span><span class="mass-sc-chip-lbl">Added floors</span></div>
+        <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addnia">-</span><span class="mass-sc-chip-lbl">Added NIA</span></div>
+        <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-height">-</span><span class="mass-sc-chip-lbl">Est. height</span></div>
+        <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-cost">-</span><span class="mass-sc-chip-lbl">Build cost</span></div>
       </div>
 
       <!-- Pegman Street View -->
