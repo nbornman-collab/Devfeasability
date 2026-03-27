@@ -1963,10 +1963,26 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+// Scrim click-to-close: only fire on genuine click (not map drag overshoot)
+(function() {
+  var scrimDownTarget = null;
+  document.addEventListener('mousedown', function(e) {
+    var scrim = document.getElementById('mass-scrim');
+    if (scrim && scrim.classList.contains('open')) scrimDownTarget = e.target;
+  });
+  document.addEventListener('mouseup', function(e) {
+    var scrim = document.getElementById('mass-scrim');
+    if (scrim && scrim.classList.contains('open') && e.target === scrim && scrimDownTarget === scrim) {
+      closeMassPopup();
+    }
+    scrimDownTarget = null;
+  });
+})();
+
 </script>
 
 <!-- Massing popup HTML shell -->
-<div class="mass-scrim" id="mass-scrim" onclick="if(event.target===this)closeMassPopup();">
+<div class="mass-scrim" id="mass-scrim">
   <div class="mass-modal">
     <button class="mass-close" onclick="closeMassPopup();">&times;</button>
 
