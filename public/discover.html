@@ -1190,13 +1190,14 @@ function render() {
     // Derived hook numbers
 
     var typeColor = s.brownfield ? '#8b7355' : s.useType === 'mixed' ? '#a07c9e' : s.useType === 'industrial' ? '#7a7a96' : s.useType === 'resi' ? '#c4915a' : '#5b7a9d';
+    var typeLabel = s.brownfield ? 'Brownfield' : s.useType === 'mixed' ? 'Mixed-use' : s.useType === 'industrial' ? 'Industrial' : s.useType === 'resi' ? 'Residential' : 'Office';
     return `<div class="site-card" id="card-${s.id}" onclick="cardClick(${s.id})" style="border-left:4px solid ${typeColor}">
       <div class="card-header">
         ${rank ? `<div class="card-rank">${rank}</div>` : ''}
         <div class="card-main">
           <div class="card-name">${s.name}</div>
           <div class="card-address">${s.address}</div>
-          <div class="card-borough-row"><span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span></div>
+          <div class="card-borough-row"><span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span><span class="chip type-chip" style="background:${typeColor}15;color:${typeColor};border:1px solid ${typeColor}40">${typeLabel}</span></div>
           <div class="card-chips"><span class="verdict-pill ${vc}">${vl}</span>${otherChips}</div>
           ${s.desc ? `<div class="card-summary">${s.desc}</div>` : ''}
         </div>
@@ -1444,7 +1445,7 @@ function initMap(token) {
     addSiteMarkers();
     // Hairline white ring on satellite for contrast
     if (currentMapStyle === 'satellite' && MAP.getLayer('sites-dot')) {
-      MAP.setPaintProperty('sites-dot', 'circle-stroke-width', 1.5);
+      MAP.setPaintProperty('sites-dot', 'circle-stroke-width', 2.5);
     }
     mapStyleSwitching = false;
     setTimeout(function() { document.getElementById('map-fade').classList.remove('active'); }, 100);
@@ -1543,8 +1544,31 @@ function addSiteMarkers() {
     }
     setTimeout(function(){ cardClick(id); },100);
   });
-  MAP.on('mouseenter','sites-dot',function(){MAP.getCanvas().style.cursor='pointer';});
-  MAP.on('mouseleave','sites-dot',function(){MAP.getCanvas().style.cursor='';});
+  var hoverPopup = null;
+  MAP.on('mouseenter','sites-dot',function(e){
+    MAP.getCanvas().style.cursor='pointer';
+    var props = e.features[0].properties;
+    var site = ALL_SITES.find(function(s){return s.id===props.id;});
+    if (!site) return;
+    var typeLabel = site.brownfield ? 'Brownfield' : site.useType === 'mixed' ? 'Mixed-use' : site.useType === 'industrial' ? 'Industrial' : site.useType === 'resi' ? 'Residential' : 'Office';
+    var typeColor = site.brownfield ? '#8b7355' : site.useType === 'mixed' ? '#a07c9e' : site.useType === 'industrial' ? '#7a7a96' : site.useType === 'resi' ? '#c4915a' : '#5b7a9d';
+    var vc = verdictClass(site.score);
+    var scoreCol = vc==='green'?'#15803d':vc==='amber'?'#b45309':'#999';
+    if (hoverPopup) { hoverPopup.remove(); hoverPopup=null; }
+    hoverPopup = new mapboxgl.Popup({offset:12,closeButton:false,maxWidth:'200px',className:'hover-popup'})
+      .setLngLat(e.lngLat)
+      .setHTML('<div style="font:700 11px var(--sans);color:var(--ink);margin-bottom:4px">'+site.name+'</div>'+
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">'+
+        '<span style="font:800 18px var(--mono);color:'+scoreCol+'">'+site.score+'</span>'+
+        '<span style="font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;background:'+typeColor+'22;color:'+typeColor+';padding:2px 6px;border-radius:3px;border:1px solid '+typeColor+'44">'+typeLabel+'</span>'+
+        '</div>'+
+        '<div style="font:400 11px var(--sans);color:var(--ink3)">'+site.borough+'</div>')
+      .addTo(MAP);
+  });
+  MAP.on('mouseleave','sites-dot',function(){
+    MAP.getCanvas().style.cursor='';
+    if (hoverPopup) { hoverPopup.remove(); hoverPopup=null; }
+  });
 }
 
 function addBoroughOutlines() {
