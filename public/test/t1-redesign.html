@@ -1142,7 +1142,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   // Offset center slightly right so massing is prominent in both halves
   map.on('load', () => { map.setPadding({left: 0, right: 0, top: 0, bottom: 0}); });
   map.on('style.load', () => {
-    map.setConfigProperty('basemap', 'lightPreset', 'dawn');
+    map.setConfigProperty('basemap', 'lightPreset', 'dusk');
     // Buildings: off-white, ground light grey
     try { map.setConfigProperty('basemap', 'showPlaceLabels', true); } catch(e) {}
     try { map.setConfigProperty('basemap', 'show3dObjects', true); } catch(e) {}
