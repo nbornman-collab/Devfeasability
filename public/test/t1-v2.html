@@ -891,6 +891,7 @@ function initMap(token) {
   antialias: true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-left');
+  map.scrollZoom.disable(); // prevent scroll trap - page scrolls normally, map still rotates/drags
   MAP_REF = map;
 
 function rotateMap() {
@@ -906,13 +907,13 @@ map.on('style.load', () => {
 
   map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
   map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
-    paint:{'fill-extrusion-color':'rgba(255,255,255,0.92)','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.95}});
+    paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.6}});
   map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
-    paint:{'fill-extrusion-color':'rgba(255,255,255,0.92)','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.95}});
+    paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.8}});
   for (let fl = 1; fl <= 20; fl++) {
     const h = fl * FTF;
     map.addLayer({id:'floor-line-'+fl, type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'rgba(17,17,16,0.18)','fill-extrusion-height':h,'fill-extrusion-base':h-0.25,'fill-extrusion-opacity':1.0}});
+      paint:{'fill-extrusion-color':'rgba(0,0,0,0.6)','fill-extrusion-height':h,'fill-extrusion-base':h-0.25,'fill-extrusion-opacity':1.0}});
   }
   if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
     map.getSource('site-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[SITE_INTELLIGENCE.polygon]}});

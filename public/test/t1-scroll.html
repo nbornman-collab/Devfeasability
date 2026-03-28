@@ -1237,6 +1237,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
     interactive: true, attributionControl: false, antialias: true
   });
   map.addControl(new mapboxgl.NavigationControl({showCompass:true}),'top-left');
+  map.scrollZoom.disable();
   map.dragRotate.enable();
   map.touchZoomRotate.enableRotation();
   MAP_REF = map;
@@ -1260,9 +1261,9 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
     map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'rgba(255,255,255,0.92)','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.95}});
+      paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.6}});
     map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'rgba(255,255,255,0.92)','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.95}});
+      paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.8}});
     // Floor lines across full height (existing + proposed)
     for (let fl = 1; fl <= 20; fl++) {
       const h = fl * FTF;
