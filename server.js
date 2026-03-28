@@ -950,7 +950,7 @@ const svCache = new Map();
 app.get('/api/streetview-thumbnail', async (req, res) => {
   const { lat, lng } = req.query;
   if (!lat || !lng) return res.status(400).json({ error: 'lat and lng required' });
-  const KEY = process.env.GOOGLE_MAPS_API_KEY;
+  const KEY = process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI';
   if (!KEY) return res.status(503).json({ error: 'Street View API key not configured' });
 
   const cacheKey = `${parseFloat(lat).toFixed(4)},${parseFloat(lng).toFixed(4)}`;
