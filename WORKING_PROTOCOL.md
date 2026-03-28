@@ -285,7 +285,7 @@ Do not invest further in `/t2/` as a product URL.
 
 - **Homepage**: dark-v11 vector, pitch 55, slow bearing rotation, interactive:false
 - **Discover (T0)**: dark-v11 vector, pitch 0 browse / pitch 52 site focus flyTo
-- **T1 (Appraise)**: standard + dawn, pitch 58, zoom 17.5, bearing -20, 3D massing layers
+- **T1 (Appraise)**: standard + dusk, pitch 58, zoom 17.5, bearing -20, 3D massing layers
 - **T2 (Full Insight)**: satellite-streets-v12, pitch 60, 3D massing layers
 
 Locked camera values - do not change without explicit instruction.

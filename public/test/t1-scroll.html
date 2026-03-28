@@ -1251,7 +1251,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   }
 
   map.on('style.load', () => {
-    map.setConfigProperty('basemap', 'lightPreset', 'dawn');
+    map.setConfigProperty('basemap', 'lightPreset', 'dusk');
     // Remove POI labels and business icons
     try { map.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch(e) {}
     try { map.setConfigProperty('basemap', 'showTransitLabels', false); } catch(e) {}
@@ -1710,7 +1710,7 @@ function openScModal(idx) {
       interactive: true, attributionControl: false
     });
     scModalMap.on('style.load', () => {
-      scModalMap.setConfigProperty('basemap', 'lightPreset', 'dawn');
+      scModalMap.setConfigProperty('basemap', 'lightPreset', 'dusk');
       try { scModalMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch(e) {}
       try { scModalMap.setConfigProperty('basemap', 'showTransitLabels', false); } catch(e) {}
       scModalMap.addSource('modal-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_INTELLIGENCE.polygon||[]]}}});
