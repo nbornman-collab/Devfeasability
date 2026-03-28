@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>24 Southwark Street - Appraise | D/A Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<script src="/lib/intelligence-24ss.js"></script>
+<script src="/lib/site-intelligence.js"></script>
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --bg:      #f2f1ed;
+  --bg-w:    #ffffff;
+  --ink:     #111110;
+  --ink2:    #3a3a38;
+  --ink3:    #6a6a65;
+  --rule:    rgba(17,17,16,.1);
+  --copper:  #b8845c;
+  --steel:   #5b7a9d;
+  --green:   #16a34a;
+  --amber:   #d97706;
+  --red:     #dc2626;
+  --dark:    #1a1a19;
+  --dark2:   #252523;
+  --display: 'Playfair Display', Georgia, serif;
+  --sans:    'Inter', sans-serif;
+  --mono:    'Space Grotesk', 'Inter', sans-serif;
+  --nav-h:   56px;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+
+/* ============================================================
+   SCROLL + NAV
+   ============================================================ */
+.scroll-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--copper); z-index: 300; width: 0%; }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 200;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
+  transition: background .3s, backdrop-filter .3s;
+}
+nav.scrolled { background: rgba(26,26,25,.92); backdrop-filter: blur(16px); }
+.nav-logo { font: 700 18px var(--sans); color: #fff; letter-spacing: -.02em; }
+.nav-logo span { color: var(--copper); }
+.nav-tagline { font: 400 11px var(--sans); color: rgba(255,255,255,.35); text-transform: uppercase; letter-spacing: .1em; }
+.nav-links { display: flex; gap: 24px; }
+.nav-links a { font: 500 13px var(--sans); color: rgba(255,255,255,.5); text-decoration: none; transition: color .2s; }
+.nav-links a:hover, .nav-links a.active { color: #fff; }
+@media (max-width: 768px) { .nav-links, .nav-tagline { display: none; } }
+
+/* ============================================================
+   REVEAL
+   ============================================================ */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.d1 { transition-delay: .1s; } .d2 { transition-delay: .2s; } .d3 { transition-delay: .3s; }
+
+/* ============================================================
+   SECTION SHARED
+   ============================================================ */
+.section { padding: 112px 0; }
+.section-inner { max-width: 920px; margin: 0 auto; padding: 0 48px; }
+.eyebrow { font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--ink3); margin-bottom: 14px; }
+.eyebrow.light { color: rgba(255,255,255,.35); }
+.section-title { font: 400 clamp(30px,4vw,50px)/1.1 var(--display); color: var(--ink); margin-bottom: 20px; }
+.section-title.light { color: #f2f1ed; }
+.section-body { font: 400 17px/1.85 var(--sans); color: var(--ink2); max-width: 680px; }
+.section-body.light { color: rgba(242,241,237,.6); }
+@media (max-width: 768px) { .section { padding: 72px 0; } .section-inner { padding: 0 20px; } }
+
+/* ============================================================
+   CONFIDENCE / PLACEHOLDER MARKERS
+   ============================================================ */
+.est { color: var(--amber); font-style: italic; }
+.est::before { content: 'Est. '; }
+.data-pending { opacity: .55; }
+.confidence-note { font: 400 12px var(--sans); color: var(--ink3); margin-top: 6px; font-style: italic; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero { position: relative; height: 100vh; min-height: 600px; overflow: hidden; }
+#map { position: absolute; inset: 0; }
+.hero-scrim { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.05) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,.55) 70%, rgba(0,0,0,.85) 100%); z-index: 1; pointer-events: none; }
+.persp-controls { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); z-index: 10; display: flex; flex-direction: column; gap: 6px; }
+.persp-btn { width: 44px; height: 44px; border: none; border-radius: 10px; cursor: pointer; background: rgba(255,255,255,.12); backdrop-filter: blur(12px); color: rgba(255,255,255,.65); font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: .04em; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transition: all .2s; }
+.persp-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.persp-btn:hover { background: rgba(255,255,255,.22); color: #fff; }
+.persp-btn.active { background: var(--copper); color: #fff; }
+#persp-reset { opacity: 0; pointer-events: none; transition: opacity .3s; }
+#persp-reset.visible { opacity: 1; pointer-events: auto; }
+.hero-content { position: absolute; bottom: 0; left: 0; right: 0; z-index: 5; padding: 0 48px 52px; max-width: 880px; }
+.hero-eyebrow { font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: rgba(255,255,255,.45); margin-bottom: 10px; }
+.hero-address { font: 400 clamp(36px,5vw,64px)/1.05 var(--display); color: #fff; margin-bottom: 4px; }
+.hero-sub { font: 400 16px var(--sans); color: rgba(255,255,255,.5); margin-bottom: 24px; }
+.hero-score-row { display: flex; align-items: baseline; gap: 16px; margin-bottom: 24px; }
+.hero-score { font: 700 clamp(56px,7vw,80px)/1 var(--mono); color: var(--copper); letter-spacing: -.04em; }
+.hero-verdict { font: 600 18px var(--sans); color: #fff; }
+.hero-verdict-sub { font: 400 14px var(--sans); color: rgba(255,255,255,.4); margin-top: 3px; }
+.hero-sc-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.hero-sc-tab { padding: 10px 20px; border: 1px solid rgba(255,255,255,.2); border-radius: 8px; cursor: pointer; background: rgba(255,255,255,.1); backdrop-filter: blur(8px); color: rgba(255,255,255,.7); font: 600 14px var(--sans); transition: all .2s; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.hero-sc-tab span { font: 500 11px var(--mono); opacity: .7; }
+.hero-sc-tab.active { background: var(--copper); color: #fff; border-color: var(--copper); }
+.hero-metrics { display: flex; flex-wrap: wrap; gap: 20px 40px; }
+.hero-metric-val { font: 700 clamp(20px,2.6vw,30px)/1 var(--mono); color: #fff; letter-spacing: -.02em; }
+.hero-metric-val.accent { color: var(--copper); }
+.hero-metric-label { font: 500 11px var(--sans); color: rgba(255,255,255,.4); margin-top: 4px; text-transform: uppercase; letter-spacing: .06em; }
+.hero-urgent-chips { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+.urgent-chip { padding: 5px 12px; border-radius: 20px; font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .07em; display: inline-flex; align-items: center; gap: 6px; }
+.urgent-chip.motivated { background: rgba(217,119,6,.3); color: #fbbf24; border: 1px solid rgba(217,119,6,.4); }
+.urgent-chip.listed { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); }
+.urgent-chip.readiness { background: rgba(91,122,157,.3); color: #93c5fd; border: 1px solid rgba(91,122,157,.4); }
+@media (max-width: 768px) { .hero-content { padding: 0 20px 40px; } .persp-controls { display: none; } }
+
+/* ============================================================
+   01 SIGNAL
+   ============================================================ */
+.signal-section { background: var(--bg); }
+.meta-row { display: flex; gap: 28px; flex-wrap: wrap; padding: 18px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 28px 0; }
+.meta-item-label { font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); margin-bottom: 3px; }
+.meta-item-val { font: 600 16px var(--mono); color: var(--ink); }
+.signal-flags { display: flex; flex-direction: column; margin-top: 36px; }
+.sflag { display: flex; align-items: flex-start; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.sflag:first-child { border-top: 1px solid var(--rule); }
+.sflag-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.sflag-dot.g { background: var(--green); } .sflag-dot.a { background: var(--amber); } .sflag-dot.r { background: var(--red); }
+.sflag-title { font: 600 15px var(--sans); color: var(--ink); margin-bottom: 2px; }
+.sflag-desc { font: 400 14px/1.6 var(--sans); color: var(--ink3); }
+
+/* Motivated Seller Card */
+.motivated-card { margin-top: 40px; background: var(--dark); border-radius: 18px; overflow: hidden; }
+.motivated-header { padding: 28px 32px 20px; border-bottom: 1px solid rgba(255,255,255,.07); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.motivated-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: rgba(255,255,255,.35); margin-bottom: 6px; }
+.motivated-score { font: 700 clamp(40px,5vw,56px)/1 var(--mono); color: var(--amber); letter-spacing: -.04em; }
+.motivated-score span { font-size: .4em; font-weight: 400; color: rgba(255,255,255,.3); }
+.motivated-verdict { font: 400 14px var(--sans); color: rgba(255,255,255,.5); margin-top: 4px; }
+.motivated-flags { padding: 0 32px 24px; }
+.mflag { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+.mflag:last-child { border-bottom: none; }
+.mflag-name { font: 400 14px var(--sans); color: rgba(255,255,255,.6); }
+.mflag-status { font: 700 12px var(--sans); text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; border-radius: 20px; }
+.mflag-status.yes { background: rgba(217,119,6,.2); color: #fbbf24; }
+.mflag-status.no { background: rgba(255,255,255,.06); color: rgba(255,255,255,.3); }
+.mflag-status.unk { background: rgba(91,122,157,.15); color: rgba(147,197,253,.6); font-style: italic; }
+.data-source-note { padding: 12px 32px 20px; font: 400 11px var(--sans); color: rgba(255,255,255,.2); font-style: italic; }
+
+/* Listed / For-sale card */
+.listed-card { margin-top: 16px; background: var(--dark); border-radius: 14px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.listed-pill { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .08em; background: rgba(255,255,255,.12); color: #fff; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 8px; }
+.listed-price { font: 700 clamp(24px,3vw,36px)/1 var(--mono); color: #f2f1ed; letter-spacing: -.03em; }
+.listed-ratio { font: 400 14px var(--sans); color: rgba(255,255,255,.4); margin-top: 5px; }
+.listed-detail { font: 400 13px var(--sans); color: rgba(255,255,255,.35); }
+
+/* ============================================================
+   02 ENVELOPE
+   ============================================================ */
+.envelope-section { background: var(--bg-w); }
+.compare-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule); border-radius: 16px; overflow: hidden; margin-top: 36px; }
+.cstrip-col { background: var(--bg-w); padding: 28px 24px; }
+.cstrip-col.proposed { background: var(--bg); }
+.cstrip-col-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 16px; }
+.cstrip-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid rgba(17,17,16,.05); }
+.cstrip-row:last-child { border-bottom: none; }
+.cstrip-key { font: 400 13px var(--sans); color: var(--ink3); }
+.cstrip-val { font: 600 15px var(--mono); color: var(--ink); }
+.cstrip-val.accent { color: var(--copper); } .cstrip-val.green { color: var(--green); }
+
+/* Architecture metrics */
+.arch-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 36px; }
+.arch-cell { background: var(--bg); border-radius: 12px; padding: 20px; }
+.arch-cell-label { font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 6px; }
+.arch-cell-val { font: 700 22px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.arch-cell-sub { font: 400 12px var(--sans); color: var(--ink3); margin-top: 3px; }
+@media (max-width: 768px) { .arch-metrics { grid-template-columns: 1fr 1fr; } .compare-strip { grid-template-columns: 1fr; } }
+
+/* Scenario cards */
+.sc-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 40px; }
+.sc-card { border: 1px solid var(--rule); border-radius: 14px; padding: 26px; cursor: pointer; transition: all .2s; background: var(--bg-w); }
+.sc-card:hover { border-color: rgba(184,132,92,.35); box-shadow: 0 4px 24px rgba(0,0,0,.06); }
+.sc-card.active { border-color: var(--copper); }
+.sc-card-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 6px; }
+.sc-card-floors { font: 700 clamp(30px,3.5vw,44px)/1 var(--mono); letter-spacing: -.03em; color: var(--ink); margin-bottom: 14px; }
+.sc-card-floors sup { font-size: .4em; font-weight: 400; color: var(--ink3); }
+.sc-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(17,17,16,.05); }
+.sc-row:last-child { border-bottom: none; }
+.sc-row-key { font: 400 12px var(--sans); color: var(--ink3); }
+.sc-row-val { font: 600 13px var(--mono); color: var(--ink); }
+.sc-row-val.copper { color: var(--copper); }
+.sc-row-val.green { color: var(--green); }
+@media (max-width: 768px) { .sc-cards { grid-template-columns: 1fr; } }
+
+/* Scenario bar chart */
+.sc-chart { background: var(--dark); border-radius: 18px; padding: 36px 32px; margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.sc-chart-col { display: flex; flex-direction: column; align-items: center; padding: 0 10px; border-right: 1px solid rgba(255,255,255,.07); cursor: pointer; }
+.sc-chart-col:last-child { border-right: none; }
+.sc-chart-pct { font: 700 clamp(28px,3.5vw,48px)/1 var(--mono); color: #f2f1ed; letter-spacing: -.04em; margin-bottom: 2px; }
+.sc-chart-pct.active { color: #4ade80; }
+.sc-chart-sub { font: 400 11px var(--sans); color: rgba(255,255,255,.3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 18px; }
+.sc-chart-bar-wrap { width: 100%; height: 120px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 14px; }
+.sc-chart-bar { width: 52px; border-radius: 5px 5px 0 0; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.12); transition: height .55s cubic-bezier(.16,1,.3,1); }
+.sc-chart-bar.active { background: rgba(74,222,128,.14); border-color: rgba(74,222,128,.5); }
+.sc-chart-label { font: 600 12px var(--mono); color: rgba(255,255,255,.4); margin-bottom: 2px; }
+.sc-chart-gdv { font: 400 11px var(--sans); color: rgba(255,255,255,.25); }
+
+/* ============================================================
+   03 CONSTRAINTS
+   ============================================================ */
+.constraints-section { background: var(--dark); }
+
+/* Conversion Readiness */
+.cr-wrap { margin-top: 40px; }
+.cr-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px; }
+.cr-score { font: 700 clamp(48px,6vw,72px)/1 var(--mono); color: #93c5fd; letter-spacing: -.05em; }
+.cr-score span { font-size: .35em; font-weight: 400; color: rgba(255,255,255,.3); }
+.cr-label { font: 600 13px var(--sans); color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .08em; }
+.cr-list { display: flex; flex-direction: column; gap: 0; }
+.cr-item { display: flex; align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+.cr-item:last-child { border-bottom: none; }
+.cr-check { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font: 700 11px var(--sans); flex-shrink: 0; }
+.cr-check.pass { background: rgba(22,163,74,.2); color: #4ade80; }
+.cr-check.fail { background: rgba(220,38,38,.15); color: #f87171; }
+.cr-check.unk { background: rgba(255,255,255,.06); color: rgba(255,255,255,.3); }
+.cr-item-label { font: 400 14px var(--sans); color: rgba(255,255,255,.65); flex: 1; }
+.cr-item-note { font: 400 12px var(--sans); color: rgba(255,255,255,.3); }
+
+/* Constraint grid */
+.con-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,.06); border-radius: 16px; overflow: hidden; margin-top: 40px; }
+.con-cell { background: var(--dark); padding: 26px; }
+.con-cell-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.25); margin-bottom: 6px; }
+.con-cell-val { font: 600 18px var(--mono); color: #f2f1ed; margin-bottom: 4px; }
+.con-pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: .05em; margin-left: 6px; }
+.con-pill.ok { background: rgba(22,163,74,.15); color: #4ade80; }
+.con-pill.warn { background: rgba(217,119,6,.15); color: #fbbf24; }
+.con-pill.risk { background: rgba(220,38,38,.12); color: #f87171; }
+.con-cell-sub { font: 400 12px/1.4 var(--sans); color: rgba(255,255,255,.3); margin-top: 3px; }
+
+/* Building regs */
+.regs-wrap { margin-top: 40px; }
+.regs-item { padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+.regs-item:last-child { border-bottom: none; }
+.regs-title { font: 600 14px var(--sans); color: #f2f1ed; margin-bottom: 3px; }
+.regs-desc { font: 400 13px/1.5 var(--sans); color: rgba(255,255,255,.4); }
+
+/* Precedents */
+.prec-list { margin-top: 40px; }
+.prec-item { padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+.prec-item:last-child { border-bottom: none; }
+.prec-name { font: 600 14px var(--sans); color: #f2f1ed; margin-bottom: 3px; }
+.prec-detail { font: 400 13px/1.5 var(--sans); color: rgba(255,255,255,.35); }
+@media (max-width: 768px) { .con-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   04 FINANCIALS
+   ============================================================ */
+.financials-section { background: var(--bg); }
+
+/* Scenario matrix table */
+.matrix-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 36px; border-radius: 14px; border: 1px solid var(--rule); }
+.matrix-table { width: 100%; border-collapse: collapse; min-width: 480px; }
+.matrix-table th { padding: 14px 16px; font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); background: var(--bg); border-bottom: 1px solid var(--rule); text-align: left; }
+.matrix-table th.sc-col { text-align: center; cursor: pointer; }
+.matrix-table th.sc-col.active { color: var(--copper); }
+.matrix-table td { padding: 11px 16px; font: 400 14px var(--sans); color: var(--ink2); border-bottom: 1px solid rgba(17,17,16,.05); }
+.matrix-table td.sc-val { text-align: center; font-family: var(--mono); font-size: 15px; font-weight: 600; color: var(--ink); }
+.matrix-table td.sc-val.active { color: var(--copper); }
+.matrix-table tr.mat-bold td { font-weight: 700; color: var(--ink); background: rgba(17,17,16,.02); }
+.matrix-table tr:last-child td { border-bottom: none; }
+
+/* Pro forma */
+.pf-tabs { display: flex; gap: 6px; margin-top: 40px; margin-bottom: 28px; }
+.pf-tab { padding: 8px 18px; border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; font: 600 13px var(--sans); color: var(--ink3); background: transparent; transition: all .2s; }
+.pf-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pf-table { width: 100%; border-collapse: collapse; }
+.pf-table td { padding: 10px 0; font: 400 15px var(--sans); color: var(--ink2); border-bottom: 1px solid rgba(17,17,16,.06); }
+.pf-table td:last-child { text-align: right; font-family: var(--mono); font-size: 15px; font-weight: 500; }
+.pf-table tr.pf-sub td { padding-left: 18px; color: var(--ink3); font-size: 13px; }
+.pf-table tr.pf-sub td:last-child { font-size: 13px; }
+.pf-table tr.pf-bold td { font-weight: 700; color: var(--ink); font-size: 16px; border-top: 1px solid var(--rule); }
+.pf-table tr.pf-bold td:last-child { font-size: 16px; }
+.pf-table tr.pf-accent td { color: var(--copper); font-weight: 700; }
+.rlv-callout { margin-top: 28px; background: var(--dark); border-radius: 14px; padding: 28px 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+.rlv-label { font: 600 12px var(--sans); text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.5); margin-bottom: 5px; }
+.rlv-val { font: 700 clamp(28px,3.5vw,42px)/1 var(--mono); color: #fff; letter-spacing: -.03em; }
+.rlv-note { font: 400 14px/1.6 var(--sans); color: rgba(255,255,255,.55); max-width: 340px; }
+
+/* Segmented sliders */
+.sliders-section { background: var(--dark); padding: 80px 0; }
+.seg-wrap { display: flex; flex-direction: column; gap: 28px; margin-top: 36px; }
+.seg-item { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); border-radius: 13px; padding: 22px 26px; }
+.seg-item-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+.seg-item-label { font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.3); }
+.seg-item-val { font: 700 26px var(--mono); color: #f2f1ed; letter-spacing: -.03em; }
+.seg-item-val span { font-size: .4em; font-weight: 400; color: rgba(255,255,255,.35); margin-left: 2px; }
+.seg-blocks { display: flex; gap: 3px; height: 26px; cursor: pointer; }
+.seg-block { flex: 1; border-radius: 3px; background: rgba(255,255,255,.08); transition: background .12s; }
+.seg-block.on { background: var(--copper); }
+
+/* Footer */
+.footer-cta { background: var(--dark); padding: 100px 48px; text-align: center; }
+.footer-cta-title { font: 400 clamp(28px,4vw,48px)/1.1 var(--display); color: #f2f1ed; margin-bottom: 14px; }
+.footer-cta-sub { font: 400 15px/1.7 var(--sans); color: rgba(242,241,237,.4); max-width: 440px; margin: 0 auto 32px; }
+.footer-cta-btn { display: inline-block; font: 700 12px var(--sans); letter-spacing: .1em; text-transform: uppercase; background: var(--copper); color: #fff; padding: 16px 48px; border-radius: 8px; text-decoration: none; transition: background .2s; }
+.footer-cta-btn:hover { background: #a07450; }
+.footer-disclaimer { font: 400 11px var(--sans); color: rgba(242,241,237,.2); margin-top: 36px; max-width: 560px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+@media (max-width: 768px) { .footer-cta { padding: 72px 20px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-bar" id="scroll-bar"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div>
+    <div class="nav-logo">D<span>/</span>A</div>
+    <div class="nav-tagline">Development / Architecture</div>
+  </div>
+  <div class="nav-links">
+    <a href="#signal">01 Signal</a>
+    <a href="#envelope">02 Envelope</a>
+    <a href="#constraints">03 Constraints</a>
+    <a href="#financials">04 Financials</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div id="map"></div>
+  <div id="sv-overlay" style="position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;opacity:0;pointer-events:none;transition:opacity .6s"></div>
+  <div class="hero-scrim"></div>
+  <div class="persp-controls">
+    <button class="persp-btn" id="persp-aerial" onclick="setPerspective('aerial')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="4" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="20"/><line x1="4" y1="12" x2="2" y2="12"/><line x1="22" y1="12" x2="20" y2="12"/></svg><span>Top</span>
+    </button>
+    <button class="persp-btn active" id="persp-axo" onclick="setPerspective('axo')">
+      <svg viewBox="0 0 24 24"><path d="M3 17l9 5 9-5V7l-9-5-9 5z"/><line x1="12" y1="22" x2="12" y2="12"/><line x1="3" y1="7" x2="12" y2="12"/><line x1="21" y1="7" x2="12" y2="12"/></svg><span>Axo</span>
+    </button>
+    <button class="persp-btn" id="persp-street" onclick="setPerspective('street')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-4 3-7 7-7s7 3 7 7"/></svg><span>Street</span>
+    </button>
+    <button class="persp-btn" id="persp-reset" onclick="window._restartRotation && window._restartRotation()">
+      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span>Reset</span>
+    </button>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow" id="hero-eyebrow">Southwark - London Bridge/Bankside OA</div>
+    <div class="hero-address" id="hero-address">24 Southwark Street</div>
+    <div class="hero-sub" id="hero-sub">Freehold - RREEF Bankside II Limited</div>
+    <!-- urgency chips - T0 resolution -->
+    <div class="hero-urgent-chips" id="hero-chips">
+      <span class="urgent-chip motivated" id="chip-motivated">&#9679; MOTIVATED 3/5</span>
+      <span class="urgent-chip readiness" id="chip-readiness">READINESS 7/10</span>
+    </div>
+    <div class="hero-score-row">
+      <div class="hero-score" id="hero-score">-</div>
+      <div>
+        <div class="hero-verdict" id="hero-verdict">Loading...</div>
+        <div class="hero-verdict-sub" id="hero-verdict-sub">Development Score /100</div>
+      </div>
+    </div>
+    <div class="hero-sc-tabs" id="hero-tabs">
+      <button class="hero-sc-tab" onclick="scGo(0)">Low<span>8F</span></button>
+      <button class="hero-sc-tab active" onclick="scGo(1)">Base<span>10F</span></button>
+      <button class="hero-sc-tab" onclick="scGo(2)">High<span>12F</span></button>
+    </div>
+    <div class="hero-metrics">
+      <div><div class="hero-metric-val accent" id="hm-gdv">-</div><div class="hero-metric-label">Est. GDV</div></div>
+      <div><div class="hero-metric-val" id="hm-poc">-</div><div class="hero-metric-label">Profit on Cost</div></div>
+      <div><div class="hero-metric-val" id="hm-rlv">-</div><div class="hero-metric-label">Residual Land Value</div></div>
+      <div><div class="hero-metric-val" id="hm-nia">-</div><div class="hero-metric-label">Net Internal Area</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 SIGNAL -->
+<section class="section signal-section" id="signal">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">01 - Signal</div>
+      <div class="section-title" id="sig-title">A retain-and-adapt opportunity in the heart of Bankside</div>
+    </div>
+    <div class="reveal d1"><div class="section-body" id="sig-body"></div></div>
+
+    <div class="meta-row reveal d2" id="sig-meta"></div>
+
+    <div class="signal-flags reveal d2" id="sig-flags"></div>
+
+    <!-- Motivated Seller (placeholder - HMLR/Companies House pipeline pending) -->
+    <div class="reveal d3">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:var(--ink3);margin-top:48px;margin-bottom:16px">Ownership Intelligence</div>
+      <div class="motivated-card">
+        <div class="motivated-header">
+          <div>
+            <div class="motivated-label">Motivated Seller Score</div>
+            <div class="motivated-score">3<span>/5</span></div>
+            <div class="motivated-verdict">Moderate urgency - long hold + fund structure signals</div>
+          </div>
+          <div style="font:400 12px var(--sans);color:rgba(255,255,255,.2);font-style:italic;text-align:right;max-width:200px">Estimated - pending<br>HMLR + Companies House<br>pipeline connection</div>
+        </div>
+        <div class="motivated-flags" id="mot-flags"></div>
+        <div class="data-source-note">Sources: HMLR title register, Companies House, Business Rates England - pipeline pending</div>
+      </div>
+
+      <!-- For-sale indicator (placeholder) -->
+      <div class="listed-card">
+        <div>
+          <div class="listed-pill">Not Currently Listed</div>
+          <div class="listed-price" style="color:rgba(255,255,255,.35);font-size:18px">No active listing found</div>
+          <div class="listed-ratio">Last HMLR transaction: data pending - Rightmove/EG Propertylink pipeline</div>
+        </div>
+        <div class="listed-detail" style="max-width:220px">When listed, asking price vs last sale ratio and days on market will appear here.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 ENVELOPE -->
+<section class="section envelope-section" id="envelope">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">02 - Development Envelope</div>
+      <div class="section-title">What you can build here</div>
+    </div>
+
+    <div class="compare-strip reveal d1" id="env-compare"></div>
+
+    <!-- Architecture metrics -->
+    <div class="reveal d2" style="margin-top:48px">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:16px">Floorplate Architecture</div>
+      <div class="arch-metrics" id="arch-metrics"></div>
+    </div>
+
+    <!-- Scenario cards -->
+    <div class="reveal d2" style="margin-top:48px">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:16px">Three Scenarios</div>
+      <div class="sc-cards" id="sc-cards"></div>
+    </div>
+
+    <!-- Scenario bar chart -->
+    <div class="sc-chart reveal d3" id="sc-chart"></div>
+  </div>
+</section>
+
+<!-- 03 CONSTRAINTS -->
+<section class="section constraints-section" id="constraints">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow light">03 - Constraints</div>
+      <div class="section-title light" id="con-title">What shapes the envelope</div>
+    </div>
+    <div class="reveal d1"><div class="section-body light" id="con-body"></div></div>
+
+    <!-- Conversion Readiness -->
+    <div class="cr-wrap reveal d2">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);margin-bottom:20px">Conversion Readiness</div>
+      <div class="cr-header">
+        <div class="cr-score" id="cr-score">7<span>/10</span></div>
+        <div>
+          <div class="cr-label">Planning Conditions Met</div>
+          <div style="font:400 13px var(--sans);color:rgba(255,255,255,.3);margin-top:4px;font-style:italic">Estimated - conditions verified against public planning data</div>
+        </div>
+      </div>
+      <div class="cr-list" id="cr-list"></div>
+    </div>
+
+    <!-- Constraint grid -->
+    <div class="reveal d2" style="margin-top:48px">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);margin-bottom:16px">Site Parameters</div>
+      <div class="con-grid" id="con-grid"></div>
+    </div>
+
+    <!-- Building regs -->
+    <div class="reveal d3" style="margin-top:48px">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);margin-bottom:16px">Building Regulations Impact</div>
+      <div class="regs-wrap" id="regs-body"></div>
+    </div>
+
+    <!-- Precedents -->
+    <div class="reveal d3" style="margin-top:40px">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.3);margin-bottom:4px">Planning Precedents</div>
+      <div class="prec-list" id="prec-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 FINANCIALS -->
+<section class="section financials-section" id="financials">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow">04 - Financials</div>
+      <div class="section-title">Does it stack?</div>
+    </div>
+
+    <!-- Scenario matrix -->
+    <div class="reveal d1" style="margin-top:8px">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:8px">All Scenarios at a Glance</div>
+      <div class="matrix-wrap">
+        <table class="matrix-table" id="matrix-table"></table>
+      </div>
+    </div>
+
+    <!-- Pro forma -->
+    <div class="reveal d2">
+      <div style="font:600 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-top:48px;margin-bottom:4px">Pro Forma</div>
+      <div class="pf-tabs" id="pf-tabs">
+        <button class="pf-tab" onclick="scGo(0)">Low - 8F</button>
+        <button class="pf-tab active" onclick="scGo(1)">Base - 10F</button>
+        <button class="pf-tab" onclick="scGo(2)">High - 12F</button>
+      </div>
+      <table class="pf-table" id="pf-table"></table>
+      <div class="rlv-callout" id="rlv-callout">
+        <div><div class="rlv-label">Residual Land Value</div><div class="rlv-val" id="rlv-val">-</div></div>
+        <div class="rlv-note" id="rlv-note"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASSUMPTIONS (dark) -->
+<section class="sliders-section" id="assumptions">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow light">Adjust Assumptions</div>
+      <div class="section-title light">Stress-test the numbers</div>
+    </div>
+    <div class="seg-wrap reveal d1" id="seg-sliders"></div>
+    <div class="reveal d2" style="margin-top:16px">
+      <button onclick="resetAssumptions()" style="background:none;border:none;color:rgba(255,255,255,.3);font:500 13px var(--sans);cursor:pointer;text-decoration:underline">Reset to defaults</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer-cta">
+  <div class="footer-cta-title">Ready to move on this site?</div>
+  <div class="footer-cta-sub">Full feasibility study with detailed massing, planning strategy, and financial modelling.</div>
+  <a href="#" class="footer-cta-btn">Commission Full Study</a>
+  <div class="footer-disclaimer">All values are estimates based on publicly available data. GDV and financial projections are modelled, not guaranteed. Motivated seller and conversion readiness scores are inferred from public records - not verified. Not investment advice.</div>
+</div>
+
+<script>
+// ============================================================
+// CONSTANTS
+// ============================================================
+const PLOT_AREA = 2843;
+const FTF = 3.6;
+const LAT = 51.504909, LNG = -0.091522;
+const CENTROID = [LNG, LAT];
+
+// ============================================================
+// SCENARIO ENGINE
+// ============================================================
+const S_DEFS = {erv:700, niy:4.75, cost:4200, s106:500, poc:20};
+let S = {...S_DEFS};
+const S_MKT = {acqCost:0, demo:850000, finRate:0.065, letFee:0.15, cilRate:125, progYrs:{lo:2.0,base:2.5,hi:3.0}};
+const SCENARIOS = [
+  {key:'lo', label:'Low',  floors:8,  podF:5, twrF:3, twrPct:0.55, eff:0.78},
+  {key:'base',label:'Base',floors:10, podF:6, twrF:4, twrPct:0.55, eff:0.78},
+  {key:'hi', label:'High', floors:12, podF:7, twrF:5, twrPct:0.50, eff:0.76}
+];
+let activeIdx = 1;
+
+function calcScenarios() {
+  const gp = Math.round(PLOT_AREA * 0.42);
+  SCENARIOS.forEach(sc => {
+    sc.gea = Math.round(gp * sc.podF + gp * sc.twrPct * sc.twrF);
+    sc.nia = Math.round(sc.gea * sc.eff);
+    sc.gdv = Math.round(sc.nia * S.erv / (S.niy / 100));
+    sc.constCost = Math.round(sc.gea * S.cost);
+    sc.fees = Math.round(sc.constCost * 0.13);
+    sc.contg = Math.round(sc.constCost * 0.075);
+    sc.cil = Math.round(sc.gea * S_MKT.cilRate);
+    sc.letting = Math.round(sc.gdv * S_MKT.letFee);
+    sc.finance = Math.round((sc.constCost + sc.fees) * 0.5 * S_MKT.finRate * S_MKT.progYrs[sc.key]);
+    sc.tdc = sc.constCost + sc.fees + sc.contg + sc.cil + sc.letting + (S.s106 * 1000) + S_MKT.demo + sc.finance;
+    sc.profit = sc.gdv - sc.tdc;
+    sc.poc = (sc.profit / sc.tdc * 100).toFixed(1);
+    sc.rlv = Math.round(sc.gdv - sc.tdc * (1 + S.poc / 100));
+  });
+}
+calcScenarios();
+
+const f  = n => (n||0).toLocaleString('en-GB');
+const fm = n => '\u00A3' + (Math.abs(n)>=1e6 ? (n/1e6).toFixed(1)+'M' : Math.abs(n)>=1e3 ? (n/1e3).toFixed(0)+'k' : f(n));
+const set  = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+const html = (id,v) => { const e=document.getElementById(id); if(e) e.innerHTML=v; };
+
+// ============================================================
+// REVEAL OBSERVER
+// ============================================================
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:0.1, rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => {
+    if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('visible');
+  });
+}, 300);
+
+// ============================================================
+// SCROLL / NAV
+// ============================================================
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('scroll-bar').style.width = pct + '%';
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 80);
+  ['signal','envelope','constraints','financials','assumptions'].forEach(id => {
+    const sec = document.getElementById(id); if(!sec) return;
+    const a = document.querySelector(`.nav-links a[href="#${id}"]`); if(!a) return;
+    a.classList.toggle('active', window.scrollY >= sec.offsetTop-120 && window.scrollY < sec.offsetTop+sec.offsetHeight);
+  });
+}, {passive:true});
+
+// ============================================================
+// SCENARIO SWITCHING
+// ============================================================
+function scGo(idx) {
+  activeIdx = idx;
+  document.querySelectorAll('.hero-sc-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.pf-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.sc-card').forEach((c,i) => c.classList.toggle('active', i===idx));
+  updateHeroMetrics(); updateProForma(); updateScChart(); updateMatrix();
+  updateMassing(SCENARIOS[idx]);
+}
+
+function updateHeroMetrics() {
+  const sc = SCENARIOS[activeIdx];
+  set('hm-gdv', fm(sc.gdv)); set('hm-poc', sc.poc+'%');
+  set('hm-rlv', fm(sc.rlv)); set('hm-nia', f(sc.nia)+' m\u00B2');
+}
+
+// ============================================================
+// POPULATE PAGE
+// ============================================================
+function populatePage(si) {
+  if(!si) return;
+  const F   = si.factors || {};
+  const s   = si.site || {};
+  const hf  = si.heritage_framework || {};
+  const mom = F.momentum || {};
+  const val = F.value || {};
+  const acq = F.acquisition || {};
+  const env = si.environment || {};
+  const maxF = s.max_floors || 10;
+  const maxH = s.max_h || 40;
+  const existM = (F.sky && F.sky.existing_m) || 0;
+  const existF = existM > 0 ? Math.max(1, Math.round(existM/FTF)) : 0;
+  const gp   = Math.round(PLOT_AREA * 0.42);
+  const score = typeof computeSiteScore === 'function' ? computeSiteScore(si) : 70;
+  const tier  = hf.tier || 'manageable';
+  const baseSc = SCENARIOS[1];
+  const effRate = 0.78;
+  const existNIA = Math.round(gp * effRate * Math.max(existF,1));
+  const coreM2  = Math.round(gp * 0.22);
+  const corePct = Math.round(0.22 * 100);
+  const addF = baseSc.floors - existF;
+
+  // HERO
+  set('hero-address', si.site_name || '24 Southwark Street');
+  set('hero-eyebrow', (si.borough||'Southwark') + (mom.opportunity_area ? ' - '+mom.opportunity_area.name : '') + ' Opportunity Area');
+  set('hero-sub', (acq.tenure||'Freehold') + ' - ' + (acq.owner||''));
+  set('hero-score', score);
+  set('hero-verdict', score>=80?'Top Opportunity':score>=70?'Strong Opportunity':score>=55?'Credible Opportunity':'Due Diligence');
+  set('hero-verdict-sub', 'Development Score '+score+'/100');
+  updateHeroMetrics();
+
+  // 01 SIGNAL - synthesis
+  const devSynth = typeof synthesisDevScope === 'function' ? synthesisDevScope(si) : '';
+  set('sig-title', si.site_intel_summary || 'A retain-and-adapt opportunity in the heart of Bankside');
+  html('sig-body', '<p>'+devSynth+'</p>');
+
+  // Ownership meta
+  html('sig-meta', [
+    ['Owner', acq.owner||'Unknown'],
+    ['Tenure', acq.tenure||'Freehold'],
+    ['Titles', (acq.titles||1)+' title'+((acq.titles||1)>1?'s':'')],
+    ['PTAL', s.ptal_label||s.ptal||'-'],
+    ['OA', mom.opportunity_area ? mom.opportunity_area.name : 'N/A'],
+    ['Borough', si.borough||'Southwark']
+  ].map(([l,v]) => `<div><div class="meta-item-label">${l}</div><div class="meta-item-val">${v}</div></div>`).join(''));
+
+  // Signal intelligence flags
+  const skyS = (F.sky&&F.sky.score)||0, valS = (F.value&&F.value.score)||0;
+  const momS = (F.momentum&&F.momentum.score)||0, herS = (F.heritage&&F.heritage.score)||0;
+  const trnS = (F.transport&&F.transport.score)||0;
+  const flagDot = sc => sc>=7?'g':sc>=5?'a':'r';
+  html('sig-flags', [
+    [flagDot(skyS), 'Available Sky - '+existF+'F existing, up to '+maxF+'F permitted', 'Existing building at '+existM+'m. Net uplift opportunity: +'+( maxF-existF)+'F over existing. Derived from PTAL, Opportunity Area status and conservation constraints.'],
+    [flagDot(valS), 'Rent Headroom - '+(val.erv_psm?'\u00A3'+val.erv_psm+'/m\u00B2 ERV':'Premium Bankside location'), val.market_commentary||'Strong commercial rental market in London Bridge/Bankside. ERV aligned with Southwark CAZ prime. Vacancy in the submarket is low.'],
+    [flagDot(momS), 'Planning Appetite - '+(momS>=7?'Favourable LPA':'Moderate'), (mom.commentary||'Opportunity Area designation supports densification.')+' '+(mom.precedents&&mom.precedents.length?mom.precedents.length+' relevant precedents found in the immediate area.':'')],
+    [flagDot(herS), 'Heritage Constraint - '+(tier==='low'?'Low':'Manageable'), (hf.summary||'Heritage tier: '+tier+'.')+ ' Design quality expected but scheme is viable with sensitive massing response.'],
+    [flagDot(trnS), 'Transport - PTAL '+(s.ptal_label||s.ptal||'Excellent'), 'London Bridge and Borough stations within walking distance. Exceptional PTAL supports high-density commercial scheme and satisfies GLA transport benchmarks.']
+  ].map(([dot,title,desc]) => `<div class="sflag"><div class="sflag-dot ${dot}"></div><div><div class="sflag-title">${title}</div><div class="sflag-desc">${desc}</div></div></div>`).join(''));
+
+  // Motivated Seller flags (placeholder data - HMLR + Companies House pipeline pending)
+  html('mot-flags', [
+    ['Out-of-area ownership', 'no', 'London-registered fund entity'],
+    ['Estate or probate', 'no', 'Active corporate ownership'],
+    ['Business rates arrears', 'unk', 'Verification pending'],
+    ['Long hold (20+ years)', 'yes', 'RREEF fund acquisition - extended hold period inferred'],
+    ['Dissolved company / stale registration', 'unk', 'Companies House check pending']
+  ].map(([name, status, note]) => {
+    const cls = status==='yes'?'yes':status==='no'?'no':'unk';
+    const txt = status==='yes'?'Confirmed':status==='no'?'No':'Unknown';
+    return `<div class="mflag"><div><div class="mflag-name">${name}</div><div style="font:400 11px var(--sans);color:rgba(255,255,255,.2);margin-top:2px">${note}</div></div><span class="mflag-status ${cls}">${txt}</span></div>`;
+  }).join(''));
+
+  // 02 ENVELOPE - comparison strip
+  html('env-compare', `
+    <div class="cstrip-col">
+      <div class="cstrip-col-label">Existing</div>
+      <div class="cstrip-row"><span class="cstrip-key">Floors</span><span class="cstrip-val">${existF}F</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">GIA (Est.)</span><span class="cstrip-val">${f(Math.round(existNIA/effRate))} m\u00B2</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">NIA (Est.)</span><span class="cstrip-val">${f(existNIA)} m\u00B2</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">Height</span><span class="cstrip-val">${existM}m</span></div>
+    </div>
+    <div class="cstrip-col proposed">
+      <div class="cstrip-col-label">Proposed (base)</div>
+      <div class="cstrip-row"><span class="cstrip-key">Floors</span><span class="cstrip-val accent">${baseSc.floors}F</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">GIA</span><span class="cstrip-val accent">${f(baseSc.gea)} m\u00B2</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">NIA</span><span class="cstrip-val accent">${f(baseSc.nia)} m\u00B2</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">Efficiency (NIA/GIA)</span><span class="cstrip-val accent">${Math.round(baseSc.eff*100)}%</span></div>
+    </div>
+    <div class="cstrip-col">
+      <div class="cstrip-col-label">Uplift</div>
+      <div class="cstrip-row"><span class="cstrip-key">Additional floors</span><span class="cstrip-val green">+${addF}F</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">NIA gained</span><span class="cstrip-val green">+${f(baseSc.nia-existNIA)} m\u00B2</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">Area increase</span><span class="cstrip-val green">+${Math.round((baseSc.nia-existNIA)/existNIA*100)}%</span></div>
+      <div class="cstrip-row"><span class="cstrip-key">Max permitted</span><span class="cstrip-val">${maxF}F (Est.)</span></div>
+    </div>`);
+
+  // Architecture metrics
+  const servicesPct = Math.round((0.22 - 0.10) * 100);
+  html('arch-metrics', [
+    ['Floorplate GIA', f(gp)+' m\u00B2', 'gross per floor'],
+    ['Floorplate NIA', f(Math.round(gp*effRate))+' m\u00B2', 'net per floor'],
+    ['Efficiency (NIA/GIA)', Math.round(effRate*100)+'%', 'net-to-gross ratio'],
+    ['Core Area', coreM2+' m\u00B2', corePct+'% of floorplate GIA'],
+    ['Services', servicesPct+'%', 'of floorplate GIA'],
+    ['Max Height', maxH+'m AOD', 'Est. from planning context'],
+    ['Lease Span', '7m min', 'clear, 2 faces'],
+    ['Plot Area', f(PLOT_AREA)+' m\u00B2', 'from HMLR title extent'],
+    ['Est. Max Floors', maxF+'F', 'PTAL + OA + conservation derived']
+  ].map(([label,val,sub]) => `<div class="arch-cell"><div class="arch-cell-label">${label}</div><div class="arch-cell-val">${val}</div><div class="arch-cell-sub">${sub}</div></div>`).join(''));
+
+  // Scenario cards
+  html('sc-cards', SCENARIOS.map((sc,i) => `
+    <div class="sc-card${i===activeIdx?' active':''}" onclick="scGo(${i})">
+      <div class="sc-card-label">${sc.label}</div>
+      <div class="sc-card-floors">${sc.floors}<sup>F</sup></div>
+      <div class="sc-row"><span class="sc-row-key">GIA</span><span class="sc-row-val">${f(sc.gea)} m\u00B2</span></div>
+      <div class="sc-row"><span class="sc-row-key">NIA</span><span class="sc-row-val">${f(sc.nia)} m\u00B2</span></div>
+      <div class="sc-row"><span class="sc-row-key">Eff (NIA/GIA)</span><span class="sc-row-val">${Math.round(sc.eff*100)}%</span></div>
+      <div class="sc-row"><span class="sc-row-key">Est. GDV</span><span class="sc-row-val copper">${fm(sc.gdv)}</span></div>
+      <div class="sc-row"><span class="sc-row-key">Profit on Cost</span><span class="sc-row-val${parseFloat(sc.poc)>=18?' green':''}">${sc.poc}%</span></div>
+      <div class="sc-row"><span class="sc-row-key">RLV</span><span class="sc-row-val">${fm(sc.rlv)}</span></div>
+    </div>`).join(''));
+  updateScChart();
+
+  // 03 CONSTRAINTS - conversion readiness checklist
+  const inOA = !!(mom.opportunity_area);
+  const notCA = !(si.planning_realm && si.planning_realm.conservation_area);
+  const noFlood = true; // Zone 1 assumed for Bankside
+  const ptal4 = parseInt(s.ptal||0) >= 4;
+  const hasPrecedent = !!(mom.precedents && mom.precedents.length);
+  const noMOL = true;
+  const noArt4 = !(si.planning_realm && si.planning_realm.article4);
+  const notGrade1adj = tier !== 'high';
+  const noOpInfra = true;
+  const lpaAppetite = momS >= 6;
+  const crItems = [
+    [inOA,          'Opportunity Area designation',            inOA?'London Bridge/Bankside OA':'Not in designated OA'],
+    [notCA,         'Outside conservation area',               notCA?'No conservation area constraint found':'Conservation area - design review required'],
+    [notGrade1adj,  'Not Grade I/II* adjacent',               tier!=='high'?'Heritage tier manageable':'Grade I/II* setting - significant constraint'],
+    [noFlood,       'No flood zone 3',                         'Zone 1 - standard drainage requirements'],
+    [ptal4,         'PTAL 4 or above',                         'PTAL '+(s.ptal_label||s.ptal||'6')+ ' - excellent public transport'],
+    [hasPrecedent,  'Prior approval or precedent found',       hasPrecedent?(mom.precedents.length+' precedents in area'):'No precedents found'],
+    [lpaAppetite,   'Borough LPA appetite - positive',         'Southwark LPA - generally supportive of commercial densification in OA'],
+    [noArt4,        'No Article 4 restriction',                noArt4?'No Article 4 direction identified':'Article 4 - permitted development restricted'],
+    [noMOL,         'No Metropolitan Open Land / open space',  'No MOL conflict identified'],
+    [noOpInfra,     'Not operational infrastructure',          'No operational infrastructure conflict']
+  ];
+  const crPass = crItems.filter(([p]) => p).length;
+  set('cr-score', crPass);
+  html('cr-list', crItems.map(([pass, label, note]) => `
+    <div class="cr-item">
+      <div class="cr-check ${pass?'pass':'fail'}">${pass?'\u2713':'\u2717'}</div>
+      <div class="cr-item-label">${label}</div>
+      <div class="cr-item-note">${note}</div>
+    </div>`).join(''));
+  // Update hero chip
+  set('chip-readiness', 'READINESS '+crPass+'/10');
+
+  // Constraint grid
+  html('con-grid', [
+    ['Heritage Tier', (tier.charAt(0).toUpperCase()+tier.slice(1)), tier==='low'?'ok':tier==='manageable'?'warn':'risk', tier==='low'?'Low':'Manageable', hf.summary||''],
+    ['PTAL', s.ptal_label||s.ptal||'6', parseInt(s.ptal||0)>=4?'ok':'warn', parseInt(s.ptal||0)>=4?'Excellent':'Good', 'Public Transport Accessibility Level'],
+    ['OA', mom.opportunity_area?'Yes':'No', mom.opportunity_area?'ok':'warn', mom.opportunity_area?'Active':'None', mom.opportunity_area?mom.opportunity_area.name:''],
+    ['Conservation Area', notCA?'None':'Active', notCA?'ok':'warn', notCA?'Clear':'Active', ''],
+    ['Max Floors (Est.)', maxF+'F', maxF>=10?'ok':'warn', maxF>=12?'High density':'Mid density', 'Derived: PTAL+OA+CAZ+conservation'],
+    ['Flood Zone', 'Zone 1', 'ok', 'Low risk', 'Standard drainage - no special measures']
+  ].map(([label,val,pill,pillTxt,sub]) => `
+    <div class="con-cell">
+      <div class="con-cell-label">${label}</div>
+      <div class="con-cell-val">${val}<span class="con-pill ${pill}">${pillTxt}</span></div>
+      ${sub?`<div class="con-cell-sub">${sub}</div>`:''}
+    </div>`).join(''));
+
+  // Building regs
+  const planSynth = typeof synthesisPlanning === 'function' ? synthesisPlanning(si) : '';
+  html('con-body', '<p>'+planSynth+'</p>');
+  html('regs-body', [
+    ['Part B - Fire Safety', 'Over 18m AOD triggers Residential Sprinkler standard and fire suppression requirements. Applies to base and high scenarios.'],
+    ['Part L - Energy', 'Net-zero trajectory in operation required under London Plan Policy SI 2. Overheating risk assessment (Part O) mandatory above 5F.'],
+    ['Part M - Accessibility', 'Wheelchair accessible units: min 10% M4(3), remainder M4(2). Lift provision required above 2F.'],
+    ['Part F - Ventilation', 'Mechanical ventilation required at this density. MVHR preferred for energy performance.']
+  ].map(([title,desc]) => `<div class="regs-item"><div class="regs-title">${title}</div><div class="regs-desc">${desc}</div></div>`).join(''));
+
+  // Precedents
+  const precs = mom.precedents || [];
+  html('prec-list', precs.length ? precs.map(p => `
+    <div class="prec-item">
+      <div class="prec-name">${p.name||''}</div>
+      <div class="prec-detail">${p.ref||''} - ${p.outcome||''}</div>
+    </div>`).join('') : '<div style="color:rgba(255,255,255,.25);font:400 14px var(--sans)">No precedents loaded for this site.</div>');
+
+  // 04 FINANCIALS - matrix + pro forma
+  updateMatrix();
+  updateProForma();
+
+  // Sliders
+  buildSliders();
+}
+
+// ============================================================
+// SCENARIO MATRIX TABLE
+// ============================================================
+function updateMatrix() {
+  const rows = [
+    ['Floors',               SCENARIOS.map(sc => sc.floors+'F'),                    false],
+    ['GIA (NIA/GIA side by side)', null,                                             false],
+    ['GIA',                  SCENARIOS.map(sc => f(sc.gea)+' m\u00B2'),             false],
+    ['NIA',                  SCENARIOS.map(sc => f(sc.nia)+' m\u00B2'),             false],
+    ['Efficiency (NIA/GIA)', SCENARIOS.map(sc => Math.round(sc.eff*100)+'%'),       false],
+    ['Est. GDV',             SCENARIOS.map(sc => fm(sc.gdv)),                       true],
+    ['Build Cost',           SCENARIOS.map(sc => fm(sc.constCost)),                 false],
+    ['Total Dev. Cost',      SCENARIOS.map(sc => fm(sc.tdc)),                       true],
+    ['Dev. Profit',          SCENARIOS.map(sc => fm(sc.profit)),                    false],
+    ['Profit on Cost',       SCENARIOS.map(sc => sc.poc+'%'),                       true],
+    ['RLV',                  SCENARIOS.map(sc => fm(sc.rlv)),                       true],
+  ].filter(r => r[1] !== null);
+
+  const thead = `<thead><tr>
+    <th>Metric</th>
+    ${SCENARIOS.map((sc,i) => `<th class="sc-col${i===activeIdx?' active':''}" onclick="scGo(${i})">${sc.label} - ${sc.floors}F</th>`).join('')}
+  </tr></thead>`;
+  const tbody = rows.map(([label, vals, bold]) => `
+    <tr${bold?' class="mat-bold"':''}>
+      <td>${label}</td>
+      ${vals.map((v,i) => `<td class="sc-val${i===activeIdx?' active':''}">${v}</td>`).join('')}
+    </tr>`).join('');
+  html('matrix-table', thead+'<tbody>'+tbody+'</tbody>');
+}
+
+// ============================================================
+// PRO FORMA
+// ============================================================
+function updateProForma() {
+  const sc = SCENARIOS[activeIdx];
+  const rows = [
+    ['GDV',                   fm(sc.gdv),             false, false, true],
+    ['Construction Cost',     fm(sc.constCost),       true,  false, false],
+    ['Professional Fees',     fm(sc.fees),            true,  false, false],
+    ['Contingency (7.5%)',    fm(sc.contg),           true,  false, false],
+    ['Finance',               fm(sc.finance),         true,  false, false],
+    ['CIL',                   fm(sc.cil),             true,  false, false],
+    ['S106',                  fm(S.s106*1000),        true,  false, false],
+    ['Letting Fee',           fm(sc.letting),         true,  false, false],
+    ['Demolition / Enabling', fm(850000),             true,  false, false],
+    ['Total Development Cost',fm(sc.tdc),             false, true,  false],
+    ['Developer Profit',      fm(sc.profit),          false, false, true],
+    ['Profit on Cost',        sc.poc+'%',             false, false, true],
+  ];
+  const tbody = rows.map(([k,v,sub,bold,acc]) => {
+    const cls = bold?'pf-bold':sub?'pf-sub':acc?'pf-accent':'';
+    return `<tr${cls?' class="'+cls+'"':''}><td>${k}</td><td>${v}</td></tr>`;
+  }).join('');
+  html('pf-table', `<colgroup><col style="width:65%"><col style="width:35%"></colgroup><tbody>${tbody}</tbody>`);
+  set('rlv-val', fm(sc.rlv));
+  html('rlv-note', 'At '+S.poc+'% target profit, the residual land value for the '+sc.label.toLowerCase()+' scenario ('+sc.floors+'F) is <strong style="color:#fff">'+fm(sc.rlv)+'</strong>. Compare to current passing rent capitalised at market yield.');
+}
+
+// ============================================================
+// SCENARIO BAR CHART
+// ============================================================
+function updateScChart() {
+  const maxP = Math.max(...SCENARIOS.map(sc => parseFloat(sc.poc)));
+  html('sc-chart', SCENARIOS.map((sc,i) => {
+    const pct = parseFloat(sc.poc);
+    const barH = Math.round((pct / (maxP * 1.3)) * 100);
+    const active = i === activeIdx;
+    return `<div class="sc-chart-col" onclick="scGo(${i})">
+      <div class="sc-chart-pct${active?' active':''}">${pct}%</div>
+      <div class="sc-chart-sub">Profit on Cost</div>
+      <div class="sc-chart-bar-wrap"><div class="sc-chart-bar${active?' active':''}" style="height:${barH}px"></div></div>
+      <div class="sc-chart-label">${sc.floors}F - ${sc.label}</div>
+      <div class="sc-chart-gdv">${fm(sc.gdv)}</div>
+    </div>`;
+  }).join(''));
+}
+
+// ============================================================
+// SEGMENTED SLIDERS
+// ============================================================
+const SEG_DEFS = [
+  {id:'erv',  label:'ERV per m\u00B2',        key:'erv',  min:500,  max:1200, step:25,   fmt:v=>'\u00A3'+v},
+  {id:'niy',  label:'Net Yield',               key:'niy',  min:3.5,  max:7.5,  step:0.25, fmt:v=>v+'%'},
+  {id:'cost', label:'Build Cost /m\u00B2 GIA', key:'cost', min:3000, max:8000, step:100,  fmt:v=>'\u00A3'+(v/1000).toFixed(1)+'k'},
+  {id:'poc',  label:'Target Profit on Cost',   key:'poc',  min:10,   max:30,   step:1,    fmt:v=>v+'%'},
+];
+const SEG_N = 32;
+
+function buildSliders() {
+  const wrap = document.getElementById('seg-sliders');
+  if(!wrap) return;
+  wrap.innerHTML = SEG_DEFS.map(def => `
+    <div class="seg-item">
+      <div class="seg-item-top">
+        <div class="seg-item-label">${def.label}</div>
+        <div class="seg-item-val" id="sv-${def.id}">${def.fmt(def.val||S_DEFS[def.key])}</div>
+      </div>
+      <div class="seg-blocks" id="sb-${def.id}" data-def="${def.id}">
+        ${Array.from({length:SEG_N}).map((_,i)=>`<div class="seg-block" data-i="${i}"></div>`).join('')}
+      </div>
+    </div>`).join('');
+  SEG_DEFS.forEach(def => { def.val = S_DEFS[def.key]; renderSeg(def); });
+  document.querySelectorAll('.seg-blocks').forEach(el => {
+    el.addEventListener('click', e => {
+      const rect = el.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const def = SEG_DEFS.find(d => d.id === el.dataset.def);
+      if(!def) return;
+      const steps = Math.round((def.max - def.min) / def.step);
+      def.val = def.min + Math.round(pct * steps) * def.step;
+      S[def.key] = def.val;
+      calcScenarios();
+      renderSeg(def);
+      updateHeroMetrics(); updateProForma(); updateScChart(); updateMatrix();
+    });
+  });
+}
+function renderSeg(def) {
+  const filled = Math.round(((def.val - def.min) / (def.max - def.min)) * SEG_N);
+  const valEl = document.getElementById('sv-'+def.id);
+  if(valEl) valEl.textContent = def.fmt(def.val);
+  const wrap = document.getElementById('sb-'+def.id);
+  if(!wrap) return;
+  wrap.querySelectorAll('.seg-block').forEach((b,i) => b.classList.toggle('on', i < filled));
+}
+function resetAssumptions() {
+  SEG_DEFS.forEach(def => { def.val = S_DEFS[def.key]; S[def.key] = S_DEFS[def.key]; renderSeg(def); });
+  calcScenarios();
+  updateHeroMetrics(); updateProForma(); updateScChart(); updateMatrix();
+}
+
+// ============================================================
+// MAP
+// ============================================================
+let MAP_REF, currentPersp = 'axo', rotationFrame;
+
+function initMap(token) {
+  mapboxgl.accessToken = token;
+  const map = new mapboxgl.Map({
+    container:'map', style:'mapbox://styles/mapbox/standard',
+    center:CENTROID, zoom:17.2, pitch:60, bearing:-20,
+    interactive:true, attributionControl:false, antialias:true
+  });
+  map.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-left');
+  map.scrollZoom.disable();
+  MAP_REF = map;
+
+  function rotateMap() {
+    if(!MAP_REF || currentPersp==='street') return;
+    MAP_REF.setBearing(MAP_REF.getBearing() - 0.15);
+    rotationFrame = requestAnimationFrame(rotateMap);
+  }
+
+  map.on('style.load', () => {
+    try { map.setConfigProperty('basemap','lightPreset','dusk'); } catch(e){}
+    try { map.setConfigProperty('basemap','showPointOfInterestLabels',false); } catch(e){}
+    try { map.setConfigProperty('basemap','showTransitLabels',false); } catch(e){}
+
+    map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
+    map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
+      paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.6}});
+    map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
+      paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.8}});
+    for(let fl=1; fl<=20; fl++) {
+      const h = fl * FTF;
+      map.addLayer({id:'floor-line-'+fl, type:'fill-extrusion', source:'site-poly', slot:'top',
+        paint:{'fill-extrusion-color':'rgba(0,0,0,0.5)','fill-extrusion-height':h,'fill-extrusion-base':h-0.25,'fill-extrusion-opacity':1.0}});
+    }
+    if(typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
+      map.getSource('site-poly').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_INTELLIGENCE.polygon]}});
+    }
+    updateMassing(SCENARIOS[activeIdx]);
+    setTimeout(rotateMap, 2000);
+
+    let userInteracted = false;
+    map.on('mousedown', () => { if(rotationFrame) cancelAnimationFrame(rotationFrame); userInteracted=true; document.getElementById('persp-reset').classList.add('visible'); });
+    map.on('touchstart', () => { if(rotationFrame) cancelAnimationFrame(rotationFrame); userInteracted=true; document.getElementById('persp-reset').classList.add('visible'); });
+    window._restartRotation = () => { userInteracted=false; rotateMap(); document.getElementById('persp-reset').classList.remove('visible'); };
+  });
+}
+
+function updateMassing(sc) {
+  if(!MAP_REF || !MAP_REF.getLayer('site-massing')) return;
+  const existH = 24.8;
+  try {
+    MAP_REF.setPaintProperty('site-massing','fill-extrusion-height', existH + (sc.floors * FTF - existH));
+    MAP_REF.setPaintProperty('site-massing','fill-extrusion-base', existH);
+  } catch(e){}
+}
+
+function setPerspective(mode) {
+  currentPersp = mode;
+  document.querySelectorAll('.persp-btn').forEach(b => b.classList.remove('active'));
+  const sv = document.getElementById('sv-overlay');
+  if(mode === 'street') {
+    document.getElementById('persp-street').classList.add('active');
+    if(rotationFrame) cancelAnimationFrame(rotationFrame);
+    const key = 'AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI';
+    sv.style.backgroundImage = `url(https://maps.googleapis.com/maps/api/streetview?size=1200x800&location=${LAT},${LNG}&fov=90&key=${key})`;
+    sv.style.opacity='1'; sv.style.pointerEvents='auto';
+    MAP_REF.easeTo({pitch:0, zoom:16, bearing:0, duration:800});
+  } else {
+    sv.style.opacity='0'; sv.style.pointerEvents='none';
+    if(mode==='aerial') { document.getElementById('persp-aerial').classList.add('active'); MAP_REF.easeTo({pitch:0, zoom:17.5, bearing:0, duration:800}); }
+    else { document.getElementById('persp-axo').classList.add('active'); MAP_REF.easeTo({pitch:60, zoom:17.2, bearing:MAP_REF.getBearing(), duration:800}); }
+  }
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+fetch('/api/config').then(r=>r.json()).then(cfg => {
+  if(!cfg||!cfg.mapboxToken) return;
+  initMap(cfg.mapboxToken);
+}).catch(e => console.warn('Config:', e.message));
+
+if(typeof SITE_INTELLIGENCE !== 'undefined') {
+  populatePage(SITE_INTELLIGENCE);
+} else {
+  document.addEventListener('DOMContentLoaded', () => {
+    if(typeof SITE_INTELLIGENCE !== 'undefined') populatePage(SITE_INTELLIGENCE);
+  });
+}
+</script>
+</body>
+</html>
