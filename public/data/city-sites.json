@@ -29,7 +29,8 @@
         "inBrownfield": false
       },
       "desc": "Liverpool Street station supersite",
-      "deliveryFlag": "station-oversite"
+      "deliveryFlag": "station-oversite",
+      "max_floors": 7
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -59,7 +60,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "GLA layer 108 - Norton Folgate allocation"
+      "desc": "GLA layer 108 - Norton Folgate allocation",
+      "max_floors": 7
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -89,7 +91,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "4000m² office site with planning context for 30F/120m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "4000m\u00b2 office site with planning context for 30F/120m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "max_floors": 7
     },
     {
       "name": "10 Trinity Square",
@@ -119,7 +122,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "GLA layer 108 - Tower Gateway cluster"
+      "desc": "GLA layer 108 - Tower Gateway cluster",
+      "max_floors": 7
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -149,7 +153,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "5000m² office site with planning context for 22F/90m - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "5000m\u00b2 office site with planning context for 22F/90m - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "max_floors": 7
     },
     {
       "name": "Barts Square, Little Britain",
@@ -179,7 +184,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "GLA layer 108 - Smithfield/Barbican"
+      "desc": "GLA layer 108 - Smithfield/Barbican",
+      "max_floors": 7
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -209,7 +215,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "3500m² office site with potential to 12F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "3500m\u00b2 office site with potential to 12F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "max_floors": 7
     },
     {
       "name": "Crown Place, Earl Street",
@@ -239,7 +246,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "GLA layer 108 - Moorgate cluster"
+      "desc": "GLA layer 108 - Moorgate cluster",
+      "max_floors": 7
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -269,7 +277,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "4500m² office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "4500m\u00b2 office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "max_floors": 7
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -299,7 +308,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "GLA layer 108 - Aldgate cluster"
+      "desc": "GLA layer 108 - Aldgate cluster",
+      "max_floors": 7
     },
     {
       "name": "Land at Royal Mint Street",
@@ -329,7 +339,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "8000m² mixed-use site with potential to 18F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "8000m\u00b2 mixed-use site with potential to 18F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "max_floors": 7
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -359,7 +370,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "1.0ha mixed-use site with planning context for 22F/90m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "1.0ha mixed-use site with planning context for 22F/90m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "max_floors": 7
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -389,7 +401,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "5000m² office site with planning context for 25F/100m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "5000m\u00b2 office site with planning context for 25F/100m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "max_floors": 7
     },
     {
       "name": "100 Leadenhall Street",
@@ -419,7 +432,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "City cluster - Leadenhall corridor"
+      "desc": "City cluster - Leadenhall corridor",
+      "max_floors": 7
     },
     {
       "name": "Fleet Street East, EC4",
@@ -449,7 +463,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "Fleet Street corridor - media/legal cluster"
+      "desc": "Fleet Street corridor - media/legal cluster",
+      "max_floors": 7
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -479,7 +494,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "4000m² office site with potential to 12F - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "4000m\u00b2 office site with potential to 12F - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "max_floors": 7
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -510,7 +526,8 @@
         "inBrownfield": false
       },
       "desc": "TfL oversite - station air rights",
-      "deliveryFlag": "station-oversite"
+      "deliveryFlag": "station-oversite",
+      "max_floors": 7
     },
     {
       "name": "Moorgate Station Oversite",
@@ -540,8 +557,9 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "5000m² office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
-      "deliveryFlag": "station-oversite"
+      "desc": "5000m\u00b2 office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "deliveryFlag": "station-oversite",
+      "max_floors": 7
     },
     {
       "name": "Smithfield Market, EC1",
@@ -571,7 +589,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "Former meat market - museum/mixed-use"
+      "desc": "Former meat market - museum/mixed-use",
+      "max_floors": 7
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -601,7 +620,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "3500m² office site with potential to 11F - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "3500m\u00b2 office site with potential to 11F - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "max_floors": 7
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -631,7 +651,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "GLA layer 108 - Blackfriars gateway"
+      "desc": "GLA layer 108 - Blackfriars gateway",
+      "max_floors": 7
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -661,7 +682,8 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "GLA layer 108 - Holborn residential"
+      "desc": "GLA layer 108 - Holborn residential",
+      "max_floors": 7
     }
   ],
   "borough": "City of London",

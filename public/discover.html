@@ -1885,7 +1885,11 @@ function initMassMap(site, scenarios) {
     massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
     massMap.setConfigProperty('basemap', 'showTransitLabels', false);
     var sc = scenarios[massScenario];
-    addMassingLayers(massMap, site, sc);
+    if (site.brownfield) {
+      addGhostMassing(massMap, site);
+    } else {
+      addMassingLayers(massMap, site, sc);
+    }
   });
 }
 
@@ -1915,6 +1919,73 @@ function insetRect(coords, metres) {
     if (dist === 0) return p;
     var shrink = Math.max(0, dist - factor) / dist;
     return [c[0] + dx * shrink, c[1] + dy * shrink];
+  });
+}
+
+// PLACEHOLDER: Ghost extrusion for brownfield sites - uses approximate rect from hectares
+// Replace with real INSPIRE polygon when available
+function addGhostMassing(map, site) {
+  var rect = siteRect(site);
+  var floorH = 3.5;
+  var maxF = site.maxFloors || 8;
+  var totalH = maxF * floorH;
+  var midH = Math.round(totalH * 0.6);
+
+  // Site outline - dashed white
+  map.addSource('ghost-site', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [rect] } }
+  });
+  map.addLayer({
+    id: 'ghost-outline', type: 'line', source: 'ghost-site',
+    paint: { 'line-color': '#8b7355', 'line-width': 2, 'line-opacity': 0.8, 'line-dasharray': [4, 2] }
+  });
+
+  // Ghost envelope - semi-transparent brownfield colour
+  map.addSource('ghost-envelope', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [rect] } }
+  });
+  map.addLayer({
+    id: 'ghost-body', type: 'fill-extrusion', source: 'ghost-envelope',
+    paint: {
+      'fill-extrusion-color': '#8b7355',
+      'fill-extrusion-height': totalH,
+      'fill-extrusion-base': 0,
+      'fill-extrusion-opacity': 0.18
+    }
+  });
+
+  // Ghost cap - slightly more visible top face
+  map.addSource('ghost-cap', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [insetRect(rect, 1)] } }
+  });
+  map.addLayer({
+    id: 'ghost-cap-3d', type: 'fill-extrusion', source: 'ghost-cap',
+    paint: {
+      'fill-extrusion-color': '#c4a882',
+      'fill-extrusion-height': totalH + 0.3,
+      'fill-extrusion-base': totalH,
+      'fill-extrusion-opacity': 0.5
+    }
+  });
+
+  // Horizontal guide lines at 1/3 and 2/3 height
+  [Math.round(totalH*0.33), Math.round(totalH*0.66)].forEach(function(h, i) {
+    map.addSource('ghost-line-'+i, {
+      type: 'geojson',
+      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [insetRect(rect, 0.3)] } }
+    });
+    map.addLayer({
+      id: 'ghost-hline-'+i, type: 'fill-extrusion', source: 'ghost-line-'+i,
+      paint: {
+        'fill-extrusion-color': '#8b7355',
+        'fill-extrusion-height': h + 0.3,
+        'fill-extrusion-base': h,
+        'fill-extrusion-opacity': 0.4
+      }
+    });
   });
 }
 
