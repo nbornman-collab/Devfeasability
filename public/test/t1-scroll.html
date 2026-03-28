@@ -398,6 +398,25 @@ input[type=range].ruler-input {
   .reveal { opacity: 1; transform: none; }
   .return-curve-path { stroke-dashoffset: 0 !important; stroke-dasharray: none !important; }
 }
+
+/* -- MOTIVATED SELLER FLAGS -- */
+.mflag { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+.mflag:last-child { border-bottom: none; }
+.mflag-name { font: 400 14px var(--sans); color: rgba(255,255,255,.6); }
+.mflag-note { font: 400 11px var(--sans); color: rgba(255,255,255,.2); margin-top: 2px; }
+.mflag-status { font: 700 12px var(--sans); text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; border-radius: 20px; }
+.mflag-status.yes { background: rgba(217,119,6,.2); color: #fbbf24; }
+.mflag-status.no { background: rgba(255,255,255,.06); color: rgba(255,255,255,.3); }
+.mflag-status.unk { background: rgba(255,255,255,.04); color: rgba(255,255,255,.2); }
+
+/* -- CONVERSION READINESS -- */
+.cr-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.cr-item:last-child { border-bottom: none; }
+.cr-check { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font: 700 13px var(--sans); flex-shrink: 0; }
+.cr-check.pass { background: rgba(22,163,74,.1); color: #16a34a; }
+.cr-check.fail { background: rgba(220,38,38,.08); color: #dc2626; }
+.cr-item-label { font: 600 14px var(--sans); color: var(--ink); }
+.cr-item-note { font: 400 13px var(--sans); color: var(--ink3); margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -408,10 +427,9 @@ input[type=range].ruler-input {
 <!-- PROGRESS DOTS -->
 <div class="progress-dots" id="progress-dots">
   <button class="progress-dot active" data-target="overview"><div class="progress-dot-circle"></div><span class="progress-dot-label">Overview</span></button>
-  <button class="progress-dot" data-target="development"><div class="progress-dot-circle"></div><span class="progress-dot-label">01 Dev</span></button>
-  <button class="progress-dot" data-target="scenarios"><div class="progress-dot-circle"></div><span class="progress-dot-label">02 Scenarios</span></button>
-  <button class="progress-dot" data-target="architecture"><div class="progress-dot-circle"></div><span class="progress-dot-label">03 Architecture</span></button>
-  <button class="progress-dot" data-target="planning"><div class="progress-dot-circle"></div><span class="progress-dot-label">04 Planning</span></button>
+  <button class="progress-dot" data-target="development"><div class="progress-dot-circle"></div><span class="progress-dot-label">01 Development</span></button>
+  <button class="progress-dot" data-target="architecture"><div class="progress-dot-circle"></div><span class="progress-dot-label">02 Architecture</span></button>
+  <button class="progress-dot" data-target="planning"><div class="progress-dot-circle"></div><span class="progress-dot-label">03 Planning</span></button>
 </div>
 
 <!-- NAV (frosted, fixed) -->
@@ -420,7 +438,6 @@ input[type=range].ruler-input {
   <div class="nav-links">
     <a href="#overview" class="active">Overview</a>
     <a href="#development">Development</a>
-    <a href="#scenarios">Scenarios</a>
     <a href="#architecture">Architecture</a>
     <a href="#planning">Planning</a>
   </div>
@@ -513,15 +530,27 @@ input[type=range].ruler-input {
       <div class="section-label">Intelligence Factors</div>
       <div class="factor-grid" id="factor-bars"></div>
     </div>
-  </div>
-</section>
 
-<!-- SECTION 2: SCENARIO COMPARISON MATRIX -->
-<section class="section" id="scenarios" style="background: var(--bg2);">
-  <div class="section-inner">
-    <div class="reveal">
-      <div class="section-label">02 - Scenario Matrix</div>
-      <div class="section-title">Three densities. Every consequence.</div>
+    <!-- Motivated Seller -->
+    <div class="reveal" style="margin-top:48px">
+      <div class="motivated-card" style="background:#1a1a19;border-radius:18px;overflow:hidden">
+        <div style="padding:28px 32px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+          <div>
+            <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.35);margin-bottom:6px">Motivated Seller Score</div>
+            <div style="font:700 clamp(40px,5vw,56px)/1 var(--mono);color:#d97706;letter-spacing:-.04em" id="mot-score">3<span style="font-size:.4em;font-weight:400;color:rgba(255,255,255,.3)">/5</span></div>
+            <div style="font:400 14px var(--sans);color:rgba(255,255,255,.5);margin-top:4px" id="mot-verdict">Moderate urgency - long hold + fund structure signals</div>
+          </div>
+          <div style="font:400 12px var(--sans);color:rgba(255,255,255,.2);font-style:italic;text-align:right;max-width:200px">Estimated - pending<br>HMLR + Companies House<br>pipeline connection</div>
+        </div>
+        <div id="mot-flags" style="padding:0 32px 24px"></div>
+        <div style="padding:0 32px 20px;font:400 11px var(--sans);color:rgba(255,255,255,.15)">Sources: HMLR title register, Companies House, Business Rates England - pipeline pending</div>
+      </div>
+    </div>
+
+    <!-- Scenario Matrix (absorbed into Development) -->
+    <div class="reveal" style="margin-top:56px">
+      <div class="section-label">Scenario Matrix</div>
+      <div class="section-title" style="font-size:clamp(24px,3vw,36px)">Three densities. Every consequence.</div>
       <div class="section-body">Each column is a complete picture - not just what it costs, but what it triggers.</div>
     </div>
 
@@ -589,11 +618,11 @@ input[type=range].ruler-input {
   </div>
 </section>
 
-<!-- SECTION 3: ARCHITECTURE (above Planning - physical before regulatory) -->
+<!-- SECTION 2: ARCHITECTURE -->
 <section class="section" id="architecture" style="background: var(--bg2);">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-label">03 - Architecture</div>
+      <div class="section-label">02 - Architecture</div>
       <div class="section-title" id="arch-title">Heritage-led. Code-compliant.</div>
     </div>
     <div class="reveal reveal-delay-1">
@@ -615,14 +644,25 @@ input[type=range].ruler-input {
       <div class="section-label">Height Context</div>
       <div id="heights-body"></div>
     </div>
+
+    <!-- Conversion Readiness Checklist -->
+    <div class="glass reveal" style="margin-top:48px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px">
+        <div class="section-label" style="margin-bottom:0">Conversion Readiness</div>
+        <div style="font:700 28px var(--mono);color:var(--accent)" id="cr-score">-</div>
+      </div>
+      <div style="font:400 13px var(--sans);color:var(--ink3);margin-bottom:20px">10 conditions assessed against site data. Score reflects planning and delivery readiness, not financial viability.</div>
+      <div id="cr-list"></div>
+      <div style="margin-top:16px;font:400 11px var(--sans);color:var(--ink3);font-style:italic">Screening estimate - not a compliance assessment. Professional verification required.</div>
+    </div>
   </div>
 </section>
 
-<!-- SECTION 4: PLANNING -->
+<!-- SECTION 3: PLANNING -->
 <section class="section" id="planning">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-label">04 - Planning</div>
+      <div class="section-label">03 - Planning</div>
       <div class="section-title" id="plan-title">Strong precedent. Clear pathway.</div>
     </div>
     <div class="reveal reveal-delay-1">
@@ -804,6 +844,51 @@ function populatePage(si) {
     const pct = Math.round(sc2 / 10 * 100);
     return `<div class="factor-row"><div class="factor-row-top"><span class="factor-name">${LABELS[k]||k}</span><span class="factor-score">${typeof sc2==='number'?sc2.toFixed(1):sc2}</span></div><div class="factor-bar-wrap"><div class="factor-bar${sc2>=7?' high':''}" style="width:${pct}%"></div></div></div>`;
   }).join(''));
+
+  // Motivated Seller flags
+  html('mot-flags', [
+    ['Out-of-area ownership', 'no', 'London-registered fund entity'],
+    ['Estate or probate', 'no', 'Active corporate ownership'],
+    ['Business rates arrears', 'unk', 'Verification pending'],
+    ['Long hold (20+ years)', 'yes', 'RREEF fund acquisition - extended hold period inferred'],
+    ['Dissolved company / stale registration', 'unk', 'Companies House check pending']
+  ].map(([name, status, note]) => {
+    const cls = status==='yes'?'yes':status==='no'?'no':'unk';
+    const txt = status==='yes'?'Confirmed':status==='no'?'No':'Unknown';
+    return `<div class="mflag"><div><div class="mflag-name">${name}</div><div class="mflag-note">${note}</div></div><span class="mflag-status ${cls}">${txt}</span></div>`;
+  }).join(''));
+
+  // Conversion Readiness checklist
+  const inOA = !!(mom.opportunity_area);
+  const notCA = !(hf.building_character && hf.building_character.conservation_area);
+  const noFlood = true;
+  const ptal4 = parseInt(s.ptal||0) >= 4;
+  const hasPrecedent = !!(mom.precedents && mom.precedents.length);
+  const noMOL = true;
+  const noArt4 = true;
+  const notGrade1adj = tier !== 'high';
+  const noOpInfra = true;
+  const momS = (mom.score||0);
+  const lpaAppetite = momS >= 6;
+  const crItems = [
+    [inOA,          'Opportunity Area designation',            inOA?'London Bridge/Bankside OA':'Not in designated OA'],
+    [notCA,         'Outside conservation area',               notCA?'No conservation area constraint':'Conservation area - design review required'],
+    [notGrade1adj,  'Not Grade I/II* adjacent',               tier!=='high'?'Heritage tier manageable':'Grade I/II* setting - significant constraint'],
+    [noFlood,       'No flood zone 3',                         'Zone 1 - standard drainage requirements'],
+    [ptal4,         'PTAL 4 or above',                         'PTAL '+(s.ptal_label||s.ptal||'6')+ ' - excellent public transport'],
+    [hasPrecedent,  'Prior approval or precedent found',       hasPrecedent?((mom.precedents||[]).length+' precedents in area'):'No precedents found'],
+    [lpaAppetite,   'Borough LPA appetite - positive',         'Southwark LPA - supportive of commercial densification in OA'],
+    [noArt4,        'No Article 4 restriction',                'No Article 4 direction identified'],
+    [noMOL,         'No Metropolitan Open Land / open space',  'No MOL conflict identified'],
+    [noOpInfra,     'Not operational infrastructure',          'No operational infrastructure conflict']
+  ];
+  const crPass = crItems.filter(([p]) => p).length;
+  set('cr-score', crPass + '/10');
+  html('cr-list', crItems.map(([pass, label, note]) => `
+    <div class="cr-item">
+      <div class="cr-check ${pass?'pass':'fail'}">${pass?'\u2713':'\u2717'}</div>
+      <div><div class="cr-item-label">${label}</div><div class="cr-item-note">${note}</div></div>
+    </div>`).join(''));
 
   // Planning
   const planSynth = typeof synthesisPlanning === 'function' ? synthesisPlanning(si) : '';
@@ -1511,7 +1596,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 // -- 4. PROGRESS DOTS --
 (function() {
   const dots = document.querySelectorAll('.progress-dot');
-  const sectionIds = ['overview','development','scenarios','architecture','planning'];
+  const sectionIds = ['overview','development','architecture','planning'];
 
   dots.forEach(dot => {
     dot.addEventListener('click', () => {

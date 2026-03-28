@@ -943,16 +943,7 @@ app.get('/api/version', (req, res) => {
   res.json({ version: '4.3.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
 });
 
-app.get('/api/diag-files', (req, res) => {
-  const fs = require('fs');
-  const testDir = path.join(__dirname, 'public', 'test');
-  try {
-    const files = fs.readdirSync(testDir);
-    res.json({ testDir, files });
-  } catch(e) {
-    res.json({ error: e.message });
-  }
-});
+
 
 // ── Building data from OS NGD — real footprint polygon + height ───────────
 const buildingDataCache = new Map();
