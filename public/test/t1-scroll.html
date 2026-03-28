@@ -75,7 +75,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
   transition: all .3s; }
 .hero-sc-tab:hover { background: rgba(255,255,255,.15); color: rgba(255,255,255,.9); }
 .hero-sc-tab.active { background: var(--accent2); color: #fff; border-color: var(--accent2); }
-.hero-sc-tab span { display: block; font: 500 11px var(--mono); opacity: .7; margin-top: 3px; }
+.hero-sc-tab span { display: block; font: 500 18px var(--mono); opacity: .7; margin-top: 3px; }
 
 .hero-metrics { display: flex; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
 .hero-metric { }
@@ -93,7 +93,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
   font: 800 20px var(--sans); color: var(--ink); letter-spacing: -.02em; padding: 20px 16px; }
 .matrix-table thead th:first-child { text-align: left; font: 600 12px var(--sans); text-transform: uppercase;
   letter-spacing: .1em; color: var(--ink3); }
-.matrix-table thead th .th-floors { font: 500 13px var(--mono); color: var(--ink3); margin-top: 2px; }
+.matrix-table thead th .th-floors { font: 500 18px var(--mono); color: var(--ink3); margin-top: 2px; }
 .matrix-table tbody td { font: 500 18px var(--sans); color: var(--ink2); border-top: 1px solid rgba(0,0,0,.04); }
 .matrix-table tbody td:first-child { text-align: left; font: 600 13px var(--sans); color: var(--ink3);
   text-transform: uppercase; letter-spacing: .06em; background: rgba(255,255,255,.3); }
@@ -402,8 +402,8 @@ input[type=range].ruler-input {
 /* -- MOTIVATED SELLER FLAGS -- */
 .mflag { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
 .mflag:last-child { border-bottom: none; }
-.mflag-name { font: 400 14px var(--sans); color: rgba(255,255,255,.6); }
-.mflag-note { font: 400 11px var(--sans); color: rgba(255,255,255,.2); margin-top: 2px; }
+.mflag-name { font: 400 14px var(--sans); color: rgba(255,255,255,.65); }
+.mflag-note { font: 400 11px var(--sans); color: rgba(255,255,255,.5); margin-top: 2px; }
 .mflag-status { font: 700 12px var(--sans); text-transform: uppercase; letter-spacing: .06em; padding: 3px 10px; border-radius: 20px; }
 .mflag-status.yes { background: rgba(217,119,6,.2); color: #fbbf24; }
 .mflag-status.no { background: rgba(255,255,255,.06); color: rgba(255,255,255,.3); }
@@ -536,14 +536,14 @@ input[type=range].ruler-input {
       <div class="motivated-card" style="background:#1a1a19;border-radius:18px;overflow:hidden">
         <div style="padding:28px 32px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
           <div>
-            <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.35);margin-bottom:6px">Motivated Seller Score</div>
+            <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.65);margin-bottom:6px">Motivated Seller Score</div>
             <div style="font:700 clamp(40px,5vw,56px)/1 var(--mono);color:#d97706;letter-spacing:-.04em" id="mot-score">3<span style="font-size:.4em;font-weight:400;color:rgba(255,255,255,.3)">/5</span></div>
-            <div style="font:400 14px var(--sans);color:rgba(255,255,255,.5);margin-top:4px" id="mot-verdict">Moderate urgency - long hold + fund structure signals</div>
+            <div style="font:400 14px var(--sans);color:rgba(255,255,255,.65);margin-top:4px" id="mot-verdict">Moderate urgency - long hold + fund structure signals</div>
           </div>
-          <div style="font:400 12px var(--sans);color:rgba(255,255,255,.2);font-style:italic;text-align:right;max-width:200px">Estimated - pending<br>HMLR + Companies House<br>pipeline connection</div>
+          <div style="font:400 12px var(--sans);color:rgba(255,255,255,.5);font-style:italic;text-align:right;max-width:200px">Estimated - pending<br>HMLR + Companies House<br>pipeline connection</div>
         </div>
         <div id="mot-flags" style="padding:0 32px 24px"></div>
-        <div style="padding:0 32px 20px;font:400 11px var(--sans);color:rgba(255,255,255,.15)">Sources: HMLR title register, Companies House, Business Rates England - pipeline pending</div>
+        <div style="padding:0 32px 20px;font:400 11px var(--sans);color:rgba(255,255,255,.5)">Sources: HMLR title register, Companies House, Business Rates England - pipeline pending</div>
       </div>
     </div>
 
@@ -600,7 +600,7 @@ input[type=range].ruler-input {
     <div class="glass reveal" style="margin-top:48px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px">
         <div class="section-label" style="margin-bottom:0">Pro Forma</div>
-        <div style="font:600 13px var(--mono);color:var(--ink3)" id="pf-scenario-label">Base - 10 Floors</div>
+        <div style="font:600 18px var(--mono);color:var(--ink3)" id="pf-scenario-label">Base - 10 Floors</div>
       </div>
       <div class="proforma" id="proforma"></div>
       <div class="rlv-block" id="rlv-block"></div>
@@ -855,7 +855,7 @@ function populatePage(si) {
   ].map(([name, status, note]) => {
     const cls = status==='yes'?'yes':status==='no'?'no':'unk';
     const txt = status==='yes'?'Confirmed':status==='no'?'No':'Unknown';
-    return `<div class="mflag"><div><div class="mflag-name">${name}</div><div class="mflag-note">${note}</div></div><span class="mflag-status ${cls}">${txt}</span></div>`;
+    return `<div class="mflag"><div><div class="mflag-name">${name}</div><div class="mflag-note" style="color:rgba(255,255,255,.5)">${note}</div></div><span class="mflag-status ${cls}">${txt}</span></div>`;
   }).join(''));
 
   // Conversion Readiness checklist
