@@ -64,7 +64,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "50-60 Commercial Street",
@@ -128,7 +132,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Brick Lane and Fournier Street",
+        "article4": false
+      }
     },
     {
       "name": "Worship Street EC2A",
@@ -192,7 +201,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Shoreditch High Street South",
@@ -256,7 +269,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "South Shoreditch",
+        "article4": false
+      }
     },
     {
       "name": "Sun Street / Finsbury Square Fringe",
@@ -320,7 +338,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Curtain Road Warehouse District",
@@ -384,7 +406,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "South Shoreditch",
+        "article4": false
+      }
     },
     {
       "name": "Hoxton Square Fringe",
@@ -448,7 +475,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "South Shoreditch",
+        "article4": false
+      }
     },
     {
       "name": "Pitfield Street Industrial",
@@ -512,7 +544,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Eagle Wharf East",
@@ -576,7 +612,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "St Leonards Hospital. Hoxton Street, London (Mixed Non-residential)",
@@ -700,7 +740,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Kingsland",
+        "article4": false
+      }
     },
     {
       "name": "130 Kingsland Road and site to the rear 130A Kingsland Road (Mixed Residential/Non-Residential)",
@@ -824,7 +869,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Kingsland",
+        "article4": false
+      }
     },
     {
       "name": "Kingsland Road Industrial Corridor",
@@ -888,7 +938,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Eagle Wharf Road (Mixed Residential/Non-Residential)",
@@ -1012,7 +1066,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Regent's Canal",
+        "article4": false
+      }
     },
     {
       "name": "40-43 Andrews Road and Ash Grove Bus Garage (Mixed Residential/Non-Residential)",
@@ -1104,7 +1163,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "51-61 Mare Street (Mixed Residential/Non-Residential)",
@@ -1208,7 +1271,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Former Rose Lipman Library and Environs, Downham Road (Mixed Residential/Non-Residential)",
@@ -1332,7 +1399,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "164-170 Mare Street (Mixed Residential/Non-Residential)",
@@ -1456,7 +1527,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Mare Street",
+        "article4": false
+      }
     },
     {
       "name": "27-38 Well Street (Lidl) (Mixed Residential/Non-Residential)",
@@ -1528,7 +1604,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Mare Street",
+        "article4": false
+      }
     },
     {
       "name": "182 Mare Street (London College of Fashion) (Mixed Residential/Non-Residential)",
@@ -1652,7 +1733,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Mare Street",
+        "article4": false
+      }
     },
     {
       "name": "Florfield Road Cluster (Mixed Residential/Non-Residential)",
@@ -1748,7 +1834,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Tesco Metro, Well Street (Mixed Residential/Non-Residential)",
@@ -1864,7 +1954,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Former CLR James Library, 16-22 Dalston Lane, 62 Beechwood Road (Mixed Residential/Non-Residential)",
@@ -1988,7 +2082,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "1, 3, 5, 7 Dalston Lane, (Dalston Western Curve), & 1-7 Ashwin Street (Mixed Residential/Non-Residential)",
@@ -2112,7 +2210,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Dalston Lane (West)",
+        "article4": false
+      }
     },
     {
       "name": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of \u00e2\u20ac\u02dceastern curve\u00e2\u20ac\u2122 (Mixed Residential/Non-Residential)",
@@ -2236,7 +2339,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Dalston Lane (West)",
+        "article4": false
+      }
     },
     {
       "name": "36-42 Kingsland High Street (currently McDonalds) (Mixed Residential/Non-Residential)",
@@ -2324,7 +2432,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "333-337 Mare Street (Iceland Foods) and 231-237 Graham Road (Mixed Residential/Non-Residential)",
@@ -2436,7 +2548,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "55 Morning Lane (Mixed Residential/Non-Residential)",
@@ -2560,7 +2676,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Kingsland Shopping Centre (Mixed Residential/Non-Residential)",
@@ -2684,7 +2804,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Hackney Central Overground Station and Car Park (Mixed Non-residential)",
@@ -2765,7 +2889,11 @@
       ],
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "deliveryFlag": "station-oversite"
+      "deliveryFlag": "station-oversite",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "339-357 Mare Street, 6-18 Amhurst Road (Marks and Spencer) (Mixed Residential/Non-Residential)",
@@ -2889,7 +3017,12 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Clapton Square",
+        "article4": false
+      }
     },
     {
       "name": "Ridley Road (Mixed Non-residential)",
@@ -3001,7 +3134,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Travis Perkins, 111 Dalston Lane (Mixed Residential/Non-Residential)",
@@ -3121,7 +3258,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Clapton Bus Garage (Mixed Residential/Non-Residential)",
@@ -3245,7 +3386,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "230 Dalston Lane and Hackney Downs Station Entrance (Mixed Residential/Non-Residential)",
@@ -3322,7 +3467,11 @@
       ],
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "deliveryFlag": "station-oversite"
+      "deliveryFlag": "station-oversite",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Birkbeck Mews (Mixed Residential/Non-Residential)",
@@ -3386,7 +3535,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Lower Clapton Health Centre (Mixed Residential/Non-Residential)",
@@ -3510,7 +3663,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Tram Depot, 38-40 Upper Clapton Road (Mixed Residential/Non-Residential)",
@@ -3634,7 +3791,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "71-73 Lordship Road (St Mary\u00e2\u20ac\u2122s Lodge) (Mixed Residential/Non-Residential)",
@@ -3742,7 +3903,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Yard Buildings, 318 Green Lanes (Mixed Residential/Non-Residential)",
@@ -3866,7 +4031,11 @@
         ]
       ],
       "offMarket": "high",
-      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail."
+      "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     }
   ]
 }

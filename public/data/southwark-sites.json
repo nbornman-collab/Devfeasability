@@ -34,7 +34,15 @@
       },
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Scoring puts this in the top tier for the borough.",
-      "max_floors": 14
+      "max_floors": 14,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "24 Southwark Street",
@@ -90,7 +98,17 @@
       },
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 15
+      "max_floors": 15,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Borough High Street",
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone",
+          "Protected shopping frontage SF8: Borough High Street"
+        ]
+      }
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
@@ -128,7 +146,14 @@
       "coordSource": "google-geocode",
       "offMarket": "medium",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Peckham Major Town Centre"
+        ]
+      }
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -166,7 +191,14 @@
       "coordSource": "intelligence-file",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP39: Kwik Fit and Gibbs & Dandy, Grove Vale"
+        ]
+      }
     },
     {
       "name": "Tower Workshops",
@@ -205,7 +237,14 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
       "plot": 33618,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP14: Tower Workshops"
+        ]
+      }
     },
     {
       "name": "Kinglake Street Garages",
@@ -243,7 +282,15 @@
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP58: Mandela Way",
+          "Old Kent Road North District Town Centre"
+        ]
+      }
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
@@ -281,7 +328,17 @@
       "coordSource": "google-geocode",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Thomas A'Becket and High Street",
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP62: Former petrol filling station, 233-247 Old Kent Road",
+          "Old Kent Road North District Town Centre",
+          "Protected shopping frontage SF24: Old Kent Road, East Street and Dunton Road"
+        ]
+      }
     },
     {
       "name": "Salisbury estate car park",
@@ -319,7 +376,12 @@
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Cobourg Road",
+        "article4": false
+      }
     },
     {
       "name": "Croft Street Depot",
@@ -357,7 +419,14 @@
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP68: Sandgate Street and Verney Road"
+        ]
+      }
     },
     {
       "name": "Abellio Walworth Depot",
@@ -395,7 +464,11 @@
       "coordSource": "google-geocode",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -455,7 +528,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP72: 684-698 Old Kent Road (Kwikfit garage)",
+          "Old Kent Road South District Town Centre"
+        ]
+      }
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -515,7 +596,16 @@
       "coordSource": "google-geocode",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Dulwich Wood",
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP38:l The Grove Tavern, 520 Lordship Lane",
+          "The Grove Tavern"
+        ]
+      }
     },
     {
       "name": "Camberwell Bus Garage",
@@ -554,7 +644,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
       "plot": 33636,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Camberwell District Town Centre",
+          "Site allocation NSP28: Camberwell Bus Garage"
+        ]
+      }
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -592,7 +690,12 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
       "plot": 33585,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Graham Road and Mapledene",
+        "article4": false
+      }
     },
     {
       "name": "Burgess Business Park",
@@ -633,7 +736,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. A credible development case with manageable constraints.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Blackpool Road Business Park",
@@ -669,7 +776,16 @@
       "coordSource": "osm-polygon-centroid",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. A credible development case with manageable constraints.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone",
+          "Site allocation NSP48: London Southbank University Quarter"
+        ]
+      }
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -710,7 +826,11 @@
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -749,7 +869,14 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33618,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP79: St Olav's Business Park, Lower Road"
+        ]
+      }
     },
     {
       "name": "Aylesbury Phase 2",
@@ -787,7 +914,11 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33599,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Aylesbury Phase 3",
@@ -826,7 +957,12 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33626,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Liverpool Grove",
+        "article4": false
+      }
     },
     {
       "name": "Aylesbury Phase 2",
@@ -864,7 +1000,11 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33599,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "123 Grove Park",
@@ -919,7 +1059,15 @@
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
       "plot": 4000,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Camberwell Grove",
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP34: 123 Grove Park"
+        ]
+      }
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -957,7 +1105,12 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33626,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Liverpool Grove",
+        "article4": false
+      }
     },
     {
       "name": "Aylesbury Plot 18",
@@ -995,7 +1148,12 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33626,
       "plotEstimated": true,
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Liverpool Grove",
+        "article4": false
+      }
     },
     {
       "name": "Aylesbury Site 7",
@@ -1043,7 +1201,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Borough High Street",
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
@@ -1084,7 +1251,11 @@
       "coordSource": "google-geocode",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -1144,7 +1315,14 @@
       "coordSource": "osm-polygon-centroid",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP41: Railway Rise, East Dulwich Site allocation NSP41"
+        ]
+      }
     },
     {
       "name": "62-67 Park Street",
@@ -1204,7 +1382,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone",
+          "Site allocation NSP03: 62-67 Park Street"
+        ]
+      }
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
@@ -1264,7 +1451,16 @@
       "coordSource": "google-geocode",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone",
+          "Site allocation NSP06: 1 Southwark Bridge Road and Red Lion Court"
+        ]
+      }
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -1303,7 +1499,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33636,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Peckham Major Town Centre",
+          "Site allocation NSP74: Aylesham Centre and Peckham Bus Station"
+        ]
+      }
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
@@ -1342,7 +1546,11 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33662,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "London Bridge Health Cluster",
@@ -1381,7 +1589,16 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33614,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Borough High Street",
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -1441,7 +1658,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Trafalgar Square",
+        "article4": true,
+        "article4_names": [
+          "Article 4 Basement Development Permitted Rights Removed",
+          "Article 4 Direction Class E To C3 In Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Landmark Court",
@@ -1479,7 +1705,16 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33613,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Borough High Street",
+        "article4": true,
+        "article4_names": [
+          "London Bridge District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
@@ -1518,7 +1753,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33615,
       "plotEstimated": true,
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "London Bridge District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Mandela Way",
@@ -1560,7 +1803,15 @@
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 10000,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP58: Mandela Way",
+          "Old Kent Road North District Town Centre"
+        ]
+      }
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -1601,7 +1852,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
@@ -1642,7 +1897,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP09: Swan Street Cluster",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -1680,7 +1943,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33619,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Bricklayers Arms",
@@ -1719,7 +1990,16 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33621,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP56: Bricklayers Arms",
+          "Old Kent Road North District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -1760,7 +2040,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Pages Walk",
+        "article4": true,
+        "article4_names": [
+          "Old Kent Road North District Town Centre"
+        ]
+      }
     },
     {
       "name": "636 Old Kent Road",
@@ -1801,7 +2089,14 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Old Kent Road South District Town Centre"
+        ]
+      }
     },
     {
       "name": "Marlborough Grove and St James\u2019s Road",
@@ -1842,7 +2137,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "St James's",
+        "article4": true,
+        "article4_names": [
+          "Article 4 Basement Development Permitted Rights Removed",
+          "Article 4 Direction Class E To C3 In Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -1883,7 +2187,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "4/12 Albany Road",
@@ -1924,7 +2232,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "200 Great Dover Street",
@@ -1965,7 +2277,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP09: Swan Street Cluster",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "7-14 Great Dover Street",
@@ -2006,7 +2326,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP09: Swan Street Cluster",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -2044,7 +2372,17 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33613,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Borough High Street",
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone",
+          "Protected shopping frontage SF8: Borough High Street"
+        ]
+      }
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
@@ -2085,7 +2423,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Central Activities Zone",
+          "Site allocation NSP12: 19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
+          "Site allocation NSP12: 19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Ca"
+        ]
+      }
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
@@ -2126,7 +2473,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone",
+          "Railway Arches"
+        ]
+      }
     },
     {
       "name": "Aylesbury Phase 1",
@@ -2164,7 +2520,17 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33613,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Borough High Street",
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone",
+          "Protected shopping frontage SF8: Borough High Street"
+        ]
+      }
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
@@ -2206,7 +2572,17 @@
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 12000,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "St Georges Circus",
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone",
+          "Site allocation NSP45: Bakerloo Line Sidings and 7 St. George's Circus"
+        ]
+      }
     },
     {
       "name": "Newington Triangle",
@@ -2247,7 +2623,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
@@ -2288,7 +2668,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "49 Lomond Grove",
@@ -2329,7 +2717,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "99 Lomond Grove",
@@ -2370,7 +2762,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -2409,7 +2805,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33613,
       "plotEstimated": true,
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -2450,7 +2854,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "London Fire and Emergency Planning Authority",
@@ -2488,7 +2896,12 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33585,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Graham Road and Mapledene",
+        "article4": false
+      }
     },
     {
       "name": "London Southbank University Quarter",
@@ -2527,7 +2940,16 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33618,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone",
+          "Site allocation NSP48: London Southbank University Quarter"
+        ]
+      }
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -2568,7 +2990,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Camberwell District Town Centre",
+          "Site allocation NSP24: Camberwell Station Site allocation NSP24"
+        ]
+      }
     },
     {
       "name": "1-5 Westminster Bridge Road",
@@ -2609,7 +3039,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "St Georges Circus",
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -2650,7 +3089,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -2689,7 +3136,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33612,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -2730,7 +3185,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP23: 1-5 Paris Garden and 16-19 Hatfields",
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "63-85 Newington Causeway",
@@ -2771,7 +3235,16 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP46: 63-85 Newington Causeway",
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -2812,7 +3285,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Bloomsbury",
+        "article4": true,
+        "article4_names": [
+          "Basements"
+        ]
+      }
     },
     {
       "name": "Denmark Hill Campus East",
@@ -2853,7 +3334,11 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Camberwell Green Magistrates Court",
@@ -2894,7 +3379,15 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Camberwell Green",
+        "article4": true,
+        "article4_names": [
+          "Camberwell District Town Centre"
+        ]
+      }
     },
     {
       "name": "Chambers Wharf",
@@ -2936,7 +3429,12 @@
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 12000,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "St Anne's Church",
+        "article4": false
+      }
     },
     {
       "name": "Bath Trading Estate",
@@ -2972,7 +3470,11 @@
       "coordSource": "osm-polygon-centroid",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Goose Green Trading Estate",
@@ -3011,7 +3513,14 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33645,
       "plotEstimated": true,
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP43: Goose Green Trading Estate"
+        ]
+      }
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -3052,7 +3561,16 @@
       "coordSource": "osm-polygon-centroid",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "London Bridge District Town Centre",
+          "Central Activities Zone",
+          "Railway Arches"
+        ]
+      }
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -3093,7 +3611,14 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "SPIL4: Integrated Waste Management Facility, Electricity Substation and Ormside Street"
+        ]
+      }
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -3135,7 +3660,14 @@
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 15000,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP68: Sandgate Street and Verney Road"
+        ]
+      }
     },
     {
       "name": "Former Southern Railway Stables",
@@ -3174,7 +3706,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33626,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP65: Former Southern Railway Stables",
+          "The Old Southern Railway Stables and the Forge"
+        ]
+      }
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -3213,7 +3753,14 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33629,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP70: Hatcham Road, Penarth Street and Ilderton Road"
+        ]
+      }
     },
     {
       "name": "Rotherhite Gasometer",
@@ -3252,7 +3799,11 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33619,
       "plotEstimated": true,
-      "max_floors": 7
+      "max_floors": 7,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Camberwell Station",
@@ -3291,7 +3842,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33636,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Camberwell District Town Centre",
+          "Site allocation NSP24: Camberwell Station Site allocation NSP24"
+        ]
+      }
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -3332,7 +3891,12 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Stoke Newington",
+        "article4": false
+      }
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -3374,7 +3938,16 @@
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 5220,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Bankside and Borough District Town Centre",
+          "Central Activities Zone",
+          "Site allocation NSP17: Friars House, 157-168 Blackfriars Road"
+        ]
+      }
     },
     {
       "name": "Valmar Trading Estate",
@@ -3413,7 +3986,16 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33637,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Camberwell Green",
+        "article4": true,
+        "article4_names": [
+          "Camberwell District Town Centre",
+          "Protected shopping frontage SF3: Camberwell"
+        ]
+      }
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -3454,7 +4036,12 @@
       "coordSource": "intelligence-file",
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "South Shoreditch",
+        "article4": false
+      }
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -3496,7 +4083,16 @@
       "offMarket": "high",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 4000,
-      "max_floors": 8
+      "max_floors": 8,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone",
+          "Site allocation NSP21: McLaren House, St George's Circus"
+        ]
+      }
     },
     {
       "name": "330-344 Walworth Road",
@@ -3539,7 +4135,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33627,
       "plotEstimated": true,
-      "max_floors": 6
+      "max_floors": 6,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Walworth Road",
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre"
+        ]
+      }
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -3578,7 +4182,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33624,
       "plotEstimated": true,
-      "max_floors": 6
+      "max_floors": 6,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Elephant and Castle Major Town Centre",
+          "Central Activities Zone"
+        ]
+      }
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -3621,7 +4233,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33625,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP59: 107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
+          "Old Kent Road North District Town Centre"
+        ]
+      }
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
@@ -3664,7 +4284,14 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33597,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Article 4 Basement Development Permitted Rights Removed"
+        ]
+      }
     },
     {
       "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
@@ -3707,7 +4334,14 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33618,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Canada Water Major Town Centre"
+        ]
+      }
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -3750,7 +4384,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33623,
       "plotEstimated": true,
-      "max_floors": 9
+      "max_floors": 9,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Thomas A'Becket and High Street",
+        "article4": true,
+        "article4_names": [
+          "Old Kent Road North District Town Centre"
+        ]
+      }
     },
     {
       "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
@@ -3793,7 +4435,15 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33632,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP71: 760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
+          "Old Kent Road South District Town Centre"
+        ]
+      }
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
@@ -3836,7 +4486,11 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33616,
       "plotEstimated": true,
-      "max_floors": 10
+      "max_floors": 10,
+      "planning_realm": {
+        "conservation_area": false,
+        "article4": false
+      }
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -3875,7 +4529,17 @@
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area - strong off-market acquisition signal. Mixed signals - worth examining the constraints in detail.",
       "plot": 33626,
       "plotEstimated": true,
-      "max_floors": 7
+      "max_floors": 7,
+      "planning_realm": {
+        "conservation_area": true,
+        "conservation_area_name": "Walworth Road",
+        "article4": true,
+        "article4_names": [
+          "Site allocation NSP83: Morrisons, Walworth Road",
+          "Elephant and Castle Major Town Centre",
+          "Protected shopping frontage SF2: Walworth Road"
+        ]
+      }
     }
   ],
   "total": 93
