@@ -60,18 +60,8 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .progress-dot:hover .progress-dot-circle { background: var(--accent); opacity: .7; }
 .progress-dot:hover .progress-dot-label { color: var(--ink2); }
 
-/* -- NAV -- */
-nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 200;
-  display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
-  background: rgba(10,10,8,.92); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--rule); }
-.nav-logo { font: 800 18px var(--sans); letter-spacing: -.03em; color: var(--ink); text-decoration: none; }
-.nav-logo span { color: var(--accent); }
-.nav-back-link { font: 500 13px var(--sans); color: var(--ink3); text-decoration: none; margin-left: 16px; padding: 4px 8px; border-radius: 4px; transition: color .15s; }
-.nav-back-link:hover { color: var(--ink); }
-.nav-links { display: flex; gap: 28px; }
-.nav-links a { font: 500 18px var(--sans); color: var(--ink3); text-decoration: none; transition: color .2s; }
-.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+/* -- NAV (handled by /css/nav.css - stub here for body padding) -- */
+body { padding-top: 0; } /* nav.css handles spacing */
 
 /* -- HERO SCENARIO SWITCHER -- */
 .hero-scenarios { display: flex; gap: 6px; margin-top: 24px; }
@@ -94,13 +84,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 .matrix-wrap { border-radius: 14px; overflow: hidden; background: #1a1a19; }
 .matrix-table { width: 100%; border-collapse: collapse; }
 .matrix-table th, .matrix-table td { padding: 14px 16px; text-align: center; vertical-align: middle; }
-.matrix-table thead th { background: rgba(255,255,255,.04);
-  font: 800 20px var(--sans); color: rgba(255,255,255,.85); letter-spacing: -.02em; padding: 20px 16px; }
+.matrix-table thead th { background: rgba(255,255,255,.06);
+  font: 800 20px var(--sans); color: rgba(232,228,218,.85); letter-spacing: -.02em; padding: 20px 16px; }
 .matrix-table thead th:first-child { text-align: left; font: 600 12px var(--sans); text-transform: uppercase;
-  letter-spacing: .1em; color: rgba(255,255,255,.4); }
-.matrix-table thead th .th-floors { font: 500 18px var(--mono); color: rgba(255,255,255,.4); margin-top: 2px; }
-.matrix-table tbody td { font: 500 18px var(--sans); color: rgba(255,255,255,.7); border-top: 1px solid rgba(255,255,255,.04); }
-.matrix-table tbody td:first-child { text-align: left; font: 600 13px var(--sans); color: rgba(255,255,255,.4);
+  letter-spacing: .1em; color: rgba(232,228,218,.45); }
+.matrix-table thead th .th-floors { font: 500 18px var(--mono); color: rgba(232,228,218,.5); margin-top: 2px; }
+.matrix-table tbody td { font: 500 18px var(--sans); color: rgba(232,228,218,.7); border-top: 1px solid rgba(232,228,218,.06); }
+.matrix-table tbody td:first-child { text-align: left; font: 600 13px var(--sans); color: rgba(232,228,218,.45);
   text-transform: uppercase; letter-spacing: .06em; }
 .matrix-table tbody td:not(:first-child) { background: rgba(255,255,255,.02); }
 .matrix-group-header td { background: rgba(255,255,255,.03) !important; font: 700 11px var(--sans) !important;
@@ -139,6 +129,15 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 #development,
 #planning {
   background: #f5f4f0;
+  color: #1a1917;
+}
+
+/* Force all generic text elements in light sections */
+#development p, #development h1, #development h2, #development h3,
+#development span, #development div, #development td, #development th,
+#planning p, #planning h1, #planning h2, #planning h3,
+#planning span, #planning div, #planning td, #planning th {
+  /* Inherits from section - only override specific exceptions below */
 }
 
 /* Light section - all text */
@@ -351,6 +350,19 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 .section-label { font: 700 20px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 14px; }
 .section-title { font: 400 clamp(28px,4vw,48px)/1.1 var(--display); color: var(--ink); letter-spacing: -.02em; margin-bottom: 20px; }
 .section-body { font: 400 20px/1.9 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
+/* Light sections override section text explicitly */
+#development .section-body, #planning .section-body { color: #4a4845; }
+#development .factor-row, #planning .factor-row { border-bottom-color: rgba(26,25,23,.1); }
+#development .proforma td, #planning .proforma td { color: #4a4845; }
+#development .proforma tr.bold td, #planning .proforma tr.bold td { color: #1a1917; }
+#development .proforma tr.sep td, #planning .proforma tr.sep td { border-top-color: rgba(26,25,23,.1); }
+#development .precedent, #planning .precedent { border-bottom-color: rgba(26,25,23,.1); }
+#development .precedent-name, #planning .precedent-name { color: #1a1917; }
+#development .precedent-detail, #planning .precedent-detail { color: #6a6760; }
+#development .comp-row, #planning .comp-row { border: none; }
+#development .comp-key, #planning .comp-key { color: #6a6760; }
+#development .comp-val, #planning .comp-val { color: #1a1917; }
+#development .comp-col-title, #planning .comp-col-title { color: #9a9896; }
 
 /* -- DATA CARDS -- */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-top: 40px; }
@@ -410,7 +422,8 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 /* -- SCENARIO SECTION -- */
 .scenario-tabs { display: flex; gap: 2px; margin-bottom: 32px; }
 .sc-tab { flex: 1; padding: 24px 16px; border: none; border-radius: 4px; cursor: pointer; text-align: center;
-  background: rgba(255,255,255,.4); font: 700 20px var(--sans); color: var(--ink3); transition: all .25s; }
+  background: rgba(255,255,255,.06); font: 700 20px var(--sans); color: rgba(232,228,218,.45); transition: all .25s; }
+.sc-tab:hover { background: rgba(255,255,255,.1); color: rgba(232,228,218,.75); }
 .sc-tab.active { background: rgba(255,255,255,.1); color: var(--accent2); box-shadow: none; border-bottom: 2px solid var(--accent2); }
 .sc-tab-floors { display: block; font: 500 18px var(--mono); color: inherit; opacity: .6; margin-top: 6px; }
 
@@ -421,7 +434,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
   transition: border-color .2s;
 }
 .slider-item:hover { border-color: rgba(184,132,92,.2); }
-.slider-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.5); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
+.slider-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: rgba(232,228,218,.55); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: baseline; }
 .slider-val { font: 800 28px var(--mono); color: #fff; letter-spacing: -.02em; }
 /* Ruler canvas slider */
 .ruler-wrap { position: relative; width: 100%; height: 56px; cursor: grab; user-select: none; touch-action: none; }
@@ -509,12 +522,7 @@ input[type=range].ruler-input {
 
 @media (max-width: 768px) {
   /* Nav */
-  nav { padding: 0 16px; }
-  .nav-links { display: none; }
-  .nav-tagline { display: none; }
-
-  /* Progress */
-  .progress-dots { display: none !important; }
+  /* nav handled by nav.css */
 
   /* Sections */
   .section { padding: 72px 0; }
