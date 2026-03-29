@@ -799,7 +799,7 @@ function populatePage(si) {
   const niaFloor = grossPlate - Math.round(grossPlate * 0.22);
   const existNIA = Math.round(niaFloor * Math.max(existF, 1));
   const baseSc = S04_SCENARIOS[1];
-  const tier = hf.tier || 'manageable';
+  const tier = hf.tier || 'CONTEXTUAL';
   const score = typeof computeSiteScore === 'function' ? computeSiteScore(si) : 70;
 
   // Hero
@@ -878,7 +878,7 @@ function populatePage(si) {
   const crItems = [
     [inOA,          'Opportunity Area designation',            inOA?'London Bridge/Bankside OA':'Not in designated OA'],
     [notCA,         'Outside conservation area',               notCA?'No conservation area constraint':'Conservation area - design review required'],
-    [notGrade1adj,  'Not Grade I/II* adjacent',               tier!=='high'?'Heritage tier manageable':'Grade I/II* setting - significant constraint'],
+    [notGrade1adj,  'Not Grade I/II* adjacent',               tier==='FULL_CONSERVATION'?'Grade I/II* setting - significant constraint':'Heritage tier ' + tier],
     [noFlood,       'No flood zone 3',                         'Zone 1 - standard drainage requirements'],
     [ptal4,         'PTAL 4 or above',                         'PTAL '+(s.ptal_label||s.ptal||'6')+ ' - excellent public transport'],
     [hasPrecedent,  'Prior approval or precedent found',       hasPrecedent?((mom.precedents||[]).length+' precedents in area'):'No precedents found'],
@@ -1342,7 +1342,7 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
   }
 
   map.on('style.load', () => {
-    map.setConfigProperty('basemap', 'lightPreset', 'dusk');
+    map.setConfigProperty('basemap', 'lightPreset', 'day');
     // Remove POI labels and business icons
     try { map.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch(e) {}
     try { map.setConfigProperty('basemap', 'showTransitLabels', false); } catch(e) {}
@@ -1351,9 +1351,9 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
 
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
     map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.6}});
+      paint:{'fill-extrusion-color':'#f0f4ff','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.9,'fill-extrusion-emissive-strength':0.2}});
     map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
-      paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.8}});
+      paint:{'fill-extrusion-color':'#b8845c','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.9,'fill-extrusion-emissive-strength':0.2}});
     // Floor lines across full height (existing + proposed)
     for (let fl = 1; fl <= 20; fl++) {
       const h = fl * FTF;
@@ -1798,7 +1798,7 @@ function openScModal(idx) {
       interactive: true, attributionControl: false
     });
     scModalMap.on('style.load', () => {
-      scModalMap.setConfigProperty('basemap', 'lightPreset', 'dusk');
+      scModalMap.setConfigProperty('basemap', 'lightPreset', 'day');
       try { scModalMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch(e) {}
       try { scModalMap.setConfigProperty('basemap', 'showTransitLabels', false); } catch(e) {}
       scModalMap.addSource('modal-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_INTELLIGENCE.polygon||[]]}}});
