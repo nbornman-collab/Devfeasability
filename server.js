@@ -26,10 +26,7 @@ async function fetchTestPage(name) {
   }
 }
 
-// Fetch all test pages on startup
-Promise.all(TEST_PAGES.map(fetchTestPage)).then(() => {
-  console.log('[test-pages] startup fetch complete');
-});
+// Fetch all test pages - awaited before server listens (see bottom of file)
 
 // Simple in-memory cache for Overpass/external API responses (5 min TTL)
 const apiCache = new Map();
@@ -1130,7 +1127,14 @@ app.post('/api/generate-render', express.json({ limit: '10mb' }), async (req, re
   }
 });
 
-app.listen(PORT, () => console.log(`DevFeasibility v4.3 (London) running on port ${PORT}`));
+// Fetch test pages from GitHub before accepting connections (bypasses Docker COPY cache)
+Promise.all(TEST_PAGES.map(fetchTestPage)).then(() => {
+  console.log('[test-pages] fetch complete, starting server');
+  app.listen(PORT, () => console.log(`DevFeasibility v4.3 (London) running on port ${PORT}`));
+}).catch(() => {
+  // Start anyway if fetch fails - static files are fallback
+  app.listen(PORT, () => console.log(`DevFeasibility v4.3 (London) running on port ${PORT} (test-pages fallback mode)`));
+});
 
 // ── Companies House API ─────────────────────────────────────────────────────
 app.get('/api/company/:number', async (req, res) => {
