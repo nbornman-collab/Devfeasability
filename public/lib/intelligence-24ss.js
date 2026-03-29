@@ -3,6 +3,12 @@
 // Development IS achievable - the score shapes the massing strategy, not the viability decision.
 const SITE_INTELLIGENCE = {
   polygon: [[-0.092196,51.504788],[-0.091781,51.504778],[-0.091505,51.50478],[-0.091101,51.504797],[-0.09087,51.504832],[-0.090881,51.504973],[-0.090896,51.505003],[-0.091092,51.505038],[-0.091098,51.505056],[-0.091217,51.505072],[-0.091229,51.505048],[-0.09145,51.505038],[-0.091446,51.50501],[-0.091448,51.504971],[-0.091514,51.504968],[-0.091504,51.504856],[-0.091762,51.504847],[-0.091774,51.504947],[-0.092154,51.504813],[-0.09218,51.504802],[-0.09219,51.504795],[-0.092196,51.504788]],
+  massing_config: {
+    primary_bearing: 180,
+    primary_setback_m: 1.5,
+    secondary_setback_m: 0.0,
+    notes: 'Primary: Southwark Street south facade (CA, heritage frontage). Secondary: Stoney Street rear. Hold line north - Borough Market CA context. 1.5m step above existing parapet per RETAIN_AND_ADAPT protocol.'
+  },
   site: '24 Southwark Street',
   borough: 'Southwark',
   factors: {

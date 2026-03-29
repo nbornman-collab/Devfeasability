@@ -1265,14 +1265,50 @@ function setPerspective(mode) {
 
 // -- Map + Massing --
 let MAP_REF = null;
+// -- Massing polygon offset (primary elevation setback, secondary holds line / overhangs) --
+function computeMassingPolygon(polygon, config) {
+  if (!polygon || polygon.length < 3) return polygon;
+  const { primary_bearing = 180, primary_setback_m = 1.5, secondary_setback_m = 0 } = config || {};
+  const LAT_M = 1/111320, LNG_M = 1/(111320 * Math.cos(Math.PI/180 * 51.5049));
+  const pRad = primary_bearing * Math.PI / 180;
+  const pVec = [Math.sin(pRad), Math.cos(pRad)]; // [east, north]
+  const n = polygon.length;
+  return polygon.map((curr, i) => {
+    const prev = polygon[(i - 1 + n) % n];
+    const nxt = polygon[(i + 1) % n];
+    const e1 = [(curr[0]-prev[0])/LNG_M, (curr[1]-prev[1])/LAT_M];
+    const e2 = [(nxt[0]-curr[0])/LNG_M, (nxt[1]-curr[1])/LAT_M];
+    const l1 = Math.hypot(e1[0], e1[1]), l2 = Math.hypot(e2[0], e2[1]);
+    if (l1 < 0.01 || l2 < 0.01) return curr;
+    const out1 = [e1[1]/l1, -e1[0]/l1], out2 = [e2[1]/l2, -e2[0]/l2];
+    const dot1 = out1[0]*pVec[0]+out1[1]*pVec[1], dot2 = out2[0]*pVec[0]+out2[1]*pVec[1];
+    const isPrimary = dot1 > 0.35 || dot2 > 0.35;
+    const setback = isPrimary ? primary_setback_m : secondary_setback_m;
+    if (Math.abs(setback) < 0.001) return curr;
+    // Inward bisector at vertex
+    const in1 = [-out1[0], -out1[1]], in2 = [-out2[0], -out2[1]];
+    let bx = in1[0]+in2[0], by = in1[1]+in2[1];
+    const bl = Math.hypot(bx, by); if (bl < 0.01) return curr;
+    bx /= bl; by /= bl;
+    const miter = Math.min(setback / Math.max(0.2, in1[0]*bx+in1[1]*by), Math.abs(setback) * 4) * Math.sign(setback);
+    return [curr[0] + bx*miter*LNG_M, curr[1] + by*miter*LAT_M];
+  });
+}
+
 function updateMassing(sc) {
   if (!MAP_REF) return;
-  const existH = 24.8;
+  const si = typeof SITE_INTELLIGENCE !== 'undefined' ? SITE_INTELLIGENCE : null;
+  const existH = (si && si.factors && si.factors.sky && si.factors.sky.existing_m) || 24.8;
   const proposedH = sc.floors * FTF;
   try {
     MAP_REF.setPaintProperty('site-existing', 'fill-extrusion-height', existH);
     MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-height', proposedH);
     MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-base', existH);
+    // Update massing polygon - setback on primary elevation, hold/overhang on secondary
+    if (si && si.polygon && si.massing_config && MAP_REF.getSource('site-massing-poly')) {
+      const massPoly = computeMassingPolygon(si.polygon, si.massing_config);
+      MAP_REF.getSource('site-massing-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[massPoly]}});
+    }
     for (let fl = 1; fl <= 20; fl++) {
       const flH = fl * FTF;
       const vis = flH <= proposedH ? 'visible' : 'none';
@@ -1378,12 +1414,15 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
     try { map.setPaintProperty('building-extrusion', 'fill-extrusion-color', '#e8e6e0'); } catch(e) {}
     try { map.setPaintProperty('building-extrusion', 'fill-extrusion-opacity', 0.85); } catch(e) {}
 
+    // Two polygon sources: full footprint (existing) + setback footprint (proposed massing)
     map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
+    map.addSource('site-massing-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
     map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
       paint:{'fill-extrusion-color':'#f0f4ff','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.9,'fill-extrusion-emissive-strength':0.2}});
-    map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
+    // Proposed massing uses setback polygon (primary elevation stepped, secondary holds)
+    map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-massing-poly', slot:'top',
       paint:{'fill-extrusion-color':'#b8845c','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.9,'fill-extrusion-emissive-strength':0.2}});
-    // Floor lines across full height (existing + proposed)
+    // Floor lines use full footprint
     for (let fl = 1; fl <= 20; fl++) {
       const h = fl * FTF;
       map.addLayer({id:'floor-line-'+fl, type:'fill-extrusion', source:'site-poly', slot:'top',
@@ -1391,6 +1430,10 @@ fetch('/api/config').then(r=>r.json()).then(cfg=>{
     }
     if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
       map.getSource('site-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[SITE_INTELLIGENCE.polygon]}});
+      // Compute setback polygon for proposed massing
+      const massingCfg = SITE_INTELLIGENCE.massing_config || null;
+      const massPoly = massingCfg ? computeMassingPolygon(SITE_INTELLIGENCE.polygon, massingCfg) : SITE_INTELLIGENCE.polygon;
+      map.getSource('site-massing-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[massPoly]}});
     }
     setTimeout(() => updateMassing(S04_SCENARIOS[s04Idx]), 200);
     // Start rotation after a delay
