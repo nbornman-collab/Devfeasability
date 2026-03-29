@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>24 Southwark Street - Appraise | D/A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<script src="/lib/intelligence-24ss.js"></script>
+<script src="/lib/site-intelligence.js"></script>
+<style>
+/* -- TOKENS -- */
+:root {
+  --bg:        #f2f1ed;
+  --bg2:       #e8e7e2;
+  --ink:       #111110;
+  --ink2:      #3a3a38;
+  --ink3:      #6a6a65;
+  --accent:    #5b7a9d;
+  --accent-bg: #f0f4f8;
+  --accent2:   #b8845c;
+  --display: 'Playfair Display', Georgia, serif;
+  --rule:      rgba(17,17,16,.1);
+  --sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: 'Space Grotesk', 'Inter', sans-serif;
+  --nav-h: 56px;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+
+/* -- SCROLL PROGRESS BAR -- */
+.scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 300; width: 0%; transition: none; }
+
+/* -- CUSTOM CURSOR (removed - invasive for professional users) -- */
+
+/* -- PROGRESS DOTS -- */
+.progress-dots { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 250;
+  display: flex; flex-direction: column; gap: 20px; }
+.progress-dot {
+  display: flex; align-items: center; gap: 8px;
+  background: none; border: none; padding: 0; cursor: pointer;
+}
+.progress-dot-circle {
+  width: 8px; height: 8px; border-radius: 50%; background: rgba(17,17,16,.2);
+  transition: background .3s, transform .3s; flex-shrink: 0;
+}
+.progress-dot-label {
+  font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(17,17,16,.22); white-space: nowrap;
+  opacity: 1; transform: translateX(0); transition: color .3s;
+}
+.progress-dot.active .progress-dot-circle { background: var(--accent); transform: scale(1.4); }
+.progress-dot.active .progress-dot-label { color: var(--accent); }
+.progress-dot:hover .progress-dot-circle { background: var(--accent); opacity: .7; }
+.progress-dot:hover .progress-dot-label { color: var(--ink2); }
+
+/* -- NAV -- */
+nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 200;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
+  background: rgba(242,241,237,.85); backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 1px solid var(--rule); }
+.nav-logo { font: 800 18px var(--sans); letter-spacing: -.03em; color: var(--ink); }
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a { font: 500 18px var(--sans); color: var(--ink3); text-decoration: none; transition: color .2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+
+/* -- HERO SCENARIO SWITCHER -- */
+.hero-scenarios { display: flex; gap: 6px; margin-top: 24px; }
+.hero-sc-tab { padding: 10px 20px; border: 1px solid rgba(255,255,255,.25); border-radius: 8px; cursor: pointer;
+  background: rgba(255,255,255,.08); backdrop-filter: blur(8px); font: 700 20px var(--sans); color: rgba(255,255,255,.6);
+  transition: all .3s; }
+.hero-sc-tab:hover { background: rgba(255,255,255,.15); color: rgba(255,255,255,.9); }
+.hero-sc-tab.active { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+.hero-sc-tab span { display: block; font: 500 11px var(--mono); opacity: .7; margin-top: 3px; }
+
+.hero-metrics { display: flex; gap: 32px; margin-top: 20px; flex-wrap: wrap; }
+.hero-metric { }
+.hero-metric-val { font: 800 clamp(24px,3.5vw,36px) var(--mono); color: #fff; letter-spacing: -.03em; line-height: 1; }
+.hero-metric-val.accent { color: var(--accent2); }
+.hero-metric-val.green { color: #fff; }
+.hero-metric-val.red { color: rgba(255,255,255,.6); }
+.hero-metric-label { font: 500 11px var(--sans); color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .08em; margin-top: 4px; }
+
+/* -- SCENARIO MATRIX -- */
+.matrix-wrap { border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.8); }
+.matrix-table { width: 100%; border-collapse: collapse; }
+.matrix-table th, .matrix-table td { padding: 14px 16px; text-align: center; vertical-align: middle; }
+.matrix-table thead th { background: rgba(255,255,255,.7); backdrop-filter: blur(16px);
+  font: 800 20px var(--sans); color: var(--ink); letter-spacing: -.02em; padding: 20px 16px; }
+.matrix-table thead th:first-child { text-align: left; font: 600 12px var(--sans); text-transform: uppercase;
+  letter-spacing: .1em; color: var(--ink3); }
+.matrix-table thead th .th-floors { font: 500 13px var(--mono); color: var(--ink3); margin-top: 2px; }
+.matrix-table tbody td { font: 500 18px var(--sans); color: var(--ink2); border-top: 1px solid rgba(0,0,0,.04); }
+.matrix-table tbody td:first-child { text-align: left; font: 600 13px var(--sans); color: var(--ink3);
+  text-transform: uppercase; letter-spacing: .06em; background: rgba(255,255,255,.3); }
+.matrix-table tbody td:not(:first-child) { background: rgba(255,255,255,.5); }
+.matrix-group-header td { background: rgba(91,122,157,.08) !important; font: 700 11px var(--sans) !important;
+  text-transform: uppercase !important; letter-spacing: .12em !important; color: var(--accent) !important;
+  padding: 10px 16px !important; text-align: left !important; }
+.matrix-val { font: 700 20px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.matrix-val.hero { font-size: 24px; }
+.matrix-pill { display: inline-block; padding: 4px 10px; border-radius: 6px; font: 700 12px var(--sans); }
+.matrix-pill.green { background: #dcfce7; color: #16a34a; }
+.matrix-pill.amber { background: #fef3c7; color: #b45309; }
+.matrix-pill.red { background: #fee2e2; color: #dc2626; }
+.matrix-pill.blue { background: var(--accent-bg); color: var(--accent); }
+.matrix-pill.blue { background: #e0f2fe; color: #0369a1; }
+
+/* -- CONSEQUENCE STRIP -- */
+.conseq-row { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,.04); }
+.conseq-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font: 700 12px var(--sans); flex-shrink: 0; }
+.conseq-icon.green { background: #dcfce7; color: #16a34a; }
+.conseq-icon.amber { background: #fef3c7; color: #b45309; }
+.conseq-icon.red { background: #fee2e2; color: #dc2626; }
+.conseq-text { font: 500 18px var(--sans); color: var(--ink2); }
+.conseq-text strong { color: var(--ink); }
+
+/* -- SECTIONS -- */
+.section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+  padding: 160px 0; position: relative; scroll-snap-align: start; }
+.section-inner { max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 40px; }
+
+/* -- HERO (section 0) -- */
+.hero-section { min-height: 100vh; position: relative; overflow: hidden; padding: 0; scroll-snap-align: start; }
+.hero-map { position: absolute; inset: 0; z-index: 0; }
+.hero-map #map { width: 100%; height: 100%; }
+.hero-scrim { position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(180deg, rgba(17,17,16,.08) 0%, rgba(17,17,16,.02) 40%, rgba(17,17,16,.5) 85%, rgba(17,17,16,.8) 100%); }
+.hero-content { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; padding: 0 40px 60px; }
+.hero-address { font: 400 clamp(36px,5vw,64px)/1 var(--display); color: #fff; letter-spacing: -.02em; margin-bottom: 16px; }
+.hero-sub { font: 500 18px var(--sans); color: rgba(255,255,255,.7); margin-bottom: 24px; }
+.hero-score-row { display: flex; align-items: center; gap: 20px; }
+.hero-score { font: 900 clamp(48px,7vw,80px) var(--mono); color: var(--accent2); letter-spacing: -.05em; line-height: .85; }
+.hero-verdict { font: 700 22px var(--sans); color: #fff; }
+.hero-verdict-sub { font: 400 18px var(--sans); color: rgba(255,255,255,.6); margin-top: 6px; }
+.hero-scroll-hint { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 2;
+  font: 500 11px var(--sans); color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: .15em;
+  animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: .4; } 50% { opacity: .8; } }
+
+/* -- PERSPECTIVE CONTROLS -- */
+.persp-controls { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); z-index: 3;
+  display: flex; flex-direction: column; gap: 6px; }
+.persp-btn { width: 44px; height: 44px; border: none; border-radius: 10px; cursor: pointer;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(12px); color: rgba(255,255,255,.7);
+  font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: .05em;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  transition: all .25s; line-height: 1; }
+.persp-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.persp-btn:hover { background: rgba(255,255,255,.3); color: #fff; }
+.persp-btn.active { background: var(--accent); color: #fff; }
+.persp-btn.active:hover { background: var(--accent); }
+#persp-reset.visible { opacity: 1 !important; pointer-events: auto !important; }
+
+/* -- REVEAL ANIMATIONS -- */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .12s; }
+.reveal-delay-2 { transition-delay: .24s; }
+.reveal-delay-3 { transition-delay: .36s; }
+
+/* -- TYPOGRAPHY -- */
+.section-label { font: 700 20px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 14px; }
+.section-title { font: 400 clamp(28px,4vw,48px)/1.1 var(--display); color: var(--ink); letter-spacing: -.02em; margin-bottom: 20px; }
+.section-body { font: 400 20px/1.9 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
+
+/* -- DATA CARDS -- */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-top: 40px; }
+.scenario-group { background: rgba(255,255,255,.45); backdrop-filter: blur(16px); border: 1px solid rgba(17,17,16,.08);
+  border-radius: 20px; padding: 32px; }
+
+/* Scenario Popup Modal */
+.sc-modal-scrim { position: fixed; inset: 0; z-index: 500; background: rgba(17,17,16,.6); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity .35s; }
+.sc-modal-scrim.open { display: flex; opacity: 1; }
+.sc-modal { background: var(--bg); border-radius: 20px; width: 90%; max-width: 960px; max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,.25); position: relative; }
+.sc-modal-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(17,17,16,.06); border: none; cursor: pointer; font: 500 18px var(--sans); color: var(--ink3);
+  display: flex; align-items: center; justify-content: center; z-index: 2; transition: background .2s; }
+.sc-modal-close:hover { background: rgba(17,17,16,.12); }
+.sc-modal-map { width: 100%; height: 280px; border-radius: 20px 20px 0 0; }
+.sc-modal-body { padding: 32px; }
+.sc-modal-title { font: 400 clamp(24px,3vw,36px)/1.1 var(--display); color: var(--ink); margin-bottom: 4px; }
+.sc-modal-sub { font: 500 18px var(--mono); color: var(--ink3); margin-bottom: 24px; }
+.sc-modal-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+.sc-modal-metric { background: rgba(17,17,16,.03); border-radius: 12px; padding: 16px; }
+.sc-modal-metric-val { font: 800 24px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.sc-modal-metric-label { font: 500 11px var(--sans); color: var(--ink3); text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+.sc-modal-conseq { display: flex; flex-direction: column; gap: 10px; }
+.sc-modal-conseq-row { display: flex; gap: 10px; align-items: center; }
+.sc-modal-conseq-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.sc-modal-conseq-dot.green { background: #16a34a; }
+.sc-modal-conseq-dot.amber { background: #d97706; }
+.sc-modal-conseq-dot.red { background: #dc2626; }
+.sc-modal-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+.sc-modal-tab { flex: 1; padding: 12px; border: 1px solid var(--rule); border-radius: 10px; cursor: pointer;
+  text-align: center; background: transparent; font: 600 14px var(--sans); color: var(--ink3); transition: all .2s; }
+.sc-modal-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.sc-modal-tab:hover:not(.active) { background: rgba(17,17,16,.04); }
+.card { background: rgba(255,255,255,.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.8);
+  border-radius: 16px; padding: 36px; transition: transform .3s, box-shadow .3s; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(91,122,157,.12), 0 0 0 1px rgba(91,122,157,.08); }
+.card-label { font: 700 20px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 10px; }
+.card-value { font: 800 clamp(32px,4vw,48px) var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
+.card-value.accent { color: var(--accent2); }
+.card-value.green { color: #16a34a; }
+.card-value.red { color: #dc2626; }
+.card-sub { font: 400 18px var(--sans); color: var(--ink3); margin-top: 8px; }
+
+/* -- COMPARISON STRIP -- */
+.comp-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--rule);
+  border-radius: 16px; overflow: hidden; margin-top: 40px; }
+.comp-col { background: rgba(255,255,255,.5); padding: 36px 30px; backdrop-filter: blur(16px); }
+.comp-col-title { font: 700 20px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 16px; }
+.comp-row { display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0; }
+.comp-key { font: 500 18px var(--sans); color: var(--ink3); }
+.comp-val { font: 700 20px var(--mono); color: var(--ink); }
+.comp-val.accent { color: var(--accent2); }
+.comp-val.green { color: #16a34a; }
+
+/* -- SCENARIO SECTION -- */
+.scenario-tabs { display: flex; gap: 2px; margin-bottom: 32px; }
+.sc-tab { flex: 1; padding: 24px 16px; border: none; border-radius: 12px; cursor: pointer; text-align: center;
+  background: rgba(255,255,255,.4); font: 700 20px var(--sans); color: var(--ink3); transition: all .25s; }
+.sc-tab.active { background: rgba(255,255,255,.8); color: var(--accent2); box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+.sc-tab-floors { display: block; font: 500 18px var(--mono); color: inherit; opacity: .6; margin-top: 6px; }
+
+/* -- SLIDERS -- */
+.slider-group { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+.slider-item {
+  background: rgba(255,255,255,.65); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.8); border-radius: 14px; padding: 20px 24px;
+  transition: border-color .2s;
+}
+.slider-item:hover { border-color: rgba(184,132,92,.3); }
+.slider-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; }
+.slider-val { font: 800 18px var(--mono); color: var(--accent2); letter-spacing: -.02em; }
+/* Ruler canvas slider */
+.ruler-wrap { position: relative; width: 100%; height: 64px; cursor: grab; user-select: none; touch-action: none; }
+.ruler-wrap:active { cursor: grabbing; }
+.ruler-canvas { display: block; width: 100%; height: 100%; border-radius: 8px; }
+/* Hidden range - still used for value tracking */
+input[type=range].ruler-input {
+  position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%;
+  cursor: inherit; margin: 0; pointer-events: none;
+}
+
+/* -- PRO FORMA TABLE -- */
+.proforma { margin-top: 32px; }
+.proforma table { width: 100%; border-collapse: collapse; }
+.proforma td { padding: 10px 0; font: 400 18px var(--sans); color: var(--ink2); }
+.proforma td:last-child { text-align: right; font-family: var(--mono); font-weight: 500; }
+.proforma tr.bold td { font-weight: 700; color: var(--ink); font-size: 17px; }
+.proforma tr.sep td { border-top: 1px solid var(--rule); padding-top: 14px; }
+.proforma tr.accent td { color: var(--accent2); font-weight: 700; }
+
+/* -- FACTOR BARS -- */
+.factor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
+.factor-row { display: flex; flex-direction: column; gap: 8px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.factor-row-top { display: flex; justify-content: space-between; align-items: baseline; }
+.factor-name { font: 700 12px var(--sans); text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); }
+.factor-score { font: 800 22px var(--mono); color: var(--ink); letter-spacing: -.03em; }
+.factor-bar-wrap { height: 10px; background: rgba(17,17,16,.07); border-radius: 99px; overflow: hidden; }
+.factor-bar { height: 100%; border-radius: 99px; background: var(--ink); transition: width 1s cubic-bezier(.16,1,.3,1); }
+.factor-bar.high { background: #16a34a; }
+
+/* -- GLASS PANEL (larger sections) -- */
+.glass { background: rgba(255,255,255,.55); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,.8);
+  border-radius: 20px; padding: 52px; margin-top: 40px; }
+
+/* -- PRECEDENT CARDS -- */
+.precedent { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.precedent:last-child { border-bottom: none; }
+.precedent-name { font: 600 16px var(--sans); color: var(--ink); margin-bottom: 4px; }
+.precedent-detail { font: 400 18px/1.6 var(--sans); color: var(--ink3); }
+
+/* -- FLAGS -- */
+.flag-row { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,.04); }
+.flag-sym { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font: 700 12px var(--sans); flex-shrink: 0; }
+.flag-sym.ok { background: #dcfce7; color: #16a34a; }
+.flag-sym.warn { background: #fef3c7; color: #d97706; }
+.flag-sym.risk { background: #fee2e2; color: #dc2626; }
+.flag-sym.info { background: var(--bg2); color: var(--ink3); }
+.flag-title { font: 600 16px var(--sans); color: var(--ink); }
+.flag-desc { font: 400 18px/1.7 var(--sans); color: var(--ink3); margin-top: 3px; }
+
+/* -- INLINE MAP (for scenario section) -- */
+.inline-map { width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin-top: 40px; position: relative; }
+.inline-map #map-scenario { width: 100%; height: 100%; }
+
+/* -- RLV CALLOUT -- */
+.rlv-block { border-left: 4px solid var(--accent); background: var(--accent-bg); border-radius: 0 12px 12px 0;
+  padding: 20px 24px; margin-top: 24px; }
+
+/* -- ARCHITECTURE DATA GRID -- */
+.arch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+.arch-cell { padding: 16px; background: var(--bg2); border-radius: 12px; }
+.arch-cell-label { font: 600 12px var(--sans); text-transform: uppercase; letter-spacing: .1em; color: var(--ink3); margin-bottom: 6px; }
+.arch-cell-val { font: 700 22px var(--mono); color: var(--ink); }
+.arch-cell-sub { font: 400 13px var(--sans); color: var(--ink3); margin-top: 3px; }
+
+/* -- FOOTER -- */
+.footer { padding: 60px 40px; text-align: center; }
+.footer-text { font: 400 13px var(--sans); color: var(--ink3); }
+
+/* -- SELF-DRAWING SVG -- */
+.return-curve-path { stroke-dasharray: 1000; stroke-dashoffset: 1000; }
+.return-curve-path.draw { transition: stroke-dashoffset 1.2s ease-in-out; stroke-dashoffset: 0; }
+
+/* -- MOBILE -- */
+/* -- PREFERS REDUCED MOTION -- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-snap-type: none; scroll-behavior: auto; }
+  .cursor { display: none !important; }
+  body { cursor: auto; }
+  .factor-bar { transition: none; }
+  .card { transition: none; }
+}
+
+@media (max-width: 768px) {
+  /* Nav */
+  nav { padding: 0 16px; }
+  .nav-links { display: none; }
+  .nav-tagline { display: none; }
+
+  /* Progress */
+  .progress-dots { display: none !important; }
+
+  /* Sections */
+  .section { padding: 72px 0; }
+  .section-inner { padding: 0 20px; }
+  .section-title { font-size: clamp(24px,6vw,36px); }
+
+  /* Hero */
+  .hero-content { padding: 0 20px 40px; }
+  .hero-address { font-size: 32px; }
+  .hero-strip { flex-wrap: wrap; gap: 12px; }
+  .hero-sc-tabs { flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .hero-sc-tab { padding: 8px 14px; font-size: 13px; }
+  .hero-metrics { flex-wrap: wrap; gap: 16px; }
+
+  /* Matrix - horizontal scroll on mobile */
+  .matrix-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .matrix-table { min-width: 560px; }
+  .matrix-table th, .matrix-table td { padding: 10px 12px; font-size: 13px; }
+
+  /* Cards */
+  .card-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Comparison strip */
+  .comp-strip { grid-template-columns: 1fr; gap: 12px; }
+
+  /* Sliders */
+  .slider-group { grid-template-columns: 1fr; }
+
+  /* Architecture grid */
+  .arch-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Factor bars */
+  .factor-grid { grid-template-columns: 1fr; }
+
+  /* Scenario group */
+  .scenario-group { padding: 20px; border-radius: 14px; }
+  .scenario-tabs { flex-wrap: wrap; gap: 6px; }
+  .sc-tab { min-width: calc(50% - 6px); }
+
+  /* Consequence strip */
+  .conseq-row { flex-wrap: wrap; }
+
+  /* Flags */
+  .flag-row { padding: 10px 0; }
+
+  /* Return curve section */
+  .return-section svg { width: 100%; height: auto; }
+
+  /* Scenario modal */
+  .sc-modal { width: 96%; max-height: 90vh; }
+  .sc-modal-metrics { grid-template-columns: 1fr 1fr; }
+  .sc-modal-map { height: 200px; }
+  .sc-modal-tabs { flex-wrap: wrap; gap: 6px; }
+  .sc-modal-tab { min-width: calc(33% - 6px); font-size: 13px; padding: 10px 8px; }
+  .sc-modal-body { padding: 20px; }
+}
+
+/* -- PREFERS REDUCED MOTION -- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  html { scroll-snap-type: none !important; }
+  .reveal { opacity: 1; transform: none; }
+  .return-curve-path { stroke-dashoffset: 0 !important; stroke-dasharray: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS BAR -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<!-- PROGRESS DOTS -->
+<div class="progress-dots" id="progress-dots">
+  <button class="progress-dot active" data-target="overview"><div class="progress-dot-circle"></div><span class="progress-dot-label">Overview</span></button>
+  <button class="progress-dot" data-target="development"><div class="progress-dot-circle"></div><span class="progress-dot-label">01 Dev</span></button>
+  <button class="progress-dot" data-target="scenarios"><div class="progress-dot-circle"></div><span class="progress-dot-label">02 Scenarios</span></button>
+  <button class="progress-dot" data-target="architecture"><div class="progress-dot-circle"></div><span class="progress-dot-label">03 Architecture</span></button>
+  <button class="progress-dot" data-target="planning"><div class="progress-dot-circle"></div><span class="progress-dot-label">04 Planning</span></button>
+</div>
+
+<!-- NAV (frosted, fixed) -->
+<nav>
+  <div class="nav-logo">D<span>/</span>A</div>
+  <div class="nav-links">
+    <a href="#overview" class="active">Overview</a>
+    <a href="#development">Development</a>
+    <a href="#scenarios">Scenarios</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#planning">Planning</a>
+  </div>
+</nav>
+
+<!-- SECTION 0: HERO (full-viewport map) -->
+<section class="hero-section" id="overview">
+  <div class="hero-map">
+    <div id="map"></div>
+    <div id="streetview-overlay" style="position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;opacity:0;pointer-events:none;transition:opacity .6s"></div>
+  </div>
+  <div class="hero-scrim"></div>
+  <!-- Perspective controls -->
+  <div class="persp-controls">
+    <button class="persp-btn" id="persp-aerial" title="Aerial" onclick="setPerspective('aerial')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><line x1="12" y1="4" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="20"/><line x1="4" y1="12" x2="2" y2="12"/><line x1="22" y1="12" x2="20" y2="12"/></svg>
+      <span>Aerial</span>
+    </button>
+    <button class="persp-btn" id="persp-plan" title="Plan" onclick="setPerspective('plan')">
+      <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+      <span>Plan</span>
+    </button>
+    <button class="persp-btn active" id="persp-axo" title="Axonometric" onclick="setPerspective('axo')">
+      <svg viewBox="0 0 24 24"><path d="M3 17l9 5 9-5V7l-9-5-9 5z"/><line x1="12" y1="22" x2="12" y2="12"/><line x1="3" y1="7" x2="12" y2="12"/><line x1="21" y1="7" x2="12" y2="12"/></svg>
+      <span>Axo</span>
+    </button>
+    <button class="persp-btn" id="persp-elevation" title="Elevation" onclick="setPerspective('elevation')">
+      <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="1"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/><line x1="15" y1="10" x2="15" y2="20"/></svg>
+      <span>Elev</span>
+    </button>
+    <button class="persp-btn" id="persp-street" title="Street View" onclick="setPerspective('street')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-4 3-7 7-7s7 3 7 7"/></svg>
+      <span>Street</span>
+    </button>
+    <button class="persp-btn" id="persp-reset" title="Reset rotation" onclick="window._restartRotation && window._restartRotation()" style="opacity:0;transition:opacity .3s;pointer-events:none">
+      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      <span>Reset</span>
+    </button>
+  </div>
+  <div class="hero-content">
+    <div class="hero-address" id="hero-address">24 Southwark Street</div>
+    <div class="hero-sub" id="hero-sub">Southwark - Freehold - London Bridge/Bankside Opportunity Area</div>
+    <div class="hero-score-row">
+      <div class="hero-score" id="hero-score">-</div>
+      <div>
+        <div class="hero-verdict" id="hero-verdict">Loading...</div>
+        <div class="hero-verdict-sub" id="hero-verdict-sub">Development Score /100</div>
+      </div>
+    </div>
+
+    <!-- Scenario tabs in hero -->
+    <div class="hero-scenarios" id="hero-sc-tabs">
+      <button class="hero-sc-tab" onclick="heroScGo(0)">Low<span>8F</span></button>
+      <button class="hero-sc-tab active" onclick="heroScGo(1)">Base<span>10F</span></button>
+      <button class="hero-sc-tab" onclick="heroScGo(2)">High<span>12F</span></button>
+    </div>
+
+    <!-- Mega metrics -->
+    <div class="hero-metrics" id="hero-metrics">
+      <div class="hero-metric"><div class="hero-metric-val accent" id="hm-gdv">-</div><div class="hero-metric-label">Est. GDV</div></div>
+      <div class="hero-metric"><div class="hero-metric-val" id="hm-poc">-</div><div class="hero-metric-label">Profit on Cost</div></div>
+      <div class="hero-metric"><div class="hero-metric-val" id="hm-rlv">-</div><div class="hero-metric-label">Residual Land Value</div></div>
+      <div class="hero-metric"><div class="hero-metric-val" id="hm-nia">-</div><div class="hero-metric-label">Net Area</div></div>
+      <div class="hero-metric"><div class="hero-metric-val" id="hm-profit">-</div><div class="hero-metric-label">Dev Profit</div></div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">Scroll to explore &#8595;</div>
+</section>
+
+<!-- hero spacer removed -->
+
+<!-- SECTION 1: DEVELOPMENT OVERVIEW -->
+<section class="section" id="development">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">01 - Development</div>
+      <div class="section-title" id="dev-title">A retain-and-adapt opportunity in the heart of Bankside</div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="section-body" id="dev-synthesis"></div>
+    </div>
+
+    <!-- Existing / Proposed / Delta -->
+    <div class="comp-strip reveal reveal-delay-2" id="comp-strip">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- Factor scores -->
+    <div class="glass reveal reveal-delay-3" style="margin-top:48px">
+      <div class="section-label">Intelligence Factors</div>
+      <div class="factor-grid" id="factor-bars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: SCENARIO COMPARISON MATRIX -->
+<section class="section" id="scenarios" style="background: var(--bg2);">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">02 - Scenario Matrix</div>
+      <div class="section-title">Three densities. Every consequence.</div>
+      <div class="section-body">Each column is a complete picture - not just what it costs, but what it triggers.</div>
+    </div>
+
+    <!-- THE MATRIX -->
+    <div class="reveal reveal-delay-1" style="margin-top:40px">
+      <div class="matrix-wrap" id="scenario-matrix">
+        <!-- populated by JS: buildMatrix() -->
+      </div>
+    </div>
+
+    <!-- Scenario detail group (tabs + consequences + cards) -->
+    <div class="reveal reveal-delay-2 scenario-group" style="margin-top:48px">
+      <div class="section-label">Active Scenario Detail</div>
+      <div class="scenario-tabs" id="sc-tabs">
+        <button class="sc-tab active" onclick="s04go(0)">Low<span class="sc-tab-floors">8 Floors</span></button>
+        <button class="sc-tab" onclick="s04go(1)">Base<span class="sc-tab-floors">10 Floors</span></button>
+        <button class="sc-tab" onclick="s04go(2)">High<span class="sc-tab-floors">12 Floors</span></button>
+        <button class="sc-tab" onclick="openScModal(s04Idx)" style="background:var(--accent);color:#fff;border-color:var(--accent);flex:0;padding:12px 20px;white-space:nowrap" title="Open detailed scenario view">&#x2197; Detail</button>
+      </div>
+      <!-- Consequence strip under active tab -->
+      <div id="consequence-strip" style="margin-top:16px"></div>
+      <!-- Key metrics cards (inside the group) -->
+      <div class="card-grid" id="sc-cards" style="margin-top:24px">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- Sliders -->
+    <div class="reveal reveal-delay-2" style="margin-top:48px;margin-bottom:4px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <div class="section-label" style="margin-bottom:0">Adjust Assumptions</div>
+        <div style="font:400 13px var(--sans);color:var(--ink3)">Edit any value - numbers update live</div>
+      </div>
+    </div>
+    <div class="slider-group reveal reveal-delay-2" id="sc-sliders">
+      <div class="slider-item"><div class="slider-label">ERV (per m²) <span class="slider-val" id="sv-erv">£700</span></div><div class="ruler-wrap" data-id="sl-erv" data-min="500" data-max="1200" data-step="25" data-default="700" data-val="700"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item"><div class="slider-label">Net Yield <span class="slider-val" id="sv-niy">4.75%</span></div><div class="ruler-wrap" data-id="sl-niy" data-min="3.5" data-max="7.5" data-step="0.25" data-default="4.75" data-val="4.75"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item"><div class="slider-label">Build Cost <span class="slider-val" id="sv-cost">£4,200</span></div><div class="ruler-wrap" data-id="sl-cost" data-min="3000" data-max="8000" data-step="100" data-default="4200" data-val="4200"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item"><div class="slider-label">S106 <span class="slider-val" id="sv-s106">£500k</span></div><div class="ruler-wrap" data-id="sl-s106" data-min="0" data-max="3000" data-step="50" data-default="500" data-val="500"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item"><div class="slider-label">Target Profit <span class="slider-val" id="sv-poc">20%</span></div><div class="ruler-wrap" data-id="sl-poc" data-min="10" data-max="30" data-step="1" data-default="20" data-val="20"><canvas class="ruler-canvas"></canvas></div></div>
+      <div class="slider-item" style="display:flex;align-items:center;justify-content:center">
+        <button onclick="s04Reset()" style="font:500 13px var(--sans);color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline">Reset assumptions</button>
+      </div>
+    </div>
+
+    <!-- Pro forma -->
+    <div class="glass reveal" style="margin-top:48px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px">
+        <div class="section-label" style="margin-bottom:0">Pro Forma</div>
+        <div style="font:600 13px var(--mono);color:var(--ink3)" id="pf-scenario-label">Base - 10 Floors</div>
+      </div>
+      <div class="proforma" id="proforma"></div>
+      <div class="rlv-block" id="rlv-block"></div>
+      <!-- Return curve SVG - self-drawing -->
+      <svg id="return-curve-svg" viewBox="0 0 500 200" style="width:100%;height:auto;margin-top:32px;overflow:visible" aria-label="Return curve">
+        <defs><linearGradient id="curve-grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#dc2626"/><stop offset="50%" style="stop-color:#e07b2a"/><stop offset="100%" style="stop-color:#16a34a"/></linearGradient></defs>
+        <line x1="40" y1="10" x2="40" y2="180" stroke="#ddd" stroke-width="1"/>
+        <line x1="40" y1="180" x2="490" y2="180" stroke="#ddd" stroke-width="1"/>
+        <text x="20" y="100" fill="#6a6a65" font-size="10" font-family="var(--sans)" text-anchor="middle" transform="rotate(-90,20,100)">Return %</text>
+        <text x="265" y="198" fill="#6a6a65" font-size="10" font-family="var(--sans)" text-anchor="middle">Density (floors)</text>
+        <path class="return-curve-path" id="return-curve-path" d="M 60 170 Q 120 165 180 140 Q 240 100 300 60 Q 360 35 400 45 Q 440 60 470 90" fill="none" stroke="url(#curve-grad)" stroke-width="3" stroke-linecap="round"/>
+        <circle id="return-curve-dot" cx="300" cy="60" r="5" fill="var(--accent2)" opacity="0"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: ARCHITECTURE (above Planning - physical before regulatory) -->
+<section class="section" id="architecture" style="background: var(--bg2);">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">03 - Architecture</div>
+      <div class="section-title" id="arch-title">Heritage-led. Code-compliant.</div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="section-body" id="arch-synthesis"></div>
+    </div>
+
+    <div class="arch-grid reveal reveal-delay-2" id="arch-grid">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- Building regs -->
+    <div class="glass reveal reveal-delay-3">
+      <div class="section-label">Building Regulations Impact</div>
+      <div id="regs-body"></div>
+    </div>
+
+    <!-- Heights context -->
+    <div class="glass reveal">
+      <div class="section-label">Height Context</div>
+      <div id="heights-body"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: PLANNING -->
+<section class="section" id="planning">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">04 - Planning</div>
+      <div class="section-title" id="plan-title">Strong precedent. Clear pathway.</div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="section-body" id="plan-synthesis"></div>
+    </div>
+
+    <!-- Flags -->
+    <div class="glass reveal reveal-delay-2">
+      <div class="section-label">Site Constraints &amp; Flags</div>
+      <div id="flags-body"></div>
+    </div>
+
+    <!-- Precedents -->
+    <div class="glass reveal reveal-delay-3">
+      <div class="section-label">Planning Precedents</div>
+      <div id="precedents-body"></div>
+    </div>
+
+    <!-- Planning applications link -->
+    <div class="glass reveal" style="margin-top:24px; text-align:center; padding:28px">
+      <div class="section-label" style="margin-bottom:8px">Full Planning History</div>
+      <div style="font:400 15px var(--sans);color:var(--ink2);margin-bottom:16px">300+ applications analysed across the borough</div>
+      <a href="#" id="planning-apps-link" style="font:600 14px var(--sans);color:var(--accent);text-decoration:none;padding:12px 24px;border:1px solid var(--accent);border-radius:8px;display:inline-block;transition:all .2s"
+         onmouseover="this.style.background='var(--accent)';this.style.color='#fff'"
+         onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">View All Applications &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer" style="background:#1a1a19;padding:80px 40px;text-align:center">
+  <div style="font:400 clamp(24px,3vw,36px) var(--display);color:#f2f1ed;margin-bottom:16px">Ready to move on this site?</div>
+  <div style="font:400 15px/1.7 var(--sans);color:rgba(242,241,237,.5);max-width:480px;margin:0 auto 32px">Full feasibility study with detailed massing, planning strategy, and financial modelling.</div>
+  <a href="#" style="display:inline-block;font:700 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;background:var(--accent2);color:#fff;padding:16px 40px;border-radius:8px;text-decoration:none;transition:background .2s" onmouseover="this.style.background='#a07450'" onmouseout="this.style.background='var(--accent2)'">Commission Full Study</a>
+  <div style="font:400 12px var(--sans);color:rgba(242,241,237,.3);margin-top:40px">All values are estimates based on publicly available data. GDV and financial projections are modelled, not guaranteed.</div>
+</div>
+
+<script>
+// -- Constants --
+const PLOT_AREA = 2843;
+const FTF = 3.6;
+const LAT = 51.504909, LNG = -0.091522;
+const CENTROID = [LNG, LAT];
+const ADDRESS = '24 Southwark Street, SE1 0SW';
+
+// -- S04 Engine (identical to t1-redesign) --
+const S04_DEFS = {erv:700, niy:4.75, cost:4200, s106:500, poc:20};
+let S04 = {...S04_DEFS};
+const S04_MARKET = {acqCost:0, demo:850000, finRate:0.065, letFee:0.15, cilRate:125, progYrs:{lo:2.0,base:2.5,hi:3.0}};
+const S04_SCENARIOS = [
+  {key:'lo', label:'Low', floors:8, podF:5, twrF:3, twrPct:0.55, eff:0.78},
+  {key:'base', label:'Base', floors:10, podF:6, twrF:4, twrPct:0.55, eff:0.78},
+  {key:'hi', label:'High', floors:12, podF:7, twrF:5, twrPct:0.50, eff:0.76}
+];
+let s04Idx = 1;
+
+function s04calc() {
+  const grossPlate = Math.round(PLOT_AREA * 0.42);
+  S04_SCENARIOS.forEach(sc => {
+    sc.gea = Math.round(grossPlate * sc.podF + grossPlate * sc.twrPct * sc.twrF);
+    sc.nia = Math.round(sc.gea * sc.eff);
+    sc.gdv = Math.round(sc.nia * S04.erv / (S04.niy / 100));
+    sc.constCost = Math.round(sc.gea * S04.cost);
+    sc.fees = Math.round(sc.constCost * 0.13);
+    sc.contg = Math.round(sc.constCost * 0.075);
+    sc.cil = Math.round(sc.gea * S04_MARKET.cilRate);
+    sc.letting = Math.round(sc.gdv * S04_MARKET.letFee);
+    sc.finance = Math.round((sc.constCost + sc.fees) * 0.5 * S04_MARKET.finRate * S04_MARKET.progYrs[sc.key]);
+    sc.tdc = sc.constCost + sc.fees + sc.contg + sc.cil + sc.letting + (S04.s106 * 1000) + S04_MARKET.demo + sc.finance + S04_MARKET.acqCost;
+    sc.profit = sc.gdv - sc.tdc;
+    sc.poc = (sc.profit / sc.tdc * 100).toFixed(1);
+    sc.rlv = Math.round(sc.gdv - sc.tdc * (1 + S04.poc/100));
+  });
+}
+s04calc();
+
+// Helpers
+const f = n => (n||0).toLocaleString('en-GB');
+const fm = n => '\u00A3' + (Math.abs(n) >= 1e6 ? (n/1e6).toFixed(1)+'M' : f(n));
+const set = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+const html = (id,v) => { const el=document.getElementById(id); if(el) el.innerHTML=v; };
+
+// -- Intersection Observer for reveal animations --
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// Trigger reveals for anything already in viewport on load
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight) el.classList.add('visible');
+  });
+}, 500);
+
+// -- Nav active state on scroll --
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 200) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+// -- Populate page from SITE_INTELLIGENCE --
+function populatePage(si) {
+  if (!si) return;
+  const F = si.factors || {};
+  const s = si.site || {};
+  const hf = si.heritage_framework || {};
+  const mom = F.momentum || {};
+  const val = F.value || {};
+  const acq = F.acquisition || {};
+  const maxF = s.max_floors || 10;
+  const maxH = s.max_h || 40;
+  const plotM2 = s.plot_m2 || PLOT_AREA;
+  const existM = (F.sky && F.sky.existing_m) || 0;
+  const existF = existM > 0 ? Math.max(1, Math.round(existM / FTF)) : 0;
+  const grossPlate = Math.round(plotM2 * 0.42);
+  const niaFloor = grossPlate - Math.round(grossPlate * 0.22);
+  const existNIA = Math.round(niaFloor * Math.max(existF, 1));
+  const baseSc = S04_SCENARIOS[1];
+  const tier = hf.tier || 'manageable';
+  const score = typeof computeSiteScore === 'function' ? computeSiteScore(si) : 70;
+
+  // Hero
+  set('hero-address', si.site_name || '24 Southwark Street');
+  set('hero-score', score);
+  const pillText = score >= 80 ? 'Top Opportunity' : score >= 70 ? 'Strong Opportunity' : score >= 55 ? 'Credible Opportunity' : 'Due Diligence';
+  set('hero-verdict', pillText);
+  set('hero-verdict-sub', 'Development Score ' + score + '/100 - Heritage: ' + tier);
+  set('hero-sub', (si.borough||'Southwark') + ' - ' + (acq.tenure||'Freehold') + (mom.opportunity_area ? ' - ' + mom.opportunity_area.name : ''));
+
+  // Development synthesis
+  const ownerName = acq.owner || 'Unknown';
+  const tenure = acq.tenure || 'Freehold';
+  const devSynth = typeof synthesisDevScope === 'function' ? synthesisDevScope(si) : '';
+  html('dev-synthesis', `<p style="margin-bottom:16px"><strong>${ownerName}</strong> - ${tenure} - ${acq.titles||1} title${(acq.titles||1)>1?'s':''}${acq.jurisdiction ? ' - ' + acq.jurisdiction : ''}</p><p>${devSynth}</p>`);
+
+  // Comparison strip
+  const addF = baseSc.floors - existF;
+  html('comp-strip', `
+    <div class="comp-col">
+      <div class="comp-col-title">Existing</div>
+      <div class="comp-row"><span class="comp-key">Floors</span><span class="comp-val">${existF}F</span></div>
+      <div class="comp-row"><span class="comp-key">Est. GIA</span><span class="comp-val">${f(Math.round(existNIA/0.78))}m\u00B2</span></div>
+      <div class="comp-row"><span class="comp-key">Est. NIA</span><span class="comp-val">${f(existNIA)}m\u00B2</span></div>
+      <div class="comp-row"><span class="comp-key">Height</span><span class="comp-val">${existM}m</span></div>
+    </div>
+    <div class="comp-col">
+      <div class="comp-col-title">Proposed (base)</div>
+      <div class="comp-row"><span class="comp-key">Floors</span><span class="comp-val accent">${baseSc.floors}F</span></div>
+      <div class="comp-row"><span class="comp-key">GIA</span><span class="comp-val accent">${f(baseSc.gea)}m\u00B2</span></div>
+      <div class="comp-row"><span class="comp-key">NIA</span><span class="comp-val accent">${f(baseSc.nia)}m\u00B2</span></div>
+      <div class="comp-row"><span class="comp-key">Efficiency</span><span class="comp-val accent">${Math.round(baseSc.eff*100)}%</span></div>
+    </div>
+    <div class="comp-col">
+      <div class="comp-col-title">Uplift</div>
+      <div class="comp-row"><span class="comp-key">Additional</span><span class="comp-val green">+${addF}F</span></div>
+      <div class="comp-row"><span class="comp-key">NIA Uplift</span><span class="comp-val green">+${f(baseSc.nia - existNIA)}m\u00B2</span></div>
+      <div class="comp-row"><span class="comp-key">Area</span><span class="comp-val green">+${Math.round((baseSc.nia - existNIA)/existNIA*100)}%</span></div>
+    </div>
+  `);
+
+  // Factor bars
+  const LABELS = {sky:'Available Sky', value:'Rent Headroom', momentum:'Planning Appetite', heritage:'Heritage Shadow', acquisition:'Title Stack', transport:'Transport Links'};
+  html('factor-bars', Object.entries(F).map(([k, fv]) => {
+    if (k === 'heritage_framework') return '';
+    const sc2 = typeof fv === 'object' ? (fv.score || 0) : fv;
+    const pct = Math.round(sc2 / 10 * 100);
+    return `<div class="factor-row"><div class="factor-row-top"><span class="factor-name">${LABELS[k]||k}</span><span class="factor-score">${typeof sc2==='number'?sc2.toFixed(1):sc2}</span></div><div class="factor-bar-wrap"><div class="factor-bar${sc2>=7?' high':''}" style="width:${pct}%"></div></div></div>`;
+  }).join(''));
+
+  // Planning
+  const planSynth = typeof synthesisPlanning === 'function' ? synthesisPlanning(si) : '';
+  html('plan-synthesis', planSynth);
+
+  // Precedents
+  const precs = (mom.precedents || []);
+  html('precedents-body', precs.length ? precs.map(p => `<div class="precedent"><div class="precedent-name">${p.name}</div><div class="precedent-detail">${p.ref||''} - ${p.outcome||''}</div></div>`).join('') : '<div style="color:var(--ink3)">No precedents loaded.</div>');
+
+  // Architecture
+  const archSynth = typeof synthesisArchitecture === 'function' ? synthesisArchitecture(si) : '';
+  html('arch-synthesis', archSynth);
+  const coreM2 = Math.round(grossPlate * 0.22);
+  const corePct = Math.round(coreM2 / grossPlate * 100);
+  html('arch-grid', `
+    <div class="arch-cell"><div class="arch-cell-label">Floorplate GIA</div><div class="arch-cell-val">${f(grossPlate)}m\u00B2</div><div class="arch-cell-sub">gross per floor</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Floorplate NIA</div><div class="arch-cell-val">${f(niaFloor)}m\u00B2</div><div class="arch-cell-sub">net per floor</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Efficiency (NIA/GIA)</div><div class="arch-cell-val">${Math.round(baseSc.eff*100)}%</div><div class="arch-cell-sub">net-to-gross</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Core Area</div><div class="arch-cell-val">${coreM2}m\u00B2</div><div class="arch-cell-sub">${corePct}% of floorplate GIA</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Max Height</div><div class="arch-cell-val">${maxH}m</div><div class="arch-cell-sub">AOD</div></div>
+    <div class="arch-cell"><div class="arch-cell-label">Lease Span</div><div class="arch-cell-val">7m min</div><div class="arch-cell-sub">clear, 2 faces</div></div>
+  `);
+
+  // Building regs
+  const bsaLabel = maxH >= 50 ? 'HRB regime (BSA 2022)' : maxH >= 30 ? '2nd staircase mandatory' : maxH >= 18 ? 'Enhanced fire strategy (Part B2)' : 'Below 18m';
+  const liftCount = maxF >= 11 ? 3 : maxF >= 6 ? 2 : 1;
+  html('regs-body', `
+    <div class="flag-row"><div class="flag-sym ${maxH>=30?'warn':'ok'}">${maxH>=30?'\u26A0':'\u2713'}</div><div><div class="flag-title">Part B / BSA 2022</div><div class="flag-desc">${bsaLabel}${maxH>=30 ? '. Second staircase adds ~280-340m\u00B2 GIA per floor and ~\u00A31.2-1.5M to construction cost.' : '.'}</div></div></div>
+    <div class="flag-row"><div class="flag-sym info">i</div><div><div class="flag-title">Part M2 - Accessibility</div><div class="flag-desc">${liftCount} lift${liftCount>1?'s':''} minimum required.</div></div></div>
+    <div class="flag-row"><div class="flag-sym info">i</div><div><div class="flag-title">Part L2 - Energy</div><div class="flag-desc">${mom.opportunity_area ? 'BREEAM Excellent required (GLA) ~\u00A350/m\u00B2 premium.' : 'BREEAM Very Good minimum.'}</div></div></div>
+  `);
+}
+
+// -- S04 Render (scroll version) --
+function s04render() {
+  const sc = S04_SCENARIOS[s04Idx];
+  const pocCol = parseFloat(sc.poc) >= S04.poc ? '#16a34a' : '#dc2626';
+  const rlvPos = sc.rlv > 0;
+
+  // Tabs
+  document.querySelectorAll('.sc-tab').forEach((b,i) => {
+    b.classList.toggle('active', i === s04Idx);
+    const sub = b.querySelector('.sc-tab-floors');
+    if (sub) sub.textContent = S04_SCENARIOS[i].floors + 'F - ' + fm(S04_SCENARIOS[i].gdv);
+  });
+
+  // Cards
+  html('sc-cards', `
+    <div class="card"><div class="card-label">Est. GDV</div><div class="card-value accent">${fm(sc.gdv)}</div><div class="card-sub">Gross Development Value</div></div>
+    <div class="card"><div class="card-label">Profit on Cost</div><div class="card-value ${parseFloat(sc.poc)>=S04.poc?'green':'red'}">${sc.poc}%</div><div class="card-sub">Target: ${S04.poc}%</div></div>
+    <div class="card"><div class="card-label">Residual Land Value</div><div class="card-value ${rlvPos?'green':'red'}">${fm(sc.rlv)}</div><div class="card-sub">${rlvPos?'Max site price at target return':'Does not stack at target'}</div></div>
+    <div class="card"><div class="card-label">Net Internal Area</div><div class="card-value">${f(sc.nia)}m\u00B2</div><div class="card-sub">${sc.floors} floors at ${Math.round(sc.eff*100)}% efficiency</div></div>
+    <div class="card"><div class="card-label">Total Dev Cost</div><div class="card-value">${fm(sc.tdc)}</div><div class="card-sub">All-in including finance</div></div>
+    <div class="card"><div class="card-label">Developer Profit</div><div class="card-value ${parseFloat(sc.poc)>=S04.poc?'green':'red'}">${fm(sc.profit)}</div><div class="card-sub">${sc.label} scenario</div></div>
+  `);
+
+  // Pro forma label
+  set('pf-scenario-label', sc.label + ' - ' + sc.floors + ' Floors');
+
+  // Pro forma table
+  const rows = [
+    {l:'Gross Development Value', v: fm(sc.gdv), b:true, s:true},
+    {l:'Net Internal Area', v: f(sc.nia)+' m\u00B2'},
+    {l:'GEA', v: f(sc.gea)+' m\u00B2'},
+    null,
+    {l:'Construction', v: fm(sc.constCost), b:true},
+    {l:'Professional fees (13%)', v: fm(sc.fees)},
+    {l:'Contingency (7.5%)', v: fm(sc.contg)},
+    {l:'CIL', v: fm(sc.cil)},
+    {l:'Letting fees', v: fm(sc.letting)},
+    {l:'S106', v: '\u00A3'+S04.s106+'k'},
+    {l:'Demolition', v: fm(S04_MARKET.demo)},
+    {l:'Finance', v: fm(sc.finance)},
+    {l:'Total Dev Cost', v: fm(sc.tdc), b:true, s:true},
+    null,
+    {l:'Developer Profit', v: fm(sc.profit), b:true, accent:true},
+    {l:'Profit on Cost', v: sc.poc+'%', b:true, accent:true},
+  ];
+  html('proforma', `<table>${rows.map(r => {
+    if (!r) return '<tr><td colspan="2" style="padding:6px 0"></td></tr>';
+    const cls = [r.b?'bold':'', r.s?'sep':'', r.accent?'accent':''].filter(Boolean).join(' ');
+    return `<tr${cls?' class="'+cls+'"':''}><td>${r.l}</td><td>${r.v}</td></tr>`;
+  }).join('')}</table>`);
+
+  // RLV block
+  html('rlv-block', `
+    <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.1em;color:${rlvPos?'var(--accent2)':'#dc2626'};margin-bottom:6px">Residual Land Value at ${S04.poc}% Target</div>
+    <div style="font:800 28px var(--mono);color:${rlvPos?'var(--ink)':'#dc2626'};letter-spacing:-.02em">${fm(sc.rlv)}</div>
+    <div style="font:400 13px var(--sans);color:var(--ink3);margin-top:4px">${rlvPos ? 'Maximum site price to achieve target return.' : 'Scheme does not stack at target profit.'}</div>
+  `);
+  const rlvEl = document.getElementById('rlv-block');
+  if (rlvEl) {
+    rlvEl.style.borderLeftColor = rlvPos ? 'var(--accent2)' : '#dc2626';
+    rlvEl.style.background = rlvPos ? '#f8f3ef' : '#fef2f2';
+  }
+
+  // Slider values
+  const fmts = {erv:v=>'\u00A3'+v, niy:v=>v+'%', cost:v=>'\u00A3'+Number(v).toLocaleString(), s106:v=>'\u00A3'+v+'k', poc:v=>v+'%'};
+  ['erv','niy','cost','s106','poc'].forEach(k => {
+    const sv = document.getElementById('sv-'+k);
+    if (sv) sv.textContent = fmts[k](S04[k]);
+  });
+}
+
+function s04go(idx) { s04Idx = idx; s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics(); buildMatrix(); updateConsequenceStrip(); document.querySelectorAll('.hero-sc-tab').forEach((b,i) => b.classList.toggle('active', i === idx)); }
+function s04Slider(key, v) {
+  S04[key] = v;
+  const fmts = {erv:v2=>'\u00A3'+v2, niy:v2=>v2+'%', cost:v2=>'\u00A3'+Number(v2).toLocaleString(), s106:v2=>'\u00A3'+v2+'k', poc:v2=>v2+'%'};
+  const sv = document.getElementById('sv-'+key);
+  if (sv) sv.textContent = fmts[key](v);
+  s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); buildMatrix(); updateConsequenceStrip(); updateHeroMetrics();
+}
+function s04Reset() {
+  S04 = {...S04_DEFS};
+  // Reset ruler wraps to defaults
+  document.querySelectorAll('.ruler-wrap').forEach(w => {
+    w.dataset.val = w.dataset.default;
+  });
+  if (typeof window.redrawRulers === 'function') window.redrawRulers();
+  s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics(); buildMatrix(); updateConsequenceStrip();
+}
+
+// -- Hero Scenario Switcher --
+function updateHeroMetrics() {
+  const sc = S04_SCENARIOS[s04Idx];
+  const pocOk = parseFloat(sc.poc) >= S04.poc;
+  const rlvOk = sc.rlv > 0;
+  set('hm-gdv', fm(sc.gdv));
+  const pocEl = document.getElementById('hm-poc');
+  if (pocEl) { pocEl.textContent = sc.poc + '%'; pocEl.className = 'hero-metric-val ' + (pocOk ? 'green' : 'red'); }
+  const rlvEl = document.getElementById('hm-rlv');
+  if (rlvEl) { rlvEl.textContent = fm(sc.rlv); rlvEl.className = 'hero-metric-val ' + (rlvOk ? 'green' : 'red'); }
+  set('hm-nia', f(sc.nia) + 'm\u00B2');
+  const profEl = document.getElementById('hm-profit');
+  if (profEl) { profEl.textContent = fm(sc.profit); profEl.className = 'hero-metric-val ' + (pocOk ? 'green' : 'red'); }
+}
+
+function heroScGo(idx) {
+  s04Idx = idx;
+  s04calc();
+  // Update hero tabs
+  document.querySelectorAll('.hero-sc-tab').forEach((b,i) => b.classList.toggle('active', i === idx));
+  // Also sync the deep-dive tabs
+  s04render();
+  updateMassing(S04_SCENARIOS[s04Idx]);
+  updateHeroMetrics();
+}
+
+// -- Scenario Comparison Matrix --
+function scenarioMeta(sc) {
+  const h = sc.floors * 3.6;
+  const bsa = h >= 50 ? {label:'HRB Regime', pill:'red'} : h >= 30 ? {label:'Dual Staircase', pill:'amber'} : {label:'Single Staircase', pill:'green'};
+  const lifts = sc.floors >= 11 ? 3 : sc.floors >= 6 ? 2 : 1;
+  const corePct = h >= 30 ? 25 : 22;
+  const costM2 = h >= 30 ? 4800 : 4200;
+  // LVMF / planning thresholds (simplified for 24SS context)
+  const lvmf = sc.floors <= 8 ? {label:'Clear', pill:'green'} : sc.floors <= 10 ? {label:'Manageable', pill:'amber'} : {label:'Challenged', pill:'red'};
+  const planApp = sc.floors <= 8 ? {label:'Strong precedent', pill:'green'} : sc.floors <= 10 ? {label:'Within envelope', pill:'amber'} : {label:'Above comfort', pill:'red'};
+  const heritage = sc.floors <= 8 ? {label:'Comfortable', pill:'green'} : sc.floors <= 10 ? {label:'Navigable', pill:'amber'} : {label:'Pushback likely', pill:'red'};
+  const fireStrat = h >= 50 ? {label:'Full HRB', pill:'red'} : h >= 30 ? {label:'Enhanced Part B', pill:'amber'} : {label:'Standard Part B', pill:'green'};
+  return {bsa, lifts, corePct, costM2, lvmf, planApp, heritage, fireStrat};
+}
+
+function buildMatrix() {
+  s04calc();
+  const rows = [];
+  const scs = S04_SCENARIOS;
+  const metas = scs.map(scenarioMeta);
+
+  function pill(m) { return `<span class="matrix-pill ${m.pill}">${m.label}</span>`; }
+  function val(v, cls) { return `<span class="matrix-val${cls?' '+cls:''}">${v}</span>`; }
+
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Financial</td></tr>`);
+  rows.push(`<tr><td>Est. GDV</td>${scs.map(sc => `<td>${val(fm(sc.gdv),'hero')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Profit on Cost</td>${scs.map(sc => `<td>${val(sc.poc+'%', parseFloat(sc.poc)>=S04.poc?'':'')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>RLV</td>${scs.map(sc => `<td>${val(fm(sc.rlv))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Total Dev Cost</td>${scs.map(sc => `<td>${val(fm(sc.tdc))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Dev Profit</td>${scs.map(sc => `<td>${val(fm(sc.profit))}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>GIA</td>${scs.map(sc => `<td>${val(f(sc.gea)+'m\u00B2')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>NIA</td>${scs.map(sc => `<td>${val(f(sc.nia)+'m\u00B2')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Efficiency (NIA/GIA)</td>${scs.map(sc => `<td>${val(Math.round(sc.eff*100)+'%')}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Cost / m\u00B2 GIA</td>${metas.map(m => `<td>${val('\u00A3'+f(m.costM2))}</td>`).join('')}</tr>`);
+
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Planning</td></tr>`);
+  rows.push(`<tr><td>LVMF Impact</td>${metas.map(m => `<td>${pill(m.lvmf)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Planning Appetite</td>${metas.map(m => `<td>${pill(m.planApp)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Heritage Response</td>${metas.map(m => `<td>${pill(m.heritage)}</td>`).join('')}</tr>`);
+
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Architecture</td></tr>`);
+  rows.push(`<tr><td>BSA Regime</td>${metas.map(m => `<td>${pill(m.bsa)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Fire Strategy</td>${metas.map(m => `<td>${pill(m.fireStrat)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Lifts Required</td>${metas.map(m => `<td>${val(m.lifts)}</td>`).join('')}</tr>`);
+  rows.push(`<tr><td>Core %</td>${metas.map(m => `<td>${val(m.corePct+'%')}</td>`).join('')}</tr>`);
+
+  // Environment & Compliance group (from source docs integration)
+  const SI = SITE_INTELLIGENCE;
+  const env = SI.environment || {};
+  const eco = SI.ecology || {};
+  const sus = SI.sustainability || {};
+  const del = SI.delivery || {};
+  rows.push(`<tr class="matrix-group-header"><td colspan="4">Environment & Compliance</td></tr>`);
+
+  // Flood zone
+  const fzPill = (env.flood_zone||1) <= 1 ? {pill:'green',label:'Zone 1 - Low'} : (env.flood_zone||1) === 2 ? {pill:'amber',label:'Zone 2 - Medium'} : {pill:'red',label:'Zone 3 - High'};
+  rows.push(`<tr><td>Flood Risk</td>${scs.map(() => `<td>${pill(fzPill)}</td>`).join('')}</tr>`);
+
+  // BNG
+  if (eco.bng_mandatory) {
+    const bngPill = {pill:'amber',label:'BNG 10% - \u00A3' + ((eco.bng_cost_estimate_low||0)/1000).toFixed(0) + '-' + ((eco.bng_cost_estimate_high||0)/1000).toFixed(0) + 'K'};
+    rows.push(`<tr><td>Biodiversity Net Gain</td>${scs.map(() => `<td>${pill(bngPill)}</td>`).join('')}</tr>`);
+  }
+
+  // GLA Referral
+  if (del.gla_referral) {
+    rows.push(`<tr><td>GLA Referral</td>${scs.map(() => `<td>${pill({pill:'amber',label:'Stage 1/2'})}</td>`).join('')}</tr>`);
+  }
+
+  // Fire Statement
+  if (del.fire_statement_required) {
+    rows.push(`<tr><td>Fire Statement (D12)</td>${scs.map(() => `<td>${pill({pill:'green',label:'Required'})}</td>`).join('')}</tr>`);
+  }
+
+  // BREEAM
+  if (sus.energy_planning && sus.energy_planning.breeam_target) {
+    rows.push(`<tr><td>BREEAM Target</td>${scs.map(() => `<td>${pill({pill:'blue',label:sus.energy_planning.breeam_target + ' ~\u00A3' + (sus.energy_planning.breeam_cost_uplift_per_sqm||50) + '/m\u00B2'})}</td>`).join('')}</tr>`);
+  }
+
+  // WLC + CES
+  if (sus.wlc_required) {
+    rows.push(`<tr><td>WLC / Circular Economy</td>${scs.map(() => `<td>${pill({pill:'blue',label:'Both Required'})}</td>`).join('')}</tr>`);
+  }
+
+  // Pre-commencement gates
+  if (del.pre_commencement_gates && del.pre_commencement_gates.length) {
+    rows.push(`<tr><td>Pre-Start Gates</td>${scs.map(() => `<td><span class="matrix-val">${del.pre_commencement_gates.length} conditions</span></td>`).join('')}</tr>`);
+  }
+
+  // Existing building data for comparison column
+  const existFloors = typeof SITE_INTELLIGENCE !== 'undefined' ? Math.round(((SITE_INTELLIGENCE.factors||{}).sky||{}).existing_m||24.8 / FTF) : 7;
+  const existGIA = Math.round(Math.round(PLOT_AREA * 0.42) * existFloors);
+  const existNIATotal = Math.round(existGIA * 0.78);
+
+  html('scenario-matrix', `<table class="matrix-table">
+    <thead><tr>
+      <th></th>
+      <th style="background:rgba(17,17,16,.04)">Existing<div class="th-floors">${existFloors} Floors - 24.8m</div></th>
+      ${scs.map(sc => `<th>${sc.label}<div class="th-floors">${sc.floors} Floors - ${Math.round(sc.floors*3.6)}m</div></th>`).join('')}
+    </tr></thead>
+    <tbody>${rows.map(r => {
+      // Inject existing column data after first <td>
+      if (r.includes('matrix-group-header')) return r.replace('colspan="4"','colspan="5"');
+      // For each data row, insert existing value after the label cell
+      const existCellMap = {
+        'Est. GDV': '—',
+        'Profit on Cost': '—',
+        'RLV': '—',
+        'Total Dev Cost': '—',
+        'Dev Profit': '—',
+        'GIA': val(f(existGIA)+'m\u00B2'),
+        'NIA': val(f(existNIATotal)+'m\u00B2'),
+        'Efficiency (NIA/GIA)': val('78%'),
+        'Cost / m\u00B2 GIA': '—',
+        'LVMF Impact': '—',
+        'Planning Appetite': '—',
+        'Heritage Response': '—',
+        'BSA Regime': val(existFloors*3.6 >= 30 ? 'Dual Stair' : 'Single Stair'),
+        'Fire Strategy': '—',
+        'Lifts Required': '—',
+        'Core %': val('22%'),
+        'Flood Risk': '—',
+        'Biodiversity Net Gain': '—',
+        'GLA Referral': '—',
+        'Fire Statement (D12)': '—',
+        'BREEAM Target': '—',
+        'WLC / Circular Economy': '—',
+        'Pre-Start Gates': '—',
+      };
+      // Find which row this is by its label text
+      const labelMatch = r.match(/<td>([^<]+)<\/td>/);
+      const label = labelMatch ? labelMatch[1] : '';
+      const existVal = existCellMap[label] !== undefined ? existCellMap[label] : '—';
+      return r.replace(/<\/td>(<td>)/, `</td><td style="background:rgba(17,17,16,.025)">${existVal}</td>$1`);
+    }).join('')}</tbody>
+  </table>`);
+}
+
+// -- Consequence Strip (Option B) --
+function updateConsequenceStrip() {
+  const sc = S04_SCENARIOS[s04Idx];
+  const m = scenarioMeta(sc);
+  const items = [
+    {icon: m.bsa.pill, text: `<strong>BSA:</strong> ${m.bsa.label}${m.bsa.pill !== 'green' ? ' - adds ~280-340m\u00B2 core per floor' : ''}`},
+    {icon: m.lvmf.pill, text: `<strong>LVMF:</strong> ${m.lvmf.label}${m.lvmf.pill === 'red' ? ' - strategic view corridor constrained' : ''}`},
+    {icon: m.planApp.pill, text: `<strong>Planning:</strong> ${m.planApp.label}${m.planApp.pill === 'red' ? ' - expect GLA Stage II scrutiny' : ''}`},
+    {icon: m.heritage.pill, text: `<strong>Heritage:</strong> ${m.heritage.label}${m.heritage.pill === 'red' ? ' - SPAB/Victorian Society likely objection' : ''}`},
+    {icon: m.fireStrat.pill, text: `<strong>Fire:</strong> ${m.fireStrat.label} - ${m.lifts} lift${m.lifts>1?'s':''}, ${m.corePct}% core`},
+    {icon: parseFloat(sc.poc) >= S04.poc ? 'green' : 'red', text: `<strong>Return:</strong> ${sc.poc}% PoC ${parseFloat(sc.poc) >= S04.poc ? '(above' : '(below'} ${S04.poc}% target)`}
+  ];
+  html('consequence-strip', items.map(it =>
+    `<div class="conseq-row"><div class="conseq-icon ${it.icon}">${it.icon==='green'?'\u2713':it.icon==='amber'?'\u26A0':'\u2717'}</div><div class="conseq-text">${it.text}</div></div>`
+  ).join(''));
+}
+
+// -- Perspective Modes --
+const PERSPECTIVES = {
+  aerial:    { pitch: 0,  zoom: 15,   bearing: 0,   duration: 1800 },
+  plan:      { pitch: 0,  zoom: 18,   bearing: -20,  duration: 1500 },
+  axo:       { pitch: 60, zoom: 17.2, bearing: -20,  duration: 1500 },
+  elevation: { pitch: 80, zoom: 18.5, bearing: -20,  duration: 1500 },
+  street:    { pitch: 75, zoom: 19,   bearing: 30,   duration: 1800 }
+};
+let currentPersp = 'axo';
+
+function setPerspective(mode) {
+  if (!MAP_REF) return;
+  currentPersp = mode;
+  const p = PERSPECTIVES[mode];
+
+  // Street View = interactive Google Maps embed
+  const svOverlay = document.getElementById('streetview-overlay');
+  if (mode === 'street' && svOverlay) {
+    svOverlay.innerHTML = '<iframe src="https://www.google.com/maps/embed/v1/streetview?key=AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI&location=' + LAT + ',' + LNG + '&heading=200&pitch=10&fov=90" style="width:100%;height:100%;border:none" allowfullscreen></iframe>';
+    svOverlay.style.opacity = '1';
+    svOverlay.style.pointerEvents = 'auto';
+  } else if (svOverlay) {
+    svOverlay.style.opacity = '0';
+    svOverlay.style.pointerEvents = 'none';
+    svOverlay.innerHTML = '';
+  }
+
+  if (mode !== 'street') {
+    MAP_REF.flyTo({ center: CENTROID, pitch: p.pitch, zoom: p.zoom, bearing: p.bearing, duration: p.duration, essential: true });
+  }
+
+  // Update active button
+  document.querySelectorAll('.persp-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('persp-' + mode);
+  if (btn) btn.classList.add('active');
+}
+
+// -- Map + Massing --
+let MAP_REF = null;
+function updateMassing(sc) {
+  if (!MAP_REF) return;
+  const existH = 24.8;
+  const proposedH = sc.floors * FTF;
+  try {
+    MAP_REF.setPaintProperty('site-existing', 'fill-extrusion-height', existH);
+    MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-height', proposedH);
+    MAP_REF.setPaintProperty('site-massing', 'fill-extrusion-base', existH);
+    for (let fl = 1; fl <= 20; fl++) {
+      const flH = fl * FTF;
+      const vis = flH <= proposedH ? 'visible' : 'none';
+      try { MAP_REF.setLayoutProperty('floor-line-'+fl, 'visibility', vis); } catch(e) {}
+    }
+  } catch(e) {}
+}
+
+// -- Init --
+if (typeof SITE_INTELLIGENCE !== 'undefined') populatePage(SITE_INTELLIGENCE);
+s04render();
+updateHeroMetrics();
+buildMatrix();
+updateConsequenceStrip();
+
+// Flags - data-driven from intelligence file
+function buildFlags() {
+  const SI = SITE_INTELLIGENCE;
+  const env = SI.environment || {};
+  const eco = SI.ecology || {};
+  const sus = SI.sustainability || {};
+  const pol = SI.policy_designations || {};
+  const del = SI.delivery || {};
+  const her = SI.factors.heritage;
+
+  const flags = [];
+
+  // Planning & Heritage
+  if (pol.opportunity_area) flags.push({icon:'ok',sym:'\u2713',title: pol.opportunity_area.name + ' Opportunity Area',desc:'London Plan 2021 Policy SD1. Mayoral backing for intensification.'});
+  if (pol.caz) flags.push({icon:'ok',sym:'\u2713',title:'Central Activities Zone (CAZ)',desc: pol.caz_note || 'Supports commercial intensification.'});
+  if (her.building_character && her.building_character.listed_building) flags.push({icon:'warn',sym:'\u26A0',title:'Grade ' + her.building_character.listed_building + ' Listed Building',desc: her.statutory.primary.name + ' (NHLE ' + her.building_character.nhle_on_site.list_entry + '). Listed Building Consent required.'});
+  if (her.building_character && her.building_character.conservation_area) flags.push({icon:'warn',sym:'\u26A0',title:'Conservation Area',desc:'Site within designated conservation area.'});
+  else flags.push({icon:'ok',sym:'\u2713',title:'Not in Conservation Area',desc:'Site is not within a designated conservation area.'});
+  if (her.building_character && her.building_character.nhle_adjacent && her.building_character.nhle_adjacent.length) flags.push({icon:'info',sym:'i',title:'Adjacent listed buildings within 50m',desc: her.building_character.nhle_adjacent.join(', ') + '.'});
+  if (pol.article4_directions && pol.article4_directions.length) flags.push({icon:'info',sym:'i',title:'Article 4 Directions Active',desc: pol.article4_directions.join('. ') + '.'});
+  if (pol.locally_listed) flags.push({icon:'warn',sym:'\u26A0',title:'Locally Listed Building',desc: pol.locally_listed_note || 'On borough Local Heritage List. Material planning consideration.'});
+
+  // Environment
+  const fz = env.flood_zone || 1;
+  if (fz <= 1) flags.push({icon:'ok',sym:'\u2713',title:'Flood Zone ' + fz + ' - Low Risk',desc:'No sequential test required.'});
+  else flags.push({icon: fz >= 3 ? 'risk' : 'warn', sym: fz >= 3 ? '\u2717' : '\u26A0', title:'Flood Zone ' + fz, desc: fz >= 3 ? 'Sequential test required. FRA mandatory.' : 'FRA required.'});
+  if (env.historic_landfill) flags.push({icon:'warn',sym:'\u26A0',title:'Historic Landfill within ' + env.historic_landfill_proximity_m + 'm',desc:'Contamination screening required. Phase 1 desk study + potential GI. ' + (env.contamination_note || '')});
+  if (env.air_quality && env.air_quality.aqma) flags.push({icon:'info',sym:'i',title:'Air Quality Management Area',desc: env.air_quality.aqma_name + '. ' + (env.air_quality.note || '')});
+  if (env.surface_water_risk && env.surface_water_risk !== 'low') flags.push({icon:'warn',sym:'\u26A0',title:'Surface Water Flood Risk: ' + env.surface_water_risk,desc:'SuDS strategy and basement risk assessment required.'});
+
+  // Ecology & BNG
+  if (eco.bng_mandatory) flags.push({icon:'info',sym:'i',title:'Biodiversity Net Gain (10% mandatory)',desc: eco.bng_note || 'BNG plan required pre-commencement. Estimated cost: \u00A3' + ((eco.bng_cost_estimate_low||0)/1000).toFixed(0) + '-' + ((eco.bng_cost_estimate_high||0)/1000).toFixed(0) + 'K.'});
+  if (eco.tpo_on_site) flags.push({icon:'warn',sym:'\u26A0',title:'Tree Preservation Order on Site',desc: eco.tpo_note || 'Protected trees may constrain layout.'});
+  if (eco.tpo_adjacent) flags.push({icon:'info',sym:'i',title:'TPO Adjacent to Site',desc: eco.tpo_note || 'Consider root protection areas.'});
+
+  // Sustainability
+  if (sus.wlc_required) flags.push({icon:'info',sym:'i',title:'Whole Life Carbon Assessment Required',desc: sus.wlc_note || 'GLA WLC Guidance applies to referable schemes.'});
+  if (sus.circular_economy_required) flags.push({icon:'info',sym:'i',title:'Circular Economy Statement Required',desc: sus.circular_economy_note || 'GLA CES Guidance applies to referable schemes.'});
+  if (sus.energy_planning && sus.energy_planning.breeam_target) flags.push({icon:'info',sym:'i',title:'BREEAM ' + sus.energy_planning.breeam_target + ' Target',desc: sus.energy_planning.note || ''});
+
+  // Delivery & Process
+  if (del.fire_statement_required) flags.push({icon:'info',sym:'i',title:'Fire Statement Required (Policy D12)',desc: del.fire_statement_note || 'London Plan requirement for major developments.'});
+  if (del.bsr_gateway) flags.push({icon:'warn',sym:'\u26A0',title:'BSR Higher-Risk Building Gateways',desc: del.bsr_gateway_note || 'Gateway 2/3 required. Programme + 6-12 months.'});
+  if (del.gla_referral) flags.push({icon:'info',sym:'i',title:'GLA Referral Required',desc: del.gla_referral_note || 'Mayor Stage 1/2 process.'});
+
+  html('flags-body', flags.map(f2=>`<div class="flag-row"><div class="flag-sym ${f2.icon}">${f2.sym}</div><div><div class="flag-title">${f2.title}</div><div class="flag-desc">${f2.desc}</div></div></div>`).join(''));
+}
+buildFlags();
+
+// Heights
+const KNOWN_HEIGHTS=[{name:'The Shard',h:310},{name:'One Blackfriars',h:163},{name:'Blackfriars Circus',h:85},{name:'240 Blackfriars Rd',h:55},{name:'Tate Modern',h:65},{name:'OXO Tower',h:37}];
+const maxHt = Math.max(...KNOWN_HEIGHTS.map(b=>b.h));
+html('heights-body', KNOWN_HEIGHTS.sort((a,b)=>b.h-a.h).map(b => {
+  const pct = Math.round(b.h/maxHt*100);
+  const col = b.h>=200?'var(--ink)':b.h>=100?'var(--accent)':'#d97706';
+  return `<div class="factor-row"><span class="factor-name">${b.name}</span><div class="factor-bar-wrap"><div style="height:100%;width:${pct}%;background:${col};border-radius:3px"></div></div><span class="factor-score">${b.h}m</span></div>`;
+}).join(''));
+
+// -- Map init --
+fetch('/api/config').then(r=>r.json()).then(cfg=>{
+  if (!cfg || !cfg.mapboxToken) return;
+  mapboxgl.accessToken = cfg.mapboxToken;
+  const map = new mapboxgl.Map({
+    container:'map', style:'mapbox://styles/mapbox/standard',
+    center: CENTROID, zoom: 17.2, pitch: 60, bearing: -20,
+    interactive: true, attributionControl: false, antialias: true
+  });
+  map.addControl(new mapboxgl.NavigationControl({showCompass:true}),'top-left');
+  map.scrollZoom.disable();
+  map.dragRotate.enable();
+  map.touchZoomRotate.enableRotation();
+  MAP_REF = map;
+
+  // Slow bearing rotation
+  let rotationFrame;
+  function rotateMap() {
+    if (!MAP_REF || currentPersp === 'street') return;
+    const bearing = MAP_REF.getBearing() - 0.15;
+    MAP_REF.setBearing(bearing);
+    rotationFrame = requestAnimationFrame(rotateMap);
+  }
+
+  map.on('style.load', () => {
+    map.setConfigProperty('basemap', 'lightPreset', 'dusk');
+    // Remove POI labels and business icons
+    try { map.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch(e) {}
+    try { map.setConfigProperty('basemap', 'showTransitLabels', false); } catch(e) {}
+    try { map.setPaintProperty('building-extrusion', 'fill-extrusion-color', '#e8e6e0'); } catch(e) {}
+    try { map.setPaintProperty('building-extrusion', 'fill-extrusion-opacity', 0.85); } catch(e) {}
+
+    map.addSource('site-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}}, slot:'top'});
+    map.addLayer({id:'site-existing', type:'fill-extrusion', source:'site-poly', slot:'top',
+      paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':24.8,'fill-extrusion-base':0,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.6}});
+    map.addLayer({id:'site-massing', type:'fill-extrusion', source:'site-poly', slot:'top',
+      paint:{'fill-extrusion-color':'#ffffff','fill-extrusion-height':42.0,'fill-extrusion-base':24.8,'fill-extrusion-opacity':0.95,'fill-extrusion-emissive-strength':0.8}});
+    // Floor lines across full height (existing + proposed)
+    for (let fl = 1; fl <= 20; fl++) {
+      const h = fl * FTF;
+      map.addLayer({id:'floor-line-'+fl, type:'fill-extrusion', source:'site-poly', slot:'top',
+        paint:{'fill-extrusion-color':'rgba(17,17,16,0.18)','fill-extrusion-height':h,'fill-extrusion-base':h-0.25,'fill-extrusion-opacity':1.0}});
+    }
+    if (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.polygon && SITE_INTELLIGENCE.polygon.length > 3) {
+      map.getSource('site-poly').setData({type:'Feature', geometry:{type:'Polygon', coordinates:[SITE_INTELLIGENCE.polygon]}});
+    }
+    setTimeout(() => updateMassing(S04_SCENARIOS[s04Idx]), 200);
+    // Start rotation after a delay
+    setTimeout(() => rotateMap(), 2000);
+    // Pause rotation on user interaction, resume after
+    // User takes control permanently once they interact - rotation doesn't force-resume
+    let userHasInteracted = false;
+    map.on('mousedown', () => {
+      if (rotationFrame) cancelAnimationFrame(rotationFrame);
+      userHasInteracted = true;
+      document.getElementById('persp-reset') && document.getElementById('persp-reset').classList.add('visible');
+    });
+    map.on('touchstart', () => {
+      if (rotationFrame) cancelAnimationFrame(rotationFrame);
+      userHasInteracted = true;
+      document.getElementById('persp-reset') && document.getElementById('persp-reset').classList.add('visible');
+    });
+    // Expose restart for reset button
+    window._restartRotation = function() {
+      userHasInteracted = false;
+      rotateMap();
+      document.getElementById('persp-reset') && document.getElementById('persp-reset').classList.remove('visible');
+    };
+  });
+}).catch(e => console.warn('Config:', e.message));
+
+// ============================================================
+// AWARD-GRADE ENHANCEMENTS
+// ============================================================
+
+// -- 1. RULER CANVAS SLIDERS --
+(function() {
+  const TICK_COUNT = 48;
+  const COLOR_ACTIVE = '#111110';
+  const COLOR_INACTIVE = 'rgba(17,17,16,0.18)';
+  const COLOR_DEFAULT_LINE = '#b8845c'; // copper for default marker
+
+  function drawRuler(wrap) {
+    const canvas = wrap.querySelector('.ruler-canvas');
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const W = wrap.offsetWidth;
+    const H = 64;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, W, H);
+
+    const min = parseFloat(wrap.dataset.min);
+    const max = parseFloat(wrap.dataset.max);
+    const val = parseFloat(wrap.dataset.val);
+    const def = parseFloat(wrap.dataset.default);
+    const pct = (val - min) / (max - min);
+    const defPct = (def - min) / (max - min);
+    const curX = pct * W;
+    const defX = defPct * W;
+
+    // Draw ticks
+    const tickW = 3;
+    const gap = (W - TICK_COUNT * tickW) / (TICK_COUNT - 1);
+    for (let i = 0; i < TICK_COUNT; i++) {
+      const x = i * (tickW + gap);
+      const tickPct = i / (TICK_COUNT - 1);
+      const active = tickPct <= pct;
+      // Height variation: alternating tall/short like a ruler
+      const isMajor = i % 4 === 0;
+      const isMid = i % 2 === 0;
+      const tickH = isMajor ? H * 0.85 : isMid ? H * 0.65 : H * 0.45;
+      const y = H - tickH;
+      ctx.fillStyle = active ? COLOR_ACTIVE : COLOR_INACTIVE;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(x, y, tickW, tickH, [2, 2, 1, 1]) : ctx.rect(x, y, tickW, tickH);
+      ctx.fill();
+    }
+
+    // Default position line (copper)
+    ctx.save();
+    ctx.strokeStyle = COLOR_DEFAULT_LINE;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(defX, 0);
+    ctx.lineTo(defX, H);
+    ctx.stroke();
+    ctx.restore();
+
+    // Default label
+    ctx.save();
+    ctx.font = '500 9px Inter, sans-serif';
+    ctx.fillStyle = COLOR_DEFAULT_LINE;
+    ctx.textAlign = defPct > 0.8 ? 'right' : 'center';
+    ctx.fillText('default', defPct > 0.8 ? defX - 4 : defX, 10);
+    ctx.restore();
+
+    // Current position line (dark)
+    ctx.save();
+    ctx.strokeStyle = '#111110';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(curX, 0);
+    ctx.lineTo(curX, H);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function initRuler(wrap) {
+    drawRuler(wrap);
+
+    function pointerMove(e) {
+      const rect = wrap.getBoundingClientRect();
+      const min = parseFloat(wrap.dataset.min);
+      const max = parseFloat(wrap.dataset.max);
+      const step = parseFloat(wrap.dataset.step);
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      let val = min + pct * (max - min);
+      val = Math.round(val / step) * step;
+      val = Math.max(min, Math.min(max, val));
+      // Round to avoid float drift
+      val = parseFloat(val.toFixed(10));
+      wrap.dataset.val = val;
+      drawRuler(wrap);
+      // Fire the s04Slider update
+      const id = wrap.dataset.id;
+      const key = id.replace('sl-','');
+      if (typeof s04Slider === 'function') s04Slider(key, val);
+    }
+
+    let dragging = false;
+    wrap.addEventListener('pointerdown', e => {
+      dragging = true;
+      wrap.setPointerCapture(e.pointerId);
+      pointerMove(e);
+    });
+    wrap.addEventListener('pointermove', e => { if (dragging) pointerMove(e); });
+    wrap.addEventListener('pointerup', () => { dragging = false; });
+    wrap.addEventListener('pointercancel', () => { dragging = false; });
+
+    // Double-click to reset to default
+    wrap.addEventListener('dblclick', () => {
+      wrap.dataset.val = wrap.dataset.default;
+      drawRuler(wrap);
+      const key = wrap.dataset.id.replace('sl-','');
+      if (typeof s04Slider === 'function') s04Slider(key, parseFloat(wrap.dataset.default));
+    });
+  }
+
+  // Init all ruler wraps after DOM ready
+  function initAll() {
+    document.querySelectorAll('.ruler-wrap').forEach(w => initRuler(w));
+    // Redraw on resize
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.ruler-wrap').forEach(w => drawRuler(w));
+    });
+  }
+
+  // Expose redraw for reset button
+  window.redrawRulers = function() {
+    document.querySelectorAll('.ruler-wrap').forEach(w => {
+      w.dataset.val = w.dataset.default;
+      drawRuler(w);
+    });
+  };
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll);
+  else initAll();
+})();
+
+// -- 2. NUMBER COUNT-UP ANIMATIONS --
+(function() {
+  function parseValue(text) {
+    const clean = text.replace(/[£$,\s]/g, '');
+    if (clean.endsWith('M')) return { num: parseFloat(clean) * 1e6, suffix: '', prefix: '\u00A3', divisor: 1e6, dp: 1, mSuffix: 'M' };
+    if (clean.endsWith('%')) return { num: parseFloat(clean), suffix: '%', prefix: '', divisor: 1, dp: 1, mSuffix: '' };
+    if (clean.includes('m\u00B2') || text.includes('m²')) {
+      return { num: parseFloat(clean.replace('m²','').replace('m\u00B2','')), suffix: 'm\u00B2', prefix: '', divisor: 1, dp: 0, mSuffix: '' };
+    }
+    const n = parseFloat(clean);
+    if (isNaN(n)) return null;
+    return { num: n, suffix: '', prefix: text.startsWith('\u00A3') || text.startsWith('£') ? '\u00A3' : '', divisor: 1, dp: 0, mSuffix: '' };
+  }
+
+  function animateCount(el, targetText, duration) {
+    const parsed = parseValue(targetText);
+    if (!parsed || isNaN(parsed.num)) return;
+    const target = parsed.num;
+    const start = performance.now();
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      const current = target * ease;
+      if (parsed.mSuffix === 'M') {
+        el.textContent = parsed.prefix + (current / parsed.divisor).toFixed(parsed.dp) + parsed.mSuffix;
+      } else if (parsed.suffix === '%') {
+        el.textContent = parsed.prefix + current.toFixed(parsed.dp) + parsed.suffix;
+      } else {
+        el.textContent = parsed.prefix + Math.round(current).toLocaleString('en-GB') + parsed.suffix;
+      }
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = targetText;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target._counted) {
+        entry.target._counted = true;
+        const finalText = entry.target.textContent;
+        entry.target._finalText = finalText;
+        animateCount(entry.target, finalText, 800);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  // Observe card values after render
+  const origS04render = window.s04render;
+  if (typeof origS04render === 'function') {
+    // We'll set up observation after DOM population - see MutationObserver below
+  }
+
+  // Watch for card-value elements being added
+  const cardObserverMO = new MutationObserver(() => {
+    document.querySelectorAll('.card-value, .hero-score, .comp-val').forEach(el => {
+      if (!el._countObserved) {
+        el._countObserved = true;
+        countObserver.observe(el);
+      }
+    });
+  });
+  cardObserverMO.observe(document.body, { childList: true, subtree: true });
+})();
+
+// -- 4. PROGRESS DOTS --
+(function() {
+  const dots = document.querySelectorAll('.progress-dot');
+  const sectionIds = ['overview','development','scenarios','architecture','planning'];
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = dot.dataset.target;
+      const el = document.getElementById(target);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  function updateDots() {
+    let current = 0;
+    sectionIds.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - window.innerHeight * 0.4) current = i;
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+  window.addEventListener('scroll', updateDots, { passive: true });
+})();
+
+// -- 6. CARD HOVER TILT --
+(function() {
+  if (window.matchMedia('(max-width:768px)').matches) return;
+  document.addEventListener('mousemove', e => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(800px) rotateX(${-y * 4}deg) rotateY(${x * 4}deg) translateY(-2px)`;
+  });
+  document.addEventListener('mouseleave', e => {
+    const card = e.target.closest && e.target.closest('.card');
+    if (card) card.style.transform = '';
+  }, true);
+  document.addEventListener('mouseout', e => {
+    if (e.target.classList && e.target.classList.contains('card')) {
+      e.target.style.transform = '';
+    }
+  });
+})();
+
+// -- 7. STICKY MAP REMOVED (caused layout chaos) --
+
+// -- 8. NUMBER MORPHING ON SCENARIO CHANGE --
+(function() {
+  function morphNumber(el, fromText, toText, duration) {
+    const parseNum = t => {
+      const clean = t.replace(/[£$,%\s]/g, '').replace('M','');
+      return parseFloat(clean.replace(/,/g, ''));
+    };
+    const fromN = parseNum(fromText);
+    const toN = parseNum(toText);
+    if (isNaN(fromN) || isNaN(toN) || fromN === toN) { el.textContent = toText; return; }
+
+    const isM = toText.includes('M');
+    const isPct = toText.includes('%');
+    const hasP = toText.includes('\u00A3') || toText.includes('£');
+    const start = performance.now();
+
+    function tick(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
+      const current = fromN + (toN - fromN) * ease;
+      if (isM) el.textContent = (hasP ? '\u00A3' : '') + current.toFixed(1) + 'M';
+      else if (isPct) el.textContent = current.toFixed(1) + '%';
+      else el.textContent = (hasP ? '\u00A3' : '') + Math.round(current).toLocaleString('en-GB');
+      if (t < 1) requestAnimationFrame(tick);
+      else el.textContent = toText;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Override s04go to morph numbers
+  const origS04go = window.s04go;
+  window.s04go = function(idx) {
+    // Capture current values
+    const oldCards = document.querySelectorAll('#sc-cards .card-value');
+    const oldTexts = Array.from(oldCards).map(el => el.textContent);
+
+    // Call original
+    origS04go(idx);
+
+    // Morph new values
+    const newCards = document.querySelectorAll('#sc-cards .card-value');
+    newCards.forEach((el, i) => {
+      if (oldTexts[i] && el.textContent !== oldTexts[i]) {
+        const newText = el.textContent;
+        morphNumber(el, oldTexts[i], newText, 400);
+      }
+    });
+  };
+})();
+
+// -- 10. SCROLL PROGRESS BAR --
+(function() {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = h > 0 ? (window.scrollY / h) * 100 : 0;
+    bar.style.width = pct + '%';
+  }, { passive: true });
+})();
+
+// -- 11. RETURN CURVE SELF-DRAWING --
+(function() {
+  const svg = document.getElementById('return-curve-svg');
+  const path = document.getElementById('return-curve-path');
+  const dot = document.getElementById('return-curve-dot');
+  if (!svg || !path) return;
+
+  // Set the actual path length
+  const pathLength = path.getTotalLength();
+  path.style.strokeDasharray = pathLength;
+  path.style.strokeDashoffset = pathLength;
+
+  const curveObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !svg._drawn) {
+        svg._drawn = true;
+        // Trigger the draw
+        path.style.transition = 'stroke-dashoffset 1.2s ease-in-out';
+        path.style.strokeDashoffset = '0';
+        // Animate the dot after curve draws
+        if (dot) {
+          setTimeout(() => { dot.style.transition = 'opacity .3s'; dot.style.opacity = '1'; }, 1200);
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+  curveObserver.observe(svg);
+})();
+</script>
+
+<!-- Scenario Popup Modal -->
+<div class="sc-modal-scrim" id="sc-modal-scrim" onclick="if(event.target===this)closeScModal()">
+  <div class="sc-modal">
+    <button class="sc-modal-close" onclick="closeScModal()">&times;</button>
+    <div class="sc-modal-map" id="sc-modal-map"></div>
+    <div class="sc-modal-body">
+      <div class="sc-modal-tabs" id="sc-modal-tabs"></div>
+      <div class="sc-modal-title" id="sc-modal-title"></div>
+      <div class="sc-modal-sub" id="sc-modal-sub"></div>
+      <div class="sc-modal-metrics" id="sc-modal-metrics"></div>
+      <div class="sc-modal-conseq" id="sc-modal-conseq"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+let scModalMap = null;
+function openScModal(idx) {
+  if (typeof idx === 'number') { s04Idx = idx; s04calc(); }
+  const scrim = document.getElementById('sc-modal-scrim');
+  scrim.style.display = 'flex';
+  requestAnimationFrame(() => scrim.classList.add('open'));
+
+  const sc = S04_SCENARIOS[s04Idx];
+  const m = scenarioMeta(sc);
+  s04calc();
+
+  // Tabs
+  document.getElementById('sc-modal-tabs').innerHTML = S04_SCENARIOS.map((s, i) =>
+    `<button class="sc-modal-tab${i===s04Idx?' active':''}" onclick="openScModal(${i})">${s.label} - ${s.floors}F</button>`
+  ).join('');
+
+  document.getElementById('sc-modal-title').textContent = sc.label + ' Scenario';
+  document.getElementById('sc-modal-sub').textContent = sc.floors + ' Floors - ' + Math.round(sc.floors * FTF) + 'm - ' + (sc.twrPct * 100).toFixed(0) + '% tower coverage';
+
+  document.getElementById('sc-modal-metrics').innerHTML = `
+    <div class="sc-modal-metric"><div class="sc-modal-metric-val">${fm(sc.gdv)}</div><div class="sc-modal-metric-label">Est. GDV</div></div>
+    <div class="sc-modal-metric"><div class="sc-modal-metric-val">${sc.poc}%</div><div class="sc-modal-metric-label">Profit on Cost</div></div>
+    <div class="sc-modal-metric"><div class="sc-modal-metric-val">${fm(sc.rlv)}</div><div class="sc-modal-metric-label">RLV</div></div>
+    <div class="sc-modal-metric"><div class="sc-modal-metric-val">${f(sc.nia)}m\u00B2</div><div class="sc-modal-metric-label">NIA</div></div>
+    <div class="sc-modal-metric"><div class="sc-modal-metric-val">${f(sc.gea)}m\u00B2</div><div class="sc-modal-metric-label">GIA</div></div>
+    <div class="sc-modal-metric"><div class="sc-modal-metric-val">${Math.round(sc.eff*100)}%</div><div class="sc-modal-metric-label">Efficiency</div></div>
+  `;
+
+  const items = [
+    {c: m.bsa.pill, t: 'BSA: ' + m.bsa.label},
+    {c: m.lvmf.pill, t: 'LVMF: ' + m.lvmf.label},
+    {c: m.planApp.pill, t: 'Planning: ' + m.planApp.label},
+    {c: m.heritage.pill, t: 'Heritage: ' + m.heritage.label},
+    {c: m.fireStrat.pill, t: 'Fire: ' + m.fireStrat.label + ' - ' + m.lifts + ' lift' + (m.lifts>1?'s':'')},
+    {c: parseFloat(sc.poc) >= S04.poc ? 'green' : 'red', t: 'Return: ' + sc.poc + '% PoC (' + (parseFloat(sc.poc)>=S04.poc?'above':'below') + ' ' + S04.poc + '% target)'}
+  ];
+  document.getElementById('sc-modal-conseq').innerHTML = items.map(it =>
+    `<div class="sc-modal-conseq-row"><div class="sc-modal-conseq-dot ${it.c}"></div><span style="font:400 14px var(--sans);color:var(--ink2)">${it.t}</span></div>`
+  ).join('');
+
+  // Modal map
+  if (!scModalMap && typeof mapboxgl !== 'undefined' && mapboxgl.accessToken) {
+    scModalMap = new mapboxgl.Map({
+      container: 'sc-modal-map', style: 'mapbox://styles/mapbox/standard',
+      center: CENTROID, zoom: 17, pitch: 55, bearing: -20,
+      interactive: true, attributionControl: false
+    });
+    scModalMap.on('style.load', () => {
+      scModalMap.setConfigProperty('basemap', 'lightPreset', 'dusk');
+      try { scModalMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch(e) {}
+      try { scModalMap.setConfigProperty('basemap', 'showTransitLabels', false); } catch(e) {}
+      scModalMap.addSource('modal-poly', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[SITE_INTELLIGENCE.polygon||[]]}}});
+      scModalMap.addLayer({id:'modal-massing', type:'fill-extrusion', source:'modal-poly',
+        paint:{'fill-extrusion-color':'rgba(255,255,255,0.92)','fill-extrusion-height': sc.floors * FTF,'fill-extrusion-base':0,'fill-extrusion-opacity':0.9}});
+    });
+  } else if (scModalMap) {
+    scModalMap.resize();
+    try {
+      scModalMap.setPaintProperty('modal-massing', 'fill-extrusion-height', sc.floors * FTF);
+    } catch(e) {}
+  }
+
+  // Update main page massing too
+  updateMassing(sc);
+  document.querySelectorAll('.hero-sc-tab').forEach((b,i) => b.classList.toggle('active', i === s04Idx));
+
+  document.addEventListener('keydown', scModalEsc);
+}
+
+function closeScModal() {
+  const scrim = document.getElementById('sc-modal-scrim');
+  scrim.classList.remove('open');
+  setTimeout(() => { scrim.style.display = 'none'; }, 350);
+  document.removeEventListener('keydown', scModalEsc);
+}
+
+function scModalEsc(e) { if (e.key === 'Escape') closeScModal(); }
+</script>
+</body>
+</html>
