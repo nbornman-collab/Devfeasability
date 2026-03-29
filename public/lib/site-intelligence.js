@@ -330,7 +330,7 @@ function synthesisDevScope(si) {
     bsaNarrative = `At ${maxF}F, the scheme sits below all BSA thresholds - single staircase, standard fire strategy, no higher-risk building regime. That is a meaningful cost and programme advantage that should be reflected in the development appraisal. Schemes in this range typically have lower delivery risk than taller comparable sites.`;
   }
 
-  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${potentialNarrative}</p><p style="font:400 12px/1.75 Inter,sans-serif;color:#374151">${bsaNarrative}</p>`;
+  return `<p style="font:400 15px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${potentialNarrative}</p><p style="font:400 15px/1.75 Inter,sans-serif;color:#374151">${bsaNarrative}</p>`;
 }
 
 function synthesisPlanning(si) {
@@ -381,7 +381,7 @@ function synthesisPlanning(si) {
     titleNote = ` The title stack (${titles} titles) adds an acquisition layer to the planning timeline. Assembling control before spending on pre-app is worth considering - fractured ownership can become a material planning constraint if it is not resolved before submission.`;
   }
 
-  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${planNarrative}${caNote}${titleNote}</p>`;
+  return `<p style="font:400 15px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${planNarrative}${caNote}${titleNote}</p>`;
 }
 
 function synthesisArchitecture(si) {
@@ -435,7 +435,7 @@ function synthesisArchitecture(si) {
   const buildMonths = maxF >= 12 ? '30-36' : maxF >= 8 ? '24-30' : '18-24';
   const progNote = `Indicative programme: pre-app ${preAppMonths} months, planning decision ${planningMonths} months post-submission, construction ${buildMonths} months. Total end-to-end from site control: ${(parseInt(preAppMonths)+parseInt(planningMonths)+parseInt(buildMonths)+12)} months is a reasonable planning assumption before testing against lender requirements.`;
 
-  return `<p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${massingNarrative}</p><p style="font:400 12px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${carbonNarrative}</p><p style="font:400 11px/1.6 Inter,sans-serif;color:#6b7280">${progNote}</p>`;
+  return `<p style="font:400 15px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${massingNarrative}</p><p style="font:400 15px/1.75 Inter,sans-serif;color:#374151;margin-bottom:10px">${carbonNarrative}</p><p style="font:400 14px/1.6 Inter,sans-serif;color:#6b7280">${progNote}</p>`;
 }
 
 
