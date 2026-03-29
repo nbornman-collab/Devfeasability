@@ -124,7 +124,17 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
+// No-cache for HTML files - prevents stale in-app browser cache (Safari/Telegram)
+app.use(express.static(path.join(__dirname, 'public'), {
+  extensions: ['html'],
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.set('Pragma', 'no-cache');
+      res.set('Expires', '0');
+    }
+  }
+}));
 
 // ── Tier routes: /t1/:site, /t2/:site, /t3/:site ──────────────────────────
 // T1 Scout  — site overview (placeholder until built)
