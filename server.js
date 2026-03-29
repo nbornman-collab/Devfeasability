@@ -156,9 +156,31 @@ app.get('/t2/:site', (req, res) => {
 app.get('/t3/:site', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'reports', `${req.params.site}.html`));
 });
+// Slug -> intelligence file mapping (sites with full T1 intelligence)
+const T1_INTELLIGENCE_MAP = {
+  '24-southwark-st':    'intelligence-24ss',
+  '196-blackfriars-rd': 'intelligence-196br',
+};
+
 app.get('/t1/:site', (req, res) => {
-  const filePath = path.join(__dirname, 'public', 'scout', `${req.params.site}.html`);
-  if (require('fs').existsSync(filePath)) {
+  const slug = req.params.site;
+  const fs = require('fs');
+
+  // If site has an intelligence file, serve the new T1 scroll template
+  if (T1_INTELLIGENCE_MAP[slug]) {
+    const template = path.join(__dirname, 'public', 'test', 't1-scroll.html');
+    if (fs.existsSync(template)) {
+      let html = fs.readFileSync(template, 'utf8');
+      const scriptTag = `<script src="/lib/${T1_INTELLIGENCE_MAP[slug]}.js"></script>`;
+      html = html.replace('<!-- @@INTELLIGENCE_SCRIPT@@ -->', scriptTag);
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+      return res.send(html);
+    }
+  }
+
+  // Fallback: serve old scout file if it exists
+  const filePath = path.join(__dirname, 'public', 'scout', `${slug}.html`);
+  if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
     // Coming soon — site not yet onboarded
