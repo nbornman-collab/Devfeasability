@@ -728,6 +728,19 @@ Never present screening flags as definitive compliance. The platform structures 
 
 ---
 
+## COLOUR / INLINE STYLE RULE (locked 2026-03-29)
+
+**No inline `color` or `background` in HTML.** Period.
+
+- All colour through CSS classes or `var(--token)`
+- No `style="color:rgba(...)"` in HTML or JS templates
+- No `style="background:#..."` on HTML elements
+- If a new colour is needed: add a class to the CSS first, then use the class
+- This makes dark/light section switching work. It makes mobile work. It makes everything maintainable.
+- **Enforcement**: before committing any HTML change, grep for `style="[^"]*color:` and `style="[^"]*background:` - if any exist outside of layout properties (padding, margin, display, flex, grid), reject.
+
+---
+
 ## TYPOGRAPHY SYSTEM (locked 2026-03-29)
 
 **Single source of truth: `public/css/type.css`**

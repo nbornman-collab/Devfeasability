@@ -464,6 +464,24 @@ input[type=range].ruler-input {
 .reset-btn { font: 500 13px var(--sans); color: var(--ink3); background: none; border: none; cursor: pointer; text-decoration: underline; }
 .reset-btn:hover { color: var(--ink); }
 
+/* Motivated seller card (always dark - sits as dark panel on any bg) */
+.motivated-card { background: #0d0d0b; border-radius: 14px; overflow: hidden; border: 1px solid rgba(232,228,218,.07); }
+.mot-header { padding: 24px 28px 20px; border-bottom: 1px solid rgba(232,228,218,.07); display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; }
+.mot-label { font: 700 11px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: rgba(232,228,218,.5); margin-bottom: 6px; }
+.mot-score-val { font: 700 clamp(36px,5vw,56px)/1 var(--mono); color: #d97706; letter-spacing: -.04em; }
+.mot-denom { font-size: .4em; font-weight: 400; color: rgba(232,228,218,.3); }
+.mot-verdict { font: 400 14px var(--sans); color: rgba(232,228,218,.6); margin-top: 4px; }
+.mot-disclaimer { font: 400 12px var(--sans); color: rgba(232,228,218,.4); font-style: italic; text-align: right; max-width: 200px; }
+.mot-flags-wrap { padding: 0 28px 20px; }
+.mot-source { padding: 0 28px 16px; font: 400 11px var(--sans); color: rgba(232,228,218,.3); }
+
+/* Footer */
+.footer { background: #0d0d0b; padding: 80px 40px; text-align: center; }
+
+/* Matrix existing column */
+.th-existing { background: rgba(232,228,218,.04); }
+.td-existing { background: rgba(232,228,218,.02); }
+
 /* -- PRO FORMA TABLE -- */
 .proforma { margin-top: 32px; }
 .proforma table { width: 100%; border-collapse: collapse; }
@@ -752,17 +770,17 @@ input[type=range].ruler-input {
 
     <!-- Motivated Seller -->
     <div class="reveal" style="margin-top:48px">
-      <div class="motivated-card" style="background:#1a1a19;border-radius:18px;overflow:hidden">
-        <div style="padding:28px 32px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+      <div class="motivated-card">
+        <div class="mot-header">
           <div>
-            <div style="font:700 11px var(--sans);text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.65);margin-bottom:6px">Motivated Seller Score</div>
-            <div style="font:700 clamp(40px,5vw,56px)/1 var(--mono);color:#d97706;letter-spacing:-.04em" id="mot-score">3<span style="font-size:.4em;font-weight:400;color:rgba(255,255,255,.3)">/5</span></div>
-            <div style="font:400 14px var(--sans);color:rgba(255,255,255,.65);margin-top:4px" id="mot-verdict">Moderate urgency - long hold + fund structure signals</div>
+            <div class="mot-label">Motivated Seller Score</div>
+            <div class="mot-score-val" id="mot-score">3<span class="mot-denom">/5</span></div>
+            <div class="mot-verdict" id="mot-verdict">Moderate urgency - long hold + fund structure signals</div>
           </div>
-          <div style="font:400 12px var(--sans);color:rgba(255,255,255,.5);font-style:italic;text-align:right;max-width:200px">Estimated - pending<br>HMLR + Companies House<br>pipeline connection</div>
+          <div class="mot-disclaimer">Estimated - pending<br>HMLR + Companies House<br>pipeline connection</div>
         </div>
-        <div id="mot-flags" style="padding:0 32px 24px"></div>
-        <div style="padding:0 32px 20px;font:400 11px var(--sans);color:rgba(255,255,255,.5)">Sources: HMLR title register, Companies House, Business Rates England - pipeline pending</div>
+        <div id="mot-flags" class="mot-flags-wrap"></div>
+        <div class="mot-source">Sources: HMLR title register, Companies House, Business Rates England - pipeline pending</div>
       </div>
     </div>
 
@@ -919,7 +937,7 @@ input[type=range].ruler-input {
 </section>
 
 <!-- FOOTER -->
-<div class="footer" style="background:#1a1a19;padding:80px 40px;text-align:center">
+<div class="footer">
   <div style="font:400 clamp(24px,3vw,36px) var(--display);color:#f2f1ed;margin-bottom:16px">Ready to move on this site?</div>
   <div style="font:400 15px/1.7 var(--sans);color:rgba(242,241,237,.5);max-width:480px;margin:0 auto 32px">Full feasibility study with detailed massing, planning strategy, and financial modelling.</div>
   <a href="#" style="display:inline-block;font:700 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;background:var(--accent2);color:#fff;padding:16px 40px;border-radius:8px;text-decoration:none;transition:background .2s" onmouseover="this.style.background='#a07450'" onmouseout="this.style.background='var(--accent2)'">Commission Full Study</a>
@@ -1396,7 +1414,7 @@ function buildMatrix() {
   html('scenario-matrix', `<table class="matrix-table">
     <thead><tr>
       <th></th>
-      <th style="background:rgba(17,17,16,.04)">Existing<div class="th-floors">${existFloors} Floors - 24.8m</div></th>
+      <th class="th-existing">Existing<div class="th-floors">${existFloors} Floors - 24.8m</div></th>
       ${scs.map(sc => `<th>${sc.label}<div class="th-floors">${sc.floors} Floors - ${Math.round(sc.floors*3.6)}m</div></th>`).join('')}
     </tr></thead>
     <tbody>${rows.map(r => {
@@ -1432,7 +1450,7 @@ function buildMatrix() {
       const labelMatch = r.match(/<td>([^<]+)<\/td>/);
       const label = labelMatch ? labelMatch[1] : '';
       const existVal = existCellMap[label] !== undefined ? existCellMap[label] : '—';
-      return r.replace(/<\/td>(<td>)/, `</td><td style="background:rgba(17,17,16,.025)">${existVal}</td>$1`);
+      return r.replace(/<\/td>(<td>)/, `</td><td class="td-existing">${existVal}</td>$1`);
     }).join('')}</tbody>
   </table>`);
 }
