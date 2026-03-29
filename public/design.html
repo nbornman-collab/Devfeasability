@@ -83,6 +83,76 @@ body.arch {
   color: var(--ink);
 }
 
+/* ── Hero Mockup ── */
+.hero-mock-wrap {
+  position: relative; width: 100%; height: 100vh; min-height: 600px; max-height: 900px;
+  overflow: hidden; display: flex; align-items: flex-end;
+}
+.hero-mock-bg {
+  position: absolute; inset: -5%;
+  background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=2400&q=85&auto=format');
+  background-size: cover; background-position: center 40%;
+  animation: kenburns 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes kenburns {
+  0%   { transform: scale(1.08) translate(0%, 0%); }
+  50%  { transform: scale(1.14) translate(-1.5%, 0.8%); }
+  100% { transform: scale(1.08) translate(1%, -0.5%); }
+}
+.hero-mock-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(6,6,5,0.25) 0%,
+    rgba(6,6,5,0.1) 30%,
+    rgba(6,6,5,0.5) 70%,
+    rgba(6,6,5,0.88) 100%
+  );
+}
+.hero-mock-content {
+  position: relative; z-index: 10;
+  padding: 0 72px 80px;
+  max-width: 760px;
+}
+.hero-mock-eyebrow {
+  font: 600 11px var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(242,241,237,.45); margin-bottom: 20px;
+}
+.hero-mock-title {
+  font: 300 clamp(44px,6vw,80px)/1.05 var(--sans);
+  color: #f2f1ed; letter-spacing: -.03em;
+  margin-bottom: 24px;
+}
+.hero-mock-title em {
+  font-style: normal;
+  color: var(--copper);
+}
+.hero-mock-sub {
+  font: 400 16px/1.7 var(--sans);
+  color: rgba(242,241,237,.6);
+  max-width: 480px;
+  margin-bottom: 36px;
+}
+.hero-mock-ctas { display: flex; gap: 12px; align-items: center; }
+.hero-mock-btn-primary {
+  font: 600 13px var(--sans); letter-spacing: .04em;
+  padding: 14px 28px; background: var(--copper); color: #fff;
+  text-decoration: none; border-radius: 4px; transition: background .15s;
+}
+.hero-mock-btn-primary:hover { background: var(--copper2); }
+.hero-mock-btn-ghost {
+  font: 500 13px var(--sans); letter-spacing: .04em;
+  padding: 14px 24px; background: rgba(242,241,237,.08); color: rgba(242,241,237,.7);
+  text-decoration: none; border-radius: 4px; border: 1px solid rgba(242,241,237,.12);
+  transition: all .15s;
+}
+.hero-mock-btn-ghost:hover { background: rgba(242,241,237,.12); color: #f2f1ed; }
+.hero-mock-credit {
+  position: absolute; bottom: 16px; right: 24px; z-index: 10;
+  font: 400 10px var(--sans); color: rgba(242,241,237,.2); letter-spacing: .06em;
+}
+
 /* ── Layout ── */
 body { font-family: var(--sans); -webkit-font-smoothing: antialiased; min-height: 100vh; }
 
@@ -549,6 +619,22 @@ body.arch .score-verdict { border: 1px solid rgba(22,163,74,.3); color: #16a34a;
   </div>
 </nav>
 
+<!-- ── HERO MOCKUP (full bleed) ── -->
+<div class="hero-mock-wrap">
+  <div class="hero-mock-bg"></div>
+  <div class="hero-mock-overlay"></div>
+  <div class="hero-mock-content">
+    <div class="hero-mock-eyebrow">Development / Architecture / Planning</div>
+    <h1 class="hero-mock-title">In-depth feasibility<br>analysis.<br><em>Before you bid.</em></h1>
+    <p class="hero-mock-sub">Site intelligence for London development - planning, architecture, and financial modelling in one place.</p>
+    <div class="hero-mock-ctas">
+      <a class="hero-mock-btn-primary" href="/discover">Discover Sites &rarr;</a>
+      <a class="hero-mock-btn-ghost" href="/t1/196-blackfriars-rd">Live Appraisal</a>
+    </div>
+  </div>
+  <div class="hero-mock-credit">Aerial view, London Bridge / Bankside corridor</div>
+</div>
+
 <div class="ds-body">
 
   <!-- 01 Score hero -->
@@ -755,6 +841,8 @@ body.arch .score-verdict { border: 1px solid rgba(22,163,74,.3); color: #16a34a;
       </div>
     </div>
   </div>
+
+
 
   <!-- 07 Status pills -->
   <div class="ds-section">
