@@ -63,8 +63,10 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
   display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
   background: rgba(242,241,237,.85); backdrop-filter: blur(20px) saturate(1.8);
   border-bottom: 1px solid var(--rule); }
-.nav-logo { font: 800 18px var(--sans); letter-spacing: -.03em; color: var(--ink); }
+.nav-logo { font: 800 18px var(--sans); letter-spacing: -.03em; color: var(--ink); text-decoration: none; }
 .nav-logo span { color: var(--accent); }
+.nav-back-link { font: 500 13px var(--sans); color: var(--ink3); text-decoration: none; margin-left: 16px; padding: 4px 8px; border-radius: 4px; transition: color .15s; }
+.nav-back-link:hover { color: var(--ink); }
 .nav-links { display: flex; gap: 28px; }
 .nav-links a { font: 500 18px var(--sans); color: var(--ink3); text-decoration: none; transition: color .2s; }
 .nav-links a:hover, .nav-links a.active { color: var(--ink); }
@@ -433,7 +435,8 @@ input[type=range].ruler-input {
 
 <!-- NAV (frosted, fixed) -->
 <nav>
-  <div class="nav-logo">D<span>/</span>A</div>
+  <a href="/" class="nav-logo">D<span>/</span>A</a>
+  <a href="/discover" class="nav-back-link">← Discover</a>
   <div class="nav-links">
     <a href="#overview" class="active">Overview</a>
     <a href="#development">Development</a>
