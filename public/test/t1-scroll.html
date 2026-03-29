@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>24 Southwark Street - Appraise | D/A</title>
+<title id="page-title">Appraise | D/A</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -707,12 +707,14 @@ input[type=range].ruler-input {
 </div>
 
 <script>
-// -- Constants --
-const PLOT_AREA = 2843;
+// -- Constants (driven by SITE_INTELLIGENCE; 24SS values as fallback) --
+const _SI = typeof SITE_INTELLIGENCE !== 'undefined' ? SITE_INTELLIGENCE : {};
+const PLOT_AREA = _SI.plot_m2 || 2843;
 const FTF = 3.6;
-const LAT = 51.504909, LNG = -0.091522;
+const LAT = _SI.lat || 51.504909;
+const LNG = _SI.lng || -0.091522;
 const CENTROID = [LNG, LAT];
-const ADDRESS = '24 Southwark Street, SE1 0SW';
+const ADDRESS = _SI.address || _SI.site_name || _SI.site || '24 Southwark Street, SE1 0SW';
 
 // -- S04 Engine (identical to t1-redesign) --
 const S04_DEFS = {erv:700, niy:4.75, cost:4200, s106:500, poc:20};
@@ -832,7 +834,9 @@ function populatePage(si) {
   };
 
   // Hero
-  set('hero-address', si.site_name || '24 Southwark Street');
+  const siteName = si.site_name || si.site || '24 Southwark Street';
+  set('hero-address', siteName);
+  document.title = siteName + ' - Appraise | D/A';
   set('hero-score', score);
   const pillText = score >= 80 ? 'Top Opportunity' : score >= 70 ? 'Strong Opportunity' : score >= 55 ? 'Credible Opportunity' : 'Due Diligence';
   set('hero-verdict', pillText);

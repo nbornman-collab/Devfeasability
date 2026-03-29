@@ -2,6 +2,11 @@
 const SITE_INTELLIGENCE = {
   polygon: [[-0.1043136,51.5051097],[-0.1040587,51.5051072],[-0.1040664,51.5048021],[-0.1043214,51.5048046],[-0.1043136,51.5051097]],
   site: '196 Blackfriars Road',
+  site_name: '196 Blackfriars Road',
+  address: '196 Blackfriars Road, SE1 8NJ',
+  lat: 51.50496,
+  lng: -0.10419,
+  plot_m2: 840,
   borough: 'Southwark',
   use: 'residential',
 
