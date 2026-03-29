@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D/A Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Theme tokens ── */
+:root {
+  --copper: #b8845c;
+  --copper2: #a07450;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --blue: #60a5fa;
+  --sans: 'Inter', sans-serif;
+  --mono: 'Space Grotesk', 'Inter', sans-serif;
+  --serif: 'Instrument Serif', Georgia, serif;
+}
+
+/* ── THEME: TERMINAL ── */
+body.terminal {
+  --bg: #080807;
+  --bg2: #111110;
+  --bg3: #1a1a18;
+  --ink: #f2f1ed;
+  --ink2: rgba(242,241,237,.65);
+  --ink3: rgba(242,241,237,.35);
+  --rule: rgba(242,241,237,.07);
+  --accent: var(--copper);
+  --card-bg: #111110;
+  --card-border: rgba(242,241,237,.06);
+  --metric-size: 52px;
+  --metric-weight: 700;
+  --label-size: 10px;
+  --label-ls: .12em;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* ── THEME: EDITORIAL ── */
+body.editorial {
+  --bg: #0d0d0b;
+  --bg2: #161614;
+  --bg3: #1f1f1d;
+  --ink: #f0ede6;
+  --ink2: rgba(240,237,230,.7);
+  --ink3: rgba(240,237,230,.38);
+  --rule: rgba(240,237,230,.08);
+  --accent: var(--copper);
+  --card-bg: #161614;
+  --card-border: rgba(240,237,230,.08);
+  --metric-size: 48px;
+  --metric-weight: 600;
+  --label-size: 11px;
+  --label-ls: .08em;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* ── THEME: ARCHITECTURAL ── */
+body.arch {
+  --bg: #f5f4f0;
+  --bg2: #edecea;
+  --bg3: #e2e0dc;
+  --ink: #1a1917;
+  --ink2: #4a4845;
+  --ink3: #9a9896;
+  --rule: rgba(26,25,23,.1);
+  --accent: var(--copper);
+  --card-bg: #fff;
+  --card-border: rgba(26,25,23,.1);
+  --metric-size: 44px;
+  --metric-weight: 700;
+  --label-size: 11px;
+  --label-ls: .1em;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* ── Layout ── */
+body { font-family: var(--sans); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+.ds-nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 0;
+  padding: 0 32px; height: 52px;
+  border-bottom: 1px solid var(--rule);
+  backdrop-filter: blur(12px);
+}
+body.terminal .ds-nav { background: rgba(8,8,7,.9); }
+body.editorial .ds-nav { background: rgba(13,13,11,.9); }
+body.arch .ds-nav { background: rgba(245,244,240,.92); }
+
+.ds-logo { font: 800 16px var(--sans); color: var(--ink); letter-spacing: -.03em; margin-right: 32px; }
+.ds-logo span { color: var(--accent); }
+
+.theme-tabs { display: flex; gap: 2px; }
+.theme-tab {
+  font: 600 11px var(--sans); letter-spacing: .08em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 4px; border: none; cursor: pointer;
+  background: transparent; color: var(--ink3); transition: all .15s;
+}
+.theme-tab:hover { color: var(--ink); }
+.theme-tab.active { background: var(--accent); color: #fff; }
+
+.ds-body { max-width: 1080px; margin: 0 auto; padding: 48px 32px 96px; }
+
+/* Section */
+.ds-section { margin-bottom: 64px; }
+.ds-section-label {
+  font: 700 10px var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 24px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* ──────────────────────────────────────────────────────
+   01 METRIC CARDS
+────────────────────────────────────────────────────── */
+.metric-row { display: flex; gap: 2px; }
+
+/* TERMINAL: no border, pure data */
+body.terminal .metric-card {
+  flex: 1; padding: 20px 24px 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 2px;
+}
+body.terminal .metric-val {
+  font: var(--metric-weight) var(--metric-size) var(--mono);
+  color: var(--ink); letter-spacing: -.03em; line-height: 1;
+  margin-bottom: 6px;
+}
+body.terminal .metric-val.accent { color: var(--accent); }
+body.terminal .metric-lbl {
+  font: 500 var(--label-size) var(--sans); letter-spacing: var(--label-ls);
+  text-transform: uppercase; color: var(--ink3);
+}
+body.terminal .metric-card.hero { border-color: rgba(184,132,92,.25); }
+body.terminal .metric-card.hero .metric-val { color: var(--accent); }
+
+/* EDITORIAL: card with subtle gradient top border */
+body.editorial .metric-card {
+  flex: 1; padding: 24px 24px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  position: relative; overflow: hidden;
+}
+body.editorial .metric-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--rule), transparent);
+}
+body.editorial .metric-card.hero::before {
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+body.editorial .metric-val {
+  font: var(--metric-weight) var(--metric-size) var(--mono);
+  color: var(--ink); letter-spacing: -.02em; line-height: 1;
+  margin-bottom: 8px;
+}
+body.editorial .metric-val.accent { color: var(--accent); }
+body.editorial .metric-lbl {
+  font: 500 var(--label-size) var(--sans); letter-spacing: var(--label-ls);
+  text-transform: uppercase; color: var(--ink3);
+}
+
+/* ARCHITECTURAL: ruled card, print quality */
+body.arch .metric-card {
+  flex: 1; padding: 20px 20px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 0;
+  border-left: 3px solid var(--rule);
+}
+body.arch .metric-card.hero { border-left-color: var(--accent); }
+body.arch .metric-val {
+  font: var(--metric-weight) var(--metric-size) var(--mono);
+  color: var(--ink); letter-spacing: -.02em; line-height: 1;
+  margin-bottom: 6px;
+}
+body.arch .metric-val.accent { color: var(--accent); }
+body.arch .metric-lbl {
+  font: 500 var(--label-size) var(--sans); letter-spacing: var(--label-ls);
+  text-transform: uppercase; color: var(--ink3);
+}
+
+/* ──────────────────────────────────────────────────────
+   02 COMPARISON MATRIX
+────────────────────────────────────────────────────── */
+
+/* TERMINAL */
+body.terminal .matrix-wrap { border-radius: 2px; overflow: hidden; border: 1px solid var(--card-border); }
+body.terminal .matrix-table { width: 100%; border-collapse: collapse; }
+body.terminal .matrix-table thead th {
+  padding: 12px 16px; background: var(--bg3);
+  font: 700 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3);
+  text-align: center;
+}
+body.terminal .matrix-table thead th:first-child { text-align: left; }
+body.terminal .matrix-table thead th .th-floors { font: 600 22px var(--mono); color: var(--ink); display: block; margin-top: 2px; letter-spacing: -.02em; }
+body.terminal .matrix-table tbody tr { border-top: 1px solid var(--rule); }
+body.terminal .matrix-table tbody td { padding: 11px 16px; text-align: center; }
+body.terminal .matrix-table tbody td:first-child { text-align: left; font: 600 10px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); }
+body.terminal .matrix-val { font: 700 18px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+body.terminal .matrix-val.hero { font-size: 22px; color: var(--accent); }
+body.terminal .matrix-pill {
+  display: inline-block; padding: 3px 8px; border-radius: 2px;
+  font: 700 10px var(--mono); letter-spacing: .06em;
+}
+
+/* EDITORIAL */
+body.editorial .matrix-wrap { border-radius: 10px; overflow: hidden; border: 1px solid var(--card-border); }
+body.editorial .matrix-table { width: 100%; border-collapse: collapse; }
+body.editorial .matrix-table thead th {
+  padding: 16px 20px; background: var(--bg3);
+  font: 600 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink3);
+  text-align: center;
+}
+body.editorial .matrix-table thead th:first-child { text-align: left; }
+body.editorial .matrix-table thead th .th-floors { font: 600 26px var(--mono); color: var(--ink); display: block; margin-top: 4px; letter-spacing: -.02em; }
+body.editorial .matrix-table thead th.active-col { background: rgba(184,132,92,.08); }
+body.editorial .matrix-table thead th.active-col .th-floors { color: var(--accent); }
+body.editorial .matrix-table tbody tr { border-top: 1px solid var(--rule); }
+body.editorial .matrix-table tbody tr:hover td { background: rgba(255,255,255,.02); }
+body.editorial .matrix-table tbody td { padding: 14px 20px; text-align: center; }
+body.editorial .matrix-table tbody td:first-child { text-align: left; font: 600 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); }
+body.editorial .matrix-table tbody td.active-col { background: rgba(184,132,92,.04); }
+body.editorial .matrix-val { font: 600 18px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+body.editorial .matrix-val.hero { font-size: 22px; color: var(--accent); }
+body.editorial .matrix-pill {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font: 600 11px var(--sans);
+}
+
+/* ARCHITECTURAL */
+body.arch .matrix-wrap { overflow: hidden; border: 1px solid var(--card-border); border-radius: 0; }
+body.arch .matrix-table { width: 100%; border-collapse: collapse; }
+body.arch .matrix-table thead th {
+  padding: 12px 16px; background: var(--bg2);
+  font: 700 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3);
+  text-align: center; border-bottom: 2px solid var(--rule);
+}
+body.arch .matrix-table thead th:first-child { text-align: left; }
+body.arch .matrix-table thead th .th-floors { font: 700 24px var(--mono); color: var(--ink); display: block; margin-top: 4px; letter-spacing: -.02em; }
+body.arch .matrix-table thead th.active-col { border-bottom-color: var(--accent); }
+body.arch .matrix-table thead th.active-col .th-floors { color: var(--accent); }
+body.arch .matrix-table tbody tr { border-top: 1px solid var(--rule); }
+body.arch .matrix-table tbody td { padding: 12px 16px; text-align: center; }
+body.arch .matrix-table tbody td:first-child { text-align: left; font: 600 10px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); }
+body.arch .matrix-val { font: 700 18px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+body.arch .matrix-val.hero { font-size: 22px; color: var(--accent); }
+body.arch .matrix-pill {
+  display: inline-block; padding: 3px 8px; border-radius: 0;
+  font: 700 10px var(--sans); letter-spacing: .08em;
+}
+
+/* Pill colours (shared) */
+.pill-green { background: rgba(34,197,94,.12); color: #4ade80; }
+.pill-amber { background: rgba(245,158,11,.12); color: #fbbf24; }
+.pill-red { background: rgba(239,68,68,.1); color: #f87171; }
+body.arch .pill-green { background: rgba(34,197,94,.1); color: #16a34a; }
+body.arch .pill-amber { background: rgba(245,158,11,.1); color: #d97706; }
+body.arch .pill-red { background: rgba(239,68,68,.08); color: #dc2626; }
+
+/* ──────────────────────────────────────────────────────
+   03 RETURN CURVE
+────────────────────────────────────────────────────── */
+.curve-wrap {
+  padding: 24px;
+  border-radius: 2px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+}
+body.editorial .curve-wrap { border-radius: 10px; }
+.curve-label-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 16px;
+}
+.curve-title { font: 700 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); }
+.curve-highlight { font: 700 24px var(--mono); color: var(--accent); letter-spacing: -.02em; }
+.curve-highlight span { font: 500 11px var(--sans); color: var(--ink3); letter-spacing: .04em; margin-left: 4px; }
+svg.curve-svg { width: 100%; display: block; }
+
+/* TERMINAL: thin line, no fill */
+body.terminal .curve-line { stroke: var(--copper); stroke-width: 1.5; fill: none; }
+body.terminal .curve-fill { display: none; }
+body.terminal .curve-axis { stroke: var(--rule); stroke-width: 1; }
+body.terminal .curve-dot { fill: var(--copper); }
+body.terminal .curve-dot-ring { fill: none; stroke: var(--copper); stroke-width: 1; opacity: .4; }
+body.terminal .curve-grid { stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 4; }
+body.terminal .curve-threshold { stroke: rgba(184,132,92,.3); stroke-width: 1; stroke-dasharray: 3 5; }
+body.terminal .curve-zero { fill: rgba(239,68,68,.15); stroke: rgba(239,68,68,.3); stroke-width: 1; }
+
+/* EDITORIAL: line + gradient fill */
+body.editorial .curve-line { stroke: var(--copper); stroke-width: 2; fill: none; }
+body.editorial .curve-fill { fill: url(#editGrad); }
+body.editorial .curve-axis { stroke: var(--rule); stroke-width: 1; }
+body.editorial .curve-dot { fill: var(--copper); }
+body.editorial .curve-dot-ring { fill: none; stroke: var(--copper); stroke-width: 1.5; opacity: .35; }
+body.editorial .curve-grid { stroke: var(--rule); stroke-width: 1; }
+body.editorial .curve-threshold { stroke: rgba(184,132,92,.4); stroke-width: 1; stroke-dasharray: 4 6; }
+body.editorial .curve-zero { fill: rgba(239,68,68,.12); stroke: rgba(239,68,68,.2); stroke-width: 1; }
+
+/* ARCHITECTURAL: ink line, clean */
+body.arch .curve-line { stroke: #1a1917; stroke-width: 1.5; fill: none; }
+body.arch .curve-fill { display: none; }
+body.arch .curve-axis { stroke: rgba(26,25,23,.2); stroke-width: 1; }
+body.arch .curve-dot { fill: var(--copper); }
+body.arch .curve-dot-ring { fill: none; stroke: var(--copper); stroke-width: 1; opacity: .4; }
+body.arch .curve-grid { stroke: rgba(26,25,23,.08); stroke-width: 1; }
+body.arch .curve-threshold { stroke: var(--copper); stroke-width: 1; stroke-dasharray: 3 5; opacity: .5; }
+body.arch .curve-zero { fill: rgba(239,68,68,.06); stroke: rgba(239,68,68,.2); stroke-width: 1; }
+
+/* ──────────────────────────────────────────────────────
+   04 SLIDERS
+────────────────────────────────────────────────────── */
+.slider-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+
+/* TERMINAL */
+body.terminal .slider-item {
+  padding: 20px 20px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 2px;
+}
+body.terminal .slider-val {
+  font: 700 40px var(--mono); color: var(--ink);
+  letter-spacing: -.03em; line-height: 1; margin-bottom: 2px;
+}
+body.terminal .slider-val span { font-size: 20px; color: var(--ink3); }
+body.terminal .slider-lbl {
+  font: 600 10px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 16px;
+}
+body.terminal .slider-track {
+  position: relative; height: 2px; background: var(--rule); border-radius: 1px; margin-bottom: 8px;
+}
+body.terminal .slider-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--accent); border-radius: 1px; transition: width .1s; }
+body.terminal .slider-thumb {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 8px; height: 8px; border-radius: 0;
+  background: var(--accent); border: 0;
+  transition: left .1s;
+}
+body.terminal .slider-range { position: absolute; inset: -8px 0; cursor: pointer; opacity: 0; width: 100%; height: 24px; top: -11px; }
+
+/* EDITORIAL */
+body.editorial .slider-item {
+  padding: 24px 20px 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+body.editorial .slider-val {
+  font: 600 40px var(--mono); color: var(--ink);
+  letter-spacing: -.02em; line-height: 1; margin-bottom: 2px;
+}
+body.editorial .slider-val span { font-size: 22px; color: var(--accent); }
+body.editorial .slider-lbl {
+  font: 500 11px var(--sans); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 18px;
+}
+body.editorial .slider-track {
+  position: relative; height: 4px; background: var(--rule); border-radius: 2px; margin-bottom: 8px;
+}
+body.editorial .slider-fill { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--copper2), var(--accent)); border-radius: 2px; transition: width .1s; }
+body.editorial .slider-thumb {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg);
+  box-shadow: 0 0 0 3px rgba(184,132,92,.2);
+  transition: left .1s;
+}
+body.editorial .slider-range { position: absolute; inset: -10px 0; cursor: pointer; opacity: 0; width: 100%; height: 28px; top: -12px; }
+
+/* ARCHITECTURAL */
+body.arch .slider-item {
+  padding: 20px 20px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 0;
+  border-top: 2px solid var(--rule);
+}
+body.arch .slider-item:first-child { border-top-color: var(--accent); }
+body.arch .slider-val {
+  font: 700 36px var(--mono); color: var(--ink);
+  letter-spacing: -.02em; line-height: 1; margin-bottom: 2px;
+}
+body.arch .slider-val span { font-size: 18px; color: var(--ink3); }
+body.arch .slider-lbl {
+  font: 600 10px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 16px;
+}
+body.arch .slider-track {
+  position: relative; height: 1px; background: var(--rule); margin-bottom: 8px;
+}
+body.arch .slider-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--accent); transition: width .1s; }
+body.arch .slider-thumb {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg);
+  transition: left .1s;
+}
+body.arch .slider-range { position: absolute; inset: -12px 0; cursor: pointer; opacity: 0; width: 100%; height: 28px; top: -14px; }
+
+/* ──────────────────────────────────────────────────────
+   05 FACTOR BARS
+────────────────────────────────────────────────────── */
+.factor-list { display: flex; flex-direction: column; gap: 2px; }
+
+/* TERMINAL */
+body.terminal .factor-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 2px;
+}
+body.terminal .factor-name {
+  font: 600 10px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); width: 130px; flex-shrink: 0;
+}
+body.terminal .factor-bar-wrap { flex: 1; height: 2px; background: var(--rule); position: relative; }
+body.terminal .factor-bar-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--accent); transition: width .6s ease; }
+body.terminal .factor-score { font: 700 18px var(--mono); color: var(--ink); letter-spacing: -.02em; width: 48px; text-align: right; flex-shrink: 0; }
+
+/* EDITORIAL */
+body.editorial .factor-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 18px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
+body.editorial .factor-name {
+  font: 500 11px var(--sans); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink3); width: 140px; flex-shrink: 0;
+}
+body.editorial .factor-bar-wrap { flex: 1; height: 4px; background: var(--rule); border-radius: 2px; position: relative; }
+body.editorial .factor-bar-fill { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--copper2), var(--accent)); border-radius: 2px; transition: width .6s ease; }
+body.editorial .factor-score { font: 700 20px var(--mono); color: var(--ink); letter-spacing: -.02em; width: 52px; text-align: right; flex-shrink: 0; }
+
+/* ARCHITECTURAL */
+body.arch .factor-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+  background: transparent;
+}
+body.arch .factor-item:first-child { border-top: 1px solid var(--rule); }
+body.arch .factor-name {
+  font: 600 10px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); width: 140px; flex-shrink: 0;
+}
+body.arch .factor-bar-wrap { flex: 1; height: 1px; background: var(--rule); position: relative; }
+body.arch .factor-bar-fill { position: absolute; top: 0; left: 0; height: 100%; background: var(--ink); transition: width .6s ease; }
+body.arch .factor-score { font: 700 18px var(--mono); color: var(--ink); letter-spacing: -.02em; width: 48px; text-align: right; flex-shrink: 0; }
+
+/* ──────────────────────────────────────────────────────
+   06 STATUS PILLS
+────────────────────────────────────────────────────── */
+.pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.ds-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font: 600 11px var(--sans); letter-spacing: .06em; text-transform: uppercase;
+  padding: 6px 12px;
+}
+
+/* TERMINAL */
+body.terminal .ds-pill { border-radius: 2px; border: 1px solid; }
+body.terminal .ds-pill.green { color: #4ade80; border-color: rgba(74,222,128,.25); background: rgba(34,197,94,.08); }
+body.terminal .ds-pill.amber { color: #fbbf24; border-color: rgba(251,191,36,.25); background: rgba(245,158,11,.08); }
+body.terminal .ds-pill.red { color: #f87171; border-color: rgba(248,113,113,.25); background: rgba(239,68,68,.08); }
+body.terminal .ds-pill.blue { color: #93c5fd; border-color: rgba(147,197,253,.25); background: rgba(96,165,250,.08); }
+body.terminal .ds-pill.copper { color: var(--accent); border-color: rgba(184,132,92,.3); background: rgba(184,132,92,.08); }
+body.terminal .ds-pill.neutral { color: var(--ink3); border-color: var(--rule); background: transparent; }
+
+/* EDITORIAL */
+body.editorial .ds-pill { border-radius: 20px; border: 0; }
+body.editorial .ds-pill.green { color: #4ade80; background: rgba(34,197,94,.12); }
+body.editorial .ds-pill.amber { color: #fbbf24; background: rgba(245,158,11,.12); }
+body.editorial .ds-pill.red { color: #f87171; background: rgba(239,68,68,.1); }
+body.editorial .ds-pill.blue { color: #93c5fd; background: rgba(96,165,250,.1); }
+body.editorial .ds-pill.copper { color: var(--accent); background: rgba(184,132,92,.12); }
+body.editorial .ds-pill.neutral { color: var(--ink3); background: var(--bg3); }
+
+/* ARCHITECTURAL */
+body.arch .ds-pill { border-radius: 0; border: 1px solid; }
+body.arch .ds-pill.green { color: #16a34a; border-color: rgba(22,163,74,.3); background: rgba(22,163,74,.06); }
+body.arch .ds-pill.amber { color: #d97706; border-color: rgba(217,119,6,.3); background: rgba(245,158,11,.06); }
+body.arch .ds-pill.red { color: #dc2626; border-color: rgba(220,38,38,.25); background: rgba(239,68,68,.05); }
+body.arch .ds-pill.blue { color: #2563eb; border-color: rgba(37,99,235,.25); background: rgba(96,165,250,.06); }
+body.arch .ds-pill.copper { color: var(--copper2); border-color: rgba(160,116,80,.35); background: rgba(184,132,92,.06); }
+body.arch .ds-pill.neutral { color: var(--ink3); border-color: var(--rule); background: transparent; }
+
+/* Pill dot */
+.pill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.pill-dot.green { background: #4ade80; }
+.pill-dot.amber { background: #fbbf24; }
+.pill-dot.red { background: #f87171; }
+body.arch .pill-dot.green { background: #16a34a; }
+body.arch .pill-dot.amber { background: #d97706; }
+body.arch .pill-dot.red { background: #dc2626; }
+
+/* ──────────────────────────────────────────────────────
+   07 SCORE HERO
+────────────────────────────────────────────────────── */
+.score-hero-wrap {
+  display: flex; align-items: center; gap: 32px;
+  padding: 28px 32px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+}
+body.editorial .score-hero-wrap { border-radius: 10px; }
+body.terminal .score-hero-wrap { border-radius: 2px; }
+body.arch .score-hero-wrap { border-radius: 0; border-left: 4px solid var(--accent); }
+
+.score-big { font: 900 80px var(--mono); letter-spacing: -.04em; line-height: 1; color: var(--accent); }
+.score-denom { font: 500 28px var(--mono); color: var(--ink3); margin-left: 2px; }
+.score-meta { flex: 1; }
+.score-meta-title { font: 700 20px var(--sans); color: var(--ink); margin-bottom: 6px; }
+body.editorial .score-meta-title { font: 400 24px var(--serif); font-style: italic; }
+.score-meta-sub { font: 400 14px var(--sans); color: var(--ink2); line-height: 1.6; }
+.score-verdict {
+  padding: 10px 18px; font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+}
+body.terminal .score-verdict { border: 1px solid rgba(34,197,94,.3); color: #4ade80; background: rgba(34,197,94,.08); border-radius: 2px; }
+body.editorial .score-verdict { border: 0; color: #4ade80; background: rgba(34,197,94,.12); border-radius: 20px; }
+body.arch .score-verdict { border: 1px solid rgba(22,163,74,.3); color: #16a34a; background: rgba(22,163,74,.06); border-radius: 0; }
+
+</style>
+</head>
+<body class="terminal">
+
+<!-- NAV -->
+<nav class="ds-nav">
+  <div class="ds-logo">D<span>/</span>A</div>
+  <div class="theme-tabs">
+    <button class="theme-tab active" onclick="setTheme('terminal', this)">01 Terminal</button>
+    <button class="theme-tab" onclick="setTheme('editorial', this)">02 Editorial</button>
+    <button class="theme-tab" onclick="setTheme('arch', this)">03 Architectural</button>
+  </div>
+</nav>
+
+<div class="ds-body">
+
+  <!-- 01 Score hero -->
+  <div class="ds-section">
+    <div class="ds-section-label">Score Hero</div>
+    <div class="score-hero-wrap">
+      <div><span class="score-big">91</span><span class="score-denom">/100</span></div>
+      <div class="score-meta">
+        <div class="score-meta-title">196 Blackfriars Road</div>
+        <div class="score-meta-sub">Southwark &middot; Freehold &middot; London Bridge/Bankside Opportunity Area</div>
+      </div>
+      <div class="score-verdict">Strong Buy</div>
+    </div>
+  </div>
+
+  <!-- 02 Metric cards -->
+  <div class="ds-section">
+    <div class="ds-section-label">Metric Cards</div>
+    <div class="metric-row">
+      <div class="metric-card hero">
+        <div class="metric-val accent">£84-121M</div>
+        <div class="metric-lbl">Est. GDV Range</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">14F</div>
+        <div class="metric-lbl">Base Scenario</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">7,840m²</div>
+        <div class="metric-lbl">Net Internal Area</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">9.5</div>
+        <div class="metric-lbl">Planning Score</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-val">PTAL 6a</div>
+        <div class="metric-lbl">Transport Access</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 Comparison matrix -->
+  <div class="ds-section">
+    <div class="ds-section-label">Comparison Matrix</div>
+    <div class="matrix-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th><div>Low</div><div class="th-floors">10F</div></th>
+            <th class="active-col"><div>Base</div><div class="th-floors">14F</div></th>
+            <th><div>High</div><div class="th-floors">18F</div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total GIA</td>
+            <td><span class="matrix-val">5,600m²</span></td>
+            <td class="active-col"><span class="matrix-val hero">7,840m²</span></td>
+            <td><span class="matrix-val">10,080m²</span></td>
+          </tr>
+          <tr>
+            <td>Net NIA</td>
+            <td><span class="matrix-val">4,592m²</span></td>
+            <td class="active-col"><span class="matrix-val hero">6,272m²</span></td>
+            <td><span class="matrix-val">7,862m²</span></td>
+          </tr>
+          <tr>
+            <td>Est. GDV</td>
+            <td><span class="matrix-val">£60-87M</span></td>
+            <td class="active-col"><span class="matrix-val hero">£84-121M</span></td>
+            <td><span class="matrix-val">£105-152M</span></td>
+          </tr>
+          <tr>
+            <td>BSA Threshold</td>
+            <td><span class="matrix-pill pill-amber">30m+</span></td>
+            <td class="active-col"><span class="matrix-pill pill-amber">50m+</span></td>
+            <td><span class="matrix-pill pill-red">50m+</span></td>
+          </tr>
+          <tr>
+            <td>Heritage Impact</td>
+            <td><span class="matrix-pill pill-green">Low impact</span></td>
+            <td class="active-col"><span class="matrix-pill pill-green">Low impact</span></td>
+            <td><span class="matrix-pill pill-amber">Manageable</span></td>
+          </tr>
+          <tr>
+            <td>2nd Staircase</td>
+            <td><span class="matrix-pill pill-red">Required</span></td>
+            <td class="active-col"><span class="matrix-pill pill-red">Required</span></td>
+            <td><span class="matrix-pill pill-red">Required</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 04 Return curve -->
+  <div class="ds-section">
+    <div class="ds-section-label">Return Curve</div>
+    <div class="curve-wrap">
+      <div class="curve-label-row">
+        <div class="curve-title">Residual Land Value vs Floors</div>
+        <div class="curve-highlight">£31.2M <span>at 14F base</span></div>
+      </div>
+      <svg class="curve-svg" viewBox="0 0 600 180" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="editGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgb(184,132,92)" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="rgb(184,132,92)" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+        <!-- Grid lines -->
+        <line class="curve-grid" x1="0" y1="45" x2="600" y2="45"/>
+        <line class="curve-grid" x1="0" y1="90" x2="600" y2="90"/>
+        <line class="curve-grid" x1="0" y1="135" x2="600" y2="135"/>
+        <!-- Zero zone (below break-even) -->
+        <rect class="curve-zero" x="0" y="135" width="100" height="45"/>
+        <!-- Threshold line (break-even) -->
+        <line class="curve-threshold" x1="0" y1="135" x2="600" y2="135"/>
+        <!-- Fill (editorial only) -->
+        <path class="curve-fill" d="M0,170 L0,165 C50,158 80,145 120,128 C180,105 220,78 280,52 C320,34 360,28 400,30 C440,32 480,42 520,58 C560,74 580,88 600,98 L600,170 Z"/>
+        <!-- Curve line -->
+        <path class="curve-line" d="M0,165 C50,158 80,145 120,128 C180,105 220,78 280,52 C320,34 360,28 400,30 C440,32 480,42 520,58 C560,74 580,88 600,98"/>
+        <!-- Base scenario dot -->
+        <circle class="curve-dot-ring" cx="280" cy="52" r="10"/>
+        <circle class="curve-dot" cx="280" cy="52" r="4"/>
+        <!-- Axis -->
+        <line class="curve-axis" x1="0" y1="170" x2="600" y2="170"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 05 Sliders -->
+  <div class="ds-section">
+    <div class="ds-section-label">Sliders</div>
+    <div class="slider-group">
+      <div class="slider-item">
+        <div class="slider-val" id="sv-floors">14<span>F</span></div>
+        <div class="slider-lbl">Floors</div>
+        <div class="slider-track" id="st-floors">
+          <div class="slider-fill" id="sf-floors" style="width:60%"></div>
+          <div class="slider-thumb" id="sth-floors" style="left:60%"></div>
+          <input type="range" class="slider-range" min="4" max="22" value="14"
+            oninput="updateSlider('floors', this.value, 4, 22, 'F', '')">
+        </div>
+      </div>
+      <div class="slider-item">
+        <div class="slider-val" id="sv-erv">£<span>8,200</span>/m²</div>
+        <div class="slider-lbl">Resi ERV</div>
+        <div class="slider-track">
+          <div class="slider-fill" id="sf-erv" style="width:55%"></div>
+          <div class="slider-thumb" id="sth-erv" style="left:55%"></div>
+          <input type="range" class="slider-range" min="6000" max="12000" value="8200"
+            oninput="updateSliderERV(this.value)">
+        </div>
+      </div>
+      <div class="slider-item">
+        <div class="slider-val" id="sv-cov">75<span>%</span></div>
+        <div class="slider-lbl">Site Coverage</div>
+        <div class="slider-track">
+          <div class="slider-fill" id="sf-cov" style="width:65%"></div>
+          <div class="slider-thumb" id="sth-cov" style="left:65%"></div>
+          <input type="range" class="slider-range" min="40" max="95" value="75"
+            oninput="updateSlider('cov', this.value, 40, 95, '%', '')">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 Factor bars -->
+  <div class="ds-section">
+    <div class="ds-section-label">Factor Bars</div>
+    <div class="factor-list">
+      <div class="factor-item">
+        <div class="factor-name">Available Sky</div>
+        <div class="factor-bar-wrap"><div class="factor-bar-fill" style="width:90%"></div></div>
+        <div class="factor-score">9.0</div>
+      </div>
+      <div class="factor-item">
+        <div class="factor-name">Rent Headroom</div>
+        <div class="factor-bar-wrap"><div class="factor-bar-fill" style="width:95%"></div></div>
+        <div class="factor-score">9.5</div>
+      </div>
+      <div class="factor-item">
+        <div class="factor-name">Planning Tailwind</div>
+        <div class="factor-bar-wrap"><div class="factor-bar-fill" style="width:95%"></div></div>
+        <div class="factor-score">9.5</div>
+      </div>
+      <div class="factor-item">
+        <div class="factor-name">Heritage Shadow</div>
+        <div class="factor-bar-wrap"><div class="factor-bar-fill" style="width:90%"></div></div>
+        <div class="factor-score">9.0</div>
+      </div>
+      <div class="factor-item">
+        <div class="factor-name">Title Stack</div>
+        <div class="factor-bar-wrap"><div class="factor-bar-fill" style="width:80%"></div></div>
+        <div class="factor-score">8.0</div>
+      </div>
+      <div class="factor-item">
+        <div class="factor-name">Transport Links</div>
+        <div class="factor-bar-wrap"><div class="factor-bar-fill" style="width:95%"></div></div>
+        <div class="factor-score">9.5</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 Status pills -->
+  <div class="ds-section">
+    <div class="ds-section-label">Status Pills</div>
+    <div class="pill-row">
+      <div class="ds-pill green"><span class="pill-dot green"></span>Strong Buy</div>
+      <div class="ds-pill green">UNRESTRICTED</div>
+      <div class="ds-pill green">Low Heritage Impact</div>
+      <div class="ds-pill amber"><span class="pill-dot amber"></span>BSA 30m+</div>
+      <div class="ds-pill amber">Manageable</div>
+      <div class="ds-pill red"><span class="pill-dot red"></span>2nd Staircase</div>
+      <div class="ds-pill red">Blocking</div>
+      <div class="ds-pill copper">OA Opportunity</div>
+      <div class="ds-pill blue">PTAL 6a</div>
+      <div class="ds-pill neutral">Freehold</div>
+      <div class="ds-pill neutral">Barts Charity</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function setTheme(theme, btn) {
+  document.body.className = theme;
+  document.querySelectorAll('.theme-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateSlider(key, val, min, max, suffix, prefix) {
+  const pct = ((val - min) / (max - min) * 100).toFixed(1);
+  const fill = document.getElementById('sf-' + key);
+  const thumb = document.getElementById('sth-' + key);
+  const display = document.getElementById('sv-' + key);
+  if (fill) fill.style.width = pct + '%';
+  if (thumb) thumb.style.left = pct + '%';
+  if (display) {
+    if (key === 'floors') display.innerHTML = val + '<span>F</span>';
+    else if (key === 'cov') display.innerHTML = val + '<span>%</span>';
+  }
+}
+
+function updateSliderERV(val) {
+  const pct = ((val - 6000) / (12000 - 6000) * 100).toFixed(1);
+  const fill = document.getElementById('sf-erv');
+  const thumb = document.getElementById('sth-erv');
+  const display = document.getElementById('sv-erv');
+  if (fill) fill.style.width = pct + '%';
+  if (thumb) thumb.style.left = pct + '%';
+  if (display) display.innerHTML = '£<span>' + parseInt(val).toLocaleString() + '</span>/m²';
+}
+</script>
+</body>
+</html>
