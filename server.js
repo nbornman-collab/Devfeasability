@@ -161,6 +161,10 @@ const T1_INTELLIGENCE_MAP = {
   '24-southwark-st':    'intelligence-24ss',
   '196-blackfriars-rd': 'intelligence-196br',
 };
+const T1_SITE_NAMES = {
+  '24-southwark-st':    '24 Southwark Street',
+  '196-blackfriars-rd': '196 Blackfriars Road',
+};
 
 app.get('/t1/:site', (req, res) => {
   const slug = req.params.site;
@@ -173,6 +177,8 @@ app.get('/t1/:site', (req, res) => {
       let html = fs.readFileSync(template, 'utf8');
       const scriptTag = `<script src="/lib/${T1_INTELLIGENCE_MAP[slug]}.js"></script>`;
       html = html.replace('<!-- @@INTELLIGENCE_SCRIPT@@ -->', scriptTag);
+      const siteName = T1_SITE_NAMES[slug] || slug;
+      html = html.replace('<title id="page-title">Appraise | D/A</title>', `<title>${siteName} - Appraise | D/A</title>`);
       res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
       return res.send(html);
     }
