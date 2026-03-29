@@ -1,0 +1,45 @@
+/* ── D/A Typography System ────────────────────────────────────────────────
+   Single source of truth. All font sizes live here.
+   Rules (WORKING_PROTOCOL.md):
+   - No text below 11px anywhere
+   - Body copy: 15px minimum (synthesis/narrative paragraphs)
+   - Labels/eyebrows: 11px (uppercase only)
+   - Mono metrics: 18px minimum (Space Grotesk)
+   - Headings/section labels: 20px+
+
+   DO NOT override with inline styles in generated HTML.
+   DO NOT set font-size in innerHTML or template literals.
+   Use these classes. If a new size is needed, add it here first.
+──────────────────────────────────────────────────────────────────────── */
+
+/* Headings */
+.t-display   { font: 400 clamp(28px,4vw,48px)/1.1 var(--display, 'Instrument Serif', Georgia, serif); letter-spacing: -.02em; }
+.t-heading   { font: 700 20px/1.3 var(--sans, 'Inter', sans-serif); }
+.t-subhead   { font: 600 18px/1.4 var(--sans, 'Inter', sans-serif); }
+
+/* Body copy - 15px minimum */
+.t-body      { font: 400 15px/1.75 var(--sans, 'Inter', sans-serif); color: var(--ink2, #3a3a38); }
+.t-body-sm   { font: 400 14px/1.7  var(--sans, 'Inter', sans-serif); color: var(--ink2, #3a3a38); }
+.t-body p    { font: 400 15px/1.75 var(--sans, 'Inter', sans-serif); margin-bottom: 14px; }
+.t-body p:last-child { margin-bottom: 0; }
+
+/* Labels - 11px floor, uppercase only */
+.t-label     { font: 700 11px/1 var(--sans, 'Inter', sans-serif); text-transform: uppercase; letter-spacing: .1em; }
+.t-label-sm  { font: 600 11px/1 var(--sans, 'Inter', sans-serif); text-transform: uppercase; letter-spacing: .08em; }
+
+/* Metrics - mono, 18px minimum */
+.t-metric    { font: 700 18px/1 var(--mono, 'Space Grotesk', 'Inter', sans-serif); }
+.t-metric-lg { font: 700 24px/1 var(--mono, 'Space Grotesk', 'Inter', sans-serif); }
+.t-metric-xl { font: 700 32px/1 var(--mono, 'Space Grotesk', 'Inter', sans-serif); }
+
+/* Notes / footnotes - 14px floor */
+.t-note      { font: 400 14px/1.6 var(--sans, 'Inter', sans-serif); color: var(--ink3, #6a6a65); }
+.t-caption   { font: 400 11px/1.5 var(--sans, 'Inter', sans-serif); color: var(--ink3, #6a6a65); }
+
+/* Synthesis / narrative blocks (used by site-intelligence.js output) */
+.t-synthesis        { font: 400 15px/1.75 var(--sans, 'Inter', sans-serif); color: var(--ink2, #3a3a38); }
+.t-synthesis p      { margin-bottom: 14px; }
+.t-synthesis p:last-child { margin-bottom: 0; }
+.t-synthesis--dark  { font: 400 15px/1.75 var(--sans, 'Inter', sans-serif); color: rgba(242,241,237,.75); }
+.t-synthesis--dark p { margin-bottom: 14px; }
+.t-synthesis--dark p:last-child { margin-bottom: 0; }

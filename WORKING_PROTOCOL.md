@@ -728,6 +728,27 @@ Never present screening flags as definitive compliance. The platform structures 
 
 ---
 
+## TYPOGRAPHY SYSTEM (locked 2026-03-29)
+
+**Single source of truth: `public/css/type.css`**
+All type rules live there. Reference before setting any font size.
+
+**Hard rules - no exceptions:**
+- No inline `font-size` in generated HTML (`innerHTML`, template literals, synthesis functions)
+- Use CSS classes from `type.css` (`.t-body`, `.t-synthesis`, `.t-label`, `.t-metric`, `.t-note`)
+- If a new size is needed: add it to `type.css` first, then use the class
+- No font size below 11px anywhere
+
+**Key classes:**
+- `.t-synthesis` - 15px/1.75, narrative paragraphs (synthesis functions, body copy)
+- `.t-body` / `.t-body-sm` - 15px / 14px body text
+- `.t-label` - 11px uppercase labels only
+- `.t-metric` / `.t-metric-lg` / `.t-metric-xl` - 18px / 24px / 32px Space Grotesk
+- `.t-note` - 14px footnotes/secondary
+- `.t-caption` - 11px captions only (non-readable decorative use)
+
+---
+
 ## TYPOGRAPHY SCALE (locked 2026-03-26)
 
 Global text size rules - apply to ALL pages, no exceptions:
