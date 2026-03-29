@@ -128,6 +128,33 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
   padding: 160px 0; position: relative; scroll-snap-align: start; }
 .section-inner { max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 40px; }
 
+/* ── Alternating section themes ── */
+#overview    { background: var(--bg); color: var(--ink); }  /* dark */
+#development {
+  background: #f5f4f0; color: #1a1917;
+  --ink: #1a1917; --ink2: #4a4845; --ink3: #9a9896;
+  --rule: rgba(26,25,23,.1); --accent: #b8845c;
+  --accent-bg: rgba(184,132,92,.08);
+  --bg2: #edecea; --bg3: #e2e0dc;
+}
+#development .section-label { color: #9a9896; border-color: rgba(26,25,23,.15); }
+#development .section-title { color: #1a1917; }
+#development .t-synthesis { color: #4a4845; }
+#development .metric-card { background: #fff; border-color: rgba(26,25,23,.1); }
+#development .matrix-wrap { background: #fff; border: 1px solid rgba(26,25,23,.1); }
+#development .slider-item { background: #fff; border-color: rgba(26,25,23,.1); }
+
+#architecture { background: var(--bg); color: var(--ink); }  /* dark */
+
+#planning {
+  background: #f5f4f0; color: #1a1917;
+  --ink: #1a1917; --ink2: #4a4845; --ink3: #9a9896;
+  --rule: rgba(26,25,23,.1); --accent: #b8845c;
+}
+#planning .section-label { color: #9a9896; border-color: rgba(26,25,23,.15); }
+#planning .section-title { color: #1a1917; }
+#planning .t-synthesis { color: #4a4845; }
+
 /* -- HERO (section 0) -- */
 .hero-section { min-height: 100vh; position: relative; overflow: hidden; padding: 0; scroll-snap-align: start; }
 .hero-map { position: absolute; inset: 0; z-index: 0; }
@@ -629,7 +656,7 @@ input[type=range].ruler-input {
 </section>
 
 <!-- SECTION 2: ARCHITECTURE -->
-<section class="section" id="architecture" style="background: var(--bg2);">
+<section class="section" id="architecture">
   <div class="section-inner">
     <div class="reveal">
       <div class="section-label">02 - Architecture</div>

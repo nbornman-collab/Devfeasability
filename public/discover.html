@@ -10,19 +10,19 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <style>
 :root {
-  --bg:        #0a0a08;
-  --bg2:       #111110;
-  --bg3:       #1a1a18;
-  --ink:       #e8e4da;
-  --ink2:      #a8a498;
-  --ink3:      #7a7668;
-  --accent:    #c8a040;
+  --bg:        #f2f1ed;
+  --bg2:       #e8e7e2;
+  --bg3:       #dddcd8;
+  --ink:       #111110;
+  --ink2:      #555550;
+  --ink3:      #999990;
+  --accent:    #b8845c;
   --accent-blue: #5b7a9d;
-  --accent-bg: rgba(200,160,64,.08);
-  --rule:      rgba(232,228,218,.07);
-  --green:     rgba(74,222,128,.9);
-  --amber:     rgba(251,191,36,.9);
-  --red:       rgba(248,113,113,.9);
+  --accent-bg: rgba(184,132,92,.08);
+  --rule:      rgba(17,17,16,.1);
+  --green:     #15803d;
+  --amber:     #b45309;
+  --red:       #b91c1c;
   --sans: 'Inter', sans-serif;
   --mono: 'JetBrains Mono', monospace;
   --nav-h: 48px;
@@ -34,7 +34,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── NAV ── */
 .da-nav {
   position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
-  background: rgba(10,10,8,.96);
+  background: rgba(242,241,237,1);
   border-bottom: 1px solid rgba(255,255,255,0.3);
   display: flex; align-items: center; padding: 0 24px; gap: 20px; z-index: 200;
 }
@@ -92,7 +92,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   flex-shrink: 0;
   padding: 16px 20px 14px;
   display: flex; gap: 0; align-items: stretch;
-  background: rgba(10,10,8,.96);
+  background: rgba(242,241,237,1);
   border-bottom: 2px solid rgba(184,132,92,0.18);
 }
 .hero-stat {
@@ -161,7 +161,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .borough-selector {
   flex-shrink: 0;
   padding: 10px 16px 12px;
-  background: rgba(10,10,8,.98);
+  background: rgba(242,241,237,0.98);
   border-top: 1px solid rgba(255,255,255,0.3);
   margin-top: auto;
 }
@@ -192,7 +192,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   width: var(--panel-w); height: calc(100% - var(--nav-h));
   display: flex; flex-direction: column;
   overflow: hidden; z-index: 10;
-  background: rgba(10,10,8,.98);
+  background: rgba(242,241,237,0.98);
   border-left: 1px solid rgba(255,255,255,0.45);
   box-shadow: -4px 0 32px rgba(17,17,16,.10);
 }
@@ -403,7 +403,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   position: relative;
 }
 .site-card:hover {
-  background: #0d0d0b;
+  background: #f5f3ee;
   transform: translateX(4px);
   box-shadow: -4px 0 0 0 var(--accent), 4px 0 20px rgba(0,0,0,.12);
   z-index: 1;
@@ -437,7 +437,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* Main body */
 .card-main { flex: 1; min-width: 0; }
-.card-name { font: 300 24px/1.2 var(--sans); letter-spacing: -.02em; color: var(--ink); overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.card-name { font: 400 24px/1.2 var(--sans); letter-spacing: -.02em; color: var(--ink); overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
 .card-address { font: 400 13px var(--sans); color: var(--ink2); margin-bottom: 6px; }
 .card-borough-row { margin-bottom: 5px; }
 .card-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
@@ -469,10 +469,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
   padding: 3px 8px; border-radius: 20px; color: #fff; white-space: nowrap;
 }
-.verdict-pill.green  { background: rgba(74,222,128,.12); color: #4ade80; }
-.verdict-pill.amber  { background: rgba(251,191,36,.12); color: #fbbf24; }
-.verdict-pill.red    { background: rgba(248,113,113,.12); color: #f87171; }
-.verdict-pill.grey   { background: rgba(232,228,218,.1); color: var(--ink3); }
+.verdict-pill.green  { background: var(--green); color: #fff; }
+.verdict-pill.amber  { background: var(--amber); color: #fff; }
+.verdict-pill.red    { background: var(--red); color: #fff; }
+.verdict-pill.grey   { background: var(--ink3); color: #fff; }
 .card-cta {
   font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
   padding: 6px 12px; border-radius: 4px; text-decoration: none;
