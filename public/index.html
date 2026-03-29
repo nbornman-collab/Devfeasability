@@ -28,15 +28,16 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 .hero-photo-slide {
   position: absolute; inset: -5%;
   background-size: cover; background-position: center;
-  opacity: 0; transition: opacity 2s ease-in-out;
-  animation: kb 18s ease-in-out infinite alternate;
+  opacity: 0; transition: opacity 2.5s ease-in-out;
   will-change: transform, opacity;
 }
-.hero-photo-slide.active { opacity: 1; }
+.hero-photo-slide.active {
+  opacity: 1;
+  animation: kb 12s ease-in-out forwards;
+}
 @keyframes kb {
-  0%   { transform: scale(1.06) translate(0%, 0%); }
-  50%  { transform: scale(1.12) translate(-1%, 0.5%); }
-  100% { transform: scale(1.06) translate(0.8%, -0.4%); }
+  0%   { transform: scale(1.0); }
+  100% { transform: scale(1.08); }
 }
 
 /* ── DARK OVERLAY ── */
@@ -619,7 +620,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
   <!-- CENTER: title only -->
   <div class="hero-bottom-content">
     <h1 class="hero-title">
-      <span class="hero-line1">In-depth feasibility analysis...</span>
+      <span class="hero-line1">Development, Architecture and Planning analysis.</span>
       <em id="hero-cycle">Before you bid.</em>
     </h1>
   </div>
