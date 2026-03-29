@@ -802,12 +802,40 @@ function populatePage(si) {
   const tier = hf.tier || 'CONTEXTUAL';
   const score = typeof computeSiteScore === 'function' ? computeSiteScore(si) : 70;
 
+  // Heritage impact per scenario
+  window._heritageTier = tier;
+  window._heritageScore = hf.score || null;
+  function heritageImpact(floors) {
+    if (tier === 'FULL_CONSERVATION') return 'Blocked';
+    const h = floors * FTF;
+    if (tier === 'RETAIN_AND_ADAPT' || tier === 'CONTEXTUAL') {
+      if (h <= 20) return 'Low impact';
+      if (h <= 30) return 'Manageable';
+      if (h <= 40) return 'Notable';
+      return 'Challenging';
+    }
+    if (h <= 25) return 'Low impact';
+    if (h <= 35) return 'Manageable';
+    if (h <= 50) return 'Notable';
+    return 'Challenging';
+  }
+  window.updateHeritageLabel = function() {
+    const sc = S04_SCENARIOS[s04Idx];
+    if (!sc) return;
+    const impact = heritageImpact(sc.floors);
+    const el = document.getElementById('hero-verdict-sub');
+    if (el) el.textContent = 'Development Score ' + score + '/100 - Heritage: ' + impact + ' at ' + sc.floors + 'F';
+  };
+
   // Hero
   set('hero-address', si.site_name || '24 Southwark Street');
   set('hero-score', score);
   const pillText = score >= 80 ? 'Top Opportunity' : score >= 70 ? 'Strong Opportunity' : score >= 55 ? 'Credible Opportunity' : 'Due Diligence';
   set('hero-verdict', pillText);
-  set('hero-verdict-sub', 'Development Score ' + score + '/100 - Heritage: ' + tier);
+  // Show range on load, then per-scenario on tab switch
+  const impactRange = [...new Set(S04_SCENARIOS.map(s => heritageImpact(s.floors)))];
+  const rangeStr = impactRange.length > 1 ? impactRange[0] + ' - ' + impactRange[impactRange.length-1] : impactRange[0];
+  set('hero-verdict-sub', 'Development Score ' + score + '/100 - Heritage: ' + rangeStr + ' (' + S04_SCENARIOS[0].floors + '-' + S04_SCENARIOS[S04_SCENARIOS.length-1].floors + 'F range)');
   set('hero-sub', (si.borough||'Southwark') + ' - ' + (acq.tenure||'Freehold') + (mom.opportunity_area ? ' - ' + mom.opportunity_area.name : ''));
 
   // Development synthesis
@@ -998,7 +1026,7 @@ function s04render() {
   });
 }
 
-function s04go(idx) { s04Idx = idx; s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics(); buildMatrix(); updateConsequenceStrip(); document.querySelectorAll('.hero-sc-tab').forEach((b,i) => b.classList.toggle('active', i === idx)); }
+function s04go(idx) { s04Idx = idx; s04calc(); s04render(); updateMassing(S04_SCENARIOS[s04Idx]); updateHeroMetrics(); buildMatrix(); updateConsequenceStrip(); document.querySelectorAll('.hero-sc-tab').forEach((b,i) => b.classList.toggle('active', i === idx)); if (typeof window.updateHeritageLabel === 'function') window.updateHeritageLabel(); }
 function s04Slider(key, v) {
   S04[key] = v;
   const fmts = {erv:v2=>'\u00A3'+v2, niy:v2=>v2+'%', cost:v2=>'\u00A3'+Number(v2).toLocaleString(), s106:v2=>'\u00A3'+v2+'k', poc:v2=>v2+'%'};
@@ -1040,6 +1068,7 @@ function heroScGo(idx) {
   s04render();
   updateMassing(S04_SCENARIOS[s04Idx]);
   updateHeroMetrics();
+  if (typeof window.updateHeritageLabel === 'function') window.updateHeritageLabel();
 }
 
 // -- Scenario Comparison Matrix --
