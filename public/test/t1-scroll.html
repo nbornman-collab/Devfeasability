@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/type.css">
+<link rel="stylesheet" href="/css/nav.css">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <!-- @@INTELLIGENCE_SCRIPT@@ -->
 <script src="/lib/site-intelligence.js"></script>
@@ -454,24 +455,34 @@ input[type=range].ruler-input {
 <div class="scroll-progress" id="scroll-progress"></div>
 
 <!-- PROGRESS DOTS -->
-<div class="progress-dots" id="progress-dots">
-  <button class="progress-dot active" data-target="overview"><div class="progress-dot-circle"></div><span class="progress-dot-label">Overview</span></button>
-  <button class="progress-dot" data-target="development"><div class="progress-dot-circle"></div><span class="progress-dot-label">01 Development</span></button>
-  <button class="progress-dot" data-target="architecture"><div class="progress-dot-circle"></div><span class="progress-dot-label">02 Architecture</span></button>
-  <button class="progress-dot" data-target="planning"><div class="progress-dot-circle"></div><span class="progress-dot-label">03 Planning</span></button>
-</div>
-
-<!-- NAV (frosted, fixed) -->
-<nav>
-  <a href="/" class="nav-logo">D<span>/</span>A</a>
-  <a href="/discover" class="nav-back-link">← Discover</a>
-  <div class="nav-links">
-    <a href="#overview" class="active">Overview</a>
-    <a href="#development">Development</a>
-    <a href="#architecture">Architecture</a>
-    <a href="#planning">Planning</a>
+<!-- NAV -->
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <div class="da-nav-sep"></div>
+  <a class="da-nav-link" href="/discover">Discover</a>
+  <div class="da-nav-sep"></div>
+  <div class="da-nav-sections">
+    <a class="da-nav-anchor active" href="#overview">Overview</a>
+    <a class="da-nav-anchor" href="#development">01 D</a>
+    <a class="da-nav-anchor" href="#architecture">02 A</a>
+    <a class="da-nav-anchor" href="#planning">03 P</a>
   </div>
+  <div class="da-nav-spacer"></div>
+  <a class="da-nav-contact" href="mailto:hello@devfeasibility.com">Contact</a>
+  <button class="da-burger" id="da-burger" aria-label="Menu" onclick="daOpenBurger()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="da-burger-overlay" id="da-burger-overlay" onclick="daCloseBurger()"></div>
+<div class="da-burger-panel" id="da-burger-panel">
+  <button class="da-burger-close" onclick="daCloseBurger()">✕</button>
+  <nav class="da-burger-nav">
+    <a href="/">Home</a>
+    <a href="/discover">Discover</a>
+    <a href="/pd" class="accent">PD Check</a>
+    <a href="mailto:hello@devfeasibility.com">Contact</a>
+  </nav>
+</div>
 
 <!-- SECTION 0: HERO (full-viewport map) -->
 <section class="hero-section" id="overview">
@@ -807,7 +818,7 @@ setTimeout(() => {
 
 // -- Nav active state on scroll --
 const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
+const navLinks = document.querySelectorAll('.da-nav-anchor');
 window.addEventListener('scroll', () => {
   let current = '';
   sections.forEach(s => {
@@ -1938,6 +1949,18 @@ function closeScModal() {
 }
 
 function scModalEsc(e) { if (e.key === 'Escape') closeScModal(); }
+
+function daOpenBurger() {
+  document.getElementById('da-burger-panel').classList.add('open');
+  document.getElementById('da-burger-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function daCloseBurger() {
+  document.getElementById('da-burger-panel').classList.remove('open');
+  document.getElementById('da-burger-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') daCloseBurger(); });
 </script>
 </body>
 </html>

@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>D/A — London Development Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/nav.css">
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -561,36 +562,29 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 </div>
 <div class="overlay"></div>
 
-<nav class="nav">
-  <div style="display:flex;align-items:baseline;gap:0">
-    <a href="/" class="nav-logo">D<span class="sl">/</span>A</a>
-    <span class="nav-logo-sub">Development / Architecture</span>
-  </div>
-  <div class="nav-links">
-    <a class="nav-link" href="/discover">Discover</a>
-    <a class="nav-link" href="/t1/196-blackfriars-rd">Appraise</a>
-    <a class="nav-cta" href="/discover">Explore Sites →</a>
-    <button class="burger" id="burger" aria-label="Menu" onclick="openMenu()">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
+  <div class="da-nav-sep"></div>
+  <a class="da-nav-link" href="/discover">Discover</a>
+  <a class="da-nav-link" href="/t1/196-blackfriars-rd">Appraise</a>
+  <div class="da-nav-sep"></div>
+  <a class="da-nav-link accent" href="/pd">PD Check</a>
+  <div class="da-nav-spacer"></div>
+  <a class="da-nav-contact" href="mailto:hello@devfeasibility.com">Contact</a>
+  <button class="da-burger" id="da-burger" aria-label="Menu" onclick="daOpenBurger()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
-
-<!-- Burger menu -->
-<div class="burger-overlay" id="burger-overlay" onclick="closeMenu()"></div>
-<div class="burger-panel" id="burger-panel">
-  <div class="burger-header">
-    <span class="burger-logo">D<span class="sl">/</span>A</span>
-    <button class="burger-close" onclick="closeMenu()">✕</button>
-  </div>
-  <nav class="burger-nav">
+<div class="da-burger-overlay" id="da-burger-overlay" onclick="daCloseBurger()"></div>
+<div class="da-burger-panel" id="da-burger-panel">
+  <button class="da-burger-close" onclick="daCloseBurger()">✕</button>
+  <nav class="da-burger-nav">
     <a href="/">Home</a>
     <a href="/discover">Discover</a>
     <a href="/t1/196-blackfriars-rd">Appraise</a>
-    <a href="/pd" class="accent">PD &amp; Extensions</a>
+    <a href="/pd" class="accent">PD Check</a>
     <a href="mailto:hello@devfeasibility.com">Contact</a>
   </nav>
-  <div class="burger-footer">Development &middot; Planning &middot; Architecture</div>
 </div>
 
 <div class="hero">
@@ -1019,17 +1013,17 @@ Promise.all([
 })();
 
 // ── Burger menu ───────────────────────────────────────────────────────────────
-function openMenu() {
-  document.getElementById('burger-panel').classList.add('open');
-  document.getElementById('burger-overlay').classList.add('open');
+function daOpenBurger() {
+  document.getElementById('da-burger-panel').classList.add('open');
+  document.getElementById('da-burger-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeMenu() {
-  document.getElementById('burger-panel').classList.remove('open');
-  document.getElementById('burger-overlay').classList.remove('open');
+function daCloseBurger() {
+  document.getElementById('da-burger-panel').classList.remove('open');
+  document.getElementById('da-burger-overlay').classList.remove('open');
   document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') daCloseBurger(); });
 
 // ── PD address search passthrough ─────────────────────────────────────────────
 const pdInput = document.getElementById('pd-addr-input');

@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Discover - D/A London Development Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/nav.css">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
 <style>
 :root {
@@ -826,32 +827,27 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 <nav class="da-nav">
   <a href="/" class="da-nav-logo">D<span class="sl">/</span>A</a>
-  <div class="nav-sep"></div>
-  <span class="nav-tagline">Development / Architecture</span>
-  <div class="da-nav-links">
-    <a class="da-nav-link active" href="/discover">Discover</a>
-    <a class="da-nav-link" id="nav-appraise" href="/t1/196-blackfriars-rd">Appraise</a>
-    <button class="da-burger" id="da-burger" aria-label="Menu" onclick="openBurger()">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+  <div class="da-nav-sep"></div>
+  <a class="da-nav-link active" href="/discover">Discover</a>
+  <a class="da-nav-link" id="nav-appraise" href="/t1/196-blackfriars-rd">Appraise</a>
+  <div class="da-nav-sep"></div>
+  <a class="da-nav-link accent" href="/pd">PD Check</a>
+  <div class="da-nav-spacer"></div>
+  <a class="da-nav-contact" href="mailto:hello@devfeasibility.com">Contact</a>
+  <button class="da-burger" id="da-burger" aria-label="Menu" onclick="daOpenBurger()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
-
-<!-- Burger -->
-<div class="burger-overlay" id="burger-overlay" onclick="closeBurger()"></div>
-<div class="burger-panel" id="burger-panel">
-  <div class="burger-header">
-    <span class="burger-logo">D<span style="color:var(--accent)">/</span>A</span>
-    <button class="burger-close" onclick="closeBurger()">&#x2715;</button>
-  </div>
-  <nav class="burger-nav">
+<div class="da-burger-overlay" id="da-burger-overlay" onclick="daCloseBurger()"></div>
+<div class="da-burger-panel" id="da-burger-panel">
+  <button class="da-burger-close" onclick="daCloseBurger()">✕</button>
+  <nav class="da-burger-nav">
     <a href="/">Home</a>
     <a href="/discover">Discover</a>
     <a href="/t1/196-blackfriars-rd">Appraise</a>
-    <a href="/pd" style="color:var(--accent)">PD &amp; Extensions</a>
+    <a href="/pd" class="accent">PD Check</a>
     <a href="mailto:hello@devfeasibility.com">Contact</a>
   </nav>
-  <div class="burger-footer">Development &middot; Planning &middot; Architecture</div>
 </div>
 
 <!-- Full-canvas map (behind all overlays) -->
@@ -1659,16 +1655,17 @@ function updateMapFilter(ids) {
   });
 }
 
-// ── Burger menu ───────────────────────────────────────────────────────────────
-function openBurger() {
-  document.getElementById('burger-panel').classList.add('open');
-  document.getElementById('burger-overlay').classList.add('open');
+function daOpenBurger() {
+  document.getElementById('da-burger-panel').classList.add('open');
+  document.getElementById('da-burger-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
-function closeBurger() {
-  document.getElementById('burger-panel').classList.remove('open');
-  document.getElementById('burger-overlay').classList.remove('open');
+function daCloseBurger() {
+  document.getElementById('da-burger-panel').classList.remove('open');
+  document.getElementById('da-burger-overlay').classList.remove('open');
+  document.body.style.overflow = '';
 }
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeBurger(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') daCloseBurger(); });
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
 // Handle ?mode= deep-link from homepage discovery cards
