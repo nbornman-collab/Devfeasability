@@ -829,7 +829,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   <span class="nav-tagline">Development / Architecture</span>
   <div class="da-nav-links">
     <a class="da-nav-link active" href="/discover">Discover</a>
-    <a class="da-nav-link" href="/test/t1-scroll">Appraise</a>
+    <a class="da-nav-link" id="nav-appraise" href="/t1/196-blackfriars-rd">Appraise</a>
     <button class="da-burger" id="da-burger" aria-label="Menu" onclick="openBurger()">
       <span></span><span></span><span></span>
     </button>
@@ -846,7 +846,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   <nav class="burger-nav">
     <a href="/">Home</a>
     <a href="/discover">Discover</a>
-    <a href="/test/t1-scroll">Appraise</a>
+    <a href="/t1/196-blackfriars-rd">Appraise</a>
     <a href="/pd" style="color:var(--accent)">PD &amp; Extensions</a>
     <a href="mailto:hello@devfeasibility.com">Contact</a>
   </nav>
@@ -1695,6 +1695,11 @@ var massSV = null;
 function openMassPopup(site) {
   massSite = site;
   massScenario = 'base';
+  // Update nav Appraise link to this site if it has a T1
+  if (site && site.t1) {
+    var navLink = document.getElementById('nav-appraise');
+    if (navLink) navLink.href = site.t1;
+  }
   var scrim = document.getElementById('mass-scrim');
   if (!scrim) return;
   scrim.classList.add('open');
