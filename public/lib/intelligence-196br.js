@@ -4,6 +4,21 @@ const SITE_INTELLIGENCE = {
   site: '196 Blackfriars Road',
   borough: 'Southwark',
   use: 'residential',
+
+  // Massing config: UNRESTRICTED - full plate, no setback required
+  massing_config: {
+    primary_bearing: 0,
+    primary_setback_m: 0.0,
+    secondary_setback_m: 0.0
+  },
+
+  // Scenarios: UNRESTRICTED residential - Low/Base/High 10F/14F/18F
+  // BSA thresholds: 30m (second staircase) crossed at 10F, 50m at ~14F
+  scenarios: [
+    { key: 'lo',   label: 'Low',  floors: 10, podF: 10, twrF: 0, twrPct: 1.0, eff: 0.82 },
+    { key: 'base', label: 'Base', floors: 14, podF: 14, twrF: 0, twrPct: 1.0, eff: 0.80 },
+    { key: 'hi',   label: 'High', floors: 18, podF: 18, twrF: 0, twrPct: 1.0, eff: 0.78 }
+  ],
   factors: {
     sky: {
       label: 'Available Sky',
@@ -54,6 +69,8 @@ const SITE_INTELLIGENCE = {
     heritage_framework: {
       tier: 'UNRESTRICTED',
       score: 9.0,
+      nhle_verified: true,
+      nhle_date: '2026-03-29',
       verdict: 'No listed buildings within 400m. Blackfriars OA zone. Residential tall building - One Blackfriars (50F) 300m south is the direct precedent. Heritage is not the binding constraint here.',
       rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
     },

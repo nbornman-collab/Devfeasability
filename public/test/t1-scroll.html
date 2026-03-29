@@ -718,11 +718,14 @@ const ADDRESS = '24 Southwark Street, SE1 0SW';
 const S04_DEFS = {erv:700, niy:4.75, cost:4200, s106:500, poc:20};
 let S04 = {...S04_DEFS};
 const S04_MARKET = {acqCost:0, demo:850000, finRate:0.065, letFee:0.15, cilRate:125, progYrs:{lo:2.0,base:2.5,hi:3.0}};
-const S04_SCENARIOS = [
-  {key:'lo', label:'Low', floors:8, podF:5, twrF:3, twrPct:0.55, eff:0.78},
-  {key:'base', label:'Base', floors:10, podF:6, twrF:4, twrPct:0.55, eff:0.78},
-  {key:'hi', label:'High', floors:12, podF:7, twrF:5, twrPct:0.50, eff:0.76}
-];
+// Use scenarios from intelligence file if defined, else fall back to 24SS defaults
+const S04_SCENARIOS = (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.scenarios)
+  ? SITE_INTELLIGENCE.scenarios
+  : [
+    {key:'lo', label:'Low', floors:8, podF:5, twrF:3, twrPct:0.55, eff:0.78},
+    {key:'base', label:'Base', floors:10, podF:6, twrF:4, twrPct:0.55, eff:0.78},
+    {key:'hi', label:'High', floors:12, podF:7, twrF:5, twrPct:0.50, eff:0.76}
+  ];
 let s04Idx = 1;
 
 function s04calc() {

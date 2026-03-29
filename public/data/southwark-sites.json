@@ -34,7 +34,7 @@
       },
       "offMarket": "low",
       "desc": "Compact office plot mid-rise potential to 8F within an Opportunity Area on confirmed brownfield land. Scoring puts this in the top tier for the borough.",
-      "max_floors": 14,
+      "max_floors": 18,
       "planning_realm": {
         "conservation_area": false,
         "article4": true,
@@ -42,7 +42,8 @@
           "Bankside and Borough District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "heritTier": "clean"
     },
     {
       "name": "24 Southwark Street",
