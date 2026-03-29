@@ -269,6 +269,20 @@ body { padding-top: 0; } /* nav.css handles spacing */
 #development .rlv-block,
 #planning .rlv-block { background: rgba(184,132,92,.06); }
 
+/* Light section - mflags */
+#development .mflag,
+#planning .mflag { border-bottom-color: rgba(26,25,23,.1); }
+#development .mflag-name,
+#planning .mflag-name { color: #1a1917 !important; }
+#development .mflag-note,
+#planning .mflag-note { color: #6a6760 !important; }
+#development .mflag-status.no,
+#planning .mflag-status.no { background: rgba(26,25,23,.06); color: #9a9896; }
+#development .mflag-status.unk,
+#planning .mflag-status.unk { background: rgba(26,25,23,.04); color: #9a9896; }
+#development .mflag-status.yes,
+#planning .mflag-status.yes { background: rgba(180,83,9,.1); color: #b45309; }
+
 /* Light section - status colours (bright neons → ink versions) */
 #development .conseq-icon.green,
 #planning .conseq-icon.green { background: rgba(22,163,74,.1); color: #16a34a; }
@@ -445,6 +459,10 @@ input[type=range].ruler-input {
   position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%;
   cursor: inherit; margin: 0; pointer-events: none;
 }
+
+/* Reset button */
+.reset-btn { font: 500 13px var(--sans); color: var(--ink3); background: none; border: none; cursor: pointer; text-decoration: underline; }
+.reset-btn:hover { color: var(--ink); }
 
 /* -- PRO FORMA TABLE -- */
 .proforma { margin-top: 32px; }
@@ -793,7 +811,7 @@ input[type=range].ruler-input {
       <div class="slider-item"><div class="slider-label">S106 <span class="slider-val" id="sv-s106">£500k</span></div><div class="ruler-wrap" data-id="sl-s106" data-min="0" data-max="3000" data-step="50" data-default="500" data-val="500"><canvas class="ruler-canvas"></canvas></div></div>
       <div class="slider-item"><div class="slider-label">Target Profit <span class="slider-val" id="sv-poc">20%</span></div><div class="ruler-wrap" data-id="sl-poc" data-min="10" data-max="30" data-step="1" data-default="20" data-val="20"><canvas class="ruler-canvas"></canvas></div></div>
       <div class="slider-item" style="display:flex;align-items:center;justify-content:center">
-        <button onclick="s04Reset()" style="font:500 13px var(--sans);color:rgba(255,255,255,.4);background:none;border:none;cursor:pointer;text-decoration:underline">Reset assumptions</button>
+        <button onclick="s04Reset()" class="reset-btn">Reset assumptions</button>
       </div>
     </div>
 
@@ -1098,7 +1116,7 @@ function populatePage(si) {
   ].map(([name, status, note]) => {
     const cls = status==='yes'?'yes':status==='no'?'no':'unk';
     const txt = status==='yes'?'Confirmed':status==='no'?'No':'Unknown';
-    return `<div class="mflag"><div><div class="mflag-name">${name}</div><div class="mflag-note" style="color:rgba(255,255,255,.5)">${note}</div></div><span class="mflag-status ${cls}">${txt}</span></div>`;
+    return `<div class="mflag"><div><div class="mflag-name">${name}</div><div class="mflag-note">${note}</div></div><span class="mflag-status ${cls}">${txt}</span></div>`;
   }).join(''));
 
   // Conversion Readiness checklist
