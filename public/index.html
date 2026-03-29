@@ -25,16 +25,21 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 /* ── MAP ── */
 /* ── PHOTO CYCLING HERO ── */
 .hero-photo-wrap { position: fixed; inset: 0; z-index: 0; }
+/* Black fade layer - sits above photos, fades in/out to mask transitions */
+.hero-fade-mask {
+  position: absolute; inset: 0; z-index: 2;
+  background: #000; opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.2s ease-in-out;
+}
+.hero-fade-mask.dark { opacity: 1; }
 .hero-photo-slide {
   position: absolute; inset: -5%;
   background-size: cover; background-position: center;
-  opacity: 0; transition: opacity 2.5s ease-in-out;
-  will-change: transform, opacity;
+  opacity: 0;
+  will-change: transform;
 }
-.hero-photo-slide.active {
-  opacity: 1;
-  animation: kb 12s ease-in-out forwards;
-}
+.hero-photo-slide.active { opacity: 1; }
 @keyframes kb {
   0%   { transform: scale(1.0); }
   100% { transform: scale(1.08); }
@@ -551,7 +556,9 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 <body>
 
 <div class="hero-wrap">
-<div class="hero-photo-wrap" id="hero-photos"></div>
+<div class="hero-photo-wrap" id="hero-photos">
+  <div class="hero-fade-mask" id="hero-fade-mask"></div>
+</div>
 <div class="overlay"></div>
 
 <nav class="nav">
@@ -980,23 +987,35 @@ Promise.all([
     const div = document.createElement('div');
     div.className = 'hero-photo-slide' + (i === 0 ? ' active' : '');
     div.style.backgroundImage = `url('${url}')`;
-    // Vary the Ken Burns direction per slide
-    div.style.animationDelay = `-${i * 3.6}s`;
+    if (i === 0) div.style.animation = 'kb 14s ease-in forwards';
     wrap.appendChild(div);
     return div;
   });
 
+  const mask = document.getElementById('hero-fade-mask');
   let current = 0;
-  setInterval(() => {
-    slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
-    const next = slides[current];
-    // Force animation restart by removing and re-adding
-    next.style.animation = 'none';
-    next.offsetHeight; // reflow
-    next.style.animation = '';
-    next.classList.add('active');
-  }, 9000);
+
+  function nextSlide() {
+    // 1. Fade to black
+    mask.classList.add('dark');
+    setTimeout(() => {
+      // 2. Swap slide while black
+      slides[current].classList.remove('active');
+      slides[current].style.animation = 'none';
+      current = (current + 1) % slides.length;
+      const next = slides[current];
+      next.style.animation = 'none';
+      next.offsetHeight; // reflow
+      next.style.animation = 'kb 14s ease-in forwards';
+      next.classList.add('active');
+      // 3. Fade back in
+      setTimeout(() => {
+        mask.classList.remove('dark');
+      }, 100);
+    }, 1300); // wait for fade-to-black to complete
+  }
+
+  setInterval(nextSlide, 10000); // 10s per slide
 })();
 
 // ── Burger menu ───────────────────────────────────────────────────────────────
