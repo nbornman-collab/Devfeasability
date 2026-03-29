@@ -986,6 +986,22 @@ app.get('/api/version', (req, res) => {
   res.json({ version: '4.3.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
 });
 
+app.get('/api/test-cache', async (req, res) => {
+  const status = {};
+  for (const name of TEST_PAGES) {
+    status[name] = testPageCache[name] ? testPageCache[name].length + ' bytes' : 'EMPTY';
+  }
+  // Try a live fetch to diagnose
+  let liveTest = 'not tried';
+  try {
+    const r = await fetch(`${GITHUB_RAW}/public/test/t1-scroll.html`);
+    liveTest = `status=${r.status} ok=${r.ok}`;
+  } catch(e) {
+    liveTest = `ERROR: ${e.message}`;
+  }
+  res.json({ cache: status, liveFetchTest: liveTest });
+});
+
 
 
 // ── Building data from OS NGD — real footprint polygon + height ───────────
