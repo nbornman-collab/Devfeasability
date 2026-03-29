@@ -7,6 +7,30 @@ const PORT = process.env.PORT || 3000;
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN || '';
 const OS_API_KEY = process.env.OS_API_KEY || 'LX85JnG1cHTIXA5bpRGHJmA1QDrHHJWZ';
 
+// -- Test pages fetched live from GitHub to bypass Docker layer cache --
+// Railway's BuildKit caches COPY layers aggressively; fetching from raw GitHub
+// ensures test pages always reflect the latest commit on main.
+const GITHUB_RAW = 'https://raw.githubusercontent.com/nbornman-collab/Devfeasability/main';
+const TEST_PAGES = ['t1-scroll', 't1-v2', 't1-v3', 't1-redesign'];
+const testPageCache = {};
+
+async function fetchTestPage(name) {
+  try {
+    const res = await fetch(`${GITHUB_RAW}/public/test/${name}.html`);
+    if (res.ok) {
+      testPageCache[name] = await res.text();
+      console.log(`[test-pages] fetched ${name}.html from GitHub (${testPageCache[name].length} bytes)`);
+    }
+  } catch (e) {
+    console.warn(`[test-pages] could not fetch ${name}.html: ${e.message}`);
+  }
+}
+
+// Fetch all test pages on startup
+Promise.all(TEST_PAGES.map(fetchTestPage)).then(() => {
+  console.log('[test-pages] startup fetch complete');
+});
+
 // Simple in-memory cache for Overpass/external API responses (5 min TTL)
 const apiCache = new Map();
 const CACHE_TTL = 5 * 60 * 1000;
@@ -124,6 +148,18 @@ app.use((req, res, next) => {
   }
   next();
 });
+// Serve test pages from GitHub-fetched in-memory cache (bypasses Docker COPY layer cache)
+app.get('/test/:page', (req, res, next) => {
+  const name = req.params.page.replace('.html', '');
+  if (testPageCache[name]) {
+    res.set('Content-Type', 'text/html; charset=utf-8');
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    return res.send(testPageCache[name]);
+  }
+  next(); // fall through to static if not cached yet
+});
+
 // No-cache for HTML files - prevents stale in-app browser cache (Safari/Telegram)
 app.use(express.static(path.join(__dirname, 'public'), {
   extensions: ['html'],
