@@ -52,8 +52,8 @@ body.terminal .score-big {
   color: #c8a040;
 }
 body.terminal .score-denom { font: 500 28px var(--mono); color: #3a3830; }
-body.terminal .score-meta-title { font: 600 14px var(--sans); color: #d4d0c8; margin-bottom: 4px; letter-spacing: .02em; }
-body.terminal .score-meta-sub { font: 400 12px var(--sans); color: #5a5850; line-height: 1.8; letter-spacing: .04em; }
+body.terminal .score-meta-title { font: 600 16px var(--sans); color: #d4d0c8; margin-bottom: 6px; letter-spacing: .01em; }
+body.terminal .score-meta-sub { font: 400 13px var(--sans); color: #5a5850; line-height: 1.7; }
 body.terminal .score-verdict {
   font: 700 10px var(--mono); letter-spacing: .12em; text-transform: uppercase;
   padding: 8px 14px; border: 1px solid #2a7a2a; color: #40c840; background: rgba(64,200,64,.06);
@@ -75,7 +75,7 @@ body.terminal .metric-lbl {
 
 /* Terminal: Matrix - pure data grid */
 body.terminal .matrix-wrap { border: 1px solid #1a1a18; }
-body.terminal .matrix-table { width: 100%; border-collapse: collapse; font-family: var(--mono); }
+body.terminal .matrix-table { width: 100%; border-collapse: collapse; font-family: var(--sans); }
 body.terminal .matrix-table thead th {
   padding: 8px 12px; background: #080806;
   font: 700 9px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #3a3830;
@@ -102,9 +102,9 @@ body.terminal .matrix-pill {
 
 /* Terminal: Curve */
 body.terminal .curve-wrap { background: #0a0a08; border: 1px solid #1a1a18; padding: 20px; }
-body.terminal .curve-title { font: 600 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #3a3830; }
-body.terminal .curve-highlight { font: 700 20px var(--mono); color: #c8a040; letter-spacing: -.01em; }
-body.terminal .curve-highlight span { font: 400 10px var(--mono); color: #3a3830; letter-spacing: .1em; }
+body.terminal .curve-title { font: 600 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: #3a3830; }
+body.terminal .curve-highlight { font: 700 22px var(--mono); color: #c8a040; letter-spacing: -.01em; }
+body.terminal .curve-highlight span { font: 400 10px var(--sans); color: #3a3830; letter-spacing: .08em; }
 body.terminal .curve-line { stroke: #c8a040; stroke-width: 1; fill: none; }
 body.terminal .curve-fill { display: none; }
 body.terminal .curve-axis { stroke: #1a1a18; stroke-width: 1; }
@@ -119,7 +119,7 @@ body.terminal .slider-group { display: grid; grid-template-columns: 1fr 1fr 1fr;
 body.terminal .slider-item { padding: 16px; background: #0a0a08; }
 body.terminal .slider-val { font: 700 36px var(--mono); color: #d4d0c8; letter-spacing: -.02em; line-height: 1; margin-bottom: 2px; }
 body.terminal .slider-val span { color: #5a5850; }
-body.terminal .slider-lbl { font: 500 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #3a3830; margin-bottom: 14px; }
+body.terminal .slider-lbl { font: 500 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: #3a3830; margin-bottom: 14px; }
 body.terminal .slider-track { position: relative; height: 1px; background: #1a1a18; margin-bottom: 0; }
 body.terminal .slider-fill { position: absolute; top: 0; left: 0; height: 100%; background: #c8a040; transition: width .1s; }
 body.terminal .slider-thumb { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 5px; height: 10px; background: #c8a040; border-radius: 0; transition: left .1s; }
