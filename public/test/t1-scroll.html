@@ -242,6 +242,52 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 #development .card-label,
 #planning .card-label { color: #9a9896; }
 
+/* Light section - glass/comp elements */
+#development .card,
+#planning .card {
+  background: #fff;
+  border: 1px solid rgba(26,25,23,.08);
+  backdrop-filter: none;
+}
+#development .comp-col,
+#planning .comp-col { background: #fff; }
+#development .comp-strip,
+#planning .comp-strip { background: rgba(26,25,23,.08); }
+#development .glass,
+#planning .glass { background: #fff; border-color: rgba(26,25,23,.08); backdrop-filter: none; }
+#development .scenario-group,
+#planning .scenario-group { background: #fff; border-color: rgba(26,25,23,.08); backdrop-filter: none; }
+#development .sc-tab,
+#planning .sc-tab { background: rgba(26,25,23,.04); color: #9a9896; }
+#development .sc-tab.active,
+#planning .sc-tab.active { background: rgba(26,25,23,.08); color: #b8845c; border-bottom-color: #b8845c; }
+#development .matrix-table thead th,
+#planning .matrix-table thead th { background: #ece9e2 !important; }
+#development .matrix-table tbody td:not(:first-child),
+#planning .matrix-table tbody td:not(:first-child) { background: rgba(26,25,23,.02); }
+#development .matrix-group-header td,
+#planning .matrix-group-header td { background: rgba(26,25,23,.04) !important; color: #9a9896 !important; }
+#development .rlv-block,
+#planning .rlv-block { background: rgba(184,132,92,.06); }
+
+/* Light section - status colours (bright neons → ink versions) */
+#development .conseq-icon.green,
+#planning .conseq-icon.green { background: rgba(22,163,74,.1); color: #16a34a; }
+#development .conseq-icon.amber,
+#planning .conseq-icon.amber { background: rgba(180,83,9,.1); color: #b45309; }
+#development .conseq-icon.red,
+#planning .conseq-icon.red { background: rgba(185,28,28,.1); color: #b91c1c; }
+#development .flag-sym.ok,
+#planning .flag-sym.ok { background: rgba(22,163,74,.1); color: #16a34a; }
+#development .flag-sym.warn,
+#planning .flag-sym.warn { background: rgba(180,83,9,.1); color: #b45309; }
+#development .flag-sym.risk,
+#planning .flag-sym.risk { background: rgba(185,28,28,.1); color: #b91c1c; }
+#development .card-value.green,
+#planning .card-value.green { color: #16a34a; }
+#development .comp-val.green,
+#planning .comp-val.green { color: #16a34a; }
+
 /* Light section - return curve */
 #development .curve-wrap,
 #planning .curve-wrap { background: #fff; border-color: rgba(26,25,23,.1); }
