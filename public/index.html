@@ -6,8 +6,7 @@
 <title>D/A — London Development Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -24,8 +23,20 @@ html { scroll-behavior: smooth; }
 body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 
 /* ── MAP ── */
-#map {
-  position: fixed; inset: 0; z-index: 0;
+/* ── PHOTO CYCLING HERO ── */
+.hero-photo-wrap { position: fixed; inset: 0; z-index: 0; }
+.hero-photo-slide {
+  position: absolute; inset: -5%;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 2s ease-in-out;
+  animation: kb 18s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+.hero-photo-slide.active { opacity: 1; }
+@keyframes kb {
+  0%   { transform: scale(1.06) translate(0%, 0%); }
+  50%  { transform: scale(1.12) translate(-1%, 0.5%); }
+  100% { transform: scale(1.06) translate(0.8%, -0.4%); }
 }
 
 /* ── DARK OVERLAY ── */
@@ -539,7 +550,7 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 <body>
 
 <div class="hero-wrap">
-<div id="map"></div>
+<div class="hero-photo-wrap" id="hero-photos"></div>
 <div class="overlay"></div>
 
 <nav class="nav">
@@ -973,29 +984,39 @@ Promise.all([
   document.getElementById('h-scored').textContent = scored || all.length;
 }).catch(()=>{});
 
-// Map
-fetch('/api/config').then(r=>r.json()).then(cfg => {
-  if (!cfg.mapboxToken) return;
-  mapboxgl.accessToken = cfg.mapboxToken;
-  const map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/standard',
-    center: [-0.090, 51.505],
-    zoom: 11.5, pitch: 55, bearing: 0,
-    interactive: false,
-    attributionControl: false
+// ── Hero photo cycling ────────────────────────────────────────────────────────
+(function() {
+  const photos = [
+    // Thames aerial, classic London
+    'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=2400&q=85&auto=format&fit=crop',
+    // Looking up at glass towers (developer's eye view)
+    'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=2400&q=85&auto=format&fit=crop',
+    // Construction site cranes at dusk
+    'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=2400&q=85&auto=format&fit=crop',
+    // City rooftop golden hour
+    'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=2400&q=85&auto=format&fit=crop',
+    // Canary Wharf cluster from above
+    'https://images.unsplash.com/photo-1520857014576-2c4f4c972b57?w=2400&q=85&auto=format&fit=crop'
+  ];
+
+  const wrap = document.getElementById('hero-photos');
+  const slides = photos.map((url, i) => {
+    const div = document.createElement('div');
+    div.className = 'hero-photo-slide' + (i === 0 ? ' active' : '');
+    div.style.backgroundImage = `url('${url}')`;
+    // Vary the Ken Burns direction per slide
+    div.style.animationDelay = `-${i * 3.6}s`;
+    wrap.appendChild(div);
+    return div;
   });
-  // Slow rotation
-  let bearing = 0;
-  map.on('style.load', () => {
-    map.setConfigProperty('basemap', 'lightPreset', 'night');
-    (function rotate() {
-      bearing = (bearing + 0.04) % 360;
-      map.setBearing(bearing);
-      requestAnimationFrame(rotate);
-    })();
-  });
-});
+
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 9000); // 9s per photo, 2s crossfade overlap
+})();
 
 // ── Burger menu ───────────────────────────────────────────────────────────────
 function openMenu() {
