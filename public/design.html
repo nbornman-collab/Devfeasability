@@ -24,8 +24,8 @@
    Zero decoration. Information density IS the aesthetic.
 ════════════════════════════════════════════════════ */
 body.terminal {
-  background: #040403;
-  color: #d4d0c8;
+  background: #0a0a08;
+  color: #e8e4da;
   font-family: var(--sans);  /* Body in sans; mono reserved for numbers/metrics */
 }
 body.terminal .ds-nav {
@@ -38,7 +38,7 @@ body.terminal .theme-tab.active { background: #c8a040; color: #040403; border-ra
 
 /* Terminal section label */
 body.terminal .ds-section-label {
-  font: 600 10px var(--sans); letter-spacing: .14em; color: #3a3830;
+  font: 700 11px var(--sans); letter-spacing: .12em; color: #7a7668;
   border-bottom: 1px solid #1a1a18; padding-bottom: 8px; margin-bottom: 20px;
 }
 
@@ -51,11 +51,11 @@ body.terminal .score-big {
   font: 900 88px var(--mono); letter-spacing: -.04em; line-height: 1;
   color: #c8a040;
 }
-body.terminal .score-denom { font: 500 28px var(--mono); color: #3a3830; }
+body.terminal .score-denom { font: 400 28px var(--mono); color: #5a5850; }
 body.terminal .score-meta-title { font: 600 16px var(--sans); color: #d4d0c8; margin-bottom: 6px; letter-spacing: .01em; }
-body.terminal .score-meta-sub { font: 400 13px var(--sans); color: #5a5850; line-height: 1.7; }
+body.terminal .score-meta-sub { font: 400 14px var(--sans); color: #8a8678; line-height: 1.7; }
 body.terminal .score-verdict {
-  font: 700 10px var(--mono); letter-spacing: .12em; text-transform: uppercase;
+  font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
   padding: 8px 14px; border: 1px solid #2a7a2a; color: #40c840; background: rgba(64,200,64,.06);
 }
 
@@ -70,16 +70,16 @@ body.terminal .metric-val {
 }
 body.terminal .metric-val.accent { color: #c8a040; }
 body.terminal .metric-lbl {
-  font: 500 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: #3a3830;
+  font: 500 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: #7a7668;
 }
 
 /* Terminal: Matrix - pure data grid */
 body.terminal .matrix-wrap { border: 1px solid #1a1a18; }
 body.terminal .matrix-table { width: 100%; border-collapse: collapse; font-family: var(--sans); }
 body.terminal .matrix-table thead th {
-  padding: 8px 12px; background: #080806;
-  font: 700 9px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #3a3830;
-  text-align: center; border-right: 1px solid #141412;
+  padding: 10px 14px; background: #111110;
+  font: 700 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: #7a7668;
+  text-align: center; border-right: 1px solid #1e1e1c;
 }
 body.terminal .matrix-table thead th:first-child { text-align: left; }
 body.terminal .matrix-table thead th .th-floors {
@@ -88,11 +88,11 @@ body.terminal .matrix-table thead th .th-floors {
 body.terminal .matrix-table thead th.active-col .th-floors { color: #c8a040; }
 body.terminal .matrix-table tbody tr { border-top: 1px solid #111110; }
 body.terminal .matrix-table tbody td {
-  padding: 8px 12px; text-align: center; font: 400 12px var(--mono); color: #8a8678;
-  border-right: 1px solid #111110;
+  padding: 10px 14px; text-align: center; font: 400 14px var(--sans); color: #a8a498;
+  border-right: 1px solid #1e1e1c;
 }
 body.terminal .matrix-table tbody td:first-child {
-  text-align: left; font: 600 9px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #3a3830;
+  text-align: left; font: 600 11px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: #8a8678;
 }
 body.terminal .matrix-val { font: 700 14px var(--mono); color: #d4d0c8; }
 body.terminal .matrix-val.hero { color: #c8a040; font-size: 16px; }
@@ -102,9 +102,9 @@ body.terminal .matrix-pill {
 
 /* Terminal: Curve */
 body.terminal .curve-wrap { background: #0a0a08; border: 1px solid #1a1a18; padding: 20px; }
-body.terminal .curve-title { font: 600 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: #3a3830; }
+body.terminal .curve-title { font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: #7a7668; }
 body.terminal .curve-highlight { font: 700 22px var(--mono); color: #c8a040; letter-spacing: -.01em; }
-body.terminal .curve-highlight span { font: 400 10px var(--sans); color: #3a3830; letter-spacing: .08em; }
+body.terminal .curve-highlight span { font: 400 12px var(--sans); color: #7a7668; letter-spacing: .08em; }
 body.terminal .curve-line { stroke: #c8a040; stroke-width: 1; fill: none; }
 body.terminal .curve-fill { display: none; }
 body.terminal .curve-axis { stroke: #1a1a18; stroke-width: 1; }
@@ -118,8 +118,8 @@ body.terminal .curve-dot-ring { fill: none; stroke: #c8a040; stroke-width: 1; op
 body.terminal .slider-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: #1a1a18; border: 1px solid #1a1a18; }
 body.terminal .slider-item { padding: 16px; background: #0a0a08; }
 body.terminal .slider-val { font: 700 36px var(--mono); color: #d4d0c8; letter-spacing: -.02em; line-height: 1; margin-bottom: 2px; }
-body.terminal .slider-val span { color: #5a5850; }
-body.terminal .slider-lbl { font: 500 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: #3a3830; margin-bottom: 14px; }
+body.terminal .slider-val span { color: #7a7668; }
+body.terminal .slider-lbl { font: 500 12px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: #7a7668; margin-bottom: 14px; }
 body.terminal .slider-track { position: relative; height: 1px; background: #1a1a18; margin-bottom: 0; }
 body.terminal .slider-fill { position: absolute; top: 0; left: 0; height: 100%; background: #c8a040; transition: width .1s; }
 body.terminal .slider-thumb { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 5px; height: 10px; background: #c8a040; border-radius: 0; transition: left .1s; }
@@ -128,20 +128,20 @@ body.terminal .slider-range { position: absolute; inset: -12px 0; cursor: pointe
 /* Terminal: Factor bars */
 body.terminal .factor-list { display: flex; flex-direction: column; gap: 1px; background: #1a1a18; border: 1px solid #1a1a18; }
 body.terminal .factor-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: #0a0a08; }
-body.terminal .factor-name { font: 600 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: #3a3830; width: 120px; flex-shrink: 0; }
+body.terminal .factor-name { font: 600 12px var(--sans); letter-spacing: .06em; text-transform: uppercase; color: #8a8678; width: 120px; flex-shrink: 0; }
 body.terminal .factor-bar-wrap { flex: 1; height: 1px; background: #1a1a18; position: relative; }
 body.terminal .factor-bar-fill { position: absolute; top: 0; left: 0; height: 100%; background: #c8a040; transition: width .8s; }
 body.terminal .factor-score { font: 700 14px var(--mono); color: #c8a040; width: 40px; text-align: right; flex-shrink: 0; }
 
 /* Terminal: Pills */
 .pill-row { display: flex; flex-wrap: wrap; gap: 4px; }
-body.terminal .ds-pill { font: 600 10px var(--sans); letter-spacing: .1em; text-transform: uppercase; padding: 4px 8px; border: 1px solid; border-radius: 0; display: inline-flex; align-items: center; gap: 5px; }
+body.terminal .ds-pill { font: 600 11px var(--sans); letter-spacing: .06em; text-transform: uppercase; padding: 4px 8px; border: 1px solid; border-radius: 0; display: inline-flex; align-items: center; gap: 5px; }
 body.terminal .ds-pill.green { color: #40c840; border-color: rgba(64,200,64,.3); background: rgba(64,200,64,.05); }
 body.terminal .ds-pill.amber { color: #c8a040; border-color: rgba(200,160,64,.3); background: rgba(200,160,64,.05); }
 body.terminal .ds-pill.red { color: #c84040; border-color: rgba(200,64,64,.3); background: rgba(200,64,64,.05); }
 body.terminal .ds-pill.blue { color: #4080c8; border-color: rgba(64,128,200,.3); background: rgba(64,128,200,.05); }
 body.terminal .ds-pill.copper { color: #c8a040; border-color: rgba(200,160,64,.3); background: rgba(200,160,64,.05); }
-body.terminal .ds-pill.neutral { color: #3a3830; border-color: #1a1a18; background: transparent; }
+body.terminal .ds-pill.neutral { color: #7a7668; border-color: #2a2a28; background: transparent; }
 .pill-dot { width: 5px; height: 5px; border-radius: 0; flex-shrink: 0; }
 body.terminal .pill-dot.green { background: #40c840; }
 body.terminal .pill-dot.amber { background: #c8a040; }
