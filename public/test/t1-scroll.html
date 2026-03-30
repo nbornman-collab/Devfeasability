@@ -626,22 +626,8 @@ input[type=range].ruler-input {
       </div>
     </div>
 
-    <!-- Scenario Matrix (absorbed into Development) -->
-    <div class="reveal" style="margin-top:56px">
-      <div class="section-label">Scenario Matrix</div>
-      <div class="section-title" style="font-size:clamp(24px,3vw,36px)">Three densities. Every consequence.</div>
-      <div class="section-body">Each column is a complete picture - not just what it costs, but what it triggers.</div>
-    </div>
-
-    <!-- THE MATRIX -->
-    <div class="reveal reveal-delay-1" style="margin-top:40px">
-      <div class="matrix-wrap" id="scenario-matrix">
-        <!-- populated by JS: buildMatrix() -->
-      </div>
-    </div>
-
     <!-- Scenario detail group (tabs + consequences + cards) -->
-    <div class="reveal reveal-delay-2 scenario-group" style="margin-top:48px">
+    <div class="reveal reveal-delay-2 scenario-group" style="margin-top:56px">
       <div class="section-label">Active Scenario Detail</div>
       <div class="scenario-tabs" id="sc-tabs">
         <button class="sc-tab active" onclick="s04go(0)">Low<span class="sc-tab-floors">8 Floors</span></button>
@@ -653,6 +639,20 @@ input[type=range].ruler-input {
       <!-- Key metrics cards (inside the group) -->
       <div class="card-grid" id="sc-cards" style="margin-top:24px">
         <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- Scenario Matrix (absorbed into Development) -->
+    <div class="reveal" style="margin-top:56px">
+      <div class="section-label">Scenario Matrix</div>
+      <div class="section-title" style="font-size:clamp(24px,3vw,36px)">Three densities. Every consequence.</div>
+      <div class="section-body">Each column is a complete picture - not just what it costs, but what it triggers.</div>
+    </div>
+
+    <!-- THE MATRIX -->
+    <div class="reveal reveal-delay-1" style="margin-top:40px">
+      <div class="matrix-wrap" id="scenario-matrix">
+        <!-- populated by JS: buildMatrix() -->
       </div>
     </div>
 
