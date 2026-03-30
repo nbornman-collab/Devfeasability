@@ -121,205 +121,64 @@ body { padding-top: 0; } /* nav.css handles spacing */
 
 /* ── Alternating section themes ── */
 
-/* DARK sections: overview + architecture */
-#overview    { background: #0a0a08; }
-#architecture { background: #0a0a08; }
+/* ── Section themes ──
+   Overview    = dark (Terminal)
+   Development = dark (Terminal - numbers, matrix, sliders)
+   Architecture = light (off-white)
+   Planning    = dark (Terminal)
+── */
+#overview, #development, #planning { background: #0a0a08; }
 
-/* LIGHT sections: development + planning */
-#development,
-#planning {
-  background: #f5f4f0;
-  color: #1a1917;
-}
-
-/* Force all generic text elements in light sections */
-#development p, #development h1, #development h2, #development h3,
-#development span, #development div, #development td, #development th,
-#planning p, #planning h1, #planning h2, #planning h3,
-#planning span, #planning div, #planning td, #planning th {
-  /* Inherits from section - only override specific exceptions below */
-}
-
-/* Light section - all text */
-#development .section-label,
-#planning .section-label {
-  color: #9a9896; border-bottom-color: rgba(26,25,23,.12);
-}
-#development .section-title,
-#planning .section-title { color: #1a1917; }
-
-#development .section-body,
-#planning .section-body { color: #4a4845; }
-
-#development .t-synthesis,
-#development .t-synthesis p,
-#planning .t-synthesis,
-#planning .t-synthesis p { color: #4a4845; }
-
-#development .t-note,
-#planning .t-note { color: #7a7775; }
-
-/* Light section - metric cards */
-#development .metric-card,
-#planning .metric-card {
-  background: #fff; border-color: rgba(26,25,23,.1);
-}
-#development .metric-val,
-#planning .metric-val { color: #1a1917; }
-#development .metric-val.accent,
-#planning .metric-val.accent { color: #b8845c; }
-#development .metric-lbl,
-#planning .metric-lbl { color: #9a9896; }
-
-/* Light section - matrix */
-#development .matrix-wrap,
-#planning .matrix-wrap {
-  background: #fff; border: 1px solid rgba(26,25,23,.1);
-}
-#development .matrix-table thead th,
-#planning .matrix-table thead th {
-  background: #f0ece4; color: #9a9896; border-color: rgba(26,25,23,.08);
-}
-#development .matrix-table tbody tr,
-#planning .matrix-table tbody tr { border-color: rgba(26,25,23,.06); }
-#development .matrix-table tbody td,
-#planning .matrix-table tbody td { color: #4a4845; border-color: rgba(26,25,23,.06); }
-#development .matrix-table tbody td:first-child,
-#planning .matrix-table tbody td:first-child { color: #9a9896; }
-#development .matrix-val,
-#planning .matrix-val { color: #1a1917; }
-#development .matrix-val.hero,
-#planning .matrix-val.hero { color: #b8845c; }
-#development .matrix-table thead th.active-col,
-#planning .matrix-table thead th.active-col { border-bottom-color: #b8845c; }
-#development .matrix-table thead th .th-floors,
-#planning .matrix-table thead th .th-floors { color: #1a1917; }
-#development .matrix-table thead th.active-col .th-floors,
-#planning .matrix-table thead th.active-col .th-floors { color: #b8845c; }
-
-/* Light section - matrix pills */
-#development .matrix-pill.pill-green,
-#planning .matrix-pill.pill-green { background: rgba(22,163,74,.1); color: #16a34a; }
-#development .matrix-pill.pill-amber,
-#planning .matrix-pill.pill-amber { background: rgba(180,83,9,.1); color: #b45309; }
-#development .matrix-pill.pill-red,
-#planning .matrix-pill.pill-red { background: rgba(185,28,28,.1); color: #b91c1c; }
-
-/* Light section - sliders */
-#development .slider-item,
-#planning .slider-item {
-  background: #fff; border-color: rgba(26,25,23,.1);
-}
-#development .slider-val,
-#planning .slider-val { color: #1a1917; }
-#development .slider-val span,
-#planning .slider-val span { color: #9a9896; }
-#development .slider-lbl,
-#planning .slider-lbl { color: #9a9896; }
-#development .slider-track,
-#planning .slider-track { background: rgba(26,25,23,.1); }
-#development .slider-fill,
-#planning .slider-fill { background: #b8845c; }
-#development .slider-thumb,
-#planning .slider-thumb { background: #b8845c; border-color: #f5f4f0; }
-
-/* Light section - factor bars */
-#development .factor-bar-wrap,
-#planning .factor-bar-wrap { background: rgba(26,25,23,.08); }
-#development .factor-bar,
-#planning .factor-bar { background: #b8845c; }
-#development .factor-name,
-#planning .factor-name { color: #9a9896; }
-#development .factor-val,
-#planning .factor-val { color: #1a1917; }
-
-/* Light section - score hero, cards */
-#development .card,
-#planning .card { background: rgba(26,25,23,.04); border-color: rgba(26,25,23,.1); }
-#development .card-val,
-#planning .card-val { color: #1a1917; }
-#development .card-label,
-#planning .card-label { color: #9a9896; }
-
-/* Light section - glass/comp elements */
-#development .card,
-#planning .card {
-  background: #fff;
-  border: 1px solid rgba(26,25,23,.08);
-  backdrop-filter: none;
-}
-#development .comp-col,
-#planning .comp-col { background: #fff; }
-#development .comp-strip,
-#planning .comp-strip { background: rgba(26,25,23,.08); }
-#development .glass,
-#planning .glass { background: #fff; border-color: rgba(26,25,23,.08); backdrop-filter: none; }
-#development .scenario-group,
-#planning .scenario-group { background: #fff; border-color: rgba(26,25,23,.08); backdrop-filter: none; }
-#development .sc-tab,
-#planning .sc-tab { background: rgba(26,25,23,.04); color: #9a9896; }
-#development .sc-tab.active,
-#planning .sc-tab.active { background: rgba(26,25,23,.08); color: #b8845c; border-bottom-color: #b8845c; }
-#development .matrix-table thead th,
-#planning .matrix-table thead th { background: #ece9e2 !important; }
-#development .matrix-table tbody td:not(:first-child),
-#planning .matrix-table tbody td:not(:first-child) { background: rgba(26,25,23,.02); }
-#development .matrix-group-header td,
-#planning .matrix-group-header td { background: rgba(26,25,23,.04) !important; color: #9a9896 !important; }
-#development .rlv-block,
-#planning .rlv-block { background: rgba(184,132,92,.06); }
-
-/* Light section - mflags */
-#development .mflag,
-#planning .mflag { border-bottom-color: rgba(26,25,23,.1); }
-#development .mflag-name,
-#planning .mflag-name { color: #1a1917 !important; }
-#development .mflag-note,
-#planning .mflag-note { color: #6a6760 !important; }
-#development .mflag-status.no,
-#planning .mflag-status.no { background: rgba(26,25,23,.06); color: #9a9896; }
-#development .mflag-status.unk,
-#planning .mflag-status.unk { background: rgba(26,25,23,.04); color: #9a9896; }
-#development .mflag-status.yes,
-#planning .mflag-status.yes { background: rgba(180,83,9,.1); color: #b45309; }
-
-/* Light section - status colours (bright neons → ink versions) */
-#development .conseq-icon.green,
-#planning .conseq-icon.green { background: rgba(22,163,74,.1); color: #16a34a; }
-#development .conseq-icon.amber,
-#planning .conseq-icon.amber { background: rgba(180,83,9,.1); color: #b45309; }
-#development .conseq-icon.red,
-#planning .conseq-icon.red { background: rgba(185,28,28,.1); color: #b91c1c; }
-#development .flag-sym.ok,
-#planning .flag-sym.ok { background: rgba(22,163,74,.1); color: #16a34a; }
-#development .flag-sym.warn,
-#planning .flag-sym.warn { background: rgba(180,83,9,.1); color: #b45309; }
-#development .flag-sym.risk,
-#planning .flag-sym.risk { background: rgba(185,28,28,.1); color: #b91c1c; }
-#development .card-value.green,
-#planning .card-value.green { color: #16a34a; }
-#development .comp-val.green,
-#planning .comp-val.green { color: #16a34a; }
-
-/* Light section - return curve */
-#development .curve-wrap,
-#planning .curve-wrap { background: #fff; border-color: rgba(26,25,23,.1); }
-#development .curve-title,
-#planning .curve-title { color: #9a9896; }
-#development .curve-highlight,
-#planning .curve-highlight { color: #b8845c; }
-#development .curve-line,
-#planning .curve-line { stroke: #1a1917; }
-#development .curve-grid,
-#planning .curve-grid { stroke: rgba(26,25,23,.08); }
-#development .curve-threshold,
-#planning .curve-threshold { stroke: rgba(26,25,23,.2); }
-#development .curve-axis,
-#planning .curve-axis { stroke: rgba(26,25,23,.15); }
-#development .curve-dot,
-#planning .curve-dot { fill: #b8845c; }
-#development .curve-dot-ring,
-#planning .curve-dot-ring { stroke: #b8845c; }
+/* LIGHT section: architecture only */
+#architecture { background: #f5f4f0; color: #1a1917; }
+#architecture .section-label { color: #9a9896; }
+#architecture .section-title { color: #1a1917; }
+#architecture .section-body { color: #4a4845; }
+#architecture .t-synthesis, #architecture .t-synthesis p { color: #4a4845; }
+#architecture .t-note { color: #7a7775; }
+#architecture .card { background: #fff; border: 1px solid rgba(26,25,23,.08); backdrop-filter: none; }
+#architecture .card-val { color: #1a1917; }
+#architecture .card-label { color: #9a9896; }
+#architecture .card-value.green { color: #16a34a; }
+#architecture .glass { background: #fff; border-color: rgba(26,25,23,.08); backdrop-filter: none; }
+#architecture .scenario-group { background: #fff; border-color: rgba(26,25,23,.08); backdrop-filter: none; }
+#architecture .factor-bar-wrap { background: rgba(26,25,23,.08); }
+#architecture .factor-bar { background: #b8845c; }
+#architecture .factor-name { color: #9a9896; }
+#architecture .factor-score { color: #1a1917; }
+#architecture .factor-row { border-bottom-color: rgba(26,25,23,.1); }
+#architecture .conseq-icon.green { background: rgba(22,163,74,.1); color: #16a34a; }
+#architecture .conseq-icon.amber { background: rgba(180,83,9,.1); color: #b45309; }
+#architecture .conseq-icon.red { background: rgba(185,28,28,.1); color: #b91c1c; }
+#architecture .flag-sym.ok { background: rgba(22,163,74,.1); color: #16a34a; }
+#architecture .flag-sym.warn { background: rgba(180,83,9,.1); color: #b45309; }
+#architecture .flag-sym.risk { background: rgba(185,28,28,.1); color: #b91c1c; }
+#architecture .matrix-wrap { background: #fff; border: 1px solid rgba(26,25,23,.1); }
+#architecture .matrix-table thead th { background: #ece9e2 !important; color: #9a9896; }
+#architecture .matrix-table tbody td { color: #4a4845; border-color: rgba(26,25,23,.06); }
+#architecture .matrix-table tbody td:first-child { color: #9a9896; }
+#architecture .matrix-val { color: #1a1917; }
+#architecture .matrix-val.hero { color: #b8845c; }
+#architecture .precedent { border-bottom-color: rgba(26,25,23,.1); }
+#architecture .precedent-name { color: #1a1917; }
+#architecture .precedent-detail { color: #6a6760; }
+#architecture .comp-col { background: #fff; }
+#architecture .comp-strip { background: rgba(26,25,23,.08); }
+#architecture .comp-key { color: #6a6760; }
+#architecture .comp-val { color: #1a1917; }
+#architecture .comp-col-title { color: #9a9896; }
+#architecture .curve-wrap { background: #fff; border-color: rgba(26,25,23,.1); }
+#architecture .curve-title { color: #9a9896; }
+#architecture .curve-highlight { color: #b8845c; }
+#architecture .curve-line { stroke: #1a1917; }
+#architecture .curve-grid { stroke: rgba(26,25,23,.08); }
+#architecture .curve-threshold { stroke: rgba(26,25,23,.2); }
+#architecture .curve-axis { stroke: rgba(26,25,23,.15); }
+#architecture .curve-dot { fill: #b8845c; }
+#architecture .curve-dot-ring { stroke: #b8845c; }
+#architecture .proforma td { color: #4a4845; }
+#architecture .proforma tr.bold td { color: #1a1917; }
+#architecture .proforma tr.sep td { border-top-color: rgba(26,25,23,.1); }
 
 /* -- HERO (section 0) -- */
 .hero-section { min-height: 100vh; position: relative; overflow: hidden; padding: 0; scroll-snap-align: start; }
@@ -364,19 +223,7 @@ body { padding-top: 0; } /* nav.css handles spacing */
 .section-label { font: 700 20px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 14px; }
 .section-title { font: 400 clamp(28px,4vw,48px)/1.1 var(--display); color: var(--ink); letter-spacing: -.02em; margin-bottom: 20px; }
 .section-body { font: 400 20px/1.9 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
-/* Light sections override section text explicitly */
-#development .section-body, #planning .section-body { color: #4a4845; }
-#development .factor-row, #planning .factor-row { border-bottom-color: rgba(26,25,23,.1); }
-#development .proforma td, #planning .proforma td { color: #4a4845; }
-#development .proforma tr.bold td, #planning .proforma tr.bold td { color: #1a1917; }
-#development .proforma tr.sep td, #planning .proforma tr.sep td { border-top-color: rgba(26,25,23,.1); }
-#development .precedent, #planning .precedent { border-bottom-color: rgba(26,25,23,.1); }
-#development .precedent-name, #planning .precedent-name { color: #1a1917; }
-#development .precedent-detail, #planning .precedent-detail { color: #6a6760; }
-#development .comp-row, #planning .comp-row { border: none; }
-#development .comp-key, #planning .comp-key { color: #6a6760; }
-#development .comp-val, #planning .comp-val { color: #1a1917; }
-#development .comp-col-title, #planning .comp-col-title { color: #9a9896; }
+
 
 /* -- DATA CARDS -- */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-top: 40px; }
