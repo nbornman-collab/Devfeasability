@@ -452,6 +452,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .chip.cons  { background: #fef3c7; color: #b45309; }
 .chip.bor   { background: var(--bg2); color: var(--ink3); }
 .chip.ptal  { background: var(--bg2); color: var(--ink2); }
+.chip.listed { background: rgba(22,163,74,.1); color: #16a34a; border-color: rgba(22,163,74,.2); font-weight: 600; }
+.chip.mot { background: var(--bg2); color: var(--ink2); }
+.chip.mot-4, .chip.mot-5 { background: rgba(239,68,68,.1); color: #dc2626; border-color: rgba(239,68,68,.2); }
+.chip.mot-3 { background: rgba(245,158,11,.1); color: #b45309; border-color: rgba(245,158,11,.2); }
+.chip.mot-2 { background: rgba(245,158,11,.07); color: var(--ink3); }
 /* Borough colour chips - prominent */
 .chip.bor-southwark,
 .chip.bor-city,
@@ -1038,7 +1043,34 @@ function normaliseSite(s, idx) {
     owner: s.owner||null,
     planning: s.planning||null,
     hmlr: s.hmlr||null,
+    onMarket: !!(s.on_market),
+    listingUrl: s.listing_url||null,
+    listingAgent: s.listing_agent||null,
+    motScore: computeMotivatedSeller(s),
   };
+}
+
+function computeMotivatedSeller(s) {
+  // Signals: charity/trust/estate owner, public body, overseas/non-London address,
+  // long HMLR hold, dissolved company, vacant/brownfield
+  let score = 0;
+  const owner = (s.owner||'').toLowerCase();
+
+  // Owner type signals
+  if (/charity|charitable|trust|foundation/i.test(owner)) score += 1;  // non-core asset for charities
+  if (/estate|probate|executor|deceased/i.test(owner)) score += 2;      // strong signal
+  if (/dissolved|struck off|liquidat/i.test(owner)) score += 2;         // very strong
+  if (/council|borough|nhs|crown|authority|government/i.test(owner)) score += 1; // public disposals
+  if (/pension|fund|investment|reit|properties limited|group limited/i.test(owner)) score += 1; // institutional = transactional
+
+  // Site condition
+  if (s.brownfield) score += 1;
+  if (s.offMarket === 'off-market' || s.offMarket === 'vacant') score += 1;
+
+  // HMLR hold duration (if available)
+  if (s.hmlr_reg_year && s.hmlr_reg_year < 2005) score += 1; // 20+ year hold
+
+  return Math.min(5, Math.max(0, Math.round(score)));
 }
 
 // ── Load data ─────────────────────────────────────────────────────────────────
@@ -1165,7 +1197,10 @@ function render() {
     const vc = verdictClass(s.score);
     const vl = verdictLabel(s.score);
     const bc = scoreColor(s.score);
+    const motDot = s.motScore >= 4 ? '🔴' : s.motScore >= 2 ? '🟡' : '';
     const otherChips = [
+      s.onMarket ? `<span class="chip listed"><a href="${s.listingUrl||'#'}" target="_blank" onclick="event.stopPropagation()" style="color:inherit;text-decoration:none">Listed${s.listingAgent?' · '+s.listingAgent:''}</a></span>` : '',
+      s.motScore >= 2 ? `<span class="chip mot mot-${s.motScore}">${motDot} Seller ${s.motScore}/5</span>` : '',
       s.inOA  ? '<span class="chip oa">OA</span>' : '',
       s.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
       s.inCons? '<span class="chip cons">Conservation</span>' : '',
