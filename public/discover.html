@@ -1030,11 +1030,17 @@ function normaliseSite(s, idx) {
   const nia = plotM2 * 0.78 * 0.42 * maxFloors;
   const gdvEst = (nia * erv / 0.0475 / 1e6).toFixed(1);
   const planScore = s.mom || (inOA ? 8.5 : inCAZ ? 7.5 : 6.5);
-  const heritTier = s.her || (inCons ? 'navigable' : 'manageable');
+  // Heritage tier: use NHLE-graded tier if available, else derive from conservation area
+  const nhle_tier = (s.nhle_tier || '').toLowerCase();
+  const heritTier = s.her ||
+    (nhle_tier === 'blocking' ? 'blocking' :
+     nhle_tier === 'navigable' ? 'navigable' :
+     nhle_tier === 'manageable' ? 'manageable' :
+     inCons ? 'navigable' : 'manageable');
   return {
     id: idx, name: s.name||s.address, address: s.address||s.name, borough,
     lat: parseFloat(s.lat)||0, lng: parseFloat(s.lng)||0,
-    score: parseInt(s.score)||0, verified: !!s.verified, t1: s.t1||null,
+    score: Math.max(0, (parseInt(s.score)||0) - (s.nhle_score_penalty||0)), verified: !!s.verified, t1: s.t1||null,
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
     ptal, maxFloors, plotM2, gdvEst, planScore, heritTier,
     useType: s.use || inferUseType(s),

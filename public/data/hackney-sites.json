@@ -113,7 +113,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "50-60 Commercial Street",
@@ -184,7 +188,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Worship Street EC2A",
@@ -254,7 +262,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Shoreditch High Street South",
@@ -452,7 +464,11 @@
         ]
       ],
       "inspire_area_ratio": 0.41,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Sun Street / Finsbury Square Fringe",
@@ -522,7 +538,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Curtain Road Warehouse District",
@@ -632,7 +652,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Hoxton Square Fringe",
@@ -754,7 +778,11 @@
         ]
       ],
       "inspire_area_ratio": 0.03,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Pitfield Street Industrial",
@@ -1383,7 +1411,11 @@
         ]
       ],
       "inspire_area_ratio": 4.32,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Eagle Wharf East",
@@ -1596,7 +1628,11 @@
         ]
       ],
       "inspire_area_ratio": 1.06,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "St Leonards Hospital. Hoxton Street, London (Mixed Non-residential)",
@@ -1782,7 +1818,11 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "130 Kingsland Road and site to the rear 130A Kingsland Road (Mixed Residential/Non-Residential)",
@@ -2032,7 +2072,11 @@
         ]
       ],
       "inspire_area_ratio": 0.25,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Kingsland Road Industrial Corridor",
@@ -2189,7 +2233,11 @@
         ]
       ],
       "inspire_area_ratio": 0.05,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Eagle Wharf Road (Mixed Residential/Non-Residential)",
@@ -2403,7 +2451,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "40-43 Andrews Road and Ash Grove Bus Garage (Mixed Residential/Non-Residential)",
@@ -2576,7 +2628,11 @@
         ]
       ],
       "inspire_area_ratio": 0.04,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "51-61 Mare Street (Mixed Residential/Non-Residential)",
@@ -2721,7 +2777,11 @@
         ]
       ],
       "inspire_area_ratio": 0.03,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Former Rose Lipman Library and Environs, Downham Road (Mixed Residential/Non-Residential)",
@@ -2934,7 +2994,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "164-170 Mare Street (Mixed Residential/Non-Residential)",
@@ -3132,7 +3196,11 @@
         ]
       ],
       "inspire_area_ratio": 0.41,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "27-38 Well Street (Lidl) (Mixed Residential/Non-Residential)",
@@ -3326,7 +3394,11 @@
         ]
       ],
       "inspire_area_ratio": 0.15,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "182 Mare Street (London College of Fashion) (Mixed Residential/Non-Residential)",
@@ -3524,7 +3596,11 @@
         ]
       ],
       "inspire_area_ratio": 0.11,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Florfield Road Cluster (Mixed Residential/Non-Residential)",
@@ -3781,7 +3857,11 @@
         ]
       ],
       "inspire_area_ratio": 0.36,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Tesco Metro, Well Street (Mixed Residential/Non-Residential)",
@@ -4106,7 +4186,11 @@
         ]
       ],
       "inspire_area_ratio": 0.11,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Former CLR James Library, 16-22 Dalston Lane, 62 Beechwood Road (Mixed Residential/Non-Residential)",
@@ -4291,7 +4375,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "1, 3, 5, 7 Dalston Lane, (Dalston Western Curve), & 1-7 Ashwin Street (Mixed Residential/Non-Residential)",
@@ -4513,7 +4601,11 @@
         ]
       ],
       "inspire_area_ratio": 0.29,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of \u00e2\u20ac\u02dceastern curve\u00e2\u20ac\u2122 (Mixed Residential/Non-Residential)",
@@ -4763,7 +4855,11 @@
         ]
       ],
       "inspire_area_ratio": 0.39,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "36-42 Kingsland High Street (currently McDonalds) (Mixed Residential/Non-Residential)",
@@ -4908,7 +5004,11 @@
         ]
       ],
       "inspire_area_ratio": 0.31,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "333-337 Mare Street (Iceland Foods) and 231-237 Graham Road (Mixed Residential/Non-Residential)",
@@ -5073,7 +5173,11 @@
         ]
       ],
       "inspire_area_ratio": 0.04,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "55 Morning Lane (Mixed Residential/Non-Residential)",
@@ -5258,7 +5362,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Kingsland Shopping Centre (Mixed Residential/Non-Residential)",
@@ -5439,7 +5547,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Hackney Central Overground Station and Car Park (Mixed Non-residential)",
@@ -5569,7 +5681,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "339-357 Mare Street, 6-18 Amhurst Road (Marks and Spencer) (Mixed Residential/Non-Residential)",
@@ -5727,7 +5843,11 @@
         ]
       ],
       "inspire_area_ratio": 0.05,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Ridley Road (Mixed Non-residential)",
@@ -5892,7 +6012,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Travis Perkins, 111 Dalston Lane (Mixed Residential/Non-Residential)",
@@ -6069,7 +6193,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Clapton Bus Garage (Mixed Residential/Non-Residential)",
@@ -6478,7 +6606,11 @@
         ]
       ],
       "inspire_area_ratio": 0.27,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "230 Dalston Lane and Hackney Downs Station Entrance (Mixed Residential/Non-Residential)",
@@ -6620,7 +6752,11 @@
         ]
       ],
       "inspire_area_ratio": 0.04,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Birkbeck Mews (Mixed Residential/Non-Residential)",
@@ -6741,7 +6877,11 @@
         ]
       ],
       "inspire_area_ratio": 0.06,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Lower Clapton Health Centre (Mixed Residential/Non-Residential)",
@@ -7106,7 +7246,11 @@
         ]
       ],
       "inspire_area_ratio": 1.1,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Tram Depot, 38-40 Upper Clapton Road (Mixed Residential/Non-Residential)",
@@ -7575,7 +7719,11 @@
         ]
       ],
       "inspire_area_ratio": 0.45,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "71-73 Lordship Road (St Mary\u00e2\u20ac\u2122s Lodge) (Mixed Residential/Non-Residential)",
@@ -8104,7 +8252,11 @@
         ]
       ],
       "inspire_area_ratio": 3.63,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Yard Buildings, 318 Green Lanes (Mixed Residential/Non-Residential)",
@@ -8234,7 +8386,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     }
   ]
 }

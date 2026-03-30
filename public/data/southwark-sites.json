@@ -160,7 +160,11 @@
         ]
       ],
       "inspire_area_ratio": 1.75,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "24 Southwark Street",
@@ -407,7 +411,18 @@
         ]
       ],
       "inspire_area_ratio": 2.19,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [
+        {
+          "ref": "471343",
+          "name": "The Hop Exchange",
+          "grade": "II",
+          "dist_m": 7
+        }
+      ],
+      "nhle_tier": "NAVIGABLE",
+      "nhle_score_penalty": 15
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
@@ -521,7 +536,11 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -671,7 +690,11 @@
         ]
       ],
       "inspire_area_ratio": 0.19,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Tower Workshops",
@@ -766,7 +789,11 @@
         ]
       ],
       "inspire_area_ratio": 0.03,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Kinglake Street Garages",
@@ -953,7 +980,11 @@
         ]
       ],
       "inspire_area_ratio": 1.88,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
@@ -1070,7 +1101,11 @@
         ]
       ],
       "inspire_area_ratio": 0.12,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Salisbury estate car park",
@@ -1150,7 +1185,11 @@
         ]
       ],
       "inspire_area_ratio": 0.1,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Croft Street Depot",
@@ -1328,7 +1367,11 @@
         ]
       ],
       "inspire_area_ratio": 0.23,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Abellio Walworth Depot",
@@ -1427,7 +1470,11 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -1548,7 +1595,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -2030,7 +2081,11 @@
         ]
       ],
       "inspire_area_ratio": 7.14,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Camberwell Bus Garage",
@@ -2298,7 +2353,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -2343,7 +2402,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Burgess Business Park",
@@ -2390,7 +2453,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Blackpool Road Business Park",
@@ -2492,7 +2559,11 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -2594,7 +2665,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -2701,7 +2776,11 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesbury Phase 2",
@@ -2745,7 +2824,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesbury Phase 3",
@@ -2870,7 +2953,11 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesbury Phase 2",
@@ -2914,7 +3001,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "123 Grove Park",
@@ -3114,7 +3205,11 @@
         ]
       ],
       "inspire_area_ratio": 0.14,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -3238,7 +3333,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesbury Plot 18",
@@ -3362,7 +3461,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesbury Site 7",
@@ -3468,7 +3571,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
@@ -3515,7 +3622,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -3635,7 +3746,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "62-67 Park Street",
@@ -3769,7 +3884,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
@@ -3923,7 +4042,11 @@
         ]
       ],
       "inspire_area_ratio": 0.1,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -4023,7 +4146,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
@@ -4068,7 +4195,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "London Bridge Health Cluster",
@@ -4177,7 +4308,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -4248,7 +4383,11 @@
         ]
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Landmark Court",
@@ -4332,7 +4471,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
@@ -4508,7 +4651,11 @@
         ]
       ],
       "inspire_area_ratio": 0.23,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Mandela Way",
@@ -4635,7 +4782,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -4737,7 +4888,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
@@ -4863,7 +5018,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -4954,7 +5113,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Bricklayers Arms",
@@ -5211,7 +5374,11 @@
         ]
       ],
       "inspire_area_ratio": 0.1,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -5445,7 +5612,11 @@
         ]
       ],
       "inspire_area_ratio": 0.03,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "636 Old Kent Road",
@@ -5622,7 +5793,11 @@
         ]
       ],
       "inspire_area_ratio": 1.22,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Marlborough Grove and St James\u2019s Road",
@@ -5674,7 +5849,11 @@
         ]
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -5800,7 +5979,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "4/12 Albany Road",
@@ -6030,7 +6213,11 @@
         ]
       ],
       "inspire_area_ratio": 4.12,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "200 Great Dover Street",
@@ -6112,7 +6299,11 @@
         ]
       ],
       "inspire_area_ratio": 0.09,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "7-14 Great Dover Street",
@@ -6230,7 +6421,11 @@
         ]
       ],
       "inspire_area_ratio": 0.03,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -6307,7 +6502,18 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [
+        {
+          "ref": "471341",
+          "name": "No given name",
+          "grade": "II",
+          "dist_m": 4
+        }
+      ],
+      "nhle_tier": "NAVIGABLE",
+      "nhle_score_penalty": 15
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
@@ -6402,7 +6608,11 @@
         ]
       ],
       "inspire_area_ratio": 0.03,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
@@ -6705,7 +6915,11 @@
         ]
       ],
       "inspire_area_ratio": 3.9,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aylesbury Phase 1",
@@ -6782,7 +6996,18 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [
+        {
+          "ref": "471341",
+          "name": "No given name",
+          "grade": "II",
+          "dist_m": 4
+        }
+      ],
+      "nhle_tier": "NAVIGABLE",
+      "nhle_score_penalty": 15
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
@@ -6883,7 +7108,11 @@
         ]
       ],
       "inspire_area_ratio": 0.05,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Newington Triangle",
@@ -6930,7 +7159,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
@@ -7028,7 +7261,11 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "49 Lomond Grove",
@@ -7146,7 +7383,11 @@
         ]
       ],
       "inspire_area_ratio": 0.1,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "99 Lomond Grove",
@@ -7308,7 +7549,11 @@
         ]
       ],
       "inspire_area_ratio": 0.18,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -7412,7 +7657,11 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -7798,7 +8047,11 @@
         ]
       ],
       "inspire_area_ratio": 3.45,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "London Fire and Emergency Planning Authority",
@@ -7843,7 +8096,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "London Southbank University Quarter",
@@ -8304,7 +8561,11 @@
         ]
       ],
       "inspire_area_ratio": 0.12,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -8430,7 +8691,11 @@
         ]
       ],
       "inspire_area_ratio": 0.09,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "1-5 Westminster Bridge Road",
@@ -8521,7 +8786,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -8619,7 +8888,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -8668,7 +8941,11 @@
         ]
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -8755,7 +9032,18 @@
         ]
       ],
       "inspire_area_ratio": 0.07,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [
+        {
+          "ref": "471158",
+          "name": "Former clays printing works",
+          "grade": "II",
+          "dist_m": 10
+        }
+      ],
+      "nhle_tier": "NAVIGABLE",
+      "nhle_score_penalty": 15
     },
     {
       "name": "63-85 Newington Causeway",
@@ -9026,7 +9314,11 @@
         ]
       ],
       "inspire_area_ratio": 0.6,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -9077,7 +9369,11 @@
         ]
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Denmark Hill Campus East",
@@ -9124,7 +9420,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Camberwell Green Magistrates Court",
@@ -9538,7 +9838,11 @@
         ]
       ],
       "inspire_area_ratio": 2.2,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Chambers Wharf",
@@ -9587,7 +9891,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Bath Trading Estate",
@@ -9940,7 +10248,11 @@
         ]
       ],
       "inspire_area_ratio": 0.4,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Goose Green Trading Estate",
@@ -10063,7 +10375,11 @@
         ]
       ],
       "inspire_area_ratio": 0.08,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -10382,7 +10698,11 @@
         ]
       ],
       "inspire_area_ratio": 1.06,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -10839,7 +11159,11 @@
         ]
       ],
       "inspire_area_ratio": 0.24,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -11077,7 +11401,11 @@
         ]
       ],
       "inspire_area_ratio": 0.04,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Former Southern Railway Stables",
@@ -11513,7 +11841,11 @@
         ]
       ],
       "inspire_area_ratio": 3.41,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -11616,7 +11948,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Rotherhite Gasometer",
@@ -11728,7 +12064,11 @@
         ]
       ],
       "inspire_area_ratio": 0.64,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Camberwell Station",
@@ -11828,7 +12168,11 @@
         ]
       ],
       "inspire_area_ratio": 0.03,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -11876,7 +12220,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -12100,7 +12448,11 @@
         ]
       ],
       "inspire_area_ratio": 0.22,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Valmar Trading Estate",
@@ -12193,7 +12545,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -12241,7 +12597,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -12337,7 +12697,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "330-344 Walworth Road",
@@ -12437,7 +12801,11 @@
         ]
       ],
       "inspire_area_ratio": 0.05,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -12693,7 +13061,11 @@
         ]
       ],
       "inspire_area_ratio": 1.18,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -12805,7 +13177,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
@@ -12857,7 +13233,11 @@
         ]
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
@@ -13220,7 +13600,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -13448,7 +13832,11 @@
         ]
       ],
       "inspire_area_ratio": 0.72,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
@@ -13580,7 +13968,11 @@
         ]
       ],
       "inspire_area_ratio": 0.02,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
@@ -13664,7 +14056,11 @@
         ]
       ],
       "inspire_area_ratio": 0.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -13998,7 +14394,11 @@
         ]
       ],
       "inspire_area_ratio": 1.45,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     }
   ],
   "total": 93

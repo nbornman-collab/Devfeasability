@@ -335,7 +335,11 @@
         ]
       ],
       "inspire_area_ratio": 7.55,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -484,7 +488,11 @@
         ]
       ],
       "inspire_area_ratio": 10.83,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -733,7 +741,11 @@
         ]
       ],
       "inspire_area_ratio": 5.17,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "10 Trinity Square",
@@ -894,7 +906,18 @@
         ]
       ],
       "inspire_area_ratio": 1.6,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [
+        {
+          "ref": "1079138",
+          "name": "FORMER PORT OF LONDON AUTHORITY BUILDING",
+          "grade": "II*",
+          "dist_m": 7
+        }
+      ],
+      "nhle_tier": "BLOCKING",
+      "nhle_score_penalty": 35
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -1150,7 +1173,11 @@
         ]
       ],
       "inspire_area_ratio": 2.76,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Barts Square, Little Britain",
@@ -1394,7 +1421,11 @@
         ]
       ],
       "inspire_area_ratio": 0.64,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -1432,7 +1463,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Crown Place, Earl Street",
@@ -1470,7 +1505,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -1602,7 +1641,11 @@
         ]
       ],
       "inspire_area_ratio": 0.33,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -1726,7 +1769,18 @@
         ]
       ],
       "inspire_area_ratio": 0.59,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [
+        {
+          "ref": "1252467",
+          "name": "Minories 41 -47 Ibex House",
+          "grade": "II",
+          "dist_m": 49
+        }
+      ],
+      "nhle_tier": "MANAGEABLE",
+      "nhle_score_penalty": 5
     },
     {
       "name": "Land at Royal Mint Street",
@@ -1834,7 +1888,11 @@
         ]
       ],
       "inspire_area_ratio": 0.38,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -1872,7 +1930,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -1976,7 +2038,11 @@
         ]
       ],
       "inspire_area_ratio": 1.55,
-      "inspire_quality": "good"
+      "inspire_quality": "good",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "100 Leadenhall Street",
@@ -2588,7 +2654,11 @@
         ]
       ],
       "inspire_area_ratio": 3.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Fleet Street East, EC4",
@@ -2817,7 +2887,11 @@
         ]
       ],
       "inspire_area_ratio": 4.6,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -2889,7 +2963,18 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [
+        {
+          "ref": "1064641",
+          "name": "BRIDGE OR VIADUCT OVER FARRINGDON STREET",
+          "grade": "II",
+          "dist_m": 37
+        }
+      ],
+      "nhle_tier": "MANAGEABLE",
+      "nhle_score_penalty": 5
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -3038,7 +3123,11 @@
         ]
       ],
       "inspire_area_ratio": 0.2,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Moorgate Station Oversite",
@@ -3103,7 +3192,11 @@
         ]
       ],
       "inspire_area_ratio": 0.01,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Smithfield Market, EC1",
@@ -3141,7 +3234,18 @@
         "article4": false
       },
       "nhle_count": 1,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [
+        {
+          "ref": "1285241",
+          "name": "West Smithfield East Building of Central Market",
+          "grade": "II*",
+          "dist_m": 10
+        }
+      ],
+      "nhle_tier": "BLOCKING",
+      "nhle_score_penalty": 35
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -3178,7 +3282,11 @@
         "article4": false
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -3383,7 +3491,11 @@
         ]
       ],
       "inspire_area_ratio": 9.0,
-      "inspire_quality": "suspect"
+      "inspire_quality": "suspect",
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -3423,7 +3535,11 @@
         ]
       },
       "nhle_count": 0,
-      "nhle_grades": []
+      "nhle_grades": [],
+      "nhle_graded": true,
+      "nhle_listed": [],
+      "nhle_tier": "CLEAN",
+      "nhle_score_penalty": 0
     }
   ],
   "borough": "City of London",
