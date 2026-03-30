@@ -835,3 +835,73 @@ After reset: grep audit across all files flagging opacity < 0.65 on dark backgro
 
 ### Ghosted black standard (approved 2026-03-27)
 All UI overlays on maps use `rgba(0,0,0,.65)` + `1px solid rgba(255,255,255,.1)` - NO glass/blur effects.
+
+---
+
+## SCORING ENGINE ARCHITECTURE (locked 2026-03-30)
+
+### Principle: Split engine in two
+- **Hard Rules (Feasibility Envelope)** → caps what is consentable. Non-negotiable.
+- **Soft Signals (Scoring Layer)** → ranks attractiveness within that envelope.
+- Soft signals (OA, precedent) CANNOT override hard contextual limits.
+
+### Context Era Tiers (classify dominant context within 150m)
+- **Tier A**: Pre-1919 (Georgian/Victorian/Edwardian) → primary constraint trigger
+- **Tier B**: 1920–1945 (interwar, mansion blocks) → mid-rise intensification
+- **Tier C**: 1945–1985 (post-war commercial/resi) → full redevelopment viable
+- **Tier D**: 1985+ (modern commercial) → optimisation play
+
+### Urban Typology Overrides (overrides era when applicable)
+- **Tower Cluster**: ≥3 buildings >20F within 250m, no major barrier → remove height caps
+- **City Core seeds**: EC2A, EC2N, EC3A, EC3V (validate against building dataset)
+- **Emerging tall zones**: South Bank pockets, Stratford, Croydon, Vauxhall/Nine Elms
+- **Fine Grain / Heritage Fabric**: strict height caps apply
+
+### Hard Rules by Era
+
+**Rule Set 1: Heritage-Dominant Context (Tier A dominant)**
+- Trigger: conservation area OR nhle_count > 0 within 30m OR 60%+ pre-1919 within 120m
+- Max uplift: existing + 2F to + 3F
+- Massing: setback mandatory above eaves
+- Tower: PROHIBITED unless Tower Cluster override
+- Score cap: 65/100
+
+**Rule Set 2: Mixed Historic Context (Tier A/B blend)**
+- Trigger: inCons = true OR nhle_count > 0 within 150m
+- Max uplift: existing + 3F to + 5F
+- Taller only if not visible in key views
+- Score cap: 75/100
+
+**Rule Set 3: Interwar / Mansion Block (Tier B)**
+- Mid-rise intensification viable
+- Max height: +4 to +6F
+- No hard score cap
+
+**Rule Set 4: Post-War / Commercial (Tier C)**
+- Full redevelopment viable
+- Height driven by precedent + PTAL + policy
+- Current model performs well here
+
+**Rule Set 5: Tower Cluster Override**
+- ≥3 buildings >20F within 250m AND no major barrier
+- Remove era height caps → relative height logic
+- Score cap lifted
+
+### Kill Switches (score cannot exceed threshold)
+1. **Heritage-Dominant Kill Switch**: inCons + nhle_count > 0 within 30m → score ≤ 65
+2. **Fabric Sensitivity Kill Switch**: Tier A context + no cluster override → score ≤ 70
+3. **Precedent Validity Check**: tall precedent only valid if typology matches (cleared commercial ≠ terrace fabric, river frontage ≠ inland)
+
+### Precedent Signal Rules
+- 0–100m + typology match → strong precedent (downgrade constraint by one tier)
+- 100–250m + typology match → weak precedent (minor score uplift only)
+- 250m+ → negligible
+- One Blackfriars does NOT justify tower in Victorian terrace fabric regardless of distance
+
+### 196BR Correct Assessment (reference case)
+- Context: Tier A (Victorian + Georgian terraces)
+- Sensitivity: High
+- Precedent: One Blackfriars = INVALID (typology mismatch + river separation)
+- Max height: existing + 2–3 storeys
+- Tower: blocked
+- Score ceiling: ~65–70, NOT 91
