@@ -225,6 +225,14 @@ body { padding-top: 0; } /* nav.css handles spacing */
 .section-body { font: 400 20px/1.9 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
 
 
+/* -- DEV SECTION TWO-COL -- */
+.dev-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.dev-col-left { }
+.dev-col-right { padding: 28px 32px; }
+@media (max-width: 900px) {
+  .dev-two-col { grid-template-columns: 1fr; gap: 32px; }
+}
+
 /* -- DATA CARDS -- */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; margin-top: 40px; }
 .scenario-group { background: rgba(255,255,255,.04); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.08);
@@ -603,23 +611,18 @@ input[type=range].ruler-input {
 <!-- SECTION 1: DEVELOPMENT OVERVIEW -->
 <section class="section" id="development">
   <div class="section-inner">
-    <div class="reveal">
-      <div class="section-label">01 - Development</div>
-      <div class="section-title" id="dev-title">A retain-and-adapt opportunity in the heart of Bankside</div>
-    </div>
-    <div class="reveal reveal-delay-1">
-      <div class="section-body" id="dev-synthesis"></div>
-    </div>
 
-    <!-- Existing / Proposed / Delta -->
-    <div class="comp-strip reveal reveal-delay-2" id="comp-strip">
-      <!-- populated by JS -->
-    </div>
-
-    <!-- Factor scores -->
-    <div class="glass reveal reveal-delay-3" style="margin-top:48px">
-      <div class="section-label">Intelligence Factors</div>
-      <div class="factor-grid" id="factor-bars"></div>
+    <!-- Two-col: synthesis left, factors right -->
+    <div class="dev-two-col reveal">
+      <div class="dev-col-left">
+        <div class="section-label">01 - Development</div>
+        <div class="section-title" id="dev-title">A retain-and-adapt opportunity in the heart of Bankside</div>
+        <div class="section-body" id="dev-synthesis" style="margin-top:20px"></div>
+      </div>
+      <div class="dev-col-right glass">
+        <div class="section-label">Intelligence Factors</div>
+        <div class="factor-grid" id="factor-bars"></div>
+      </div>
     </div>
 
     <!-- Motivated Seller -->
