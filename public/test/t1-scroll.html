@@ -230,6 +230,18 @@ body { padding-top: 0; } /* nav.css handles spacing */
 .scenario-group { background: rgba(255,255,255,.04); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.08);
   border-radius: 20px; padding: 32px; }
 
+/* -- SCENARIO GROUP COMPACT (fits block on one screen) -- */
+.scenario-group .card-grid { gap: 12px; margin-top: 16px; }
+.scenario-group .card { padding: 18px 20px; border-radius: 10px; }
+.scenario-group .card-label { font-size: 11px; margin-bottom: 4px; }
+.scenario-group .card-value { font-size: clamp(20px,2.5vw,28px); }
+.scenario-group .card-sub { font-size: 13px; margin-top: 4px; }
+.scenario-group .conseq-row { padding: 6px 0; }
+.scenario-group .conseq-text { font-size: 14px; }
+.scenario-group .conseq-icon { width: 22px; height: 22px; font-size: 12px; }
+.scenario-group .sc-tab { padding: 14px 12px; }
+.scenario-group .sc-tab-floors { font-size: 14px; margin-top: 3px; }
+
 /* Scenario Popup Modal */
 .sc-modal-scrim { position: fixed; inset: 0; z-index: 500; background: rgba(17,17,16,.6); backdrop-filter: blur(8px);
   display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity .35s; }
