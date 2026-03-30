@@ -43,7 +43,9 @@
           "Central Activities Zone"
         ]
       },
-      "heritTier": "clean"
+      "heritTier": "clean",
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "24 Southwark Street",
@@ -109,7 +111,9 @@
           "Central Activities Zone",
           "Protected shopping frontage SF8: Borough High Street"
         ]
-      }
+      },
+      "nhle_count": 1,
+      "nhle_grades": []
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
@@ -154,7 +158,9 @@
         "article4_names": [
           "Peckham Major Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -199,7 +205,9 @@
         "article4_names": [
           "Site allocation NSP39: Kwik Fit and Gibbs & Dandy, Grove Vale"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Tower Workshops",
@@ -245,7 +253,9 @@
         "article4_names": [
           "Site allocation NSP14: Tower Workshops"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Kinglake Street Garages",
@@ -291,7 +301,9 @@
           "Site allocation NSP58: Mandela Way",
           "Old Kent Road North District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
@@ -339,7 +351,9 @@
           "Old Kent Road North District Town Centre",
           "Protected shopping frontage SF24: Old Kent Road, East Street and Dunton Road"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Salisbury estate car park",
@@ -382,7 +396,9 @@
         "conservation_area": true,
         "conservation_area_name": "Cobourg Road",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Croft Street Depot",
@@ -427,7 +443,9 @@
         "article4_names": [
           "Site allocation NSP68: Sandgate Street and Verney Road"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Abellio Walworth Depot",
@@ -469,7 +487,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -537,7 +557,9 @@
           "Site allocation NSP72: 684-698 Old Kent Road (Kwikfit garage)",
           "Old Kent Road South District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -606,7 +628,9 @@
           "Site allocation NSP38:l The Grove Tavern, 520 Lordship Lane",
           "The Grove Tavern"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Camberwell Bus Garage",
@@ -653,7 +677,9 @@
           "Camberwell District Town Centre",
           "Site allocation NSP28: Camberwell Bus Garage"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -696,7 +722,9 @@
         "conservation_area": true,
         "conservation_area_name": "Graham Road and Mapledene",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Burgess Business Park",
@@ -741,7 +769,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Blackpool Road Business Park",
@@ -786,7 +816,9 @@
           "Central Activities Zone",
           "Site allocation NSP48: London Southbank University Quarter"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -831,7 +863,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -877,7 +911,9 @@
         "article4_names": [
           "Site allocation NSP79: St Olav's Business Park, Lower Road"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesbury Phase 2",
@@ -919,7 +955,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesbury Phase 3",
@@ -963,7 +1001,9 @@
         "conservation_area": true,
         "conservation_area_name": "Liverpool Grove",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesbury Phase 2",
@@ -1005,7 +1045,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "123 Grove Park",
@@ -1068,7 +1110,9 @@
         "article4_names": [
           "Site allocation NSP34: 123 Grove Park"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -1111,7 +1155,9 @@
         "conservation_area": true,
         "conservation_area_name": "Liverpool Grove",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesbury Plot 18",
@@ -1154,7 +1200,9 @@
         "conservation_area": true,
         "conservation_area_name": "Liverpool Grove",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesbury Site 7",
@@ -1211,7 +1259,9 @@
           "Bankside and Borough District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
@@ -1256,7 +1306,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -1323,7 +1375,9 @@
         "article4_names": [
           "Site allocation NSP41: Railway Rise, East Dulwich Site allocation NSP41"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "62-67 Park Street",
@@ -1392,7 +1446,9 @@
           "Central Activities Zone",
           "Site allocation NSP03: 62-67 Park Street"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
@@ -1461,7 +1517,9 @@
           "Central Activities Zone",
           "Site allocation NSP06: 1 Southwark Bridge Road and Red Lion Court"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -1508,7 +1566,9 @@
           "Peckham Major Town Centre",
           "Site allocation NSP74: Aylesham Centre and Peckham Bus Station"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
@@ -1551,7 +1611,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "London Bridge Health Cluster",
@@ -1599,7 +1661,9 @@
           "Bankside and Borough District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -1668,7 +1732,9 @@
           "Article 4 Basement Development Permitted Rights Removed",
           "Article 4 Direction Class E To C3 In Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Landmark Court",
@@ -1715,7 +1781,9 @@
           "London Bridge District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
@@ -1762,7 +1830,9 @@
           "London Bridge District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Mandela Way",
@@ -1812,7 +1882,9 @@
           "Site allocation NSP58: Mandela Way",
           "Old Kent Road North District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -1857,7 +1929,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
@@ -1906,7 +1980,9 @@
           "Site allocation NSP09: Swan Street Cluster",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -1952,7 +2028,9 @@
           "Elephant and Castle Major Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Bricklayers Arms",
@@ -2000,7 +2078,9 @@
           "Old Kent Road North District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -2049,7 +2129,9 @@
         "article4_names": [
           "Old Kent Road North District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "636 Old Kent Road",
@@ -2097,7 +2179,9 @@
         "article4_names": [
           "Old Kent Road South District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Marlborough Grove and St James\u2019s Road",
@@ -2147,7 +2231,9 @@
           "Article 4 Basement Development Permitted Rights Removed",
           "Article 4 Direction Class E To C3 In Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -2192,7 +2278,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "4/12 Albany Road",
@@ -2237,7 +2325,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "200 Great Dover Street",
@@ -2286,7 +2376,9 @@
           "Site allocation NSP09: Swan Street Cluster",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "7-14 Great Dover Street",
@@ -2335,7 +2427,9 @@
           "Site allocation NSP09: Swan Street Cluster",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -2383,7 +2477,9 @@
           "Central Activities Zone",
           "Protected shopping frontage SF8: Borough High Street"
         ]
-      }
+      },
+      "nhle_count": 1,
+      "nhle_grades": []
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
@@ -2433,7 +2529,9 @@
           "Site allocation NSP12: 19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
           "Site allocation NSP12: 19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Ca"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
@@ -2483,7 +2581,9 @@
           "Central Activities Zone",
           "Railway Arches"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aylesbury Phase 1",
@@ -2531,7 +2631,9 @@
           "Central Activities Zone",
           "Protected shopping frontage SF8: Borough High Street"
         ]
-      }
+      },
+      "nhle_count": 1,
+      "nhle_grades": []
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
@@ -2583,7 +2685,9 @@
           "Central Activities Zone",
           "Site allocation NSP45: Bakerloo Line Sidings and 7 St. George's Circus"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Newington Triangle",
@@ -2628,7 +2732,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
@@ -2677,7 +2783,9 @@
           "Bankside and Borough District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "49 Lomond Grove",
@@ -2722,7 +2830,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "99 Lomond Grove",
@@ -2767,7 +2877,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -2814,7 +2926,9 @@
           "Bankside and Borough District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -2859,7 +2973,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "London Fire and Emergency Planning Authority",
@@ -2902,7 +3018,9 @@
         "conservation_area": true,
         "conservation_area_name": "Graham Road and Mapledene",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "London Southbank University Quarter",
@@ -2950,7 +3068,9 @@
           "Central Activities Zone",
           "Site allocation NSP48: London Southbank University Quarter"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -2999,7 +3119,9 @@
           "Camberwell District Town Centre",
           "Site allocation NSP24: Camberwell Station Site allocation NSP24"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "1-5 Westminster Bridge Road",
@@ -3049,7 +3171,9 @@
           "Elephant and Castle Major Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -3098,7 +3222,9 @@
           "Bankside and Borough District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -3145,7 +3271,9 @@
           "Bankside and Borough District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -3195,7 +3323,9 @@
           "Bankside and Borough District Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 1,
+      "nhle_grades": []
     },
     {
       "name": "63-85 Newington Causeway",
@@ -3245,7 +3375,9 @@
           "Elephant and Castle Major Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -3294,7 +3426,9 @@
         "article4_names": [
           "Basements"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Denmark Hill Campus East",
@@ -3339,7 +3473,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Camberwell Green Magistrates Court",
@@ -3388,7 +3524,9 @@
         "article4_names": [
           "Camberwell District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Chambers Wharf",
@@ -3435,7 +3573,9 @@
         "conservation_area": true,
         "conservation_area_name": "St Anne's Church",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Bath Trading Estate",
@@ -3475,7 +3615,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Goose Green Trading Estate",
@@ -3521,7 +3663,9 @@
         "article4_names": [
           "Site allocation NSP43: Goose Green Trading Estate"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -3571,7 +3715,9 @@
           "Central Activities Zone",
           "Railway Arches"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -3619,7 +3765,9 @@
         "article4_names": [
           "SPIL4: Integrated Waste Management Facility, Electricity Substation and Ormside Street"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -3668,7 +3816,9 @@
         "article4_names": [
           "Site allocation NSP68: Sandgate Street and Verney Road"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Former Southern Railway Stables",
@@ -3715,7 +3865,9 @@
           "Site allocation NSP65: Former Southern Railway Stables",
           "The Old Southern Railway Stables and the Forge"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -3761,7 +3913,9 @@
         "article4_names": [
           "Site allocation NSP70: Hatcham Road, Penarth Street and Ilderton Road"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Rotherhite Gasometer",
@@ -3804,7 +3958,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Camberwell Station",
@@ -3851,7 +4007,9 @@
           "Camberwell District Town Centre",
           "Site allocation NSP24: Camberwell Station Site allocation NSP24"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -3897,7 +4055,9 @@
         "conservation_area": true,
         "conservation_area_name": "Stoke Newington",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -3948,7 +4108,9 @@
           "Central Activities Zone",
           "Site allocation NSP17: Friars House, 157-168 Blackfriars Road"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Valmar Trading Estate",
@@ -3996,7 +4158,9 @@
           "Camberwell District Town Centre",
           "Protected shopping frontage SF3: Camberwell"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -4042,7 +4206,9 @@
         "conservation_area": true,
         "conservation_area_name": "South Shoreditch",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -4093,7 +4259,9 @@
           "Central Activities Zone",
           "Site allocation NSP21: McLaren House, St George's Circus"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "330-344 Walworth Road",
@@ -4144,7 +4312,9 @@
         "article4_names": [
           "Elephant and Castle Major Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -4191,7 +4361,9 @@
           "Elephant and Castle Major Town Centre",
           "Central Activities Zone"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -4242,7 +4414,9 @@
           "Site allocation NSP59: 107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
           "Old Kent Road North District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
@@ -4292,7 +4466,9 @@
         "article4_names": [
           "Article 4 Basement Development Permitted Rights Removed"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
@@ -4342,7 +4518,9 @@
         "article4_names": [
           "Canada Water Major Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -4393,7 +4571,9 @@
         "article4_names": [
           "Old Kent Road North District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
@@ -4444,7 +4624,9 @@
           "Site allocation NSP71: 760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
           "Old Kent Road South District Town Centre"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
@@ -4491,7 +4673,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -4540,7 +4724,9 @@
           "Elephant and Castle Major Town Centre",
           "Protected shopping frontage SF2: Walworth Road"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     }
   ],
   "total": 93

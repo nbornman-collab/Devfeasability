@@ -34,7 +34,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -70,7 +72,9 @@
         "conservation_area": true,
         "conservation_area_name": "Elder Street",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -106,7 +110,9 @@
         "conservation_area": true,
         "conservation_area_name": "Bishopsgate",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "10 Trinity Square",
@@ -142,7 +148,9 @@
         "conservation_area": true,
         "conservation_area_name": "Trinity Square",
         "article4": false
-      }
+      },
+      "nhle_count": 1,
+      "nhle_grades": []
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -177,7 +185,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Barts Square, Little Britain",
@@ -212,7 +222,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -248,7 +260,9 @@
         "conservation_area": true,
         "conservation_area_name": "South Shoreditch",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Crown Place, Earl Street",
@@ -284,7 +298,9 @@
         "conservation_area": true,
         "conservation_area_name": "Sun Street",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -319,7 +335,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -354,7 +372,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 1,
+      "nhle_grades": []
     },
     {
       "name": "Land at Royal Mint Street",
@@ -389,7 +409,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -425,7 +447,9 @@
         "conservation_area": true,
         "conservation_area_name": "Whitechapel High Street",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -460,7 +484,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "100 Leadenhall Street",
@@ -495,7 +521,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Fleet Street East, EC4",
@@ -531,7 +559,9 @@
         "conservation_area": true,
         "conservation_area_name": "Fleet Street",
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -566,7 +596,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 1,
+      "nhle_grades": []
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -602,7 +634,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Moorgate Station Oversite",
@@ -638,7 +672,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Smithfield Market, EC1",
@@ -674,7 +710,9 @@
         "conservation_area": true,
         "conservation_area_name": "Smithfield",
         "article4": false
-      }
+      },
+      "nhle_count": 1,
+      "nhle_grades": []
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -709,7 +747,9 @@
       "planning_realm": {
         "conservation_area": false,
         "article4": false
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -749,7 +789,9 @@
           "Central Activities Zone",
           "Site allocation NSP19: Ludgate House & Sampson House, 64 Hopton Street"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -787,7 +829,9 @@
         "article4_names": [
           "Basements"
         ]
-      }
+      },
+      "nhle_count": 0,
+      "nhle_grades": []
     }
   ],
   "borough": "City of London",

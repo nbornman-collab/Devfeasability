@@ -1047,7 +1047,24 @@ function normaliseSite(s, idx) {
     listingUrl: s.listing_url||null,
     listingAgent: s.listing_agent||null,
     motScore: computeMotivatedSeller(s),
+    nhleCount: s.nhle_count||0,
+    dataConfidence: computeConfidence(s),
   };
+}
+
+function computeConfidence(s) {
+  // High: has real HMLR polygon + verified score + owner data
+  // Med: has score + lat/lng but derived max_floors
+  // Low: everything estimated
+  let points = 0;
+  if (s.verified) points += 2;
+  if (s.owner) points += 1;
+  if (s.lat && s.lng) points += 1;
+  if (s.max_floors) points += 1; // explicit not estimated
+  if (s.nhle_count !== undefined) points += 1; // enriched
+  if (points >= 5) return 'high';
+  if (points >= 3) return 'medium';
+  return 'low';
 }
 
 function computeMotivatedSeller(s) {
