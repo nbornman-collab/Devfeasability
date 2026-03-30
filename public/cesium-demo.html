@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>D/A · Full Insight — 24 Southwark Street</title>
+<title>D/A · Full Insight — 196 Blackfriars Road</title>
 <link href="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Cesium.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -149,7 +149,7 @@ input[type=range]::-webkit-slider-thumb{
 <!-- Loading -->
 <div id="loading">
   <div class="load-logo">D/A</div>
-  <div style="font:400 12px Inter,sans-serif;color:rgba(255,255,255,.3);margin-bottom:8px">Full Insight · 24 Southwark Street</div>
+  <div style="font:400 12px Inter,sans-serif;color:rgba(255,255,255,.3);margin-bottom:8px">Full Insight · 196 Blackfriars Road</div>
   <div class="load-bar"><div class="load-fill" id="load-fill"></div></div>
   <div class="load-label" id="load-label">Initialising 3D engine…</div>
 </div>
@@ -161,7 +161,7 @@ input[type=range]::-webkit-slider-thumb{
 <div id="topbar">
   <div class="logo">D<em>/</em>A</div>
   <div class="site-pill">
-    <span class="name">24 Southwark Street, SE1</span>
+    <span class="name">196 Blackfriars Road, SE1</span>
     <div class="sep"></div>
     <span class="score">82</span>
     <span class="verd">Green</span>
@@ -243,7 +243,7 @@ input[type=range]::-webkit-slider-thumb{
   <!-- Intelligence -->
   <div class="ps">
     <div class="ps-label">D/A Read</div>
-    <p class="intel-para" id="intel-blurb">Sky availability and a clean heritage position mean the vertical envelope is genuinely open at this site. On the balance of available evidence, a well-argued scheme at 10-14F should find support — the pre-app conversation here is about design quality, not whether development is appropriate at all.</p>
+    <p class="intel-para" id="intel-blurb">196 Blackfriars Road sits in the London Bridge/Bankside Opportunity Area with One Blackfriars (50F, 163m) 100m north as the definitive height precedent. UNRESTRICTED heritage profile - no listed buildings within 400m. The GLA actively supports tall residential here. A well-argued 14-18F scheme has very strong policy backing.</p>
   </div>
 
   <!-- BSA -->
@@ -256,19 +256,22 @@ input[type=range]::-webkit-slider-thumb{
 
 <script>
 const SITE = {
-  lat: 51.504909, lng: -0.091522, plotM2: 1550,
-  // Tighter real polygon
+  lat: 51.50496, lng: -0.10419, plotM2: 840,
+  name: '196 Blackfriars Road, SE1 8NJ',
+  // HMLR INSPIRE boundary (approximate bbox - upgrade when real polygon available)
   polygon: [
-    [-0.09245, 51.50457],[-0.09098, 51.50455],[-0.09097, 51.50527],
-    [-0.09176, 51.50527],[-0.09177, 51.50514],[-0.09246, 51.50514],
-    [-0.09245, 51.50457]
+    [-0.1043136, 51.5051097],
+    [-0.1040587, 51.5051072],
+    [-0.1040664, 51.5048021],
+    [-0.1043214, 51.5048046],
+    [-0.1043136, 51.5051097]
   ]
 };
 
 const SCHEMES = [
-  {floors:7, cov:60, erv:650, niy:5.0},
-  {floors:10, cov:65, erv:700, niy:4.75},
-  {floors:14, cov:72, erv:750, niy:4.5}
+  {floors:10, cov:85, erv:8000, niy:4.5, label:'Low'},
+  {floors:14, cov:85, erv:8500, niy:4.5, label:'Base'},
+  {floors:18, cov:85, erv:9000, niy:4.5, label:'High'}
 ];
 
 const FTF = 4.0;
@@ -380,7 +383,7 @@ async function init(){
   // Cinematic intro: start high, arc down
   const {lat, lng} = SITE;
   viewer.camera.setView({
-    destination: Cesium.Cartesian3.fromDegrees(lng + 0.02, lat - 0.012, 1200),
+    destination: Cesium.Cartesian3.fromDegrees(lng + 0.005, lat + 0.008, 900),
     orientation:{
       heading: Cesium.Math.toRadians(310),
       pitch: Cesium.Math.toRadians(-42),
@@ -656,10 +659,11 @@ function flyTo(preset){
 
   const D = Cesium.Math.toRadians;
   const presets = {
-    aerial: new Cesium.HeadingPitchRange(D(0),   D(-72), 420),
-    iso:    new Cesium.HeadingPitchRange(D(30),  D(-38), 260),
-    street: new Cesium.HeadingPitchRange(D(200), D(-8),  80),
-    north:  new Cesium.HeadingPitchRange(D(0),   D(-22), 175),
+    aerial: new Cesium.HeadingPitchRange(D(0),    D(-75), 500),
+    iso:    new Cesium.HeadingPitchRange(D(320),  D(-35), 280),
+    // Street view: standing on Blackfriars Rd pavement, looking south at the site
+    street: new Cesium.HeadingPitchRange(D(170),  D(-5),  60),
+    north:  new Cesium.HeadingPitchRange(D(355),  D(-20), 180),
   };
   const hpr = presets[preset];
   if(!hpr) return;
