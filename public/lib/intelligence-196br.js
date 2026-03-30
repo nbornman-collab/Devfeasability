@@ -1,13 +1,14 @@
 // Development Intelligence - 196 Blackfriars Road, SE1 8NJ
 const SITE_INTELLIGENCE = {
-  // HMLR INSPIRE parcel 52104519 - 29pt real boundary, 1469m²
-  polygon: [[-0.104896,51.50475],[-0.104897,51.50475],[-0.104841,51.50462],[-0.104692,51.504645],[-0.104587,51.504663],[-0.104389,51.504697],[-0.104353,51.504703],[-0.104346,51.504704],[-0.104292,51.504713],[-0.104066,51.504752],[-0.104081,51.504789],[-0.104122,51.504885],[-0.104162,51.504977],[-0.104322,51.504953],[-0.104439,51.504995],[-0.104451,51.505059],[-0.104568,51.505047],[-0.104582,51.505045],[-0.104587,51.505044],[-0.104579,51.505027],[-0.104553,51.504968],[-0.104513,51.504876],[-0.104519,51.504875],[-0.104611,51.504859],[-0.104922,51.504806],[-0.10492,51.504801],[-0.104896,51.50475]],
+  // Polygon: manually derived ~20x24m bbox (TIER 3 - needs OS NGD upgrade via contractor)
+  // INSPIRE parcels at this address are fragmented individual commercial units, not whole-building title
+  polygon: [[-0.104309,51.504771],[-0.104021,51.504771],[-0.104021,51.504987],[-0.104309,51.504987],[-0.104309,51.504771]],
   site: '196 Blackfriars Road',
   site_name: '196 Blackfriars Road',
   address: '196 Blackfriars Road, SE1 8NJ',
-  lat: 51.504857,
-  lng: -0.104525,
-  plot_m2: 1469,
+  lat: 51.504879,
+  lng: -0.104165,
+  plot_m2: 480,
   borough: 'Southwark',
   use: 'residential',
 
@@ -66,19 +67,20 @@ const SITE_INTELLIGENCE = {
     },
     heritage: {
       label: 'Heritage Shadow',
-      score: 9.0, weight: 1.5,
-      primary: { name: 'No listed buildings adjacent', grade: 'n/a', dist_m: 400, height_m: 0 },
+      score: 7.5, weight: 1.5,
+      primary: { name: 'Railway Viaduct Arches (NHLE 1400290)', grade: 'II', dist_m: 30, note: 'Grade II listed Victorian railway viaduct runs along the southern and eastern boundary of the site. Setting impact must be addressed in Heritage Impact Assessment.' },
       secondary: { name: 'Waterloo Station', grade: 'II*', dist_m: 700 },
-      insight: 'No listed buildings within 400m. One Blackfriars (50F, 2018) is not heritage-listed. Waterloo Station (Grade II*) is 700m - no setting impact at this scale. This is one of the cleanest heritage profiles on the Southwark riverside.'
+      insight: 'The Grade II listed railway viaduct arches (NHLE 1400290) run directly adjacent to the site boundary - approximately 30m. This is not a blocker for tall residential (One Blackfriars at 50F was approved 100m north with the same viaduct context) but it requires a Heritage Impact Assessment demonstrating no adverse setting impact. The viaduct is a low-rise horizontal element - a tall residential tower behind it does not typically constitute harm. Waterloo Station (Grade II*) is 700m - no material setting impact.'
     },
 
     heritage_framework: {
-      tier: 'UNRESTRICTED',
-      score: 9.0,
+      tier: 'MANAGEABLE',
+      score: 7.5,
       nhle_verified: true,
-      nhle_date: '2026-03-29',
-      verdict: 'No listed buildings within 400m. Blackfriars OA zone. Residential tall building - One Blackfriars (50F) 300m south is the direct precedent. Heritage is not the binding constraint here.',
-      rocketship: 'Rocketship conditions present. No heritage blocker. Lead with bold massing and urban contribution.'
+      nhle_date: '2026-03-30',
+      nhle_adjacent: ['Railway Viaduct Arches (GrII, 1400290) - 30m south/east'],
+      verdict: 'Grade II listed railway viaduct arches adjacent. Manageable tier - One Blackfriars (50F, 163m) was approved in the same context. Heritage Impact Assessment required but not a scheme blocker. The viaduct is horizontal low-rise; a tall residential tower in background does not typically constitute harm to its setting.',
+      rocketship: false
     },
     acquisition: {
       label: 'Title Stack',
