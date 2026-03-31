@@ -1595,7 +1595,7 @@ function factorBars(s) {
 
 function cardClick(id) {
   const site = ALL_SITES.find(s=>s.id===id);
-  if (site) openFocus(site);
+  if (site) openMassPopup(site);
 }
 
 function openFocus(site) {
@@ -2473,12 +2473,7 @@ function initPegman() {
   });
 }
 
-// Wire card click to massing popup instead of focus panel
-var _origCardClick = typeof cardClick === 'function' ? cardClick : null;
-function cardClick(id) {
-  var site = ALL_SITES.find(function(s) { return s.id === id; });
-  if (site) openMassPopup(site);
-}
+// cardClick is defined above — massing popup override applied there directly
 
 // Escape: first press exits Street View, second press closes popup
 document.addEventListener('keydown', function(e) {
