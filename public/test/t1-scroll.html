@@ -1445,6 +1445,29 @@ function buildFlags() {
   if (her.building_character && her.building_character.conservation_area) flags.push({icon:'warn',sym:'\u26A0',title:'Conservation Area',desc:'Site within designated conservation area.'});
   else flags.push({icon:'ok',sym:'\u2713',title:'Not in Conservation Area',desc:'Site is not within a designated conservation area.'});
   if (her.building_character && her.building_character.nhle_adjacent && her.building_character.nhle_adjacent.length) flags.push({icon:'info',sym:'i',title:'Adjacent listed buildings within 50m',desc: her.building_character.nhle_adjacent.join(', ') + '.'});
+  // LVMF / Protected Views
+  const lvmfViews = SI.lvmf_views || [];
+  if (lvmfViews.length > 0) {
+    const viewingCorridors = lvmfViews.filter(v => v.type === 'Viewing Corridor');
+    const wsca = lvmfViews.filter(v => v.type === 'Wider Setting Consultation Area');
+    const extensions = lvmfViews.filter(v => v.type === 'Extension');
+    if (viewingCorridors.length > 0) {
+      flags.push({icon:'warn', sym:'\u26A0', title:'LVMF Protected Viewing Corridor',
+        desc: viewingCorridors.map(v => v.ref + ': ' + v.name).join('. ') + '. Height above threshold triggers Strategic Views Assessment.'});
+    }
+    if (wsca.length > 0) {
+      const names = [...new Set(wsca.map(v => v.ref + ' ' + v.name.split(' to ')[1]))].join(', ');
+      flags.push({icon:'info', sym:'i', title:'LVMF Wider Setting Consultation Area (' + wsca.length + ' view' + (wsca.length > 1 ? 's' : '') + ')',
+        desc: wsca.map(v => v.ref + ': ' + v.name).join('. ') + '. Development must not cause unacceptable harm to these protected views.'});
+    }
+    if (extensions.length > 0 && viewingCorridors.length === 0 && wsca.length === 0) {
+      flags.push({icon:'info', sym:'i', title:'LVMF View Extension Zone (' + extensions.length + ' view' + (extensions.length > 1 ? 's' : '') + ')',
+        desc: extensions.map(v => v.ref + ': ' + v.name).join('. ') + '. Assess impact on protected views.'});
+    }
+  } else if (pol.tall_building_zone) {
+    flags.push({icon:'ok', sym:'\u2713', title:'No LVMF Protected Views Affected', desc:'Site not within London View Management Framework viewing corridors or consultation areas.'});
+  }
+
   if (pol.article4_directions && pol.article4_directions.length) flags.push({icon:'info',sym:'i',title:'Article 4 Directions Active',desc: pol.article4_directions.join('. ') + '.'});
   if (pol.locally_listed) flags.push({icon:'warn',sym:'\u26A0',title:'Locally Listed Building',desc: pol.locally_listed_note || 'On borough Local Heritage List. Material planning consideration.'});
 

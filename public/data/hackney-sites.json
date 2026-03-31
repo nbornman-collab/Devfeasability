@@ -128,7 +128,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "50-60 Commercial Street",
@@ -214,7 +215,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Worship Street EC2A",
@@ -299,7 +301,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "8A.1",
+          "name": "Westminster Pier to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Shoreditch High Street South",
@@ -512,7 +521,19 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "8A.1",
+          "name": "Westminster Pier to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "9A.1",
+          "name": "King Henry's Mound to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Sun Street / Finsbury Square Fringe",
@@ -597,7 +618,19 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "8A.1",
+          "name": "Westminster Pier to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "9A.1",
+          "name": "King Henry's Mound to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Curtain Road Warehouse District",
@@ -722,7 +755,8 @@
         "use": 6,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Hoxton Square Fringe",
@@ -859,7 +893,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Pitfield Street Industrial",
@@ -1503,7 +1538,8 @@
         "use": 7,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Eagle Wharf East",
@@ -1731,7 +1767,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "St Leonards Hospital. Hoxton Street, London (Mixed Non-residential)",
@@ -1932,7 +1969,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "130 Kingsland Road and site to the rear 130A Kingsland Road (Mixed Residential/Non-Residential)",
@@ -2197,7 +2235,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Kingsland Road Industrial Corridor",
@@ -2369,7 +2408,8 @@
         "use": 7,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Eagle Wharf Road (Mixed Residential/Non-Residential)",
@@ -2598,7 +2638,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "40-43 Andrews Road and Ash Grove Bus Garage (Mixed Residential/Non-Residential)",
@@ -2786,7 +2827,19 @@
         "use": 9,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        },
+        {
+          "ref": "8A.1",
+          "name": "Westminster Pier to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "51-61 Mare Street (Mixed Residential/Non-Residential)",
@@ -2946,7 +2999,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Former Rose Lipman Library and Environs, Downham Road (Mixed Residential/Non-Residential)",
@@ -3174,7 +3234,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "164-170 Mare Street (Mixed Residential/Non-Residential)",
@@ -3387,7 +3448,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "27-38 Well Street (Lidl) (Mixed Residential/Non-Residential)",
@@ -3596,7 +3664,14 @@
         "use": 8,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "182 Mare Street (London College of Fashion) (Mixed Residential/Non-Residential)",
@@ -3809,7 +3884,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Florfield Road Cluster (Mixed Residential/Non-Residential)",
@@ -4081,7 +4163,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Tesco Metro, Well Street (Mixed Residential/Non-Residential)",
@@ -4421,7 +4510,14 @@
         "use": 8,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Former CLR James Library, 16-22 Dalston Lane, 62 Beechwood Road (Mixed Residential/Non-Residential)",
@@ -4621,7 +4717,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "1, 3, 5, 7 Dalston Lane, (Dalston Western Curve), & 1-7 Ashwin Street (Mixed Residential/Non-Residential)",
@@ -4858,7 +4955,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of \u00e2\u20ac\u02dceastern curve\u00e2\u20ac\u2122 (Mixed Residential/Non-Residential)",
@@ -5123,7 +5221,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "36-42 Kingsland High Street (currently McDonalds) (Mixed Residential/Non-Residential)",
@@ -5283,7 +5382,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "333-337 Mare Street (Iceland Foods) and 231-237 Graham Road (Mixed Residential/Non-Residential)",
@@ -5463,7 +5563,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "55 Morning Lane (Mixed Residential/Non-Residential)",
@@ -5663,7 +5770,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Kingsland Shopping Centre (Mixed Residential/Non-Residential)",
@@ -5859,7 +5973,8 @@
         "use": 8,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Hackney Central Overground Station and Car Park (Mixed Non-residential)",
@@ -6004,7 +6119,14 @@
         "use": 10,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "339-357 Mare Street, 6-18 Amhurst Road (Marks and Spencer) (Mixed Residential/Non-Residential)",
@@ -6177,7 +6299,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Ridley Road (Mixed Non-residential)",
@@ -6357,7 +6486,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Travis Perkins, 111 Dalston Lane (Mixed Residential/Non-Residential)",
@@ -6549,7 +6679,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Clapton Bus Garage (Mixed Residential/Non-Residential)",
@@ -6973,7 +7104,14 @@
         "use": 9,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "230 Dalston Lane and Hackney Downs Station Entrance (Mixed Residential/Non-Residential)",
@@ -7130,7 +7268,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Birkbeck Mews (Mixed Residential/Non-Residential)",
@@ -7266,7 +7405,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Lower Clapton Health Centre (Mixed Residential/Non-Residential)",
@@ -7646,7 +7786,14 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Tram Depot, 38-40 Upper Clapton Road (Mixed Residential/Non-Residential)",
@@ -8130,7 +8277,8 @@
         "use": 9,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "71-73 Lordship Road (St Mary\u00e2\u20ac\u2122s Lodge) (Mixed Residential/Non-Residential)",
@@ -8674,7 +8822,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     },
     {
       "name": "Yard Buildings, 318 Green Lanes (Mixed Residential/Non-Residential)",
@@ -8819,7 +8968,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Hackney"
+      "_borough": "Hackney",
+      "lvmf_views": []
     }
   ]
 }

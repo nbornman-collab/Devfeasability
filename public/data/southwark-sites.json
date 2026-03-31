@@ -175,7 +175,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "24 Southwark Street",
@@ -444,7 +445,24 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
@@ -573,7 +591,8 @@
         "use": 7,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -738,7 +757,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Tower Workshops",
@@ -848,7 +874,19 @@
         "use": 7,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Kinglake Street Garages",
@@ -1050,7 +1088,14 @@
         "use": 9,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
@@ -1182,7 +1227,14 @@
         "use": 10,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Salisbury estate car park",
@@ -1277,7 +1329,8 @@
         "use": 10,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Croft Street Depot",
@@ -1470,7 +1523,19 @@
         "use": 9,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Abellio Walworth Depot",
@@ -1584,7 +1649,8 @@
         "use": 9,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -1720,7 +1786,19 @@
         "use": 9,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -2217,7 +2295,19 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "4A.2",
+          "name": "Primrose Hill summit to the Palace of Westminster",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Camberwell Bus Garage",
@@ -2500,7 +2590,8 @@
         "use": 9,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -2560,7 +2651,14 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Burgess Business Park",
@@ -2622,7 +2720,8 @@
         "use": 6,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Blackpool Road Business Park",
@@ -2739,7 +2838,14 @@
         "use": 6,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -2856,7 +2962,14 @@
         "use": 6,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -2978,7 +3091,44 @@
         "use": 6,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Aylesbury Phase 2",
@@ -3037,7 +3187,19 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        }
+      ]
     },
     {
       "name": "Aylesbury Phase 3",
@@ -3177,7 +3339,14 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Aylesbury Phase 2",
@@ -3236,7 +3405,19 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        }
+      ]
     },
     {
       "name": "123 Grove Park",
@@ -3451,7 +3632,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -3590,7 +3778,14 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Aylesbury Plot 18",
@@ -3729,7 +3924,14 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Aylesbury Site 7",
@@ -3850,7 +4052,19 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
@@ -3912,7 +4126,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "4A.2",
+          "name": "Primrose Hill summit to the Palace of Westminster",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -4047,7 +4268,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "62-67 Park Street",
@@ -4196,7 +4424,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
@@ -4365,7 +4600,24 @@
         "use": 4,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -4480,7 +4732,8 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
@@ -4540,7 +4793,8 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "London Bridge Health Cluster",
@@ -4664,7 +4918,19 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -4750,7 +5016,19 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.2",
+          "name": "Parliament Hill summit to the Palace of Westminster",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "2B.1",
+          "name": "Parliament Hill oak tree to Palace of Westminster",
+          "type": "Viewing Corridor"
+        }
+      ]
     },
     {
       "name": "Landmark Court",
@@ -4849,7 +5127,19 @@
         "use": 4,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
@@ -5040,7 +5330,19 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Mandela Way",
@@ -5182,7 +5484,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -5299,7 +5608,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
@@ -5440,7 +5756,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -5546,7 +5869,14 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Bricklayers Arms",
@@ -5818,7 +6148,14 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -6067,7 +6404,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "636 Old Kent Road",
@@ -6259,7 +6603,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Marlborough Grove and St James\u2019s Road",
@@ -6326,7 +6677,8 @@
         "use": 5,
         "source": "existing"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -6467,7 +6819,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "4/12 Albany Road",
@@ -6712,7 +7065,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "200 Great Dover Street",
@@ -6809,7 +7163,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "7-14 Great Dover Street",
@@ -6942,7 +7303,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -7041,7 +7409,19 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
@@ -7151,7 +7531,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
@@ -7469,7 +7856,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Aylesbury Phase 1",
@@ -7568,7 +7956,19 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
@@ -7684,7 +8084,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Newington Triangle",
@@ -7746,7 +8147,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
@@ -7859,7 +8267,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "49 Lomond Grove",
@@ -7992,7 +8401,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "99 Lomond Grove",
@@ -8169,7 +8579,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -8288,7 +8699,8 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -8689,7 +9101,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "London Fire and Emergency Planning Authority",
@@ -8749,7 +9162,14 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "London Southbank University Quarter",
@@ -9225,7 +9645,8 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -9366,7 +9787,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "4A.2",
+          "name": "Primrose Hill summit to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "1-5 Westminster Bridge Road",
@@ -9472,7 +9900,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -9585,7 +10014,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -9649,7 +10079,8 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -9758,7 +10189,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "63-85 Newington Causeway",
@@ -10044,7 +10476,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -10110,7 +10543,34 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Extension"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        }
+      ]
     },
     {
       "name": "Denmark Hill Campus East",
@@ -10172,7 +10632,14 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "4A.2",
+          "name": "Primrose Hill summit to the Palace of Westminster",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Camberwell Green Magistrates Court",
@@ -10601,7 +11068,8 @@
         "use": 4,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Chambers Wharf",
@@ -10665,7 +11133,8 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Bath Trading Estate",
@@ -11033,7 +11502,24 @@
         "use": 7,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Goose Green Trading Estate",
@@ -11171,7 +11657,8 @@
         "use": 7,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -11505,7 +11992,19 @@
         "use": 4,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -11977,7 +12476,19 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -12230,7 +12741,19 @@
         "use": 5,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Former Southern Railway Stables",
@@ -12681,7 +13204,24 @@
         "use": 7,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -12799,7 +13339,14 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Rotherhite Gasometer",
@@ -12926,7 +13473,8 @@
         "use": 7,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Camberwell Station",
@@ -13041,7 +13589,19 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "4A.2",
+          "name": "Primrose Hill summit to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.2",
+          "name": "Primrose Hill summit to the Palace of Westminster",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -13104,7 +13664,8 @@
         "use": 4,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -13343,7 +13904,8 @@
         "use": 4,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Valmar Trading Estate",
@@ -13451,7 +14013,8 @@
         "use": 7,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -13514,7 +14077,8 @@
         "use": 4,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -13625,7 +14189,8 @@
         "use": 4,
         "source": "intel"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "330-344 Walworth Road",
@@ -13740,7 +14305,8 @@
         "use": 5,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -14011,7 +14577,8 @@
         "use": 4,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -14138,7 +14705,19 @@
         "use": 10,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Extension"
+        },
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
@@ -14205,7 +14784,8 @@
         "use": 10,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
@@ -14583,7 +15163,8 @@
         "use": 8,
         "source": "existing"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -14826,7 +15407,14 @@
         "use": 8,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "23A.1",
+          "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
@@ -14973,7 +15561,19 @@
         "use": 8,
         "source": "existing"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
@@ -15072,7 +15672,19 @@
         "use": 8,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": [
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -15421,7 +16033,8 @@
         "use": 8,
         "source": "derived"
       },
-      "_borough": "Southwark"
+      "_borough": "Southwark",
+      "lvmf_views": []
     }
   ],
   "total": 93

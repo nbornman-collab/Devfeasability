@@ -350,7 +350,14 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "9A.1",
+          "name": "King Henry's Mound to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -514,7 +521,19 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "8A.1",
+          "name": "Westminster Pier to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "9A.1",
+          "name": "King Henry's Mound to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -778,7 +797,8 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": []
     },
     {
       "name": "10 Trinity Square",
@@ -961,7 +981,8 @@
         "use": 5,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": []
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -1232,7 +1253,34 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Barts Square, Little Britain",
@@ -1491,7 +1539,29 @@
         "use": 5,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -1544,7 +1614,14 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "8A.1",
+          "name": "Westminster Pier to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Crown Place, Earl Street",
@@ -1597,7 +1674,19 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "8A.1",
+          "name": "Westminster Pier to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "9A.1",
+          "name": "King Henry's Mound to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -1744,7 +1833,59 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Extension"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -1890,7 +2031,14 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Land at Royal Mint Street",
@@ -2013,7 +2161,8 @@
         "use": 5,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": []
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -2066,7 +2215,14 @@
         "use": 5,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "25A.1",
+          "name": "City Hall to the White Tower",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -2185,7 +2341,8 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": []
     },
     {
       "name": "100 Leadenhall Street",
@@ -2812,7 +2969,8 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": []
     },
     {
       "name": "Fleet Street East, EC4",
@@ -3056,7 +3214,8 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": []
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -3150,7 +3309,59 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Extension"
+        },
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        }
+      ]
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -3314,7 +3525,44 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Extension"
+        }
+      ]
     },
     {
       "name": "Moorgate Station Oversite",
@@ -3394,7 +3642,19 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "8A.1",
+          "name": "Westminster Pier to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "9A.1",
+          "name": "King Henry's Mound to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Smithfield Market, EC1",
@@ -3454,7 +3714,29 @@
         "use": 5,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "3A.1",
+          "name": "Kenwood viewing gazebo to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "1A.2",
+          "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        }
+      ]
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -3506,7 +3788,8 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": []
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -3726,7 +4009,8 @@
         "use": 4,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": []
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -3781,7 +4065,49 @@
         "use": 5,
         "source": "city-field"
       },
-      "_borough": "City of London"
+      "_borough": "City of London",
+      "lvmf_views": [
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        },
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Extension"
+        },
+        {
+          "ref": "6A.1",
+          "name": "Blackheath Point to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "5A.2",
+          "name": "Greenwich Park Wolfe statue to Tower Bridge",
+          "type": "Extension"
+        },
+        {
+          "ref": "2A.1",
+          "name": "Parliament Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Wider Setting Consultation Area"
+        },
+        {
+          "ref": "4A.1",
+          "name": "Primrose Hill summit to St Paul's Cathedral",
+          "type": "Viewing Corridor"
+        }
+      ]
     }
   ],
   "borough": "City of London",
