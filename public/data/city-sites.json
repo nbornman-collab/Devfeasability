@@ -343,11 +343,14 @@
       "utilisation_score": 3.1,
       "existing_height_m": 48.0,
       "utilisation_data": {
+        "underuse": 3.1,
+        "location_quality": 10,
         "plot": 6,
         "floor_gap": 1,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -504,11 +507,14 @@
       "utilisation_score": 2.1,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 2.1,
+        "location_quality": 10,
         "plot": 1,
         "floor_gap": 2,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -765,11 +771,14 @@
       "utilisation_score": 2.5,
       "existing_height_m": 60.0,
       "utilisation_data": {
+        "underuse": 2.5,
+        "location_quality": 10,
         "plot": 4,
         "floor_gap": 1,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "10 Trinity Square",
@@ -945,11 +954,14 @@
       "utilisation_score": 4.5,
       "existing_height_m": 30.0,
       "utilisation_data": {
+        "underuse": 4.5,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 1,
         "use": 5,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -1213,11 +1225,14 @@
       "utilisation_score": 3.7,
       "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 3.7,
+        "location_quality": 10,
         "plot": 8,
         "floor_gap": 1,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Barts Square, Little Britain",
@@ -1469,11 +1484,14 @@
       "utilisation_score": 5.0,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 5.0,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 2,
         "use": 5,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -1519,11 +1537,14 @@
       "utilisation_score": 4.3,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 4.3,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 4,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Crown Place, Earl Street",
@@ -1569,11 +1590,14 @@
       "utilisation_score": 4.3,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 4.3,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 4,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -1713,11 +1737,14 @@
       "utilisation_score": 4.3,
       "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 4.3,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 1,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -1856,11 +1883,14 @@
       "utilisation_score": 5.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 5.8,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 4,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Land at Royal Mint Street",
@@ -1976,11 +2006,14 @@
       "utilisation_score": 6.0,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 6.0,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 4,
         "use": 5,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -2026,11 +2059,14 @@
       "utilisation_score": 3.0,
       "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 3.0,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 1,
         "use": 5,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -2142,11 +2178,14 @@
       "utilisation_score": 3.7,
       "existing_height_m": 30.0,
       "utilisation_data": {
+        "underuse": 3.7,
+        "location_quality": 10,
         "plot": 8,
         "floor_gap": 1,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "100 Leadenhall Street",
@@ -2766,11 +2805,14 @@
       "utilisation_score": 3.7,
       "existing_height_m": 48.0,
       "utilisation_data": {
+        "underuse": 3.7,
+        "location_quality": 10,
         "plot": 8,
         "floor_gap": 1,
         "use": 4,
-        "source": "intel"
-      }
+        "source": "city-field"
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Fleet Street East, EC4",
@@ -3007,11 +3049,14 @@
       "utilisation_score": 3.1,
       "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 3.1,
+        "location_quality": 10,
         "plot": 6,
         "floor_gap": 1,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -3098,11 +3143,14 @@
       "utilisation_score": 4.8,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 4.8,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 2,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -3256,14 +3304,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 4.8,
-      "existing_height_m": 20.0,
+      "utilisation_score": 4.3,
+      "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 4.3,
+        "location_quality": 10,
         "plot": 10,
-        "floor_gap": 2,
+        "floor_gap": 1,
         "use": 4,
-        "source": "intel"
-      }
+        "source": "city-field"
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Moorgate Station Oversite",
@@ -3333,14 +3384,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.8,
-      "existing_height_m": 12.0,
+      "utilisation_score": 4.8,
+      "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 4.8,
+        "location_quality": 10,
         "plot": 10,
-        "floor_gap": 6,
+        "floor_gap": 2,
         "use": 4,
-        "source": "intel"
-      }
+        "source": "city-field"
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Smithfield Market, EC1",
@@ -3393,11 +3447,14 @@
       "utilisation_score": 5.5,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 5.5,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 6,
         "use": 5,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -3442,11 +3499,14 @@
       "utilisation_score": 4.3,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 4.3,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 4,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -3659,11 +3719,14 @@
       "utilisation_score": 2.1,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 2.1,
+        "location_quality": 10,
         "plot": 1,
         "floor_gap": 2,
         "use": 4,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -3711,11 +3774,14 @@
       "utilisation_score": 5.5,
       "existing_height_m": 12.0,
       "utilisation_data": {
+        "underuse": 5.5,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 6,
         "use": 5,
         "source": "city-field"
-      }
+      },
+      "_borough": "City of London"
     }
   ],
   "borough": "City of London",

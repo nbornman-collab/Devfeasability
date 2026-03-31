@@ -121,11 +121,14 @@
       "utilisation_score": 8.0,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "50-60 Commercial Street",
@@ -204,11 +207,14 @@
       "utilisation_score": 6.5,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Worship Street EC2A",
@@ -286,11 +292,14 @@
       "utilisation_score": 6.5,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Shoreditch High Street South",
@@ -496,11 +505,14 @@
       "utilisation_score": 6.8,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 6.8,
+        "location_quality": 10,
         "plot": 6,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Sun Street / Finsbury Square Fringe",
@@ -578,11 +590,14 @@
       "utilisation_score": 6.5,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 10,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Curtain Road Warehouse District",
@@ -700,11 +715,14 @@
       "utilisation_score": 8.2,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 8.2,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 8,
         "use": 6,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Hoxton Square Fringe",
@@ -834,11 +852,14 @@
       "utilisation_score": 8.0,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 10,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Pitfield Street Industrial",
@@ -1472,14 +1493,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 4.7,
+      "utilisation_score": 3.8,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 4.7,
+        "location_quality": 8,
         "plot": 1,
         "floor_gap": 6,
         "use": 7,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Eagle Wharf East",
@@ -1697,14 +1721,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 3.3,
+      "utilisation_score": 2.6,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 3.3,
+        "location_quality": 8,
         "plot": 1,
         "floor_gap": 4,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "St Leonards Hospital. Hoxton Street, London (Mixed Non-residential)",
@@ -1895,14 +1922,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 5.6,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 8,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "130 Kingsland Road and site to the rear 130A Kingsland Road (Mixed Residential/Non-Residential)",
@@ -2157,14 +2187,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.4,
+      "utilisation_score": 4.3,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 5.4,
+        "location_quality": 8,
         "plot": 8,
         "floor_gap": 4,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Kingsland Road Industrial Corridor",
@@ -2326,14 +2359,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.4,
+      "utilisation_score": 4.2,
       "existing_height_m": 10.5,
       "utilisation_data": {
+        "underuse": 8.4,
+        "location_quality": 5,
         "plot": 10,
         "floor_gap": 8,
         "use": 7,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Eagle Wharf Road (Mixed Residential/Non-Residential)",
@@ -2552,14 +2588,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 10.5,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 5,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "40-43 Andrews Road and Ash Grove Bus Garage (Mixed Residential/Non-Residential)",
@@ -2737,14 +2776,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.8,
+      "utilisation_score": 4.4,
       "existing_height_m": 10.5,
       "utilisation_data": {
+        "underuse": 8.8,
+        "location_quality": 5,
         "plot": 10,
         "floor_gap": 8,
         "use": 9,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "51-61 Mare Street (Mixed Residential/Non-Residential)",
@@ -2894,14 +2936,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 10.5,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 5,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Former Rose Lipman Library and Environs, Downham Road (Mixed Residential/Non-Residential)",
@@ -3119,14 +3164,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 10.5,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 5,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "164-170 Mare Street (Mixed Residential/Non-Residential)",
@@ -3329,14 +3377,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.8,
+      "utilisation_score": 3.4,
       "existing_height_m": 10.5,
       "utilisation_data": {
+        "underuse": 6.8,
+        "location_quality": 5,
         "plot": 6,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "27-38 Well Street (Lidl) (Mixed Residential/Non-Residential)",
@@ -3535,14 +3586,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 10.5,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 5,
         "plot": 8,
         "floor_gap": 8,
         "use": 8,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "182 Mare Street (London College of Fashion) (Mixed Residential/Non-Residential)",
@@ -3745,14 +3799,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 10.5,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 5,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Florfield Road Cluster (Mixed Residential/Non-Residential)",
@@ -4014,14 +4071,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.8,
+      "utilisation_score": 3.1,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 7.8,
+        "location_quality": 4,
         "plot": 6,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Tesco Metro, Well Street (Mixed Residential/Non-Residential)",
@@ -4351,14 +4411,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.6,
+      "utilisation_score": 3.8,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.6,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 8,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Former CLR James Library, 16-22 Dalston Lane, 62 Beechwood Road (Mixed Residential/Non-Residential)",
@@ -4548,14 +4611,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "1, 3, 5, 7 Dalston Lane, (Dalston Western Curve), & 1-7 Ashwin Street (Mixed Residential/Non-Residential)",
@@ -4782,14 +4848,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.4,
+      "utilisation_score": 3.4,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 8.4,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of \u00e2\u20ac\u02dceastern curve\u00e2\u20ac\u2122 (Mixed Residential/Non-Residential)",
@@ -5044,14 +5113,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.8,
+      "utilisation_score": 3.1,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 7.8,
+        "location_quality": 4,
         "plot": 6,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "36-42 Kingsland High Street (currently McDonalds) (Mixed Residential/Non-Residential)",
@@ -5201,14 +5273,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.4,
+      "utilisation_score": 3.4,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 8.4,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "333-337 Mare Street (Iceland Foods) and 231-237 Graham Road (Mixed Residential/Non-Residential)",
@@ -5378,14 +5453,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "55 Morning Lane (Mixed Residential/Non-Residential)",
@@ -5575,14 +5653,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Kingsland Shopping Centre (Mixed Residential/Non-Residential)",
@@ -5768,14 +5849,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.6,
+      "utilisation_score": 3.8,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.6,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 8,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Hackney Central Overground Station and Car Park (Mixed Non-residential)",
@@ -5910,14 +5994,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 10.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 10.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 10,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "339-357 Mare Street, 6-18 Amhurst Road (Marks and Spencer) (Mixed Residential/Non-Residential)",
@@ -6080,14 +6167,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Ridley Road (Mixed Non-residential)",
@@ -6257,14 +6347,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Travis Perkins, 111 Dalston Lane (Mixed Residential/Non-Residential)",
@@ -6446,14 +6539,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Clapton Bus Garage (Mixed Residential/Non-Residential)",
@@ -6867,14 +6963,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.2,
+      "utilisation_score": 3.7,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.2,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 10,
         "use": 9,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "230 Dalston Lane and Hackney Downs Station Entrance (Mixed Residential/Non-Residential)",
@@ -7021,14 +7120,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Birkbeck Mews (Mixed Residential/Non-Residential)",
@@ -7154,14 +7256,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Lower Clapton Health Centre (Mixed Residential/Non-Residential)",
@@ -7531,14 +7636,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.3,
+      "utilisation_score": 2.5,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 6.3,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Tram Depot, 38-40 Upper Clapton Road (Mixed Residential/Non-Residential)",
@@ -8012,14 +8120,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.6,
+      "utilisation_score": 3.4,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 8.6,
+        "location_quality": 4,
         "plot": 6,
         "floor_gap": 10,
         "use": 9,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "71-73 Lordship Road (St Mary\u00e2\u20ac\u2122s Lodge) (Mixed Residential/Non-Residential)",
@@ -8553,14 +8664,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.3,
+      "utilisation_score": 2.5,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 6.3,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     },
     {
       "name": "Yard Buildings, 318 Green Lanes (Mixed Residential/Non-Residential)",
@@ -8695,14 +8809,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.5,
+      "utilisation_score": 3.0,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 7.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 10,
         "use": 5,
-        "source": "derived-maxh"
-      }
+        "source": "existing"
+      },
+      "_borough": "Hackney"
     }
   ]
 }

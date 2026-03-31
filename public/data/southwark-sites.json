@@ -165,14 +165,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.3,
+      "utilisation_score": 5.7,
       "existing_height_m": 13.7,
       "utilisation_data": {
+        "underuse": 6.3,
+        "location_quality": 9,
         "plot": 1,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "24 Southwark Street",
@@ -434,11 +437,14 @@
       "utilisation_score": 4.3,
       "existing_height_m": 24.8,
       "utilisation_data": {
+        "underuse": 4.3,
+        "location_quality": 10,
         "plot": 1,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
@@ -557,14 +563,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.4,
+      "utilisation_score": 3.8,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 9.4,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 7,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -719,14 +728,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.4,
+      "utilisation_score": 3.0,
       "existing_height_m": 7.0,
       "utilisation_data": {
+        "underuse": 7.4,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 8,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Tower Workshops",
@@ -826,14 +838,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.4,
+      "utilisation_score": 3.8,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.4,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 7,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Kinglake Street Garages",
@@ -1025,14 +1040,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.1,
+      "utilisation_score": 2.8,
       "existing_height_m": 4.0,
       "utilisation_data": {
+        "underuse": 7.1,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 10,
         "use": 9,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
@@ -1154,14 +1172,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 10.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 4.0,
       "utilisation_data": {
+        "underuse": 10.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 10,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Salisbury estate car park",
@@ -1246,14 +1267,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 10.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 3.0,
       "utilisation_data": {
+        "underuse": 10.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 10,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Croft Street Depot",
@@ -1436,14 +1460,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.2,
+      "utilisation_score": 3.7,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.2,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 10,
         "use": 9,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Abellio Walworth Depot",
@@ -1547,14 +1574,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.8,
+      "utilisation_score": 3.9,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.8,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 9,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -1680,14 +1710,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.8,
+      "utilisation_score": 3.9,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.8,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 9,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -2174,14 +2207,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.3,
+      "utilisation_score": 2.1,
       "existing_height_m": 7.0,
       "utilisation_data": {
+        "underuse": 5.3,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 8,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Camberwell Bus Garage",
@@ -2454,14 +2490,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.8,
+      "utilisation_score": 3.9,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.8,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 9,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -2511,14 +2550,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.5,
+      "utilisation_score": 3.0,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 7.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 10,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Burgess Business Park",
@@ -2570,14 +2612,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.7,
+      "utilisation_score": 3.1,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 7.7,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 10,
         "use": 6,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Blackpool Road Business Park",
@@ -2684,14 +2729,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.2,
+      "utilisation_score": 3.7,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.2,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 6,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -2798,14 +2846,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.2,
+      "utilisation_score": 3.7,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.2,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 6,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -2917,14 +2968,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.2,
+      "utilisation_score": 3.7,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.2,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 6,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesbury Phase 2",
@@ -2973,14 +3027,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.5,
+      "utilisation_score": 2.2,
       "existing_height_m": 20.0,
       "utilisation_data": {
+        "underuse": 5.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 6,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesbury Phase 3",
@@ -3110,14 +3167,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 20.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesbury Phase 2",
@@ -3166,14 +3226,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.5,
+      "utilisation_score": 2.2,
       "existing_height_m": 20.0,
       "utilisation_data": {
+        "underuse": 5.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 6,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "123 Grove Park",
@@ -3378,14 +3441,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -3514,14 +3580,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 20.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesbury Plot 18",
@@ -3650,14 +3719,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.0,
+      "utilisation_score": 3.2,
       "existing_height_m": 12.0,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesbury Site 7",
@@ -3768,14 +3840,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
@@ -3827,14 +3902,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.5,
+      "utilisation_score": 2.6,
       "existing_height_m": 12.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -3959,14 +4037,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "62-67 Park Street",
@@ -4105,14 +4186,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.0,
+      "utilisation_score": 2.4,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 6.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 4,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
@@ -4271,14 +4355,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 4.8,
+      "utilisation_score": 1.9,
       "existing_height_m": 28.0,
       "utilisation_data": {
+        "underuse": 4.8,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 2,
         "use": 4,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -4383,14 +4470,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
@@ -4440,14 +4530,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.5,
+      "utilisation_score": 2.6,
       "existing_height_m": 12.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "London Bridge Health Cluster",
@@ -4561,14 +4654,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.0,
+      "utilisation_score": 3.2,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -4644,14 +4740,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.5,
+      "utilisation_score": 2.2,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 5.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Landmark Court",
@@ -4740,14 +4839,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.3,
+      "utilisation_score": 2.5,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 6.3,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 8,
         "use": 4,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
@@ -4928,14 +5030,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.4,
+      "utilisation_score": 3.4,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 8.4,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 10,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Mandela Way",
@@ -5067,14 +5172,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -5181,14 +5289,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
@@ -5319,14 +5430,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -5422,14 +5536,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Bricklayers Arms",
@@ -5691,14 +5808,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -5937,14 +6057,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "636 Old Kent Road",
@@ -6126,14 +6249,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.3,
+      "utilisation_score": 2.5,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 6.3,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Marlborough Grove and St James\u2019s Road",
@@ -6190,14 +6316,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.5,
+      "utilisation_score": 3.0,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 7.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 10,
         "use": 5,
-        "source": "default"
-      }
+        "source": "existing"
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -6328,14 +6457,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "4/12 Albany Road",
@@ -6570,14 +6702,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.3,
+      "utilisation_score": 2.5,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 6.3,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "200 Great Dover Street",
@@ -6664,14 +6799,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "7-14 Great Dover Street",
@@ -6794,14 +6932,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -6890,14 +7031,17 @@
       ],
       "nhle_tier": "NAVIGABLE",
       "nhle_score_penalty": 15,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 20.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
@@ -6997,14 +7141,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
@@ -7312,14 +7459,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 2.3,
+      "utilisation_score": 0.9,
       "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 2.3,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 2,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Aylesbury Phase 1",
@@ -7408,14 +7558,17 @@
       ],
       "nhle_tier": "NAVIGABLE",
       "nhle_score_penalty": 15,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 20.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
@@ -7521,14 +7674,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Newington Triangle",
@@ -7580,14 +7736,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.5,
+      "utilisation_score": 2.6,
       "existing_height_m": 12.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
@@ -7690,14 +7849,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "49 Lomond Grove",
@@ -7820,14 +7982,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "99 Lomond Grove",
@@ -7994,14 +8159,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.4,
+      "utilisation_score": 3.4,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 8.4,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -8110,14 +8278,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.0,
+      "utilisation_score": 3.2,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 8.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 8,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -8508,14 +8679,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.3,
+      "utilisation_score": 2.5,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 6.3,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "London Fire and Emergency Planning Authority",
@@ -8565,14 +8739,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.5,
+      "utilisation_score": 2.6,
       "existing_height_m": 10.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "London Southbank University Quarter",
@@ -9038,14 +9215,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -9176,14 +9356,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "1-5 Westminster Bridge Road",
@@ -9279,14 +9462,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -9389,14 +9575,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -9450,14 +9639,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.5,
+      "utilisation_score": 2.6,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -9556,14 +9748,17 @@
       ],
       "nhle_tier": "NAVIGABLE",
       "nhle_score_penalty": 15,
-      "utilisation_score": 6.0,
+      "utilisation_score": 2.4,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 6.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 4,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "63-85 Newington Causeway",
@@ -9839,14 +10034,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 4.2,
+      "utilisation_score": 1.7,
       "existing_height_m": 21.0,
       "utilisation_data": {
+        "underuse": 4.2,
+        "location_quality": 4,
         "plot": 4,
         "floor_gap": 4,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -9902,14 +10100,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.5,
+      "utilisation_score": 2.2,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 5.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 6,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Denmark Hill Campus East",
@@ -9961,14 +10162,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.5,
+      "utilisation_score": 2.6,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 6.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 8,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Camberwell Green Magistrates Court",
@@ -10387,14 +10591,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.1,
+      "utilisation_score": 2.0,
       "existing_height_m": 12.0,
       "utilisation_data": {
+        "underuse": 5.1,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 8,
         "use": 4,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Chambers Wharf",
@@ -10448,14 +10655,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.5,
+      "utilisation_score": 3.0,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 7.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Bath Trading Estate",
@@ -10813,14 +11023,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.2,
+      "utilisation_score": 3.3,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 8.2,
+        "location_quality": 4,
         "plot": 6,
         "floor_gap": 10,
         "use": 7,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Goose Green Trading Estate",
@@ -10948,14 +11161,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.4,
+      "utilisation_score": 3.8,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.4,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 7,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -11279,14 +11495,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 1.6,
+      "utilisation_score": 0.6,
       "existing_height_m": 28.0,
       "utilisation_data": {
+        "underuse": 1.6,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 1,
         "use": 4,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -11748,14 +11967,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.4,
+      "utilisation_score": 3.4,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 8.4,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -11998,14 +12220,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Former Southern Railway Stables",
@@ -12446,14 +12671,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.7,
+      "utilisation_score": 2.7,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 6.7,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 10,
         "use": 7,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -12561,14 +12789,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Rotherhite Gasometer",
@@ -12685,14 +12916,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 3.6,
+      "utilisation_score": 1.4,
       "existing_height_m": 20.0,
       "utilisation_data": {
+        "underuse": 3.6,
+        "location_quality": 4,
         "plot": 4,
         "floor_gap": 2,
         "use": 7,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Camberwell Station",
@@ -12797,14 +13031,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.0,
+      "utilisation_score": 3.6,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 9.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -12857,14 +13094,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 4.3,
+      "utilisation_score": 1.7,
       "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 4.3,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 4,
         "use": 4,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -13093,14 +13333,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.2,
+      "utilisation_score": 2.1,
       "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 5.2,
+        "location_quality": 4,
         "plot": 8,
         "floor_gap": 4,
         "use": 4,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Valmar Trading Estate",
@@ -13198,14 +13441,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.4,
+      "utilisation_score": 3.8,
       "existing_height_m": 5.0,
       "utilisation_data": {
+        "underuse": 9.4,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 7,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -13258,14 +13504,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 4.3,
+      "utilisation_score": 1.7,
       "existing_height_m": 24.0,
       "utilisation_data": {
+        "underuse": 4.3,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 4,
         "use": 4,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -13366,14 +13615,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.8,
+      "utilisation_score": 2.7,
       "existing_height_m": 17.5,
       "utilisation_data": {
+        "underuse": 6.8,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 4,
         "source": "intel"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "330-344 Walworth Road",
@@ -13478,14 +13730,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.0,
+      "utilisation_score": 2.8,
       "existing_height_m": 12.0,
       "utilisation_data": {
+        "underuse": 7.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 6,
         "use": 5,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -13746,14 +14001,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 2.1,
+      "utilisation_score": 0.8,
       "existing_height_m": 18.0,
       "utilisation_data": {
+        "underuse": 2.1,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 2,
         "use": 4,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -13870,14 +14128,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 10.0,
+      "utilisation_score": 4.0,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 10.0,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 10,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
@@ -13934,14 +14195,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.5,
+      "utilisation_score": 3.4,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 8.5,
+        "location_quality": 4,
         "plot": 5,
         "floor_gap": 10,
         "use": 10,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
@@ -14309,14 +14573,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.6,
+      "utilisation_score": 3.8,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.6,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 8,
-        "source": "default"
-      }
+        "source": "existing"
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -14549,14 +14816,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 7.8,
+      "utilisation_score": 3.1,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 7.8,
+        "location_quality": 4,
         "plot": 4,
         "floor_gap": 10,
         "use": 8,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
@@ -14693,14 +14963,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 9.6,
+      "utilisation_score": 3.8,
       "existing_height_m": 6.0,
       "utilisation_data": {
+        "underuse": 9.6,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 10,
         "use": 8,
-        "source": "default"
-      }
+        "source": "existing"
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
@@ -14789,14 +15062,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 8.6,
+      "utilisation_score": 3.4,
       "existing_height_m": 15.0,
       "utilisation_data": {
+        "underuse": 8.6,
+        "location_quality": 4,
         "plot": 10,
         "floor_gap": 8,
         "use": 8,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -15135,14 +15411,17 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.9,
+      "utilisation_score": 2.4,
       "existing_height_m": 8.0,
       "utilisation_data": {
+        "underuse": 5.9,
+        "location_quality": 4,
         "plot": 1,
         "floor_gap": 8,
         "use": 8,
         "source": "derived"
-      }
+      },
+      "_borough": "Southwark"
     }
   ],
   "total": 93
