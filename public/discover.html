@@ -1249,8 +1249,7 @@ function normaliseSite(s, idx) {
   const planScore = computePlanScore(s, heritTier);
   const constraint = keyConstraint(s, era, sensitivity, heritTier);
 
-  // Utilisation score from enriched data
-  const utilisationScore = s.utilisation_score != null ? s.utilisation_score : 5.0;
+  // Utilisation label (utilisationScore already defined above)
   const utilisationData = s.utilisation_data || {};
   const utilisationLabel = utilisationScore >= 8.5 ? 'Maximally Underutilised' :
     utilisationScore >= 6.5 ? 'Significantly Underutilised' :
