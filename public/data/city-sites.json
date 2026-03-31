@@ -339,7 +339,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 3.1,
+      "existing_height_m": 48.0,
+      "utilisation_data": {
+        "plot": 6,
+        "floor_gap": 1,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -492,7 +500,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 2.1,
+      "existing_height_m": 21.0,
+      "utilisation_data": {
+        "plot": 1,
+        "floor_gap": 2,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -745,7 +761,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 2.5,
+      "existing_height_m": 60.0,
+      "utilisation_data": {
+        "plot": 4,
+        "floor_gap": 1,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "10 Trinity Square",
@@ -917,7 +941,15 @@
         }
       ],
       "nhle_tier": "BLOCKING",
-      "nhle_score_penalty": 35
+      "nhle_score_penalty": 35,
+      "utilisation_score": 4.5,
+      "existing_height_m": 30.0,
+      "utilisation_data": {
+        "plot": 10,
+        "floor_gap": 1,
+        "use": 5,
+        "source": "city-field"
+      }
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -1177,7 +1209,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 3.7,
+      "existing_height_m": 24.0,
+      "utilisation_data": {
+        "plot": 8,
+        "floor_gap": 1,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Barts Square, Little Britain",
@@ -1425,7 +1465,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 5.0,
+      "existing_height_m": 21.0,
+      "utilisation_data": {
+        "plot": 10,
+        "floor_gap": 2,
+        "use": 5,
+        "source": "city-field"
+      }
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -1467,7 +1515,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 4.3,
+      "existing_height_m": 18.0,
+      "utilisation_data": {
+        "plot": 5,
+        "floor_gap": 4,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Crown Place, Earl Street",
@@ -1509,7 +1565,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 4.3,
+      "existing_height_m": 18.0,
+      "utilisation_data": {
+        "plot": 5,
+        "floor_gap": 4,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -1645,7 +1709,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 4.3,
+      "existing_height_m": 24.0,
+      "utilisation_data": {
+        "plot": 10,
+        "floor_gap": 1,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -1780,7 +1852,15 @@
         }
       ],
       "nhle_tier": "MANAGEABLE",
-      "nhle_score_penalty": 5
+      "nhle_score_penalty": 5,
+      "utilisation_score": 5.8,
+      "existing_height_m": 18.0,
+      "utilisation_data": {
+        "plot": 10,
+        "floor_gap": 4,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Land at Royal Mint Street",
@@ -1892,7 +1972,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 6.0,
+      "existing_height_m": 18.0,
+      "utilisation_data": {
+        "plot": 10,
+        "floor_gap": 4,
+        "use": 5,
+        "source": "city-field"
+      }
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -1934,7 +2022,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 3.0,
+      "existing_height_m": 24.0,
+      "utilisation_data": {
+        "plot": 5,
+        "floor_gap": 1,
+        "use": 5,
+        "source": "city-field"
+      }
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -2042,7 +2138,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 3.7,
+      "existing_height_m": 30.0,
+      "utilisation_data": {
+        "plot": 8,
+        "floor_gap": 1,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "100 Leadenhall Street",
@@ -2658,7 +2762,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 3.7,
+      "existing_height_m": 48.0,
+      "utilisation_data": {
+        "plot": 8,
+        "floor_gap": 1,
+        "use": 4,
+        "source": "intel"
+      }
     },
     {
       "name": "Fleet Street East, EC4",
@@ -2891,7 +3003,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 3.1,
+      "existing_height_m": 24.0,
+      "utilisation_data": {
+        "plot": 6,
+        "floor_gap": 1,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -2974,7 +3094,15 @@
         }
       ],
       "nhle_tier": "MANAGEABLE",
-      "nhle_score_penalty": 5
+      "nhle_score_penalty": 5,
+      "utilisation_score": 4.8,
+      "existing_height_m": 21.0,
+      "utilisation_data": {
+        "plot": 10,
+        "floor_gap": 2,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -3127,7 +3255,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 4.8,
+      "existing_height_m": 20.0,
+      "utilisation_data": {
+        "plot": 10,
+        "floor_gap": 2,
+        "use": 4,
+        "source": "intel"
+      }
     },
     {
       "name": "Moorgate Station Oversite",
@@ -3196,7 +3332,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 6.8,
+      "existing_height_m": 12.0,
+      "utilisation_data": {
+        "plot": 10,
+        "floor_gap": 6,
+        "use": 4,
+        "source": "intel"
+      }
     },
     {
       "name": "Smithfield Market, EC1",
@@ -3245,7 +3389,15 @@
         }
       ],
       "nhle_tier": "BLOCKING",
-      "nhle_score_penalty": 35
+      "nhle_score_penalty": 35,
+      "utilisation_score": 5.5,
+      "existing_height_m": 15.0,
+      "utilisation_data": {
+        "plot": 5,
+        "floor_gap": 6,
+        "use": 5,
+        "source": "city-field"
+      }
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -3286,7 +3438,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 4.3,
+      "existing_height_m": 18.0,
+      "utilisation_data": {
+        "plot": 5,
+        "floor_gap": 4,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -3495,7 +3655,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 2.1,
+      "existing_height_m": 21.0,
+      "utilisation_data": {
+        "plot": 1,
+        "floor_gap": 2,
+        "use": 4,
+        "source": "city-field"
+      }
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -3539,7 +3707,15 @@
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
-      "nhle_score_penalty": 0
+      "nhle_score_penalty": 0,
+      "utilisation_score": 5.5,
+      "existing_height_m": 12.0,
+      "utilisation_data": {
+        "plot": 5,
+        "floor_gap": 6,
+        "use": 5,
+        "source": "city-field"
+      }
     }
   ],
   "borough": "City of London",
