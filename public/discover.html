@@ -1016,30 +1016,54 @@ function inferUseType(s) {
   return 'office'; // default
 }
 
-// ── Context Era detection ─────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════
+// SCORING ENGINE v2 — 3-layer architecture
+// Layer A: classify site → era, typology, sensitivity, posture
+// Layer B: set feasibility envelope → height cap, tower allowed, form
+// Layer C: score opportunity → apply posture ceiling
+// ══════════════════════════════════════════════════════════════════════════
+
+// ── Layer A: Context Era ──────────────────────────────────────────────────
 function contextEra(s) {
-  // Proxy: conservation area = high probability of Tier A context
-  // Brownfield + no conservation = likely Tier C/D
-  // No data = assume Tier B/C
   const inCons = !!(s.flags?.inConservation);
   const nhleNearby = (s.nhle_count || 0) > 0;
   const brownfield = !!(s.brownfield);
-  const heritTierRaw = (s.nhle_tier || '').toLowerCase();
-
-  if (heritTierRaw === 'blocking' || (inCons && nhleNearby)) return 'A';
-  if (inCons) return 'A';  // conservation area = Victorian/Georgian fabric assumed
-  if (nhleNearby) return 'B';  // listed buildings nearby but not CA = mixed context
-  if (brownfield) return 'C';  // brownfield + no heritage = post-war
-  return 'C';  // default
+  if (inCons && nhleNearby) return 'A';
+  if (inCons) return 'A';
+  if (nhleNearby) return 'mixed';
+  if (brownfield) return 'C';
+  return 'C';
 }
 
-// ── Tower cluster detection ───────────────────────────────────────────────
+// ── Layer A: Fabric Sensitivity ───────────────────────────────────────────
+function fabricSensitivity(s, era) {
+  const inCons = !!(s.flags?.inConservation);
+  const nhle30m = (s.nhle_listed || []).some(lb => lb.dist_m <= 30);
+  const nhleGradeHigh = (s.nhle_listed || []).some(lb => lb.grade === 'I' || lb.grade === 'II*');
+  if (era === 'A' && (inCons || nhle30m || nhleGradeHigh)) return 'high';
+  if (era === 'A') return 'medium';
+  if (era === 'mixed' && inCons) return 'medium';
+  return 'low';
+}
+
+// ── Layer A: Precedent validity ───────────────────────────────────────────
+// OA + cleared commercial + PTAL 6 = valid tall precedent context
+// OA + conservation area = OA is policy tailwind only, NOT tower precedent
+function precedentMatch(s) {
+  const inCons = !!(s.flags?.inConservation);
+  const inOA = !!(s.flags?.inOA || s.flags?.oa);
+  const brownfield = !!(s.brownfield);
+  // Tower precedent only valid if: OA + not conservation + brownfield or commercial
+  if (inOA && !inCons && (brownfield || s.use === 'commercial')) return 'strong';
+  if (inOA && !inCons) return 'moderate';
+  return 'weak';
+}
+
+// ── Layer A: Tower cluster detection ─────────────────────────────────────
 function isTowerCluster(s) {
-  // City core postcodes (EC2A, EC2N, EC3A, EC3V) = cluster seed
   const addr = (s.address || s.name || '').toUpperCase();
   const clusterPostcodes = ['EC2A', 'EC2N', 'EC3A', 'EC3V', 'EC1A', 'EC4V'];
   if (clusterPostcodes.some(p => addr.includes(p))) return true;
-  // OA + high PTAL + no conservation = likely cluster context
   const inOA = !!(s.flags?.inOA || s.flags?.oa);
   const inCons = !!(s.flags?.inConservation);
   const ptal = s.flags?.ptal || s.ptal || '';
@@ -1047,39 +1071,71 @@ function isTowerCluster(s) {
   return false;
 }
 
-// ── Max floors hard cap ───────────────────────────────────────────────────
-function maxFloorsHardCap(s, era, isClu) {
-  const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
-  const existFloors = s.existing_floors || Math.max(2, Math.round(rawMax * 0.45));
-  if (isClu) return rawMax;  // cluster: no era cap
-  if (era === 'A') return Math.min(rawMax, existFloors + 3);  // Victorian: +2-3F max
-  if (era === 'B') return Math.min(rawMax, existFloors + 5);  // interwar: +3-5F
-  return rawMax;  // Tier C/D: no cap
+// ── Layer A: Planning posture ─────────────────────────────────────────────
+function classifyPosture(era, sensitivity, cluster, prec) {
+  if (cluster) return 'go_hard';
+  if (era === 'A' && sensitivity === 'high') return 'defensive';
+  if (era === 'A' && sensitivity === 'medium') return 'caution';
+  if (era === 'mixed') return 'caution';
+  if ((era === 'C' || era === 'D') && sensitivity === 'low') return 'go_hard';
+  return 'caution';
 }
 
-// ── Kill switch: score cap ────────────────────────────────────────────────
-function applyKillSwitches(rawScore, s, era, isClu, heritTier) {
-  const inCons = !!(s.flags?.inConservation);
-  const nhleNearby = (s.nhle_count || 0) > 0;
-  const nhle30m = (s.nhle_listed || []).some(lb => lb.dist_m <= 30);
+// ── Layer A: Recommended form ─────────────────────────────────────────────
+function recommendedForm(posture, era, cluster) {
+  if (cluster || posture === 'go_hard') return 'Full redevelopment';
+  if (posture === 'defensive') return 'Rooftop addition / shoulder infill';
+  if (era === 'mixed') return 'Mid-rise infill';
+  return 'Contextual redevelopment';
+}
+
+// ── Layer B: Tower allowed ────────────────────────────────────────────────
+function towerAllowed(s, era, sensitivity, cluster, prec) {
+  if (cluster) return true;
+  if (era === 'A' && sensitivity === 'high') return false;
+  if (prec === 'weak') return false;
+  const addr = (s.address || s.name || '').toUpperCase();
+  if (['CONSERVATION', 'VIADUCT', 'ARCH'].some(w => addr.includes(w))) return false;
+  return true;
+}
+
+// ── Layer B: Height cap ───────────────────────────────────────────────────
+function heightCap(s, era, sensitivity, cluster, prec) {
+  const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
+  const existF = s.existing_floors || Math.max(2, Math.round(rawMax * 0.45));
+  if (cluster) return rawMax;
+  if (era === 'A') {
+    if (sensitivity === 'high') return existF + 2;
+    if (prec === 'strong' || prec === 'moderate') return existF + 4;
+    return existF + 3;
+  }
+  if (era === 'mixed') {
+    if (sensitivity === 'high') return existF + 3;
+    return existF + 4;
+  }
+  if (era === 'B') return existF + 5;
+  return rawMax; // C/D: policy+precedent led
+}
+
+// ── Layer C: Score with posture ceiling ───────────────────────────────────
+function computeScore(rawScore, s, posture, nhleBlockPenalty) {
+  let score = rawScore - (nhleBlockPenalty || 0);
+  let modifier = posture === 'go_hard' ? 5 : posture === 'caution' ? -5 : -12;
+  let ceiling = posture === 'go_hard' ? 100 : posture === 'caution' ? 82 : 68;
+  return Math.max(0, Math.min(score + modifier, ceiling));
+}
+
+// ── Key constraint label ──────────────────────────────────────────────────
+function keyConstraint(s, era, sensitivity, heritTier) {
   const nhleGradeHigh = (s.nhle_listed || []).some(lb => lb.grade === 'I' || lb.grade === 'II*');
-  const nhleBlockPenalty = s.nhle_score_penalty || 0;
-
-  let score = rawScore - nhleBlockPenalty;
-
-  // Kill switch 1: Heritage-dominant (Tier A + listed within 30m)
-  if (!isClu && era === 'A' && nhle30m) score = Math.min(score, 65);
-
-  // Kill switch 2: Fabric sensitivity (Tier A context, no cluster)
-  if (!isClu && era === 'A' && inCons) score = Math.min(score, 70);
-
-  // Kill switch 3: Blocking tier
-  if (heritTier === 'blocking') score = Math.min(score, 55);
-
-  // Kill switch 4: High-grade listed nearby regardless of cluster
-  if (nhleGradeHigh && !isClu) score = Math.min(score, 60);
-
-  return Math.max(0, score);
+  const nhle30m = (s.nhle_listed || []).some(lb => lb.dist_m <= 30);
+  if (nhleGradeHigh) return 'Grade I/II* listed building proximity';
+  if (era === 'A' && sensitivity === 'high') return 'Victorian/Georgian fine-grain context';
+  if (nhle30m) return 'Listed building adjacent';
+  if (!!(s.flags?.inConservation)) return 'Conservation area';
+  if (heritTier === 'blocking') return 'Heritage - blocking tier';
+  if (heritTier === 'navigable') return 'Heritage - navigable';
+  return null;
 }
 
 function normaliseSite(s, idx) {
@@ -1089,10 +1145,19 @@ function normaliseSite(s, idx) {
   const inCAZ = !!(s.flags?.inCAZ || s.flags?.caz);
   const inCons = !!(s.flags?.inConservation);
 
+  // Layer A
   const era = contextEra(s);
+  const sensitivity = fabricSensitivity(s, era);
   const cluster = isTowerCluster(s);
+  const prec = precedentMatch(s);
+  const posture = classifyPosture(era, sensitivity, cluster, prec);
+  const recForm = recommendedForm(posture, era, cluster);
+  const towerOK = towerAllowed(s, era, sensitivity, cluster, prec);
 
-  // Heritage tier: use NHLE-graded tier if available, else derive from conservation area
+  // Layer B
+  const maxFloorsCapped = heightCap(s, era, sensitivity, cluster, prec);
+
+  // Heritage tier
   const nhle_tier = (s.nhle_tier || '').toLowerCase();
   const heritTier = s.her ||
     (nhle_tier === 'blocking' ? 'blocking' :
@@ -1100,22 +1165,31 @@ function normaliseSite(s, idx) {
      nhle_tier === 'manageable' ? 'manageable' :
      inCons ? 'navigable' : 'manageable');
 
+  // Layer C
   const rawScore = parseInt(s.score)||0;
-  const score = applyKillSwitches(rawScore, s, era, cluster, heritTier);
+  const score = computeScore(rawScore, s, posture, s.nhle_score_penalty || 0);
 
-  // Max floors hard cap from era rules
-  const maxFloorsCapped = maxFloorsHardCap(s, era, cluster);
   const hectares = s.hectares || (s.plot ? s.plot / 10000 : 0.05);
   const plotM2 = Math.round(hectares * 10000);
   const erv = inOA ? 700 : inCAZ ? 750 : 650;
   const nia = plotM2 * 0.78 * 0.42 * maxFloorsCapped;
   const gdvEst = (nia * erv / 0.0475 / 1e6).toFixed(1);
   const planScore = s.mom || (inOA ? 8.5 : inCAZ ? 7.5 : 6.5);
+  const constraint = keyConstraint(s, era, sensitivity, heritTier);
+
+  // Utilisation score from enriched data
+  const utilisationScore = s.utilisation_score != null ? s.utilisation_score : 5.0;
+  const utilisationData = s.utilisation_data || {};
+  const utilisationLabel = utilisationScore >= 8.5 ? 'Maximally Underutilised' :
+    utilisationScore >= 6.5 ? 'Significantly Underutilised' :
+    utilisationScore >= 4.5 ? 'Moderately Underutilised' : 'Adequately Used';
 
   return {
     id: idx, name: s.name||s.address, address: s.address||s.name, borough,
     lat: parseFloat(s.lat)||0, lng: parseFloat(s.lng)||0,
-    score, rawScore, era, cluster, verified: !!s.verified, t1: s.t1||null,
+    score, rawScore, posture, era, sensitivity, cluster, prec,
+    recForm, towerOK, constraint,
+    verified: !!s.verified, t1: s.t1||null,
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
     ptal, maxFloors: maxFloorsCapped, plotM2, gdvEst, planScore, heritTier,
     useType: s.use || inferUseType(s),
@@ -1130,6 +1204,7 @@ function normaliseSite(s, idx) {
     motScore: computeMotivatedSeller(s),
     nhleCount: s.nhle_count||0,
     dataConfidence: computeConfidence(s),
+    utilisationScore, utilisationData, utilisationLabel,
   };
 }
 
@@ -1417,10 +1492,12 @@ function analystHook(s) {
 // ── Factor bar data ───────────────────────────────────────────────────────────
 function factorBars(s) {
   const ptal = Number(s.ptal) || 3;
+  const utilPct = Math.round((s.utilisationScore || 5) * 10);
+  const utilColor = utilPct >= 75 ? 'var(--accent)' : utilPct >= 50 ? 'var(--amber)' : 'var(--ink3)';
   const visible = [
     { name: 'Planning Appetite', score: Math.round(s.planScore * 10), color: s.planScore>=7?'var(--green)':s.planScore>=5?'var(--amber)':'var(--red)' },
     { name: 'Available Sky', score: s.heritTier==='blocking'?28:s.inCons?52:s.heritTier==='navigable'?62:78, color: 'var(--accent-blue)' },
-    { name: 'Rent Headroom', score: s.borough==='City of London'?82:s.inCAZ?74:s.inOA?68:56, color: 'var(--accent-blue)' },
+    { name: 'Land Utilisation', score: utilPct, color: utilColor },
   ];
   const locked = [
     { name: 'Heritage shadow →', label: 'In full report' },

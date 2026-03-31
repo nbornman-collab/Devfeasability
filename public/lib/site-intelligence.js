@@ -1,21 +1,23 @@
 /**
  * site-intelligence.js — Universal Development Intelligence Framework
- * Same 6 factors drive borough top-20 ranking, T1 hero, T2 assumptions, T3 narrative.
+ * Same 7 factors drive borough top-20 ranking, T1 hero, T2 assumptions, T3 narrative.
  * Surveyor checklist items (flood zone, use class) live in footnotes — not the hero.
  */
 
 // ── Score computation ────────────────────────────────────────────────────────
 function computeSiteScore(si) {
   const F = si.factors;
+  const utilScore = (F.utilisation && F.utilisation.score != null) ? F.utilisation.score : 5.0;
   const weighted = (
     F.sky.score        * 2.5 +
     F.value.score      * 2.0 +
     F.momentum.score   * 2.0 +
+    utilScore          * 2.0 +
     F.heritage.score   * 1.5 +
     F.acquisition.score * 1.5 +
     F.transport.score  * 0.5
   );
-  return Math.round(weighted); // out of 100
+  return Math.round(weighted / 12.0 * 10); // out of 100, new divisor 12.0
 }
 
 // ── SVG ring gauge ───────────────────────────────────────────────────────────
@@ -50,14 +52,16 @@ function scoreContext(score, borough) {
   return `Mixed signals — detailed due diligence required`;
 }
 
-// ── Render: T1 (compact hero + 6 factor cards) ───────────────────────────────
+// ── Render: T1 (compact hero + 7 factor cards) ───────────────────────────────
 function renderIntelligenceT1(si) {
   const score = computeSiteScore(si);
   const F = si.factors;
+  const utilF = F.utilisation || { score: 5.0, label: 'Moderate', plot_ratio: null, floor_gap: null };
   const factors = [
     { key:'sky',         label:'Available Sky',      f:F.sky,         primary: F.sky.sky_m+'m · '+F.sky.factor,            secondary: F.sky.existing_m+'m existing · '+F.sky.precedent_ref },
     { key:'value',       label:'Rent Headroom',      f:F.value,       primary: '+'+F.value.uplift_pct+'% uplift',           secondary: '£'+F.value.existing_rent+' → £'+F.value.new_build_rent+'/ft²' },
     { key:'momentum',    label:'Planning Tailwind',  f:F.momentum,    primary: F.momentum.cluster,                          secondary: F.momentum.consents+' towers consented nearby' },
+    { key:'utilisation', label:'Land Utilisation',   f:utilF,         primary: utilF.label || 'Underutilised',              secondary: utilF.detail || 'Plot ratio + floor gap + use type' },
     { key:'heritage',    label:'Heritage Shadow',    f:F.heritage,    primary: F.heritage.primary.name,                     secondary: 'Grade '+F.heritage.primary.grade+' · '+F.heritage.primary.dist_m+'m' },
     { key:'acquisition', label:'Title Stack', f:F.acquisition,
       primary: (F.acquisition.titles===1?'Single title':(F.acquisition.titles||1)+' titles') + ' · ' + (F.acquisition.tenure||'Freehold'),
