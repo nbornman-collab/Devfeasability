@@ -1023,54 +1023,6 @@ function inferUseType(s) {
 // Layer C: score opportunity → apply posture ceiling
 // ══════════════════════════════════════════════════════════════════════════
 
-// ── Layer A: Context Era ──────────────────────────────────────────────────
-function contextEra(s) {
-  const inCons = !!(s.flags?.inConservation);
-  const nhleNearby = (s.nhle_count || 0) > 0;
-  const brownfield = !!(s.brownfield);
-  if (inCons && nhleNearby) return 'A';
-  if (inCons) return 'A';
-  if (nhleNearby) return 'mixed';
-  if (brownfield) return 'C';
-  return 'C';
-}
-
-// ── Layer A: Fabric Sensitivity ───────────────────────────────────────────
-function fabricSensitivity(s, era) {
-  const inCons = !!(s.flags?.inConservation);
-  const nhle30m = (s.nhle_listed || []).some(lb => lb.dist_m <= 30);
-  const nhleGradeHigh = (s.nhle_listed || []).some(lb => lb.grade === 'I' || lb.grade === 'II*');
-  if (era === 'A' && (inCons || nhle30m || nhleGradeHigh)) return 'high';
-  if (era === 'A') return 'medium';
-  if (era === 'mixed' && inCons) return 'medium';
-  return 'low';
-}
-
-// ── Layer A: Precedent validity ───────────────────────────────────────────
-// OA + cleared commercial + PTAL 6 = valid tall precedent context
-// OA + conservation area = OA is policy tailwind only, NOT tower precedent
-function precedentMatch(s) {
-  const inCons = !!(s.flags?.inConservation);
-  const inOA = !!(s.flags?.inOA || s.flags?.oa);
-  const brownfield = !!(s.brownfield);
-  // Tower precedent only valid if: OA + not conservation + brownfield or commercial
-  if (inOA && !inCons && (brownfield || s.use === 'commercial')) return 'strong';
-  if (inOA && !inCons) return 'moderate';
-  return 'weak';
-}
-
-// ── Layer A: Tower cluster detection ─────────────────────────────────────
-function isTowerCluster(s) {
-  const addr = (s.address || s.name || '').toUpperCase();
-  const clusterPostcodes = ['EC2A', 'EC2N', 'EC3A', 'EC3V', 'EC1A', 'EC4V'];
-  if (clusterPostcodes.some(p => addr.includes(p))) return true;
-  const inOA = !!(s.flags?.inOA || s.flags?.oa);
-  const inCons = !!(s.flags?.inConservation);
-  const ptal = s.flags?.ptal || s.ptal || '';
-  if (inOA && !inCons && String(ptal).startsWith('6')) return true;
-  return false;
-}
-
 // ════════════════════════════════════════════════════════════════════
 // SCORING ENGINE v2 — locked 2026-03-31
 // Principle: every modifier is a function of site-specific factors.
