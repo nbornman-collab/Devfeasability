@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="page-title">Appraise | D/A</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/type.css">
 <link rel="stylesheet" href="/css/nav.css">
@@ -24,7 +24,7 @@
   --accent:    #c8a040;
   --accent-bg: rgba(200,160,64,.08);
   --accent2:   #b8845c;
-  --display: 'Inter', sans-serif;
+  --display: 'Cormorant Garamond', Georgia, serif;
   --rule:      rgba(232,228,218,.07);
   --sans: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --mono: 'Space Grotesk', 'Inter', sans-serif;
@@ -187,7 +187,7 @@ body { padding-top: 0; } /* nav.css handles spacing */
 .hero-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(180deg, rgba(10,10,8,.1) 0%, rgba(10,10,8,.05) 35%, rgba(10,10,8,.55) 70%, rgba(10,10,8,.92) 100%); }
 .hero-content { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; padding: 0 40px 60px; }
-.hero-address { font: 400 clamp(36px,5vw,64px)/1 var(--display); color: #fff; letter-spacing: -.02em; margin-bottom: 16px; }
+.hero-address { font: 300 clamp(36px,5vw,64px)/1 var(--display); color: #fff; letter-spacing: -.02em; margin-bottom: 16px; }
 .hero-sub { font: 500 18px var(--sans); color: rgba(255,255,255,.7); margin-bottom: 24px; }
 .hero-score-row { display: flex; align-items: center; gap: 20px; }
 .hero-score { font: 900 clamp(48px,7vw,80px) var(--mono); color: #fff; letter-spacing: -.05em; line-height: .85; }
@@ -221,7 +221,7 @@ body { padding-top: 0; } /* nav.css handles spacing */
 
 /* -- TYPOGRAPHY -- */
 .section-label { font: 700 20px var(--sans); text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 14px; }
-.section-title { font: 400 clamp(28px,4vw,48px)/1.1 var(--display); color: var(--ink); letter-spacing: -.02em; margin-bottom: 20px; }
+.section-title { font: 300 clamp(28px,4vw,48px)/1.1 var(--display); color: var(--ink); letter-spacing: -.02em; margin-bottom: 20px; }
 .section-body { font: 400 20px/1.9 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
 
 
@@ -262,7 +262,7 @@ body { padding-top: 0; } /* nav.css handles spacing */
 .sc-modal-close:hover { background: rgba(17,17,16,.12); }
 .sc-modal-map { width: 100%; height: 280px; border-radius: 20px 20px 0 0; }
 .sc-modal-body { padding: 32px; }
-.sc-modal-title { font: 400 clamp(24px,3vw,36px)/1.1 var(--display); color: var(--ink); margin-bottom: 4px; }
+.sc-modal-title { font: 300 clamp(24px,3vw,36px)/1.1 var(--display); color: var(--ink); margin-bottom: 4px; }
 .sc-modal-sub { font: 500 18px var(--mono); color: var(--ink3); margin-bottom: 24px; }
 .sc-modal-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
 .sc-modal-metric { background: rgba(17,17,16,.03); border-radius: 12px; padding: 16px; }
@@ -794,7 +794,7 @@ input[type=range].ruler-input {
 
 <!-- FOOTER -->
 <div class="footer">
-  <div style="font:400 clamp(24px,3vw,36px) var(--display);color:#f2f1ed;margin-bottom:16px">Ready to move on this site?</div>
+  <div style="font:300 clamp(24px,3vw,36px) var(--display);color:#f2f1ed;margin-bottom:16px">Ready to move on this site?</div>
   <div style="font:400 15px/1.7 var(--sans);color:rgba(242,241,237,.5);max-width:480px;margin:0 auto 32px">Full feasibility study with detailed massing, planning strategy, and financial modelling.</div>
   <a href="#" style="display:inline-block;font:700 11px var(--sans);letter-spacing:.12em;text-transform:uppercase;background:var(--accent2);color:#fff;padding:16px 40px;border-radius:8px;text-decoration:none;transition:background .2s" onmouseover="this.style.background='#a07450'" onmouseout="this.style.background='var(--accent2)'">Commission Full Study</a>
   <div style="font:400 12px var(--sans);color:rgba(242,241,237,.3);margin-top:40px">All values are estimates based on publicly available data. GDV and financial projections are modelled, not guaranteed.</div>
