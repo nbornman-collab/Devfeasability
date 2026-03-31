@@ -1071,11 +1071,66 @@ function isTowerCluster(s) {
   return false;
 }
 
+// ════════════════════════════════════════════════════════════════════
+// SCORING ENGINE v2 — locked 2026-03-31
+// Principle: every modifier is a function of site-specific factors.
+// No blanket bonuses. No posture shortcuts. Constraints always bite.
+// ════════════════════════════════════════════════════════════════════
+
+// ── Layer A: Context era ──────────────────────────────────────────────────
+// Uses manual context_era field if set; otherwise derives from CA/NHLE
+function contextEra(s) {
+  if (s.context_era) return s.context_era; // manual override wins
+  const inCons = !!(s.flags?.inConservation);
+  const nhleNearby = (s.nhle_count || 0) > 0;
+  if (inCons && nhleNearby) return 'A';
+  if (inCons) return 'A';
+  if (nhleNearby) return 'mixed';
+  return 'C'; // default: post-war/modern until proven otherwise
+}
+
+// ── Layer A: Fabric sensitivity ───────────────────────────────────────────
+function fabricSensitivity(s, era) {
+  const inCons = !!(s.flags?.inConservation);
+  const nhle30m = (s.nhle_listed || []).some(lb => lb.dist_m <= 30);
+  const nhleGradeHigh = (s.nhle_listed || []).some(lb => lb.grade === 'I' || lb.grade === 'II*');
+  const nhle_tier = (s.nhle_tier || '').toLowerCase();
+  if (era === 'A' && (nhleGradeHigh || nhle_tier === 'blocking')) return 'high';
+  if (era === 'A' && (inCons || nhle30m || nhle_tier === 'navigable')) return 'high';
+  if (era === 'A') return 'medium';
+  if (era === 'mixed' && inCons) return 'medium';
+  return 'low';
+}
+
+// ── Layer A: Tower cluster — postcode-only, no OA shortcut ───────────────
+// Cluster = >=3 tall buildings within 250m. Proxy: established City EC postcodes only.
+// OA + PTAL6 alone does NOT constitute a cluster — that was wrong.
+function isTowerCluster(s) {
+  const addr = (s.address || s.name || '').toUpperCase();
+  const clusterPostcodes = ['EC2A','EC2N','EC3A','EC3V','EC1A','EC4V','EC2M','EC3M'];
+  if (clusterPostcodes.some(p => addr.includes(p))) return true;
+  if (s.tower_cluster === true) return true; // explicit override only
+  return false;
+}
+
+// ── Layer A: Precedent validity ───────────────────────────────────────────
+// Tower precedent only valid if: OA + brownfield/commercial + NOT conservation
+function precedentMatch(s) {
+  const inCons = !!(s.flags?.inConservation);
+  const inOA   = !!(s.flags?.inOA || s.flags?.oa);
+  const brownfield = !!(s.brownfield);
+  const useType = (s.use || '').toLowerCase();
+  const isCommercial = ['office','commercial','industrial','retail'].includes(useType);
+  if (inOA && !inCons && (brownfield || isCommercial)) return 'strong';
+  if (inOA && !inCons && !brownfield && !isCommercial) return 'moderate'; // OA but resi/unknown
+  return 'weak';
+}
+
 // ── Layer A: Planning posture ─────────────────────────────────────────────
 function classifyPosture(era, sensitivity, cluster, prec) {
   if (cluster) return 'go_hard';
   if (era === 'A' && sensitivity === 'high') return 'defensive';
-  if (era === 'A' && sensitivity === 'medium') return 'caution';
+  if (era === 'A') return 'caution';
   if (era === 'mixed') return 'caution';
   if ((era === 'C' || era === 'D') && sensitivity === 'low') return 'go_hard';
   return 'caution';
@@ -1094,35 +1149,93 @@ function towerAllowed(s, era, sensitivity, cluster, prec) {
   if (cluster) return true;
   if (era === 'A' && sensitivity === 'high') return false;
   if (prec === 'weak') return false;
-  const addr = (s.address || s.name || '').toUpperCase();
-  if (['CONSERVATION', 'VIADUCT', 'ARCH'].some(w => addr.includes(w))) return false;
   return true;
 }
 
 // ── Layer B: Height cap ───────────────────────────────────────────────────
 function heightCap(s, era, sensitivity, cluster, prec) {
   const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
-  const existF = s.existing_floors || Math.max(2, Math.round(rawMax * 0.45));
+  const existingH = s.existing_height_m || null;
+  const existF = existingH ? Math.round(existingH / 3.5) : Math.max(2, Math.round(rawMax * 0.40));
   if (cluster) return rawMax;
   if (era === 'A') {
-    if (sensitivity === 'high') return existF + 2;
-    if (prec === 'strong' || prec === 'moderate') return existF + 4;
-    return existF + 3;
+    if (sensitivity === 'high') return Math.min(existF + 2, rawMax);
+    if (prec === 'strong') return Math.min(existF + 4, rawMax);
+    return Math.min(existF + 3, rawMax);
   }
-  if (era === 'mixed') {
-    if (sensitivity === 'high') return existF + 3;
-    return existF + 4;
-  }
-  if (era === 'B') return existF + 5;
-  return rawMax; // C/D: policy+precedent led
+  if (era === 'mixed') return Math.min(existF + 4, rawMax);
+  if (era === 'B') return Math.min(existF + 5, rawMax);
+  return rawMax;
 }
 
-// ── Layer C: Score with posture ceiling ───────────────────────────────────
-function computeScore(rawScore, s, posture, nhleBlockPenalty) {
-  let score = rawScore - (nhleBlockPenalty || 0);
-  let modifier = posture === 'go_hard' ? 5 : posture === 'caution' ? -5 : -12;
-  let ceiling = posture === 'go_hard' ? 100 : posture === 'caution' ? 82 : 68;
-  return Math.max(0, Math.min(score + modifier, ceiling));
+// ── Layer C: Score — factored modifier, no flat bonuses ──────────────────
+// base_headroom: how much upside does the location offer?
+// constraint_discount: how much does heritage/context eat that upside?
+// utilisation_boost: does the site have genuine latent capacity?
+function computeScore(rawScore, s, posture, nhleBlockPenalty, utilisationScore) {
+  const inOA   = !!(s.flags?.inOA || s.flags?.oa);
+  const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
+  const inCity = (s.borough || '').toLowerCase().includes('city');
+  const ptal_raw = s.flags?.ptal || s.ptal || 0;
+  const ptal = parseFloat(String(ptal_raw).replace(/[ab]/i,'')) || 0;
+  const nhle_tier = (s.nhle_tier || '').toLowerCase();
+  const inCons = !!(s.flags?.inConservation);
+
+  // Base headroom — what the location can support
+  // Tier A context (caution/defensive posture) caps base at 6: Victorian fabric constrains regardless of OA/PTAL
+  // City cluster capped at 10 — great location, not a blank cheque
+  const eraA = (posture === 'caution' || posture === 'defensive');
+  let baseHeadroom;
+  if (inCity && !eraA) baseHeadroom = 10;
+  else if (inCAZ && ptal >= 6 && !eraA) baseHeadroom = 10;
+  else if (inOA && ptal >= 6 && !eraA) baseHeadroom = 9;
+  else if (inCAZ && !eraA) baseHeadroom = 8;
+  else if (inOA && ptal >= 5 && !eraA) baseHeadroom = 7;
+  else if (inOA && !eraA) baseHeadroom = 6;
+  else if (inOA) baseHeadroom = 6;   // Tier A in OA: location acknowledged, fabric limits it
+  else if (inCity) baseHeadroom = 7; // Tier A in City: constrained by heritage but still City
+  else if (ptal >= 5) baseHeadroom = 5;
+  else if (ptal >= 4) baseHeadroom = 3;
+  else baseHeadroom = 1;
+
+  // Constraint discount — heritage/context eats the headroom
+  let constraintDiscount;
+  if (nhle_tier === 'blocking' || posture === 'defensive') constraintDiscount = 0.2;
+  else if (inCons && nhle_tier === 'navigable') constraintDiscount = 0.35;
+  else if (inCons) constraintDiscount = 0.5;
+  else if (nhle_tier === 'navigable') constraintDiscount = 0.6;
+  else if (nhle_tier === 'manageable') constraintDiscount = 0.8;
+  else constraintDiscount = 1.0;
+
+  // Utilisation boost — latent capacity adds to modifier (max +3)
+  const util = utilisationScore != null ? utilisationScore : 5.0;
+  const utilBoost = Math.round(((util - 5) / 5) * 3); // -3 to +3
+
+  const modifier = Math.round(baseHeadroom * constraintDiscount) + utilBoost;
+
+  // Ceiling: hard cap based on posture. 92 max — no site scores 100.
+  const ceiling = posture === 'go_hard' ? 92 : posture === 'caution' ? 82 : 68;
+
+  const score = (rawScore - (nhleBlockPenalty || 0)) + modifier;
+  return Math.max(0, Math.min(score, ceiling));
+}
+
+// ── Layer C: Planning score — factored, not blanket OA bonus ─────────────
+function computePlanScore(s, heritTier) {
+  const inOA   = !!(s.flags?.inOA || s.flags?.oa);
+  const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
+  const inCons = !!(s.flags?.inConservation);
+  const nhle_tier = (s.nhle_tier || '').toLowerCase();
+  // Use explicit score from intelligence file if available
+  if (s.mom) return s.mom;
+  // Base from location
+  let base = inOA ? 7.5 : inCAZ ? 7.0 : 5.5;
+  // Heritage discount
+  if (nhle_tier === 'blocking') base *= 0.5;
+  else if (inCons && nhle_tier === 'navigable') base *= 0.65;
+  else if (inCons) base *= 0.75;
+  else if (nhle_tier === 'navigable') base *= 0.80;
+  return Math.round(base * 10) / 10;
 }
 
 // ── Key constraint label ──────────────────────────────────────────────────
@@ -1165,16 +1278,23 @@ function normaliseSite(s, idx) {
      nhle_tier === 'manageable' ? 'manageable' :
      inCons ? 'navigable' : 'manageable');
 
-  // Layer C
+  // Layer C — factored score
+  const utilisationScore = s.utilisation_score != null ? s.utilisation_score : 5.0;
   const rawScore = parseInt(s.score)||0;
-  const score = computeScore(rawScore, s, posture, s.nhle_score_penalty || 0);
+  const score = computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore);
 
   const hectares = s.hectares || (s.plot ? s.plot / 10000 : 0.05);
   const plotM2 = Math.round(hectares * 10000);
-  const erv = inOA ? 700 : inCAZ ? 750 : 650;
+  // ERV: factored by use type, not blanket OA/CAZ
+  const useType = (s.use || '').toLowerCase();
+  const ervBase = useType === 'residential' ? 0 :
+    (s.borough||'').toLowerCase().includes('city') ? 850 :
+    inCAZ ? 750 : inOA ? 700 : 600;
+  const ervResid = useType === 'residential' ? (inCAZ ? 1100 : inOA ? 950 : 750) : 0;
+  const erv = ervBase || ervResid || 650;
   const nia = plotM2 * 0.78 * 0.42 * maxFloorsCapped;
   const gdvEst = (nia * erv / 0.0475 / 1e6).toFixed(1);
-  const planScore = s.mom || (inOA ? 8.5 : inCAZ ? 7.5 : 6.5);
+  const planScore = computePlanScore(s, heritTier);
   const constraint = keyConstraint(s, era, sensitivity, heritTier);
 
   // Utilisation score from enriched data
