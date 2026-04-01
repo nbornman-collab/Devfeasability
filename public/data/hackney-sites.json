@@ -129,7 +129,90 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "JOHN WESLEY'S HOUSE AND ATTACHED RAILINGS",
+          "grade": "I",
+          "nhle_id": "1195533"
+        },
+        {
+          "name": "WESLEY'S CHAPEL",
+          "grade": "I",
+          "nhle_id": "1195538"
+        },
+        {
+          "name": "CHAPEL KEEPER'S HOUSE, WESLEY'S CHAPEL",
+          "grade": "II",
+          "nhle_id": "1195539"
+        },
+        {
+          "name": "STATUE OF JOHN WESLEY IN THE FORECOURT OF WESLEY'S CHAPEL",
+          "grade": "II",
+          "nhle_id": "1195540"
+        },
+        {
+          "name": "SHOREDITCH COUNTY COURT AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195652"
+        },
+        {
+          "name": "TOMB OF JOHN WESLEY IN THE BURIAL GROUND OF WESLEY'S CHAPEL",
+          "grade": "II*",
+          "nhle_id": "1207627"
+        },
+        {
+          "name": "BENSON BUILDING, ABUTTING WESLEY'S CHAPEL",
+          "grade": "II",
+          "nhle_id": "1207690"
+        },
+        {
+          "name": "DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1226614"
+        },
+        {
+          "name": "ST MICHAEL'S CHURCH SCHOOL",
+          "grade": "II*",
+          "nhle_id": "1226884"
+        },
+        {
+          "name": "CLERGY HOUSE TO WEST OF CHURCH OF ST MICHAEL",
+          "grade": "II*",
+          "nhle_id": "1226961"
+        },
+        {
+          "name": "POST AT NORTH CORNER OF SCRUTTON STREET",
+          "grade": "II",
+          "nhle_id": "1235271"
+        },
+        {
+          "name": "CHURCH OF ST MICHAEL",
+          "grade": "I",
+          "nhle_id": "1265204"
+        },
+        {
+          "name": "87, GREAT EASTERN STREET EC2",
+          "grade": "II",
+          "nhle_id": "1265680"
+        },
+        {
+          "name": "THE MANSE",
+          "grade": "II",
+          "nhle_id": "1298067"
+        },
+        {
+          "name": "CENTRAL FOUNDATION SCHOOL FOR BOYS",
+          "grade": "II",
+          "nhle_id": "1389132"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 15,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "50-60 Commercial Street",
@@ -216,7 +299,340 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "12 AND 14, PRINCELET STREET E1",
+          "grade": "II",
+          "nhle_id": "1065074"
+        },
+        {
+          "name": "9, PRINCELET STREET E1",
+          "grade": "II",
+          "nhle_id": "1065075"
+        },
+        {
+          "name": "15, PRINCELET STREET E1",
+          "grade": "II",
+          "nhle_id": "1065076"
+        },
+        {
+          "name": "17, PRINCELET STREET E1",
+          "grade": "II",
+          "nhle_id": "1065077"
+        },
+        {
+          "name": "21, 23, 25, PRINCELET STREET E1",
+          "grade": "II",
+          "nhle_id": "1065078"
+        },
+        {
+          "name": "11, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065157"
+        },
+        {
+          "name": "15, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065158"
+        },
+        {
+          "name": "19, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065159"
+        },
+        {
+          "name": "21, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065160"
+        },
+        {
+          "name": "25, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065161"
+        },
+        {
+          "name": "29, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065162"
+        },
+        {
+          "name": "31, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065163"
+        },
+        {
+          "name": "33, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065164"
+        },
+        {
+          "name": "37, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065165"
+        },
+        {
+          "name": "39, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065166"
+        },
+        {
+          "name": "AREA RAILINGS AT NO 4",
+          "grade": "II",
+          "nhle_id": "1065167"
+        },
+        {
+          "name": "AREA RAILINGS AT 8 AND 10",
+          "grade": "II",
+          "nhle_id": "1065168"
+        },
+        {
+          "name": "AREA RAILINGS AT NO 12",
+          "grade": "II",
+          "nhle_id": "1065169"
+        },
+        {
+          "name": "AREA RAILINGS AT NOS 16 AND 18",
+          "grade": "II",
+          "nhle_id": "1065170"
+        },
+        {
+          "name": "1 AND 3, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065198"
+        },
+        {
+          "name": "DRINKING FOUNTAIN (IN THE BOUNDARY WALL OF CHRIST CHURCH CHURCHYARD)",
+          "grade": "II",
+          "nhle_id": "1065202"
+        },
+        {
+          "name": "5 BOLLARDS (ON THE PAVEMENT IN FRONT OF CHRIST CHURCH CHURCHYARD)",
+          "grade": "II",
+          "nhle_id": "1065203"
+        },
+        {
+          "name": "TEN BELLS PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1065204"
+        },
+        {
+          "name": "BRICK LANE JAMME MASJID (FORMER SCHOOL AND VESTRY TO NEUVE EGLISE)",
+          "grade": "II",
+          "nhle_id": "1065278"
+        },
+        {
+          "name": "114-122, BRICK LANE",
+          "grade": "II",
+          "nhle_id": "1065737"
+        },
+        {
+          "name": "SPITALFIELDS MARKET",
+          "grade": "II",
+          "nhle_id": "1065750"
+        },
+        {
+          "name": "6, WILKES STREET E1",
+          "grade": "II",
+          "nhle_id": "1065790"
+        },
+        {
+          "name": "10, WILKES STREET E1",
+          "grade": "II",
+          "nhle_id": "1065791"
+        },
+        {
+          "name": "13 AND 15, WILKES STREET",
+          "grade": "II",
+          "nhle_id": "1065792"
+        },
+        {
+          "name": "10-48, FASHION STREET E1",
+          "grade": "II",
+          "nhle_id": "1240611"
+        },
+        {
+          "name": "BRICK LANE JAMME MASJID (FORMER NEUVE EGLISE)",
+          "grade": "II*",
+          "nhle_id": "1240697"
+        },
+        {
+          "name": "Christchurch Rectory, 2 Fournier Street and area railings",
+          "grade": "II*",
+          "nhle_id": "1240832"
+        },
+        {
+          "name": "AREA RAILINGS AT NO 6",
+          "grade": "II",
+          "nhle_id": "1240850"
+        },
+        {
+          "name": "AREA RAILINGS AT NO 14",
+          "grade": "II",
+          "nhle_id": "1240855"
+        },
+        {
+          "name": "18-22, PRINCELET STREET E1",
+          "grade": "II",
+          "nhle_id": "1241597"
+        },
+        {
+          "name": "13, PRINCELET STREET E1",
+          "grade": "II",
+          "nhle_id": "1241599"
+        },
+        {
+          "name": "2, WILKES STREET E1",
+          "grade": "II",
+          "nhle_id": "1242278"
+        },
+        {
+          "name": "16, WILKES STREET E1",
+          "grade": "II",
+          "nhle_id": "1242284"
+        },
+        {
+          "name": "4-7, PUMA COURT",
+          "grade": "II",
+          "nhle_id": "1242320"
+        },
+        {
+          "name": "RAILINGS TO NO 5",
+          "grade": "II",
+          "nhle_id": "1260020"
+        },
+        {
+          "name": "NASH MONUMENT, CHRIST CHURCH",
+          "grade": "II",
+          "nhle_id": "1260166"
+        },
+        {
+          "name": "CHRIST CHURCH PRIMARY SCHOOL AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1260197"
+        },
+        {
+          "name": "19, PRINCELET STREET E1",
+          "grade": "II*",
+          "nhle_id": "1260421"
+        },
+        {
+          "name": "35, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1260863"
+        },
+        {
+          "name": "CHRISTCHURCH SCHOOL DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1262707"
+        },
+        {
+          "name": "17-25, WILKES STREET E1",
+          "grade": "II",
+          "nhle_id": "1357532"
+        },
+        {
+          "name": "3 AND 5, PRINCELET STREET",
+          "grade": "II",
+          "nhle_id": "1357543"
+        },
+        {
+          "name": "SOUP KITCHEN FOR THE JEWISH POOR",
+          "grade": "II",
+          "nhle_id": "1357557"
+        },
+        {
+          "name": "57, Brick Lane ",
+          "grade": "II",
+          "nhle_id": "1357788"
+        },
+        {
+          "name": "CATTLE AND HORSE DRINKING TROUGH (ON PAVEMENT IN FRONT OF DRINKING FOUNTAIN)",
+          "grade": "II",
+          "nhle_id": "1357794"
+        },
+        {
+          "name": "CHRIST CHURCH (INCLUDING GATEPIERS AND GATES TO VERGERS YARD)",
+          "grade": "I",
+          "nhle_id": "1357795"
+        },
+        {
+          "name": "27, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1357813"
+        },
+        {
+          "name": "AREA RAILINGS AT NO 20",
+          "grade": "II",
+          "nhle_id": "1357814"
+        },
+        {
+          "name": "5, 7 AND 9, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1357848"
+        },
+        {
+          "name": "13, FOURNIER STREET E1 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1357849"
+        },
+        {
+          "name": "17, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1357850"
+        },
+        {
+          "name": "23, FOURNIER STREET E1",
+          "grade": "II",
+          "nhle_id": "1357851"
+        },
+        {
+          "name": "2 AND 4, PRINCELET STREET E1",
+          "grade": "II",
+          "nhle_id": "1357887"
+        },
+        {
+          "name": "16, PRINCELET STREET",
+          "grade": "II",
+          "nhle_id": "1357888"
+        },
+        {
+          "name": "11, PRINCELET STREET",
+          "grade": "II",
+          "nhle_id": "1390050"
+        },
+        {
+          "name": "K6 TELEPHONE KIOSK",
+          "grade": "II",
+          "nhle_id": "1393747"
+        },
+        {
+          "name": "14, WILKES STREET",
+          "grade": "II",
+          "nhle_id": "1393808"
+        },
+        {
+          "name": "Golden Heart Public House",
+          "grade": "II",
+          "nhle_id": "1426296"
+        },
+        {
+          "name": "Spitalfields Christ Church War Memorial",
+          "grade": "II",
+          "nhle_id": "1444657"
+        },
+        {
+          "name": "Former Stapleton's Horse and Carriage Repository",
+          "grade": "II",
+          "nhle_id": "1469946"
+        }
+      ],
+      "nhle_count_50m": 8,
+      "nhle_count_150m": 65,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Worship Street EC2A",
@@ -308,7 +724,50 @@
           "name": "Westminster Pier to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "15-23, CHRISTOPHER STREET",
+          "grade": "II",
+          "nhle_id": "1226407"
+        },
+        {
+          "name": "2 AND 4, PAUL STREET EC2",
+          "grade": "II",
+          "nhle_id": "1235236"
+        },
+        {
+          "name": "91-101, WORSHIP STREET EC2",
+          "grade": "II*",
+          "nhle_id": "1235558"
+        },
+        {
+          "name": "BLACK SEA HOUSE",
+          "grade": "II",
+          "nhle_id": "1235639"
+        },
+        {
+          "name": "POST AT WEST CORNER OF CLIFTON STREET",
+          "grade": "II",
+          "nhle_id": "1235641"
+        },
+        {
+          "name": "FLYING HORSE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1271413"
+        },
+        {
+          "name": "DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1298057"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 7,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Shoreditch High Street South",
@@ -533,7 +992,85 @@
           "name": "King Henry's Mound to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "1 AND 3, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065178"
+        },
+        {
+          "name": "THE COMMERCIAL PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1065205"
+        },
+        {
+          "name": "FORMER POLICE STATION",
+          "grade": "II",
+          "nhle_id": "1065207"
+        },
+        {
+          "name": "POST AT EAST SIDE OF CORNER OF PLOUGH YARD",
+          "grade": "II",
+          "nhle_id": "1226764"
+        },
+        {
+          "name": "FORECOURT WALL AND GATES TO OLD BISHOPSGATE GOODS STATION",
+          "grade": "II",
+          "nhle_id": "1235316"
+        },
+        {
+          "name": "187-189, SHOREDITCH HIGH STREET E1",
+          "grade": "II",
+          "nhle_id": "1235320"
+        },
+        {
+          "name": "2 POSTS AT ENTRANCE TO BOWL COURT",
+          "grade": "II",
+          "nhle_id": "1235321"
+        },
+        {
+          "name": "196, SHOREDITCH HIGH STREET E1",
+          "grade": "II",
+          "nhle_id": "1235410"
+        },
+        {
+          "name": "1, ELDER STREET E1 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1240659"
+        },
+        {
+          "name": "6-8, GREAT EASTERN STREET",
+          "grade": "II",
+          "nhle_id": "1264878"
+        },
+        {
+          "name": "191, SHOREDITCH HIGH STREET E1",
+          "grade": "II",
+          "nhle_id": "1265136"
+        },
+        {
+          "name": "POST ON EAST SIDE OF ENTRANCE TO BOWL COURT",
+          "grade": "II",
+          "nhle_id": "1265175"
+        },
+        {
+          "name": "190, SHOREDITCH HIGH STREET E1",
+          "grade": "II",
+          "nhle_id": "1365739"
+        },
+        {
+          "name": "5, FAIRCHILD PLACE (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1391708"
+        }
+      ],
+      "nhle_count_50m": 4,
+      "nhle_count_150m": 14,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Sun Street / Finsbury Square Fringe",
@@ -630,7 +1167,45 @@
           "name": "King Henry's Mound to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "CATTLE TROUGH",
+          "grade": "II",
+          "nhle_id": "1195592"
+        },
+        {
+          "name": "ROMAN CATHOLIC CHURCH OF ST MARY MOORFIELDS",
+          "grade": "II",
+          "nhle_id": "1265731"
+        },
+        {
+          "name": "FLYING HORSE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1271413"
+        },
+        {
+          "name": "CATTLE TROUGH",
+          "grade": "II",
+          "nhle_id": "1292588"
+        },
+        {
+          "name": "DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1298057"
+        },
+        {
+          "name": "1 Finsbury Avenue",
+          "grade": "II",
+          "nhle_id": "1422594"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Curtain Road Warehouse District",
@@ -756,7 +1331,85 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "128 AND 132, CURTAIN ROAD EC2 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1226585"
+        },
+        {
+          "name": "DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1226614"
+        },
+        {
+          "name": "6 AND 8, GARDEN WALK EC2 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1226750"
+        },
+        {
+          "name": "ST MICHAEL'S CHURCH SCHOOL",
+          "grade": "II*",
+          "nhle_id": "1226884"
+        },
+        {
+          "name": "CLERGY HOUSE TO WEST OF CHURCH OF ST MICHAEL",
+          "grade": "II*",
+          "nhle_id": "1226961"
+        },
+        {
+          "name": "324, OLD STREET",
+          "grade": "II",
+          "nhle_id": "1235231"
+        },
+        {
+          "name": "POST AT WEST CORNER OF GARDEN WALK",
+          "grade": "II",
+          "nhle_id": "1235308"
+        },
+        {
+          "name": "2 POSTS TO WEST OF CURTAIN ROAD",
+          "grade": "II",
+          "nhle_id": "1265133"
+        },
+        {
+          "name": "CHURCH OF ST MICHAEL",
+          "grade": "I",
+          "nhle_id": "1265204"
+        },
+        {
+          "name": "87, GREAT EASTERN STREET EC2",
+          "grade": "II",
+          "nhle_id": "1265680"
+        },
+        {
+          "name": "THE GRIFFIN PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1389397"
+        },
+        {
+          "name": "43-49, CHARLOTTE ROAD",
+          "grade": "II",
+          "nhle_id": "1391679"
+        },
+        {
+          "name": "40-42, GREAT EASTERN STREET",
+          "grade": "II",
+          "nhle_id": "1391702"
+        },
+        {
+          "name": "18-26, RIVINGTON STREET",
+          "grade": "II",
+          "nhle_id": "1392418"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 14,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Hoxton Square Fringe",
@@ -894,7 +1547,85 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "10, HOXTON SQUARE N1",
+          "grade": "II",
+          "nhle_id": "1226768"
+        },
+        {
+          "name": "32, HOXTON SQUARE N1",
+          "grade": "II",
+          "nhle_id": "1226769"
+        },
+        {
+          "name": "FORECOURT WALLS AND RAILINGS TO NUMBER 10",
+          "grade": "II",
+          "nhle_id": "1226818"
+        },
+        {
+          "name": "NUMBER 323 (INCLUDING 323A)",
+          "grade": "II",
+          "nhle_id": "1235230"
+        },
+        {
+          "name": "17-21, PITFIELD STREET N1",
+          "grade": "II",
+          "nhle_id": "1235238"
+        },
+        {
+          "name": "FRONT WALL AND PIERS TO LONDON COLLEGE OF FURNITURE",
+          "grade": "II",
+          "nhle_id": "1235239"
+        },
+        {
+          "name": "340 AND 342, OLD STREET EC1",
+          "grade": "II",
+          "nhle_id": "1235259"
+        },
+        {
+          "name": "8 AND 10, PITFIELD STREET N1",
+          "grade": "II",
+          "nhle_id": "1235279"
+        },
+        {
+          "name": "CHURCH OF ST MONICA",
+          "grade": "II",
+          "nhle_id": "1253428"
+        },
+        {
+          "name": "ACADEMY FITNESS CENTRE",
+          "grade": "II",
+          "nhle_id": "1253433"
+        },
+        {
+          "name": "PRIORY OF THE AUGUSTINIAN FRIARS",
+          "grade": "II",
+          "nhle_id": "1261784"
+        },
+        {
+          "name": "PASSMORE EDWARDS FREE LIBRARY",
+          "grade": "II",
+          "nhle_id": "1265173"
+        },
+        {
+          "name": "56, HOXTON SQUARE N1",
+          "grade": "II",
+          "nhle_id": "1265685"
+        },
+        {
+          "name": "134-146 Curtain Road",
+          "grade": "II",
+          "nhle_id": "1391632"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 14,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Pitfield Street Industrial",
@@ -1539,7 +2270,35 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "FORECOURT WALLS RAILINGS AND GATES TO NUMBERS 31 TO 41 (ODD)",
+          "grade": "II",
+          "nhle_id": "1226966"
+        },
+        {
+          "name": "31-41, NEW NORTH ROAD N1",
+          "grade": "II",
+          "nhle_id": "1235216"
+        },
+        {
+          "name": "RAILINGS AND GATES TO CHURCHYARD OF ST JOHN THE BAPTIST",
+          "grade": "II",
+          "nhle_id": "1235240"
+        },
+        {
+          "name": "CHURCH OF ST JOHN THE BAPTIST",
+          "grade": "II*",
+          "nhle_id": "1235285"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Eagle Wharf East",
@@ -1768,7 +2527,14 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "St Leonards Hospital. Hoxton Street, London (Mixed Non-residential)",
@@ -1970,7 +2736,50 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "FORECOURT RAILINGS TO CHURCH OF ST COLUMBA AND VICARAGE",
+          "grade": "II",
+          "nhle_id": "1226777"
+        },
+        {
+          "name": "CHURCH OF ST COLUMBA",
+          "grade": "I",
+          "nhle_id": "1226862"
+        },
+        {
+          "name": "2-16, PEARSON STREET E2",
+          "grade": "II",
+          "nhle_id": "1235237"
+        },
+        {
+          "name": "SHOREDITCH HEALTH CENTRE",
+          "grade": "II",
+          "nhle_id": "1258017"
+        },
+        {
+          "name": "ST COLUMBA'S VICARAGE, WITH LINK TO CHURCH",
+          "grade": "I",
+          "nhle_id": "1265658"
+        },
+        {
+          "name": "SISTERS' HOUSE AND SCHOOL TO NORTH OF CHURCH OF ST COLUMBA",
+          "grade": "II*",
+          "nhle_id": "1265691"
+        },
+        {
+          "name": "Blocks A and B and façade of Relief Office at St Leonard's Hospital",
+          "grade": "II",
+          "nhle_id": "1393325"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 7,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "130 Kingsland Road and site to the rear 130A Kingsland Road (Mixed Residential/Non-Residential)",
@@ -2236,7 +3045,35 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "THE GEFFRYE MUSEUM",
+          "grade": "I",
+          "nhle_id": "1226772"
+        },
+        {
+          "name": "K6 TELEPHONE KIOSK, OUTSIDE GEFFRYE MUSEUM",
+          "grade": "II",
+          "nhle_id": "1235680"
+        },
+        {
+          "name": "FORECOURT WALL, GATES AND RAILINGS TO GEFFRYE MUSEUM",
+          "grade": "II",
+          "nhle_id": "1265688"
+        },
+        {
+          "name": "North London Railwaymen War Memorial",
+          "grade": "II",
+          "nhle_id": "1445194"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Kingsland Road Industrial Corridor",
@@ -2409,7 +3246,70 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "237 AND 237A, HOXTON STREET N1",
+          "grade": "II",
+          "nhle_id": "1226771"
+        },
+        {
+          "name": "FORECOURT RAILINGS TO CHURCH OF ST COLUMBA AND VICARAGE",
+          "grade": "II",
+          "nhle_id": "1226777"
+        },
+        {
+          "name": "CHURCH OF ST COLUMBA",
+          "grade": "I",
+          "nhle_id": "1226862"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK OUTSIDE ST LEONARD'S HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1235668"
+        },
+        {
+          "name": "HAGGERSTON BRANCH LIBRARY",
+          "grade": "II",
+          "nhle_id": "1235820"
+        },
+        {
+          "name": "233 AND 235, HOXTON STREET N1",
+          "grade": "II",
+          "nhle_id": "1265648"
+        },
+        {
+          "name": "ST COLUMBA'S VICARAGE, WITH LINK TO CHURCH",
+          "grade": "I",
+          "nhle_id": "1265658"
+        },
+        {
+          "name": "SISTERS' HOUSE AND SCHOOL TO NORTH OF CHURCH OF ST COLUMBA",
+          "grade": "II*",
+          "nhle_id": "1265691"
+        },
+        {
+          "name": "CHURCH OF ST ANNE WITH ST COLUMBA",
+          "grade": "II",
+          "nhle_id": "1376507"
+        },
+        {
+          "name": "TWO CANNON BOLLARDS",
+          "grade": "II",
+          "nhle_id": "1392903"
+        },
+        {
+          "name": "Blocks A and B and façade of Relief Office at St Leonard's Hospital",
+          "grade": "II",
+          "nhle_id": "1393325"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 11,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Eagle Wharf Road (Mixed Residential/Non-Residential)",
@@ -2639,7 +3539,25 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 22-39 (CONSECUTIVE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195462"
+        },
+        {
+          "name": "NUMBER 12-21 (CONSECUTIVE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1281251"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "40-43 Andrews Road and Ash Grove Bus Garage (Mixed Residential/Non-Residential)",
@@ -2839,7 +3757,20 @@
           "name": "Westminster Pier to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "12-20, MARE STREET E8",
+          "grade": "II",
+          "nhle_id": "1226896"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "51-61 Mare Street (Mixed Residential/Non-Residential)",
@@ -3006,7 +3937,20 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "12-20, MARE STREET E8",
+          "grade": "II",
+          "nhle_id": "1226896"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Former Rose Lipman Library and Environs, Downham Road (Mixed Residential/Non-Residential)",
@@ -3235,7 +4179,14 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "164-170 Mare Street (Mixed Residential/Non-Residential)",
@@ -3455,7 +4406,30 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "ARCHWAY LEADING TO ST THOMAS'S RECREATION GROUND",
+          "grade": "II",
+          "nhle_id": "1226897"
+        },
+        {
+          "name": "THE NEW LANSDOWNE CLUB",
+          "grade": "II*",
+          "nhle_id": "1265590"
+        },
+        {
+          "name": "THE DOLPHIN PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1393174"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 3,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "27-38 Well Street (Lidl) (Mixed Residential/Non-Residential)",
@@ -3671,7 +4645,20 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE NEW LANSDOWNE CLUB",
+          "grade": "II*",
+          "nhle_id": "1265590"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "182 Mare Street (London College of Fashion) (Mixed Residential/Non-Residential)",
@@ -3891,7 +4878,35 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "ARCHWAY LEADING TO ST THOMAS'S RECREATION GROUND",
+          "grade": "II",
+          "nhle_id": "1226897"
+        },
+        {
+          "name": "DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1235875"
+        },
+        {
+          "name": "THE NEW LANSDOWNE CLUB",
+          "grade": "II*",
+          "nhle_id": "1265590"
+        },
+        {
+          "name": "THE DOLPHIN PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1393174"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Florfield Road Cluster (Mixed Residential/Non-Residential)",
@@ -4170,7 +5185,40 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "25 AND 27, HACKNEY GROVE E8",
+          "grade": "II",
+          "nhle_id": "1226756"
+        },
+        {
+          "name": "FORECOURT WALL TO NUMBER 25",
+          "grade": "II",
+          "nhle_id": "1226757"
+        },
+        {
+          "name": "HACKNEY TOWN HALL",
+          "grade": "II",
+          "nhle_id": "1235869"
+        },
+        {
+          "name": "HACKNEY TOWN HALL CIVIC GARDEN WALLS AND LAMP PIERS, TO WESTERN ELEVATION",
+          "grade": "II",
+          "nhle_id": "1235870"
+        },
+        {
+          "name": "33, HACKNEY GROVE E8",
+          "grade": "II",
+          "nhle_id": "1265682"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Tesco Metro, Well Street (Mixed Residential/Non-Residential)",
@@ -4517,7 +5565,20 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "20-54, CASSLAND ROAD E9",
+          "grade": "II",
+          "nhle_id": "1226405"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Former CLR James Library, 16-22 Dalston Lane, 62 Beechwood Road (Mixed Residential/Non-Residential)",
@@ -4718,7 +5779,40 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "POST AT OUTER CORNER OF NUMBER 20",
+          "grade": "II",
+          "nhle_id": "1079829"
+        },
+        {
+          "name": "540-544, KINGSLAND ROAD E2",
+          "grade": "II",
+          "nhle_id": "1226775"
+        },
+        {
+          "name": "590 AND 592, KINGSLAND ROAD E2",
+          "grade": "II",
+          "nhle_id": "1226776"
+        },
+        {
+          "name": "560-568, KINGSLAND ROAD E8",
+          "grade": "II",
+          "nhle_id": "1226858"
+        },
+        {
+          "name": "546-558, KINGSLAND ROAD E2",
+          "grade": "II",
+          "nhle_id": "1265690"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "1, 3, 5, 7 Dalston Lane, (Dalston Western Curve), & 1-7 Ashwin Street (Mixed Residential/Non-Residential)",
@@ -4956,11 +6050,39 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "POST AT OUTER CORNER OF NUMBER 20",
+          "grade": "II",
+          "nhle_id": "1079829"
+        },
+        {
+          "name": "590 AND 592, KINGSLAND ROAD E2",
+          "grade": "II",
+          "nhle_id": "1226776"
+        },
+        {
+          "name": "560-568, KINGSLAND ROAD E8",
+          "grade": "II",
+          "nhle_id": "1226858"
+        },
+        {
+          "name": "F COOKE'S EEL, PIE AND MASH SHOP",
+          "grade": "II",
+          "nhle_id": "1235868"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
-      "name": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of \u00e2\u20ac\u02dceastern curve\u00e2\u20ac\u2122 (Mixed Residential/Non-Residential)",
-      "address": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of \u00e2\u20ac\u02dceastern curve\u00e2\u20ac\u2122 (Mixed Residential/Non-Residential), London",
+      "name": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of â€˜eastern curveâ€™ (Mixed Residential/Non-Residential)",
+      "address": "2-16 Ashwin St, 11 - 15 Dalston Lane, southern end of â€˜eastern curveâ€™ (Mixed Residential/Non-Residential), London",
       "borough": "Hackney",
       "lat": 51.546526,
       "lng": -0.074346,
@@ -5222,7 +6344,35 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "POST AT OUTER CORNER OF NUMBER 20",
+          "grade": "II",
+          "nhle_id": "1079829"
+        },
+        {
+          "name": "590 AND 592, KINGSLAND ROAD E2",
+          "grade": "II",
+          "nhle_id": "1226776"
+        },
+        {
+          "name": "560-568, KINGSLAND ROAD E8",
+          "grade": "II",
+          "nhle_id": "1226858"
+        },
+        {
+          "name": "F COOKE'S EEL, PIE AND MASH SHOP",
+          "grade": "II",
+          "nhle_id": "1235868"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "36-42 Kingsland High Street (currently McDonalds) (Mixed Residential/Non-Residential)",
@@ -5383,7 +6533,30 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "POST AT OUTER CORNER OF NUMBER 20",
+          "grade": "II",
+          "nhle_id": "1079829"
+        },
+        {
+          "name": "FORECOURT RAILINGS TO COLVESTONE PRIMARY SCHOOL",
+          "grade": "II",
+          "nhle_id": "1226422"
+        },
+        {
+          "name": "F COOKE'S EEL, PIE AND MASH SHOP",
+          "grade": "II",
+          "nhle_id": "1235868"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 3,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "333-337 Mare Street (Iceland Foods) and 231-237 Graham Road (Mixed Residential/Non-Residential)",
@@ -5570,7 +6743,45 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE MIDLAND BANK",
+          "grade": "II",
+          "nhle_id": "1226899"
+        },
+        {
+          "name": "THE HACKNEY EMPIRE",
+          "grade": "II*",
+          "nhle_id": "1226960"
+        },
+        {
+          "name": "CIRCLE HOUSE",
+          "grade": "II",
+          "nhle_id": "1235548"
+        },
+        {
+          "name": "4, SYLVESTER PATH E8",
+          "grade": "II",
+          "nhle_id": "1264966"
+        },
+        {
+          "name": "OLD TOWER OF FORMER CHURCH OF ST AUGUSTINE",
+          "grade": "I",
+          "nhle_id": "1265635"
+        },
+        {
+          "name": "WALL AND PUBLIC CONVENIENCES",
+          "grade": "II",
+          "nhle_id": "1322058"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "55 Morning Lane (Mixed Residential/Non-Residential)",
@@ -5777,7 +6988,30 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE MIDLAND BANK",
+          "grade": "II",
+          "nhle_id": "1226899"
+        },
+        {
+          "name": "WALL TO NORTH OF FORMER CHURCHYARD OF ST AUGUSTINE",
+          "grade": "II",
+          "nhle_id": "1226900"
+        },
+        {
+          "name": "OLD TOWER OF FORMER CHURCH OF ST AUGUSTINE",
+          "grade": "I",
+          "nhle_id": "1265635"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 3,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Kingsland Shopping Centre (Mixed Residential/Non-Residential)",
@@ -5974,7 +7208,25 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "POST AT OUTER CORNER OF NUMBER 20",
+          "grade": "II",
+          "nhle_id": "1079829"
+        },
+        {
+          "name": "FORECOURT RAILINGS TO COLVESTONE PRIMARY SCHOOL",
+          "grade": "II",
+          "nhle_id": "1226422"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Hackney Central Overground Station and Car Park (Mixed Non-residential)",
@@ -6126,7 +7378,35 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE MIDLAND BANK",
+          "grade": "II",
+          "nhle_id": "1226899"
+        },
+        {
+          "name": "CIRCLE HOUSE",
+          "grade": "II",
+          "nhle_id": "1235548"
+        },
+        {
+          "name": "4, SYLVESTER PATH E8",
+          "grade": "II",
+          "nhle_id": "1264966"
+        },
+        {
+          "name": "OLD TOWER OF FORMER CHURCH OF ST AUGUSTINE",
+          "grade": "I",
+          "nhle_id": "1265635"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "339-357 Mare Street, 6-18 Amhurst Road (Marks and Spencer) (Mixed Residential/Non-Residential)",
@@ -6306,7 +7586,50 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE MIDLAND BANK",
+          "grade": "II",
+          "nhle_id": "1226899"
+        },
+        {
+          "name": "WALL TO NORTH OF FORMER CHURCHYARD OF ST AUGUSTINE",
+          "grade": "II",
+          "nhle_id": "1226900"
+        },
+        {
+          "name": "CIRCLE HOUSE",
+          "grade": "II",
+          "nhle_id": "1235548"
+        },
+        {
+          "name": "4, SYLVESTER PATH E8",
+          "grade": "II",
+          "nhle_id": "1264966"
+        },
+        {
+          "name": "WALL TO SOUTH WEST OF CHURCH OF ST JOHN AT HACKNEY",
+          "grade": "II",
+          "nhle_id": "1265589"
+        },
+        {
+          "name": "THE MANOR",
+          "grade": "II",
+          "nhle_id": "1265591"
+        },
+        {
+          "name": "OLD TOWER OF FORMER CHURCH OF ST AUGUSTINE",
+          "grade": "I",
+          "nhle_id": "1265635"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 7,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Ridley Road (Mixed Non-residential)",
@@ -6487,7 +7810,35 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "ST MARKS CHURCH HALL AND VERGERS HOUSE",
+          "grade": "II",
+          "nhle_id": "1031612"
+        },
+        {
+          "name": "FORECOURT RAILINGS TO COLVESTONE PRIMARY SCHOOL",
+          "grade": "II",
+          "nhle_id": "1226422"
+        },
+        {
+          "name": "CHURCH OF ST MARK",
+          "grade": "II*",
+          "nhle_id": "1265134"
+        },
+        {
+          "name": "Colvestone Primary School",
+          "grade": "II",
+          "nhle_id": "1265832"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Travis Perkins, 111 Dalston Lane (Mixed Residential/Non-Residential)",
@@ -6680,7 +8031,55 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "126, DALSTON LANE E8",
+          "grade": "II",
+          "nhle_id": "1226429"
+        },
+        {
+          "name": "FORECOURT RAILINGS TO NUMBER 126",
+          "grade": "II",
+          "nhle_id": "1226430"
+        },
+        {
+          "name": "MARLOW HOUSE",
+          "grade": "II",
+          "nhle_id": "1226591"
+        },
+        {
+          "name": "166, DALSTON LANE E8",
+          "grade": "II",
+          "nhle_id": "1226592"
+        },
+        {
+          "name": "168, Dalston Lane",
+          "grade": "II",
+          "nhle_id": "1226593"
+        },
+        {
+          "name": "LODGE TO WEST ENTRANCE OF GERMAN HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1235778"
+        },
+        {
+          "name": "162 AND 164, DALSTON LANE E8",
+          "grade": "II",
+          "nhle_id": "1265789"
+        },
+        {
+          "name": "113, DALSTON LANE E8",
+          "grade": "II",
+          "nhle_id": "1265863"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 8,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Clapton Bus Garage (Mixed Residential/Non-Residential)",
@@ -7111,7 +8510,60 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE MIDLAND BANK",
+          "grade": "II",
+          "nhle_id": "1226899"
+        },
+        {
+          "name": "WALL TO NORTH OF FORMER CHURCHYARD OF ST AUGUSTINE",
+          "grade": "II",
+          "nhle_id": "1226900"
+        },
+        {
+          "name": "5-16, SUTTON PLACE E9",
+          "grade": "II",
+          "nhle_id": "1235547"
+        },
+        {
+          "name": "K6 TELEPHONE KIOSK, OUTSIDE SUTTON PLACE, JUNCTION HOMERTON HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1264976"
+        },
+        {
+          "name": "1-4, SUTTON PLACE",
+          "grade": "II",
+          "nhle_id": "1265029"
+        },
+        {
+          "name": "17-22, SUTTON PLACE E9",
+          "grade": "II",
+          "nhle_id": "1265030"
+        },
+        {
+          "name": "WALL TO SOUTH WEST OF CHURCH OF ST JOHN AT HACKNEY",
+          "grade": "II",
+          "nhle_id": "1265589"
+        },
+        {
+          "name": "OLD TOWER OF FORMER CHURCH OF ST AUGUSTINE",
+          "grade": "I",
+          "nhle_id": "1265635"
+        },
+        {
+          "name": "LODDIGES FAMILY TOMB, ST JOHN AT HACKNEY CHURCHYARD GARDENS",
+          "grade": "II",
+          "nhle_id": "1391335"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 9,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "230 Dalston Lane and Hackney Downs Station Entrance (Mixed Residential/Non-Residential)",
@@ -7269,7 +8721,35 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "CHALMAR HOUSE",
+          "grade": "II",
+          "nhle_id": "1226587"
+        },
+        {
+          "name": "216-222, DALTON LANE E8",
+          "grade": "II",
+          "nhle_id": "1226596"
+        },
+        {
+          "name": "224 AND 226, DALSTON LANE E8",
+          "grade": "II",
+          "nhle_id": "1226658"
+        },
+        {
+          "name": "212 AND 214, DALSTON LANE E8",
+          "grade": "II",
+          "nhle_id": "1265737"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Birkbeck Mews (Mixed Residential/Non-Residential)",
@@ -7406,7 +8886,35 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "FORECOURT RAILINGS TO COLVESTONE PRIMARY SCHOOL",
+          "grade": "II",
+          "nhle_id": "1226422"
+        },
+        {
+          "name": "F COOKE'S EEL, PIE AND MASH SHOP",
+          "grade": "II",
+          "nhle_id": "1235868"
+        },
+        {
+          "name": "RIO CINEMA",
+          "grade": "II",
+          "nhle_id": "1244939"
+        },
+        {
+          "name": "Colvestone Primary School",
+          "grade": "II",
+          "nhle_id": "1265832"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Lower Clapton Health Centre (Mixed Residential/Non-Residential)",
@@ -7793,7 +9301,60 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "PUBLIC BATHS, KINGS HALL LEISURE CENTRE",
+          "grade": "II",
+          "nhle_id": "1096051"
+        },
+        {
+          "name": "VERGER'S HOUSE TO UNITED REFORMED CHURCH",
+          "grade": "II",
+          "nhle_id": "1226753"
+        },
+        {
+          "name": "10 AND 12, LOWER CLAPTON ROAD E5",
+          "grade": "II",
+          "nhle_id": "1226887"
+        },
+        {
+          "name": "6 AND 8, LOWER CLAPTON ROAD E5",
+          "grade": "II",
+          "nhle_id": "1226913"
+        },
+        {
+          "name": "26 AND 28, LOWER CLAPTON ROAD E5",
+          "grade": "II",
+          "nhle_id": "1226916"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK ON CORNER OF JUNCTION WITH LOWER CLAPTON ROAD",
+          "grade": "II",
+          "nhle_id": "1235752"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK OUTSIDE POLICE STATION NEAR JUNCTION WITH LOWER CLAPTON ROAD",
+          "grade": "II",
+          "nhle_id": "1235753"
+        },
+        {
+          "name": "THE POLICE STATION",
+          "grade": "II",
+          "nhle_id": "1264866"
+        },
+        {
+          "name": "UNITED REFORMED CHURCH",
+          "grade": "II*",
+          "nhle_id": "1265632"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 9,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Tram Depot, 38-40 Upper Clapton Road (Mixed Residential/Non-Residential)",
@@ -8278,11 +9839,18 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
-      "name": "71-73 Lordship Road (St Mary\u00e2\u20ac\u2122s Lodge) (Mixed Residential/Non-Residential)",
-      "address": "71-73 Lordship Road (St Mary\u00e2\u20ac\u2122s Lodge) (Mixed Residential/Non-Residential), London",
+      "name": "71-73 Lordship Road (St Maryâ€™s Lodge) (Mixed Residential/Non-Residential)",
+      "address": "71-73 Lordship Road (St Maryâ€™s Lodge) (Mixed Residential/Non-Residential), London",
       "borough": "Hackney",
       "lat": 51.565625,
       "lng": -0.084591,
@@ -8823,7 +10391,14 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Yard Buildings, 318 Green Lanes (Mixed Residential/Non-Residential)",
@@ -8969,7 +10544,14 @@
         "source": "existing"
       },
       "_borough": "Hackney",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     }
   ]
 }

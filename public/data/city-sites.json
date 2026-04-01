@@ -357,7 +357,100 @@
           "name": "King Henry's Mound to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "56 TO 60, NEW BROAD STREET",
+          "grade": "II",
+          "nhle_id": "1064588"
+        },
+        {
+          "name": "62, NEW BROAD STREET EC2",
+          "grade": "II",
+          "nhle_id": "1064589"
+        },
+        {
+          "name": "CHURCH OF ALL HALLOWS",
+          "grade": "I",
+          "nhle_id": "1064632"
+        },
+        {
+          "name": "FINSBURY HOUSE",
+          "grade": "II",
+          "nhle_id": "1064718"
+        },
+        {
+          "name": "8, BISHOPSGATE CHURCHYARD",
+          "grade": "II",
+          "nhle_id": "1064751"
+        },
+        {
+          "name": "Carpenters' Hall",
+          "grade": "II",
+          "nhle_id": "1079135"
+        },
+        {
+          "name": "PARK HOUSE AND GARDEN HOUSE",
+          "grade": "II",
+          "nhle_id": "1192541"
+        },
+        {
+          "name": "POLICE CALL BOX OUTSIDE LIVERPOOL STREET STATION",
+          "grade": "II",
+          "nhle_id": "1252268"
+        },
+        {
+          "name": "DRINKING FOUNTAIN AND SHELTER, NORTH SIDE OF GARDENS",
+          "grade": "II",
+          "nhle_id": "1252284"
+        },
+        {
+          "name": "ROMAN CATHOLIC CHURCH OF ST MARY MOORFIELDS",
+          "grade": "II",
+          "nhle_id": "1265731"
+        },
+        {
+          "name": "76-80, OLD BROAD STREET EC2",
+          "grade": "II",
+          "nhle_id": "1285815"
+        },
+        {
+          "name": "23, 24 AND 25, GREAT WINCHESTER STREET EC2",
+          "grade": "II",
+          "nhle_id": "1358913"
+        },
+        {
+          "name": "ST BOTOLPHS CHURCH HALL",
+          "grade": "II",
+          "nhle_id": "1359149"
+        },
+        {
+          "name": "LONDON WALL BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1375268"
+        },
+        {
+          "name": "Signal Box: Liverpool Street London Underground",
+          "grade": "II",
+          "nhle_id": "1413844"
+        },
+        {
+          "name": "Great Eastern Railway War Memorial, Liverpool Street Station",
+          "grade": "II",
+          "nhle_id": "1483817"
+        },
+        {
+          "name": "London Society of East Anglians War Memorial, Liverpool Street Station",
+          "grade": "II",
+          "nhle_id": "1483820"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 17,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "D"
     },
     {
       "name": "Norton Folgate, Spitalfields",
@@ -533,7 +626,135 @@
           "name": "King Henry's Mound to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "STREET LAMP STANDARD",
+          "grade": "II",
+          "nhle_id": "1065057"
+        },
+        {
+          "name": "THE CENTRAL FOUNDATION SCHOOL FOR GIRLS",
+          "grade": "II",
+          "nhle_id": "1065058"
+        },
+        {
+          "name": "1 AND 3, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065178"
+        },
+        {
+          "name": "Nos. 9-13, ELDER STREET; RAILINGS AT NOS 9 and 11",
+          "grade": "II",
+          "nhle_id": "1065179"
+        },
+        {
+          "name": "17, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065180"
+        },
+        {
+          "name": "19 AND 21, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065181"
+        },
+        {
+          "name": "24, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065182"
+        },
+        {
+          "name": "28 AND 30, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065183"
+        },
+        {
+          "name": "36, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1065184"
+        },
+        {
+          "name": "2 BOLLARDS (AT JUNCTION WITH ELDER STREET)",
+          "grade": "II",
+          "nhle_id": "1065196"
+        },
+        {
+          "name": "6 AND 8, FOLGATE STREET E1",
+          "grade": "II",
+          "nhle_id": "1065197"
+        },
+        {
+          "name": "1A, STOTHARD PLACE EC2",
+          "grade": "II",
+          "nhle_id": "1079127"
+        },
+        {
+          "name": "POST AT CORNER OF WORSHIP STREET",
+          "grade": "II",
+          "nhle_id": "1235254"
+        },
+        {
+          "name": "2 POSTS AT ENTRANCE TO BOWL COURT",
+          "grade": "II",
+          "nhle_id": "1235321"
+        },
+        {
+          "name": "27, FOLGATE STREET E1",
+          "grade": "II",
+          "nhle_id": "1240681"
+        },
+        {
+          "name": "No. 37 SPITAL SQUARE (INCLUDING RAILINGS)",
+          "grade": "II",
+          "nhle_id": "1242060"
+        },
+        {
+          "name": "FORECOURT WALL AND GATE PIERS AT THE CENTRAL FOUNDATION SCHOOL FOR GIRLS",
+          "grade": "II",
+          "nhle_id": "1242076"
+        },
+        {
+          "name": "5 AND 7, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1357820"
+        },
+        {
+          "name": "15, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1357821"
+        },
+        {
+          "name": "23, ELDER STREET E1",
+          "grade": "II",
+          "nhle_id": "1357822"
+        },
+        {
+          "name": "STREET LAMP AFFIXED TO WALL OF NO 26",
+          "grade": "II",
+          "nhle_id": "1357823"
+        },
+        {
+          "name": "RAILINGS AT NOS 32 AND 34",
+          "grade": "II",
+          "nhle_id": "1357824"
+        },
+        {
+          "name": "17-21, FOLGATE STREET E1",
+          "grade": "II",
+          "nhle_id": "1357828"
+        },
+        {
+          "name": "10-18, FOLGATE STREET E1",
+          "grade": "II",
+          "nhle_id": "1357829"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 24,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -563,7 +784,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "4000m\u00b2 office site with planning context for 30F/120m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "desc": "4000m² office site with planning context for 30F/120m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
       "max_floors": 7,
       "planning_realm": {
         "conservation_area": true,
@@ -798,7 +1019,110 @@
         "source": "city-field"
       },
       "_borough": "City of London",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "SHIELD HOUSE",
+          "grade": "II",
+          "nhle_id": "1064590"
+        },
+        {
+          "name": "PORT OF LONDON AUTHORITY'S WAREHOUSES AND BOUNDARY WALLS TO MIDDLESEX STREET AND NEW STREET",
+          "grade": "II",
+          "nhle_id": "1064679"
+        },
+        {
+          "name": "12 AND 13, DEVONSHIRE SQUARE EC2",
+          "grade": "II",
+          "nhle_id": "1064684"
+        },
+        {
+          "name": "CHURCH OF ST BOTOLPH",
+          "grade": "II*",
+          "nhle_id": "1064747"
+        },
+        {
+          "name": "52-68, BISHOPSGATE EC2",
+          "grade": "II",
+          "nhle_id": "1064749"
+        },
+        {
+          "name": "162 AND 164, BISHOPSGATE EC2",
+          "grade": "II",
+          "nhle_id": "1064750"
+        },
+        {
+          "name": "8, BISHOPSGATE CHURCHYARD",
+          "grade": "II",
+          "nhle_id": "1064751"
+        },
+        {
+          "name": "GUILD CHURCH OF ST ETHELBURGA THE VIRGIN",
+          "grade": "I",
+          "nhle_id": "1191603"
+        },
+        {
+          "name": "GATEWAY TO NUMBER 21",
+          "grade": "II",
+          "nhle_id": "1194082"
+        },
+        {
+          "name": "WALL TO REAR OF NUMBERS 4 TO 18 (EVEN) WHICH ARE NOT OF SPECIAL ARCHITECTURAL OR HISTORICAL INTEREST",
+          "grade": "II",
+          "nhle_id": "1252034"
+        },
+        {
+          "name": "POLICE CALL BOX OUTSIDE LIVERPOOL STREET STATION",
+          "grade": "II",
+          "nhle_id": "1252268"
+        },
+        {
+          "name": "Former Great Eastern Hotel",
+          "grade": "II*",
+          "nhle_id": "1252272"
+        },
+        {
+          "name": "ST BOTOLPHS CHURCH HALL",
+          "grade": "II",
+          "nhle_id": "1359149"
+        },
+        {
+          "name": "2 DRINKING FOUNTAINS, 3 OVERTHROWS AND LANTERNS",
+          "grade": "II",
+          "nhle_id": "1359170"
+        },
+        {
+          "name": "5-7, NEW STREET EC2",
+          "grade": "II",
+          "nhle_id": "1359216"
+        },
+        {
+          "name": "1, 3 AND 5, STONE HOUSE COURT EC3",
+          "grade": "II",
+          "nhle_id": "1375287"
+        },
+        {
+          "name": "Bishopsgate Parish Memorial",
+          "grade": "II",
+          "nhle_id": "1433405"
+        },
+        {
+          "name": "Great Eastern Railway War Memorial, Liverpool Street Station",
+          "grade": "II",
+          "nhle_id": "1483817"
+        },
+        {
+          "name": "London Society of East Anglians War Memorial, Liverpool Street Station",
+          "grade": "II",
+          "nhle_id": "1483820"
+        }
+      ],
+      "nhle_count_50m": 5,
+      "nhle_count_150m": 19,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "D"
     },
     {
       "name": "10 Trinity Square",
@@ -982,7 +1306,150 @@
         "source": "city-field"
       },
       "_borough": "City of London",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "The Merchant Navy Memorial, Second World War section",
+          "grade": "II*",
+          "nhle_id": "1031597"
+        },
+        {
+          "name": "Tower and remains of Church of All Hallows",
+          "grade": "I",
+          "nhle_id": "1064605"
+        },
+        {
+          "name": "GATEWAY WITH ADJOINING WALL AND RAILING TO YARD OF CHURCH OF ST OLAVE",
+          "grade": "II*",
+          "nhle_id": "1064636"
+        },
+        {
+          "name": "CHURCH OF ALL HALLOWS BY THE TOWER",
+          "grade": "I",
+          "nhle_id": "1064671"
+        },
+        {
+          "name": "CHURCH OF ST OLAVE",
+          "grade": "I",
+          "nhle_id": "1064676"
+        },
+        {
+          "name": "42, CRUTCHED FRIARS EC3",
+          "grade": "II*",
+          "nhle_id": "1064677"
+        },
+        {
+          "name": "43 AND 44, CRUTCHED FRIARS EC3",
+          "grade": "II",
+          "nhle_id": "1064678"
+        },
+        {
+          "name": "41, CRUTCHED FRIARS EC3",
+          "grade": "II",
+          "nhle_id": "1064716"
+        },
+        {
+          "name": "REVETMENT WALL TO WEST AND NORTH SIDE OF MOAT, FROM OUTWORK ATTACHED TO MIDDLE TOWER (QV) TO TOWER HILL POSTERN",
+          "grade": "II",
+          "nhle_id": "1065764"
+        },
+        {
+          "name": "41, Trinity Square and area railings",
+          "grade": "II",
+          "nhle_id": "1065838"
+        },
+        {
+          "name": "Iron railings and gates at Trinity House",
+          "grade": "II",
+          "nhle_id": "1065839"
+        },
+        {
+          "name": "CORN EXCHANGE CHAMBERS",
+          "grade": "II",
+          "nhle_id": "1079125"
+        },
+        {
+          "name": "Trinity House",
+          "grade": "I",
+          "nhle_id": "1079137"
+        },
+        {
+          "name": "FORMER PORT OF LONDON AUTHORITY BUILDING",
+          "grade": "II*",
+          "nhle_id": "1079138"
+        },
+        {
+          "name": "FRONT BLOCK OF FENCHURCH STREET STATION",
+          "grade": "II",
+          "nhle_id": "1079149"
+        },
+        {
+          "name": "8-10, Tower Hill ",
+          "grade": "II",
+          "nhle_id": "1180654"
+        },
+        {
+          "name": "THE SHIP PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1192980"
+        },
+        {
+          "name": "LAMBE'S CHAPEL CRYPT UNDER YARD FORMERLY BELONGING TO CHURCH OF ALL HALLOWS STAINING",
+          "grade": "II",
+          "nhle_id": "1193707"
+        },
+        {
+          "name": "OUTER CURTAIN WALL WITH CASEMENTS AND MURAL TOWERS",
+          "grade": "I",
+          "nhle_id": "1242026"
+        },
+        {
+          "name": "43, Trinity Square and area railings",
+          "grade": "II",
+          "nhle_id": "1242296"
+        },
+        {
+          "name": "The Merchant Navy Memorial, First World War section",
+          "grade": "I",
+          "nhle_id": "1260087"
+        },
+        {
+          "name": "WINE CELLARS AT PREMISES OF MESSERS ASHER STOREY",
+          "grade": "II",
+          "nhle_id": "1260113"
+        },
+        {
+          "name": "RAILING AND DWARF WALL TO CHURCH OF ALL HALLOWS (FLANKING GREAT TOWER STREET)",
+          "grade": "II",
+          "nhle_id": "1286421"
+        },
+        {
+          "name": "RAILING AND DWARF WALL TO CHURCH OF ALL HALLOWS (FLANKING BYWARD STREET)",
+          "grade": "II",
+          "nhle_id": "1359187"
+        },
+        {
+          "name": "60 AND 61, MARK LANE EC3",
+          "grade": "II*",
+          "nhle_id": "1359196"
+        },
+        {
+          "name": "HM TOWER OF LONDON LIBERTY BOUNDARY MARKERS",
+          "grade": "II",
+          "nhle_id": "1393921"
+        },
+        {
+          "name": "HM TOWER OF LONDON LIBERTY BOUNDARY MARKERS",
+          "grade": "II",
+          "nhle_id": "1393922"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 27,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -1012,7 +1479,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "5000m\u00b2 office site with planning context for 22F/90m - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "desc": "5000m² office site with planning context for 22F/90m - strong off-market acquisition signal. A credible development case with manageable constraints.",
       "max_floors": 7,
       "planning_realm": {
         "conservation_area": false,
@@ -1280,7 +1747,85 @@
           "name": "Greenwich Park Wolfe statue to Tower Bridge",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "CHURCH OF ST MARY AT HILL",
+          "grade": "I",
+          "nhle_id": "1064600"
+        },
+        {
+          "name": "3 BOLLARDS",
+          "grade": "II",
+          "nhle_id": "1064635"
+        },
+        {
+          "name": "9, IDOL LANE EC3",
+          "grade": "II",
+          "nhle_id": "1064644"
+        },
+        {
+          "name": "7, BOTOLPH ALLEY EC3",
+          "grade": "II",
+          "nhle_id": "1064719"
+        },
+        {
+          "name": "16, ST MARY AT HILL EC3",
+          "grade": "II",
+          "nhle_id": "1079154"
+        },
+        {
+          "name": "RECTORY",
+          "grade": "II",
+          "nhle_id": "1285645"
+        },
+        {
+          "name": "WATERMENS HALL",
+          "grade": "II*",
+          "nhle_id": "1285652"
+        },
+        {
+          "name": "WALLS, GATES AND RAILINGS TO CHURCHYARD OF CHURCH OF ST DUNSTAN IN THE EAST",
+          "grade": "II",
+          "nhle_id": "1286322"
+        },
+        {
+          "name": "6 AND 7, ST MARY AT HILL EC3",
+          "grade": "II",
+          "nhle_id": "1358869"
+        },
+        {
+          "name": "BILLINGSGATE MARKET",
+          "grade": "II",
+          "nhle_id": "1358911"
+        },
+        {
+          "name": "CHURCH OF ST DUNSTAN IN THE EAST ST DUNSTAN IN THE EAST (RUIN)",
+          "grade": "I",
+          "nhle_id": "1359173"
+        },
+        {
+          "name": "4 AND 5, LOVAT LANE EC3",
+          "grade": "II",
+          "nhle_id": "1359192"
+        },
+        {
+          "name": "CUSTOM HOUSE",
+          "grade": "I",
+          "nhle_id": "1359193"
+        },
+        {
+          "name": "River Wall, Stairs and Cranes, Custom House Quay",
+          "grade": "II*",
+          "nhle_id": "1419872"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 14,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Barts Square, Little Britain",
@@ -1561,7 +2106,100 @@
           "name": "Parliament Hill summit to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "3 Little Britain and Franklin House 2 Little Britain ",
+          "grade": "II",
+          "nhle_id": "1064628"
+        },
+        {
+          "name": "Buckley House 4, Little Britain",
+          "grade": "II",
+          "nhle_id": "1064629"
+        },
+        {
+          "name": "STATUE OF ROWLAND HILL",
+          "grade": "II",
+          "nhle_id": "1064655"
+        },
+        {
+          "name": "CHURCH OF ST BOTOLPH",
+          "grade": "I",
+          "nhle_id": "1064732"
+        },
+        {
+          "name": "MAIN NORTH BLOCK, EAST BLOCK, WEST BLOCK, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "I",
+          "nhle_id": "1079116"
+        },
+        {
+          "name": "MEMORIAL TO SIR WILLIAM WALLACE AND MARTYRS MEMORIAL, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1079117"
+        },
+        {
+          "name": "NORTH EAST BLOCK WITH ATTACHED BUILDINGS, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1180919"
+        },
+        {
+          "name": "CHURCH OF ST BARTHOLOMEW THE LESS, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II*",
+          "nhle_id": "1180946"
+        },
+        {
+          "name": "3 LAMP STANDARDS IN COURTYARD, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1180957"
+        },
+        {
+          "name": "POLICE CALL BOX AT NORTH EAST ANGLE OF NUMBER 1",
+          "grade": "II",
+          "nhle_id": "1262444"
+        },
+        {
+          "name": "ST BARTHOLOMEW HOUSE",
+          "grade": "II",
+          "nhle_id": "1262479"
+        },
+        {
+          "name": "Memorial to Heroic Self Sacrifice",
+          "grade": "II*",
+          "nhle_id": "1285796"
+        },
+        {
+          "name": "KING EDWARDS BUILDINGS (POST OFFICE)",
+          "grade": "II*",
+          "nhle_id": "1286242"
+        },
+        {
+          "name": "GATEHOUSE TO CHURCH OF ST BARTHOLOMEW THE GREAT",
+          "grade": "II*",
+          "nhle_id": "1358892"
+        },
+        {
+          "name": "SCREEN WALL AND COLONNADE, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II*",
+          "nhle_id": "1358893"
+        },
+        {
+          "name": "CIRCULAR POOL WITH FOUNTAIN IN COURTYARD, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1358894"
+        },
+        {
+          "name": "GATE AND RAILINGS TO FORMER CHURCHYARD OF CHURCH OF ST BOTOLPH",
+          "grade": "II",
+          "nhle_id": "1359142"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 17,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -1591,7 +2229,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "3500m\u00b2 office site with potential to 12F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "desc": "3500m² office site with potential to 12F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
       "max_floors": 7,
       "planning_realm": {
         "conservation_area": true,
@@ -1621,7 +2259,60 @@
           "name": "Westminster Pier to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "POST OPPOSITE EAST ENTRANCE OF NEW INN BROADWAY",
+          "grade": "II",
+          "nhle_id": "1226964"
+        },
+        {
+          "name": "2 POSTS AT EITHER SIDE OF ENTRANCE TO KING JOHN'S COURT",
+          "grade": "II",
+          "nhle_id": "1235212"
+        },
+        {
+          "name": "POST OUTSIDE CENTRAL ENTRANCE OF NUMBERS 36 TO 46",
+          "grade": "II",
+          "nhle_id": "1235215"
+        },
+        {
+          "name": "2 POSTS AT WEST END OF NORTH PART",
+          "grade": "II",
+          "nhle_id": "1265758"
+        },
+        {
+          "name": "POST ON NORTH CORNER OF HEWETT STREET",
+          "grade": "II",
+          "nhle_id": "1265784"
+        },
+        {
+          "name": "GUNPOST AT NORTH CORNER OF FRENCH PLACE, BY RAILWAY",
+          "grade": "II",
+          "nhle_id": "1265792"
+        },
+        {
+          "name": "THE GRIFFIN PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1389397"
+        },
+        {
+          "name": "43-49, CHARLOTTE ROAD",
+          "grade": "II",
+          "nhle_id": "1391679"
+        },
+        {
+          "name": "40-42, GREAT EASTERN STREET",
+          "grade": "II",
+          "nhle_id": "1391702"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 9,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Crown Place, Earl Street",
@@ -1686,7 +2377,40 @@
           "name": "King Henry's Mound to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "15-23, CHRISTOPHER STREET",
+          "grade": "II",
+          "nhle_id": "1226407"
+        },
+        {
+          "name": "ROMAN CATHOLIC CHURCH OF ST MARY MOORFIELDS",
+          "grade": "II",
+          "nhle_id": "1265731"
+        },
+        {
+          "name": "FLYING HORSE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1271413"
+        },
+        {
+          "name": "DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1298057"
+        },
+        {
+          "name": "1 Finsbury Avenue",
+          "grade": "II",
+          "nhle_id": "1422594"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "D"
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -1716,7 +2440,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "4500m\u00b2 office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "desc": "4500m² office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
       "max_floors": 7,
       "planning_realm": {
         "conservation_area": false,
@@ -1885,7 +2609,75 @@
           "name": "Kenwood viewing gazebo to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "CHURCH OF ST JAMES GARLICKHITHE",
+          "grade": "I",
+          "nhle_id": "1064669"
+        },
+        {
+          "name": "27 AND 28, QUEEN STREET EC4",
+          "grade": "II*",
+          "nhle_id": "1079139"
+        },
+        {
+          "name": "ALBERT BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1079140"
+        },
+        {
+          "name": "CHURCH OF ST NICHOLAS COLE ABBEY",
+          "grade": "I",
+          "nhle_id": "1079146"
+        },
+        {
+          "name": "VINTNERS HALL",
+          "grade": "I",
+          "nhle_id": "1180690"
+        },
+        {
+          "name": "POLICE PUBLIC CALLBOX, CORNER OF FRIDAY STREET AND QUEEN VICTORIA",
+          "grade": "II",
+          "nhle_id": "1251865"
+        },
+        {
+          "name": "Bracken House",
+          "grade": "II*",
+          "nhle_id": "1262582"
+        },
+        {
+          "name": "TOWER OF FORMER CHURCH OF ST MARY SOMERSET",
+          "grade": "I",
+          "nhle_id": "1358904"
+        },
+        {
+          "name": "69, UPPER THAMES STREET (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1358918"
+        },
+        {
+          "name": "THE SUGAR LOAF PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1375266"
+        },
+        {
+          "name": "22, QUEEN STREET EC4",
+          "grade": "II",
+          "nhle_id": "1375280"
+        },
+        {
+          "name": "30 Cannon Street (formerly Crédit Lyonnais)",
+          "grade": "II",
+          "nhle_id": "1422718"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 12,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "15-16 Minories and 62 Aldgate High Street",
@@ -2038,7 +2830,35 @@
           "name": "City Hall to the White Tower",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "SIR JOHN CASS COLLEGE",
+          "grade": "II",
+          "nhle_id": "1064654"
+        },
+        {
+          "name": "57 AND 59, MANSELL STREET E1",
+          "grade": "II",
+          "nhle_id": "1065151"
+        },
+        {
+          "name": "GATE AND END PIERS AND WALL TO ROAD",
+          "grade": "II",
+          "nhle_id": "1241049"
+        },
+        {
+          "name": "IBEX HOUSE",
+          "grade": "II",
+          "nhle_id": "1252467"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Land at Royal Mint Street",
@@ -2068,7 +2888,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "8000m\u00b2 mixed-use site with potential to 18F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "desc": "8000m² mixed-use site with potential to 18F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
       "max_floors": 7,
       "planning_realm": {
         "conservation_area": false,
@@ -2162,7 +2982,70 @@
         "source": "city-field"
       },
       "_borough": "City of London",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "16, PRESCOT STREET E1",
+          "grade": "II",
+          "nhle_id": "1065071"
+        },
+        {
+          "name": "30, PRESCOT STREET E1",
+          "grade": "II",
+          "nhle_id": "1065072"
+        },
+        {
+          "name": "137, LEMAN STREET E1",
+          "grade": "II",
+          "nhle_id": "1065147"
+        },
+        {
+          "name": "BROWN BEAR PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1065148"
+        },
+        {
+          "name": "NUMBER 1 PRESCOT STREET AND ATTACHED WALL AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1065738"
+        },
+        {
+          "name": "CAST IRON LAMP STANDARDS IN FORECOURT OF THE ROYAL MINT",
+          "grade": "II",
+          "nhle_id": "1065835"
+        },
+        {
+          "name": "CHURCH OF THE ENGLISH MARTYRS",
+          "grade": "II",
+          "nhle_id": "1241734"
+        },
+        {
+          "name": "SEAMANS REGISTRY",
+          "grade": "II",
+          "nhle_id": "1241797"
+        },
+        {
+          "name": "The Royal Mint",
+          "grade": "II*",
+          "nhle_id": "1357516"
+        },
+        {
+          "name": "THE CROWN AND SEVEN STARS PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1357536"
+        },
+        {
+          "name": "23, PRESCOT STREET E1",
+          "grade": "II",
+          "nhle_id": "1357885"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 11,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -2222,7 +3105,70 @@
           "name": "City Hall to the White Tower",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "TOYNBEE HALL",
+          "grade": "II",
+          "nhle_id": "1065201"
+        },
+        {
+          "name": "32 AND 34, COMMERCIAL ROAD E1",
+          "grade": "II",
+          "nhle_id": "1065226"
+        },
+        {
+          "name": "WHITECHAPEL PUBLIC LIBRARY",
+          "grade": "II",
+          "nhle_id": "1065733"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK AT JUNCTION WITH WHITECHAPEL ROAD",
+          "grade": "II",
+          "nhle_id": "1065759"
+        },
+        {
+          "name": "WHITECHAPEL ART GALLERY",
+          "grade": "II*",
+          "nhle_id": "1065820"
+        },
+        {
+          "name": "TOMB IN SOUTH EAST CORNER OF FORMER ST MARY'S CHURCHYARD",
+          "grade": "II",
+          "nhle_id": "1065823"
+        },
+        {
+          "name": "GUNMAKERS COMPANY HALL AND PROOF HOUSE",
+          "grade": "II",
+          "nhle_id": "1239992"
+        },
+        {
+          "name": "WALL OF FORMER ST MARY'S CHURCHYARD",
+          "grade": "II",
+          "nhle_id": "1260066"
+        },
+        {
+          "name": "DRINKING FOUNTAIN SET IN WALL OF FORMER ST MARY'S CHURCHYARD",
+          "grade": "II",
+          "nhle_id": "1357512"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK OUTSIDE NUMBER 48, COMMERCIAL ROAD",
+          "grade": "II",
+          "nhle_id": "1357550"
+        },
+        {
+          "name": "88, WHITECHAPEL HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1391964"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 11,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -2252,7 +3198,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "5000m\u00b2 office site with planning context for 25F/100m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "desc": "5000m² office site with planning context for 25F/100m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
       "max_floors": 7,
       "planning_realm": {
         "conservation_area": false,
@@ -2342,7 +3288,95 @@
         "source": "city-field"
       },
       "_borough": "City of London",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "Tower and remains of Church of All Hallows",
+          "grade": "I",
+          "nhle_id": "1064605"
+        },
+        {
+          "name": "GATEWAY WITH ADJOINING WALL AND RAILING TO YARD OF CHURCH OF ST OLAVE",
+          "grade": "II*",
+          "nhle_id": "1064636"
+        },
+        {
+          "name": "CHURCH OF ST OLAVE",
+          "grade": "I",
+          "nhle_id": "1064676"
+        },
+        {
+          "name": "42, CRUTCHED FRIARS EC3",
+          "grade": "II*",
+          "nhle_id": "1064677"
+        },
+        {
+          "name": "43 AND 44, CRUTCHED FRIARS EC3",
+          "grade": "II",
+          "nhle_id": "1064678"
+        },
+        {
+          "name": "72-75, FENCHURCH STREET EC3 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1064689"
+        },
+        {
+          "name": "41, CRUTCHED FRIARS EC3",
+          "grade": "II",
+          "nhle_id": "1064716"
+        },
+        {
+          "name": "PUMP AT JUNCTION WITH LEADENHALL STREET AND FENCHURCH STREET",
+          "grade": "II",
+          "nhle_id": "1064733"
+        },
+        {
+          "name": "FRONT BLOCK OF FENCHURCH STREET STATION",
+          "grade": "II",
+          "nhle_id": "1079149"
+        },
+        {
+          "name": "20 AND 21, BILLITER STREET EC3",
+          "grade": "II",
+          "nhle_id": "1191544"
+        },
+        {
+          "name": "LLOYD'S REGISTRY",
+          "grade": "II*",
+          "nhle_id": "1192466"
+        },
+        {
+          "name": "THE SHIP PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1192980"
+        },
+        {
+          "name": "LAMBE'S CHAPEL CRYPT UNDER YARD FORMERLY BELONGING TO CHURCH OF ALL HALLOWS STAINING",
+          "grade": "II",
+          "nhle_id": "1193707"
+        },
+        {
+          "name": "60 AND 61, MARK LANE EC3",
+          "grade": "II*",
+          "nhle_id": "1359196"
+        },
+        {
+          "name": "8, LLOYD'S AVENUE EC3",
+          "grade": "II",
+          "nhle_id": "1359208"
+        },
+        {
+          "name": "LLOYD'S AVENUE HOUSE",
+          "grade": "II",
+          "nhle_id": "1375277"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 16,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "100 Leadenhall Street",
@@ -2970,7 +4004,75 @@
         "source": "city-field"
       },
       "_borough": "City of London",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "CHURCH OF ST KATHERINE CREE",
+          "grade": "I",
+          "nhle_id": "1064627"
+        },
+        {
+          "name": "72-75, FENCHURCH STREET EC3 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1064689"
+        },
+        {
+          "name": "Holland House",
+          "grade": "II*",
+          "nhle_id": "1064724"
+        },
+        {
+          "name": "SYNAGOGUE",
+          "grade": "I",
+          "nhle_id": "1064745"
+        },
+        {
+          "name": "2-16, CREECHURCH LANE EC3",
+          "grade": "II",
+          "nhle_id": "1079098"
+        },
+        {
+          "name": "CHURCH OF ST ANDREW UNDERSHAFT",
+          "grade": "I",
+          "nhle_id": "1079155"
+        },
+        {
+          "name": "20 AND 21, BILLITER STREET EC3",
+          "grade": "II",
+          "nhle_id": "1191544"
+        },
+        {
+          "name": "LLOYD'S REGISTRY",
+          "grade": "II*",
+          "nhle_id": "1192466"
+        },
+        {
+          "name": "37-39, LIME STREET",
+          "grade": "II",
+          "nhle_id": "1251951"
+        },
+        {
+          "name": "GATEWAY IN YARD OF CHURCH OF ST KATHERINE CREE",
+          "grade": "II",
+          "nhle_id": "1286153"
+        },
+        {
+          "name": "CHURCH OF ST HELEN",
+          "grade": "I",
+          "nhle_id": "1286458"
+        },
+        {
+          "name": "IRON GATES AND RAILINGS TO ENTRANCE OF CHURCH OF ST ANDREW UNDERSHAFT",
+          "grade": "II",
+          "nhle_id": "1358870"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 12,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "D"
     },
     {
       "name": "Fleet Street East, EC4",
@@ -3215,7 +4317,235 @@
         "source": "city-field"
       },
       "_borough": "City of London",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "5, PEMBERTON ROW EC4",
+          "grade": "II",
+          "nhle_id": "1064595"
+        },
+        {
+          "name": "MITRE COURT CHAMBERS",
+          "grade": "II",
+          "nhle_id": "1064619"
+        },
+        {
+          "name": "TEMPLE CHURCH (ST MARY'S)",
+          "grade": "I",
+          "nhle_id": "1064646"
+        },
+        {
+          "name": "1 KING'S BENCH WALK",
+          "grade": "I",
+          "nhle_id": "1064647"
+        },
+        {
+          "name": "3, KING'S BENCH WALK",
+          "grade": "I",
+          "nhle_id": "1064648"
+        },
+        {
+          "name": "4 LAMP STANDARDS AT NORTH END",
+          "grade": "II",
+          "nhle_id": "1064652"
+        },
+        {
+          "name": "1 AND 2, MITRE COURT BUILDINGS EC4",
+          "grade": "II",
+          "nhle_id": "1064653"
+        },
+        {
+          "name": "MERSEY HOUSE",
+          "grade": "II",
+          "nhle_id": "1064660"
+        },
+        {
+          "name": "143 AND 144, FLEET STREET EC4",
+          "grade": "II",
+          "nhle_id": "1064661"
+        },
+        {
+          "name": "YE OLDE CHESHIRE CHEESE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1064662"
+        },
+        {
+          "name": "CHURCH OF ST DUNSTAN IN THE WEST (INCLUDING ATTACHED SUNDAY SCHOOL)",
+          "grade": "I",
+          "nhle_id": "1064663"
+        },
+        {
+          "name": "PHOENIX ASSURANCE COMPANY",
+          "grade": "II",
+          "nhle_id": "1064664"
+        },
+        {
+          "name": "29 FLEET STREET",
+          "grade": "II",
+          "nhle_id": "1064694"
+        },
+        {
+          "name": "49 AND 50, FLEET STREET EC4",
+          "grade": "II",
+          "nhle_id": "1064695"
+        },
+        {
+          "name": "THE GATEHOUSE WITH GATEWAY AND SCREEN WALL TO WEST",
+          "grade": "II",
+          "nhle_id": "1064700"
+        },
+        {
+          "name": "5, CRANE COURT EC4",
+          "grade": "II",
+          "nhle_id": "1064715"
+        },
+        {
+          "name": "OBELISK IN CENTRE OF ROADWAY",
+          "grade": "II",
+          "nhle_id": "1079124"
+        },
+        {
+          "name": "8, RED LION COURT EC4",
+          "grade": "II",
+          "nhle_id": "1079150"
+        },
+        {
+          "name": "YE OLDE COCK TAVERN",
+          "grade": "II",
+          "nhle_id": "1192621"
+        },
+        {
+          "name": "HOARE'S BANK",
+          "grade": "II*",
+          "nhle_id": "1192633"
+        },
+        {
+          "name": "DR JOHNSONS HOUSE",
+          "grade": "I",
+          "nhle_id": "1192738"
+        },
+        {
+          "name": "THE MASTERS HOUSE",
+          "grade": "II",
+          "nhle_id": "1193098"
+        },
+        {
+          "name": "2 KING'S BENCH WALK",
+          "grade": "I",
+          "nhle_id": "1193156"
+        },
+        {
+          "name": "4, KING'S BENCH WALK",
+          "grade": "I",
+          "nhle_id": "1193173"
+        },
+        {
+          "name": "TIPPERARY PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1251734"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK OUTSIDE ST DUNSTAN'S COURT, FETTER LANE",
+          "grade": "II",
+          "nhle_id": "1251737"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK",
+          "grade": "II",
+          "nhle_id": "1251738"
+        },
+        {
+          "name": "7, WINE OFFICE COURT",
+          "grade": "II",
+          "nhle_id": "1252320"
+        },
+        {
+          "name": "THE HARROW PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1285203"
+        },
+        {
+          "name": "1-3, WINE OFFICE COURT EC4",
+          "grade": "II",
+          "nhle_id": "1285207"
+        },
+        {
+          "name": "6 CRANE COURT, INCLUDING 18 RED LION COURT",
+          "grade": "II",
+          "nhle_id": "1286657"
+        },
+        {
+          "name": "The Daily Telegraph Building",
+          "grade": "II",
+          "nhle_id": "1358917"
+        },
+        {
+          "name": "REMAINS OF FORMER WHITEFRIARS CONVENT",
+          "grade": "II",
+          "nhle_id": "1359134"
+        },
+        {
+          "name": "Former Public Record Office",
+          "grade": "II*",
+          "nhle_id": "1359155"
+        },
+        {
+          "name": "33, FLEET STREET EC4",
+          "grade": "II",
+          "nhle_id": "1359160"
+        },
+        {
+          "name": "STATUE OF JOHN HICCOCKS AGAINST REAR WALL OF NUMBERS 30 TO 32 FLEET STREET",
+          "grade": "II",
+          "nhle_id": "1359175"
+        },
+        {
+          "name": "3 KING'S BENCH WALK NORTH",
+          "grade": "II*",
+          "nhle_id": "1359176"
+        },
+        {
+          "name": "146, FLEET STREET EC4",
+          "grade": "II",
+          "nhle_id": "1359181"
+        },
+        {
+          "name": "GATES AND RAILINGS TO CHURCH OF ST DUNSTAN IN THE WEST",
+          "grade": "II",
+          "nhle_id": "1359182"
+        },
+        {
+          "name": "FORMER GLASGOW HERALD OFFICE",
+          "grade": "II",
+          "nhle_id": "1375271"
+        },
+        {
+          "name": "Caretaker's Lodge",
+          "grade": "II",
+          "nhle_id": "1375274"
+        },
+        {
+          "name": "2-7, SALISBURY COURT EC4",
+          "grade": "II",
+          "nhle_id": "1375284"
+        },
+        {
+          "name": "30, 31 AND 32 FLEET STREET",
+          "grade": "II",
+          "nhle_id": "1375722"
+        },
+        {
+          "name": "6, BOLT COURT",
+          "grade": "II",
+          "nhle_id": "1380346"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 44,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Holborn Viaduct Development Site",
@@ -3245,7 +4575,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "4000m\u00b2 office site with potential to 12F - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "desc": "4000m² office site with potential to 12F - strong off-market acquisition signal. A credible development case with manageable constraints.",
       "max_floors": 7,
       "planning_realm": {
         "conservation_area": false,
@@ -3361,7 +4691,60 @@
           "name": "Primrose Hill summit to St Paul's Cathedral",
           "type": "Viewing Corridor"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "BRIDGE OR VIADUCT OVER FARRINGDON STREET",
+          "grade": "II",
+          "nhle_id": "1064641"
+        },
+        {
+          "name": "THE CITY TEMPLE",
+          "grade": "II",
+          "nhle_id": "1064642"
+        },
+        {
+          "name": "CHURCH OF ST ANDREW",
+          "grade": "I",
+          "nhle_id": "1064643"
+        },
+        {
+          "name": "4, SNOW HILL EC1",
+          "grade": "II",
+          "nhle_id": "1079126"
+        },
+        {
+          "name": "LODGE ST ANDREW'S COURT HOUSE VICARAGE WALL AND GATEPIERS TO GARDEN OF NUMBER 7 (ST ANDREW'S COURT HOUSE) AND VICARAGE",
+          "grade": "II",
+          "nhle_id": "1079152"
+        },
+        {
+          "name": "54, FARRINGDON STREET EC1 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1359172"
+        },
+        {
+          "name": "NUMBER 26 (FORMERLY KNOWN AS NUMBERS 26 AND 27)",
+          "grade": "II",
+          "nhle_id": "1375267"
+        },
+        {
+          "name": "15, OLD BAILEY EC1 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1375723"
+        },
+        {
+          "name": "SNOW HILL POLICE STATION",
+          "grade": "II",
+          "nhle_id": "1375725"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 9,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -3562,7 +4945,205 @@
           "name": "Greenwich Park Wolfe statue to Tower Bridge",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "Mansion House",
+          "grade": "I",
+          "nhle_id": "1064604"
+        },
+        {
+          "name": "VESTRY HOUSE",
+          "grade": "II",
+          "nhle_id": "1064624"
+        },
+        {
+          "name": "5, LAURENCE POUNTNEY LANE EC4",
+          "grade": "II",
+          "nhle_id": "1064625"
+        },
+        {
+          "name": "RECTORY HOUSE",
+          "grade": "II",
+          "nhle_id": "1064626"
+        },
+        {
+          "name": "TALLOW CHANDLERS HALL",
+          "grade": "II*",
+          "nhle_id": "1064685"
+        },
+        {
+          "name": "SKINNERS HALL",
+          "grade": "I",
+          "nhle_id": "1064686"
+        },
+        {
+          "name": "MONUMENT IN YARD OF FORMER CHURCH OF ST JOHN THE BAPTIST, WALLBROOK",
+          "grade": "II",
+          "nhle_id": "1064701"
+        },
+        {
+          "name": "22, COLLEGE HILL EC4",
+          "grade": "II*",
+          "nhle_id": "1064707"
+        },
+        {
+          "name": "INNHOLDERS HALL",
+          "grade": "II*",
+          "nhle_id": "1064708"
+        },
+        {
+          "name": "103, CANNON STREET EC4",
+          "grade": "II",
+          "nhle_id": "1064725"
+        },
+        {
+          "name": "115 AND 117, CANNON STREET EC4",
+          "grade": "II",
+          "nhle_id": "1064726"
+        },
+        {
+          "name": "20, ST SWITHIN'S LANE",
+          "grade": "II*",
+          "nhle_id": "1079092"
+        },
+        {
+          "name": "19, ST SWITHIN'S LANE AND CELLAR IN SUB BASEMENT",
+          "grade": "II*",
+          "nhle_id": "1079099"
+        },
+        {
+          "name": "GATE PIERS TO CHURCHYARD OF CHURCH OF ST STEPHEN GATE PIERS TO CHURCHYARD OF CHURCH OF ST STEPHEN, WALLBROOK",
+          "grade": "II",
+          "nhle_id": "1079123"
+        },
+        {
+          "name": "129, CANNON STREET EC4",
+          "grade": "II",
+          "nhle_id": "1191908"
+        },
+        {
+          "name": "19 AND 20, COLLEGE HILL EC4",
+          "grade": "II",
+          "nhle_id": "1192179"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK AT JUNCTION WITH QUEEN STREET",
+          "grade": "II",
+          "nhle_id": "1251735"
+        },
+        {
+          "name": "POLICE PUBLIC CALLBOX OUTSIDE MANSION HOUSE",
+          "grade": "II",
+          "nhle_id": "1251872"
+        },
+        {
+          "name": "RETAINING WALL AND RAILINGS WITH OVERTHROWS, GATE AND LETTER BOXES TO POUNTNEY CHURCHYARD",
+          "grade": "II",
+          "nhle_id": "1251991"
+        },
+        {
+          "name": "1, KING WILLIAM STREET",
+          "grade": "II",
+          "nhle_id": "1252015"
+        },
+        {
+          "name": "CHURCH OF ST STEPHEN",
+          "grade": "I",
+          "nhle_id": "1285320"
+        },
+        {
+          "name": "1-6, LOMBARD STREET EC3",
+          "grade": "II",
+          "nhle_id": "1286139"
+        },
+        {
+          "name": "CHURCH OF ST MICHAEL PATERNOSTER ROYAL",
+          "grade": "I",
+          "nhle_id": "1286707"
+        },
+        {
+          "name": "'LONDON STONE' WITH STONE SURROUND AND IRON GRILLE SET INTO BASE OF NUMBER 111",
+          "grade": "II*",
+          "nhle_id": "1286846"
+        },
+        {
+          "name": "121, CANNON STREET EC4",
+          "grade": "II",
+          "nhle_id": "1286854"
+        },
+        {
+          "name": "THE BELL PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1286879"
+        },
+        {
+          "name": "2, SUFFOLK LANE EC4",
+          "grade": "II",
+          "nhle_id": "1358897"
+        },
+        {
+          "name": "CHURCH OF ST MARY",
+          "grade": "I",
+          "nhle_id": "1359119"
+        },
+        {
+          "name": "113, CANNON STREET EC4",
+          "grade": "II",
+          "nhle_id": "1359135"
+        },
+        {
+          "name": "123-127, CANNON STREET EC4 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1359136"
+        },
+        {
+          "name": "DRAKE HOUSE LONSDALE HOUSE",
+          "grade": "II",
+          "nhle_id": "1359152"
+        },
+        {
+          "name": "DYERS HALL",
+          "grade": "II*",
+          "nhle_id": "1359153"
+        },
+        {
+          "name": "4, COLLEGE HILL EC4",
+          "grade": "II",
+          "nhle_id": "1359163"
+        },
+        {
+          "name": "22A, COLLEGE HILL EC4",
+          "grade": "II*",
+          "nhle_id": "1359164"
+        },
+        {
+          "name": "PAIR OF PIERS AND IRON GATES AND SCREEN AT ENTRANCE TO CHURCH OF ST MARY WOOLNOTH",
+          "grade": "II",
+          "nhle_id": "1359202"
+        },
+        {
+          "name": "1 AND 2, LAURENCE POUNTNEY HILL EC4",
+          "grade": "II*",
+          "nhle_id": "1359204"
+        },
+        {
+          "name": "POUNTNEY HILL HOUSE",
+          "grade": "II",
+          "nhle_id": "1359205"
+        },
+        {
+          "name": "TEMPLE OF MITHRAS",
+          "grade": "II",
+          "nhle_id": "1391846"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 38,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Moorgate Station Oversite",
@@ -3592,7 +5173,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "5000m\u00b2 office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
+      "desc": "5000m² office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
       "deliveryFlag": "station-oversite",
       "max_floors": 7,
       "planning_realm": {
@@ -3654,7 +5235,80 @@
           "name": "King Henry's Mound to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "63-73, MOORGATE EC2",
+          "grade": "II",
+          "nhle_id": "1064584"
+        },
+        {
+          "name": "LUTYENS HOUSE",
+          "grade": "II*",
+          "nhle_id": "1064691"
+        },
+        {
+          "name": "ARMOURERS AND BRAZIERS HALL",
+          "grade": "II*",
+          "nhle_id": "1192163"
+        },
+        {
+          "name": "Business School, London Metropolitan University",
+          "grade": "II",
+          "nhle_id": "1251605"
+        },
+        {
+          "name": "80, COLEMAN STREET",
+          "grade": "II",
+          "nhle_id": "1251862"
+        },
+        {
+          "name": "87, MOORGATE",
+          "grade": "II",
+          "nhle_id": "1252053"
+        },
+        {
+          "name": "THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1252057"
+        },
+        {
+          "name": "FORMER FOX'S UMBRELLAS",
+          "grade": "II",
+          "nhle_id": "1252059"
+        },
+        {
+          "name": "2, MOORFIELDS (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1252083"
+        },
+        {
+          "name": "8, MOORFIELDS",
+          "grade": "II",
+          "nhle_id": "1252107"
+        },
+        {
+          "name": "4, MOORFIELDS",
+          "grade": "II",
+          "nhle_id": "1262450"
+        },
+        {
+          "name": "MOORGATE UNDERGROUND STATION",
+          "grade": "II",
+          "nhle_id": "1359213"
+        },
+        {
+          "name": "SALISBURY HOUSE",
+          "grade": "II",
+          "nhle_id": "1375270"
+        }
+      ],
+      "nhle_count_50m": 7,
+      "nhle_count_150m": 13,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Smithfield Market, EC1",
@@ -3736,7 +5390,215 @@
           "name": "Parliament Hill summit to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "SIX BOLLARDS ON THE NORTH AND NORTH WEST SIDE OF THE SQUARE",
+          "grade": "II",
+          "nhle_id": "1025025"
+        },
+        {
+          "name": "FOX AND ANCHOR PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1052278"
+        },
+        {
+          "name": "39 AND 40, CLOTH FAIR EC1",
+          "grade": "II",
+          "nhle_id": "1064702"
+        },
+        {
+          "name": "Nos. 41 and 42, CLOTH FAIR",
+          "grade": "II*",
+          "nhle_id": "1064703"
+        },
+        {
+          "name": "43, 44, 45, 46 and 51 Cloth Fair",
+          "grade": "II",
+          "nhle_id": "1064704"
+        },
+        {
+          "name": "MEMORIAL TO SIR WILLIAM WALLACE AND MARTYRS MEMORIAL, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1079117"
+        },
+        {
+          "name": "CHURCH OF ST BARTHOLOMEW THE GREAT",
+          "grade": "I",
+          "nhle_id": "1180873"
+        },
+        {
+          "name": "NORTH EAST BLOCK WITH ATTACHED BUILDINGS, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1180919"
+        },
+        {
+          "name": "89, CHARTERHOUSE STREET (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1187189"
+        },
+        {
+          "name": "NUMBERS 22 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195526"
+        },
+        {
+          "name": "RAILINGS ROUND NEW CHURCH HAWE AND GATES ON THE SOUTH SIDE OF THE SQUARE",
+          "grade": "II",
+          "nhle_id": "1195529"
+        },
+        {
+          "name": "111, CHARTERHOUSE STREET",
+          "grade": "II",
+          "nhle_id": "1195530"
+        },
+        {
+          "name": "9-13, COWCROSS STREET",
+          "grade": "II",
+          "nhle_id": "1195570"
+        },
+        {
+          "name": "3 AND 5, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1195728"
+        },
+        {
+          "name": "24, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1195729"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK ON THE SOUTH SIDE OF THE SQUARE",
+          "grade": "II",
+          "nhle_id": "1206694"
+        },
+        {
+          "name": "16, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1208594"
+        },
+        {
+          "name": "26, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1208605"
+        },
+        {
+          "name": "PAIR OF K2 TELEPHONE KIOSKS IN CENTRAL MARKETS",
+          "grade": "II",
+          "nhle_id": "1251741"
+        },
+        {
+          "name": "K6 TELEPHONE KIOSK IN CENTRAL MARKETS",
+          "grade": "II",
+          "nhle_id": "1251822"
+        },
+        {
+          "name": "K6 TELEPHONE KIOSK IN CENTRAL MARKETS",
+          "grade": "II",
+          "nhle_id": "1251824"
+        },
+        {
+          "name": "K6 TELEPHONE KIOSK IN CENTRAL MARKETS",
+          "grade": "II",
+          "nhle_id": "1251825"
+        },
+        {
+          "name": "ST BARTHOLOMEW HOUSE",
+          "grade": "II",
+          "nhle_id": "1262479"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK IN CENTRAL MARKET K2 TELEPHONE KIOSK IN CENTRAL MARKETS",
+          "grade": "II",
+          "nhle_id": "1262591"
+        },
+        {
+          "name": "GATES AT NORTH WEST CORNER, LEADING INTO CHARTERHOUSE STREET",
+          "grade": "II",
+          "nhle_id": "1280090"
+        },
+        {
+          "name": "East building of Central Market",
+          "grade": "II*",
+          "nhle_id": "1285241"
+        },
+        {
+          "name": "22, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1293083"
+        },
+        {
+          "name": "THE HOPE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1293085"
+        },
+        {
+          "name": "14-16, COWCROSS STREET",
+          "grade": "II",
+          "nhle_id": "1293088"
+        },
+        {
+          "name": "18 AND 20, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1298004"
+        },
+        {
+          "name": "34 AND 36, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1298005"
+        },
+        {
+          "name": "119, CHARTERHOUSE STREET",
+          "grade": "II",
+          "nhle_id": "1298102"
+        },
+        {
+          "name": "GATEHOUSE TO CHURCH OF ST BARTHOLOMEW THE GREAT",
+          "grade": "II*",
+          "nhle_id": "1358892"
+        },
+        {
+          "name": "SCREEN WALL AND COLONNADE, ST BARTHOLOMEW'S HOSPITAL",
+          "grade": "II*",
+          "nhle_id": "1358893"
+        },
+        {
+          "name": "DRINKING FOUNTAIN IN CENTRE OF GARDENS",
+          "grade": "II",
+          "nhle_id": "1358895"
+        },
+        {
+          "name": "67-77, CHARTERHOUSE STREET EC1",
+          "grade": "II",
+          "nhle_id": "1375616"
+        },
+        {
+          "name": "SMITHFIELD POULTRY MARKET",
+          "grade": "II",
+          "nhle_id": "1381209"
+        },
+        {
+          "name": "DOUBLE CATTLE TROUGH",
+          "grade": "II",
+          "nhle_id": "1391398"
+        },
+        {
+          "name": "79-83, CHARTERHOUSE STREET",
+          "grade": "II",
+          "nhle_id": "1391806"
+        },
+        {
+          "name": "RAMP",
+          "grade": "II",
+          "nhle_id": "1396459"
+        }
+      ],
+      "nhle_count_50m": 6,
+      "nhle_count_150m": 40,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Bunhill Fields adjacent, EC1",
@@ -3766,7 +5628,7 @@
       "flags": {
         "inBrownfield": false
       },
-      "desc": "3500m\u00b2 office site with potential to 11F - strong off-market acquisition signal. A credible development case with manageable constraints.",
+      "desc": "3500m² office site with potential to 11F - strong off-market acquisition signal. A credible development case with manageable constraints.",
       "max_floors": 7,
       "planning_realm": {
         "conservation_area": false,
@@ -3789,7 +5651,385 @@
         "source": "city-field"
       },
       "_borough": "City of London",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "20, BUNHILL ROW (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1195486"
+        },
+        {
+          "name": "ARMOURY HOUSE",
+          "grade": "II*",
+          "nhle_id": "1195537"
+        },
+        {
+          "name": "BOUNDARY WALLS, GATES AND RAILINGS TO BUNHILL FIELDS BURIAL GROUND",
+          "grade": "II",
+          "nhle_id": "1195541"
+        },
+        {
+          "name": "MONUMENT TO MANOAH AND SARAH SIBLY, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396490"
+        },
+        {
+          "name": "MONUMENT TO JOHN BUNYAN, CENTRAL BROADWALK",
+          "grade": "II*",
+          "nhle_id": "1396491"
+        },
+        {
+          "name": "MONUMENT TO DANIEL DEFOE, CENTRAL BROADWALK",
+          "grade": "II*",
+          "nhle_id": "1396492"
+        },
+        {
+          "name": "MONUMENT TO WILLIAM AND CATHERINE SOPHIA BLAKE, CENTRAL BROADWALK",
+          "grade": "II",
+          "nhle_id": "1396493"
+        },
+        {
+          "name": "MONUMENT TO MARY PAGE, CENTRAL BROADWALK",
+          "grade": "II*",
+          "nhle_id": "1396494"
+        },
+        {
+          "name": "MONUMENT TO DAVID NASMITH, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396495"
+        },
+        {
+          "name": "MONUMENT TO JOHN RIPPON, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396496"
+        },
+        {
+          "name": "MONUMENT TO JOSEPH IVIMEY, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396497"
+        },
+        {
+          "name": "MONUMENT TO THOMAS STOTHARD, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396498"
+        },
+        {
+          "name": "CROMWELL FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396499"
+        },
+        {
+          "name": "MONUMENT TO HENRY AND HANNAH CROMWELL, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396500"
+        },
+        {
+          "name": "MONUMENT TO JOHN GILL, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396501"
+        },
+        {
+          "name": "CHEST TOMB WITH VOLUTES, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396502"
+        },
+        {
+          "name": "BLAND FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396503"
+        },
+        {
+          "name": "POTTENGER FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396504"
+        },
+        {
+          "name": "MONUMENT TO ALEXANDER HENRY AND FAMILY, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396505"
+        },
+        {
+          "name": "MONUMENT TO WILLIAM ALDRIDGE, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396506"
+        },
+        {
+          "name": "MONUMENT TO JAMES AND ANNA MARIE WARE, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396507"
+        },
+        {
+          "name": "MONUMENT TO MARY BOYLE, SOUTH ENCLOSURE",
+          "grade": "II*",
+          "nhle_id": "1396508"
+        },
+        {
+          "name": "MONUMENT TO JOSEPH DENISON, SOUTH ENCLOSURE",
+          "grade": "II*",
+          "nhle_id": "1396509"
+        },
+        {
+          "name": "MONUMENT TO SUSANNA WESLEY, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396510"
+        },
+        {
+          "name": "KING AND DU PONT FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396511"
+        },
+        {
+          "name": "HEADSTONE TO ELEANOR AND CHARLES SANDERSON, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396512"
+        },
+        {
+          "name": "MONUMENT TO SARAH AND JOHN WHEATLY, EAST ENCLOSURE",
+          "grade": "II*",
+          "nhle_id": "1396515"
+        },
+        {
+          "name": "HEADSTONE WITH CARTOUCHE, EAST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396516"
+        },
+        {
+          "name": "MONUMENT TO ISAAC WATTS, EAST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396517"
+        },
+        {
+          "name": "MONUMENT TO JOSEPH WADDINGTON, EAST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396518"
+        },
+        {
+          "name": "MONUMENT TO DANIEL WILLIAMS, EAST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396519"
+        },
+        {
+          "name": "TOMB WITH RAILINGS, EAST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396520"
+        },
+        {
+          "name": "MONUMENT TO THOMAS HARDY, EAST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396521"
+        },
+        {
+          "name": "MONUMENT TO HENRY HUNTER, MIDDLE ENCLOSURE",
+          "grade": "II*",
+          "nhle_id": "1396523"
+        },
+        {
+          "name": "MONUMENT TO JOSEPH HUGHES, MIDDLE ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396524"
+        },
+        {
+          "name": "OBELISK MONUMENT, MIDDLE ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396525"
+        },
+        {
+          "name": "MONUMENT TO THOMAS BAYES AND FAMILY, MIDDLE ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396526"
+        },
+        {
+          "name": "MONUMENT TO JOSEPH JENKINS, MIDDLE ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396527"
+        },
+        {
+          "name": "MONUMENT TO MARY BENSON AND ADJOINING HEADSTONE, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396528"
+        },
+        {
+          "name": "MONUMENT TO JOSEPH WATTS, MIDDLE ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396529"
+        },
+        {
+          "name": "MONUMENT TO ELIZABETH STIFF AND OTHERS, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396530"
+        },
+        {
+          "name": "MONUMENT TO ELIZABETH ESDAILE, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396531"
+        },
+        {
+          "name": "MONUMENT TO DAN TAYLOR, MIDDLE ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396532"
+        },
+        {
+          "name": "GROUP OF FIVE CHEST TOMBS, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396533"
+        },
+        {
+          "name": "MONUMENT TO WILLIAM BROADFOOT, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396534"
+        },
+        {
+          "name": "MONUMENTS TO JOSEPH CARTWRIGHT AND THE FAMILY OF JS PERCY, MIDDLE ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396535"
+        },
+        {
+          "name": "MONUMENT TO SAMUEL STENNETT, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396536"
+        },
+        {
+          "name": "LAWRANCE FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396537"
+        },
+        {
+          "name": "MONUMENT TO ANDREW KIPPIS, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396538"
+        },
+        {
+          "name": "ROBINSON FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396539"
+        },
+        {
+          "name": "CHEST TOMB WITH MEMENTO MORI CARVING, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396540"
+        },
+        {
+          "name": "MONUMENT TO ANN DAVIS, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396542"
+        },
+        {
+          "name": "MONUMENT TO THOMAS BRADBURY, WEST ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396543"
+        },
+        {
+          "name": "MONUMENT TO JOSEPH HART, NORTH SECTION",
+          "grade": "II",
+          "nhle_id": "1396544"
+        },
+        {
+          "name": "MONUMENT TO SAMUEL FAVELL, NORTH SECTION",
+          "grade": "II",
+          "nhle_id": "1396545"
+        },
+        {
+          "name": "MONUMENT TO JOHN CONDER, NORTH SECTION",
+          "grade": "II",
+          "nhle_id": "1396546"
+        },
+        {
+          "name": "MONUMENT TO WILLIAM SHRUBSOLE, NORTH SECTION",
+          "grade": "II",
+          "nhle_id": "1396547"
+        },
+        {
+          "name": "MONUMENT TO THEOPHILUS AND HANNAH LINDSEY, THOMAS BELSHAM AND ELIZABETH RAYNOR, NORTH SECTION",
+          "grade": "II",
+          "nhle_id": "1396548"
+        },
+        {
+          "name": "MONUMENT TO LADY AGNES ERSKINE, NORTH SECTION",
+          "grade": "II",
+          "nhle_id": "1396549"
+        },
+        {
+          "name": "MONUMENT TO JOHN OWEN, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396550"
+        },
+        {
+          "name": "MONUMENT TO ALEXANDER AND MARY WAUGH, NORTH SECTION",
+          "grade": "II",
+          "nhle_id": "1396551"
+        },
+        {
+          "name": "CHEST TOMB WITH CHERUB BALUSTERS, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396552"
+        },
+        {
+          "name": "MONUMENT TO CHARLES FLEETWOOD, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396553"
+        },
+        {
+          "name": "MONUMENT TO THOMAS ROSEWELL, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396556"
+        },
+        {
+          "name": "MONUMENT TO THEOPHILUS GALE, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396557"
+        },
+        {
+          "name": "MONUMENT TO WILLIAM HOOKE, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396558"
+        },
+        {
+          "name": "MONUMENT TO THOMAS AND HANNAH MILLER, SOUTH ENCLOSURE",
+          "grade": "II*",
+          "nhle_id": "1396559"
+        },
+        {
+          "name": "MONUMENT TO THOMAS GOODWIN AND THANKFUL OWEN, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396560"
+        },
+        {
+          "name": "GABRIEL FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396561"
+        },
+        {
+          "name": "YALLOWLEY FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396562"
+        },
+        {
+          "name": "FLAVELL FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396563"
+        },
+        {
+          "name": "CHEESWRIGHT FAMILY MONUMENT, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396564"
+        },
+        {
+          "name": "MONUMENT TO WILLIAM JENKYN, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396565"
+        },
+        {
+          "name": "MONUMENT TO EDWARD PICKARD, SOUTH ENCLOSURE",
+          "grade": "II",
+          "nhle_id": "1396566"
+        }
+      ],
+      "nhle_count_50m": 9,
+      "nhle_count_150m": 74,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Blackfriars Gateway, EC4",
@@ -4010,7 +6250,40 @@
         "source": "city-field"
       },
       "_borough": "City of London",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "SOUTHERN ABUTMENT TO FORMER WEST BLACKFRIARS AND ST PAULS RAIL BRIDGE",
+          "grade": "II",
+          "nhle_id": "1376596"
+        },
+        {
+          "name": "HOPTONS ALMSHOUSES, HOPTON GARDENS",
+          "grade": "II*",
+          "nhle_id": "1385621"
+        },
+        {
+          "name": "67 and attached railings and overthrow to gate Hopton Street",
+          "grade": "II",
+          "nhle_id": "1385624"
+        },
+        {
+          "name": "NUMBER 1 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385933"
+        },
+        {
+          "name": "NUMBER 3 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385934"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Bourne Estate South, Holborn",
@@ -4107,7 +6380,85 @@
           "name": "Primrose Hill summit to St Paul's Cathedral",
           "type": "Viewing Corridor"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "VERULAM BUILDINGS NUMBERS 1 TO 5 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1113091"
+        },
+        {
+          "name": "BOUNDARY WALL AND GATEWAY WITH SPUR STONES EAST OF VERULAM BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1113092"
+        },
+        {
+          "name": "LODGE AT NORTH EAST CORNER OF VERULAM BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1113095"
+        },
+        {
+          "name": "RAILINGS AND GATES SOUTH OF VERULAM BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1113096"
+        },
+        {
+          "name": "BOURNE ESTATE (NORTHERN PART) DENYS HOUSE FREWELL HOUSE LEDHAM HOUSE RADCLIFFE HOUSE REDMAN HOUSE SCROPE HOUSE SKIPWITH HOUSE",
+          "grade": "II",
+          "nhle_id": "1245473"
+        },
+        {
+          "name": "ST ALBANS CLERGY HOUSE AND ATTACHED RAILINGS WITH LAMP HOLDER",
+          "grade": "II",
+          "nhle_id": "1272352"
+        },
+        {
+          "name": "CHURCH OF ST ALBAN THE MARTYR",
+          "grade": "II*",
+          "nhle_id": "1272353"
+        },
+        {
+          "name": "GRAY'S INN SQUARE NUMBERS 6, 7 AND 8 AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1322146"
+        },
+        {
+          "name": "GRAY'S INN SQUARE NUMBERS 12, 13 AND 14, GATEHOUSE AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1322147"
+        },
+        {
+          "name": "SUNDIAL IN THE CENTRE OF GRAYS INN SQUARE",
+          "grade": "II",
+          "nhle_id": "1322150"
+        },
+        {
+          "name": "YORKSHIRE GREY PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1379006"
+        },
+        {
+          "name": "THE CLOCK HOUSE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1379281"
+        },
+        {
+          "name": "83-89, LEATHER LANE",
+          "grade": "II",
+          "nhle_id": "1379282"
+        },
+        {
+          "name": "BOURNE ESTATE (SOUTHERN PART); FORMERLY UNION BUILDINGS ESTATE NIGEL HOUSE 1-71, LANEY HOUSE 1-72, KIRKEBY HOUSE 1-45, BUCKRIDGE HOUSE 1-30",
+          "grade": "II",
+          "nhle_id": "1379284"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 14,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     }
   ],
   "borough": "City of London",

@@ -178,7 +178,39 @@
       "_borough": "Southwark",
       "lvmf_views": [],
       "context_era": "A",
-      "score_note": "Corrected 2026-03-31: was 91 (wrong - OA+PTAL6 incorrectly triggered cluster). Correct: Tier A Victorian fabric, RETAIN_AND_ADAPT, no tower precedent."
+      "score_note": "Corrected 2026-03-31: was 91 (wrong - OA+PTAL6 incorrectly triggered cluster). Correct: Tier A Victorian fabric, RETAIN_AND_ADAPT, no tower precedent.",
+      "nhle_listings": [
+        {
+          "name": "GATEPOSTS AND RAILINGS AT NUMBER 74",
+          "grade": "II",
+          "nhle_id": "1376590"
+        },
+        {
+          "name": "CHRIST CHURCH GARDENS DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1376594"
+        },
+        {
+          "name": "ROCHESTER HOUSE",
+          "grade": "II",
+          "nhle_id": "1385466"
+        },
+        {
+          "name": "Christ Church",
+          "grade": "II",
+          "nhle_id": "1395086"
+        },
+        {
+          "name": "Southwark London Underground Station (including its interchange with Waterloo East Station)",
+          "grade": "II",
+          "nhle_id": "1491631"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "24 Southwark Street",
@@ -465,7 +497,224 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "WILTSHIRE HOUSE, MAIDSTONE BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1330570"
+        },
+        {
+          "name": "THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1376553"
+        },
+        {
+          "name": "28, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378345"
+        },
+        {
+          "name": "32 AND 34, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378346"
+        },
+        {
+          "name": "38, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378347"
+        },
+        {
+          "name": "40, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378348"
+        },
+        {
+          "name": "50 and 52, Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378349"
+        },
+        {
+          "name": "CALVERTS BUILDINGS (ATTACHED TO REAR OF NUMBER 50)",
+          "grade": "II",
+          "nhle_id": "1378350"
+        },
+        {
+          "name": "52 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378351"
+        },
+        {
+          "name": "53 AND 53A, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378352"
+        },
+        {
+          "name": "55, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378353"
+        },
+        {
+          "name": "58, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378354"
+        },
+        {
+          "name": "66, 68 AND 70, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378355"
+        },
+        {
+          "name": "67, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378356"
+        },
+        {
+          "name": "THE GEORGE INN",
+          "grade": "I",
+          "nhle_id": "1378357"
+        },
+        {
+          "name": "91, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378358"
+        },
+        {
+          "name": "93 AND 95, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378359"
+        },
+        {
+          "name": "101, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378360"
+        },
+        {
+          "name": "103, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378361"
+        },
+        {
+          "name": "THE GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1378362"
+        },
+        {
+          "name": "123, 125 AND 127, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378363"
+        },
+        {
+          "name": "POST AT NORTH CORNER OF BEDALE STREET",
+          "grade": "II",
+          "nhle_id": "1378367"
+        },
+        {
+          "name": "St Saviour’s War Memorial, Southwark",
+          "grade": "II*",
+          "nhle_id": "1378368"
+        },
+        {
+          "name": "BOLLARD AT THE CORNER WITH WINCHESTER WALK",
+          "grade": "II",
+          "nhle_id": "1378459"
+        },
+        {
+          "name": "CATHEDRAL CHURCH OF ST SAVIOUR AND ST MARY OVERIE (SOUTHWARK CATHEDRAL)",
+          "grade": "I",
+          "nhle_id": "1378460"
+        },
+        {
+          "name": "KINGS HEAD PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385638"
+        },
+        {
+          "name": "1-11, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385749"
+        },
+        {
+          "name": "13, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385750"
+        },
+        {
+          "name": "20-26, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385751"
+        },
+        {
+          "name": "NUMBERS 21 AND 23 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385752"
+        },
+        {
+          "name": "POSTS IN FRONT OF NUMBERS 21 AND 23",
+          "grade": "II",
+          "nhle_id": "1385753"
+        },
+        {
+          "name": "CROMWELL BUILDING NUMBERS 5-24 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385813"
+        },
+        {
+          "name": "1B, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385921"
+        },
+        {
+          "name": "3, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385922"
+        },
+        {
+          "name": "THE HOP EXCHANGE",
+          "grade": "II",
+          "nhle_id": "1385923"
+        },
+        {
+          "name": "CANNON BOLLARD BETWEEN NUMBERS 1 AND 2 (NUMBERS 1 AND 2 NOT INCLUDED)",
+          "grade": "II",
+          "nhle_id": "1385936"
+        },
+        {
+          "name": "5, STONEY STREET",
+          "grade": "II",
+          "nhle_id": "1385937"
+        },
+        {
+          "name": "THE WHEATSHEAF PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385938"
+        },
+        {
+          "name": "RESITED FLORAL HALL PORTICO AT BOROUGH MARKET",
+          "grade": "II",
+          "nhle_id": "1392690"
+        },
+        {
+          "name": "SIX BOLLARDS TO ENTRANCE OF GREEN DRAGON COURT, AND THREE BOLLARDS AND ONE LAMP POST TO REAR OF THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1393612"
+        },
+        {
+          "name": "30 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1423541"
+        },
+        {
+          "name": "54 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1428936"
+        }
+      ],
+      "nhle_count_50m": 7,
+      "nhle_count_150m": 42,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Copeland Industrial Park and 1-27 Bournemouth Road",
@@ -596,7 +845,13 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Kwik Fit and Gibbs & Dandy, Grove Vale",
@@ -768,7 +1023,20 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "Goose Green Primary and Nursery School and walls, gates and railings",
+          "grade": "II",
+          "nhle_id": "1385591"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Tower Workshops",
@@ -891,7 +1159,24 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "B"
+      "context_era": "B",
+      "nhle_listings": [
+        {
+          "name": "122-132, ABBEY STREET",
+          "grade": "II",
+          "nhle_id": "1376518"
+        },
+        {
+          "name": "GATES AND GATE PIERS AT NORTH EAST ENTRANCE TO ST MARYS CHURCHYARD",
+          "grade": "II",
+          "nhle_id": "1376576"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Kinglake Street Garages",
@@ -1101,7 +1386,24 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "THE WHITE HOUSE",
+          "grade": "II",
+          "nhle_id": "1385736"
+        },
+        {
+          "name": "PATH AND STREET RAILINGS, LAMP HOLDER AND GATES TO NUMBER 155",
+          "grade": "II",
+          "nhle_id": "1385737"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Former petrol filling station, 233-247 Old Kent Road",
@@ -1241,7 +1543,13 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Salisbury estate car park",
@@ -1338,7 +1646,84 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "29 AND 31, COBOURG ROAD",
+          "grade": "II",
+          "nhle_id": "1378485"
+        },
+        {
+          "name": "47, COBOURG ROAD",
+          "grade": "II",
+          "nhle_id": "1378486"
+        },
+        {
+          "name": "HANOVER HOUSE",
+          "grade": "II",
+          "nhle_id": "1378487"
+        },
+        {
+          "name": "51 AND 53, COBOURG ROAD",
+          "grade": "II",
+          "nhle_id": "1378488"
+        },
+        {
+          "name": "NUMBER 55 AND ATTACHED HANDRAIL",
+          "grade": "II",
+          "nhle_id": "1378489"
+        },
+        {
+          "name": "ROSETTA PLACE",
+          "grade": "II",
+          "nhle_id": "1378490"
+        },
+        {
+          "name": "61 AND 63, COBOURG ROAD",
+          "grade": "II",
+          "nhle_id": "1378491"
+        },
+        {
+          "name": "NUMBERS 1 AND 3 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385983"
+        },
+        {
+          "name": "WALL WITH GATE POSTS AND GATE, AND GARDEN WALL TO NUMBERS 1 AND 3",
+          "grade": "II",
+          "nhle_id": "1385984"
+        },
+        {
+          "name": "16-24, TRAFALGAR AVENUE",
+          "grade": "II",
+          "nhle_id": "1385985"
+        },
+        {
+          "name": "NUMBERS 25-43 AND ATTACHED WALLS, PIERS AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385986"
+        },
+        {
+          "name": "NUMBERS 26-40 AND ATTACHED HANDRAILS",
+          "grade": "II",
+          "nhle_id": "1385988"
+        },
+        {
+          "name": "42-48, TRAFALGAR AVENUE",
+          "grade": "II",
+          "nhle_id": "1385989"
+        },
+        {
+          "name": "Lord Nelson Public House",
+          "grade": "II",
+          "nhle_id": "1385992"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 14,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Croft Street Depot",
@@ -1544,7 +1929,44 @@
           "type": "Extension"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "2 AND 3, CANAL GROVE",
+          "grade": "II",
+          "nhle_id": "1378454"
+        },
+        {
+          "name": "4, 5 AND 6, CANAL GROVE",
+          "grade": "II",
+          "nhle_id": "1378455"
+        },
+        {
+          "name": "7 AND 8, CANAL GROVE",
+          "grade": "II",
+          "nhle_id": "1378456"
+        },
+        {
+          "name": "9, CANAL GROVE",
+          "grade": "II",
+          "nhle_id": "1378457"
+        },
+        {
+          "name": "GAS STANDARD ADAPTED TO ELECTRIC LIGHT",
+          "grade": "II",
+          "nhle_id": "1378458"
+        },
+        {
+          "name": "Mural depicting the History of Old Kent Road",
+          "grade": "II",
+          "nhle_id": "1442278"
+        }
+      ],
+      "nhle_count_50m": 4,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Abellio Walworth Depot",
@@ -1660,7 +2082,39 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "MANOR PLACE BATHS AND ATTACHED WALL, PIERS AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385689"
+        },
+        {
+          "name": "33, PENROSE STREET",
+          "grade": "II",
+          "nhle_id": "1385787"
+        },
+        {
+          "name": "SUTHERLAND HOUSE",
+          "grade": "II",
+          "nhle_id": "1385953"
+        },
+        {
+          "name": "NUMBERS 36-40 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385954"
+        },
+        {
+          "name": "NUMBERS 51-54 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385955"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "684-698 Old Kent Road (Kwikfit garage)",
@@ -1809,7 +2263,34 @@
           "type": "Extension"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "DODDINGTON PLACE",
+          "grade": "II",
+          "nhle_id": "1385435"
+        },
+        {
+          "name": "Former Camberwell Public Library and Livesey Museum",
+          "grade": "II",
+          "nhle_id": "1385739"
+        },
+        {
+          "name": "THE KENTISH DROVERS PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385740"
+        },
+        {
+          "name": "Statue of George Livesey situated in the garden to the rear of the former Camberwell Library and Livesey Museum",
+          "grade": "II",
+          "nhle_id": "1385743"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "The Grove Tavern, 520 Lordship Lane",
@@ -2319,7 +2800,34 @@
           "type": "Extension"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "NUMBER 549 AND GATE PIERS",
+          "grade": "II",
+          "nhle_id": "1385669"
+        },
+        {
+          "name": "CHURCH OF ST PETER",
+          "grade": "II",
+          "nhle_id": "1385670"
+        },
+        {
+          "name": "ST PETERS PARISH HALL",
+          "grade": "II",
+          "nhle_id": "1385671"
+        },
+        {
+          "name": "Dulwich (St Peter's) War Memorial",
+          "grade": "II",
+          "nhle_id": "1449914"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Camberwell Bus Garage",
@@ -2604,7 +3112,34 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "B"
+      "context_era": "B",
+      "nhle_listings": [
+        {
+          "name": "NUMBER 15 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378399"
+        },
+        {
+          "name": "FORMER LONDON COUNTY BANK",
+          "grade": "II",
+          "nhle_id": "1378400"
+        },
+        {
+          "name": "323, CAMBERWELL NEW ROAD",
+          "grade": "II",
+          "nhle_id": "1378446"
+        },
+        {
+          "name": "Roman Catholic Church of the Sacred Heart",
+          "grade": "II",
+          "nhle_id": "1422505"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Biscuit Factory and Campus",
@@ -2672,7 +3207,24 @@
           "type": "Extension"
         }
       ],
-      "context_era": "B"
+      "context_era": "B",
+      "nhle_listings": [
+        {
+          "name": "GAYHURST PRIMARY SCHOOL",
+          "grade": "II",
+          "nhle_id": "1226612"
+        },
+        {
+          "name": "131-141, RICHMOND ROAD E8",
+          "grade": "II",
+          "nhle_id": "1235328"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Burgess Business Park",
@@ -2736,7 +3288,13 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Blackpool Road Business Park",
@@ -2861,7 +3419,44 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "109-112, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1378375"
+        },
+        {
+          "name": "NUMBERS 3-11 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385547"
+        },
+        {
+          "name": "THE DUKE OF CLARENCE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1389679"
+        },
+        {
+          "name": "113-119, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1389680"
+        },
+        {
+          "name": "123-131, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1389681"
+        },
+        {
+          "name": "2-14, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1390856"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Decathlon Site and Mulberry Business Park",
@@ -2986,7 +3581,13 @@
           "type": "Extension"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "St Olav's Business Park, Lower Road",
@@ -3146,7 +3747,29 @@
           "type": "Extension"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "ST OLAV'S KIRKE",
+          "grade": "II",
+          "nhle_id": "1376530"
+        },
+        {
+          "name": "ARCHWAY TO ROTHERHITHE TUNNEL APPROACH",
+          "grade": "II",
+          "nhle_id": "1385848"
+        },
+        {
+          "name": "Rotherhithe (Norwegian Seamen) War Memorial",
+          "grade": "II",
+          "nhle_id": "1449959"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 3,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Aylesbury Phase 2",
@@ -3217,7 +3840,235 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Viewing Corridor"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 8 TO 14 (CONSECUTIVE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1025269"
+        },
+        {
+          "name": "2, ALBEMARLE WAY",
+          "grade": "II",
+          "nhle_id": "1195444"
+        },
+        {
+          "name": "54, CLERKENWELL CLOSE",
+          "grade": "II",
+          "nhle_id": "1195544"
+        },
+        {
+          "name": "CORNWELL HOUSE",
+          "grade": "II",
+          "nhle_id": "1195545"
+        },
+        {
+          "name": "43 and 44 Clerkenwell Green and 55 Clerkenwell Close",
+          "grade": "II",
+          "nhle_id": "1195546"
+        },
+        {
+          "name": "EASTERNMOST OF TWO K2 TELEPHONE KIOSKS TO THE CENTRE OF CLERKENWELL GREEN",
+          "grade": "II",
+          "nhle_id": "1195547"
+        },
+        {
+          "name": "70 AND 72, CLERKENWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1195549"
+        },
+        {
+          "name": "WOODBRIDGE CHAPEL AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195610"
+        },
+        {
+          "name": "12, JERUSALEM PASSAGE",
+          "grade": "II",
+          "nhle_id": "1195646"
+        },
+        {
+          "name": "NUMBER 20 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195726"
+        },
+        {
+          "name": "NUMBERS 26 TO 32 (EVEN) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195727"
+        },
+        {
+          "name": "148-154, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1195732"
+        },
+        {
+          "name": "201, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1195733"
+        },
+        {
+          "name": "36 AND 36A, ST JOHN'S SQUARE",
+          "grade": "II",
+          "nhle_id": "1195742"
+        },
+        {
+          "name": "49 AND 50, ST JOHN'S SQUARE",
+          "grade": "II",
+          "nhle_id": "1195743"
+        },
+        {
+          "name": "NUMBERS 17 AND 18 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195752"
+        },
+        {
+          "name": "NUMBERS 35 TO 43 (CONSECUTIVE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195754"
+        },
+        {
+          "name": "11, JERUSALEM PASSAGE",
+          "grade": "II",
+          "nhle_id": "1207649"
+        },
+        {
+          "name": "BOLLARD AT THE SOUTH END OF JERUSALEM PASSAGE",
+          "grade": "II",
+          "nhle_id": "1207655"
+        },
+        {
+          "name": "53, CLERKENWELL CLOSE",
+          "grade": "II",
+          "nhle_id": "1207772"
+        },
+        {
+          "name": "CHURCH OF ST JAMES AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1207786"
+        },
+        {
+          "name": "49-53, CLERKENWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1207936"
+        },
+        {
+          "name": "68A-69, COMPTON STREET",
+          "grade": "II",
+          "nhle_id": "1208276"
+        },
+        {
+          "name": "22a AND 24 ST JAMES'S WALK",
+          "grade": "II",
+          "nhle_id": "1208584"
+        },
+        {
+          "name": "BOLLARD ON THE CORNER OF SEKFORDE STREET AND ST JAMES'S WALK",
+          "grade": "II",
+          "nhle_id": "1208587"
+        },
+        {
+          "name": "193, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1208769"
+        },
+        {
+          "name": "47 AND 48, ST JOHN'S SQUARE",
+          "grade": "II",
+          "nhle_id": "1208835"
+        },
+        {
+          "name": "52, ST JOHN'S SQUARE",
+          "grade": "II",
+          "nhle_id": "1208838"
+        },
+        {
+          "name": "PRIORY CHURCH OF ST JOHN OF JERUSALEM",
+          "grade": "I",
+          "nhle_id": "1208840"
+        },
+        {
+          "name": "34 SEKFORDE STREET",
+          "grade": "II",
+          "nhle_id": "1209487"
+        },
+        {
+          "name": "11 AND 13, WOODBRIDGE STREET AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1209886"
+        },
+        {
+          "name": "MARX MEMORIAL LIBRARY",
+          "grade": "II",
+          "nhle_id": "1279541"
+        },
+        {
+          "name": "THE CANNON BREWERY BUILDING",
+          "grade": "II",
+          "nhle_id": "1293006"
+        },
+        {
+          "name": "NUMBERS 14 AND 16 (EVEN) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1297956"
+        },
+        {
+          "name": "187-191, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1297967"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK AT JUNCTION WITH ALBEMARLE WAY",
+          "grade": "II",
+          "nhle_id": "1297969"
+        },
+        {
+          "name": "OUTBUILDING ON SOUTH SIDE OF THE YARD, KINGSBURY COLLEGE CLERKENWELL CENTRE",
+          "grade": "II",
+          "nhle_id": "1297974"
+        },
+        {
+          "name": "NUMBERS 26A TO 33 (CONSECUTIVE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1297976"
+        },
+        {
+          "name": "BOLLARD OUTSIDE NUMBER 20",
+          "grade": "II",
+          "nhle_id": "1298003"
+        },
+        {
+          "name": "8, JERUSALEM PASSAGE",
+          "grade": "II",
+          "nhle_id": "1298006"
+        },
+        {
+          "name": "6, CLERKENWELL CLOSE",
+          "grade": "II",
+          "nhle_id": "1298070"
+        },
+        {
+          "name": "WESTERNMOST OF TWO K2 TELEPHONE KIOSKS TO THE CENTRE OF CLERKENWELL GREEN",
+          "grade": "II",
+          "nhle_id": "1298073"
+        },
+        {
+          "name": "72-77, COMPTON STREET",
+          "grade": "II",
+          "nhle_id": "1298082"
+        },
+        {
+          "name": "12-14A, CLERKENWELL GREEN",
+          "grade": "II",
+          "nhle_id": "1360787"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 44,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Aylesbury Phase 3",
@@ -3364,7 +4215,14 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Aylesbury Phase 2",
@@ -3435,7 +4293,235 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Viewing Corridor"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 8 TO 14 (CONSECUTIVE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1025269"
+        },
+        {
+          "name": "2, ALBEMARLE WAY",
+          "grade": "II",
+          "nhle_id": "1195444"
+        },
+        {
+          "name": "54, CLERKENWELL CLOSE",
+          "grade": "II",
+          "nhle_id": "1195544"
+        },
+        {
+          "name": "CORNWELL HOUSE",
+          "grade": "II",
+          "nhle_id": "1195545"
+        },
+        {
+          "name": "43 and 44 Clerkenwell Green and 55 Clerkenwell Close",
+          "grade": "II",
+          "nhle_id": "1195546"
+        },
+        {
+          "name": "EASTERNMOST OF TWO K2 TELEPHONE KIOSKS TO THE CENTRE OF CLERKENWELL GREEN",
+          "grade": "II",
+          "nhle_id": "1195547"
+        },
+        {
+          "name": "70 AND 72, CLERKENWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1195549"
+        },
+        {
+          "name": "WOODBRIDGE CHAPEL AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195610"
+        },
+        {
+          "name": "12, JERUSALEM PASSAGE",
+          "grade": "II",
+          "nhle_id": "1195646"
+        },
+        {
+          "name": "NUMBER 20 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195726"
+        },
+        {
+          "name": "NUMBERS 26 TO 32 (EVEN) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195727"
+        },
+        {
+          "name": "148-154, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1195732"
+        },
+        {
+          "name": "201, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1195733"
+        },
+        {
+          "name": "36 AND 36A, ST JOHN'S SQUARE",
+          "grade": "II",
+          "nhle_id": "1195742"
+        },
+        {
+          "name": "49 AND 50, ST JOHN'S SQUARE",
+          "grade": "II",
+          "nhle_id": "1195743"
+        },
+        {
+          "name": "NUMBERS 17 AND 18 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195752"
+        },
+        {
+          "name": "NUMBERS 35 TO 43 (CONSECUTIVE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1195754"
+        },
+        {
+          "name": "11, JERUSALEM PASSAGE",
+          "grade": "II",
+          "nhle_id": "1207649"
+        },
+        {
+          "name": "BOLLARD AT THE SOUTH END OF JERUSALEM PASSAGE",
+          "grade": "II",
+          "nhle_id": "1207655"
+        },
+        {
+          "name": "53, CLERKENWELL CLOSE",
+          "grade": "II",
+          "nhle_id": "1207772"
+        },
+        {
+          "name": "CHURCH OF ST JAMES AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1207786"
+        },
+        {
+          "name": "49-53, CLERKENWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1207936"
+        },
+        {
+          "name": "68A-69, COMPTON STREET",
+          "grade": "II",
+          "nhle_id": "1208276"
+        },
+        {
+          "name": "22a AND 24 ST JAMES'S WALK",
+          "grade": "II",
+          "nhle_id": "1208584"
+        },
+        {
+          "name": "BOLLARD ON THE CORNER OF SEKFORDE STREET AND ST JAMES'S WALK",
+          "grade": "II",
+          "nhle_id": "1208587"
+        },
+        {
+          "name": "193, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1208769"
+        },
+        {
+          "name": "47 AND 48, ST JOHN'S SQUARE",
+          "grade": "II",
+          "nhle_id": "1208835"
+        },
+        {
+          "name": "52, ST JOHN'S SQUARE",
+          "grade": "II",
+          "nhle_id": "1208838"
+        },
+        {
+          "name": "PRIORY CHURCH OF ST JOHN OF JERUSALEM",
+          "grade": "I",
+          "nhle_id": "1208840"
+        },
+        {
+          "name": "34 SEKFORDE STREET",
+          "grade": "II",
+          "nhle_id": "1209487"
+        },
+        {
+          "name": "11 AND 13, WOODBRIDGE STREET AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1209886"
+        },
+        {
+          "name": "MARX MEMORIAL LIBRARY",
+          "grade": "II",
+          "nhle_id": "1279541"
+        },
+        {
+          "name": "THE CANNON BREWERY BUILDING",
+          "grade": "II",
+          "nhle_id": "1293006"
+        },
+        {
+          "name": "NUMBERS 14 AND 16 (EVEN) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1297956"
+        },
+        {
+          "name": "187-191, ST JOHN STREET",
+          "grade": "II",
+          "nhle_id": "1297967"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK AT JUNCTION WITH ALBEMARLE WAY",
+          "grade": "II",
+          "nhle_id": "1297969"
+        },
+        {
+          "name": "OUTBUILDING ON SOUTH SIDE OF THE YARD, KINGSBURY COLLEGE CLERKENWELL CENTRE",
+          "grade": "II",
+          "nhle_id": "1297974"
+        },
+        {
+          "name": "NUMBERS 26A TO 33 (CONSECUTIVE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1297976"
+        },
+        {
+          "name": "BOLLARD OUTSIDE NUMBER 20",
+          "grade": "II",
+          "nhle_id": "1298003"
+        },
+        {
+          "name": "8, JERUSALEM PASSAGE",
+          "grade": "II",
+          "nhle_id": "1298006"
+        },
+        {
+          "name": "6, CLERKENWELL CLOSE",
+          "grade": "II",
+          "nhle_id": "1298070"
+        },
+        {
+          "name": "WESTERNMOST OF TWO K2 TELEPHONE KIOSKS TO THE CENTRE OF CLERKENWELL GREEN",
+          "grade": "II",
+          "nhle_id": "1298073"
+        },
+        {
+          "name": "72-77, COMPTON STREET",
+          "grade": "II",
+          "nhle_id": "1298082"
+        },
+        {
+          "name": "12-14A, CLERKENWELL GREEN",
+          "grade": "II",
+          "nhle_id": "1360787"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 44,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "123 Grove Park",
@@ -3657,7 +4743,85 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 144-156 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378419"
+        },
+        {
+          "name": "NUMBER 158 AND 158A AND ATTACHED AREA RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378420"
+        },
+        {
+          "name": "160 AND 162, CAMBERWELL GROVE",
+          "grade": "II",
+          "nhle_id": "1378421"
+        },
+        {
+          "name": "163 AND 165, CAMBERWELL GROVE",
+          "grade": "II",
+          "nhle_id": "1378422"
+        },
+        {
+          "name": "164 AND 166, CAMBERWELL GROVE",
+          "grade": "II",
+          "nhle_id": "1378423"
+        },
+        {
+          "name": "NUMBER 167 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378424"
+        },
+        {
+          "name": "NUMBER 168-174 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378425"
+        },
+        {
+          "name": "GROVE CRESCENT (TERRACE) AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378426"
+        },
+        {
+          "name": "180 AND 182, CAMBERWELL GROVE",
+          "grade": "II",
+          "nhle_id": "1378427"
+        },
+        {
+          "name": "NUMBERS 187 AND 189 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378429"
+        },
+        {
+          "name": "NUMBERS 191 AND 193 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378430"
+        },
+        {
+          "name": "GROVE HILL HOUSE",
+          "grade": "II",
+          "nhle_id": "1385588"
+        },
+        {
+          "name": "FONTENOY HOUSE AND IRON GATE",
+          "grade": "II",
+          "nhle_id": "1385589"
+        },
+        {
+          "name": "NUMBERS 124 AND 125 INCLUDING BALUSTRADED WALL, GATES AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385590"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 14,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Aylesbury Phase 4a-c",
@@ -3803,7 +4967,14 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Aylesbury Plot 18",
@@ -3949,7 +5120,14 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Aylesbury Site 7",
@@ -4082,7 +5260,240 @@
           "name": "Kenwood viewing gazebo to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1376553"
+        },
+        {
+          "name": "6, 8 AND 10, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378342"
+        },
+        {
+          "name": "POST OFFICE",
+          "grade": "II",
+          "nhle_id": "1378344"
+        },
+        {
+          "name": "28, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378345"
+        },
+        {
+          "name": "32 AND 34, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378346"
+        },
+        {
+          "name": "38, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378347"
+        },
+        {
+          "name": "40, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378348"
+        },
+        {
+          "name": "50 and 52, Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378349"
+        },
+        {
+          "name": "CALVERTS BUILDINGS (ATTACHED TO REAR OF NUMBER 50)",
+          "grade": "II",
+          "nhle_id": "1378350"
+        },
+        {
+          "name": "52 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378351"
+        },
+        {
+          "name": "53 AND 53A, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378352"
+        },
+        {
+          "name": "55, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378353"
+        },
+        {
+          "name": "58, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378354"
+        },
+        {
+          "name": "66, 68 AND 70, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378355"
+        },
+        {
+          "name": "67, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378356"
+        },
+        {
+          "name": "THE GEORGE INN",
+          "grade": "I",
+          "nhle_id": "1378357"
+        },
+        {
+          "name": "91, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378358"
+        },
+        {
+          "name": "93 AND 95, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378359"
+        },
+        {
+          "name": "101, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378360"
+        },
+        {
+          "name": "103, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378361"
+        },
+        {
+          "name": "THE GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1378362"
+        },
+        {
+          "name": "123, 125 AND 127, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378363"
+        },
+        {
+          "name": "POST AT NORTH CORNER OF BEDALE STREET",
+          "grade": "II",
+          "nhle_id": "1378367"
+        },
+        {
+          "name": "St Saviour’s War Memorial, Southwark",
+          "grade": "II*",
+          "nhle_id": "1378368"
+        },
+        {
+          "name": "BOLLARD AT THE CORNER WITH WINCHESTER WALK",
+          "grade": "II",
+          "nhle_id": "1378459"
+        },
+        {
+          "name": "CATHEDRAL CHURCH OF ST SAVIOUR AND ST MARY OVERIE (SOUTHWARK CATHEDRAL)",
+          "grade": "I",
+          "nhle_id": "1378460"
+        },
+        {
+          "name": "KINGS HEAD PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385638"
+        },
+        {
+          "name": "1-11, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385749"
+        },
+        {
+          "name": "13, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385750"
+        },
+        {
+          "name": "BUNCH OF GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385870"
+        },
+        {
+          "name": "NUMBERS 4-8 AND 12-16 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385871"
+        },
+        {
+          "name": "NUMBER 9 AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1385872"
+        },
+        {
+          "name": "9A, ST THOMAS STREET",
+          "grade": "II*",
+          "nhle_id": "1385873"
+        },
+        {
+          "name": "MARY SHERIDAN HOUSE (PART) AND AREA RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1385874"
+        },
+        {
+          "name": "GUYS HOSPITAL MAIN BUILDING INCLUDING WINGS AND CHAPEL",
+          "grade": "II*",
+          "nhle_id": "1385877"
+        },
+        {
+          "name": "1B, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385921"
+        },
+        {
+          "name": "3, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385922"
+        },
+        {
+          "name": "THE HOP EXCHANGE",
+          "grade": "II",
+          "nhle_id": "1385923"
+        },
+        {
+          "name": "CANNON BOLLARD BETWEEN NUMBERS 1 AND 2 (NUMBERS 1 AND 2 NOT INCLUDED)",
+          "grade": "II",
+          "nhle_id": "1385936"
+        },
+        {
+          "name": "5, STONEY STREET",
+          "grade": "II",
+          "nhle_id": "1385937"
+        },
+        {
+          "name": "THE WHEATSHEAF PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385938"
+        },
+        {
+          "name": "RESITED FLORAL HALL PORTICO AT BOROUGH MARKET",
+          "grade": "II",
+          "nhle_id": "1392690"
+        },
+        {
+          "name": "SIX BOLLARDS TO ENTRANCE OF GREEN DRAGON COURT, AND THREE BOLLARDS AND ONE LAMP POST TO REAR OF THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1393612"
+        },
+        {
+          "name": "30 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1423541"
+        },
+        {
+          "name": "54 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1428936"
+        }
+      ],
+      "nhle_count_50m": 10,
+      "nhle_count_150m": 45,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Dulwich Community Hospital, East Dulwich Grove",
@@ -4151,7 +5562,14 @@
           "name": "Primrose Hill summit to the Palace of Westminster",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Railway Rise, East Dulwich",
@@ -4293,7 +5711,14 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "62-67 Park Street",
@@ -4450,7 +5875,39 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "CARDINALS WHARF, AND RAILINGS AT DOOR",
+          "grade": "II",
+          "nhle_id": "1376548"
+        },
+        {
+          "name": "51 AND 52, BANKSIDE",
+          "grade": "II",
+          "nhle_id": "1376549"
+        },
+        {
+          "name": "FOUR POSTS ALONG BANKSIDE",
+          "grade": "II",
+          "nhle_id": "1376550"
+        },
+        {
+          "name": "UNION WORKS",
+          "grade": "II",
+          "nhle_id": "1385754"
+        },
+        {
+          "name": "POST AT WEST CORNER OF ROSE ALLEY",
+          "grade": "II",
+          "nhle_id": "1385755"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "1 Southwark Bridge Road and Red Lion Court",
@@ -4637,7 +6094,44 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "ANCHOR PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1376546"
+        },
+        {
+          "name": "FIVE POSTS OUTSIDE AND OPPOSITE NUMBER 1 ANCHOR PUBLIC HOUSE FIVE POSTS OUTSIDE AND OPPOSTIE ANCHOR PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1376547"
+        },
+        {
+          "name": "FOUR POSTS ALONG BANKSIDE",
+          "grade": "II",
+          "nhle_id": "1376550"
+        },
+        {
+          "name": "UNION WORKS",
+          "grade": "II",
+          "nhle_id": "1385754"
+        },
+        {
+          "name": "POST AT WEST CORNER OF ROSE ALLEY",
+          "grade": "II",
+          "nhle_id": "1385755"
+        },
+        {
+          "name": "ANCHOR TERRACE AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385914"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Aylesham Centre and Peckham Bus Station",
@@ -4753,7 +6247,14 @@
         "source": "derived"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Guys and St Thomas Trust Rehabilitation Centre, Crystal Palace",
@@ -4814,7 +6315,25 @@
         "source": "derived"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "242, NORWOOD ROAD SW27",
+          "grade": "II",
+          "nhle_id": "1064996"
+        },
+        {
+          "name": "WEST NORWOOD FIRE STATION",
+          "grade": "II",
+          "nhle_id": "1392336"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "London Bridge Health Cluster",
@@ -4951,7 +6470,149 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "WILTSHIRE HOUSE, MAIDSTONE BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1330570"
+        },
+        {
+          "name": "32 AND 34, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378346"
+        },
+        {
+          "name": "38, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378347"
+        },
+        {
+          "name": "40, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378348"
+        },
+        {
+          "name": "50 and 52, Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378349"
+        },
+        {
+          "name": "CALVERTS BUILDINGS (ATTACHED TO REAR OF NUMBER 50)",
+          "grade": "II",
+          "nhle_id": "1378350"
+        },
+        {
+          "name": "52 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378351"
+        },
+        {
+          "name": "58, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378354"
+        },
+        {
+          "name": "66, 68 AND 70, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378355"
+        },
+        {
+          "name": "67, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378356"
+        },
+        {
+          "name": "THE GEORGE INN",
+          "grade": "I",
+          "nhle_id": "1378357"
+        },
+        {
+          "name": "91, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378358"
+        },
+        {
+          "name": "93 AND 95, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378359"
+        },
+        {
+          "name": "101, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378360"
+        },
+        {
+          "name": "103, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378361"
+        },
+        {
+          "name": "THE GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1378362"
+        },
+        {
+          "name": "123, 125 AND 127, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378363"
+        },
+        {
+          "name": "151, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378364"
+        },
+        {
+          "name": "177, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378365"
+        },
+        {
+          "name": "St Saviour’s War Memorial, Southwark",
+          "grade": "II*",
+          "nhle_id": "1378368"
+        },
+        {
+          "name": "TWO POSTS AT NORTH AND SOUTH ENTRANCES TO NEWCOMEN STREET",
+          "grade": "II",
+          "nhle_id": "1378369"
+        },
+        {
+          "name": "KINGS ARMS PUBLIC HOUSE WITH REFIXED COAT OF ARMS",
+          "grade": "II",
+          "nhle_id": "1385719"
+        },
+        {
+          "name": "1B, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385921"
+        },
+        {
+          "name": "3, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385922"
+        },
+        {
+          "name": "31-37, UNION STREET",
+          "grade": "II",
+          "nhle_id": "1386008"
+        },
+        {
+          "name": "30 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1423541"
+        },
+        {
+          "name": "54 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1428936"
+        }
+      ],
+      "nhle_count_50m": 4,
+      "nhle_count_150m": 27,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Land between Melior Street, St Thomas Street, Weston Street and Fenning Street",
@@ -4997,13 +6658,13 @@
           {
             "ref": "17/07968/FULL",
             "date": "2017-09-05",
-            "desc": "Partial demolition and redevelopment behind retained fa\u00e7ades of three buildings ",
+            "desc": "Partial demolition and redevelopment behind retained façades of three buildings ",
             "decision": "Application Permitted"
           },
           {
             "ref": "17/07969/LBC",
             "date": "2017-09-05",
-            "desc": "Partial demolition and redevelopment behind retained fa\u00e7ades of three buildings ",
+            "desc": "Partial demolition and redevelopment behind retained façades of three buildings ",
             "decision": "Application Permitted"
           }
         ]
@@ -5050,7 +6711,169 @@
           "type": "Viewing Corridor"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "25, WHITEHALL SW1",
+          "grade": "II",
+          "nhle_id": "1066104"
+        },
+        {
+          "name": "WHITEHALL HOUSE",
+          "grade": "II",
+          "nhle_id": "1066105"
+        },
+        {
+          "name": "GOVERNMENT OFFICES, MINISTRY OF AGRICULTURE FISHERIES AND FOOD GOVERNMENT OFFICES, MINISTRY OF AGRICULTURE FISHERIES AND FOOD WEST BLOCK",
+          "grade": "II*",
+          "nhle_id": "1066106"
+        },
+        {
+          "name": "FOUNTAINS AND TERRACE WALLS WITH LAMPSTANDARDS, STEPS AND STONE BOLLARDS ENCLOSING THE SQUARE",
+          "grade": "II*",
+          "nhle_id": "1066235"
+        },
+        {
+          "name": "SOUTH AFRICA HOUSE",
+          "grade": "II*",
+          "nhle_id": "1066238"
+        },
+        {
+          "name": "LAMPSTANDARD NUMBERED 7 ON ISLAND ADJACENT TO CHARLES I STATUE",
+          "grade": "II",
+          "nhle_id": "1066283"
+        },
+        {
+          "name": "LAMPSTANDARD NUMBERED 11 ON ISLAND AT HEAD OF NORTHUMBERLAND AVENUE",
+          "grade": "II",
+          "nhle_id": "1066284"
+        },
+        {
+          "name": "STATUE OF GENERAL SIR HENRY HAVELOCK",
+          "grade": "II",
+          "nhle_id": "1217599"
+        },
+        {
+          "name": "STATUE OF JAMES II IN FRONT OF NATIONAL GALLERY WEST WING",
+          "grade": "I",
+          "nhle_id": "1217629"
+        },
+        {
+          "name": "CANADA HOUSE (INCLUDING THE FORMER ROYAL COLLEGE OF PHYSICIANS)",
+          "grade": "II*",
+          "nhle_id": "1217724"
+        },
+        {
+          "name": "NATIONAL WESTMINSTER BANK",
+          "grade": "II",
+          "nhle_id": "1217744"
+        },
+        {
+          "name": "3, WHITEHALL SW1",
+          "grade": "II",
+          "nhle_id": "1224053"
+        },
+        {
+          "name": "NORTHUMBERLAND HOUSE (VICTORIA BUILDINGS)",
+          "grade": "II",
+          "nhle_id": "1225350"
+        },
+        {
+          "name": "ROYAL BANK OF SCOTLAND ROYAL BANK OF SCOTLAND, DRUMMOND'S BANK",
+          "grade": "II",
+          "nhle_id": "1225731"
+        },
+        {
+          "name": "CIVIL SERVICE DEPARTMENT OFFICES (FORMER ADMIRALTY OFFICES)",
+          "grade": "II",
+          "nhle_id": "1231303"
+        },
+        {
+          "name": "ADMIRALTY ARCH, FIRST SEA LORD'S RESIDENCE AND OFFICES, BALUSTRADES AND STEPS",
+          "grade": "I",
+          "nhle_id": "1238982"
+        },
+        {
+          "name": "THE ROYAL MARINES MEMORIAL",
+          "grade": "II",
+          "nhle_id": "1239070"
+        },
+        {
+          "name": "STATUE OF CAPTAIN COOK",
+          "grade": "II",
+          "nhle_id": "1239083"
+        },
+        {
+          "name": "WHITEHALL THEATRE",
+          "grade": "II",
+          "nhle_id": "1259399"
+        },
+        {
+          "name": "57-59, TRAFALGAR SQUARE WC2",
+          "grade": "II",
+          "nhle_id": "1266213"
+        },
+        {
+          "name": "TRAFALGAR BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1266434"
+        },
+        {
+          "name": "OLD SHADES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1267004"
+        },
+        {
+          "name": "STATUE OF GEORGE IV",
+          "grade": "II",
+          "nhle_id": "1275350"
+        },
+        {
+          "name": "The Nelson Monument (Nelson's Column)",
+          "grade": "I",
+          "nhle_id": "1276052"
+        },
+        {
+          "name": "HARRINGTON HOUSE",
+          "grade": "II*",
+          "nhle_id": "1356938"
+        },
+        {
+          "name": "1, GREAT SCOTLAND YARD SW1",
+          "grade": "II",
+          "nhle_id": "1357068"
+        },
+        {
+          "name": "STATUE OF CHARLES I",
+          "grade": "I",
+          "nhle_id": "1357291"
+        },
+        {
+          "name": "STATUE OF GENERAL SIR CHARLES NAPIER",
+          "grade": "II",
+          "nhle_id": "1357304"
+        },
+        {
+          "name": "K6 Telephone Kiosk",
+          "grade": "II",
+          "nhle_id": "1420379"
+        },
+        {
+          "name": "Pair of K6 Telephone kiosks",
+          "grade": "II",
+          "nhle_id": "1433290"
+        },
+        {
+          "name": "Sainsbury Wing at the National Gallery",
+          "grade": "I",
+          "nhle_id": "1451082"
+        }
+      ],
+      "nhle_count_50m": 8,
+      "nhle_count_150m": 31,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Landmark Court",
@@ -5162,7 +6985,134 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "BRIDGE HOUSE",
+          "grade": "II",
+          "nhle_id": "1378341"
+        },
+        {
+          "name": "6, 8 AND 10, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378342"
+        },
+        {
+          "name": "POST OFFICE",
+          "grade": "II",
+          "nhle_id": "1378344"
+        },
+        {
+          "name": "POST AT NORTH CORNER OF BEDALE STREET",
+          "grade": "II",
+          "nhle_id": "1378367"
+        },
+        {
+          "name": "CATHEDRAL CHURCH OF ST SAVIOUR AND ST MARY OVERIE (SOUTHWARK CATHEDRAL)",
+          "grade": "I",
+          "nhle_id": "1378460"
+        },
+        {
+          "name": "BRIDGE OVER NORTH END, LONDON BRIDGE STATION",
+          "grade": "II",
+          "nhle_id": "1385629"
+        },
+        {
+          "name": "KINGS HEAD PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385638"
+        },
+        {
+          "name": "LONDON BRIDGE STATION, PLATFORMS 9-16 (BRIGHTON SIDE)",
+          "grade": "II",
+          "nhle_id": "1385808"
+        },
+        {
+          "name": "BUNCH OF GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385870"
+        },
+        {
+          "name": "NUMBERS 4-8 AND 12-16 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385871"
+        },
+        {
+          "name": "NUMBER 9 AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1385872"
+        },
+        {
+          "name": "9A, ST THOMAS STREET",
+          "grade": "II*",
+          "nhle_id": "1385873"
+        },
+        {
+          "name": "MARY SHERIDAN HOUSE (PART) AND AREA RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1385874"
+        },
+        {
+          "name": "MARY SHERIDAN HOUSE (PART) AND ATTACHED AREA RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385875"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK OUTSIDE NUMBERS 17 AND 19 (NUMBERS 17 AND 19 NOT INCLUDED)",
+          "grade": "II",
+          "nhle_id": "1385876"
+        },
+        {
+          "name": "GUYS HOSPITAL MAIN BUILDING INCLUDING WINGS AND CHAPEL",
+          "grade": "II*",
+          "nhle_id": "1385877"
+        },
+        {
+          "name": "GATES, GATE PIERS AND STREET RAILINGS TO GUYS HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1385878"
+        },
+        {
+          "name": "STATUE OF THOMAS GUY IN COURTYARD OF GUYS HOSPITAL, PEDESTAL AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385879"
+        },
+        {
+          "name": "ALCOVE FROM OLD LONDON BRIDGE IN INNER QUADRANGLE OF GUYS HOSPITAL",
+          "grade": "II",
+          "nhle_id": "1385880"
+        },
+        {
+          "name": "DENMARK HOUSE",
+          "grade": "II",
+          "nhle_id": "1385963"
+        },
+        {
+          "name": "LONDON BRIDGE HOSPITAL (PART)",
+          "grade": "II",
+          "nhle_id": "1385964"
+        },
+        {
+          "name": "29, 31 AND 33, TOOLEY STREET",
+          "grade": "II",
+          "nhle_id": "1385966"
+        },
+        {
+          "name": "ARCHWAY BENEATH SOUTHERN END OF LONDON BRIDGE, CROSSING TOOLEY STREET",
+          "grade": "II",
+          "nhle_id": "1385974"
+        },
+        {
+          "name": "SIX BOLLARDS TO ENTRANCE OF GREEN DRAGON COURT, AND THREE BOLLARDS AND ONE LAMP POST TO REAR OF THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1393612"
+        }
+      ],
+      "nhle_count_50m": 4,
+      "nhle_count_150m": 24,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Land between St Thomas Street, Fenning Street, Melior Place, and Snowsfields",
@@ -5365,7 +7315,35 @@
           "name": "Kenwood viewing gazebo to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "55, BERMONDSEY STREET",
+          "grade": "II",
+          "nhle_id": "1376557"
+        },
+        {
+          "name": "NUMBERS 59, 61 AND 63 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376558"
+        },
+        {
+          "name": "LONDON BRIDGE STATION, PLATFORMS 9-16 (BRIGHTON SIDE)",
+          "grade": "II",
+          "nhle_id": "1385808"
+        },
+        {
+          "name": "Railway viaduct arches",
+          "grade": "II",
+          "nhle_id": "1400290"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Mandela Way",
@@ -5514,7 +7492,25 @@
           "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE WHITE HOUSE",
+          "grade": "II",
+          "nhle_id": "1385736"
+        },
+        {
+          "name": "PATH AND STREET RAILINGS, LAMP HOLDER AND GATES TO NUMBER 155",
+          "grade": "II",
+          "nhle_id": "1385737"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Dulwich Hamlet Champion Hill Stadium, Dog Kennel Hill",
@@ -5638,7 +7634,14 @@
           "name": "Alexandra Palace viewing terrace to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "275 Borough High Street and 7 Trinity Street",
@@ -5787,7 +7790,74 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "26 AND 28, COLE STREET",
+          "grade": "II",
+          "nhle_id": "1385401"
+        },
+        {
+          "name": "INNER LONDON SESSIONS COURT",
+          "grade": "II",
+          "nhle_id": "1385732"
+        },
+        {
+          "name": "TRINITY ARMS PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385957"
+        },
+        {
+          "name": "NUMBERS 1-15 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385993"
+        },
+        {
+          "name": "NUMBERS 16-22 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385994"
+        },
+        {
+          "name": "NUMBERS 30-44 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385996"
+        },
+        {
+          "name": "NUMBERS 45-68 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385997"
+        },
+        {
+          "name": "Statue of King Alfred, Trinity Church Square",
+          "grade": "II",
+          "nhle_id": "1385998"
+        },
+        {
+          "name": "THE HENRY WOOD HALL, INCLUDING GATE PIERS AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385999"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK TO NORTH EAST OF THE HENRY WOOD HALL",
+          "grade": "II",
+          "nhle_id": "1386000"
+        },
+        {
+          "name": "2-12, TRINITY STREET",
+          "grade": "II",
+          "nhle_id": "1386001"
+        },
+        {
+          "name": "NUMBER 22 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1386002"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 12,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Land between the railway arches (east of Rye Lane including railway arches)",
@@ -5900,7 +7970,40 @@
           "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 2-18 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385430"
+        },
+        {
+          "name": "NUMBERS 3-11 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385547"
+        },
+        {
+          "name": "63-83, ST GEORGES ROAD",
+          "grade": "II",
+          "nhle_id": "1385855"
+        },
+        {
+          "name": "123-131, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1389681"
+        },
+        {
+          "name": "2-14, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1390856"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Bricklayers Arms",
@@ -6179,7 +8282,20 @@
           "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "TABARD STREET CENTRE (FORMER TABARD STREET SCHOOL)",
+          "grade": "II",
+          "nhle_id": "1385718"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Crimscott Street and Pages Walk",
@@ -6436,7 +8552,13 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "636 Old Kent Road",
@@ -6635,10 +8757,17 @@
           "name": "Kenwood viewing gazebo to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
-      "name": "Marlborough Grove and St James\u2019s Road",
+      "name": "Marlborough Grove and St James’s Road",
       "address": "",
       "borough": "Southwark",
       "lat": 51.5045,
@@ -6703,7 +8832,190 @@
         "source": "existing"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "77 AND 78, PALL MALL SW1",
+          "grade": "II",
+          "nhle_id": "1065858"
+        },
+        {
+          "name": "8 LAMP STANDARDS NUMBERED 1 AND 3 TO 9 (CONSECUTIVE)",
+          "grade": "II",
+          "nhle_id": "1066256"
+        },
+        {
+          "name": "RED LION PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1066937"
+        },
+        {
+          "name": "19, CROWN PASSAGE",
+          "grade": "II",
+          "nhle_id": "1096072"
+        },
+        {
+          "name": "67 AND 68, PALL MALL SW1",
+          "grade": "II",
+          "nhle_id": "1126570"
+        },
+        {
+          "name": "18, CROWN PASSAGE SW1",
+          "grade": "II",
+          "nhle_id": "1221040"
+        },
+        {
+          "name": "SCHOMBERG HOUSE",
+          "grade": "II*",
+          "nhle_id": "1225814"
+        },
+        {
+          "name": "5, PICKERING PLACE SW1",
+          "grade": "II*",
+          "nhle_id": "1226933"
+        },
+        {
+          "name": "4, ST JAMES'S STREET SW1",
+          "grade": "II",
+          "nhle_id": "1235857"
+        },
+        {
+          "name": "87 AND 88, ST JAMES'S STREET SW1",
+          "grade": "II*",
+          "nhle_id": "1235898"
+        },
+        {
+          "name": "BOUNDARY WALL TO GROUNDS OF ST JAMES'S PALACE",
+          "grade": "II",
+          "nhle_id": "1235899"
+        },
+        {
+          "name": "LANCASTER HOUSE BOUNDARY WALL TO GROUNDS AND RAILINGS AND GARDEN GATE",
+          "grade": "II",
+          "nhle_id": "1236547"
+        },
+        {
+          "name": "STABLE YARD GATE LODGE",
+          "grade": "II",
+          "nhle_id": "1236579"
+        },
+        {
+          "name": "CLARENCE HOUSE",
+          "grade": "I",
+          "nhle_id": "1236580"
+        },
+        {
+          "name": "GATEWAY TO ST JAMES'S PARK, OPPOSITE MARLBOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1239085"
+        },
+        {
+          "name": "DEAN'S RESIDENCE, QUEEN'S CHAPEL",
+          "grade": "I",
+          "nhle_id": "1239701"
+        },
+        {
+          "name": "MARLBOROUGH GATE",
+          "grade": "II",
+          "nhle_id": "1239702"
+        },
+        {
+          "name": "QUEEN ALEXANDRA MEMORIAL",
+          "grade": "I",
+          "nhle_id": "1239703"
+        },
+        {
+          "name": "STABLE YARD GATES",
+          "grade": "II",
+          "nhle_id": "1264497"
+        },
+        {
+          "name": "4 LAMPSTANDARDS",
+          "grade": "II",
+          "nhle_id": "1264512"
+        },
+        {
+          "name": "7 LAMPSTANDARDS ALONG NORTH FRONT OF PALACE",
+          "grade": "II",
+          "nhle_id": "1264806"
+        },
+        {
+          "name": "THE CONSTITUTIONAL CLUB",
+          "grade": "II",
+          "nhle_id": "1264850"
+        },
+        {
+          "name": "ST JAMES'S PALACE ST JAMES'S PALACE, GARDEN WALLS, MARLBOROUGH GATE ETC",
+          "grade": "I",
+          "nhle_id": "1264851"
+        },
+        {
+          "name": "1 and 2 St James's Street, including 64 Pall Mall",
+          "grade": "II*",
+          "nhle_id": "1264867"
+        },
+        {
+          "name": "3, ST JAMES'S STREET SW1",
+          "grade": "II*",
+          "nhle_id": "1264868"
+        },
+        {
+          "name": "LOCK'S OF ST JAMES'S",
+          "grade": "II*",
+          "nhle_id": "1264869"
+        },
+        {
+          "name": "8 LAMPSTANDARDS LINING PATH CROSSING LAKE",
+          "grade": "II",
+          "nhle_id": "1264974"
+        },
+        {
+          "name": "1-4, PICKERING PLACE SW1",
+          "grade": "II*",
+          "nhle_id": "1265610"
+        },
+        {
+          "name": "74, ST JAMES STREET SW1",
+          "grade": "II*",
+          "nhle_id": "1271896"
+        },
+        {
+          "name": "6 LAMP STANDARDS",
+          "grade": "II",
+          "nhle_id": "1273604"
+        },
+        {
+          "name": "QUEEN'S CHAPEL",
+          "grade": "I",
+          "nhle_id": "1273605"
+        },
+        {
+          "name": "54, PALL MALL SW1",
+          "grade": "II",
+          "nhle_id": "1331700"
+        },
+        {
+          "name": "MARLBOROUGH HOUSE WITH ENCLOSING FORECOURT WALLS AND EAST SERVICE/STABLE WING",
+          "grade": "I",
+          "nhle_id": "1331701"
+        },
+        {
+          "name": "OXFORD AND CAMBRIDGE UNIVERSITY CLUB",
+          "grade": "II*",
+          "nhle_id": "1357491"
+        },
+        {
+          "name": "79, PALL MALL SW1",
+          "grade": "II",
+          "nhle_id": "1357492"
+        }
+      ],
+      "nhle_count_50m": 4,
+      "nhle_count_150m": 35,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Land bounded by Glengall Road, Latona Road and Old Kent Road",
@@ -6845,7 +9157,14 @@
         "source": "intel"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "4/12 Albany Road",
@@ -7091,7 +9410,50 @@
         "source": "intel"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "38-42, ADDINGTON SQUARE",
+          "grade": "II",
+          "nhle_id": "1376527"
+        },
+        {
+          "name": "NUMBERS 47 AND 48 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376528"
+        },
+        {
+          "name": "62 AND 64, CAMBERWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1378447"
+        },
+        {
+          "name": "NUMBERS 66-84 INCLUDING RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378448"
+        },
+        {
+          "name": "86 AND 86A, CAMBERWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1378449"
+        },
+        {
+          "name": "88, 90 AND 92, CAMBERWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1378450"
+        },
+        {
+          "name": "NUMBERS 117-129 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378451"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 7,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "200 Great Dover Street",
@@ -7196,7 +9558,29 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "CHURCH OF ST GEORGE THE MARTYR",
+          "grade": "II*",
+          "nhle_id": "1378366"
+        },
+        {
+          "name": "WALL FORMING NORTH BOUNDARY OF PUBLIC GARDENS, FORMERLY ST GEORGES CHURCHYARD",
+          "grade": "II",
+          "nhle_id": "1378370"
+        },
+        {
+          "name": "19, TABARD STREET",
+          "grade": "II",
+          "nhle_id": "1395799"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 3,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "7-14 Great Dover Street",
@@ -7337,7 +9721,74 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "26 AND 28, COLE STREET",
+          "grade": "II",
+          "nhle_id": "1385401"
+        },
+        {
+          "name": "TRINITY ARMS PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385957"
+        },
+        {
+          "name": "NUMBERS 1-15 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385993"
+        },
+        {
+          "name": "NUMBERS 30-44 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385996"
+        },
+        {
+          "name": "NUMBERS 45-68 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385997"
+        },
+        {
+          "name": "Statue of King Alfred, Trinity Church Square",
+          "grade": "II",
+          "nhle_id": "1385998"
+        },
+        {
+          "name": "THE HENRY WOOD HALL, INCLUDING GATE PIERS AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385999"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK TO NORTH EAST OF THE HENRY WOOD HALL",
+          "grade": "II",
+          "nhle_id": "1386000"
+        },
+        {
+          "name": "2-12, TRINITY STREET",
+          "grade": "II",
+          "nhle_id": "1386001"
+        },
+        {
+          "name": "NUMBER 22 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1386002"
+        },
+        {
+          "name": "NUMBERS 25-47 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1386003"
+        },
+        {
+          "name": "19, TABARD STREET",
+          "grade": "II",
+          "nhle_id": "1395799"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 12,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Aylesbury Phase 1 Site 1a",
@@ -7448,7 +9899,235 @@
           "name": "Kenwood viewing gazebo to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "WILTSHIRE HOUSE, MAIDSTONE BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1330570"
+        },
+        {
+          "name": "THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1376553"
+        },
+        {
+          "name": "POST OFFICE",
+          "grade": "II",
+          "nhle_id": "1378344"
+        },
+        {
+          "name": "28, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378345"
+        },
+        {
+          "name": "32 AND 34, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378346"
+        },
+        {
+          "name": "38, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378347"
+        },
+        {
+          "name": "40, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378348"
+        },
+        {
+          "name": "50 and 52, Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378349"
+        },
+        {
+          "name": "CALVERTS BUILDINGS (ATTACHED TO REAR OF NUMBER 50)",
+          "grade": "II",
+          "nhle_id": "1378350"
+        },
+        {
+          "name": "52 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378351"
+        },
+        {
+          "name": "53 AND 53A, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378352"
+        },
+        {
+          "name": "55, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378353"
+        },
+        {
+          "name": "58, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378354"
+        },
+        {
+          "name": "66, 68 AND 70, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378355"
+        },
+        {
+          "name": "67, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378356"
+        },
+        {
+          "name": "THE GEORGE INN",
+          "grade": "I",
+          "nhle_id": "1378357"
+        },
+        {
+          "name": "91, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378358"
+        },
+        {
+          "name": "93 AND 95, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378359"
+        },
+        {
+          "name": "101, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378360"
+        },
+        {
+          "name": "103, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378361"
+        },
+        {
+          "name": "THE GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1378362"
+        },
+        {
+          "name": "123, 125 AND 127, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378363"
+        },
+        {
+          "name": "POST AT NORTH CORNER OF BEDALE STREET",
+          "grade": "II",
+          "nhle_id": "1378367"
+        },
+        {
+          "name": "St Saviour’s War Memorial, Southwark",
+          "grade": "II*",
+          "nhle_id": "1378368"
+        },
+        {
+          "name": "TWO POSTS AT NORTH AND SOUTH ENTRANCES TO NEWCOMEN STREET",
+          "grade": "II",
+          "nhle_id": "1378369"
+        },
+        {
+          "name": "KINGS HEAD PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385638"
+        },
+        {
+          "name": "1-11, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385749"
+        },
+        {
+          "name": "13, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385750"
+        },
+        {
+          "name": "20-26, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385751"
+        },
+        {
+          "name": "NUMBERS 21 AND 23 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385752"
+        },
+        {
+          "name": "POSTS IN FRONT OF NUMBERS 21 AND 23",
+          "grade": "II",
+          "nhle_id": "1385753"
+        },
+        {
+          "name": "BUNCH OF GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385870"
+        },
+        {
+          "name": "NUMBERS 4-8 AND 12-16 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385871"
+        },
+        {
+          "name": "9A, ST THOMAS STREET",
+          "grade": "II*",
+          "nhle_id": "1385873"
+        },
+        {
+          "name": "1B, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385921"
+        },
+        {
+          "name": "3, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385922"
+        },
+        {
+          "name": "THE HOP EXCHANGE",
+          "grade": "II",
+          "nhle_id": "1385923"
+        },
+        {
+          "name": "CANNON BOLLARD BETWEEN NUMBERS 1 AND 2 (NUMBERS 1 AND 2 NOT INCLUDED)",
+          "grade": "II",
+          "nhle_id": "1385936"
+        },
+        {
+          "name": "5, STONEY STREET",
+          "grade": "II",
+          "nhle_id": "1385937"
+        },
+        {
+          "name": "THE WHEATSHEAF PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385938"
+        },
+        {
+          "name": "RESITED FLORAL HALL PORTICO AT BOROUGH MARKET",
+          "grade": "II",
+          "nhle_id": "1392690"
+        },
+        {
+          "name": "SIX BOLLARDS TO ENTRANCE OF GREEN DRAGON COURT, AND THREE BOLLARDS AND ONE LAMP POST TO REAR OF THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1393612"
+        },
+        {
+          "name": "30 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1423541"
+        },
+        {
+          "name": "54 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1428936"
+        }
+      ],
+      "nhle_count_50m": 18,
+      "nhle_count_150m": 44,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "19, 21 and 23 Harper Road, 325 Borough High Street, 1-5 and 7-11 Newington Causeway",
@@ -7566,7 +10245,54 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "INNER LONDON SESSIONS COURT",
+          "grade": "II",
+          "nhle_id": "1385732"
+        },
+        {
+          "name": "TRINITY ARMS PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385957"
+        },
+        {
+          "name": "NUMBERS 1-15 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385993"
+        },
+        {
+          "name": "NUMBERS 16-22 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385994"
+        },
+        {
+          "name": "NUMBERS 23-29 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385995"
+        },
+        {
+          "name": "THE HENRY WOOD HALL, INCLUDING GATE PIERS AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385999"
+        },
+        {
+          "name": "2-12, TRINITY STREET",
+          "grade": "II",
+          "nhle_id": "1386001"
+        },
+        {
+          "name": "NUMBER 22 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1386002"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 8,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Salvation Army Headquarters, Newington Causeway",
@@ -7886,7 +10612,13 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Aylesbury Phase 1",
@@ -7997,7 +10729,235 @@
           "name": "Kenwood viewing gazebo to St Paul's Cathedral",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "WILTSHIRE HOUSE, MAIDSTONE BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1330570"
+        },
+        {
+          "name": "THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1376553"
+        },
+        {
+          "name": "POST OFFICE",
+          "grade": "II",
+          "nhle_id": "1378344"
+        },
+        {
+          "name": "28, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378345"
+        },
+        {
+          "name": "32 AND 34, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378346"
+        },
+        {
+          "name": "38, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378347"
+        },
+        {
+          "name": "40, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378348"
+        },
+        {
+          "name": "50 and 52, Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378349"
+        },
+        {
+          "name": "CALVERTS BUILDINGS (ATTACHED TO REAR OF NUMBER 50)",
+          "grade": "II",
+          "nhle_id": "1378350"
+        },
+        {
+          "name": "52 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1378351"
+        },
+        {
+          "name": "53 AND 53A, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378352"
+        },
+        {
+          "name": "55, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378353"
+        },
+        {
+          "name": "58, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378354"
+        },
+        {
+          "name": "66, 68 AND 70, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378355"
+        },
+        {
+          "name": "67, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378356"
+        },
+        {
+          "name": "THE GEORGE INN",
+          "grade": "I",
+          "nhle_id": "1378357"
+        },
+        {
+          "name": "91, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378358"
+        },
+        {
+          "name": "93 AND 95, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378359"
+        },
+        {
+          "name": "101, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378360"
+        },
+        {
+          "name": "103, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378361"
+        },
+        {
+          "name": "THE GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1378362"
+        },
+        {
+          "name": "123, 125 AND 127, BOROUGH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1378363"
+        },
+        {
+          "name": "POST AT NORTH CORNER OF BEDALE STREET",
+          "grade": "II",
+          "nhle_id": "1378367"
+        },
+        {
+          "name": "St Saviour’s War Memorial, Southwark",
+          "grade": "II*",
+          "nhle_id": "1378368"
+        },
+        {
+          "name": "TWO POSTS AT NORTH AND SOUTH ENTRANCES TO NEWCOMEN STREET",
+          "grade": "II",
+          "nhle_id": "1378369"
+        },
+        {
+          "name": "KINGS HEAD PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385638"
+        },
+        {
+          "name": "1-11, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385749"
+        },
+        {
+          "name": "13, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385750"
+        },
+        {
+          "name": "20-26, PARK STREET",
+          "grade": "II",
+          "nhle_id": "1385751"
+        },
+        {
+          "name": "NUMBERS 21 AND 23 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385752"
+        },
+        {
+          "name": "POSTS IN FRONT OF NUMBERS 21 AND 23",
+          "grade": "II",
+          "nhle_id": "1385753"
+        },
+        {
+          "name": "BUNCH OF GRAPES PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385870"
+        },
+        {
+          "name": "NUMBERS 4-8 AND 12-16 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385871"
+        },
+        {
+          "name": "9A, ST THOMAS STREET",
+          "grade": "II*",
+          "nhle_id": "1385873"
+        },
+        {
+          "name": "1B, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385921"
+        },
+        {
+          "name": "3, SOUTHWARK STREET",
+          "grade": "II",
+          "nhle_id": "1385922"
+        },
+        {
+          "name": "THE HOP EXCHANGE",
+          "grade": "II",
+          "nhle_id": "1385923"
+        },
+        {
+          "name": "CANNON BOLLARD BETWEEN NUMBERS 1 AND 2 (NUMBERS 1 AND 2 NOT INCLUDED)",
+          "grade": "II",
+          "nhle_id": "1385936"
+        },
+        {
+          "name": "5, STONEY STREET",
+          "grade": "II",
+          "nhle_id": "1385937"
+        },
+        {
+          "name": "THE WHEATSHEAF PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385938"
+        },
+        {
+          "name": "RESITED FLORAL HALL PORTICO AT BOROUGH MARKET",
+          "grade": "II",
+          "nhle_id": "1392690"
+        },
+        {
+          "name": "SIX BOLLARDS TO ENTRANCE OF GREEN DRAGON COURT, AND THREE BOLLARDS AND ONE LAMP POST TO REAR OF THE GLOBE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1393612"
+        },
+        {
+          "name": "30 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1423541"
+        },
+        {
+          "name": "54 Borough High Street",
+          "grade": "II",
+          "nhle_id": "1428936"
+        }
+      ],
+      "nhle_count_50m": 18,
+      "nhle_count_150m": 44,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Bakerloo Line Sidings and 7 St George's Circus",
@@ -8115,7 +11075,64 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "ST GEORGE THE MARTYR LIBRARY",
+          "grade": "II",
+          "nhle_id": "1378371"
+        },
+        {
+          "name": "109-112, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1378375"
+        },
+        {
+          "name": "NUMBERS 3-11 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385547"
+        },
+        {
+          "name": "ALBERT TERRACE AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385548"
+        },
+        {
+          "name": "NUMBERS 13-35 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385549"
+        },
+        {
+          "name": "OBELISK AT THE CENTRE OF ST GEORGE'S CIRCUS",
+          "grade": "II*",
+          "nhle_id": "1385642"
+        },
+        {
+          "name": "THE DUKE OF CLARENCE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1389679"
+        },
+        {
+          "name": "113-119, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1389680"
+        },
+        {
+          "name": "123-131, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1389681"
+        },
+        {
+          "name": "2-14, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1390856"
+        }
+      ],
+      "nhle_count_50m": 3,
+      "nhle_count_150m": 10,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Newington Triangle",
@@ -8184,7 +11201,30 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "79 AND 81, BROADWAY MARKET E8",
+          "grade": "II",
+          "nhle_id": "1084334"
+        },
+        {
+          "name": "182-186, LANSDOWNE DRIVE E8",
+          "grade": "II",
+          "nhle_id": "1226881"
+        },
+        {
+          "name": "TROUGH JUST NORTH OF JUNCTION WITH WESTGATE ROAD",
+          "grade": "II",
+          "nhle_id": "1226901"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 3,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Site Bordering Great Suffolk Street and Ewer Street",
@@ -8299,7 +11339,44 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "CLANDON HOUSE, BOYFIELD STREET ESTATE",
+          "grade": "II",
+          "nhle_id": "1378377"
+        },
+        {
+          "name": "THE DRAPERS ALMSHOUSES",
+          "grade": "II",
+          "nhle_id": "1385550"
+        },
+        {
+          "name": "CHADWICK HOUSE AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385850"
+        },
+        {
+          "name": "MERROW HOUSE, RUSHWORTH STREET ESTATE",
+          "grade": "II",
+          "nhle_id": "1385851"
+        },
+        {
+          "name": "RIPLEY HOUSE, RUSHWORTH STREET ESTATE",
+          "grade": "II",
+          "nhle_id": "1385852"
+        },
+        {
+          "name": "55, GREAT SUFFOLK STREET",
+          "grade": "II",
+          "nhle_id": "1393123"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "49 Lomond Grove",
@@ -8433,7 +11510,50 @@
         "source": "intel"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 7 AND 8 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376521"
+        },
+        {
+          "name": "9 AND 10, ADDINGTON SQUARE",
+          "grade": "II",
+          "nhle_id": "1376522"
+        },
+        {
+          "name": "11, ADDINGTON SQUARE",
+          "grade": "II",
+          "nhle_id": "1376523"
+        },
+        {
+          "name": "NUMBERS 13-16 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376524"
+        },
+        {
+          "name": "NUMBERS 17-20 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376525"
+        },
+        {
+          "name": "NUMBERS 33-37 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376526"
+        },
+        {
+          "name": "CAMBRIDGE HOUSE",
+          "grade": "II",
+          "nhle_id": "1378452"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 7,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "99 Lomond Grove",
@@ -8611,7 +11731,25 @@
         "source": "intel"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "BRYANSTON HOUSE AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385664"
+        },
+        {
+          "name": "CAMBERWELL BUSINESS CENTRE AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385665"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Land enclosed by Colombo Street, Meymott Street and Blackfriars Road",
@@ -8732,7 +11870,39 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "CHRIST CHURCH GARDENS DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1376594"
+        },
+        {
+          "name": "ROCHESTER HOUSE",
+          "grade": "II",
+          "nhle_id": "1385466"
+        },
+        {
+          "name": "Former Clay's Printing Works ",
+          "grade": "II",
+          "nhle_id": "1385748"
+        },
+        {
+          "name": "Christ Church",
+          "grade": "II",
+          "nhle_id": "1395086"
+        },
+        {
+          "name": "Southwark London Underground Station (including its interchange with Waterloo East Station)",
+          "grade": "II",
+          "nhle_id": "1491631"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Iceland, 118-132 Camberwell Road",
@@ -9134,7 +12304,80 @@
         "source": "intel"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 7 AND 8 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376521"
+        },
+        {
+          "name": "9 AND 10, ADDINGTON SQUARE",
+          "grade": "II",
+          "nhle_id": "1376522"
+        },
+        {
+          "name": "11, ADDINGTON SQUARE",
+          "grade": "II",
+          "nhle_id": "1376523"
+        },
+        {
+          "name": "NUMBERS 47 AND 48 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376528"
+        },
+        {
+          "name": "NUMBERS 66-84 INCLUDING RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378448"
+        },
+        {
+          "name": "86 AND 86A, CAMBERWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1378449"
+        },
+        {
+          "name": "88, 90 AND 92, CAMBERWELL ROAD",
+          "grade": "II",
+          "nhle_id": "1378450"
+        },
+        {
+          "name": "NUMBERS 117-129 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378451"
+        },
+        {
+          "name": "CAMBRIDGE HOUSE",
+          "grade": "II",
+          "nhle_id": "1378452"
+        },
+        {
+          "name": "25A AND 25B, URLWIN STREET",
+          "grade": "II",
+          "nhle_id": "1386016"
+        },
+        {
+          "name": "26A AND 26B, URLWIN STREET",
+          "grade": "II",
+          "nhle_id": "1386017"
+        },
+        {
+          "name": "27, URLWIN STREET",
+          "grade": "II",
+          "nhle_id": "1386018"
+        },
+        {
+          "name": "28, URLWIN STREET",
+          "grade": "II",
+          "nhle_id": "1386019"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 13,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "London Fire and Emergency Planning Authority",
@@ -9201,7 +12444,25 @@
           "name": "City Hall to the White Tower",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "GAYHURST PRIMARY SCHOOL",
+          "grade": "II",
+          "nhle_id": "1226612"
+        },
+        {
+          "name": "131-141, RICHMOND ROAD E8",
+          "grade": "II",
+          "nhle_id": "1235328"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "London Southbank University Quarter",
@@ -9679,7 +12940,34 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "ST GEORGE THE MARTYR LIBRARY",
+          "grade": "II",
+          "nhle_id": "1378371"
+        },
+        {
+          "name": "109-112, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1378375"
+        },
+        {
+          "name": "113-119, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1389680"
+        },
+        {
+          "name": "123-131, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1389681"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 4,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Land Between Camberwell Station Road and Warner Road",
@@ -9827,7 +13115,20 @@
           "name": "Primrose Hill summit to the Palace of Westminster",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "Roman Catholic Church of the Sacred Heart",
+          "grade": "II",
+          "nhle_id": "1422505"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "1-5 Westminster Bridge Road",
@@ -9935,7 +13236,64 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "ST GEORGE THE MARTYR LIBRARY",
+          "grade": "II",
+          "nhle_id": "1378371"
+        },
+        {
+          "name": "109-112, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1378375"
+        },
+        {
+          "name": "NUMBERS 3-11 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385547"
+        },
+        {
+          "name": "ALBERT TERRACE AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385548"
+        },
+        {
+          "name": "NUMBERS 13-35 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385549"
+        },
+        {
+          "name": "OBELISK AT THE CENTRE OF ST GEORGE'S CIRCUS",
+          "grade": "II*",
+          "nhle_id": "1385642"
+        },
+        {
+          "name": "THE DUKE OF CLARENCE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1389679"
+        },
+        {
+          "name": "113-119, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1389680"
+        },
+        {
+          "name": "123-131, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1389681"
+        },
+        {
+          "name": "2-14, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1390856"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 10,
+      "nhle_constraint": "blocking",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Land between Great Suffolk Street and Glasshill Street",
@@ -10050,7 +13408,44 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "CLANDON HOUSE, BOYFIELD STREET ESTATE",
+          "grade": "II",
+          "nhle_id": "1378377"
+        },
+        {
+          "name": "THE DRAPERS ALMSHOUSES",
+          "grade": "II",
+          "nhle_id": "1385550"
+        },
+        {
+          "name": "CHADWICK HOUSE AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385850"
+        },
+        {
+          "name": "MERROW HOUSE, RUSHWORTH STREET ESTATE",
+          "grade": "II",
+          "nhle_id": "1385851"
+        },
+        {
+          "name": "RIPLEY HOUSE, RUSHWORTH STREET ESTATE",
+          "grade": "II",
+          "nhle_id": "1385852"
+        },
+        {
+          "name": "55, GREAT SUFFOLK STREET",
+          "grade": "II",
+          "nhle_id": "1393123"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Land between Paris Gardens, Colombo Street, Blackfriars Road and Stamford Street",
@@ -10116,7 +13511,84 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "THE LONDON NAUTICAL SCHOOL",
+          "grade": "II",
+          "nhle_id": "1064951"
+        },
+        {
+          "name": "ST ANDREW'S AND ST JOHN'S CHURCH OF ENGLAND PRIMARY SCHOOL",
+          "grade": "II",
+          "nhle_id": "1064981"
+        },
+        {
+          "name": "1-9, THEED STREET SE1",
+          "grade": "II",
+          "nhle_id": "1081067"
+        },
+        {
+          "name": "1-23, ROUPELL STREET SE1",
+          "grade": "II",
+          "nhle_id": "1121892"
+        },
+        {
+          "name": "ST ANDREW'S HOUSE",
+          "grade": "II",
+          "nhle_id": "1123734"
+        },
+        {
+          "name": "73, ROUPELL STREET SE1",
+          "grade": "II",
+          "nhle_id": "1338590"
+        },
+        {
+          "name": "FRONT RAILINGS TO ST ANDREW'S HOUSE",
+          "grade": "II",
+          "nhle_id": "1357919"
+        },
+        {
+          "name": "CHRIST CHURCH GARDENS DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1376594"
+        },
+        {
+          "name": "15, 16 and 17 Hatfields",
+          "grade": "II",
+          "nhle_id": "1385596"
+        },
+        {
+          "name": "Former Clay's Printing Works ",
+          "grade": "II",
+          "nhle_id": "1385748"
+        },
+        {
+          "name": "NUMBER 1 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385933"
+        },
+        {
+          "name": "NUMBER 3 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385934"
+        },
+        {
+          "name": "PORTICO OF UNITARIAN CHAPEL",
+          "grade": "II",
+          "nhle_id": "1385935"
+        },
+        {
+          "name": "Christ Church",
+          "grade": "II",
+          "nhle_id": "1395086"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 14,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "1-5 Paris Garden and 16-19 Hatfields",
@@ -10227,7 +13699,54 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "THE LONDON NAUTICAL SCHOOL",
+          "grade": "II",
+          "nhle_id": "1064951"
+        },
+        {
+          "name": "CHRIST CHURCH GARDENS DRINKING FOUNTAIN",
+          "grade": "II",
+          "nhle_id": "1376594"
+        },
+        {
+          "name": "15, 16 and 17 Hatfields",
+          "grade": "II",
+          "nhle_id": "1385596"
+        },
+        {
+          "name": "Former Clay's Printing Works ",
+          "grade": "II",
+          "nhle_id": "1385748"
+        },
+        {
+          "name": "NUMBER 1 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385933"
+        },
+        {
+          "name": "NUMBER 3 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385934"
+        },
+        {
+          "name": "PORTICO OF UNITARIAN CHAPEL",
+          "grade": "II",
+          "nhle_id": "1385935"
+        },
+        {
+          "name": "Christ Church",
+          "grade": "II",
+          "nhle_id": "1395086"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 8,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "63-85 Newington Causeway",
@@ -10515,7 +14034,29 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "DUKE OF YORK PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1378372"
+        },
+        {
+          "name": "62, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1378374"
+        },
+        {
+          "name": "INNER LONDON SESSIONS COURT",
+          "grade": "II",
+          "nhle_id": "1385732"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 3,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Southwark Station and 1 Joan Street",
@@ -10609,7 +14150,159 @@
           "type": "Viewing Corridor"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "VERULAM BUILDINGS NUMBERS 1 TO 5 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1113091"
+        },
+        {
+          "name": "BOUNDARY WALL AND GATEWAY WITH SPUR STONES EAST OF VERULAM BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1113092"
+        },
+        {
+          "name": "LODGE AT NORTH EAST CORNER OF VERULAM BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1113095"
+        },
+        {
+          "name": "RAILINGS AND GATES SOUTH OF VERULAM BUILDINGS",
+          "grade": "II",
+          "nhle_id": "1113096"
+        },
+        {
+          "name": "55, GRAYS INN ROAD",
+          "grade": "II",
+          "nhle_id": "1113098"
+        },
+        {
+          "name": "63 TO 69, GRAYS INN ROAD",
+          "grade": "II",
+          "nhle_id": "1113099"
+        },
+        {
+          "name": "NUMBER 3 TO 16 AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1113197"
+        },
+        {
+          "name": "38, GREAT JAMES STREET",
+          "grade": "II",
+          "nhle_id": "1113204"
+        },
+        {
+          "name": "NUMBER 17 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1244575"
+        },
+        {
+          "name": "NUMBER 23 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1244576"
+        },
+        {
+          "name": "NUMBERS 29-32 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1244577"
+        },
+        {
+          "name": "NUMBER 14 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1244599"
+        },
+        {
+          "name": "NUMBERS 15 AND 16 AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1244605"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK OUTSIDE NUMBER 23 BEDFORD ROW",
+          "grade": "II",
+          "nhle_id": "1272295"
+        },
+        {
+          "name": "K6 TELEPHONE KIOSK OUTSIDE NUMBER 25 BEDFORD ROW (NUMBER 25 NOT INCLUDED)",
+          "grade": "II",
+          "nhle_id": "1272296"
+        },
+        {
+          "name": "8, NORTHINGTON STREET",
+          "grade": "II",
+          "nhle_id": "1322076"
+        },
+        {
+          "name": "13, NORTHINGTON STREET",
+          "grade": "II",
+          "nhle_id": "1322077"
+        },
+        {
+          "name": "GRAY'S INN GARDENS RAILINGS AND WALL ON NORTH SIDE",
+          "grade": "II",
+          "nhle_id": "1322142"
+        },
+        {
+          "name": "GRAY'S INN SQUARE NUMBERS 6, 7 AND 8 AND ATTACHED RAILINGS",
+          "grade": "II*",
+          "nhle_id": "1322146"
+        },
+        {
+          "name": "RAYMOND BUILDINGS NUMBERS 1 TO 6 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1322151"
+        },
+        {
+          "name": "GATEWAY AND WALLS TO NORTH AND WEST OF RAYMOND BUILDINGS RAYMOND BUILDINGS GATEWAY AND WALLS",
+          "grade": "II",
+          "nhle_id": "1322152"
+        },
+        {
+          "name": "NUMBER 12 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1379004"
+        },
+        {
+          "name": "NUMBERS 14-22 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1379005"
+        },
+        {
+          "name": "YORKSHIRE GREY PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1379006"
+        },
+        {
+          "name": "NUMBERS 2 TO 9 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1379155"
+        },
+        {
+          "name": "NUMBERS 10 TO 20 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1379156"
+        },
+        {
+          "name": "NUMBERS 22 TO 28 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1379157"
+        },
+        {
+          "name": "NUMBERS 29 TO 36 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1379158"
+        },
+        {
+          "name": "NO. 21 JOHN STREET, THE DUKE OF YORK PUBLIC HOUSE ON ROGER STREET, AND NOS. 1-4 MYTRE COURT ON JOHN MEWS",
+          "grade": "II",
+          "nhle_id": "1393968"
+        }
+      ],
+      "nhle_count_50m": 5,
+      "nhle_count_150m": 29,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Denmark Hill Campus East",
@@ -10678,7 +14371,45 @@
           "name": "Primrose Hill summit to the Palace of Westminster",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "SHELTER APPROXIMATELY 40 METRES SOUTH WEST OF EAST ENTRANCE",
+          "grade": "II",
+          "nhle_id": "1064982"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK, OUTSIDE RUSKIN PARK OPPOSITE CHAMPION HILL",
+          "grade": "II",
+          "nhle_id": "1263626"
+        },
+        {
+          "name": "STATUE OF GENERAL BOOTH IN FORECOURT OF WILLIAM BOOTH MEMORIAL TRAINING COLLEGE",
+          "grade": "II",
+          "nhle_id": "1378473"
+        },
+        {
+          "name": "STATUE OF MRS BOOTH IN FORECOURT OF WILLIAM BOOTH MEMORIAL TRAINING COLLEGE",
+          "grade": "II",
+          "nhle_id": "1378474"
+        },
+        {
+          "name": "111, DENMARK HILL",
+          "grade": "II",
+          "nhle_id": "1385463"
+        },
+        {
+          "name": "DENMARK HILL STATION, CUTTING WALLS AND PLATFORMS, WITH PHOENIX AND FIRKIN PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1386053"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "B"
     },
     {
       "name": "Camberwell Green Magistrates Court",
@@ -11109,7 +14840,39 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "B"
+      "context_era": "B",
+      "nhle_listings": [
+        {
+          "name": "2, CAMBERWELL CHURCH STREET",
+          "grade": "II",
+          "nhle_id": "1378395"
+        },
+        {
+          "name": "CAMBERWELL POLICE STATION AND ATTACHED LAMP BRACKET",
+          "grade": "II",
+          "nhle_id": "1378397"
+        },
+        {
+          "name": "NUMBER 15 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1378399"
+        },
+        {
+          "name": "FORMER LONDON COUNTY BANK",
+          "grade": "II",
+          "nhle_id": "1378400"
+        },
+        {
+          "name": "323, CAMBERWELL NEW ROAD",
+          "grade": "II",
+          "nhle_id": "1378446"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Chambers Wharf",
@@ -11175,7 +14938,69 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "11-23, NEWELL STREET E14",
+          "grade": "II",
+          "nhle_id": "1065097"
+        },
+        {
+          "name": "ACCUMULATOR TOWER AND CHIMNEY",
+          "grade": "II",
+          "nhle_id": "1065116"
+        },
+        {
+          "name": "GARDEN WALL TO FORMER ST ANNE'S RECTORY",
+          "grade": "II",
+          "nhle_id": "1065234"
+        },
+        {
+          "name": "699-711, COMMERCIAL ROAD E14",
+          "grade": "II",
+          "nhle_id": "1065238"
+        },
+        {
+          "name": "LIMEHOUSE TOWN HALL",
+          "grade": "II",
+          "nhle_id": "1240047"
+        },
+        {
+          "name": "RAILWAY VIADUCT TO NORTH OF REGENTS CANAL DOCK BETWEEN AND INCLUDING BRANCH ROAD BRIDGE AND LIMEHOUSE CUT UP TO THREE COLT STREET",
+          "grade": "II",
+          "nhle_id": "1241666"
+        },
+        {
+          "name": "BRITISH SAILORS SOCIETY",
+          "grade": "II",
+          "nhle_id": "1260541"
+        },
+        {
+          "name": "GATE PIERS AND IRON RAILINGS AT LIMEHOUSE DISTRICT LIBRARY",
+          "grade": "II",
+          "nhle_id": "1261219"
+        },
+        {
+          "name": "RAILWAY BRIDGE",
+          "grade": "II",
+          "nhle_id": "1357806"
+        },
+        {
+          "name": "LIMEHOUSE DISTRICT LIBRARY",
+          "grade": "II",
+          "nhle_id": "1357807"
+        },
+        {
+          "name": "DRINKING FOUNTAIN (UNDER RAILWAY BRIDGE AT JUNCTION WITH LOWELL STREET)",
+          "grade": "II",
+          "nhle_id": "1357809"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 11,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Bath Trading Estate",
@@ -11561,7 +15386,13 @@
           "type": "Extension"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Goose Green Trading Estate",
@@ -11701,7 +15532,24 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "DULWICH LEISURE CENTRE",
+          "grade": "II",
+          "nhle_id": "1385509"
+        },
+        {
+          "name": "CHURCH OF ST JOHN THE EVANGELIST",
+          "grade": "II",
+          "nhle_id": "1385510"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Colechurch House, London Bridge Walk",
@@ -12048,7 +15896,44 @@
           "type": "Wider Setting Consultation Area"
         }
       ],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "HAYS GALLERIA",
+          "grade": "II",
+          "nhle_id": "1385450"
+        },
+        {
+          "name": "BRIDGE OVER NORTH END, LONDON BRIDGE STATION",
+          "grade": "II",
+          "nhle_id": "1385629"
+        },
+        {
+          "name": "LONDON BRIDGE STATION, PLATFORMS 9-16 (BRIGHTON SIDE)",
+          "grade": "II",
+          "nhle_id": "1385808"
+        },
+        {
+          "name": "47 AND 49, TOOLEY STREET",
+          "grade": "II",
+          "nhle_id": "1385967"
+        },
+        {
+          "name": "THE COUNTING HOUSE",
+          "grade": "II",
+          "nhle_id": "1385968"
+        },
+        {
+          "name": "SHIPWRIGHTS ARMS PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1385969"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Devon Street and Sylvan Grove",
@@ -12533,7 +16418,19 @@
           "type": "Extension"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "Gasholder No.13, Old Kent Road former gasworks",
+          "grade": "II",
+          "nhle_id": "1446329"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Sandgate Street and Verney Road",
@@ -12799,7 +16696,39 @@
           "type": "Extension"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "2 AND 3, CANAL GROVE",
+          "grade": "II",
+          "nhle_id": "1378454"
+        },
+        {
+          "name": "4, 5 AND 6, CANAL GROVE",
+          "grade": "II",
+          "nhle_id": "1378455"
+        },
+        {
+          "name": "7 AND 8, CANAL GROVE",
+          "grade": "II",
+          "nhle_id": "1378456"
+        },
+        {
+          "name": "9, CANAL GROVE",
+          "grade": "II",
+          "nhle_id": "1378457"
+        },
+        {
+          "name": "GAS STANDARD ADAPTED TO ELECTRIC LIGHT",
+          "grade": "II",
+          "nhle_id": "1378458"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Former Southern Railway Stables",
@@ -13268,7 +17197,19 @@
           "type": "Extension"
         }
       ],
-      "context_era": "B"
+      "context_era": "B",
+      "nhle_listings": [
+        {
+          "name": "EVELINE LOWE SCHOOL",
+          "grade": "II",
+          "nhle_id": "1391693"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Hatcham Road, Penarth Street and Ilderton Road",
@@ -13394,7 +17335,13 @@
           "type": "Extension"
         }
       ],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Rotherhite Gasometer",
@@ -13523,7 +17470,24 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "TURNTABLE AND MACHINERY OF FORMER SWING ROAD BRIDGE",
+          "grade": "II",
+          "nhle_id": "1385815"
+        },
+        {
+          "name": "CAPSTAN, GREENLAND DOCK",
+          "grade": "II",
+          "nhle_id": "1385941"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Camberwell Station",
@@ -13651,7 +17615,19 @@
           "type": "Extension"
         }
       ],
-      "context_era": "B"
+      "context_era": "B",
+      "nhle_listings": [
+        {
+          "name": "Roman Catholic Church of the Sacred Heart",
+          "grade": "II",
+          "nhle_id": "1422505"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Conoco House, Quadrant House, Edward Edwards House and Suthring House",
@@ -13716,7 +17692,104 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "8, LORDSHIP ROAD N16",
+          "grade": "II",
+          "nhle_id": "1226886"
+        },
+        {
+          "name": "OLD CHURCH OF ST MARY",
+          "grade": "II*",
+          "nhle_id": "1235419"
+        },
+        {
+          "name": "BILNEY LODGE",
+          "grade": "II",
+          "nhle_id": "1235425"
+        },
+        {
+          "name": "169-173, STOKE NEWINGTON CHURCH STREET",
+          "grade": "II",
+          "nhle_id": "1235426"
+        },
+        {
+          "name": "175, STOKE NEWINGTON CHURCH STREET N16",
+          "grade": "II",
+          "nhle_id": "1235427"
+        },
+        {
+          "name": "183, STOKE NEWINGTON CHURCH STREET N16",
+          "grade": "II",
+          "nhle_id": "1235428"
+        },
+        {
+          "name": "ST MARY'S RECTORY",
+          "grade": "II",
+          "nhle_id": "1235429"
+        },
+        {
+          "name": "130, STOKE NEWINGTON CHURCH STREET N16",
+          "grade": "II",
+          "nhle_id": "1235468"
+        },
+        {
+          "name": "137, STOKE NEWINGTON CHURCH STREET N16",
+          "grade": "II",
+          "nhle_id": "1235507"
+        },
+        {
+          "name": "177-181, STOKE NEWINGTON CHURCH STREET N16",
+          "grade": "II",
+          "nhle_id": "1235521"
+        },
+        {
+          "name": "STOKE NEWINGTON MUNICIPAL BUILDINGS AND SURROUNDING WALLS",
+          "grade": "II",
+          "nhle_id": "1253465"
+        },
+        {
+          "name": "(NEW) CHURCH OF ST MARY CHURCH OF ST MARY",
+          "grade": "II*",
+          "nhle_id": "1265056"
+        },
+        {
+          "name": "FORECOURT WALL TO CHURCH AND RECTORY OF ST MARY",
+          "grade": "II",
+          "nhle_id": "1365748"
+        },
+        {
+          "name": "STOKE NEWINGTON LIBRARY",
+          "grade": "II",
+          "nhle_id": "1390563"
+        },
+        {
+          "name": "TOMB OF JAMES STEPHEN, CHURCHYARD OF OLD CHURCH OF ST MARY",
+          "grade": "II",
+          "nhle_id": "1392347"
+        },
+        {
+          "name": "TOMB OF ANNA LAETITIA BARBAULD, CHURCHYARD OF OLD CHURCH OF ST MARY",
+          "grade": "II",
+          "nhle_id": "1392694"
+        },
+        {
+          "name": "The Rose and Crown public house, Stoke Newington",
+          "grade": "II",
+          "nhle_id": "1427444"
+        },
+        {
+          "name": "War memorial at the Church of St Mary",
+          "grade": "II",
+          "nhle_id": "1431826"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 18,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Friars House, 157-168 Blackfriars Road",
@@ -13957,7 +18030,54 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 85 AND 86 INCLUDING RAILINGS",
+          "grade": "II",
+          "nhle_id": "1376593"
+        },
+        {
+          "name": "ALBURY HOUSE, BOYFIELD STREET ESTATE",
+          "grade": "II",
+          "nhle_id": "1378376"
+        },
+        {
+          "name": "THE BLACKFRIARS SETTLEMENT AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385713"
+        },
+        {
+          "name": "DELARCHE HOUSE, WEBBER ROW LONDON COUNTY COUNCIL ESTATE",
+          "grade": "II",
+          "nhle_id": "1386031"
+        },
+        {
+          "name": "OVERY HOUSE, WEBBER ROW LONDON COUNTY COUNCIL ESTATE",
+          "grade": "II",
+          "nhle_id": "1386033"
+        },
+        {
+          "name": "CENTRE FOR LITERACY IN PRIMARY EDUCATION (FORMER LONDON COUNTY COUNCIL SPECIAL SCHOOL)",
+          "grade": "II",
+          "nhle_id": "1386034"
+        },
+        {
+          "name": "BOLLARD",
+          "grade": "II",
+          "nhle_id": "1390785"
+        },
+        {
+          "name": "Former Sons of Temperance Friendly Society Building",
+          "grade": "II",
+          "nhle_id": "1416122"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 8,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Valmar Trading Estate",
@@ -14067,7 +18187,24 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "C"
+      "context_era": "C",
+      "nhle_listings": [
+        {
+          "name": "2, CAMBERWELL CHURCH STREET",
+          "grade": "II",
+          "nhle_id": "1378395"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK AT SOUTH END OF WREN ROAD",
+          "grade": "II",
+          "nhle_id": "1386055"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "Ludgate House & Sampson House, 64 Hopton Street",
@@ -14132,7 +18269,119 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "128 AND 132, CURTAIN ROAD EC2 (See details for further address information)",
+          "grade": "II",
+          "nhle_id": "1226585"
+        },
+        {
+          "name": "10, HOXTON SQUARE N1",
+          "grade": "II",
+          "nhle_id": "1226768"
+        },
+        {
+          "name": "32, HOXTON SQUARE N1",
+          "grade": "II",
+          "nhle_id": "1226769"
+        },
+        {
+          "name": "FORECOURT WALLS AND RAILINGS TO NUMBER 10",
+          "grade": "II",
+          "nhle_id": "1226818"
+        },
+        {
+          "name": "NUMBER 323 (INCLUDING 323A)",
+          "grade": "II",
+          "nhle_id": "1235230"
+        },
+        {
+          "name": "324, OLD STREET",
+          "grade": "II",
+          "nhle_id": "1235231"
+        },
+        {
+          "name": "SHOREDITCH TOWN HALL",
+          "grade": "II",
+          "nhle_id": "1235232"
+        },
+        {
+          "name": "340 AND 342, OLD STREET EC1",
+          "grade": "II",
+          "nhle_id": "1235259"
+        },
+        {
+          "name": "POST AT WEST CORNER OF GARDEN WALK",
+          "grade": "II",
+          "nhle_id": "1235308"
+        },
+        {
+          "name": "POST ABOUT 8 YARDS WEST OF HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1235309"
+        },
+        {
+          "name": "POST TO EAST OF CORNER OF RIVINGTON PLACE",
+          "grade": "II",
+          "nhle_id": "1235329"
+        },
+        {
+          "name": "125-130, SHOREDITCH HIGH STREET",
+          "grade": "II",
+          "nhle_id": "1235402"
+        },
+        {
+          "name": "CHURCH OF ST MONICA",
+          "grade": "II",
+          "nhle_id": "1253428"
+        },
+        {
+          "name": "ACADEMY FITNESS CENTRE",
+          "grade": "II",
+          "nhle_id": "1253433"
+        },
+        {
+          "name": "PRIORY OF THE AUGUSTINIAN FRIARS",
+          "grade": "II",
+          "nhle_id": "1261784"
+        },
+        {
+          "name": "2 POSTS OUTSIDE NUMBER 74",
+          "grade": "II",
+          "nhle_id": "1265103"
+        },
+        {
+          "name": "2 POSTS TO WEST OF CURTAIN ROAD",
+          "grade": "II",
+          "nhle_id": "1265133"
+        },
+        {
+          "name": "56, HOXTON SQUARE N1",
+          "grade": "II",
+          "nhle_id": "1265685"
+        },
+        {
+          "name": "COURT HOUSE AND POLICE STATION",
+          "grade": "II",
+          "nhle_id": "1376533"
+        },
+        {
+          "name": "134-146 Curtain Road",
+          "grade": "II",
+          "nhle_id": "1391632"
+        },
+        {
+          "name": "18-26, RIVINGTON STREET",
+          "grade": "II",
+          "nhle_id": "1392418"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 21,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "McLaren House, St George's Circus",
@@ -14245,7 +18494,79 @@
       },
       "_borough": "Southwark",
       "lvmf_views": [],
-      "context_era": "A"
+      "context_era": "A",
+      "nhle_listings": [
+        {
+          "name": "PEABODY ESTATE",
+          "grade": "II",
+          "nhle_id": "1376595"
+        },
+        {
+          "name": "ST GEORGE THE MARTYR LIBRARY",
+          "grade": "II",
+          "nhle_id": "1378371"
+        },
+        {
+          "name": "109-112, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1378375"
+        },
+        {
+          "name": "OBELISK AT THE CENTRE OF ST GEORGE'S CIRCUS",
+          "grade": "II*",
+          "nhle_id": "1385642"
+        },
+        {
+          "name": "ALGAR HOUSE, WEBBER ROW LONDON COUNTY COUNCIL ESTATE",
+          "grade": "II",
+          "nhle_id": "1386029"
+        },
+        {
+          "name": "DAUNCEY HOUSE, WEBBER ROW LONDON COUNTY COUNCIL ESTATE",
+          "grade": "II",
+          "nhle_id": "1386030"
+        },
+        {
+          "name": "DELARCHE HOUSE, WEBBER ROW LONDON COUNTY COUNCIL ESTATE",
+          "grade": "II",
+          "nhle_id": "1386031"
+        },
+        {
+          "name": "MAWDLEY HOUSE, WEBBER ROW LONDON COUNTY COUNCIL ESTATE",
+          "grade": "II",
+          "nhle_id": "1386032"
+        },
+        {
+          "name": "OVERY HOUSE, WEBBER ROW LONDON COUNTY COUNCIL ESTATE",
+          "grade": "II",
+          "nhle_id": "1386033"
+        },
+        {
+          "name": "THE DUKE OF CLARENCE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1389679"
+        },
+        {
+          "name": "113-119, BOROUGH ROAD",
+          "grade": "II",
+          "nhle_id": "1389680"
+        },
+        {
+          "name": "123-131, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1389681"
+        },
+        {
+          "name": "2-14, LONDON ROAD",
+          "grade": "II",
+          "nhle_id": "1390856"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 13,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01"
     },
     {
       "name": "330-344 Walworth Road",
@@ -14361,7 +18682,40 @@
         "source": "derived"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "NUMBERS 28-52 AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385660"
+        },
+        {
+          "name": "Church of St Peter",
+          "grade": "I",
+          "nhle_id": "1385662"
+        },
+        {
+          "name": "Gates, Gate Piers, Boundary Railings and Walls to Church of St Peter",
+          "grade": "II",
+          "nhle_id": "1385663"
+        },
+        {
+          "name": "HARKERS STUDIO",
+          "grade": "II",
+          "nhle_id": "1385807"
+        },
+        {
+          "name": "KENNEDYS SAUSAGES",
+          "grade": "II",
+          "nhle_id": "1392595"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "A"
     },
     {
       "name": "Chatelaine House, Walworth Road",
@@ -14633,7 +18987,45 @@
         "source": "derived"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "Church of St John the Evangelist, with associated walls, railings and gateways",
+          "grade": "II",
+          "nhle_id": "1385644"
+        },
+        {
+          "name": "MANOR PLACE BATHS AND ATTACHED WALL, PIERS AND RAILINGS",
+          "grade": "II",
+          "nhle_id": "1385689"
+        },
+        {
+          "name": "140, 142, 150, 152, WALWORTH ROAD",
+          "grade": "II",
+          "nhle_id": "1386026"
+        },
+        {
+          "name": "SOUTHWARK CENTRAL LIBRARY AND CUMING MUSEUM",
+          "grade": "II",
+          "nhle_id": "1386027"
+        },
+        {
+          "name": "SOUTHWARK MUNICIPAL OFFICES AND ATTACHED RAILINGS",
+          "grade": "II",
+          "nhle_id": "1386028"
+        },
+        {
+          "name": "THE WALWORTH CLINIC",
+          "grade": "II",
+          "nhle_id": "1393674"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 6,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "107 Dunton Road (Tesco store and car park) and Southernwood Retail Park",
@@ -14772,7 +19164,20 @@
           "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "FORMER FIRE STATION",
+          "grade": "II",
+          "nhle_id": "1385738"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 1,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Butterfly Walk & Morrisons Car Park",
@@ -14840,10 +19245,93 @@
         "source": "derived"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "1 LAMPSTANDARD IN CENTRE OF ROAD OPPOSITE KENT PASSAGE 1 LAMPSTANDARD IN CENTRE OF ROAD OPPOSITE KENT PASSAGE, OUTER CIRCLE",
+          "grade": "II",
+          "nhle_id": "1066026"
+        },
+        {
+          "name": "BOLLARD AT NORTH END OF KENT PASSAGE",
+          "grade": "II",
+          "nhle_id": "1221264"
+        },
+        {
+          "name": "BOLLARD AT SOUTH END OF KENT PASSAGE",
+          "grade": "II",
+          "nhle_id": "1221265"
+        },
+        {
+          "name": "KENT TERRACE",
+          "grade": "II*",
+          "nhle_id": "1221318"
+        },
+        {
+          "name": "9 LAMPSTANDARDS TO FORECOURT DRIVE OF NUMBERS 1 TO 18 (CONSECUTIVE) 9 LAMPSTANDARDS TO FORECOURT DRIVE OF NUMBERS 1 TO 18 (CONSECUTIVE) KENT TERRACE",
+          "grade": "II",
+          "nhle_id": "1221319"
+        },
+        {
+          "name": "76-96, PARK ROAD NW1",
+          "grade": "II",
+          "nhle_id": "1226113"
+        },
+        {
+          "name": "THE WINDSOR CASTLE PUBLIC HOUSE",
+          "grade": "II",
+          "nhle_id": "1226114"
+        },
+        {
+          "name": "28 TO 30 SUSSEX PLACE",
+          "grade": "II",
+          "nhle_id": "1237473"
+        },
+        {
+          "name": "RUDOLF STEINER HOUSE AND HALL",
+          "grade": "II",
+          "nhle_id": "1248379"
+        },
+        {
+          "name": "1 TO 26 SUSSEX PLACE LONDON GRADUATE SCHOOL OF BUSINESS STUDIES",
+          "grade": "I",
+          "nhle_id": "1264092"
+        },
+        {
+          "name": "38-42, PARK ROAD NW1",
+          "grade": "II",
+          "nhle_id": "1266013"
+        },
+        {
+          "name": "K2 TELEPHONE KIOSK OUTSIDE 1-10 HANOVER GATE MANSION",
+          "grade": "II",
+          "nhle_id": "1266014"
+        },
+        {
+          "name": "3 LAMPSTANDARDS OPPOSITE FLANKS OF NUMBER 1 HANOVER TERRACE, NUMBER 1 HANOVER MEWS AND NUMBER 1 KENT TERRACE",
+          "grade": "II",
+          "nhle_id": "1275238"
+        },
+        {
+          "name": "HANOVER TERRACE",
+          "grade": "I",
+          "nhle_id": "1279085"
+        },
+        {
+          "name": "18 LAMPSTANDARDS IN FRONT OF SUSSEX PLACE AND RETURNED TO REAR 18 LAMPSTANDARDS IN FRONT OF SUSSEX PLACE AND RETURNED TO REAR, OUTER CIRCLE LAMPSTANDARDS TO QUADRANT RETURNS OF SUSSEX PLACE",
+          "grade": "II",
+          "nhle_id": "1357154"
+        }
+      ],
+      "nhle_count_50m": 2,
+      "nhle_count_150m": 15,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
-      "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert\u2019s Close",
+      "name": "Harmsworth Quays, Surrey Quays Leisure Park, Surrey Quays Shopping Centre and Robert’s Close",
       "address": "",
       "borough": "Southwark",
       "lat": 51.498403,
@@ -15219,7 +19707,14 @@
         "source": "existing"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 0,
+      "nhle_constraint": "clean",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "96-120 Old Kent Road (Lidl store)",
@@ -15469,10 +19964,28 @@
           "name": "Centre of Bridge over the Serpentine to the Palace of Westminster",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "THE WHITE HOUSE",
+          "grade": "II",
+          "nhle_id": "1385736"
+        },
+        {
+          "name": "PATH AND STREET RAILINGS, LAMP HOLDER AND GATES TO NUMBER 155",
+          "grade": "II",
+          "nhle_id": "1385737"
+        }
+      ],
+      "nhle_count_50m": 1,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
-      "name": "760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
+      "name": "760, 812 Old Kent Road (Toys’r’us store), and 840 Old Kent Road (Aldi store)",
       "address": "",
       "borough": "Southwark",
       "lat": 51.47982,
@@ -15517,7 +20030,7 @@
         "conservation_area": false,
         "article4": true,
         "article4_names": [
-          "Site allocation NSP71: 760, 812 Old Kent Road (Toys\u2019r\u2019us store), and 840 Old Kent Road (Aldi store)",
+          "Site allocation NSP71: 760, 812 Old Kent Road (Toys’r’us store), and 840 Old Kent Road (Aldi store)",
           "Old Kent Road South District Town Centre"
         ]
       },
@@ -15628,7 +20141,40 @@
           "name": "Parliament Hill summit to St Paul's Cathedral",
           "type": "Extension"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "12A Asylum Road",
+          "grade": "II",
+          "nhle_id": "1376536"
+        },
+        {
+          "name": "12 AND 14, ASYLUM ROAD",
+          "grade": "II",
+          "nhle_id": "1376537"
+        },
+        {
+          "name": "NORTH LODGE TO LICENSED VICTUALLERS BENEVOLENT INSTITUTION (CAROLINE GARDENS)",
+          "grade": "II",
+          "nhle_id": "1376541"
+        },
+        {
+          "name": "SOUTH LODGE TO LICENSED VICTUALLERS BENEVOLENT INSTITUTION (CAROLINE GARDENS)",
+          "grade": "II",
+          "nhle_id": "1376542"
+        },
+        {
+          "name": "RAILINGS AND GATES TO CAROLINE GARDENS",
+          "grade": "II",
+          "nhle_id": "1376543"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 5,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Elephant & Castle Shopping Centre and London College of Communication",
@@ -15739,7 +20285,95 @@
           "name": "Greenwich Park Wolfe statue to Tower Bridge",
           "type": "Wider Setting Consultation Area"
         }
-      ]
+      ],
+      "nhle_listings": [
+        {
+          "name": "ST OLAV'S KIRKE",
+          "grade": "II",
+          "nhle_id": "1376530"
+        },
+        {
+          "name": "99, ROTHERHITHE STREET",
+          "grade": "II",
+          "nhle_id": "1385827"
+        },
+        {
+          "name": "101, ROTHERHITHE STREET",
+          "grade": "II",
+          "nhle_id": "1385828"
+        },
+        {
+          "name": "103, ROTHERHITHE STREET",
+          "grade": "II",
+          "nhle_id": "1385829"
+        },
+        {
+          "name": "105, ROTHERHITHE STREET",
+          "grade": "II",
+          "nhle_id": "1385830"
+        },
+        {
+          "name": "THAMES TUNNEL MILLS INCLUDING DETACHED CHIMNEY",
+          "grade": "II",
+          "nhle_id": "1385831"
+        },
+        {
+          "name": "EAST INDIA WHARF",
+          "grade": "II",
+          "nhle_id": "1385843"
+        },
+        {
+          "name": "ARCHWAY TO ROTHERHITHE TUNNEL APPROACH",
+          "grade": "II",
+          "nhle_id": "1385848"
+        },
+        {
+          "name": "70, ST MARYCHURCH STREET",
+          "grade": "II",
+          "nhle_id": "1385864"
+        },
+        {
+          "name": "FORMER ENGINE HOUSE IN RECREATION GROUND",
+          "grade": "II",
+          "nhle_id": "1385865"
+        },
+        {
+          "name": "WATCH HOUSE IN RECREATION GROUND, ADJOINING NUMBER 70",
+          "grade": "II",
+          "nhle_id": "1385866"
+        },
+        {
+          "name": "CHURCH OF ST MARY ROTHERHITHE",
+          "grade": "II*",
+          "nhle_id": "1385867"
+        },
+        {
+          "name": "MONUMENT TO PRINCE LEE BOO APPROXIMATELY 10 METRES WEST OF WEST TOWER CHURCH OF ST MARY",
+          "grade": "II",
+          "nhle_id": "1385868"
+        },
+        {
+          "name": "HOPE SUFFERANCE WHARF",
+          "grade": "II",
+          "nhle_id": "1385869"
+        },
+        {
+          "name": "Rotherhithe (Norwegian Seamen) War Memorial",
+          "grade": "II",
+          "nhle_id": "1449959"
+        },
+        {
+          "name": "Rotherhithe (St Mary the Virgin) War Memorial",
+          "grade": "II",
+          "nhle_id": "1450153"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 16,
+      "nhle_constraint": "navigable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     },
     {
       "name": "Morrisons, Walworth Road",
@@ -16089,7 +20723,25 @@
         "source": "derived"
       },
       "_borough": "Southwark",
-      "lvmf_views": []
+      "lvmf_views": [],
+      "nhle_listings": [
+        {
+          "name": "33, PENROSE STREET",
+          "grade": "II",
+          "nhle_id": "1385787"
+        },
+        {
+          "name": "KENNEDYS SAUSAGES",
+          "grade": "II",
+          "nhle_id": "1392595"
+        }
+      ],
+      "nhle_count_50m": 0,
+      "nhle_count_150m": 2,
+      "nhle_constraint": "manageable",
+      "nhle_verified": true,
+      "nhle_date": "2026-04-01",
+      "context_era": "C"
     }
   ],
   "total": 93
