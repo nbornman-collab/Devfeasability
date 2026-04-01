@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PD Check - What can you build without planning? | D/A</title>
+<title>PD Check - What can you build without planning? | Headroom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -63,9 +63,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 
 /* -- HERO -- */
 .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: var(--ink); padding: 120px 40px 80px; text-align: center; position: relative; overflow: hidden; }
+  padding: 120px 40px 80px; text-align: center; position: relative; overflow: hidden; }
+#pd-hero-map { position: absolute; inset: 0; z-index: 0; }
+.hero-scrim { position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to bottom, rgba(10,10,9,.55) 0%, rgba(10,10,9,.72) 60%, rgba(10,10,9,.9) 100%); }
+.hero > *:not(#pd-hero-map):not(.hero-scrim) { position: relative; z-index: 2; }
 .hero-eyebrow { font: 600 11px var(--sans); text-transform: uppercase; letter-spacing: 3px;
-  color: rgba(255,255,255,.3); margin-bottom: 32px; }
+  color: rgba(255,255,255,.4); margin-bottom: 24px; }
 .hero-title { font: 300 clamp(40px,6vw,80px)/1 var(--display); color: #fff; letter-spacing: -.02em; margin-bottom: 20px; }
 .hero-title em { font-style: italic; color: var(--accent2); }
 .hero-sub { font: 400 18px/1.7 var(--sans); color: rgba(255,255,255,.45); max-width: 520px; margin: 0 auto 48px; }
@@ -282,6 +286,8 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 
 <!-- ===== HERO (PRE-SEARCH) ===== -->
 <div class="hero" id="hero-search">
+  <div id="pd-hero-map"></div>
+  <div class="hero-scrim"></div>
   <div class="hero-eyebrow">Permitted Development - England</div>
   <h1 class="hero-title">What can you build.<br><em>Without asking.</em></h1>
   <p class="hero-sub">Enter any residential address. We check your property against the national PD rules and your local authority's constraints.</p>
@@ -405,9 +411,33 @@ nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index:
 let mapboxToken = null;
 let resultMap = null;
 
-// Fetch config for mapbox token
+// Fetch config for mapbox token + init hero map
 fetch('/api/config').then(r=>r.json()).then(cfg=>{
-  if(cfg && cfg.mapboxToken) mapboxToken = cfg.mapboxToken;
+  if(cfg && cfg.mapboxToken) {
+    mapboxToken = cfg.mapboxToken;
+    // Hero background map — dark London, slow rotation
+    mapboxgl.accessToken = cfg.mapboxToken;
+    const heroMap = new mapboxgl.Map({
+      container: 'pd-hero-map',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [-0.118092, 51.509865],
+      zoom: 11.5,
+      pitch: 45,
+      bearing: -20,
+      interactive: false,
+      attributionControl: false
+    });
+    heroMap.on('load', function() {
+      // Slow bearing rotation
+      let bearing = -20;
+      function rotateBearing() {
+        bearing -= 0.02;
+        heroMap.setBearing(bearing);
+        requestAnimationFrame(rotateBearing);
+      }
+      rotateBearing();
+    });
+  }
 }).catch(()=>{});
 
 // -- Scroll progress + reveal --
