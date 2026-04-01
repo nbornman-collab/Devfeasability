@@ -3,229 +3,190 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Headroom — Logo Options</title>
+<title>Headroom — Logo Options R3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --ink: #f2f1ed;
-    --bg: #0c0c0b;
-    --copper: #b8845c;
-    --copper-dim: rgba(184,132,92,.35);
-    --rule: rgba(242,241,237,.07);
-  }
-  body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --copper: #b8845c; --ink: #f2f1ed; --bg: #0c0c0b; --rule: rgba(242,241,237,.07); }
+  body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; }
 
-  header { padding: 56px 60px 0; border-bottom: 1px solid var(--rule); padding-bottom: 40px; }
-  header h1 { font: 300 52px/1 'Cormorant Garamond', serif; margin-bottom: 8px; }
-  header p { font: 400 13px 'Inter'; color: rgba(242,241,237,.35); letter-spacing: .04em; }
+  header { padding: 48px 60px 32px; border-bottom: 1px solid var(--rule); }
+  header h1 { font: 300 42px 'Cormorant Garamond', serif; margin-bottom: 6px; }
+  header p { font: 400 12px 'Inter'; color: rgba(242,241,237,.3); letter-spacing: .04em; }
 
-  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .cell { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .cell:nth-child(2n) { border-right: none; }
 
-  .cell {
-    border-right: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    padding: 0;
-    display: flex; flex-direction: column;
-  }
-  .cell:nth-child(3n) { border-right: none; }
-
-  .preview {
-    flex: 1;
-    display: flex; align-items: center; justify-content: center;
-    min-height: 260px;
-    padding: 40px;
-    position: relative;
-  }
-  .preview.light { background: #f0ede6; }
+  .preview { min-height: 200px; display: flex; align-items: center; justify-content: center; padding: 48px 40px; }
   .preview.dark { background: #0c0c0b; }
+  .preview.light { background: #f0ede6; }
 
-  /* Toggle dark/light */
-  .toggle-row {
-    display: flex; border-top: 1px solid var(--rule);
-  }
-  .toggle-btn {
-    flex: 1; padding: 10px; background: none; border: none; cursor: pointer;
-    font: 600 10px 'Inter'; letter-spacing: .1em; text-transform: uppercase;
-    color: rgba(242,241,237,.3); transition: color .2s;
-  }
-  .toggle-btn.active { color: var(--copper); }
-  .toggle-btn:first-child { border-right: 1px solid var(--rule); }
+  .meta { padding: 20px 28px 28px; border-top: 1px solid var(--rule); }
+  .opt-num { font: 700 10px 'Inter'; letter-spacing: .14em; text-transform: uppercase; color: var(--copper); margin-bottom: 8px; }
+  .opt-desc { font: 400 12px/1.7 'Inter'; color: rgba(242,241,237,.4); }
 
-  .meta { padding: 24px 28px 32px; border-top: 1px solid var(--rule); }
-  .opt-num { font: 700 10px 'Inter'; letter-spacing: .14em; text-transform: uppercase; color: var(--copper); margin-bottom: 10px; }
-  .opt-desc { font: 400 13px/1.7 'Inter'; color: rgba(242,241,237,.45); }
+  .pair { display: flex; flex-direction: column; }
+  .pair .preview:first-child { border-bottom: 1px solid var(--rule); }
 
-  /* ── MARK STYLES ── */
-
-  /* 01: The Gap — two floors, dotted line, vertical arrow */
-  .mark-01 { display: flex; flex-direction: column; align-items: center; gap: 0; }
-  .mark-01 svg { overflow: visible; }
-
-  /* 02: Massing — existing block + potential above */
-  .mark-02 svg { overflow: visible; }
-
-  /* 03: Floor counter — lift indicator style */
-  .mark-03 { display: flex; flex-direction: column; align-items: flex-start; }
-
-  /* 04: Section cut lettermark */
-  .mark-04 svg { overflow: visible; }
-
-  /* 05: The ceiling line — wordmark pinned under a copper rule */
-  .mark-05 { display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
-
-  /* 06: Skyline H */
-  .mark-06 svg { overflow: visible; }
-
-  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } .cell:nth-child(3n) { border-right: 1px solid var(--rule); } .cell:nth-child(2n) { border-right: none; } }
-  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .cell { border-right: none; } }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } .cell { border-right: none; } }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Headroom</h1>
-  <p>Logo options — Round 2</p>
+  <p>Round 3 — Font + mark exploration. Panel said: name is right, font is wrong.</p>
 </header>
 
 <div class="grid">
 
-  <!-- ── 01: THE GAP ── -->
+  <!-- 01: Inter 800 -->
   <div class="cell">
-    <div class="preview dark" id="p01">
-      <svg width="140" height="120" viewBox="0 0 140 120">
-        <!-- existing building -->
-        <rect x="20" y="72" width="100" height="40" fill="rgba(242,241,237,.12)" stroke="rgba(242,241,237,.2)" stroke-width="1"/>
-        <!-- potential zone (above) -->
-        <rect x="20" y="10" width="100" height="52" fill="rgba(184,132,92,.08)" stroke="none"/>
-        <!-- dotted ceiling line -->
-        <line x1="0" y1="72" x2="140" y2="72" stroke="#b8845c" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <!-- upward arrow in headroom zone -->
-        <line x1="70" y1="66" x2="70" y2="18" stroke="#b8845c" stroke-width="1.5"/>
-        <polygon points="70,10 65,20 75,20" fill="#b8845c"/>
-        <!-- label -->
-        <text x="70" y="115" text-anchor="middle" font-family="Inter" font-weight="800" font-size="11" letter-spacing="4" fill="rgba(242,241,237,.9)" text-transform="uppercase">HEADROOM</text>
-      </svg>
+    <div class="pair">
+      <div class="preview dark">
+        <div style="font:800 26px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#f2f1ed">HEADROOM</div>
+      </div>
+      <div class="preview light">
+        <div style="font:800 26px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#1a1917">HEADROOM</div>
+      </div>
     </div>
     <div class="meta">
-      <div class="opt-num">01 — The Gap</div>
-      <div class="opt-desc">A building section with the headroom zone above. Copper dotted line = the ceiling. The arrow is the opportunity. The entire business model in one mark.</div>
+      <div class="opt-num">01 — Inter 800</div>
+      <div class="opt-desc">Our existing sans. Heavy weight, wide tracking. Technical, no-nonsense. The default choice — does it earn its place?</div>
     </div>
   </div>
 
-  <!-- ── 02: MASSING MARK ── -->
+  <!-- 02: Inter 800 + copper accent R -->
   <div class="cell">
-    <div class="preview dark" id="p02">
-      <svg width="120" height="130" viewBox="0 0 120 130">
-        <!-- existing footprint -->
-        <rect x="10" y="80" width="100" height="36" fill="rgba(242,241,237,.15)" stroke="rgba(242,241,237,.25)" stroke-width="1"/>
-        <!-- potential tower (ghost) -->
-        <rect x="30" y="16" width="60" height="64" fill="none" stroke="#b8845c" stroke-width="1.5" stroke-dasharray="5 3"/>
-        <!-- solid floors indicator -->
-        <rect x="30" y="50" width="60" height="30" fill="rgba(184,132,92,.18)" stroke="none"/>
-        <!-- wordmark -->
-        <text x="60" y="122" text-anchor="middle" font-family="Inter" font-weight="700" font-size="10" letter-spacing="3.5" fill="rgba(242,241,237,.7)">HEADROOM</text>
-      </svg>
+    <div class="pair">
+      <div class="preview dark">
+        <div style="font:800 26px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#f2f1ed">HEAD<span style="color:#b8845c">R</span>OOM</div>
+      </div>
+      <div class="preview light">
+        <div style="font:800 26px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#1a1917">HEAD<span style="color:#b8845c">R</span>OOM</div>
+      </div>
     </div>
     <div class="meta">
-      <div class="opt-num">02 — Massing Mark</div>
-      <div class="opt-desc">Solid existing block, ghost massing above in copper. A development appraisal diagram as a logo. Any developer will instantly read it.</div>
+      <div class="opt-num">02 — Inter 800, copper R</div>
+      <div class="opt-desc">Same weight. The R is the pivot — HEAD + ROOM. Copper draws the eye to the break point. Subtle but it gives the mark a signature.</div>
     </div>
   </div>
 
-  <!-- ── 03: FLOOR COUNTER ── -->
+  <!-- 03: Space Grotesk 500 -->
   <div class="cell">
-    <div class="preview dark" id="p03">
-      <div style="display:flex;align-items:center;gap:24px">
-        <!-- floor display -->
-        <div style="display:flex;flex-direction:column;gap:2px;align-items:flex-end">
-          <div style="font:800 11px 'Inter';letter-spacing:.12em;color:rgba(242,241,237,.2);text-transform:uppercase">+18F</div>
-          <div style="font:800 11px 'Inter';letter-spacing:.12em;color:rgba(242,241,237,.2);text-transform:uppercase">+12F</div>
-          <div style="font:800 11px 'Inter';letter-spacing:.12em;color:rgba(242,241,237,.2);text-transform:uppercase">+06F</div>
-          <div style="width:32px;height:1.5px;background:#b8845c;margin:4px 0"></div>
-          <div style="font:800 14px 'Inter';letter-spacing:.06em;color:#f2f1ed;text-transform:uppercase">G</div>
+    <div class="pair">
+      <div class="preview dark">
+        <div style="font:500 28px 'Space Grotesk';letter-spacing:.06em;text-transform:uppercase;color:#f2f1ed">HEADROOM</div>
+      </div>
+      <div class="preview light">
+        <div style="font:500 28px 'Space Grotesk';letter-spacing:.06em;text-transform:uppercase;color:#1a1917">HEADROOM</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt-num">03 — Space Grotesk 500</div>
+      <div class="opt-desc">Our metric font. Geometric, slightly quirky letterforms. Sits between technical and approachable. Lighter weight breathes more.</div>
+    </div>
+  </div>
+
+  <!-- 04: Space Grotesk 700 + .city -->
+  <div class="cell">
+    <div class="pair">
+      <div class="preview dark">
+        <div style="font:700 26px 'Space Grotesk';letter-spacing:.04em;color:#f2f1ed">headroom<span style="color:#b8845c">.city</span></div>
+      </div>
+      <div class="preview light">
+        <div style="font:700 26px 'Space Grotesk';letter-spacing:.04em;color:#1a1917">headroom<span style="color:#b8845c">.city</span></div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt-num">04 — Space Grotesk 700, lowercase + .city</div>
+      <div class="opt-desc">Domain as logo. Lowercase is calmer. The .city in copper adds the location anchor. Reads as a URL — intentionally digital-native.</div>
+    </div>
+  </div>
+
+  <!-- 05: JetBrains Mono 700 -->
+  <div class="cell">
+    <div class="pair">
+      <div class="preview dark">
+        <div style="font:700 22px 'JetBrains Mono';letter-spacing:.1em;text-transform:uppercase;color:#f2f1ed">HEADROOM</div>
+      </div>
+      <div class="preview light">
+        <div style="font:700 22px 'JetBrains Mono';letter-spacing:.1em;text-transform:uppercase;color:#1a1917">HEADROOM</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="opt-num">05 — JetBrains Mono 700</div>
+      <div class="opt-desc">Monospace. Says "data engine" louder than anything else. Every character same width — mechanical precision. The most technical option.</div>
+    </div>
+  </div>
+
+  <!-- 06: JetBrains Mono + H mark -->
+  <div class="cell">
+    <div class="pair">
+      <div class="preview dark">
+        <div style="display:flex;align-items:center;gap:14px">
+          <svg width="32" height="32" viewBox="0 0 32 32">
+            <rect x="4" y="4" width="6" height="24" fill="#f2f1ed"/>
+            <rect x="22" y="4" width="6" height="24" fill="#f2f1ed"/>
+            <rect x="4" y="10" width="24" height="4" fill="#b8845c"/>
+          </svg>
+          <div style="font:700 20px 'JetBrains Mono';letter-spacing:.08em;text-transform:uppercase;color:#f2f1ed">HEADROOM</div>
         </div>
-        <!-- wordmark -->
-        <div style="display:flex;flex-direction:column;gap:2px">
-          <div style="font:800 20px 'Inter';letter-spacing:.12em;text-transform:uppercase;color:#f2f1ed;line-height:1">HEAD</div>
-          <div style="font:300 20px 'Inter';letter-spacing:.12em;text-transform:uppercase;color:rgba(242,241,237,.4);line-height:1">ROOM</div>
+      </div>
+      <div class="preview light">
+        <div style="display:flex;align-items:center;gap:14px">
+          <svg width="32" height="32" viewBox="0 0 32 32">
+            <rect x="4" y="4" width="6" height="24" fill="#1a1917"/>
+            <rect x="22" y="4" width="6" height="24" fill="#1a1917"/>
+            <rect x="4" y="10" width="24" height="4" fill="#b8845c"/>
+          </svg>
+          <div style="font:700 20px 'JetBrains Mono';letter-spacing:.08em;text-transform:uppercase;color:#1a1917">HEADROOM</div>
         </div>
       </div>
     </div>
     <div class="meta">
-      <div class="opt-num">03 — Floor Counter</div>
-      <div class="opt-desc">Lift indicator + HEAD/ROOM split wordmark. The floors count upward from G. Instantly architectural. The copper rule at ground is the product — everything above is the opportunity.</div>
+      <div class="opt-num">06 — H mark + JetBrains Mono</div>
+      <div class="opt-desc">The H with copper crossbar sitting high (the headroom line). Standalone mark works as favicon at 16px. Monospace wordmark alongside. The full system.</div>
     </div>
   </div>
 
-  <!-- ── 04: THE SECTION H ── -->
+  <!-- 07: Inter 600, mixed case -->
   <div class="cell">
-    <div class="preview dark" id="p04">
-      <svg width="110" height="110" viewBox="0 0 110 110">
-        <!-- H letterform drawn as a building section -->
-        <!-- left column -->
-        <rect x="8" y="20" width="18" height="72" fill="rgba(242,241,237,.9)"/>
-        <!-- right column -->
-        <rect x="84" y="20" width="18" height="72" fill="rgba(242,241,237,.9)"/>
-        <!-- crossbar — copper, sits high (the headroom) -->
-        <rect x="8" y="34" width="94" height="8" fill="#b8845c"/>
-        <!-- ghost space above crossbar -->
-        <rect x="8" y="20" width="94" height="14" fill="rgba(184,132,92,.12)" stroke="none"/>
-        <!-- wordmark below -->
-        <text x="55" y="106" text-anchor="middle" font-family="Inter" font-weight="700" font-size="9.5" letter-spacing="4.5" fill="rgba(242,241,237,.5)">HEADROOM</text>
-      </svg>
-    </div>
-    <div class="meta">
-      <div class="opt-num">04 — Section H</div>
-      <div class="opt-desc">The H as a structural section. Copper crossbar sits near the top — the headroom zone is the shaded space above it. The mark is the concept. Scales to 16px favicon perfectly.</div>
-    </div>
-  </div>
-
-  <!-- ── 05: CEILING LINE ── -->
-  <div class="cell">
-    <div class="preview dark" id="p05">
-      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0">
-        <!-- copper rule above -->
-        <div style="width:220px;height:2px;background:#b8845c;margin-bottom:10px"></div>
-        <!-- space indicators -->
-        <div style="display:flex;gap:3px;margin-bottom:8px">
-          <div style="width:4px;height:18px;background:rgba(184,132,92,.3)"></div>
-          <div style="width:4px;height:24px;background:rgba(184,132,92,.45)"></div>
-          <div style="width:4px;height="16px;height:16px;background:rgba(184,132,92,.25)"></div>
-          <div style="width:4px;height:28px;background:rgba(184,132,92,.55)"></div>
-          <div style="width:4px;height:20px;background:rgba(184,132,92,.35)"></div>
-          <div style="width:4px;height:22px;background:rgba(184,132,92,.4)"></div>
-          <div style="width:4px;height:14px;background:rgba(184,132,92,.2)"></div>
-          <div style="width:4px;height:26px;background:rgba(184,132,92,.5)"></div>
-        </div>
-        <!-- wordmark below skyline bars -->
-        <div style="font:800 18px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#f2f1ed">HEADROOM</div>
-        <div style="font:400 10px 'Inter';letter-spacing:.18em;text-transform:uppercase;color:rgba(242,241,237,.3);margin-top:3px">London</div>
+    <div class="pair">
+      <div class="preview dark">
+        <div style="font:600 28px 'Inter';letter-spacing:-.02em;color:#f2f1ed">Headroom</div>
+      </div>
+      <div class="preview light">
+        <div style="font:600 28px 'Inter';letter-spacing:-.02em;color:#1a1917">Headroom</div>
       </div>
     </div>
     <div class="meta">
-      <div class="opt-num">05 — Ceiling + Skyline</div>
-      <div class="opt-desc">A copper ceiling line above a variable-height skyline silhouette — each bar a different site, each height the headroom opportunity. The bars ARE the product data visualised.</div>
+      <div class="opt-num">07 — Inter 600, sentence case</div>
+      <div class="opt-desc">Tight tracking, medium weight, mixed case. More human than all-caps. Less shouty. The quiet confidence option.</div>
     </div>
   </div>
 
-  <!-- ── 06: CORMORANT EDITORIAL ── -->
+  <!-- 08: Inter 600 + copper underline -->
   <div class="cell">
-    <div class="preview dark" id="p06">
-      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0;padding:0 10px">
-        <!-- overline -->
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-          <div style="width:24px;height:1px;background:#b8845c"></div>
-          <div style="font:600 9px 'Inter';letter-spacing:.2em;text-transform:uppercase;color:#b8845c">London</div>
+    <div class="pair">
+      <div class="preview dark">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font:600 28px 'Inter';letter-spacing:-.02em;color:#f2f1ed">Headroom</div>
+          <div style="width:100%;height:2px;background:#b8845c"></div>
         </div>
-        <!-- serif wordmark -->
-        <div style="font:300 52px/0.9 'Cormorant Garamond',serif;color:#f2f1ed;letter-spacing:-.01em">Head<br><em style="color:#b8845c">room</em></div>
+      </div>
+      <div class="preview light">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:6px">
+          <div style="font:600 28px 'Inter';letter-spacing:-.02em;color:#1a1917">Headroom</div>
+          <div style="width:100%;height:2px;background:#b8845c"></div>
+        </div>
       </div>
     </div>
     <div class="meta">
-      <div class="opt-num">06 — Editorial</div>
-      <div class="opt-desc">Cormorant Garamond 300. Head in white, room in copper italic. Two-line split creates a rhythm — the break IS the headroom. Feels like an architectural magazine masthead.</div>
+      <div class="opt-num">08 — Inter 600 + copper rule</div>
+      <div class="opt-desc">The copper line beneath IS the ceiling. The word sits above it — literally headroom. Clean, minimal, the concept embedded in the layout not the letterforms.</div>
     </div>
   </div>
 
