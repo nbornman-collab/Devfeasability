@@ -225,6 +225,26 @@ body { padding-top: 0; } /* nav.css handles spacing */
 .section-body { font: 400 20px/1.9 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
 
 
+/* -- STREET VIEW THUMBNAIL -- */
+.sv-thumb {
+  position: absolute; bottom: 80px; right: 20px; z-index: 10;
+  width: 210px; height: 130px;
+  border-radius: 8px; overflow: hidden;
+  border: 1.5px solid var(--accent);
+  background: rgba(0,0,0,.4);
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity .6s;
+  box-shadow: 0 4px 20px rgba(0,0,0,.5);
+}
+.sv-thumb.loaded { opacity: 1; }
+.sv-thumb::after {
+  content: 'Street View';
+  position: absolute; bottom: 6px; left: 8px;
+  font: 600 10px var(--sans); letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.7); text-shadow: 0 1px 3px rgba(0,0,0,.8);
+}
+@media (max-width: 600px) { .sv-thumb { display: none; } }
+
 /* -- DEV SECTION TWO-COL -- */
 .dev-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
 .dev-col-left { }
@@ -603,6 +623,9 @@ input[type=range].ruler-input {
       <div class="hero-metric"><div class="hero-metric-val" id="hm-profit">-</div><div class="hero-metric-label">Dev Profit</div></div>
     </div>
   </div>
+  <!-- Street View thumbnail -->
+  <div id="sv-thumb" class="sv-thumb"></div>
+
   <div class="hero-scroll-hint">Scroll to explore &#8595;</div>
 </section>
 
@@ -715,6 +738,22 @@ input[type=range].ruler-input {
       </div>
       </div>
     </div>
+    <!-- EPC + Planning apps row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px" class="reveal">
+
+      <!-- EPC Card -->
+      <div class="glass" id="epc-card">
+        <div class="section-label" style="margin-bottom:16px">EPC Rating</div>
+        <div id="epc-body"><div style="color:var(--ink3);font:400 14px var(--sans)">No EPC data available</div></div>
+      </div>
+
+      <!-- Planning apps summary -->
+      <div class="glass" id="planning-apps-card">
+        <div class="section-label" style="margin-bottom:16px">Planning History</div>
+        <div id="planning-apps-body"><div style="color:var(--ink3);font:400 14px var(--sans)">Loading...</div></div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -737,6 +776,12 @@ input[type=range].ruler-input {
     <div class="glass reveal reveal-delay-3">
       <div class="section-label">Building Regulations Impact</div>
       <div id="regs-body"></div>
+    </div>
+
+    <!-- BSA Thresholds -->
+    <div class="glass reveal" style="margin-top:24px">
+      <div class="section-label">Building Safety Act Thresholds</div>
+      <div id="bsa-thresholds"></div>
     </div>
 
     <!-- Heights context -->
@@ -930,7 +975,19 @@ function populatePage(si) {
   // Hero
   const siteName = si.site_name || si.site || '24 Southwark Street';
   set('hero-address', siteName);
-  document.title = siteName + ' - Appraise | D/A';
+  document.title = siteName + ' - Appraise | Headroom';
+
+  // Street View static thumbnail in hero
+  (function() {
+    const svThumb = document.getElementById('sv-thumb');
+    if (!svThumb) return;
+    const heading = si.street_view_heading || 180;
+    const url = `https://maps.googleapis.com/maps/api/streetview?size=420x260&location=${LAT},${LNG}&heading=${heading}&fov=80&pitch=5&key=AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI`;
+    const img = new Image();
+    img.onload = function() { svThumb.style.backgroundImage = `url(${url})`; svThumb.classList.add('loaded'); };
+    img.onerror = function() { svThumb.style.display = 'none'; };
+    img.src = url;
+  })();
   set('hero-score', score);
   const pillText = score >= 80 ? 'Top Opportunity' : score >= 70 ? 'Strong Opportunity' : score >= 55 ? 'Credible Opportunity' : 'Due Diligence';
   set('hero-verdict', pillText);
@@ -980,12 +1037,30 @@ function populatePage(si) {
     return `<div class="factor-row"><div class="factor-row-top"><span class="factor-name">${LABELS[k]||k}</span><span class="factor-score">${typeof sc2==='number'?sc2.toFixed(1):sc2}</span></div><div class="factor-bar-wrap"><div class="factor-bar${sc2>=7?' high':''}" style="width:${pct}%"></div></div></div>`;
   }).join(''));
 
-  // Motivated Seller flags
+  // Motivated Seller — derive score from acquisition data
+  const acqOwner = (acq.owner || '').toLowerCase();
+  const isInstitutional = /fund|reit|investment|properties|group limited|plc|llp/.test(acqOwner);
+  const isCharity = /charity|charitable|trust|foundation/.test(acqOwner);
+  const isProbate = /estate|probate|executor|deceased/.test(acqOwner);
+  const isPublic = /council|borough|nhs|crown|authority|government/.test(acqOwner);
+  let motScore = 2;
+  if (isCharity) motScore += 1;
+  if (isProbate) motScore += 2;
+  if (isInstitutional) motScore += 1;
+  if (isPublic) motScore += 1;
+  motScore = Math.min(5, motScore);
+  const motVerdict = motScore >= 4 ? 'High urgency signal - disposal likely within 12 months' :
+    motScore >= 3 ? 'Moderate urgency - institutional disposal window possible' :
+    'Low urgency - long-term holder, premium exit likely required';
+  set('mot-score', motScore);
+  set('mot-verdict', motVerdict);
   html('mot-flags', [
-    ['Out-of-area ownership', 'no', 'London-registered fund entity'],
-    ['Estate or probate', 'no', 'Active corporate ownership'],
-    ['Business rates arrears', 'unk', 'Verification pending'],
-    ['Long hold (20+ years)', 'yes', 'RREEF fund acquisition - extended hold period inferred'],
+    ['Out-of-area ownership', acq.jurisdiction && !acq.jurisdiction.toLowerCase().includes('london') ? 'yes' : 'no',
+      acq.jurisdiction || 'Jurisdiction unknown'],
+    ['Estate or probate', isProbate ? 'yes' : 'no', isProbate ? 'Probate/estate ownership detected' : 'Active corporate ownership'],
+    ['Business rates arrears', 'unk', 'Verification pending - Companies House pipeline'],
+    ['Long hold (20+ years)', isInstitutional ? 'yes' : 'unk',
+      isInstitutional ? 'Institutional fund - extended hold period common' : 'Hold duration unknown'],
     ['Dissolved company / stale registration', 'unk', 'Companies House check pending']
   ].map(([name, status, note]) => {
     const cls = status==='yes'?'yes':status==='no'?'no':'unk';
@@ -1024,6 +1099,60 @@ function populatePage(si) {
       <div class="cr-check ${pass?'pass':'fail'}">${pass?'\u2713':'\u2717'}</div>
       <div><div class="cr-item-label">${label}</div><div class="cr-item-note">${note}</div></div>
     </div>`).join(''));
+
+  // EPC card
+  const epc = (si.sustainability && si.sustainability.epc_existing) || null;
+  if (epc) {
+    const ratingColor = {'A':'#16a34a','B':'#4ade80','C':'#84cc16','D':'#d97706','E':'#f97316','F':'#dc2626','G':'#991b1b'}[epc.rating] || 'var(--ink3)';
+    html('epc-body', `
+      <div style="display:flex;align-items:center;gap:20px;margin-bottom:12px">
+        <div style="width:52px;height:52px;border-radius:8px;background:${ratingColor};display:flex;align-items:center;justify-content:center;font:800 28px var(--mono);color:#fff">${epc.rating||'?'}</div>
+        <div>
+          <div class="t-metric" style="color:${ratingColor}">${epc.rating} Rating</div>
+          <div class="t-note" style="color:var(--ink3)">${epc.floor_area_m2 ? epc.floor_area_m2.toLocaleString() + 'm² assessed' : ''}</div>
+        </div>
+      </div>
+      <div class="t-body-sm" style="color:var(--ink2);line-height:1.6">${epc.note || ''}</div>
+      <div class="t-note" style="color:var(--ink3);margin-top:8px">Source: ${epc.source || 'EPC Register'} ${epc.lodgement_date ? '- lodged ' + epc.lodgement_date : ''}</div>
+    `);
+  }
+
+  // Planning apps summary
+  const planningData = si.planning_history || si.planning || null;
+  const siteData = window._siteJSON || {};
+  const planJSON = siteData.planning || planningData || {};
+  const totalApps = planJSON.total || 0;
+  const majorApps = planJSON.majorCount || 0;
+  const recentRef = planJSON.recentRef || null;
+  const recentDesc = planJSON.recentDesc || null;
+  const planNote = planJSON.note || null;
+  html('planning-apps-body', `
+    <div style="display:flex;gap:32px;margin-bottom:16px">
+      <div><div class="t-metric" style="color:var(--ink)">${totalApps}</div><div class="t-note" style="color:var(--ink3)">Total apps</div></div>
+      <div><div class="t-metric" style="color:${majorApps>0?'var(--accent)':'var(--ink)'}">${majorApps}</div><div class="t-note" style="color:var(--ink3)">Major apps</div></div>
+      ${planJSON.hasRedevelopment ? '<div><div class="t-metric" style="color:#4ade80">✓</div><div class="t-note" style="color:var(--ink3)">Redevelopment precedent</div></div>' : ''}
+    </div>
+    ${recentRef ? `<div class="t-note" style="color:var(--ink2);margin-bottom:4px"><strong>${recentRef}</strong>${recentDesc ? ' - ' + recentDesc : ''}</div>` : ''}
+    ${planNote ? `<div class="t-note" style="color:var(--ink3);margin-top:8px;font-style:italic">${planNote}</div>` : ''}
+  `);
+
+  // BSA thresholds
+  const bsaScenarios = S04_SCENARIOS.map(sc => {
+    const h = sc.floors * FTF;
+    let tier, color, note;
+    if (h < 18) { tier = 'Standard'; color = '#4ade80'; note = 'Below 18m - standard Building Regs. No second staircase required.'; }
+    else if (h < 30) { tier = '18m Trigger'; color = '#d97706'; note = 'Over 18m - Higher-Risk Building if residential. BSR Gateway 2 applies. Second staircase likely.'; }
+    else if (h < 50) { tier = '30m Trigger'; color = '#f97316'; note = 'Over 30m - second staircase mandatory. Core area increases ~280-340m² per floor. Programme +6-12 months.'; }
+    else { tier = '50m+ Trigger'; color = '#dc2626'; note = 'Over 50m - enhanced structural fire requirements. Sprinklers mandatory. Major core implications.'; }
+    return `<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--rule)">
+      <div style="width:8px;height:8px;border-radius:50%;background:${color};margin-top:4px;flex-shrink:0"></div>
+      <div>
+        <div style="font:600 13px var(--sans);color:${color}">${sc.label} ${sc.floors}F — ${Math.round(h)}m — ${tier}</div>
+        <div class="t-note" style="color:var(--ink3);margin-top:2px">${note}</div>
+      </div>
+    </div>`;
+  });
+  html('bsa-thresholds', bsaScenarios.join('') + `<div class="t-note" style="color:var(--ink3);margin-top:10px;font-style:italic">BSA thresholds: 18m (HRB residential), 30m (mandatory second stair), 50m (enhanced structural fire). Floor-to-floor: ${FTF}m.</div>`);
 
   // Planning
   const planSynth = typeof synthesisPlanning === 'function' ? synthesisPlanning(si) : '';
