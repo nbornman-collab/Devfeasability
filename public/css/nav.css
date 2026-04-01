@@ -19,11 +19,15 @@
 
 /* Logo */
 .da-nav-logo {
-  font: 800 15px 'Inter', sans-serif; letter-spacing: -.04em;
-  color: #e8e4da; text-decoration: none; flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; flex-shrink: 0;
   margin-right: 28px;
 }
-.da-nav-logo .sl { color: #c8a040; }
+.da-nav-logo svg { width: 28px; height: 25px; display: block; }
+.da-nav-logo span {
+  font: 600 15px 'Inter', sans-serif; letter-spacing: -.02em;
+  color: #e8e4da;
+}
 
 /* Divider */
 .da-nav-sep {

@@ -1,0 +1,1902 @@
+[
+  {
+    "name": "Transport for London",
+    "address": "197 Blackfriars Road",
+    "borough": "Southwark",
+    "lat": 51.503868,
+    "lng": -0.103596,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 3433m2 footprint, 11F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 33756313
+  },
+  {
+    "name": "Building at 51.5058, -0.0990",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.505824,
+    "lng": -0.099028,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 2383m2 footprint, 10F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 50733109
+  },
+  {
+    "name": "Great Guildford Street",
+    "address": "Great Guildford Street",
+    "borough": "Southwark",
+    "lat": 51.505764,
+    "lng": -0.098188,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 3319m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 50733171
+  },
+  {
+    "name": "1 London Bridge",
+    "address": "1 London Bridge",
+    "borough": "Southwark",
+    "lat": 51.506587,
+    "lng": -0.087285,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 3021m2 footprint, 12F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 53506411
+  },
+  {
+    "name": "Lavington Street",
+    "address": "Lavington Street",
+    "borough": "Southwark",
+    "lat": 51.505298,
+    "lng": -0.100452,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 2326m2 footprint, 5F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82459293
+  },
+  {
+    "name": "HSBC",
+    "address": "62-76 Park Street",
+    "borough": "Southwark",
+    "lat": 51.507561,
+    "lng": -0.097146,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 4319m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 153607840
+  },
+  {
+    "name": "The News Building",
+    "address": "London Bridge street",
+    "borough": "Southwark",
+    "lat": 51.505405,
+    "lng": -0.087612,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 3342m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 171614694
+  },
+  {
+    "name": "1 Southwark Bridge Road",
+    "address": "1 Southwark Bridge Road",
+    "borough": "Southwark",
+    "lat": 51.507271,
+    "lng": -0.094315,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 2758m2 footprint, 7F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 172670602
+  },
+  {
+    "name": "Stamford Street",
+    "address": "Stamford Street",
+    "borough": "Southwark",
+    "lat": 51.507485,
+    "lng": -0.106928,
+    "score": 94,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 2982m2 footprint, 7F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 204184796
+  },
+  {
+    "name": "154-156 Blackfriars Road",
+    "address": "154-156 Blackfriars Road",
+    "borough": "Southwark",
+    "lat": 51.501088,
+    "lng": -0.104144,
+    "score": 93,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1040m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 33756663
+  },
+  {
+    "name": "24 Southwark Street",
+    "address": "24 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.504909,
+    "lng": -0.091522,
+    "score": 93,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1584m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82796738
+  },
+  {
+    "name": "Cooper & Southwark",
+    "address": "61 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.504832,
+    "lng": -0.096658,
+    "score": 93,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1329m2 footprint, 7F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 494520279
+  },
+  {
+    "name": "London Fire Brigade",
+    "address": "169 Union Street",
+    "borough": "Southwark",
+    "lat": 51.503406,
+    "lng": -0.098638,
+    "score": 93,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: government, 2982m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 93204862
+  },
+  {
+    "name": "Building at 51.5061, -0.0869",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.506127,
+    "lng": -0.086926,
+    "score": 92,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1186m2 footprint, 6F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 53506412
+  },
+  {
+    "name": "Building at 51.5075, -0.1080",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.507548,
+    "lng": -0.107995,
+    "score": 92,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1538m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 77618445
+  },
+  {
+    "name": "5 Montague Close",
+    "address": "5 Montague Close",
+    "borough": "Southwark",
+    "lat": 51.506665,
+    "lng": -0.08995,
+    "score": 92,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1935m2 footprint, 6F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82770791
+  },
+  {
+    "name": "New City Court",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.504721,
+    "lng": -0.088793,
+    "score": 92,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1955m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 90650961
+  },
+  {
+    "name": "27-45 Stamford Street",
+    "address": "27-45 Stamford Street",
+    "borough": "Southwark",
+    "lat": 51.506973,
+    "lng": -0.106574,
+    "score": 92,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1348m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 245258656
+  },
+  {
+    "name": "Dock Shed",
+    "address": "Deal Porters Way",
+    "borough": "Southwark",
+    "lat": 51.496212,
+    "lng": -0.049763,
+    "score": 92,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 3681m2 footprint, in Canada Water, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 1427207669
+  },
+  {
+    "name": "Three Deal Porters",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.496839,
+    "lng": -0.050027,
+    "score": 92,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 2072m2 footprint, in Canada Water, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 1428008978
+  },
+  {
+    "name": "93-101 Blackfriars Road",
+    "address": "93-101 Blackfriars Road",
+    "borough": "Southwark",
+    "lat": 51.501988,
+    "lng": -0.104989,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 569m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 33772538
+  },
+  {
+    "name": "Granada Media",
+    "address": "96-108 Great Suffolk Street",
+    "borough": "Southwark",
+    "lat": 51.50159,
+    "lng": -0.100495,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 601m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 75592612
+  },
+  {
+    "name": "Skyline House",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.503853,
+    "lng": -0.101726,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 738m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 77765229
+  },
+  {
+    "name": "Building at 51.5038, -0.1010",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.503837,
+    "lng": -0.101029,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 677m2 footprint, 5F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 77765231
+  },
+  {
+    "name": "164-180 Union Street",
+    "address": "164-180 Union Street",
+    "borough": "Southwark",
+    "lat": 51.503848,
+    "lng": -0.100313,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 932m2 footprint, 6F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 77765232
+  },
+  {
+    "name": "Building at 51.5050, -0.1042",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.504987,
+    "lng": -0.104215,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 599m2 footprint, 5F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 77765234
+  },
+  {
+    "name": "83,85 Southwark Street",
+    "address": "83,85 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.505476,
+    "lng": -0.099795,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 532m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82459284
+  },
+  {
+    "name": "Building at 51.5068, -0.0955",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.506755,
+    "lng": -0.095497,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 924m2 footprint, 7F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82459683
+  },
+  {
+    "name": "Oriel House",
+    "address": "145\u2013149 Borough High Street",
+    "borough": "Southwark",
+    "lat": 51.503159,
+    "lng": -0.091155,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 568m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 90830726
+  },
+  {
+    "name": "Building at 51.5027, -0.1020",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.502735,
+    "lng": -0.102004,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 612m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 93197251
+  },
+  {
+    "name": "32-36 Loman street",
+    "address": "32-36 Loman street",
+    "borough": "Southwark",
+    "lat": 51.502939,
+    "lng": -0.099792,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 627m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 93204881
+  },
+  {
+    "name": "207 Union Street",
+    "address": "207 Union Street",
+    "borough": "Southwark",
+    "lat": 51.50357,
+    "lng": -0.101029,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 895m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 93204895
+  },
+  {
+    "name": "53 Loman Street",
+    "address": "53 Loman Street",
+    "borough": "Southwark",
+    "lat": 51.502912,
+    "lng": -0.101022,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 914m2 footprint, 3F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 93204901
+  },
+  {
+    "name": "200 Great Dover Street",
+    "address": "200 Great Dover Street",
+    "borough": "Southwark",
+    "lat": 51.500799,
+    "lng": -0.092261,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 783m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 100614927
+  },
+  {
+    "name": "Building at 51.5027, -0.0911",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.502704,
+    "lng": -0.091114,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 854m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 100799926
+  },
+  {
+    "name": "Wigglesworth House",
+    "address": "69 Southwark Bridge Road",
+    "borough": "Southwark",
+    "lat": 51.505102,
+    "lng": -0.095205,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 697m2 footprint, 7F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 367483822
+  },
+  {
+    "name": "100 Union Street",
+    "address": "100 Union Street",
+    "borough": "Southwark",
+    "lat": 51.503986,
+    "lng": -0.097812,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 635m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 451799052
+  },
+  {
+    "name": "London Councils",
+    "address": "59 1/2 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.504786,
+    "lng": -0.096086,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 675m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 494520281
+  },
+  {
+    "name": "Building at 51.5017, -0.0937",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.501682,
+    "lng": -0.093675,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 795m2 footprint, 6F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 531655900
+  },
+  {
+    "name": "22 Lavington Street",
+    "address": "22 Lavington Street",
+    "borough": "Southwark",
+    "lat": 51.504955,
+    "lng": -0.098613,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 809m2 footprint, 7F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 753788712
+  },
+  {
+    "name": "Building at 51.5062, -0.0923",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.506191,
+    "lng": -0.092266,
+    "score": 91,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 738m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 1087093645
+  },
+  {
+    "name": "Old Dock Offices",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.496774,
+    "lng": -0.050934,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1236m2 footprint, in Canada Water, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 47297144
+  },
+  {
+    "name": "65 Southwark Street",
+    "address": "65 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.505037,
+    "lng": -0.097692,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 906m2 footprint, 8F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82459250
+  },
+  {
+    "name": "Building at 51.5049, -0.0941",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.504904,
+    "lng": -0.094126,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 403m2 footprint, 6F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82796737
+  },
+  {
+    "name": "8-20 Loman Street",
+    "address": "8-20 Loman Street",
+    "borough": "Southwark",
+    "lat": 51.502993,
+    "lng": -0.099243,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 498m2 footprint, 3F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 88961772
+  },
+  {
+    "name": "100 Borough High Street",
+    "address": "100 Borough High Street",
+    "borough": "Southwark",
+    "lat": 51.503237,
+    "lng": -0.092114,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 476m2 footprint, 5F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 99493722
+  },
+  {
+    "name": "Southwark Bridge Business Centre",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.503641,
+    "lng": -0.095205,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 438m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 99869585
+  },
+  {
+    "name": "CAN Mezzanine",
+    "address": "7-14 Great Dover Street",
+    "borough": "Southwark",
+    "lat": 51.499875,
+    "lng": -0.092958,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 643m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 100275561
+  },
+  {
+    "name": "Building at 51.5054, -0.1090",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.505358,
+    "lng": -0.109048,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 662m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 115978906
+  },
+  {
+    "name": "76-80 Southwark Street",
+    "address": "76-80 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.505297,
+    "lng": -0.096936,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 698m2 footprint, 6F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 187029937
+  },
+  {
+    "name": "Leyland SDM",
+    "address": "38-40 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.504923,
+    "lng": -0.09334,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 440m2 footprint, 6F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 571616175
+  },
+  {
+    "name": "89 Southwark Street",
+    "address": "89 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.505589,
+    "lng": -0.100258,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 487m2 footprint, 4F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 810617529
+  },
+  {
+    "name": "95 Southwark Street",
+    "address": "95 Southwark Street",
+    "borough": "Southwark",
+    "lat": 51.505655,
+    "lng": -0.100705,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 427m2 footprint, 5F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 810617536
+  },
+  {
+    "name": "Building at 51.5065, -0.0954",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.506461,
+    "lng": -0.095437,
+    "score": 90,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 434m2 footprint, 7F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 1392213558
+  },
+  {
+    "name": "Building at 51.5065, -0.0907",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.506536,
+    "lng": -0.09067,
+    "score": 89,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 480m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82770836
+  },
+  {
+    "name": "Building at 51.5068, -0.0907",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.506764,
+    "lng": -0.0907,
+    "score": 89,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 491m2 footprint, 5F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 82770881
+  },
+  {
+    "name": "Building at 51.5045, -0.0897",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.504547,
+    "lng": -0.089656,
+    "score": 89,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 449m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 90650941
+  },
+  {
+    "name": "UK Power Networks",
+    "address": "237 Southwark Bridge Road",
+    "borough": "Southwark",
+    "lat": 51.498015,
+    "lng": -0.09985,
+    "score": 88,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 577m2 footprint, 6F existing, in Elephant & Castle, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 76399651
+  },
+  {
+    "name": "Building at 51.5022, -0.0860",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.502193,
+    "lng": -0.085977,
+    "score": 88,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 441m2 footprint, in Bankside/Borough/London Bridge, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 101530095
+  },
+  {
+    "name": "Lancaster House",
+    "address": "70 Newington Causeway",
+    "borough": "Southwark",
+    "lat": 51.497477,
+    "lng": -0.099371,
+    "score": 87,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 499m2 footprint, 7F existing, in Elephant & Castle, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 76399649
+  },
+  {
+    "name": "Southwark Council",
+    "address": "160 Tooley Street",
+    "borough": "Southwark",
+    "lat": 51.50314,
+    "lng": -0.080772,
+    "score": 86,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 4980m2 footprint, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 53323470
+  },
+  {
+    "name": "Fresh Wharf",
+    "address": "3 Lower Thames Street",
+    "borough": "Southwark",
+    "lat": 51.509082,
+    "lng": -0.085779,
+    "score": 86,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 3203m2 footprint, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 143415207
+  },
+  {
+    "name": "10 Lower Thames Street",
+    "address": "10 Lower Thames Street",
+    "borough": "Southwark",
+    "lat": 51.509006,
+    "lng": -0.0841,
+    "score": 86,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 3304m2 footprint, 3F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 145631775
+  },
+  {
+    "name": "Building at 51.5035, -0.0820",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.503485,
+    "lng": -0.082044,
+    "score": 84,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 876m2 footprint, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 90376678
+  },
+  {
+    "name": "136-148 Tooley Street",
+    "address": "136-148 Tooley Street",
+    "borough": "Southwark",
+    "lat": 51.503753,
+    "lng": -0.081265,
+    "score": 84,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 796m2 footprint, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 90376690
+  },
+  {
+    "name": "Building at 51.5032, -0.0816",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.503236,
+    "lng": -0.081591,
+    "score": 84,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 918m2 footprint, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 90376714
+  },
+  {
+    "name": "Building at 51.5039, -0.0819",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.503938,
+    "lng": -0.081855,
+    "score": 84,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 670m2 footprint, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 90376733
+  },
+  {
+    "name": "Peninsular House",
+    "address": "30-36 Monument Street",
+    "borough": "Southwark",
+    "lat": 51.509589,
+    "lng": -0.084987,
+    "score": 84,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1461m2 footprint, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 142658148
+  },
+  {
+    "name": "Fishmongers' Hall",
+    "address": "King William Street",
+    "borough": "Southwark",
+    "lat": 51.509344,
+    "lng": -0.087722,
+    "score": 84,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1389m2 footprint, 5F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 143415208
+  },
+  {
+    "name": "6 More London Place",
+    "address": "6 More London Place",
+    "borough": "Southwark",
+    "lat": 51.505052,
+    "lng": -0.083046,
+    "score": 83,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 2364m2 footprint, 6F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 24379319
+  },
+  {
+    "name": "Building at 51.5056, -0.0849",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.505573,
+    "lng": -0.084948,
+    "score": 83,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 520m2 footprint, 4F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 53506424
+  },
+  {
+    "name": "Building at 51.5012, -0.0784",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.501169,
+    "lng": -0.078408,
+    "score": 83,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: warehouse, 610m2 footprint, 2F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 140152728
+  },
+  {
+    "name": "Chapter House",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.502072,
+    "lng": -0.081341,
+    "score": 82,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 491m2 footprint, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 35426066
+  },
+  {
+    "name": "Building at 51.5052, -0.0842",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.50524,
+    "lng": -0.084207,
+    "score": 82,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1421m2 footprint, 6F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 53506416
+  },
+  {
+    "name": "Leathermarket Joint Management Board",
+    "address": "26 Leathermarket Street",
+    "borough": "Southwark",
+    "lat": 51.500671,
+    "lng": -0.084703,
+    "score": 82,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 461m2 footprint, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 87974778
+  },
+  {
+    "name": "9 Tanner Street",
+    "address": "9 Tanner Street",
+    "borough": "Southwark",
+    "lat": 51.500565,
+    "lng": -0.080611,
+    "score": 82,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 464m2 footprint, 4F existing, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 101328372
+  },
+  {
+    "name": "5-7 Tanner Street",
+    "address": "5-7 Tanner Street",
+    "borough": "Southwark",
+    "lat": 51.500566,
+    "lng": -0.081112,
+    "score": 82,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 452m2 footprint, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 101328390
+  },
+  {
+    "name": "Old Fire Station",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.504465,
+    "lng": -0.082204,
+    "score": 81,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 444m2 footprint, 5F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 101717595
+  },
+  {
+    "name": "Building at 51.5089, -0.0800",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.508915,
+    "lng": -0.079984,
+    "score": 79,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 3,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 7442m2 footprint, 7F existing, CAZ, PTAL 3",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 142681442
+  },
+  {
+    "name": "Ernst & Young",
+    "address": "1 More London Place",
+    "borough": "Southwark",
+    "lat": 51.505498,
+    "lng": -0.081101,
+    "score": 72,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 4771m2 footprint, 9F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 42584600
+  },
+  {
+    "name": "3 More London Riverside",
+    "address": "3 More London Riverside",
+    "borough": "Southwark",
+    "lat": 51.504263,
+    "lng": -0.079725,
+    "score": 72,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 4455m2 footprint, 9F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 42584605
+  },
+  {
+    "name": "240 Blackfriars Road",
+    "address": "240 Blackfriars Road",
+    "borough": "Southwark",
+    "lat": 51.506468,
+    "lng": -0.1041,
+    "score": 72,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 6,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1407m2 footprint, 19F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 6",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 77739566
+  },
+  {
+    "name": "Building at 51.5074, -0.1040",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.507381,
+    "lng": -0.104023,
+    "score": 71,
+    "verified": false,
+    "flags": {
+      "inOA": true,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1569m2 footprint, 19F existing, in Bankside/Borough/London Bridge, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 742635807
+  },
+  {
+    "name": "2 More London Place",
+    "address": "2 More London Place",
+    "borough": "Southwark",
+    "lat": 51.505282,
+    "lng": -0.080311,
+    "score": 70,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1650m2 footprint, 9F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 42584601
+  },
+  {
+    "name": "4 More London Riverside",
+    "address": "4 More London Riverside",
+    "borough": "Southwark",
+    "lat": 51.504509,
+    "lng": -0.080375,
+    "score": 70,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1575m2 footprint, 9F existing, CAZ, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 42584608
+  },
+  {
+    "name": "Queenhithe",
+    "address": "Queenhithe",
+    "borough": "Southwark",
+    "lat": 51.510441,
+    "lng": -0.094658,
+    "score": 70,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 4405m2 footprint, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 174644946
+  },
+  {
+    "name": "22 Upper Ground",
+    "address": "22 Upper Ground",
+    "borough": "Southwark",
+    "lat": 51.508122,
+    "lng": -0.107384,
+    "score": 70,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": true,
+      "inConservation": false,
+      "ptal": 5,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 999m2 footprint, 9F existing, CAZ, PTAL 5",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 312530328
+  },
+  {
+    "name": "Financial Times",
+    "address": "1 Friday Street",
+    "borough": "Southwark",
+    "lat": 51.512314,
+    "lng": -0.096228,
+    "score": 69,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 3240m2 footprint, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 48526837
+  },
+  {
+    "name": "95 Queen Victoria Street",
+    "address": "95 Queen Victoria Street",
+    "borough": "Southwark",
+    "lat": 51.511617,
+    "lng": -0.096864,
+    "score": 69,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 2023m2 footprint, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 154395991
+  },
+  {
+    "name": "Access Self Storage Bermondsey",
+    "address": "61 Willow Walk",
+    "borough": "Southwark",
+    "lat": 51.494076,
+    "lng": -0.079242,
+    "score": 69,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: warehouse, 2232m2 footprint, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 85166154
+  },
+  {
+    "name": "Building at 51.4892, -0.0415",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.489189,
+    "lng": -0.04146,
+    "score": 69,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 3,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: warehouse, 2313m2 footprint, PTAL 3",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 435374313
+  },
+  {
+    "name": "Viserra",
+    "address": "112a Warner Road",
+    "borough": "Southwark",
+    "lat": 51.472392,
+    "lng": -0.098386,
+    "score": 69,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 3,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: warehouse, 670m2 footprint, 2F existing, PTAL 3",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 589997588
+  },
+  {
+    "name": "Shurgard Self Storage",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.485837,
+    "lng": -0.035543,
+    "score": 69,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 3,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: warehouse, 3015m2 footprint, PTAL 3",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 842384940
+  },
+  {
+    "name": "128 Queen Victoria Street",
+    "address": "128 Queen Victoria Street",
+    "borough": "Southwark",
+    "lat": 51.512118,
+    "lng": -0.09785,
+    "score": 68,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1224m2 footprint, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 111354096
+  },
+  {
+    "name": "33 Cannon Street",
+    "address": "33 Cannon Street",
+    "borough": "Southwark",
+    "lat": 51.512873,
+    "lng": -0.094624,
+    "score": 68,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1612m2 footprint, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 145707525
+  },
+  {
+    "name": "Jones Day",
+    "address": "21 Tudor Street",
+    "borough": "Southwark",
+    "lat": 51.512139,
+    "lng": -0.107331,
+    "score": 68,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1682m2 footprint, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 148677452
+  },
+  {
+    "name": "99 Queen Victoria Street",
+    "address": "99 Queen Victoria Street",
+    "borough": "Southwark",
+    "lat": 51.511627,
+    "lng": -0.09772,
+    "score": 68,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1763m2 footprint, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 154384803
+  },
+  {
+    "name": "Building at 51.5106, -0.0897",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.510602,
+    "lng": -0.089739,
+    "score": 68,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 4,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 1275m2 footprint, PTAL 4",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 155428072
+  },
+  {
+    "name": "Old Townhall",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.486684,
+    "lng": -0.111005,
+    "score": 68,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 1,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: office, 545m2 footprint, 2F existing, PTAL 1",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 424362508
+  },
+  {
+    "name": "Building at 51.4909, -0.0590",
+    "address": "",
+    "borough": "Southwark",
+    "lat": 51.490902,
+    "lng": -0.05903,
+    "score": 68,
+    "verified": false,
+    "flags": {
+      "inOA": false,
+      "inCAZ": false,
+      "inConservation": false,
+      "ptal": 2,
+      "floodZone": 1
+    },
+    "desc": "Algorithmic screen: warehouse, 3990m2 footprint, PTAL 2",
+    "source": "algorithmic_screen_v1",
+    "osm_id": 30010469
+  }
+]
