@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/css/type.css">
 <link rel="stylesheet" href="/css/nav.css">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
-<!-- @@INTELLIGENCE_SCRIPT@@ -->
+<script src="/lib/intelligence-24ss.js"></script>
 <script src="/lib/site-intelligence.js"></script>
 <style>
 /* -- TOKENS -- */
@@ -1117,15 +1117,16 @@ function populatePage(si) {
     `);
   }
 
-  // Planning apps summary
+  // Planning apps summary — from intel file delivery section or site slug
+  const del = si.delivery || {};
   const planningData = si.planning_history || si.planning || null;
-  const siteData = window._siteJSON || {};
-  const planJSON = siteData.planning || planningData || {};
-  const totalApps = planJSON.total || 0;
+  const planJSON = planningData || {};
+  const totalApps = planJSON.total || del.planning_apps_total || 0;
   const majorApps = planJSON.majorCount || 0;
   const recentRef = planJSON.recentRef || null;
   const recentDesc = planJSON.recentDesc || null;
-  const planNote = planJSON.note || null;
+  const planNote = planJSON.note || (del.estimated_planning_duration_months ?
+    'Est. planning duration: ' + del.estimated_planning_duration_months.low + '-' + del.estimated_planning_duration_months.high + ' months' : null);
   html('planning-apps-body', `
     <div style="display:flex;gap:32px;margin-bottom:16px">
       <div><div class="t-metric" style="color:var(--ink)">${totalApps}</div><div class="t-note" style="color:var(--ink3)">Total apps</div></div>
@@ -1549,7 +1550,8 @@ function updateMassing(sc) {
 }
 
 // -- Init --
-if (typeof SITE_INTELLIGENCE !== 'undefined') populatePage(SITE_INTELLIGENCE);
+const _SITE_INTEL = typeof SITE_INTELLIGENCE !== 'undefined' ? SITE_INTELLIGENCE : null;
+if (_SITE_INTEL) populatePage(_SITE_INTEL);
 s04render();
 updateHeroMetrics();
 buildMatrix();
