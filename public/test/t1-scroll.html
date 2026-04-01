@@ -225,6 +225,26 @@ body { padding-top: 0; } /* nav.css handles spacing */
 .section-body { font: 400 20px/1.9 var(--sans); color: var(--ink2); max-width: 720px; margin-bottom: 32px; }
 
 
+/* -- STICKY D/A/P NAV -- */
+.dap-nav { position: sticky; top: 52px; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--rule);
+  display: flex; gap: 0; padding: 0 40px; }
+.dap-nav-item { padding: 14px 24px; font: 700 13px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); cursor: pointer; text-decoration: none; border-bottom: 2px solid transparent; transition: all .2s; }
+.dap-nav-item.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+.dap-nav-item:hover:not(.active) { color: var(--ink2); }
+.dap-nav-letter { font: 800 16px var(--sans); margin-right: 6px; }
+
+/* -- COLLAPSIBLE SECTIONS -- */
+.section-header { cursor: pointer; display: flex; align-items: baseline; gap: 12px; user-select: none; }
+.section-header .chevron { font-size: 14px; color: var(--ink3); transition: transform .3s; }
+.section-header.collapsed .chevron { transform: rotate(-90deg); }
+.section-collapse { overflow: hidden; max-height: 10000px; transition: max-height .5s ease-in-out; }
+.section-collapse.collapsed { max-height: 0; }
+
+/* -- SECTION SPACING -- */
+.section { padding: 80px 0 64px; }
+.section-inner > .reveal + .reveal { margin-top: 48px; }
+
 /* -- STREET VIEW THUMBNAIL -- */
 .sv-thumb {
   position: absolute; bottom: 80px; right: 20px; z-index: 10;
@@ -629,16 +649,21 @@ input[type=range].ruler-input {
   <div class="hero-scroll-hint">Scroll to explore &#8595;</div>
 </section>
 
-<!-- hero spacer removed -->
+<!-- D/A/P section nav -->
+<nav class="dap-nav" id="dap-nav">
+  <a class="dap-nav-item active" href="#development" onclick="event.preventDefault();document.getElementById('development').scrollIntoView({behavior:'smooth'})"><span class="dap-nav-letter">D</span>Development</a>
+  <a class="dap-nav-item" href="#architecture" onclick="event.preventDefault();document.getElementById('architecture').scrollIntoView({behavior:'smooth'})"><span class="dap-nav-letter">A</span>Architecture</a>
+  <a class="dap-nav-item" href="#planning" onclick="event.preventDefault();document.getElementById('planning').scrollIntoView({behavior:'smooth'})"><span class="dap-nav-letter">P</span>Planning</a>
+</nav>
 
-<!-- SECTION 1: DEVELOPMENT OVERVIEW -->
+<!-- SECTION: DEVELOPMENT -->
 <section class="section" id="development">
   <div class="section-inner">
 
     <!-- Two-col: synthesis left, factors right -->
     <div class="dev-two-col reveal">
       <div class="dev-col-left">
-        <div class="section-label">01 - Development</div>
+        <div class="section-label">D — Development</div>
         <div class="section-title" id="dev-title">A retain-and-adapt opportunity in the heart of Bankside</div>
         <div class="section-body" id="dev-synthesis" style="margin-top:20px"></div>
       </div>
@@ -738,22 +763,12 @@ input[type=range].ruler-input {
       </div>
       </div>
     </div>
-    <!-- EPC + Planning apps row -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px" class="reveal">
-
-      <!-- EPC Card -->
-      <div class="glass" id="epc-card">
-        <div class="section-label" style="margin-bottom:16px">EPC Rating</div>
-        <div id="epc-body"><div style="color:var(--ink3);font:400 14px var(--sans)">No EPC data available</div></div>
-      </div>
-
-      <!-- Planning apps summary -->
-      <div class="glass" id="planning-apps-card">
-        <div class="section-label" style="margin-bottom:16px">Planning History</div>
-        <div id="planning-apps-body"><div style="color:var(--ink3);font:400 14px var(--sans)">Loading...</div></div>
-      </div>
-
+    <!-- EPC Card -->
+    <div class="reveal" style="margin-top:48px;border-top:1px solid var(--rule);padding-top:32px">
+      <div class="section-label" style="margin-bottom:16px">EPC Rating</div>
+      <div id="epc-body"><div style="color:var(--ink3);font:400 14px var(--sans)">No EPC data available</div></div>
     </div>
+
   </div>
 </section>
 
@@ -761,7 +776,7 @@ input[type=range].ruler-input {
 <section class="section" id="architecture">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-label">02 - Architecture</div>
+      <div class="section-label">A — Architecture</div>
       <div class="section-title" id="arch-title">Heritage-led. Code-compliant.</div>
     </div>
     <div class="reveal reveal-delay-1">
@@ -773,7 +788,7 @@ input[type=range].ruler-input {
     </div>
 
     <!-- Building regs -->
-    <div class="glass reveal reveal-delay-3">
+    <div class="reveal reveal-delay-3" style="margin-top:48px;border-top:1px solid var(--rule);padding-top:32px">
       <div class="section-label">Building Regulations Impact</div>
       <div id="regs-body"></div>
     </div>
@@ -785,21 +800,12 @@ input[type=range].ruler-input {
     </div>
 
     <!-- Heights context -->
-    <div class="glass reveal">
+    <div class="reveal" style="margin-top:48px;border-top:1px solid var(--rule);padding-top:32px">
       <div class="section-label">Height Context</div>
       <div id="heights-body"></div>
     </div>
 
-    <!-- Conversion Readiness Checklist -->
-    <div class="glass reveal" style="margin-top:48px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px">
-        <div class="section-label" style="margin-bottom:0">Conversion Readiness</div>
-        <div style="font:700 28px var(--mono);color:var(--accent)" id="cr-score">-</div>
-      </div>
-      <div style="font:400 13px var(--sans);color:var(--ink3);margin-bottom:20px">10 conditions assessed against site data. Score reflects planning and delivery readiness, not financial viability.</div>
-      <div id="cr-list"></div>
-      <div style="margin-top:16px;font:400 11px var(--sans);color:var(--ink3);font-style:italic">Screening estimate - not a compliance assessment. Professional verification required.</div>
-    </div>
+
   </div>
 </section>
 
@@ -807,7 +813,7 @@ input[type=range].ruler-input {
 <section class="section" id="planning">
   <div class="section-inner">
     <div class="reveal">
-      <div class="section-label">03 - Planning</div>
+      <div class="section-label">P — Planning</div>
       <div class="section-title" id="plan-title">Strong precedent. Clear pathway.</div>
     </div>
     <div class="reveal reveal-delay-1">
@@ -815,24 +821,32 @@ input[type=range].ruler-input {
     </div>
 
     <!-- Flags -->
-    <div class="glass reveal reveal-delay-2">
+    <div class="reveal reveal-delay-2" style="margin-top:48px;border-top:1px solid var(--rule);padding-top:32px">
       <div class="section-label">Site Constraints &amp; Flags</div>
       <div id="flags-body"></div>
     </div>
 
     <!-- Precedents -->
-    <div class="glass reveal reveal-delay-3">
+    <div class="reveal reveal-delay-3" style="margin-top:48px;border-top:1px solid var(--rule);padding-top:32px">
       <div class="section-label">Planning Precedents</div>
       <div id="precedents-body"></div>
     </div>
 
-    <!-- Planning applications link -->
-    <div class="glass reveal" style="margin-top:24px; text-align:center; padding:28px">
-      <div class="section-label" style="margin-bottom:8px">Full Planning History</div>
-      <div style="font:400 15px var(--sans);color:var(--ink2);margin-bottom:16px">300+ applications analysed across the borough</div>
-      <a href="#" id="planning-apps-link" style="font:600 14px var(--sans);color:var(--accent);text-decoration:none;padding:12px 24px;border:1px solid var(--accent);border-radius:8px;display:inline-block;transition:all .2s"
-         onmouseover="this.style.background='var(--accent)';this.style.color='#fff'"
-         onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">View All Applications &rarr;</a>
+    <!-- Planning History summary -->
+    <div class="reveal" style="margin-top:48px;border-top:1px solid var(--rule);padding-top:32px">
+      <div class="section-label" style="margin-bottom:16px">Planning History</div>
+      <div id="planning-apps-body"><div style="color:var(--ink3);font:400 14px var(--sans)">Loading...</div></div>
+    </div>
+
+    <!-- Conversion Readiness (planning + delivery readiness) -->
+    <div class="reveal" style="margin-top:48px;border-top:1px solid var(--rule);padding-top:32px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px">
+        <div class="section-label" style="margin-bottom:0">Conversion Readiness</div>
+        <div style="font:700 28px var(--mono);color:var(--accent)" id="cr-score">-</div>
+      </div>
+      <div style="font:400 13px var(--sans);color:var(--ink3);margin-bottom:20px">10 conditions assessed against site data. Score reflects planning and delivery readiness, not financial viability.</div>
+      <div id="cr-list"></div>
+      <div style="margin-top:16px;font:400 11px var(--sans);color:var(--ink3);font-style:italic">Screening estimate - not a compliance assessment. Professional verification required.</div>
     </div>
   </div>
 </section>
@@ -912,6 +926,19 @@ setTimeout(() => {
     if (rect.top < window.innerHeight) el.classList.add('visible');
   });
 }, 500);
+
+// D/A/P nav scroll spy
+const dapSections = ['development','architecture','planning'];
+const dapLinks = document.querySelectorAll('.dap-nav-item');
+const dapObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      dapLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    }
+  });
+}, { threshold: 0.1, rootMargin: '-80px 0px -60% 0px' });
+dapSections.forEach(id => { const el = document.getElementById(id); if (el) dapObserver.observe(el); });
 
 // -- Nav active state on scroll --
 const sections = document.querySelectorAll('section[id]');
