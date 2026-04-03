@@ -677,8 +677,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .mass-sitenav-btn:hover:not(:disabled) { background: rgba(255,255,255,.12); }
 .mass-sitenav-btn:disabled { opacity: 0.25; cursor: default; }
 .mass-sitenav-label {
-  font: 600 12px/1 var(--sans); color: rgba(255,255,255,.7);
-  padding: 0 10px; min-width: 52px; text-align: center;
+  font: 600 12px/1.3 var(--sans); color: rgba(255,255,255,.7);
+  padding: 4px 10px; min-width: 80px; text-align: center;
   border-left: 1px solid rgba(255,255,255,.12);
   border-right: 1px solid rgba(255,255,255,.12);
 }
@@ -2134,31 +2134,38 @@ function closeMassPopup() {
 }
 
 function massNavStep(dir) {
-  if (!massSite || !FILTERED_SITES || !FILTERED_SITES.length) return;
-  var idx = FILTERED_SITES.findIndex(function(s) { return s.id === massSite.id; });
+  if (!massSite) return;
+  var sites = filteredSites();
+  var idx = sites.findIndex(function(s) { return s.id === massSite.id; });
   if (idx === -1) return;
   var next = idx + dir;
-  if (next < 0 || next >= FILTERED_SITES.length) return;
-  // Close map cleanly then reopen for new site
+  if (next < 0 || next >= sites.length) return;
   if (massMap) { massMap.remove(); massMap = null; }
   clearMassLabels();
-  openMassPopup(FILTERED_SITES[next]);
-  // Scroll card into view
-  var card = document.getElementById('card-' + FILTERED_SITES[next].id);
+  openMassPopup(sites[next]);
+  var card = document.getElementById('card-' + sites[next].id);
   if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  // Update nav button state
   updateMassNavState(next);
 }
 
 function updateMassNavState(idx) {
+  var sites = filteredSites();
+  var total = sites.length;
   var prev = document.getElementById('mass-nav-prev');
   var next = document.getElementById('mass-nav-next');
-  var total = FILTERED_SITES ? FILTERED_SITES.length : 0;
   if (prev) prev.disabled = (idx <= 0);
   if (next) next.disabled = (idx >= total - 1);
 
   var rankEl = document.getElementById('mass-rank');
-  if (rankEl && total) rankEl.textContent = (idx + 1) + '/' + total;
+  if (!rankEl) return;
+  // Show: current rank bold, next site name
+  var current = sites[idx];
+  var nextSite = idx < total - 1 ? sites[idx + 1] : null;
+  var prevSite = idx > 0 ? sites[idx - 1] : null;
+  rankEl.innerHTML =
+    '<span style="font-weight:700;color:#fff">#' + (idx + 1) + '</span>' +
+    '<span style="color:rgba(255,255,255,.4);font-size:10px"> of ' + total + '</span>' +
+    (nextSite ? '<br><span style="font-size:10px;color:rgba(255,255,255,.4)">Next: ' + nextSite.name.split(',')[0] + '</span>' : '');
 }
 
 function massingScenarios(site) {
@@ -2720,9 +2727,11 @@ function addMassLabels(map, site, sc, coords, existH, totalH, existF) {
 
 function makeMassLabel(text, color, accent) {
   var el = document.createElement('div');
-  var bg = accent ? 'rgba(5,150,105,0.85)' : 'rgba(0,0,0,0.72)';
-  var border = accent ? 'rgba(5,150,105,0)' : 'rgba(255,255,255,0.15)';
-  el.style.cssText = 'font:600 11px/1 var(--sans,system-ui);color:' + color + ';background:' + bg + ';padding:3px 8px;border-radius:3px;border:1px solid ' + border + ';white-space:nowrap;pointer-events:none;transform:translateX(-50%);';
+  // Accent (green top): white text on solid green. Non-accent: semi-transparent dark bg
+  var textColor = accent ? '#ffffff' : color;
+  var bg = accent ? 'rgba(5,150,105,0.9)' : 'rgba(0,0,0,0.72)';
+  var border = accent ? 'rgba(4,120,87,0.8)' : 'rgba(255,255,255,0.15)';
+  el.style.cssText = 'font:600 11px/1 var(--sans,system-ui);color:' + textColor + ';background:' + bg + ';padding:4px 10px;border-radius:4px;border:1px solid ' + border + ';white-space:nowrap;pointer-events:none;transform:translateX(-50%);box-shadow:0 2px 8px rgba(0,0,0,0.4);';
   el.textContent = text;
   return el;
 }
