@@ -2352,26 +2352,8 @@ function addMassingLayers(map, site, sc) {
     paint: { 'line-color': '#b45309', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [5, 3] }
   });
 
-  // Existing building - red translucent shell (slightly outset to envelop Mapbox 3D)
-  var existCoords = poly ? bufferPoly(baseCoords, 0.000004) : baseCoords;
-  map.addSource('mass-existing', {
-    type: 'geojson',
-    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [existCoords] } }
-  });
-  map.addLayer({
-    id: 'mass-existing-3d', type: 'fill-extrusion', source: 'mass-existing',
-    paint: {
-      'fill-extrusion-color': '#c0392b',
-      'fill-extrusion-height': existH,
-      'fill-extrusion-base': 0,
-      'fill-extrusion-opacity': 0.32
-    }
-  });
-  // Red edge at grade
-  map.addLayer({
-    id: 'mass-existing-edge', type: 'line', source: 'mass-existing',
-    paint: { 'line-color': '#c0392b', 'line-width': 2.5, 'line-opacity': 0.9 }
-  });
+  // No existing shell - let Mapbox 3D buildings show through naturally
+  // Just the dashed site outline above is enough for existing context
 
   // Potential envelope - green translucent from existing to total height
   if (totalH > existH) {
@@ -2488,10 +2470,10 @@ function makeMassLabel(text, color) {
 
 function updateMassingLayers(map, site, sc) {
   // Remove old layers and sources
-  ['mass-floor-lines','mass-tower-3d','mass-potential-3d','mass-potential-edge','mass-existing-3d','mass-existing-edge','mass-site-outline'].forEach(function(id) {
+  ['mass-floor-lines','mass-tower-3d','mass-potential-3d','mass-potential-edge','mass-site-outline'].forEach(function(id) {
     if (map.getLayer(id)) map.removeLayer(id);
   });
-  ['mass-floors','mass-tower','mass-potential','mass-existing','mass-site'].forEach(function(id) {
+  ['mass-floors','mass-tower','mass-potential','mass-site'].forEach(function(id) {
     if (map.getSource(id)) map.removeSource(id);
   });
   clearMassLabels();
