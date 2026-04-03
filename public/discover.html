@@ -2492,9 +2492,11 @@ function addMassingLayers(map, site, sc) {
   if (tier === 'real' || tier === 'osm') {
     // === TIER A/B: Real polygon - full 3D massing ===
     var baseCoords = poly;
-    var twrCoords = sc.towerSetback > 0 ? shrinkPoly(baseCoords, 0.85) : baseCoords;
+    // Inset 1.5m to avoid z-fighting with Mapbox 3D building surfaces
+    var massCoords = shrinkPoly(baseCoords, 0.985);
+    var twrCoords = sc.towerSetback > 0 ? shrinkPoly(massCoords, 0.85) : massCoords;
 
-    // Site outline - dashed amber boundary
+    // Site outline - full footprint, dashed amber
     map.addSource('mass-site', {
       type: 'geojson',
       data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
@@ -2504,11 +2506,11 @@ function addMassingLayers(map, site, sc) {
       paint: { 'line-color': '#b45309', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [5, 3] }
     });
 
-    // Potential envelope - green translucent from ground
+    // Potential envelope - inset from boundary, from ground up
     if (totalH > 0) {
       map.addSource('mass-potential', {
         type: 'geojson',
-        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
+        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [massCoords] } }
       });
       map.addLayer({
         id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
@@ -2516,17 +2518,17 @@ function addMassingLayers(map, site, sc) {
           'fill-extrusion-color': '#059669',
           'fill-extrusion-height': totalH,
           'fill-extrusion-base': 0,
-          'fill-extrusion-opacity': 0.22,
+          'fill-extrusion-opacity': 0.25,
           'fill-extrusion-vertical-gradient': false
         }
       });
       map.addLayer({
         id: 'mass-potential-edge', type: 'line', source: 'mass-potential',
-        paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.8 }
+        paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.9 }
       });
     }
 
-    // Tower setback
+    // Tower setback solid indicator
     if (sc.towerSetback > 0 && totalH > podH) {
       map.addSource('mass-tower', {
         type: 'geojson',
@@ -2543,16 +2545,19 @@ function addMassingLayers(map, site, sc) {
       });
     }
 
-    // Floor lines - thin slab extrusions
+    // Floor lines - evenly spaced from ground, capped at totalH
+    // Use floorH to space them, starting from floorH (first floor plate above ground)
+    // Do NOT use existH as start point - it's often inaccurate and causes floating slabs
     var floorLines = [];
-    for (var i = existF + 1; i <= sc.floors; i++) {
-      var fh = existH + (i - existF) * floorH;
-      var slabCoords = (sc.towerSetback > 0 && i > sc.podF) ? twrCoords : baseCoords;
-      var lineCoords = bufferPoly(slabCoords, 0.000003);
+    var numFloors = sc.floors;
+    for (var i = 1; i <= numFloors; i++) {
+      var fh = i * floorH;
+      if (fh > totalH + 0.5) break; // safety cap
+      var slabCoords = (sc.towerSetback > 0 && i > sc.podF) ? twrCoords : massCoords;
       floorLines.push({
         type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: [lineCoords] },
-        properties: { height: fh + 0.12, base: fh - 0.12 }
+        geometry: { type: 'Polygon', coordinates: [slabCoords] },
+        properties: { height: fh + 0.1, base: fh - 0.1 }
       });
     }
     if (floorLines.length > 0) {
@@ -2566,7 +2571,7 @@ function addMassingLayers(map, site, sc) {
           'fill-extrusion-color': '#047857',
           'fill-extrusion-height': ['get', 'height'],
           'fill-extrusion-base': ['get', 'base'],
-          'fill-extrusion-opacity': 0.5
+          'fill-extrusion-opacity': 0.45
         }
       });
     }
