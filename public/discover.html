@@ -929,14 +929,17 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
   /* Hero: single-row, 3 stats only, compact */
   .discover-hero {
-    padding: 8px 14px;
+    padding: 6px 12px;
     gap: 0;
   }
-  .hero-stat { padding: 0 10px; }
-  .hero-stat:nth-child(n+4) { display: none; } /* hide OA + Reports on mobile */
-  .hero-stat-value { font-size: 22px; }
-  .hero-stat-label { font-size: 9px; letter-spacing: .1em; }
+  .hero-stat { padding: 0 8px; }
+  .hero-stat:nth-child(n+4) { display: none; }
+  .hero-stat-value { font-size: 18px; font-family: var(--sans); font-weight: 800; }
+  .hero-stat-label { font-size: 8px; letter-spacing: .08em; }
   .hero-stat-sub { display: none; }
+
+  /* Hide legend on mobile — dots self-explain via card chips */
+  .map-legend { display: none; }
 
   /* Borough pills: horizontal scroll, no wrap */
   .borough-selector { padding: 6px 12px 8px; }
@@ -951,7 +954,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
     top: auto;
     bottom: 0; left: 0; right: 0;
     width: 100%;
-    height: 55vh;
+    height: 42vh;
     border-left: none;
     border-top: 1px solid var(--rule);
     border-radius: 16px 16px 0 0;
@@ -996,9 +999,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
   /* Map controls: bottom-right, above drawer */
   .map-controls {
-    position: fixed; bottom: calc(55vh + 12px); right: 12px; left: auto;
+    position: fixed; bottom: calc(42vh + 8px); right: 12px; left: auto;
   }
-  .map-label { bottom: calc(55vh + 48px); }
+  .map-label { bottom: calc(42vh + 40px); }
 
   /* Massing popup: full screen */
   .mass-scrim { padding: 0; }
@@ -1056,7 +1059,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* Expand drawer on focus open (JS adds class) */
 @media (max-width: 768px) {
-  .col-right.expanded { height: 85vh; }
+  .col-right.expanded { height: 80vh; }
 }
 </style>
 </head>
