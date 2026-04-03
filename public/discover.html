@@ -928,26 +928,27 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   }
   .col-left > * { pointer-events: all; }
 
-  /* Hero: single-row, 3 stats only, compact */
+  /* Hero: ultra-compact single row */
   .discover-hero {
-    padding: 6px 12px;
+    padding: 4px 10px;
     gap: 0;
+    border-bottom-width: 1px;
   }
-  .hero-stat { padding: 0 8px; }
+  .hero-stat { padding: 0 6px; }
   .hero-stat:nth-child(n+4) { display: none; }
-  .hero-stat-value { font-size: 18px; font-family: var(--sans); font-weight: 800; }
-  .hero-stat-label { font-size: 8px; letter-spacing: .08em; }
+  .hero-stat-value { font-size: 16px; font-family: var(--sans); font-weight: 800; line-height: 1.1; }
+  .hero-stat-label { font-size: 7px; letter-spacing: .06em; margin-bottom: 0; }
   .hero-stat-sub { display: none; }
 
-  /* Hide legend on mobile — dots self-explain via card chips */
+  /* Hide legend on mobile */
   .map-legend { display: none; }
 
-  /* Borough pills: horizontal scroll, no wrap */
-  .borough-selector { padding: 6px 12px 8px; }
+  /* Borough pills: horizontal scroll */
+  .borough-selector { padding: 4px 10px 5px; }
   .borough-selector-label { display: none; }
   .borough-pills { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .borough-pills::-webkit-scrollbar { display: none; }
-  .borough-pill { flex-shrink: 0; font-size: 12px; padding: 4px 10px; }
+  .borough-pill { flex-shrink: 0; font-size: 11px; padding: 3px 8px; }
 
   /* Right panel: bottom drawer */
   .col-right {
@@ -976,17 +977,33 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
     opacity: 0.4;
   }
 
-  /* Mode tabs: scrollable */
+  /* Mode tabs: compact */
   .mode-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .mode-tabs::-webkit-scrollbar { display: none; }
-  .mode-tab { flex-shrink: 0; font-size: 12px; padding: 10px 14px; }
+  .mode-tab { flex-shrink: 0; font-size: 10px; padding: 7px 10px; letter-spacing: .06em; }
+  .list-header { padding: 4px 10px; }
+  .list-header-label { font-size: 10px; }
+  .list-count { font-size: 10px; }
+  .search-input { font-size: 13px; padding: 6px 10px; }
 
-  /* Site cards: more compact */
+  /* Site cards: compact mobile */
   .site-list { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .card-name { font-size: 13px; }
-  .card-address { font-size: 11px; }
-  .card-score-num { font-size: 28px; }
+  .site-card { padding: 8px 10px; border-left-width: 3px; }
+  .card-header { gap: 6px; }
+  .card-rank { font-size: 11px; min-width: 22px; padding: 2px 0; }
+  .card-name { font-size: 12px; line-height: 1.2; }
+  .card-address { font-size: 10px; }
+  .card-borough-row { gap: 3px; margin-bottom: 2px; }
+  .card-borough-row .chip { font-size: 9px; padding: 1px 5px; }
+  .card-chips { gap: 3px; margin-bottom: 3px; }
+  .card-chips .chip { font-size: 9px; padding: 1px 5px; }
+  .card-chips .verdict-pill { font-size: 9px; padding: 2px 6px; }
+  .card-summary { display: none; }
+  .card-score-col { width: 40px; gap: 2px; }
+  .card-score-num { font-size: 22px; }
+  .card-score-sub { font-size: 9px; }
   .card-score-bar { display: none; }
+  .card-cta { font-size: 9px; padding: 3px 6px; }
 
   /* Focus panel fills full height */
   #site-focus {
