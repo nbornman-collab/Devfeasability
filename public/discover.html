@@ -905,6 +905,144 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   font: 400 14px/1.7 var(--sans); color: rgba(255,255,255,.75);
 }
 .mass-hook-text strong { color: rgba(255,255,255,.95); font-weight: 600; }
+
+/* ═══════════════════════════════════════
+   MOBILE — ≤768px
+   Map full screen, cards drawer from bottom
+   ═══════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  :root { --panel-w: 100%; --nav-h: 44px; }
+
+  /* Map fills entire screen */
+  #map-canvas { top: var(--nav-h); }
+  #map-fade { top: var(--nav-h); }
+
+  /* Left overlay: slim hero + borough pills only, full width */
+  .col-left {
+    width: 100%;
+    position: fixed; top: var(--nav-h); left: 0; right: 0;
+    height: auto; z-index: 5;
+    pointer-events: none;
+  }
+  .col-left > * { pointer-events: all; }
+
+  /* Hero: single-row, 3 stats only, compact */
+  .discover-hero {
+    padding: 8px 14px;
+    gap: 0;
+  }
+  .hero-stat { padding: 0 10px; }
+  .hero-stat:nth-child(n+4) { display: none; } /* hide OA + Reports on mobile */
+  .hero-stat-value { font-size: 22px; }
+  .hero-stat-label { font-size: 9px; letter-spacing: .1em; }
+  .hero-stat-sub { display: none; }
+
+  /* Borough pills: horizontal scroll, no wrap */
+  .borough-selector { padding: 6px 12px 8px; }
+  .borough-selector-label { display: none; }
+  .borough-pills { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .borough-pills::-webkit-scrollbar { display: none; }
+  .borough-pill { flex-shrink: 0; font-size: 12px; padding: 4px 10px; }
+
+  /* Right panel: bottom drawer */
+  .col-right {
+    position: fixed;
+    top: auto;
+    bottom: 0; left: 0; right: 0;
+    width: 100%;
+    height: 55vh;
+    border-left: none;
+    border-top: 1px solid var(--rule);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 32px rgba(17,17,16,.15);
+    transition: height .3s cubic-bezier(.22,1,.36,1);
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  /* Drag handle */
+  .col-right::before {
+    content: '';
+    display: block;
+    width: 36px; height: 4px;
+    background: var(--ink3); border-radius: 2px;
+    margin: 8px auto 0;
+    flex-shrink: 0;
+    opacity: 0.4;
+  }
+
+  /* Mode tabs: scrollable */
+  .mode-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mode-tabs::-webkit-scrollbar { display: none; }
+  .mode-tab { flex-shrink: 0; font-size: 12px; padding: 10px 14px; }
+
+  /* Site cards: more compact */
+  .site-list { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .card-name { font-size: 13px; }
+  .card-address { font-size: 11px; }
+  .card-score-num { font-size: 28px; }
+  .card-score-bar { display: none; }
+
+  /* Focus panel fills full height */
+  #site-focus {
+    position: fixed; inset: 0; top: var(--nav-h);
+    z-index: 200;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+  }
+  .focus-top { min-height: 180px; }
+  .focus-sat-wrap { width: 160px; height: 160px; }
+  .focus-score-num { font-size: 32px; }
+
+  /* Map controls: bottom-right, above drawer */
+  .map-controls {
+    position: fixed; bottom: calc(55vh + 12px); right: 12px; left: auto;
+  }
+  .map-label { bottom: calc(55vh + 48px); }
+
+  /* Massing popup: full screen */
+  .mass-scrim { padding: 0; }
+  .mass-modal {
+    width: 100vw; height: 100vh; max-width: 100vw;
+    border-radius: 0;
+  }
+  .mass-body { flex-direction: column; }
+  .mass-canvas {
+    height: 55vh; flex: 0 0 55vh;
+  }
+  .mass-info {
+    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 16px;
+  }
+  .mass-close { top: 10px; right: 10px; }
+
+  /* Tab card: move to bottom of 3D map */
+  .mass-tab-card {
+    top: auto; bottom: 8px; left: 8px; right: 8px;
+    min-width: unset; width: auto;
+  }
+  .mass-sc-tab { padding: 10px 12px; font-size: 12px; }
+
+  /* Site nav pill: top center */
+  .mass-sitenav {
+    top: 10px; right: 10px;
+  }
+  .mass-sitenav-btn { width: 40px; height: 36px; font-size: 18px; }
+
+  /* Height labels slightly smaller */
+  .mass-site-name { font-size: 15px; }
+  .mass-site-addr { font-size: 11px; }
+  .mass-score-num { font-size: 32px; }
+
+  /* Nav: hide desktop links */
+  .da-nav-links { display: none; }
+  .da-burger { display: flex; }
+}
+
+/* Expand drawer on focus open (JS adds class) */
+@media (max-width: 768px) {
+  .col-right.expanded { height: 85vh; }
+}
 </style>
 </head>
 <body>
