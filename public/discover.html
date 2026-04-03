@@ -2617,33 +2617,32 @@ function clearMassLabels() {
 function addMassLabels(map, site, sc, coords, existH, totalH, existF) {
   clearMassLabels();
   var c = polyCentroid(coords);
-
-  // Existing height label
-  var existMarker = new mapboxgl.Marker({
-    element: makeMassLabel(Math.round(existH) + 'm - ' + existF + 'F existing', '#c0392b')
-  }).setLngLat(c).setOffset([80, -30]).addTo(map);
-  _massLabels.push(existMarker);
-
-  // Potential height label
   var potFloors = sc.floors;
+
+  // Project heights to pixel offsets relative to ground at centroid
+  // At pitch 60deg, zoom ~17.5: ~1 floor ≈ 8px vertical
+  var pxPerM = 2.2; // approximate at typical zoom/pitch
+  var totalPx = Math.round(totalH * pxPerM);
+  var existPx = Math.round(existH * pxPerM);
+
+  // Green label: pinned to top of mass
   var potMarker = new mapboxgl.Marker({
-    element: makeMassLabel(Math.round(totalH) + 'm - ' + potFloors + 'F potential', '#059669')
-  }).setLngLat(c).setOffset([-80, -90]).addTo(map);
+    element: makeMassLabel(Math.round(totalH) + 'm · ' + potFloors + 'F', '#059669', true)
+  }).setLngLat(c).setOffset([0, -totalPx]).addTo(map);
   _massLabels.push(potMarker);
 
-  // Added floors callout
-  var addedF = potFloors - existF;
-  if (addedF > 0) {
-    var addMarker = new mapboxgl.Marker({
-      element: makeMassLabel('+' + addedF + 'F uplift', '#ffffff')
-    }).setLngLat(c).setOffset([0, -60]).addTo(map);
-    _massLabels.push(addMarker);
-  }
+  // White label: existing height (was red, now white)
+  var existMarker = new mapboxgl.Marker({
+    element: makeMassLabel(Math.round(existH) + 'm · ' + existF + 'F existing', '#ffffff', false)
+  }).setLngLat(c).setOffset([0, -existPx]).addTo(map);
+  _massLabels.push(existMarker);
 }
 
-function makeMassLabel(text, color) {
+function makeMassLabel(text, color, accent) {
   var el = document.createElement('div');
-  el.style.cssText = 'font:600 12px/1 var(--sans,system-ui);color:' + color + ';background:rgba(0,0,0,0.75);padding:4px 8px;border-radius:4px;border:1px solid ' + color + ';white-space:nowrap;pointer-events:none;';
+  var bg = accent ? 'rgba(5,150,105,0.85)' : 'rgba(0,0,0,0.72)';
+  var border = accent ? 'rgba(5,150,105,0)' : 'rgba(255,255,255,0.15)';
+  el.style.cssText = 'font:600 11px/1 var(--sans,system-ui);color:' + color + ';background:' + bg + ';padding:3px 8px;border-radius:3px;border:1px solid ' + border + ';white-space:nowrap;pointer-events:none;transform:translateX(-50%);';
   el.textContent = text;
   return el;
 }
