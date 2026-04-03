@@ -628,6 +628,18 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   display: flex; align-items: center; justify-content: center;
 }
 .mass-close:hover { background: rgba(255,255,255,.2); color: #fff; }
+.mass-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(30,30,30,.85); border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.7); font-size: 18px; width: 36px; height: 36px;
+  border-radius: 50%; cursor: pointer; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s;
+}
+.mass-nav:hover { background: rgba(60,60,60,.95); color: #fff; }
+.mass-nav-prev { left: -18px; }
+.mass-nav-next { right: -18px; }
+.mass-nav:disabled { opacity: 0.25; cursor: default; }
 
 /* Left: 3D / Street View canvas */
 .mass-canvas {
@@ -2035,6 +2047,10 @@ function openMassPopup(site) {
   // Init or update 3D map
   initMassMap(site, scenarios);
   setTimeout(initPegman, 100);
+
+  // Nav state
+  var idx = FILTERED_SITES ? FILTERED_SITES.findIndex(function(s) { return s.id === site.id; }) : -1;
+  updateMassNavState(idx);
 }
 
 function closeMassPopup() {
@@ -2045,6 +2061,34 @@ function closeMassPopup() {
   document.body.style.overflow = '';
   if (massMap) { massMap.remove(); massMap = null; }
   massSite = null;
+}
+
+function massNavStep(dir) {
+  if (!massSite || !FILTERED_SITES || !FILTERED_SITES.length) return;
+  var idx = FILTERED_SITES.findIndex(function(s) { return s.id === massSite.id; });
+  if (idx === -1) return;
+  var next = idx + dir;
+  if (next < 0 || next >= FILTERED_SITES.length) return;
+  // Close map cleanly then reopen for new site
+  if (massMap) { massMap.remove(); massMap = null; }
+  clearMassLabels();
+  openMassPopup(FILTERED_SITES[next]);
+  // Scroll card into view
+  var card = document.getElementById('card-' + FILTERED_SITES[next].id);
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  // Update nav button state
+  updateMassNavState(next);
+}
+
+function updateMassNavState(idx) {
+  var prev = document.getElementById('mass-nav-prev');
+  var next = document.getElementById('mass-nav-next');
+  var total = FILTERED_SITES ? FILTERED_SITES.length : 0;
+  if (prev) prev.disabled = (idx <= 0);
+  if (next) next.disabled = (idx >= total - 1);
+  // Show rank
+  var rankEl = document.getElementById('mass-rank');
+  if (rankEl && total) rankEl.textContent = (idx + 1) + ' / ' + total;
 }
 
 function massingScenarios(site) {
@@ -2367,8 +2411,9 @@ function addMassingLayers(map, site, sc) {
   // No existing shell - let Mapbox 3D buildings show through naturally
   // Just the dashed site outline above is enough for existing context
 
-  // Potential envelope - green translucent from existing to total height
-  if (totalH > existH) {
+  // Potential envelope - green translucent, always starts from 0 (ground)
+  // existH used only for floor line start - avoids Z-offset from inaccurate existing heights
+  if (totalH > 0) {
     map.addSource('mass-potential', {
       type: 'geojson',
       data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
@@ -2378,8 +2423,8 @@ function addMassingLayers(map, site, sc) {
       paint: {
         'fill-extrusion-color': '#059669',
         'fill-extrusion-height': totalH,
-        'fill-extrusion-base': existH,
-        'fill-extrusion-opacity': 0.28,
+        'fill-extrusion-base': 0,
+        'fill-extrusion-opacity': 0.22,
         'fill-extrusion-vertical-gradient': false
       }
     });
@@ -2598,6 +2643,11 @@ document.addEventListener('keydown', function(e) {
       closeMassPopup();
     }
   }
+  // Arrow keys to step through sites in disco mode
+  if (massSite) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); massNavStep(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); massNavStep(-1); }
+  }
 });
 
 // Scrim click-to-close: only fire on genuine click (not map drag overshoot)
@@ -2622,6 +2672,8 @@ document.addEventListener('keydown', function(e) {
 <div class="mass-scrim" id="mass-scrim">
   <div class="mass-modal">
     <button class="mass-close" onclick="closeMassPopup();">&times;</button>
+    <button class="mass-nav mass-nav-prev" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous site">&#8592;</button>
+    <button class="mass-nav mass-nav-next" id="mass-nav-next" onclick="massNavStep(1)" title="Next site">&#8594;</button>
 
     <!-- Left: 3D canvas + Street View -->
     <div class="mass-canvas">
