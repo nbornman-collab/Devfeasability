@@ -2626,28 +2626,11 @@ function addMassingLayers(map, site, sc) {
     addMassLabels(map, site, sc, baseCoords, existH, totalH, existF);
 
   } else {
-    // === TIER C: Approximate bbox or no polygon ===
-    // Show a subtle dashed boundary + height labels only — no 3D extrusion
-    // Let Mapbox 3D buildings provide the visual context
-    var approxCoords = poly || rect;
-
-    // Dashed approximate boundary
-    map.addSource('mass-site', {
-      type: 'geojson',
-      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [approxCoords] } }
-    });
-    map.addLayer({
-      id: 'mass-site-outline', type: 'line', source: 'mass-site',
-      paint: { 'line-color': '#b45309', 'line-width': 2, 'line-opacity': 0.5, 'line-dasharray': [6, 4] }
-    });
-    // Subtle fill to highlight the area
-    map.addLayer({
-      id: 'mass-site-fill', type: 'fill', source: 'mass-site',
-      paint: { 'fill-color': '#059669', 'fill-opacity': 0.06 }
-    });
-
-    // Labels only — no 3D massing on approximate boundaries
-    addMassLabels(map, site, sc, approxCoords, existH, totalH, existF);
+    // === TIER C: No reliable polygon ===
+    // Don't draw any boundary — Mapbox 3D context is enough
+    // Just show height labels centred on site lat/lng
+    var centreCoords = [[site.lng, site.lat]];
+    addMassLabels(map, site, sc, [[site.lng, site.lat],[site.lng, site.lat+0.0001],[site.lng+0.0001, site.lat],[site.lng, site.lat]], existH, totalH, existF);
   }
 }
 
