@@ -2006,13 +2006,13 @@ Promise.all([
 // ── MASSING POPUP ─────────────────────────────────────────────────────────────
 var massMap = null;
 var massSite = null;
-var massScenario = 'base';
+var massScenario = 'mid';
 var massGoogleLoaded = false;
 var massSV = null;
 
 function openMassPopup(site) {
   massSite = site;
-  massScenario = 'base';
+  massScenario = 'mid';
   // Update nav Appraise link to this site if it has a T1
   if (site && site.t1) {
     var navLink = document.getElementById('nav-appraise');
@@ -2030,7 +2030,7 @@ function openMassPopup(site) {
   var vl = verdictLabel(site.score);
   var existF = Math.max(1, Math.round(site.maxFloors * 0.45));
   var scenarios = massingScenarios(site);
-  var base = scenarios.base;
+  var base = scenarios.mid;
 
   document.getElementById('mass-name').textContent = site.name;
   document.getElementById('mass-addr').textContent = site.address + ' · ' + site.borough;
@@ -2156,7 +2156,7 @@ function massingScenarios(site) {
 
   return {
     lo: scenario('Low', Math.max(existF + 1, Math.round(maxF * 0.6))),
-    base: scenario('Base', Math.max(existF + 2, Math.round(maxF * 0.8))),
+    mid: scenario('Mid', Math.max(existF + 2, Math.round(maxF * 0.8))),
     hi: scenario('High', maxF)
   };
 }
@@ -2185,8 +2185,8 @@ function metricHTML(val, lbl, accent) {
 }
 
 function updateMassScenarioTabs(scenarios) {
-  var keys = ['lo','base','hi'];
-  var labels = {lo:'Low',base:'Base',hi:'High'};
+  var keys = ['lo','mid','hi'];
+  var labels = {lo:'Low',mid:'Mid',hi:'High'};
   keys.forEach(function(k) {
     var tab = document.getElementById('mass-tab-' + k);
     if (!tab) return;
@@ -2518,7 +2518,7 @@ function addMassingLayers(map, site, sc) {
           'fill-extrusion-color': '#059669',
           'fill-extrusion-height': totalH,
           'fill-extrusion-base': 0,
-          'fill-extrusion-opacity': 0.25,
+          'fill-extrusion-opacity': 0.85,
           'fill-extrusion-vertical-gradient': false
         }
       });
@@ -2568,10 +2568,10 @@ function addMassingLayers(map, site, sc) {
       map.addLayer({
         id: 'mass-floor-lines', type: 'fill-extrusion', source: 'mass-floors',
         paint: {
-          'fill-extrusion-color': '#047857',
+          'fill-extrusion-color': '#ffffff',
           'fill-extrusion-height': ['get', 'height'],
           'fill-extrusion-base': ['get', 'base'],
-          'fill-extrusion-opacity': 0.45
+          'fill-extrusion-opacity': 0.7
         }
       });
     }
@@ -2815,8 +2815,8 @@ document.addEventListener('keydown', function(e) {
           <button class="mass-sc-tab" id="mass-tab-lo" onclick="switchMassScenario('lo')">
             <span class="mass-sc-label">Low</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-lo">6F</span>
           </button>
-          <button class="mass-sc-tab active" id="mass-tab-base" onclick="switchMassScenario('base')">
-            <span class="mass-sc-label">Base</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-base">8F</span>
+          <button class="mass-sc-tab active" id="mass-tab-mid" onclick="switchMassScenario('mid')">
+            <span class="mass-sc-label">Mid</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-mid">8F</span>
           </button>
           <button class="mass-sc-tab" id="mass-tab-hi" onclick="switchMassScenario('hi')">
             <span class="mass-sc-label">High</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-hi">10F</span>
