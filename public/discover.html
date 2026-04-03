@@ -2243,51 +2243,111 @@ function shrinkPoly(coords, factor) {
   });
 }
 
+// Classify polygon quality
+function polyTier(coords) {
+  if (!coords || coords.length < 3) return 'none';
+  if (coords.length <= 5) return 'bbox'; // 4 corners + close = estimated rectangle
+  if (coords.length <= 7) return 'low';   // rough shape but not bbox
+  return 'real'; // 8+ points = real building/site polygon
+}
+
+// Fetch OSM building footprint on demand
+function fetchOSMBuilding(lat, lng, address, cb) {
+  var url = '/api/building?lat=' + lat + '&lng=' + lng;
+  if (address) url += '&address=' + encodeURIComponent(address);
+  fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+    var elements = data.elements || [];
+    var ways = elements.filter(function(e) { return e.type === 'way' && e.nodes && e.nodes.length >= 3; });
+    var nodes = {};
+    elements.filter(function(e) { return e.type === 'node'; }).forEach(function(n) { nodes[n.id] = n; });
+    if (ways.length === 0) return cb(null);
+    // Pick largest building by node count
+    var best = ways.sort(function(a,b) { return (b.nodes||[]).length - (a.nodes||[]).length; })[0];
+    var coords = best.nodes.map(function(nid) { return nodes[nid]; }).filter(Boolean)
+      .map(function(n) { return [parseFloat(n.lon.toFixed(6)), parseFloat(n.lat.toFixed(6))]; });
+    if (coords.length < 3) return cb(null);
+    // Close polygon
+    if (coords[0][0] !== coords[coords.length-1][0] || coords[0][1] !== coords[coords.length-1][1]) {
+      coords.push([coords[0][0], coords[0][1]]);
+    }
+    // Extract height
+    var tags = best.tags || {};
+    var h = parseFloat(tags.height) || parseFloat(tags['building:height']) || null;
+    var lev = parseInt(tags['building:levels']) || null;
+    cb({ coords: coords, height: h, levels: lev });
+  }).catch(function() { cb(null); });
+}
+
 function initMassMap(site, scenarios) {
   if (massMap) { massMap.remove(); massMap = null; }
   if (!MAPBOX_TOKEN) return;
 
-  // Fetch real polygon then init map
+  // Step 1: fetch intel polygon
   fetchSitePolygon(site.name, function(intel) {
-    var realPoly = intel && intel.polygon ? intel.polygon : null;
-    // Ensure polygon is closed
-    if (realPoly && realPoly.length >= 3) {
-      var first = realPoly[0], last = realPoly[realPoly.length - 1];
-      if (first[0] !== last[0] || first[1] !== last[1]) realPoly.push([first[0], first[1]]);
+    var intelPoly = intel && intel.polygon ? intel.polygon : null;
+    // Ensure closed
+    if (intelPoly && intelPoly.length >= 3) {
+      var first = intelPoly[0], last = intelPoly[intelPoly.length - 1];
+      if (first[0] !== last[0] || first[1] !== last[1]) intelPoly.push([first[0], first[1]]);
     }
-    // Store on site for massing layers
-    site._realPoly = realPoly;
     if (intel) {
       if (intel.existing_height_m) site._existH = intel.existing_height_m;
       if (intel.existing_floors) site._existF = intel.existing_floors;
     }
 
-    // Centre map on polygon centroid if available
-    var center = realPoly ? polyCentroid(realPoly) : [site.lng, site.lat];
+    var tier = polyTier(intelPoly);
 
-    var container = document.getElementById('mass-3d');
-    massMap = new mapboxgl.Map({
-      container: container,
-      style: 'mapbox://styles/mapbox/standard',
-      center: center,
-      zoom: 17.5, pitch: 60, bearing: -30,
-      attributionControl: false, antialias: true
-    });
-    massMap.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-right');
-    massMap.dragRotate.enable();
-    massMap.touchZoomRotate.enable();
+    // Step 2: if bbox or low quality, try OSM building fetch
+    if (tier === 'real') {
+      // Good polygon - use directly
+      site._realPoly = intelPoly;
+      site._polyTier = 'real';
+      _buildMassMap(site, scenarios);
+    } else {
+      // Try OSM building fetch for better polygon
+      fetchOSMBuilding(site.lat, site.lng, site.address, function(osm) {
+        if (osm && osm.coords && osm.coords.length >= 6) {
+          // OSM gave us a real building shape
+          site._realPoly = osm.coords;
+          site._polyTier = 'osm';
+          if (osm.height) site._existH = osm.height;
+          if (osm.levels) site._existF = osm.levels;
+        } else if (tier === 'bbox' || tier === 'low') {
+          // Use intel bbox but mark as approximate
+          site._realPoly = intelPoly;
+          site._polyTier = 'approximate';
+        } else {
+          site._realPoly = null;
+          site._polyTier = 'none';
+        }
+        _buildMassMap(site, scenarios);
+      });
+    }
+  });
+}
 
-    massMap.on('style.load', function() {
-      massMap.setConfigProperty('basemap', 'lightPreset', 'day');
-      massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
-      massMap.setConfigProperty('basemap', 'showTransitLabels', false);
-      var sc = scenarios[massScenario];
-      if (site.brownfield && !realPoly) {
-        addGhostMassing(massMap, site);
-      } else {
-        addMassingLayers(massMap, site, sc);
-      }
-    });
+function _buildMassMap(site, scenarios) {
+  var poly = site._realPoly;
+  var center = poly ? polyCentroid(poly) : [site.lng, site.lat];
+
+  var container = document.getElementById('mass-3d');
+  massMap = new mapboxgl.Map({
+    container: container,
+    style: 'mapbox://styles/mapbox/standard',
+    center: center,
+    zoom: 17.5, pitch: 60, bearing: -30,
+    attributionControl: false, antialias: true
+  });
+  massMap.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-right');
+  massMap.dragRotate.enable();
+  massMap.touchZoomRotate.enable();
+
+  massMap.on('style.load', function() {
+    massMap.setConfigProperty('basemap', 'lightPreset', 'day');
+    massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+    massMap.setConfigProperty('basemap', 'showTransitLabels', false);
+    var sc = scenarios[massScenario];
+    addMassingLayers(massMap, site, sc);
   });
 }
 
@@ -2388,100 +2448,125 @@ function addGhostMassing(map, site) {
 }
 
 function addMassingLayers(map, site, sc) {
-  var poly = site._realPoly; // real intelligence polygon if available
+  var poly = site._realPoly;
+  var tier = site._polyTier || 'none';
   var rect = siteRect(site);
-  var baseCoords = poly || rect;
   var floorH = 3.8;
   var existH = (site._existH || sc.existF * floorH);
   var existF = site._existF || sc.existF;
   var totalH = sc.floors * floorH;
   var podH = sc.podF * floorH;
-  var twrCoords = sc.towerSetback > 0 ? (poly ? shrinkPoly(baseCoords, 0.85) : insetRect(rect, sc.towerSetback)) : baseCoords;
 
-  // Site outline - dashed amber property boundary
-  map.addSource('mass-site', {
-    type: 'geojson',
-    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
-  });
-  map.addLayer({
-    id: 'mass-site-outline', type: 'line', source: 'mass-site',
-    paint: { 'line-color': '#b45309', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [5, 3] }
-  });
+  // Determine what geometry to use based on tier
+  if (tier === 'real' || tier === 'osm') {
+    // === TIER A/B: Real polygon - full 3D massing ===
+    var baseCoords = poly;
+    var twrCoords = sc.towerSetback > 0 ? shrinkPoly(baseCoords, 0.85) : baseCoords;
 
-  // No existing shell - let Mapbox 3D buildings show through naturally
-  // Just the dashed site outline above is enough for existing context
-
-  // Potential envelope - green translucent, always starts from 0 (ground)
-  // existH used only for floor line start - avoids Z-offset from inaccurate existing heights
-  if (totalH > 0) {
-    map.addSource('mass-potential', {
+    // Site outline - dashed amber boundary
+    map.addSource('mass-site', {
       type: 'geojson',
       data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
     });
     map.addLayer({
-      id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
-      paint: {
-        'fill-extrusion-color': '#059669',
-        'fill-extrusion-height': totalH,
-        'fill-extrusion-base': 0,
-        'fill-extrusion-opacity': 0.22,
-        'fill-extrusion-vertical-gradient': false
-      }
+      id: 'mass-site-outline', type: 'line', source: 'mass-site',
+      paint: { 'line-color': '#b45309', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [5, 3] }
     });
-    map.addLayer({
-      id: 'mass-potential-edge', type: 'line', source: 'mass-potential',
-      paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.8 }
-    });
-  }
 
-  // Tower setback (white, from podium to total) - only if there IS a setback
-  if (sc.towerSetback > 0 && totalH > podH) {
-    map.addSource('mass-tower', {
+    // Potential envelope - green translucent from ground
+    if (totalH > 0) {
+      map.addSource('mass-potential', {
+        type: 'geojson',
+        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
+      });
+      map.addLayer({
+        id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
+        paint: {
+          'fill-extrusion-color': '#059669',
+          'fill-extrusion-height': totalH,
+          'fill-extrusion-base': 0,
+          'fill-extrusion-opacity': 0.22,
+          'fill-extrusion-vertical-gradient': false
+        }
+      });
+      map.addLayer({
+        id: 'mass-potential-edge', type: 'line', source: 'mass-potential',
+        paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.8 }
+      });
+    }
+
+    // Tower setback
+    if (sc.towerSetback > 0 && totalH > podH) {
+      map.addSource('mass-tower', {
+        type: 'geojson',
+        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [twrCoords] } }
+      });
+      map.addLayer({
+        id: 'mass-tower-3d', type: 'fill-extrusion', source: 'mass-tower',
+        paint: {
+          'fill-extrusion-color': '#ffffff',
+          'fill-extrusion-height': totalH,
+          'fill-extrusion-base': podH,
+          'fill-extrusion-opacity': 0.15
+        }
+      });
+    }
+
+    // Floor lines - thin slab extrusions
+    var floorLines = [];
+    for (var i = existF + 1; i <= sc.floors; i++) {
+      var fh = existH + (i - existF) * floorH;
+      var slabCoords = (sc.towerSetback > 0 && i > sc.podF) ? twrCoords : baseCoords;
+      var lineCoords = bufferPoly(slabCoords, 0.000003);
+      floorLines.push({
+        type: 'Feature',
+        geometry: { type: 'Polygon', coordinates: [lineCoords] },
+        properties: { height: fh + 0.12, base: fh - 0.12 }
+      });
+    }
+    if (floorLines.length > 0) {
+      map.addSource('mass-floors', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: floorLines }
+      });
+      map.addLayer({
+        id: 'mass-floor-lines', type: 'fill-extrusion', source: 'mass-floors',
+        paint: {
+          'fill-extrusion-color': '#047857',
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-base': ['get', 'base'],
+          'fill-extrusion-opacity': 0.5
+        }
+      });
+    }
+
+    // Height labels
+    addMassLabels(map, site, sc, baseCoords, existH, totalH, existF);
+
+  } else {
+    // === TIER C: Approximate bbox or no polygon ===
+    // Show a subtle dashed boundary + height labels only — no 3D extrusion
+    // Let Mapbox 3D buildings provide the visual context
+    var approxCoords = poly || rect;
+
+    // Dashed approximate boundary
+    map.addSource('mass-site', {
       type: 'geojson',
-      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [twrCoords] } }
+      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [approxCoords] } }
     });
     map.addLayer({
-      id: 'mass-tower-3d', type: 'fill-extrusion', source: 'mass-tower',
-      paint: {
-        'fill-extrusion-color': '#ffffff',
-        'fill-extrusion-height': totalH,
-        'fill-extrusion-base': podH,
-        'fill-extrusion-opacity': 0.15
-      }
+      id: 'mass-site-outline', type: 'line', source: 'mass-site',
+      paint: { 'line-color': '#b45309', 'line-width': 2, 'line-opacity': 0.5, 'line-dasharray': [6, 4] }
     });
-  }
-
-  // Floor lines - thin slab extrusions at each new floor level
-  var floorLines = [];
-  for (var i = existF + 1; i <= sc.floors; i++) {
-    var fh = existH + (i - existF) * floorH;
-    var slabCoords = (sc.towerSetback > 0 && i > sc.podF) ? twrCoords : baseCoords;
-    // Slightly outset so lines are visible against the envelope
-    var lineCoords = poly ? bufferPoly(slabCoords, 0.000003) : slabCoords;
-    floorLines.push({
-      type: 'Feature',
-      geometry: { type: 'Polygon', coordinates: [lineCoords] },
-      properties: { height: fh + 0.12, base: fh - 0.12 }
-    });
-  }
-  if (floorLines.length > 0) {
-    map.addSource('mass-floors', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: floorLines }
-    });
+    // Subtle fill to highlight the area
     map.addLayer({
-      id: 'mass-floor-lines', type: 'fill-extrusion', source: 'mass-floors',
-      paint: {
-        'fill-extrusion-color': '#047857',
-        'fill-extrusion-height': ['get', 'height'],
-        'fill-extrusion-base': ['get', 'base'],
-        'fill-extrusion-opacity': 0.5
-      }
+      id: 'mass-site-fill', type: 'fill', source: 'mass-site',
+      paint: { 'fill-color': '#059669', 'fill-opacity': 0.06 }
     });
-  }
 
-  // Height labels - pinned to map as HTML overlays
-  addMassLabels(map, site, sc, baseCoords, existH, totalH, existF);
+    // Labels only — no 3D massing on approximate boundaries
+    addMassLabels(map, site, sc, approxCoords, existH, totalH, existF);
+  }
 }
 
 // Height label system - creates floating labels with floor counts
@@ -2527,7 +2612,7 @@ function makeMassLabel(text, color) {
 
 function updateMassingLayers(map, site, sc) {
   // Remove old layers and sources
-  ['mass-floor-lines','mass-tower-3d','mass-potential-3d','mass-potential-edge','mass-site-outline'].forEach(function(id) {
+  ['mass-floor-lines','mass-tower-3d','mass-potential-3d','mass-potential-edge','mass-site-outline','mass-site-fill'].forEach(function(id) {
     if (map.getLayer(id)) map.removeLayer(id);
   });
   ['mass-floors','mass-tower','mass-potential','mass-site'].forEach(function(id) {
