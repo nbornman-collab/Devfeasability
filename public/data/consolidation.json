@@ -1,0 +1,1166 @@
+{
+  "1 Southwark Bridge Road": {
+    "score": 5,
+    "label": "Easy Assembly",
+    "tier": "easy",
+    "titles_total": 2,
+    "titles_vacant": 1,
+    "titles_occupied": 1,
+    "total_leaseholds": 1,
+    "vacant_ratio": 50,
+    "titles_in_site": [
+      {
+        "title_number": "SGL35409",
+        "class": "Absolute freehold title",
+        "lat": 51.508059903748,
+        "lng": -0.094843393920458,
+        "leaseholds": 0,
+        "num_points": 5,
+        "dist_m": 95
+      },
+      {
+        "title_number": "EGL571604",
+        "class": "Absolute freehold title",
+        "lat": 51.507564087422,
+        "lng": -0.094816162404446,
+        "leaseholds": 1,
+        "num_points": 106,
+        "dist_m": 48
+      }
+    ],
+    "titles_nearby": 5
+  },
+  "100 Leadenhall Street": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "123 Grove Park": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "200 Great Dover Street": {
+    "score": 5,
+    "label": "Easy Assembly",
+    "tier": "easy",
+    "titles_total": 3,
+    "titles_vacant": 2,
+    "titles_occupied": 1,
+    "total_leaseholds": 23,
+    "vacant_ratio": 67,
+    "titles_in_site": [
+      {
+        "title_number": "SGL310278",
+        "class": "Absolute freehold title",
+        "lat": 51.500997027474,
+        "lng": -0.091714262017293,
+        "leaseholds": 0,
+        "num_points": 58,
+        "dist_m": 51
+      },
+      {
+        "title_number": "TGL107369",
+        "class": "Absolute freehold title",
+        "lat": 51.500686225806,
+        "lng": -0.091868162926856,
+        "leaseholds": 0,
+        "num_points": 17,
+        "dist_m": 48
+      },
+      {
+        "title_number": "SGL319025",
+        "class": "Absolute freehold title",
+        "lat": 51.500972440737,
+        "lng": -0.091657452959843,
+        "leaseholds": 23,
+        "num_points": 64,
+        "dist_m": 46
+      }
+    ],
+    "titles_nearby": 8
+  },
+  "24 Southwark Street": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "275 Borough High Street": {
+    "score": 2.5,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 6,
+    "titles_vacant": 2,
+    "titles_occupied": 4,
+    "total_leaseholds": 22,
+    "vacant_ratio": 33,
+    "titles_in_site": [
+      {
+        "title_number": "TGL326601",
+        "class": "Absolute freehold title",
+        "lat": 51.499806738602,
+        "lng": -0.094482391158044,
+        "leaseholds": 4,
+        "num_points": 38,
+        "dist_m": 33
+      },
+      {
+        "title_number": "TGL326601",
+        "class": "Absolute freehold title",
+        "lat": 51.499332247048,
+        "lng": -0.09475852516646,
+        "leaseholds": 0,
+        "num_points": 38,
+        "dist_m": 23
+      },
+      {
+        "title_number": "TGL271939",
+        "class": "Absolute freehold title",
+        "lat": 51.500050671024,
+        "lng": -0.094934961127827,
+        "leaseholds": 0,
+        "num_points": 8,
+        "dist_m": 60
+      },
+      {
+        "title_number": "SGL115391",
+        "class": "Absolute freehold title",
+        "lat": 51.499814239428,
+        "lng": -0.094829627537118,
+        "leaseholds": 14,
+        "num_points": 25,
+        "dist_m": 33
+      },
+      {
+        "title_number": "TGL34364",
+        "class": "Absolute freehold title",
+        "lat": 51.499946447073,
+        "lng": -0.095067841820447,
+        "leaseholds": 3,
+        "num_points": 18,
+        "dist_m": 53
+      },
+      {
+        "title_number": "TGL167201",
+        "class": "Absolute freehold title",
+        "lat": 51.499697290975,
+        "lng": -0.094930121463417,
+        "leaseholds": 1,
+        "num_points": 9,
+        "dist_m": 25
+      }
+    ],
+    "titles_nearby": 3
+  },
+  "49 Lomond Grove": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "63-85 Newington Causeway": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 1
+  },
+  "99 Lomond Grove": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 5
+  },
+  "4-12 Albany Road": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 10
+  },
+  "Aylesbury Site 7": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Bakerloo Line Sidings": {
+    "score": 3,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 10,
+    "titles_vacant": 5,
+    "titles_occupied": 5,
+    "total_leaseholds": 19,
+    "vacant_ratio": 50,
+    "titles_in_site": [
+      {
+        "title_number": "78765",
+        "class": "Absolute freehold title",
+        "lat": 51.497347613392,
+        "lng": -0.10706806041498,
+        "leaseholds": 0,
+        "num_points": 31,
+        "dist_m": 113
+      },
+      {
+        "title_number": "78765",
+        "class": "Absolute freehold title",
+        "lat": 51.498272544495,
+        "lng": -0.10456605761341,
+        "leaseholds": 0,
+        "num_points": 12,
+        "dist_m": 88
+      },
+      {
+        "title_number": "TGL216172",
+        "class": "Absolute freehold title",
+        "lat": 51.498208375208,
+        "lng": -0.10451456409236,
+        "leaseholds": 1,
+        "num_points": 10,
+        "dist_m": 88
+      },
+      {
+        "title_number": "TGL216171",
+        "class": "Absolute freehold title",
+        "lat": 51.49818070162,
+        "lng": -0.10446169412886,
+        "leaseholds": 7,
+        "num_points": 14,
+        "dist_m": 89
+      },
+      {
+        "title_number": "TGL216174",
+        "class": "Absolute freehold title",
+        "lat": 51.498125368141,
+        "lng": -0.10439651549293,
+        "leaseholds": 6,
+        "num_points": 15,
+        "dist_m": 91
+      },
+      {
+        "title_number": "SGL448594",
+        "class": "Absolute freehold title",
+        "lat": 51.498143651355,
+        "lng": -0.10455372370863,
+        "leaseholds": 0,
+        "num_points": 11,
+        "dist_m": 82
+      },
+      {
+        "title_number": "SGL426431",
+        "class": "Absolute freehold title",
+        "lat": 51.498057760573,
+        "lng": -0.10433420143293,
+        "leaseholds": 2,
+        "num_points": 15,
+        "dist_m": 93
+      },
+      {
+        "title_number": "SGL422811",
+        "class": "Absolute freehold title",
+        "lat": 51.498009420949,
+        "lng": -0.10430089772734,
+        "leaseholds": 0,
+        "num_points": 14,
+        "dist_m": 93
+      },
+      {
+        "title_number": "SGL422119",
+        "class": "Absolute freehold title",
+        "lat": 51.497986282084,
+        "lng": -0.1042306199211,
+        "leaseholds": 0,
+        "num_points": 15,
+        "dist_m": 98
+      },
+      {
+        "title_number": "SGL422720",
+        "class": "Absolute freehold title",
+        "lat": 51.497952276938,
+        "lng": -0.10416772801305,
+        "leaseholds": 3,
+        "num_points": 13,
+        "dist_m": 101
+      }
+    ],
+    "titles_nearby": 0
+  },
+  "Land Between Camberwell Station Road and Warner Road": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Cannon Street Station Oversite": {
+    "score": 3.9,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 14,
+    "titles_vacant": 10,
+    "titles_occupied": 4,
+    "total_leaseholds": 33,
+    "vacant_ratio": 71,
+    "titles_in_site": [
+      {
+        "title_number": "AGL230665",
+        "class": "Absolute freehold title",
+        "lat": 51.511358156058,
+        "lng": -0.090193472684284,
+        "leaseholds": 12,
+        "num_points": 29,
+        "dist_m": 38
+      },
+      {
+        "title_number": "AGL230656",
+        "class": "Absolute freehold title",
+        "lat": 51.511353984992,
+        "lng": -0.090151383288655,
+        "leaseholds": 12,
+        "num_points": 25,
+        "dist_m": 39
+      },
+      {
+        "title_number": "EGL537303",
+        "class": "Absolute freehold title",
+        "lat": 51.510783329186,
+        "lng": -0.089907374365468,
+        "leaseholds": 0,
+        "num_points": 16,
+        "dist_m": 49
+      },
+      {
+        "title_number": "EGL537303",
+        "class": "Absolute freehold title",
+        "lat": 51.511151958879,
+        "lng": -0.090841888497863,
+        "leaseholds": 0,
+        "num_points": 5,
+        "dist_m": 28
+      },
+      {
+        "title_number": "EGL537303",
+        "class": "Absolute freehold title",
+        "lat": 51.51149947133,
+        "lng": -0.090336420504376,
+        "leaseholds": 0,
+        "num_points": 8,
+        "dist_m": 49
+      },
+      {
+        "title_number": "EGL537303",
+        "class": "Absolute freehold title",
+        "lat": 51.510636309164,
+        "lng": -0.090144989655623,
+        "leaseholds": 0,
+        "num_points": 13,
+        "dist_m": 52
+      },
+      {
+        "title_number": "EGL537303",
+        "class": "Absolute freehold title",
+        "lat": 51.511115612075,
+        "lng": -0.090869483090505,
+        "leaseholds": 0,
+        "num_points": 4,
+        "dist_m": 29
+      },
+      {
+        "title_number": "NGL759394",
+        "class": "Absolute freehold title",
+        "lat": 51.511191480497,
+        "lng": -0.089628717604644,
+        "leaseholds": 6,
+        "num_points": 50,
+        "dist_m": 60
+      },
+      {
+        "title_number": "NGL588792",
+        "class": "Absolute freehold title",
+        "lat": 51.51145147361,
+        "lng": -0.090982671566842,
+        "leaseholds": 0,
+        "num_points": 7,
+        "dist_m": 56
+      },
+      {
+        "title_number": "LN238401",
+        "class": "Absolute freehold title",
+        "lat": 51.510911664601,
+        "lng": -0.089746823933815,
+        "leaseholds": 0,
+        "num_points": 15,
+        "dist_m": 53
+      },
+      {
+        "title_number": "EGL539801",
+        "class": "Absolute freehold title",
+        "lat": 51.511733530175,
+        "lng": -0.090512269283987,
+        "leaseholds": 0,
+        "num_points": 4,
+        "dist_m": 74
+      },
+      {
+        "title_number": "LN157918",
+        "class": "Absolute freehold title",
+        "lat": 51.511738611174,
+        "lng": -0.090510252894684,
+        "leaseholds": 0,
+        "num_points": 15,
+        "dist_m": 75
+      },
+      {
+        "title_number": "AGL612762",
+        "class": "Absolute freehold title",
+        "lat": 51.511063182239,
+        "lng": -0.091015521239376,
+        "leaseholds": 0,
+        "num_points": 86,
+        "dist_m": 38
+      },
+      {
+        "title_number": "318769",
+        "class": "Absolute freehold title",
+        "lat": 51.511723023473,
+        "lng": -0.089870071857254,
+        "leaseholds": 3,
+        "num_points": 15,
+        "dist_m": 84
+      }
+    ],
+    "titles_nearby": 4
+  },
+  "Chambers Wharf": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Conoco House and Quadrant House": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Copeland Industrial Park": {
+    "score": 3.6,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 7,
+    "titles_vacant": 4,
+    "titles_occupied": 3,
+    "total_leaseholds": 6,
+    "vacant_ratio": 57,
+    "titles_in_site": [
+      {
+        "title_number": "TGL310749",
+        "class": "Absolute freehold title",
+        "lat": 51.470105447746,
+        "lng": -0.064961396724574,
+        "leaseholds": 0,
+        "num_points": 20,
+        "dist_m": 88
+      },
+      {
+        "title_number": "TGL223522",
+        "class": "Absolute freehold title",
+        "lat": 51.469995757976,
+        "lng": -0.065139935911237,
+        "leaseholds": 1,
+        "num_points": 17,
+        "dist_m": 87
+      },
+      {
+        "title_number": "LN152703",
+        "class": "Absolute freehold title",
+        "lat": 51.470169269229,
+        "lng": -0.064717703846142,
+        "leaseholds": 0,
+        "num_points": 4,
+        "dist_m": 85
+      },
+      {
+        "title_number": "TGL194821",
+        "class": "Absolute freehold title",
+        "lat": 51.46990735528,
+        "lng": -0.065251923517457,
+        "leaseholds": 2,
+        "num_points": 16,
+        "dist_m": 87
+      },
+      {
+        "title_number": "LN192272",
+        "class": "Absolute freehold title",
+        "lat": 51.469860974682,
+        "lng": -0.065306735334533,
+        "leaseholds": 0,
+        "num_points": 19,
+        "dist_m": 88
+      },
+      {
+        "title_number": "260954",
+        "class": "Absolute freehold title",
+        "lat": 51.469600286224,
+        "lng": -0.065283103847964,
+        "leaseholds": 0,
+        "num_points": 22,
+        "dist_m": 76
+      },
+      {
+        "title_number": "TGL253544",
+        "class": "Absolute freehold title",
+        "lat": 51.469708665943,
+        "lng": -0.064338876988795,
+        "leaseholds": 3,
+        "num_points": 90,
+        "dist_m": 28
+      }
+    ],
+    "titles_nearby": 2
+  },
+  "Crimscott Street Campus": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Croft Street Depot": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Denmark Hill Campus East": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Devon Street and Sylvan Grove": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 2
+  },
+  "Dulwich Community Hospital": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Friars House": {
+    "score": 3,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 5,
+    "titles_vacant": 2,
+    "titles_occupied": 3,
+    "total_leaseholds": 16,
+    "vacant_ratio": 40,
+    "titles_in_site": [
+      {
+        "title_number": "TGL466739",
+        "class": "Absolute freehold title",
+        "lat": 51.501324546856,
+        "lng": -0.10398708541685,
+        "leaseholds": 13,
+        "num_points": 25,
+        "dist_m": 6
+      },
+      {
+        "title_number": "LN89306",
+        "class": "Absolute freehold title",
+        "lat": 51.501707876748,
+        "lng": -0.10408500461709,
+        "leaseholds": 0,
+        "num_points": 14,
+        "dist_m": 45
+      },
+      {
+        "title_number": "LN91581",
+        "class": "Absolute freehold title",
+        "lat": 51.501287417965,
+        "lng": -0.10359027691765,
+        "leaseholds": 1,
+        "num_points": 12,
+        "dist_m": 33
+      },
+      {
+        "title_number": "LN91581",
+        "class": "Absolute freehold title",
+        "lat": 51.501103448187,
+        "lng": -0.10354707144909,
+        "leaseholds": 0,
+        "num_points": 5,
+        "dist_m": 42
+      },
+      {
+        "title_number": "SGL423559",
+        "class": "Absolute freehold title",
+        "lat": 51.501749777153,
+        "lng": -0.10353975983478,
+        "leaseholds": 2,
+        "num_points": 22,
+        "dist_m": 61
+      }
+    ],
+    "titles_nearby": 6
+  },
+  "Glengall Road and Latona Road": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "7-14 Great Dover Street": {
+    "score": 5,
+    "label": "Easy Assembly",
+    "tier": "easy",
+    "titles_total": 2,
+    "titles_vacant": 1,
+    "titles_occupied": 1,
+    "total_leaseholds": 3,
+    "vacant_ratio": 50,
+    "titles_in_site": [
+      {
+        "title_number": "TGL326727",
+        "class": "Absolute freehold title",
+        "lat": 51.500438889363,
+        "lng": -0.092861101967241,
+        "leaseholds": 0,
+        "num_points": 9,
+        "dist_m": 56
+      },
+      {
+        "title_number": "TGL326727",
+        "class": "Absolute freehold title",
+        "lat": 51.499910173645,
+        "lng": -0.092819959302129,
+        "leaseholds": 3,
+        "num_points": 34,
+        "dist_m": 83
+      }
+    ],
+    "titles_nearby": 0
+  },
+  "The Grove Tavern, 520 Lordship Lane": {
+    "score": 3.6,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 7,
+    "titles_vacant": 4,
+    "titles_occupied": 3,
+    "total_leaseholds": 3,
+    "vacant_ratio": 57,
+    "titles_in_site": [
+      {
+        "title_number": "TGL333444",
+        "class": "Absolute freehold title",
+        "lat": 51.443385030564,
+        "lng": -0.068375878018415,
+        "leaseholds": 1,
+        "num_points": 64,
+        "dist_m": 8
+      },
+      {
+        "title_number": "LN209660",
+        "class": "Absolute freehold title",
+        "lat": 51.443776438474,
+        "lng": -0.067722653564858,
+        "leaseholds": 0,
+        "num_points": 12,
+        "dist_m": 58
+      },
+      {
+        "title_number": "LN341",
+        "class": "Absolute freehold title",
+        "lat": 51.443805087795,
+        "lng": -0.06776472616218,
+        "leaseholds": 0,
+        "num_points": 11,
+        "dist_m": 58
+      },
+      {
+        "title_number": "SGL359710",
+        "class": "Absolute freehold title",
+        "lat": 51.44389052905,
+        "lng": -0.067763135190343,
+        "leaseholds": 1,
+        "num_points": 16,
+        "dist_m": 66
+      },
+      {
+        "title_number": "LN49737",
+        "class": "Absolute freehold title",
+        "lat": 51.443952797815,
+        "lng": -0.067732315186184,
+        "leaseholds": 1,
+        "num_points": 16,
+        "dist_m": 73
+      },
+      {
+        "title_number": "TGL85892",
+        "class": "Absolute freehold title",
+        "lat": 51.443990036449,
+        "lng": -0.067836051982603,
+        "leaseholds": 0,
+        "num_points": 14,
+        "dist_m": 74
+      },
+      {
+        "title_number": "TGL549526",
+        "class": "Absolute freehold title",
+        "lat": 51.443903013608,
+        "lng": -0.067582105561735,
+        "leaseholds": 0,
+        "num_points": 26,
+        "dist_m": 75
+      }
+    ],
+    "titles_nearby": 3
+  },
+  "19-23 Harper Road and 325 Borough High Street": {
+    "score": 7.5,
+    "label": "Easy Assembly",
+    "tier": "easy",
+    "titles_total": 2,
+    "titles_vacant": 2,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 100,
+    "titles_in_site": [
+      {
+        "title_number": "TGL407847",
+        "class": "Absolute freehold title",
+        "lat": 51.498953188236,
+        "lng": -0.095958048833268,
+        "leaseholds": 0,
+        "num_points": 28,
+        "dist_m": 35
+      },
+      {
+        "title_number": "SGL322048",
+        "class": "Absolute freehold title",
+        "lat": 51.499215737696,
+        "lng": -0.096041588468776,
+        "leaseholds": 0,
+        "num_points": 6,
+        "dist_m": 54
+      }
+    ],
+    "titles_nearby": 9
+  },
+  "Iceland, 118-132 Camberwell Road": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 10
+  },
+  "Kinglake Street Garages": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Ludgate House and Sampson House": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Mandela Way Industrial Estate": {
+    "score": 7.5,
+    "label": "Easy Assembly",
+    "tier": "easy",
+    "titles_total": 2,
+    "titles_vacant": 2,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 100,
+    "titles_in_site": [
+      {
+        "title_number": "TGL70528",
+        "class": "Absolute freehold title",
+        "lat": 51.492597112071,
+        "lng": -0.081209340405476,
+        "leaseholds": 0,
+        "num_points": 154,
+        "dist_m": 29
+      },
+      {
+        "title_number": "TGL43727",
+        "class": "Absolute freehold title",
+        "lat": 51.492131663482,
+        "lng": -0.081154835741234,
+        "leaseholds": 0,
+        "num_points": 64,
+        "dist_m": 41
+      }
+    ],
+    "titles_nearby": 7
+  },
+  "Land between Melior Street and St Thomas Street": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Newington Triangle": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Former Petrol Station, 233-247 Old Kent Road": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "1-5 Paris Garden and 16-19 Hatfields": {
+    "score": 3.3,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 3,
+    "titles_vacant": 1,
+    "titles_occupied": 2,
+    "total_leaseholds": 8,
+    "vacant_ratio": 33,
+    "titles_in_site": [
+      {
+        "title_number": "SGL319722",
+        "class": "Absolute freehold title",
+        "lat": 51.506964501541,
+        "lng": -0.10671127943633,
+        "leaseholds": 3,
+        "num_points": 18,
+        "dist_m": 10
+      },
+      {
+        "title_number": "TGL87843",
+        "class": "Absolute freehold title",
+        "lat": 51.506774024549,
+        "lng": -0.10695857055658,
+        "leaseholds": 5,
+        "num_points": 22,
+        "dist_m": 35
+      },
+      {
+        "title_number": "418398",
+        "class": "Absolute freehold title",
+        "lat": 51.507179701862,
+        "lng": -0.10718204910846,
+        "leaseholds": 0,
+        "num_points": 5,
+        "dist_m": 48
+      }
+    ],
+    "titles_nearby": 9
+  },
+  "Railway Rise, East Dulwich": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 0
+  },
+  "Salvation Army Headquarters": {
+    "score": 5,
+    "label": "Easy Assembly",
+    "tier": "easy",
+    "titles_total": 2,
+    "titles_vacant": 1,
+    "titles_occupied": 1,
+    "total_leaseholds": 59,
+    "vacant_ratio": 50,
+    "titles_in_site": [
+      {
+        "title_number": "LN15558",
+        "class": "Absolute freehold title",
+        "lat": 51.497299023373,
+        "lng": -0.098831454699626,
+        "leaseholds": 0,
+        "num_points": 4,
+        "dist_m": 92
+      },
+      {
+        "title_number": "SGL508969",
+        "class": "Absolute freehold title",
+        "lat": 51.497139739112,
+        "lng": -0.098879729456364,
+        "leaseholds": 59,
+        "num_points": 17,
+        "dist_m": 107
+      }
+    ],
+    "titles_nearby": 2
+  },
+  "Sandgate Street and Verney Road": {
+    "score": 7.5,
+    "label": "Easy Assembly",
+    "tier": "easy",
+    "titles_total": 2,
+    "titles_vacant": 2,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 100,
+    "titles_in_site": [
+      {
+        "title_number": "TGL16392",
+        "class": "Absolute freehold title",
+        "lat": 51.483273725229,
+        "lng": -0.064030066408358,
+        "leaseholds": 0,
+        "num_points": 19,
+        "dist_m": 126
+      },
+      {
+        "title_number": "TGL63369",
+        "class": "Absolute freehold title",
+        "lat": 51.483564226833,
+        "lng": -0.063753034775341,
+        "leaseholds": 0,
+        "num_points": 8,
+        "dist_m": 115
+      }
+    ],
+    "titles_nearby": 4
+  },
+  "Land between Great Suffolk Street and Glasshill Street": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_in_site": [],
+    "titles_nearby": 1
+  },
+  "196 Blackfriars Road": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_total": 1,
+    "titles_vacant": 0,
+    "titles_occupied": 1,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0,
+    "titles_in_site": [
+      {
+        "title_number": "TGL62708",
+        "leaseholds": 0,
+        "num_points": 11,
+        "dist_m": 25
+      }
+    ]
+  },
+  "62-67 Park Street": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_total": 0,
+    "titles_vacant": 0,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0,
+    "titles_in_site": []
+  },
+  "Abellio Walworth Bus Depot": {
+    "score": 5,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 5,
+    "titles_vacant": 4,
+    "titles_occupied": 1,
+    "total_leaseholds": 2,
+    "vacant_ratio": 80,
+    "titles_in_site": [
+      {
+        "title_number": "SGL116886",
+        "leaseholds": 0,
+        "num_points": 13,
+        "dist_m": 53
+      },
+      {
+        "title_number": "SGL116886",
+        "leaseholds": 2,
+        "num_points": 15,
+        "dist_m": 52
+      },
+      {
+        "title_number": "TGL449487",
+        "leaseholds": 0,
+        "num_points": 11,
+        "dist_m": 54
+      },
+      {
+        "title_number": "SGL364019",
+        "leaseholds": 0,
+        "num_points": 10,
+        "dist_m": 54
+      },
+      {
+        "title_number": "TGL434968",
+        "leaseholds": 0,
+        "num_points": 46,
+        "dist_m": 38
+      }
+    ]
+  },
+  "Blackpool Road Business Park": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_total": 0,
+    "titles_vacant": 0,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0,
+    "titles_in_site": []
+  },
+  "Colechurch House, London Bridge Walk": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_total": 0,
+    "titles_vacant": 0,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0,
+    "titles_in_site": []
+  },
+  "Dulwich Hamlet Champion Hill Stadium": {
+    "score": 5,
+    "label": "Easy Assembly",
+    "tier": "easy",
+    "titles_total": 2,
+    "titles_vacant": 1,
+    "titles_occupied": 1,
+    "total_leaseholds": 33,
+    "vacant_ratio": 50,
+    "titles_in_site": [
+      {
+        "title_number": "251489",
+        "leaseholds": 33,
+        "num_points": 20,
+        "dist_m": 70
+      },
+      {
+        "title_number": "SGL301774",
+        "leaseholds": 0,
+        "num_points": 10,
+        "dist_m": 82
+      }
+    ]
+  },
+  "Great Suffolk Street and Ewer Street": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_total": 0,
+    "titles_vacant": 0,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0,
+    "titles_in_site": []
+  },
+  "Kwik Fit and Gibbs & Dandy, Grove Vale": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_total": 0,
+    "titles_vacant": 0,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0,
+    "titles_in_site": []
+  },
+  "Salisbury Estate Car Park": {
+    "score": 0,
+    "label": "Single Freehold",
+    "tier": "single",
+    "titles_total": 0,
+    "titles_vacant": 0,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0,
+    "titles_in_site": []
+  },
+  "1-5 Westminster Bridge Road": {
+    "score": 4.3,
+    "label": "Assembly Play",
+    "tier": "play",
+    "titles_total": 7,
+    "titles_vacant": 5,
+    "titles_occupied": 2,
+    "total_leaseholds": 34,
+    "vacant_ratio": 71,
+    "titles_in_site": [
+      {
+        "title_number": "LN191406",
+        "leaseholds": 0,
+        "num_points": 28,
+        "dist_m": 15
+      },
+      {
+        "title_number": "LN137500",
+        "leaseholds": 33,
+        "num_points": 34,
+        "dist_m": 13
+      },
+      {
+        "title_number": "LN132513",
+        "leaseholds": 0,
+        "num_points": 11,
+        "dist_m": 19
+      },
+      {
+        "title_number": "TGL477763",
+        "leaseholds": 1,
+        "num_points": 25,
+        "dist_m": 29
+      },
+      {
+        "title_number": "SGL78201",
+        "leaseholds": 0,
+        "num_points": 15,
+        "dist_m": 28
+      },
+      {
+        "title_number": "TGL319582",
+        "leaseholds": 0,
+        "num_points": 37,
+        "dist_m": 38
+      },
+      {
+        "title_number": "385439",
+        "leaseholds": 0,
+        "num_points": 11,
+        "dist_m": 51
+      }
+    ]
+  }
+}

@@ -341,7 +341,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 3.1,
-      "existing_height_m": 48.0,
+      "existing_height_m": 48,
       "utilisation_data": {
         "underuse": 3.1,
         "location_quality": 10,
@@ -605,7 +605,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 2.1,
-      "existing_height_m": 21.0,
+      "existing_height_m": 21,
       "utilisation_data": {
         "underuse": 2.1,
         "location_quality": 10,
@@ -1009,7 +1009,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 2.5,
-      "existing_height_m": 60.0,
+      "existing_height_m": 60,
       "utilisation_data": {
         "underuse": 2.5,
         "location_quality": 10,
@@ -1296,7 +1296,7 @@
       "nhle_tier": "BLOCKING",
       "nhle_score_penalty": 35,
       "utilisation_score": 4.5,
-      "existing_height_m": 30.0,
+      "existing_height_m": 30,
       "utilisation_data": {
         "underuse": 4.5,
         "location_quality": 10,
@@ -1711,7 +1711,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 3.7,
-      "existing_height_m": 24.0,
+      "existing_height_m": 24,
       "utilisation_data": {
         "underuse": 3.7,
         "location_quality": 10,
@@ -2074,10 +2074,10 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 5.0,
-      "existing_height_m": 21.0,
+      "utilisation_score": 5,
+      "existing_height_m": 21,
       "utilisation_data": {
-        "underuse": 5.0,
+        "underuse": 5,
         "location_quality": 10,
         "plot": 10,
         "floor_gap": 2,
@@ -2243,7 +2243,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 4.3,
-      "existing_height_m": 18.0,
+      "existing_height_m": 18,
       "utilisation_data": {
         "underuse": 4.3,
         "location_quality": 10,
@@ -2356,7 +2356,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 4.3,
-      "existing_height_m": 18.0,
+      "existing_height_m": 18,
       "utilisation_data": {
         "underuse": 4.3,
         "location_quality": 10,
@@ -2548,7 +2548,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 4.3,
-      "existing_height_m": 24.0,
+      "existing_height_m": 24,
       "utilisation_data": {
         "underuse": 4.3,
         "location_quality": 10,
@@ -2814,7 +2814,7 @@
       "nhle_tier": "MANAGEABLE",
       "nhle_score_penalty": 5,
       "utilisation_score": 5.8,
-      "existing_height_m": 18.0,
+      "existing_height_m": 18,
       "utilisation_data": {
         "underuse": 5.8,
         "location_quality": 10,
@@ -2971,10 +2971,10 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 6.0,
-      "existing_height_m": 18.0,
+      "utilisation_score": 6,
+      "existing_height_m": 18,
       "utilisation_data": {
-        "underuse": 6.0,
+        "underuse": 6,
         "location_quality": 10,
         "plot": 10,
         "floor_gap": 4,
@@ -3088,10 +3088,10 @@
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
-      "utilisation_score": 3.0,
-      "existing_height_m": 24.0,
+      "utilisation_score": 3,
+      "existing_height_m": 24,
       "utilisation_data": {
-        "underuse": 3.0,
+        "underuse": 3,
         "location_quality": 10,
         "plot": 5,
         "floor_gap": 1,
@@ -3278,7 +3278,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 3.7,
-      "existing_height_m": 30.0,
+      "existing_height_m": 30,
       "utilisation_data": {
         "underuse": 3.7,
         "location_quality": 10,
@@ -3994,7 +3994,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 3.7,
-      "existing_height_m": 48.0,
+      "existing_height_m": 48,
       "utilisation_data": {
         "underuse": 3.7,
         "location_quality": 10,
@@ -4072,7 +4072,13 @@
       "nhle_constraint": "navigable",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "D"
+      "context_era": "D",
+      "consolidation_tier": "single",
+      "consolidation_label": "Single Freehold",
+      "consolidation_titles": 1,
+      "consolidation_vacant": 0,
+      "consolidation_leaseholds": 0,
+      "consolidation_vacant_ratio": 0
     },
     {
       "name": "Fleet Street East, EC4",
@@ -4307,7 +4313,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 3.1,
-      "existing_height_m": 24.0,
+      "existing_height_m": 24,
       "utilisation_data": {
         "underuse": 3.1,
         "location_quality": 10,
@@ -4630,7 +4636,7 @@
       "nhle_tier": "MANAGEABLE",
       "nhle_score_penalty": 5,
       "utilisation_score": 4.8,
-      "existing_height_m": 21.0,
+      "existing_height_m": 21,
       "utilisation_data": {
         "underuse": 4.8,
         "location_quality": 10,
@@ -4899,7 +4905,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 4.3,
-      "existing_height_m": 24.0,
+      "existing_height_m": 24,
       "utilisation_data": {
         "underuse": 4.3,
         "location_quality": 10,
@@ -5143,7 +5149,13 @@
       "nhle_constraint": "navigable",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "A"
+      "context_era": "A",
+      "consolidation_tier": "play",
+      "consolidation_label": "Assembly Play",
+      "consolidation_titles": 14,
+      "consolidation_vacant": 10,
+      "consolidation_leaseholds": 33,
+      "consolidation_vacant_ratio": 71
     },
     {
       "name": "Moorgate Station Oversite",
@@ -5214,7 +5226,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 4.8,
-      "existing_height_m": 21.0,
+      "existing_height_m": 21,
       "utilisation_data": {
         "underuse": 4.8,
         "location_quality": 10,
@@ -5359,7 +5371,7 @@
       "nhle_tier": "BLOCKING",
       "nhle_score_penalty": 35,
       "utilisation_score": 5.5,
-      "existing_height_m": 15.0,
+      "existing_height_m": 15,
       "utilisation_data": {
         "underuse": 5.5,
         "location_quality": 10,
@@ -5641,7 +5653,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 4.3,
-      "existing_height_m": 18.0,
+      "existing_height_m": 18,
       "utilisation_data": {
         "underuse": 4.3,
         "location_quality": 10,
@@ -6233,14 +6245,14 @@
           51.507887
         ]
       ],
-      "inspire_area_ratio": 9.0,
+      "inspire_area_ratio": 9,
       "inspire_quality": "suspect",
       "nhle_graded": true,
       "nhle_listed": [],
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 2.1,
-      "existing_height_m": 21.0,
+      "existing_height_m": 21,
       "utilisation_data": {
         "underuse": 2.1,
         "location_quality": 10,
@@ -6329,7 +6341,7 @@
       "nhle_tier": "CLEAN",
       "nhle_score_penalty": 0,
       "utilisation_score": 5.5,
-      "existing_height_m": 12.0,
+      "existing_height_m": 12,
       "utilisation_data": {
         "underuse": 5.5,
         "location_quality": 10,

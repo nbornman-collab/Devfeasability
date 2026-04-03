@@ -456,6 +456,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .chip.mot-4, .chip.mot-5 { background: rgba(239,68,68,.1); color: #dc2626; border-color: rgba(239,68,68,.2); }
 .chip.mot-3 { background: rgba(245,158,11,.1); color: #b45309; border-color: rgba(245,158,11,.2); }
 .chip.mot-2 { background: rgba(245,158,11,.07); color: var(--ink3); }
+.chip.assembly { font-weight: 600; }
+.chip.assembly-easy { background: rgba(22,163,74,.1); color: #16a34a; border-color: rgba(22,163,74,.2); }
+.chip.assembly-play { background: rgba(245,158,11,.1); color: #b45309; border-color: rgba(245,158,11,.2); }
+.chip.assembly-moderate { background: rgba(245,158,11,.07); color: var(--ink3); border-color: rgba(245,158,11,.15); }
+.chip.assembly-complex { background: rgba(239,68,68,.1); color: #dc2626; border-color: rgba(239,68,68,.2); }
 /* Borough colour chips - prominent */
 .chip.bor-southwark,
 .chip.bor-city,
@@ -1275,6 +1280,12 @@ function normaliseSite(s, idx) {
     nhleCount: s.nhle_count||0,
     dataConfidence: computeConfidence(s),
     utilisationScore, utilisationData, utilisationLabel,
+    consolidation: s.consolidation_tier || null,
+    consolidationLabel: s.consolidation_label || null,
+    consolidationTitles: s.consolidation_titles || 0,
+    consolidationVacant: s.consolidation_vacant || 0,
+    consolidationLH: s.consolidation_leaseholds || 0,
+    consolidationVacantRatio: s.consolidation_vacant_ratio || 0,
   };
 }
 
@@ -1448,6 +1459,7 @@ function render() {
       s.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
       s.inCons? '<span class="chip cons">Conservation</span>' : '',
       s.ptal  ? `<span class="chip ptal">PTAL ${s.ptal}</span>` : '',
+      s.consolidation && s.consolidation !== 'single' ? `<span class="chip assembly assembly-${s.consolidation}">🔗 ${s.consolidationTitles} titles · ${s.consolidationVacant} vacant</span>` : '',
     ].filter(Boolean).join('');
     const hasCTA = !!s.t1;
 
