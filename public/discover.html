@@ -632,8 +632,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .mass-close:hover { background: rgba(255,255,255,.2); color: #fff; }
 .mass-nav-bar {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 44px; background: rgba(18,18,18,.96); border-top: 1px solid rgba(255,255,255,.08);
+  flex: 0 0 44px; width: 100%;
+  background: rgba(18,18,18,.96); border-top: 1px solid rgba(255,255,255,.08);
   display: flex; align-items: center; z-index: 20; border-radius: 0 0 12px 12px;
   overflow: hidden;
 }
@@ -2793,16 +2793,6 @@ document.addEventListener('keydown', function(e) {
 <div class="mass-scrim" id="mass-scrim">
   <div class="mass-modal">
     <button class="mass-close" onclick="closeMassPopup();">&times;</button>
-    <!-- Disco nav bar -->
-    <div class="mass-nav-bar">
-      <button class="mass-nav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous site">&#8592;</button>
-      <div class="mass-nav-center">
-        <div class="mass-nav-rank" id="mass-rank"></div>
-        <div class="mass-nav-label" id="mass-nav-label"></div>
-      </div>
-      <button class="mass-nav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next site">&#8594;</button>
-    </div>
-
     <div class="mass-body">
     <!-- Left: 3D canvas + Street View -->
     <div class="mass-canvas">
@@ -2870,6 +2860,15 @@ document.addEventListener('keydown', function(e) {
       <div id="mass-cta"></div>
     </div>
     </div><!-- end mass-body -->
+    <!-- Disco nav bar -->
+    <div class="mass-nav-bar">
+      <button class="mass-nav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous site">&#8592;</button>
+      <div class="mass-nav-center">
+        <div class="mass-nav-rank" id="mass-rank"></div>
+        <div class="mass-nav-label" id="mass-nav-label"></div>
+      </div>
+      <button class="mass-nav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next site">&#8594;</button>
+    </div>
   </div>
 </div>
 </body>
