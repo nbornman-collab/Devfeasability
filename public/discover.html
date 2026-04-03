@@ -645,6 +645,23 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .mass-nav-btn:hover:not(:disabled) { color: #fff; background: rgba(255,255,255,.06); }
 .mass-nav-btn:disabled { opacity: 0.2; cursor: default; }
+.mass-tab-nav {
+  display: flex; align-items: center;
+  border-left: 1px solid rgba(255,255,255,.1);
+  padding: 0 2px;
+}
+.mass-tab-nav-btn {
+  background: none; border: none; color: rgba(255,255,255,.45);
+  font-size: 15px; width: 28px; height: 100%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: color .15s;
+}
+.mass-tab-nav-btn:hover:not(:disabled) { color: #fff; }
+.mass-tab-nav-btn:disabled { opacity: 0.2; cursor: default; }
+.mass-tab-nav-label {
+  font: 500 11px/1 var(--sans); color: rgba(255,255,255,.4);
+  min-width: 42px; text-align: center; letter-spacing: .02em;
+}
 .mass-nav-center {
   flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 1px; overflow: hidden; padding: 0 4px;
@@ -2104,22 +2121,7 @@ function updateMassNavState(idx) {
   if (next) next.disabled = (idx >= total - 1);
 
   var rankEl = document.getElementById('mass-rank');
-  var labelEl = document.getElementById('mass-nav-label');
-
-  if (rankEl && total) rankEl.textContent = '#' + (idx + 1) + ' of ' + total;
-
-  // Show adjacent site name as label (what you'll navigate TO)
-  if (labelEl && FILTERED_SITES) {
-    // Show next site name if going forward, prev if at end
-    var peekIdx = idx < total - 1 ? idx + 1 : idx > 0 ? idx - 1 : -1;
-    var peekSite = peekIdx >= 0 ? FILTERED_SITES[peekIdx] : null;
-    if (peekSite) {
-      var dir = peekIdx > idx ? 'Next' : 'Prev';
-      labelEl.textContent = dir + ': ' + peekSite.name;
-    } else {
-      labelEl.textContent = '';
-    }
-  }
+  if (rankEl && total) rankEl.textContent = (idx + 1) + '/' + total;
 }
 
 function massingScenarios(site) {
@@ -2811,6 +2813,14 @@ document.addEventListener('keydown', function(e) {
           <button class="mass-sc-tab" id="mass-tab-hi" onclick="switchMassScenario('hi')">
             <span class="mass-sc-label">High</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-hi">10F</span>
           </button>
+          <!-- Site nav inline with tabs -->
+          <div class="mass-tab-nav">
+            <button class="mass-tab-nav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous site">&#8592;</button>
+            <div class="mass-tab-nav-label">
+              <span id="mass-rank"></span>
+            </div>
+            <button class="mass-tab-nav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next site">&#8594;</button>
+          </div>
         </div>
         <div class="mass-sc-chip" id="mass-sc-chip">
           <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addf">-</span><span class="mass-sc-chip-lbl">Added floors</span></div>
@@ -2860,15 +2870,6 @@ document.addEventListener('keydown', function(e) {
       <div id="mass-cta"></div>
     </div>
     </div><!-- end mass-body -->
-    <!-- Disco nav bar -->
-    <div class="mass-nav-bar">
-      <button class="mass-nav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous site">&#8592;</button>
-      <div class="mass-nav-center">
-        <div class="mass-nav-rank" id="mass-rank"></div>
-        <div class="mass-nav-label" id="mass-nav-label"></div>
-      </div>
-      <button class="mass-nav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next site">&#8594;</button>
-    </div>
   </div>
 </div>
 </body>
