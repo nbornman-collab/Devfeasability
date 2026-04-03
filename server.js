@@ -239,6 +239,41 @@ app.get('/design', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'design.html'));
 });
 
+// Serve intelligence polygon for a site by name
+app.get('/api/site-polygon', (req, res) => {
+  const siteName = (req.query.name || '').trim();
+  if (!siteName) return res.json({ polygon: null });
+  const fs = require('fs');
+  const libDir = path.join(__dirname, 'public', 'lib');
+  try {
+    const files = fs.readdirSync(libDir).filter(f => f.startsWith('intelligence-') && f.endsWith('.js'));
+    for (const fname of files) {
+      const content = fs.readFileSync(path.join(libDir, fname), 'utf8');
+      // Match site name
+      const nm = content.match(/site:\s*["']([^"']*)["']/); 
+      if (!nm) continue;
+      if (nm[1].trim().toLowerCase() !== siteName.toLowerCase()) continue;
+      // Extract polygon
+      const pm = content.match(/polygon:\s*(\[[\[\]\-\d.,\s]+\])/);
+      if (!pm) return res.json({ polygon: null });
+      const polygon = JSON.parse(pm[1]);
+      // Extract existing height + floors if available
+      const hm = content.match(/existing_height_m:\s*([\d.]+)/);
+      const fm = content.match(/existing_floors:\s*(\d+)/);
+      const pam = content.match(/plot_area_m2:\s*(\d+)/);
+      return res.json({
+        polygon,
+        existing_height_m: hm ? parseFloat(hm[1]) : null,
+        existing_floors: fm ? parseInt(fm[1]) : null,
+        plot_area_m2: pam ? parseInt(pam[1]) : null
+      });
+    }
+    res.json({ polygon: null });
+  } catch (e) {
+    res.json({ polygon: null, error: e.message });
+  }
+});
+
 // Serve mapbox token
 app.get('/api/config', (req, res) => {
   res.json({ mapboxToken: MAPBOX_TOKEN, googleMapsKey: process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI' });
