@@ -1162,5 +1162,77 @@
         "dist_m": 51
       }
     ]
+  },
+  "10 Trinity Square": {
+    "tier": "play",
+    "label": "Assembly Play",
+    "titles_total": 6,
+    "titles_vacant": 2,
+    "titles_occupied": 4,
+    "total_leaseholds": 58,
+    "vacant_ratio": 33
+  },
+  "Aldgate Place, Whitechapel High Street": {
+    "tier": "complex",
+    "label": "Complex Assembly",
+    "titles_total": 11,
+    "titles_vacant": 5,
+    "titles_occupied": 6,
+    "total_leaseholds": 6,
+    "vacant_ratio": 45
+  },
+  "Barts Square, Little Britain": {
+    "tier": "play",
+    "label": "Assembly Play",
+    "titles_total": 6,
+    "titles_vacant": 4,
+    "titles_occupied": 2,
+    "total_leaseholds": 96,
+    "vacant_ratio": 67
+  },
+  "Crown Place, Earl Street": {
+    "tier": "single",
+    "label": "Single Freehold",
+    "titles_total": 0,
+    "titles_vacant": 0,
+    "titles_occupied": 0,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0
+  },
+  "Fenchurch Place, EC3": {
+    "tier": "complex",
+    "label": "Complex Assembly",
+    "titles_total": 7,
+    "titles_vacant": 3,
+    "titles_occupied": 4,
+    "total_leaseholds": 25,
+    "vacant_ratio": 43
+  },
+  "Holborn Viaduct Development Site": {
+    "tier": "complex",
+    "label": "Complex Assembly",
+    "titles_total": 10,
+    "titles_vacant": 3,
+    "titles_occupied": 7,
+    "total_leaseholds": 27,
+    "vacant_ratio": 30
+  },
+  "Land at Royal Mint Street": {
+    "tier": "play",
+    "label": "Assembly Play",
+    "titles_total": 10,
+    "titles_vacant": 5,
+    "titles_occupied": 5,
+    "total_leaseholds": 22,
+    "vacant_ratio": 50
+  },
+  "Norton Folgate, Spitalfields": {
+    "tier": "single",
+    "label": "Single Freehold",
+    "titles_total": 1,
+    "titles_vacant": 0,
+    "titles_occupied": 1,
+    "total_leaseholds": 0,
+    "vacant_ratio": 0
   }
 }

@@ -30,7 +30,7 @@
       },
       "desc": "Liverpool Street station supersite",
       "deliveryFlag": "station-oversite",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -481,7 +481,7 @@
         "inBrownfield": false
       },
       "desc": "GLA layer 108 - Norton Folgate allocation",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": true,
         "conservation_area_name": "Elder Street",
@@ -754,7 +754,13 @@
       "nhle_constraint": "navigable",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "A"
+      "context_era": "A",
+      "consolidation_tier": "single",
+      "consolidation_label": "Single Freehold",
+      "consolidation_titles": 1,
+      "consolidation_vacant": 0,
+      "consolidation_leaseholds": 0,
+      "consolidation_vacant_ratio": 0
     },
     {
       "name": "Stone House and 128-170 Bishopsgate",
@@ -785,7 +791,7 @@
         "inBrownfield": false
       },
       "desc": "4000m² office site with planning context for 30F/120m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": true,
         "conservation_area_name": "Bishopsgate",
@@ -1153,7 +1159,7 @@
         "inBrownfield": false
       },
       "desc": "GLA layer 108 - Tower Gateway cluster",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": true,
         "conservation_area_name": "Trinity Square",
@@ -1449,7 +1455,13 @@
       "nhle_constraint": "blocking",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "A"
+      "context_era": "A",
+      "consolidation_tier": "play",
+      "consolidation_label": "Assembly Play",
+      "consolidation_titles": 6,
+      "consolidation_vacant": 2,
+      "consolidation_leaseholds": 58,
+      "consolidation_vacant_ratio": 33
     },
     {
       "name": "Sugar Quay, Lower Thames Street",
@@ -1480,7 +1492,7 @@
         "inBrownfield": false
       },
       "desc": "5000m² office site with planning context for 22F/90m - strong off-market acquisition signal. A credible development case with manageable constraints.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -1856,7 +1868,7 @@
         "inBrownfield": false
       },
       "desc": "GLA layer 108 - Smithfield/Barbican",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -2199,7 +2211,13 @@
       "nhle_constraint": "navigable",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "A"
+      "context_era": "A",
+      "consolidation_tier": "play",
+      "consolidation_label": "Assembly Play",
+      "consolidation_titles": 6,
+      "consolidation_vacant": 4,
+      "consolidation_leaseholds": 96,
+      "consolidation_vacant_ratio": 67
     },
     {
       "name": "Curtain Road, Worship Street",
@@ -2230,7 +2248,7 @@
         "inBrownfield": false
       },
       "desc": "3500m² office site with potential to 12F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": true,
         "conservation_area_name": "South Shoreditch",
@@ -2343,7 +2361,7 @@
         "inBrownfield": false
       },
       "desc": "GLA layer 108 - Moorgate cluster",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": true,
         "conservation_area_name": "Sun Street",
@@ -2410,7 +2428,13 @@
       "nhle_constraint": "manageable",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "D"
+      "context_era": "D",
+      "consolidation_tier": "single",
+      "consolidation_label": "Single Freehold",
+      "consolidation_titles": 1,
+      "consolidation_vacant": 0,
+      "consolidation_leaseholds": 0,
+      "consolidation_vacant_ratio": 0
     },
     {
       "name": "Ocean House, Little Moorfields",
@@ -2441,7 +2465,7 @@
         "inBrownfield": false
       },
       "desc": "4500m² office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -2708,7 +2732,7 @@
         "inBrownfield": false
       },
       "desc": "GLA layer 108 - Aldgate cluster",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -2889,7 +2913,7 @@
         "inBrownfield": false
       },
       "desc": "8000m² mixed-use site with potential to 18F - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -3045,7 +3069,13 @@
       "nhle_constraint": "navigable",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "B"
+      "context_era": "B",
+      "consolidation_tier": "play",
+      "consolidation_label": "Assembly Play",
+      "consolidation_titles": 10,
+      "consolidation_vacant": 5,
+      "consolidation_leaseholds": 22,
+      "consolidation_vacant_ratio": 50
     },
     {
       "name": "Aldgate Place, Whitechapel High Street",
@@ -3076,7 +3106,7 @@
         "inBrownfield": false
       },
       "desc": "1.0ha mixed-use site with planning context for 22F/90m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": true,
         "conservation_area_name": "Whitechapel High Street",
@@ -3168,7 +3198,13 @@
       "nhle_constraint": "blocking",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "C"
+      "context_era": "C",
+      "consolidation_tier": "complex",
+      "consolidation_label": "Complex Assembly",
+      "consolidation_titles": 11,
+      "consolidation_vacant": 5,
+      "consolidation_leaseholds": 6,
+      "consolidation_vacant_ratio": 45
     },
     {
       "name": "Fenchurch Place, EC3",
@@ -3199,7 +3235,7 @@
         "inBrownfield": false
       },
       "desc": "5000m² office site with planning context for 25F/100m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -3376,7 +3412,13 @@
       "nhle_constraint": "navigable",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "B"
+      "context_era": "B",
+      "consolidation_tier": "complex",
+      "consolidation_label": "Complex Assembly",
+      "consolidation_titles": 7,
+      "consolidation_vacant": 3,
+      "consolidation_leaseholds": 25,
+      "consolidation_vacant_ratio": 43
     },
     {
       "name": "100 Leadenhall Street",
@@ -3407,7 +3449,7 @@
         "inBrownfield": false
       },
       "desc": "City cluster - Leadenhall corridor",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -4109,7 +4151,7 @@
         "inBrownfield": false
       },
       "desc": "Fleet Street corridor - media/legal cluster",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": true,
         "conservation_area_name": "Fleet Street",
@@ -4582,7 +4624,7 @@
         "inBrownfield": false
       },
       "desc": "4000m² office site with potential to 12F - strong off-market acquisition signal. A credible development case with manageable constraints.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -4750,7 +4792,13 @@
       "nhle_constraint": "navigable",
       "nhle_verified": true,
       "nhle_date": "2026-04-01",
-      "context_era": "B"
+      "context_era": "B",
+      "consolidation_tier": "complex",
+      "consolidation_label": "Complex Assembly",
+      "consolidation_titles": 10,
+      "consolidation_vacant": 3,
+      "consolidation_leaseholds": 27,
+      "consolidation_vacant_ratio": 30
     },
     {
       "name": "Cannon Street Station Oversite",
@@ -4782,7 +4830,7 @@
       },
       "desc": "TfL oversite - station air rights",
       "deliveryFlag": "station-oversite",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -5187,7 +5235,7 @@
       },
       "desc": "5000m² office site with planning context for 20F/80m - strong off-market acquisition signal. Scoring puts this in the top tier for the borough.",
       "deliveryFlag": "station-oversite",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -5351,7 +5399,7 @@
         "inBrownfield": false
       },
       "desc": "Former meat market - museum/mixed-use",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": true,
         "conservation_area_name": "Smithfield",
@@ -5641,7 +5689,7 @@
         "inBrownfield": false
       },
       "desc": "3500m² office site with potential to 11F - strong off-market acquisition signal. A credible development case with manageable constraints.",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": false
@@ -6072,7 +6120,7 @@
         "inBrownfield": false
       },
       "desc": "GLA layer 108 - Blackfriars gateway",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": true,
@@ -6326,7 +6374,7 @@
         "inBrownfield": false
       },
       "desc": "GLA layer 108 - Holborn residential",
-      "max_floors": 7,
+      "max_floors": 10,
       "planning_realm": {
         "conservation_area": false,
         "article4": true,
