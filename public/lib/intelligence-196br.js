@@ -3,7 +3,7 @@ const SITE_INTELLIGENCE = {
   // Polygon: manually derived ~20x24m bbox (TIER 3 - needs OS NGD upgrade via contractor)
   // INSPIRE parcels at this address are fragmented individual commercial units, not whole-building title
   polygon: [[-0.104309,51.504771],[-0.104021,51.504771],[-0.104021,51.504987],[-0.104309,51.504987],[-0.104309,51.504771]],
-  site: '196 Blackfriars Road',
+  site: "196 Blackfriars Road",
   site_name: '196 Blackfriars Road',
   address: '196 Blackfriars Road, SE1 8NJ',
   lat: 51.504879,

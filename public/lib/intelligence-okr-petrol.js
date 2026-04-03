@@ -3,7 +3,7 @@
 // Polygon: OSM way 74866525, centroid=[-0.079416,51.489889]
 const SITE_INTELLIGENCE = {
   polygon: [[-0.079606, 51.489735], [-0.079226, 51.489735], [-0.079226, 51.490043], [-0.079606, 51.490043], [-0.079606, 51.489735]],
-  site: 'Former Petrol Station, 233-247 Old Kent Road',
+  site: "Former Petrol Station, 233-247 Old Kent Road",
   borough: 'Southwark',
   use: 'commercial',
   address: '233-247 Old Kent Road, SE1 5EL',

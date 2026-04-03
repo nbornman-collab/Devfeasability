@@ -9,7 +9,7 @@ const SITE_INTELLIGENCE = {
     secondary_setback_m: 0.0,
     notes: 'Primary: Southwark Street south facade (CA, heritage frontage). Secondary: Stoney Street rear. Hold line north - Borough Market CA context. 1.5m step above existing parapet per RETAIN_AND_ADAPT protocol.'
   },
-  site: '24 Southwark Street',
+  site: "24 Southwark Street",
   site_name: '24 Southwark Street',
   address: '24 Southwark Street, SE1 0SW',
   lat: 51.504909,

@@ -3,7 +3,7 @@
 // Polygon: OSM way 1480335521, centroid=[-0.083048,51.456758]
 const SITE_INTELLIGENCE = {
   polygon: [[-0.084104, 51.455903], [-0.081992, 51.455903], [-0.081992, 51.457613], [-0.084104, 51.457613], [-0.084104, 51.455903]],
-  site: 'Dulwich Community Hospital',
+  site: "Dulwich Community Hospital",
   borough: 'Southwark',
   use: 'commercial',
   address: 'East Dulwich Grove, SE22 8PT',

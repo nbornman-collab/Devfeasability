@@ -4,7 +4,7 @@
 // Polygon: OSM way 188589437, centroid=[-0.068178,51.443454]
 const SITE_INTELLIGENCE = {
   polygon: [[-0.068625, 51.443092], [-0.067731, 51.443092], [-0.067731, 51.443816], [-0.068625, 51.443816], [-0.068625, 51.443092]],
-  site: 'The Grove Tavern, 520 Lordship Lane',
+  site: "The Grove Tavern, 520 Lordship Lane",
   borough: 'Southwark',
   use: 'commercial',
   address: '520 Lordship Lane, East Dulwich, SE22 8LF',
