@@ -123,8 +123,21 @@ async function getOSMPolygon(lat, lng, address) {
 
       if (ways.length === 0) continue;
 
+      // Filter out non-building ways (parks, green space, etc)
+      const buildingWays = ways.filter(w => {
+        const tags = w.tags || {};
+        // Must have building tag OR be specifically tagged as a development site
+        if (tags.building) return true;
+        if (tags.landuse === 'construction' || tags.landuse === 'brownfield') return true;
+        // Reject green space, parks, water
+        if (tags.leisure || tags.landuse === 'grass' || tags.landuse === 'park' ||
+            tags.landuse === 'recreation_ground' || tags.natural) return false;
+        return true;
+      });
+      const usableWays = buildingWays.length > 0 ? buildingWays : ways;
+
       // Pick the largest way by node count (likely the main building)
-      const bestWay = ways.sort((a, b) => (b.nodes || []).length - (a.nodes || []).length)[0];
+      const bestWay = usableWays.sort((a, b) => (b.nodes || []).length - (a.nodes || []).length)[0];
       const coords = bestWay.nodes
         .map(nid => nodeMap[nid])
         .filter(Boolean)
@@ -305,7 +318,7 @@ async function run() {
       // 3. Fallback: generate bbox polygon from plot area
       if (!polygon) {
         const area = site.plotM2 || 500;
-        const side = Math.sqrt(area);
+        const side = Math.min(Math.sqrt(area), 150); // cap at 150m side to avoid runaway bbox
         const latD = (side / 2) / 111320;
         const lngD = (side / 2) / (111320 * Math.cos(site.lat * Math.PI / 180));
         polygon = [

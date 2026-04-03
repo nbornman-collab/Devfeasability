@@ -2187,10 +2187,10 @@ function updateMassScChip(sc, site) {
   var addNEl = document.getElementById('chip-addnia');
   var htEl = document.getElementById('chip-height');
   var costEl = document.getElementById('chip-cost');
-  if (addFEl) addFEl.textContent = '+' + sc.addedF + 'F';
-  if (addNEl) addNEl.textContent = '+' + (sc.addedNIA || 0).toLocaleString() + 'm²';
-  if (htEl) htEl.textContent = '~' + totalH + 'm';
-  if (costEl) costEl.textContent = '£' + costM + 'M';
+  if (addFEl) addFEl.textContent = (sc.addedF > 0 ? '+' : '') + sc.addedF + 'F';
+  if (addNEl) addNEl.textContent = '+' + Math.max(0, sc.addedNIA || 0).toLocaleString() + 'm²';
+  if (htEl) htEl.textContent = '~' + Math.abs(totalH) + 'm';
+  if (costEl) costEl.textContent = '£' + Math.abs(costM) + 'M';
 
   chip.classList.remove('visible');
   setTimeout(function() { chip.classList.add('visible'); }, 20);
