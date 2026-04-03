@@ -106,11 +106,35 @@
   <!-- 3. Split — clean -->
   <div class="mark">
     <svg width="72" height="84" viewBox="0 0 72 84">
-      <rect x="0" y="0" width="72" height="38" fill="none" stroke="#111" stroke-width="5"/>
-      <rect x="0" y="42" width="72" height="42" fill="#111"/>
+      <rect x="0" y="0" width="72" height="38" fill="none" stroke="#111" stroke-width="8"/>
+      <rect x="0" y="46" width="72" height="38" fill="#111"/>
     </svg>
     <div class="name">The Split</div>
     <div class="label">Potential above / Existing below</div>
+  </div>
+
+  <!-- 3b. Split with arch top -->
+  <div class="mark">
+    <svg width="72" height="90" viewBox="0 0 72 90">
+      <!-- Top half: arch outline (fat stroke) -->
+      <path d="M0 44 L0 8 Q0 0 8 0 L64 0 Q72 0 72 8 L72 44" fill="none" stroke="#111" stroke-width="8" stroke-linejoin="round"/>
+      <!-- Bottom half: solid -->
+      <rect x="0" y="50" width="72" height="40" fill="#111"/>
+    </svg>
+    <div class="name">Split + Arch</div>
+    <div class="label">Rounded corners on top outline</div>
+  </div>
+
+  <!-- 3c. Split — arch top, semicircle crown -->
+  <div class="mark">
+    <svg width="72" height="90" viewBox="0 0 72 90">
+      <!-- Top: U-shape outline with rounded top (arch) - fat -->
+      <path d="M0 44 L0 22 Q0 0 36 0 Q72 0 72 22 L72 44" fill="none" stroke="#111" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- Bottom half: solid -->
+      <rect x="0" y="50" width="72" height="40" fill="#111"/>
+    </svg>
+    <div class="name">Split + Dome</div>
+    <div class="label">Semicircle crown / dome outline</div>
   </div>
 
   <!-- 4. Slot — clean -->
@@ -149,9 +173,9 @@
   </div>
 
   <div class="mark" style="flex-direction:row;gap:20px;justify-content:flex-start;padding:32px 40px;">
-    <svg width="36" height="42" viewBox="0 0 72 84">
-      <rect x="0" y="0" width="72" height="38" fill="none" stroke="#111" stroke-width="5"/>
-      <rect x="0" y="42" width="72" height="42" fill="#111"/>
+    <svg width="36" height="45" viewBox="0 0 72 90">
+      <path d="M0 44 L0 22 Q0 0 36 0 Q72 0 72 22 L72 44" fill="none" stroke="#111" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"/>
+      <rect x="0" y="50" width="72" height="40" fill="#111"/>
     </svg>
     <span style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#111">headroom</span>
   </div>
