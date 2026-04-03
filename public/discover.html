@@ -662,6 +662,36 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   font: 500 11px/1 var(--sans); color: rgba(255,255,255,.4);
   min-width: 42px; text-align: center; letter-spacing: .02em;
 }
+.mass-sitenav {
+  position: absolute; top: 16px; right: 60px; z-index: 20;
+  display: flex; align-items: center; gap: 0;
+  background: rgba(0,0,0,.75); border: 1px solid rgba(255,255,255,.18);
+  border-radius: 8px; overflow: hidden;
+}
+.mass-sitenav-btn {
+  background: none; border: none; color: #fff;
+  font-size: 20px; width: 44px; height: 40px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.mass-sitenav-btn:hover:not(:disabled) { background: rgba(255,255,255,.12); }
+.mass-sitenav-btn:disabled { opacity: 0.25; cursor: default; }
+.mass-sitenav-label {
+  font: 600 12px/1 var(--sans); color: rgba(255,255,255,.7);
+  padding: 0 10px; min-width: 52px; text-align: center;
+  border-left: 1px solid rgba(255,255,255,.12);
+  border-right: 1px solid rgba(255,255,255,.12);
+}
+.mass-use-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.mass-use-chip {
+  font: 600 10px/1 var(--sans); letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px; border: 1px solid;
+}
+.mass-use-chip.resi { background: rgba(196,145,90,.15); color: #c4915a; border-color: rgba(196,145,90,.3); }
+.mass-use-chip.office { background: rgba(91,122,157,.15); color: #7ba3c9; border-color: rgba(91,122,157,.3); }
+.mass-use-chip.mixed { background: rgba(160,124,158,.15); color: #c09bbf; border-color: rgba(160,124,158,.3); }
+.mass-use-chip.industrial { background: rgba(122,122,150,.15); color: #9e9ebc; border-color: rgba(122,122,150,.3); }
+.mass-use-chip.adaptive { background: rgba(184,132,92,.15); color: var(--accent); border-color: rgba(184,132,92,.3); }
 .mass-nav-center {
   flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 1px; overflow: hidden; padding: 0 4px;
@@ -2056,6 +2086,13 @@ function openMassPopup(site) {
   var vEl = document.getElementById('mass-verdict');
   vEl.textContent = vl; vEl.className = 'mass-verdict ' + vc;
 
+  // Use type chips
+  var useChipsEl = document.getElementById('mass-use-chips');
+  if (useChipsEl) {
+    var useChips = buildUseChips(site);
+    useChipsEl.innerHTML = useChips;
+  }
+
   updateMassMetrics(base, site);
   updateMassScenarioTabs(scenarios);
   setTimeout(function() { updateMassScChip(base, site); }, 300);
@@ -2614,27 +2651,70 @@ function clearMassLabels() {
   _massLabels = [];
 }
 
+function buildUseChips(site) {
+  var uses = [];
+  var ut = (site.useType || '').toLowerCase();
+  var name = (site.name || '').toLowerCase();
+  var desc = (site.desc || '').toLowerCase();
+
+  // Derive possible uses from site data
+  if (ut === 'resi' || ut === 'residential' || /residential|housing|resi|btr|pbsa|homes/.test(name+desc)) {
+    uses.push({label:'Residential', cls:'resi'});
+  }
+  if (ut === 'office' || ut === 'commercial' || /office|commercial|workspace/.test(name+desc)) {
+    uses.push({label:'Office', cls:'office'});
+  }
+  if (ut === 'mixed' || /mixed/.test(name+desc) || (uses.length === 0 && site.inCAZ)) {
+    if (!uses.find(function(u){return u.cls==='resi';})) uses.push({label:'Residential', cls:'resi'});
+    if (!uses.find(function(u){return u.cls==='office';})) uses.push({label:'Office', cls:'office'});
+  }
+  if (ut === 'industrial' || /industrial|depot|warehouse|garage|trading estate|sidings|factory/.test(name+desc)) {
+    uses.push({label:'Industrial', cls:'industrial'});
+    uses.push({label:'Adaptive Reuse', cls:'adaptive'});
+  }
+  // Always suggest resi if OA and nothing else set
+  if (uses.length === 0) {
+    if (site.inOA || site.inCAZ) {
+      uses.push({label:'Residential', cls:'resi'});
+      uses.push({label:'Office', cls:'office'});
+    } else {
+      uses.push({label:'Mixed-use', cls:'mixed'});
+    }
+  }
+
+  return uses.map(function(u) {
+    return '<span class="mass-use-chip ' + u.cls + '">' + u.label + '</span>';
+  }).join('');
+}
+
 function addMassLabels(map, site, sc, coords, existH, totalH, existF) {
   clearMassLabels();
   var c = polyCentroid(coords);
   var potFloors = sc.floors;
 
-  // Project heights to pixel offsets relative to ground at centroid
-  // At pitch 60deg, zoom ~17.5: ~1 floor ≈ 8px vertical
-  var pxPerM = 2.2; // approximate at typical zoom/pitch
-  var totalPx = Math.round(totalH * pxPerM);
-  var existPx = Math.round(existH * pxPerM);
+  // Use map camera state to project height to pixels
+  function heightToPx(hM) {
+    var zoom = map.getZoom();
+    var pitch = map.getPitch() * Math.PI / 180;
+    var lat = c[1];
+    var mpp = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom);
+    return Math.round((hM / mpp) * Math.cos(pitch));
+  }
 
-  // Green label: pinned to top of mass
+  // Green label at top of proposed mass
+  var topPx = heightToPx(totalH);
   var potMarker = new mapboxgl.Marker({
-    element: makeMassLabel(Math.round(totalH) + 'm · ' + potFloors + 'F', '#059669', true)
-  }).setLngLat(c).setOffset([0, -totalPx]).addTo(map);
+    element: makeMassLabel(Math.round(totalH) + 'm · ' + potFloors + 'F', '#059669', true),
+    anchor: 'bottom'
+  }).setLngLat(c).setOffset([0, -topPx]).addTo(map);
   _massLabels.push(potMarker);
 
-  // White label: existing height (was red, now white)
+  // White label at existing height
+  var exPx = heightToPx(existH);
   var existMarker = new mapboxgl.Marker({
-    element: makeMassLabel(Math.round(existH) + 'm · ' + existF + 'F existing', '#ffffff', false)
-  }).setLngLat(c).setOffset([0, -existPx]).addTo(map);
+    element: makeMassLabel(Math.round(existH) + 'm · ' + existF + 'F existing', 'rgba(255,255,255,0.7)', false),
+    anchor: 'bottom'
+  }).setLngLat(c).setOffset([0, -exPx]).addTo(map);
   _massLabels.push(existMarker);
 }
 
@@ -2797,6 +2877,12 @@ document.addEventListener('keydown', function(e) {
     <div class="mass-body">
     <!-- Left: 3D canvas + Street View -->
     <div class="mass-canvas">
+      <!-- Standalone site nav -->
+      <div class="mass-sitenav" id="mass-sitenav">
+        <button class="mass-sitenav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous">&#8592;</button>
+        <div class="mass-sitenav-label" id="mass-rank">1 / 154</div>
+        <button class="mass-sitenav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next">&#8594;</button>
+      </div>
       <div class="mass-map-wrap" id="mass-3d"></div>
       <div class="mass-sv-wrap" id="mass-sv"></div>
 
@@ -2812,14 +2898,7 @@ document.addEventListener('keydown', function(e) {
           <button class="mass-sc-tab" id="mass-tab-hi" onclick="switchMassScenario('hi')">
             <span class="mass-sc-label">High</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-hi">10F</span>
           </button>
-          <!-- Site nav inline with tabs -->
-          <div class="mass-tab-nav">
-            <button class="mass-tab-nav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous site">&#8592;</button>
-            <div class="mass-tab-nav-label">
-              <span id="mass-rank"></span>
-            </div>
-            <button class="mass-tab-nav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next site">&#8594;</button>
-          </div>
+
         </div>
         <div class="mass-sc-chip" id="mass-sc-chip">
           <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addf">-</span><span class="mass-sc-chip-lbl">Added floors</span></div>
@@ -2845,6 +2924,7 @@ document.addEventListener('keydown', function(e) {
         <span class="mass-score-label" id="mass-score-lbl">/100</span>
       </div>
       <div id="mass-verdict" class="mass-verdict green"></div>
+      <div class="mass-use-chips" id="mass-use-chips"></div>
 
       <div class="mass-divider"></div>
 
