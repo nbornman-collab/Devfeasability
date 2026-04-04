@@ -552,6 +552,90 @@ body { min-height: 100%; background: var(--bg-dark); overflow-x: hidden; }
 /* Mapbox attribution */
 .mapboxgl-ctrl-attrib { display: none !important; }
 .mapboxgl-ctrl-logo { display: none !important; }
+
+/* ═══════════════════════════════════════
+   MOBILE — ≤768px
+   ═══════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Nav */
+  .nav { height: 48px; padding: 0 16px; }
+  .nav-links { display: none; }
+  .nav-logo { font-size: 15px; }
+  .nav-logo-sub { display: none; }
+
+  /* Hero */
+  .hero-content { padding: 100px 20px 60px; }
+  .hero-label { font-size: 9px; letter-spacing: .15em; margin-bottom: 12px; }
+  .hero-heading { font-size: clamp(28px,8vw,48px); margin-bottom: 14px; }
+  .hero-sub { font-size: 15px; line-height: 1.6; max-width: 100%; margin-bottom: 24px; }
+  .hero-cta-row { flex-direction: column; gap: 10px; }
+  .hero-cta-row a { text-align: center; padding: 14px 20px; font-size: 12px; }
+
+  /* Stats bar */
+  .hero-stats-bar { padding: 16px; gap: 0; }
+  .hero-stat-item { padding: 0 8px; }
+  .hero-stat-item:nth-child(n+4) { display: none; }
+  .hero-stat-val { font-size: 22px; }
+  .hero-stat-label { font-size: 8px; }
+  .hero-stat-note { display: none; }
+
+  /* DPA section */
+  .dpa-strip { flex-direction: column; gap: 8px; }
+  .dpa-letter { font-size: 36px; width: 36px; }
+  .dpa-name { font-size: 16px; }
+  .dpa-desc { font-size: 14px; }
+
+  /* Tension section */
+  .tension-section { padding: 60px 20px; }
+  .tension-heading { font-size: clamp(28px,7vw,48px); }
+  .tension-body { font-size: 16px; }
+
+  /* DPA framework - stack columns */
+  .dpa-section { padding: 60px 20px; }
+  .dpa-section-sub { font-size: 16px; margin-bottom: 40px; }
+  .dpa-framework-grid { grid-template-columns: 1fr; }
+  .dpa-fw-col { padding: 32px 24px; }
+  .dpa-fw-title { font-size: 24px; }
+  .dpa-fw-body { font-size: 15px; }
+  .dpa-fw-watermark { font-size: 120px; }
+
+  /* Proof section */
+  .proof-section { padding: 60px 20px; }
+  .proof-address { font-size: clamp(28px,7vw,48px); }
+  .proof-sub { font-size: 16px; }
+  .proof-metrics { grid-template-columns: 1fr 1fr; }
+  .proof-metric { padding: 20px 16px; }
+  .proof-metric-val { font-size: 28px; }
+  .proof-metric-label { font-size: 9px; }
+
+  /* Pricing tiers - stack */
+  .tiers-section { padding: 60px 20px; }
+  .tiers-grid { grid-template-columns: 1fr; gap: 14px; }
+  .tier-card { padding: 28px 24px; }
+  .tier-price { font-size: 28px; }
+  .tier-desc { font-size: 15px; }
+  .tier-items li { font-size: 15px; }
+
+  /* PD section */
+  .pd-section { padding: 60px 20px; }
+  .pd-inner { grid-template-columns: 1fr; gap: 32px; }
+  .pd-heading { font-size: clamp(24px,6vw,36px); }
+  .pd-body { font-size: 15px; }
+  .pd-feature-list { grid-template-columns: 1fr; }
+  .pd-feature-title { font-size: 16px; }
+  .pd-feature-desc { font-size: 14px; }
+  .pd-search-row { flex-direction: column; }
+  .pd-input { font-size: 15px; padding: 12px 14px; }
+
+  /* Footer */
+  .footer { padding: 40px 20px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+
+  /* General */
+  .section-fillet { border-radius: 20px 20px 0 0; margin-top: -20px; }
+  .reveal { transform: translateY(24px); }
+}
 </style>
 </head>
 <body>
