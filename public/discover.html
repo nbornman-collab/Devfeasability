@@ -2669,7 +2669,10 @@ function fetchOSMBuilding(lat, lng, address, cb) {
 }
 
 function shouldSuppressMassing(site, intelPoly) {
-  if (site.credibleSite === false) return true;
+  var flags = site.siteLegitimacyFlags || [];
+  var hardFlags = ['open_space_named_parcel', 'transport_or_station_land', 'strategic_civic_transport_signal', 'city_open_space'];
+  if (flags.some(function(f) { return hardFlags.indexOf(f) !== -1; })) return true;
+
   var text = ((site.name || '') + ' ' + (site.address || '')).toLowerCase();
   if (/(churchyard|church yard|plaza|piazza|forecourt|courtyard|gardens|square|walk|passage)/.test(text)) return true;
 
