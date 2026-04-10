@@ -1636,7 +1636,29 @@ async function loadSites() {
     ...toArr(sw).map(s  => normaliseSite({...s, borough: s.borough||'Southwark'}, idx++)),
     ...toArr(city).map(s => normaliseSite({...s, borough: s.borough||'City of London'}, idx++)),
     ...toArr(hack).map(s => normaliseSite({...s, borough: s.borough||'Hackney'}, idx++)),
-  ].sort((a,b) => {
+  ];
+
+  try {
+    const cityOpen = await fetch('/api/city-open-spaces').then(r=>r.json());
+    const features = cityOpen && cityOpen.features ? cityOpen.features : [];
+    ALL_SITES = ALL_SITES.map(function(site) {
+      if ((site.borough || '').toLowerCase() !== 'city of london') return site;
+      var hit = features.some(function(f) { return pointInGeometry([site.lng, site.lat], f.geometry); });
+      if (!hit) return site;
+      var flags = (site.siteLegitimacyFlags || []).slice();
+      if (flags.indexOf('city_open_space') === -1) flags.push('city_open_space');
+      return Object.assign({}, site, {
+        siteLegitimacyPenalty: (site.siteLegitimacyPenalty || 0) + 40,
+        siteLegitimacyFlags: flags,
+        credibleSite: false,
+        score: Math.max(0, (site.score || 0) - 40)
+      });
+    });
+  } catch (e) {
+    console.warn('City open space enrichment failed', e);
+  }
+
+  ALL_SITES = ALL_SITES.sort((a,b) => {
     if (b.score !== a.score) return b.score - a.score;            // 1. Score desc
     if (b.gdvEst !== a.gdvEst) return b.gdvEst - a.gdvEst;       // 2. GDV desc
     if (b.plotM2 !== a.plotM2) return b.plotM2 - a.plotM2;       // 3. Plot size desc
@@ -2551,6 +2573,17 @@ function pointInPoly(point, coords) {
     if (intersect) inside = !inside;
   }
   return inside;
+}
+
+function pointInGeometry(point, geom) {
+  if (!geom || !geom.type || !geom.coordinates) return false;
+  if (geom.type === 'Polygon') return pointInPoly(point, geom.coordinates[0]);
+  if (geom.type === 'MultiPolygon') {
+    for (var i = 0; i < geom.coordinates.length; i++) {
+      if (pointInPoly(point, geom.coordinates[i][0])) return true;
+    }
+  }
+  return false;
 }
 
 // Get a stable polygon anchor. Use area-weighted centroid first, then safe fallbacks.

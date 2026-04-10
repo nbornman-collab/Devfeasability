@@ -274,6 +274,24 @@ app.get('/api/site-polygon', (req, res) => {
   }
 });
 
+// Free suppression layer: City of London statutory open spaces
+let _cityOpenSpacesCache = { ts: 0, data: null };
+app.get('/api/city-open-spaces', async (req, res) => {
+  try {
+    const now = Date.now();
+    if (_cityOpenSpacesCache.data && (now - _cityOpenSpacesCache.ts) < 24 * 60 * 60 * 1000) {
+      return res.json(_cityOpenSpacesCache.data);
+    }
+    const url = 'https://www.mapping.cityoflondon.gov.uk/arcgis/services/INSPIRE/MapServer/WFSServer?service=WFS&version=2.0.0&request=GetFeature&typeNames=INSPIRE:Statutory_Open_Spaces&outputFormat=geojson';
+    const r = await fetch(url);
+    const d = await r.json();
+    _cityOpenSpacesCache = { ts: now, data: d };
+    res.json(d);
+  } catch (e) {
+    res.status(500).json({ error: e.message, features: [] });
+  }
+});
+
 // Serve mapbox token
 app.get('/api/config', (req, res) => {
   res.json({ mapboxToken: MAPBOX_TOKEN, googleMapsKey: process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyBJvGIHywOe1tLWcBh0O0Hc0KDd6RUBKHI' });
