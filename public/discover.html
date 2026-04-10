@@ -1456,6 +1456,40 @@ function keyConstraint(s, era, sensitivity, heritTier) {
   return null;
 }
 
+function assessSiteLegitimacy(s) {
+  const text = ((s.name || '') + ' ' + (s.address || '') + ' ' + (s.desc || '') + ' ' + (s.notes || '')).toLowerCase();
+  const owner = (s.owner || '').toLowerCase();
+  const penalties = [];
+  let penalty = 0;
+
+  const openSpaceTerms = /(churchyard|church yard|plaza|square|gardens|garden|yard|court|walk|passage|forecourt|piazza|courtyard)/i;
+  const civicTerms = /(cathedral|church|guildhall|market|memorial|public realm|open space|churchyard)/i;
+  const hasStreetNumber = /\b\d+[a-z]?([-–]\d+[a-z]?)?\b/.test((s.address || '') + ' ' + (s.name || ''));
+
+  if (openSpaceTerms.test(text) && !hasStreetNumber) {
+    penalty += 28;
+    penalties.push('open_space_named_parcel');
+  }
+  if (civicTerms.test(text)) {
+    penalty += 18;
+    penalties.push('civic_or_public_realm_context');
+  }
+  if (/church|cathedral|diocese|bishop|dean and chapter/.test(owner)) {
+    penalty += 14;
+    penalties.push('institutional_owner_signal');
+  }
+  if ((s.hectares || 0) < 0.03 && !s.brownfield && !hasStreetNumber) {
+    penalty += 10;
+    penalties.push('tiny_non_brownfield_plot');
+  }
+
+  return {
+    penalty,
+    flags: penalties,
+    credible: penalty < 25
+  };
+}
+
 function normaliseSite(s, idx) {
   const borough = s.borough || 'London';
   const ptal = s.flags?.ptal || s.ptal || null;
@@ -1486,7 +1520,8 @@ function normaliseSite(s, idx) {
   // Layer C — factored score
   const utilisationScore = s.utilisation_score != null ? s.utilisation_score : 5.0;
   const rawScore = parseInt(s.score)||0;
-  const score = computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore);
+  const legitimacy = assessSiteLegitimacy(s);
+  const score = Math.max(0, computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore) - legitimacy.penalty);
 
   const hectares = s.hectares || (s.plot ? s.plot / 10000 : 0.05);
   const plotM2 = Math.round(hectares * 10000);
@@ -1529,6 +1564,9 @@ function normaliseSite(s, idx) {
     nhleCount: s.nhle_count||0,
     dataConfidence: computeConfidence(s),
     utilisationScore, utilisationData, utilisationLabel,
+    siteLegitimacyPenalty: legitimacy.penalty,
+    siteLegitimacyFlags: legitimacy.flags,
+    credibleSite: legitimacy.credible,
     consolidation: s.consolidation_tier || null,
     consolidationLabel: s.consolidation_label || null,
     consolidationTitles: s.consolidation_titles || 0,
@@ -2588,6 +2626,27 @@ function fetchOSMBuilding(lat, lng, address, cb) {
   }).catch(function() { cb(null); });
 }
 
+function shouldSuppressMassing(site, intelPoly) {
+  if (site.credibleSite === false) return true;
+  var text = ((site.name || '') + ' ' + (site.address || '')).toLowerCase();
+  if (/(churchyard|church yard|plaza|piazza|forecourt|courtyard|gardens|square|walk|passage)/.test(text)) return true;
+
+  var bounds = intelPoly ? polyBounds(intelPoly) : null;
+  if (bounds) {
+    var dx = Math.abs(bounds[1][0] - bounds[0][0]);
+    var dy = Math.abs(bounds[1][1] - bounds[0][1]);
+    var ratio = Math.max(dx, dy) / Math.max(Math.min(dx, dy), 1e-9);
+    if (ratio > 12) return true; // long strips / corridors / weird title geometry
+  }
+  return false;
+}
+
+function showMassingSuppressed(site) {
+  var container = document.getElementById('mass-3d');
+  if (!container) return;
+  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:32px;color:rgba(255,255,255,.78);font:500 14px/1.7 var(--sans);text-align:center;background:linear-gradient(180deg,rgba(10,10,10,.2),rgba(10,10,10,.35));">3D massing suppressed for this parcel.<br>This reads as public realm / residual land / non-standalone site and needs manual review.</div>';
+}
+
 function initMassMap(site, scenarios) {
   if (massMap) { massMap.remove(); massMap = null; }
   if (!MAPBOX_TOKEN) return;
@@ -2606,6 +2665,11 @@ function initMassMap(site, scenarios) {
     }
 
     var tier = polyTier(intelPoly);
+
+    if (shouldSuppressMassing(site, intelPoly)) {
+      showMassingSuppressed(site);
+      return;
+    }
 
     // Step 2: if bbox or low quality, try OSM building fetch
     if (tier === 'real') {
