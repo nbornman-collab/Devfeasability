@@ -2462,11 +2462,77 @@ function fetchSitePolygon(siteName, cb) {
     .catch(function() { _polyCache[siteName] = null; cb(null); });
 }
 
-// Get polygon centroid
+// Polygon helpers
+function normalizeRing(coords) {
+  if (!coords || coords.length < 3) return [];
+  var ring = coords.slice();
+  if (ring.length > 1) {
+    var first = ring[0], last = ring[ring.length - 1];
+    if (first[0] === last[0] && first[1] === last[1]) ring = ring.slice(0, -1);
+  }
+  return ring;
+}
+
+function polyBounds(coords) {
+  var ring = normalizeRing(coords);
+  if (!ring.length) return null;
+  var minX = ring[0][0], minY = ring[0][1], maxX = ring[0][0], maxY = ring[0][1];
+  for (var i = 1; i < ring.length; i++) {
+    minX = Math.min(minX, ring[i][0]);
+    minY = Math.min(minY, ring[i][1]);
+    maxX = Math.max(maxX, ring[i][0]);
+    maxY = Math.max(maxY, ring[i][1]);
+  }
+  return [[minX, minY], [maxX, maxY]];
+}
+
+function bboxCenter(coords) {
+  var b = polyBounds(coords);
+  if (!b) return null;
+  return [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2];
+}
+
+function pointInPoly(point, coords) {
+  var ring = normalizeRing(coords);
+  if (ring.length < 3) return false;
+  var x = point[0], y = point[1], inside = false;
+  for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    var xi = ring[i][0], yi = ring[i][1];
+    var xj = ring[j][0], yj = ring[j][1];
+    var intersect = ((yi > y) !== (yj > y)) &&
+      (x < (xj - xi) * (y - yi) / ((yj - yi) || 1e-12) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+// Get a stable polygon anchor. Use area-weighted centroid first, then safe fallbacks.
 function polyCentroid(coords) {
-  var cx = 0, cy = 0, n = coords.length;
-  for (var i = 0; i < n; i++) { cx += coords[i][0]; cy += coords[i][1]; }
-  return [cx / n, cy / n];
+  var ring = normalizeRing(coords);
+  if (!ring.length) return null;
+  if (ring.length < 3) return bboxCenter(ring) || ring[0];
+
+  var twiceArea = 0, cx = 0, cy = 0;
+  for (var i = 0; i < ring.length; i++) {
+    var p1 = ring[i];
+    var p2 = ring[(i + 1) % ring.length];
+    var f = (p1[0] * p2[1]) - (p2[0] * p1[1]);
+    twiceArea += f;
+    cx += (p1[0] + p2[0]) * f;
+    cy += (p1[1] + p2[1]) * f;
+  }
+
+  if (Math.abs(twiceArea) < 1e-12) return bboxCenter(ring) || ring[0];
+
+  var centroid = [cx / (3 * twiceArea), cy / (3 * twiceArea)];
+  if (pointInPoly(centroid, ring)) return centroid;
+
+  var boxCenter = bboxCenter(ring);
+  if (boxCenter && pointInPoly(boxCenter, ring)) return boxCenter;
+
+  var ax = 0, ay = 0;
+  for (var j = 0; j < ring.length; j++) { ax += ring[j][0]; ay += ring[j][1]; }
+  return [ax / ring.length, ay / ring.length];
 }
 
 // Buffer polygon outward from centroid
@@ -2573,6 +2639,7 @@ function initMassMap(site, scenarios) {
 function _buildMassMap(site, scenarios) {
   var poly = site._realPoly;
   var center = poly ? polyCentroid(poly) : [site.lng, site.lat];
+  var bounds = poly ? polyBounds(poly) : null;
 
   var container = document.getElementById('mass-3d');
   massMap = new mapboxgl.Map({
@@ -2590,6 +2657,11 @@ function _buildMassMap(site, scenarios) {
     massMap.setConfigProperty('basemap', 'lightPreset', 'day');
     massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
     massMap.setConfigProperty('basemap', 'showTransitLabels', false);
+
+    if (bounds) {
+      massMap.fitBounds(bounds, { padding: 80, pitch: 60, bearing: -30, maxZoom: 18.2, duration: 0 });
+    }
+
     var sc = scenarios[massScenario];
     addMassingLayers(massMap, site, sc);
   });
