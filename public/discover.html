@@ -1823,10 +1823,54 @@ function render() {
 
 // ── Card click ────────────────────────────────────────────────────────────────
 // ── Analyst hook generator ────────────────────────────────────────────────────
+function siteDevelopmentLogic(s) {
+  const highValue = s.borough === 'City of London' || s.inCAZ;
+  const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
+
+  if ((s.consolidation === 'high' || s.consolidation === 'medium') && (s.plotM2 || 0) > 1200) {
+    return {
+      type: 'Assembly / consolidation site',
+      why: 'Value is unlocked by stitched parcels rather than a single clean plot.',
+      mode: 'Assembly unlock',
+      economics: 'Combined-site value may justify a bigger planning move than any one title would support on its own.'
+    };
+  }
+
+  if (highValue && (s.planScore || 0) >= 7 && (s.maxFloors || 0) >= 18) {
+    return {
+      type: 'Strategic height candidate',
+      why: 'Cluster logic, high land value, and policy context point to metres-based height thinking rather than a timid floor uplift.',
+      mode: 'Strategic height',
+      economics: 'In a high-value market, going taller is often justified because the value can absorb the planning fight.'
+    };
+  }
+
+  if (s.heritTier === 'blocking' || s.inCons || s.heritTier === 'navigable') {
+    return {
+      type: 'Fine-grain constrained site',
+      why: 'Heritage and urban grain cap crude straight extrusion and demand a more careful envelope.',
+      mode: 'Constrained uplift',
+      economics: 'The right move is disciplined added value, not theatrical height that planning will cut back.'
+    };
+  }
+
+  return {
+    type: 'Mid-rise intensification site',
+    why: 'This reads as a normal intensification play rather than a skyline or assembly-led move.',
+    mode: 'Efficient uplift',
+    economics: highValue
+      ? 'The economics support a firmer push, but not necessarily a tower move.'
+      : 'The economics need a proportionate planning fight, so efficient uplift beats fantasy height.'
+  };
+}
+
 function analystHook(s) {
   const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
   const p = s.planning || {};
+  const logic = siteDevelopmentLogic(s);
   const sentences = [];
+
+  sentences.push(`<strong>Development logic:</strong> ${logic.type}. ${logic.why} <strong>Uplift mode:</strong> ${logic.mode}. ${logic.economics}`);
 
   // 1. Planning signal - use real data where available
   const hasRealRef = p.recentRef && /AP\/|\/\d{4}\//.test(p.recentRef);
@@ -1894,9 +1938,14 @@ function factorBars(s) {
   const ptal = Number(s.ptal) || 3;
   const utilPct = Math.round((s.utilisationScore || 5) * 10);
   const utilColor = utilPct >= 75 ? 'var(--accent)' : utilPct >= 50 ? 'var(--amber)' : 'var(--ink3)';
+  const logic = siteDevelopmentLogic(s);
+  const logicScore = logic.mode === 'Strategic height' ? 88 : logic.mode === 'Assembly unlock' ? 82 : logic.mode === 'Constrained uplift' ? 46 : 68;
+  const econScore = (s.borough === 'City of London' || s.inCAZ) ? 84 : (s.gdvEst >= 80 ? 70 : 56);
   const visible = [
     { name: 'Planning Appetite', score: Math.round(s.planScore * 10), color: s.planScore>=7?'var(--green)':s.planScore>=5?'var(--amber)':'var(--red)' },
-    { name: 'Available Sky', score: s.heritTier==='blocking'?28:s.inCons?52:s.heritTier==='navigable'?62:78, color: 'var(--accent-blue)' },
+    { name: 'Development Logic', score: logicScore, color: 'var(--accent-blue)' },
+    { name: 'Economic Justification', score: econScore, color: 'var(--accent)' },
+    { name: 'Available Sky', score: s.heritTier==='blocking'?28:s.inCons?52:s.heritTier==='navigable'?62:78, color: 'var(--amber)' },
     { name: 'Land Utilisation', score: utilPct, color: utilColor },
   ];
   const locked = [
@@ -1969,14 +2018,15 @@ function openFocus(site) {
   // Intel rows - extra data lines
   // ── Analyst hook ───────────────────────────────────────────────────────
   const hookText = analystHook(site);
+  const devLogic = siteDevelopmentLogic(site);
   document.getElementById('focus-hook').innerHTML = `
     <div class="focus-hook-label">Intelligence Signal</div>
     <div class="focus-hook-text">${hookText}</div>
-    <div class="focus-hook-question">What are the 3 comparable approvals? Does the massing stack above ${Math.round(site.maxFloors*0.7)}F? What does the residual land value look like at current yields?</div>
+    <div class="focus-hook-question"><strong>${devLogic.type}</strong> · ${devLogic.mode}. What are the 3 comparable approvals? Is this a metres site or a floors site? Does the economics justify the planning fight here?</div>
   `;
   // ── Factor bars ─────────────────────────────────────────────────────────
   document.getElementById('focus-factors').innerHTML = `
-    <div class="focus-factors-label">Score drivers · 3 of 6 visible</div>
+    <div class="focus-factors-label">Score drivers · logic, economics, planning and available sky</div>
     ${factorBars(site)}
   `;
   // ── CTA - site-specific ─────────────────────────────────────────────────
