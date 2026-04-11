@@ -1589,6 +1589,69 @@ function normaliseSite(s, idx) {
   };
 }
 
+function planningSignalSummary(s) {
+  const seeded = s.planning || {};
+  const live = s.planningContext || {};
+  const merged = {
+    source: live.source || seeded.source || null,
+    applicationCount: Number(live.applicationCount ?? seeded.applicationCount ?? seeded.count ?? 0),
+    majorCount: Number(live.majorCount ?? seeded.majorCount ?? 0),
+    liveCount: Number(live.liveCount ?? seeded.liveCount ?? 0),
+    tallCount: Number(live.tallCount ?? seeded.tallCount ?? 0),
+    liveTallCount: Number(live.liveTallCount ?? seeded.liveTallCount ?? 0),
+    recentRef: live.recentRef || seeded.recentRef || null,
+    refs: live.refs || seeded.refs || [],
+    note: live.note || seeded.note || null,
+  };
+  merged.hasSignal = merged.applicationCount > 0 || merged.majorCount > 0 || merged.tallCount > 0;
+  merged.heightIntent = merged.liveTallCount > 0 || merged.tallCount >= 2;
+  merged.clusterPressure = merged.majorCount >= 2 || merged.applicationCount >= 4;
+  return merged;
+}
+
+async function hydratePlanningSignal(site) {
+  if (!site || site._planningLoading || site._planningHydrated || !site.lat || !site.lng) return;
+  site._planningLoading = true;
+  try {
+    const r = await fetch(`/api/planning-apps?lat=${site.lat}&lng=${site.lng}`);
+    if (!r.ok) throw new Error('planning fetch failed');
+    const data = await r.json();
+    const rows = Array.isArray(data.results) ? data.results : [];
+    const isLive = txt => /submitted|validated|registered|consultation|pending|consideration|awaiting/i.test(String(txt || ''));
+    const isMajor = row => /major|eia|full|redevelopment|demolition|hybrid|outline/i.test(`${row.type || ''} ${row.description || ''}`);
+    const isTall = row => /(storey|storeys|tower|building|redevelopment|vertical extension|upward extension|roof extension)/i.test(`${row.description || ''}`);
+    const liveRows = rows.filter(row => isLive(row.status) || isLive(row.description));
+    const majorRows = rows.filter(isMajor);
+    const tallRows = rows.filter(isTall);
+    const liveTallRows = liveRows.filter(isTall);
+    const refs = rows.slice(0, 3).map(row => row.reference || row.ref || row.id).filter(Boolean);
+    site.planningContext = {
+      source: 'live-nearby-apps',
+      applicationCount: rows.length,
+      majorCount: majorRows.length,
+      liveCount: liveRows.length,
+      tallCount: tallRows.length,
+      liveTallCount: liveTallRows.length,
+      recentRef: refs[0] || null,
+      refs,
+      note: liveTallRows.length
+        ? `${liveTallRows.length} live nearby tall / uplift applications`
+        : tallRows.length
+          ? `${tallRows.length} nearby uplift precedents on record`
+          : rows.length
+            ? `${rows.length} nearby planning applications on record`
+            : null,
+    };
+    site.planning = { ...(site.planning || {}), ...site.planningContext };
+  } catch (err) {
+    console.warn('planning signal hydrate failed', err);
+  } finally {
+    site._planningLoading = false;
+    site._planningHydrated = true;
+    if (activeSite === site.id) openFocus(site, { skipPlanningHydrate: true });
+  }
+}
+
 function computeConfidence(s) {
   // High: has real HMLR polygon + verified score + owner data
   // Med: has score + lat/lng but derived max_floors
@@ -1832,24 +1895,39 @@ function siteDevelopmentLogic(s) {
   const existingHeight = Number(s.existingHeightM || s.existing_height_m || 0);
   const existingFloors = Number(s.existingFloors || s.existing_floors || s.existF || 0);
   const cityCore = s.borough === 'City of London' || s.inCAZ;
-  const tallCommercial = cityCore && (existingHeight >= 35 || existingFloors >= 10) && /(office|commercial|mixed)/.test(useType || 'office');
+  const planning = planningSignalSummary(s);
+  const tallCommercial = (cityCore && (existingHeight >= 35 || existingFloors >= 10) && /(office|commercial|mixed)/.test(useType || 'office')) || planning.heightIntent;
   const highValue = cityCore || tallCommercial;
   const heritage = s.heritTier === 'blocking' ? 'high' : s.heritTier === 'high' ? 'medium' : 'low';
   const ptal = Number(s.ptal) || 3;
   const mode = tallCommercial ? 'Strategic height'
-    : highValue && heritage === 'low' ? 'Mid-rise intensification'
+    : ((highValue && heritage === 'low') || planning.clusterPressure) ? 'Mid-rise intensification'
     : highValue ? 'Setback intensification'
     : 'Efficient infill';
   const type = tallCommercial ? 'Tower-on-podium'
     : mode === 'Mid-rise intensification' ? 'Setback mid-rise'
     : 'Perimeter uplift';
   const posture = tallCommercial ? 'aggressive' : heritage === 'high' ? 'conservative' : 'balanced';
-  return { mode, type, posture, heritage, highValue };
+  const why = planning.heightIntent
+    ? 'Live nearby planning activity is already testing taller massing in this pocket.'
+    : tallCommercial
+      ? 'Existing height, City-core context and commercial typology support a strategic-height read.'
+      : planning.clusterPressure
+        ? 'Nearby planning volume suggests an active intensification cluster, even if tower appetite is less explicit.'
+        : heritage === 'high'
+          ? 'Constraint pressure keeps this in a more controlled uplift lane.'
+          : 'Context supports uplift, but not a free-for-all.';
+  const economics = tallCommercial
+    ? 'The value case improves if the scheme behaves like a real City-core height play, not a timid extension.'
+    : mode === 'Mid-rise intensification'
+      ? 'Returns come from compound additional area rather than one heroic tower move.'
+      : 'Economics favour disciplined area gain over speculative height.';
+  return { mode, type, posture, heritage, highValue, planning, why, economics };
 }
 
 function analystHook(s) {
   const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
-  const p = s.planning || {};
+  const p = planningSignalSummary(s);
   const logic = siteDevelopmentLogic(s);
   const sentences = [];
 
@@ -1857,8 +1935,10 @@ function analystHook(s) {
 
   // 1. Planning signal - use real data where available
   const hasRealRef = p.recentRef && /AP\/|\/\d{4}\//.test(p.recentRef);
-  const totalApps = p.total || 0;
+  const totalApps = p.applicationCount || 0;
   const hasMajor = p.majorCount > 0;
+  const hasTall = p.tallCount > 0;
+  const hasLiveTall = p.liveTallCount > 0;
 
   if (s.inOA && s.planScore >= 7) {
     const oaFrame = s.borough === 'City of London'
@@ -1867,10 +1947,12 @@ function analystHook(s) {
       ? 'Hackney Central/Shoreditch OA growth corridor'
       : 'London Bridge/Bankside Opportunity Area mandate';
     sentences.push(`${oaFrame} is <strong>actively backing intensification</strong> at this scale - Policy SD1 of the London Plan 2021 requires the LPA to facilitate not resist, and comparable schemes in this corridor have landed consent.`);
+  } else if (s.inCAZ && hasLiveTall) {
+    sentences.push(`CAZ designation plus <strong>${p.liveTallCount} live nearby tall / uplift application${p.liveTallCount>1?'s':''}</strong> signals an active commercial height play in this pocket - developers are not just theorising, they are testing massing here now.`);
   } else if (s.inCAZ && hasMajor) {
-    sentences.push(`CAZ designation plus <strong>${p.majorCount} major application${p.majorCount>1?'s':''} on record</strong> signals an active planning history - the site has already attracted developer attention at this scale, which cuts both ways on consent confidence.`);
+    sentences.push(`CAZ designation plus <strong>${p.majorCount} major nearby application${p.majorCount>1?'s':''}</strong> signals active developer intent at this scale - not proof of consent, but strong evidence of where the market is pushing.`);
   } else if (s.inCAZ) {
-    sentences.push(`CAZ intensification policy applies. ${totalApps > 10 ? `<strong>${totalApps} planning applications on record</strong> - the site has been looked at` : 'Limited planning history'} - the question is whether the development plan allocation supports the use class being targeted.`);
+    sentences.push(`CAZ intensification policy applies. ${totalApps > 10 ? `<strong>${totalApps} nearby planning applications on record</strong>` : 'Limited nearby planning history'} - the question is whether this sits inside a live intensification cluster or just a permissive policy zone.`);
   } else if (s.planScore >= 8) {
     const refNote = hasRealRef ? ` Most recent application <strong>${p.recentRef}</strong> confirms active developer interest.` : '';
     sentences.push(`Planning appetite is <strong>genuinely strong at ${s.planScore}/10</strong> - the LPA has been approving at this massing scale and the allocation supports the use.${refNote}`);
@@ -1878,6 +1960,10 @@ function analystHook(s) {
     sentences.push(`Planning appetite is <strong>resistant</strong> - but the constraints are specific and the development plan leaves a window for a well-argued scheme.${totalApps > 0 ? ` ${totalApps} prior applications suggest others have tried.` : ''}`);
   } else {
     sentences.push(`Planning position is <strong>nuanced</strong>.${totalApps > 5 ? ` ${totalApps} applications on record - the site has a history.` : ''} The right massing strategy can thread the policy needle, but the comparable approvals in this postcode are what determine confidence.`);
+  }
+
+  if (p.note && (hasTall || hasLiveTall)) {
+    sentences.push(`<strong>Planning-intent signal:</strong> ${p.note}. This should calibrate confidence, not override site-specific constraints.`);
   }
 
   // 2. Ownership / title signal - use real data
@@ -1958,8 +2044,10 @@ function cardClick(id) {
   if (site) openMassPopup(site);
 }
 
-function openFocus(site) {
+function openFocus(site, opts) {
+  opts = opts || {};
   activeSite = site.id;
+  if (!opts.skipPlanningHydrate) hydratePlanningSignal(site);
   // Clear any active card state (removes spotlight + expanded content)
   document.querySelectorAll('.site-card.active').forEach(el=>el.classList.remove('active'));
   document.getElementById('site-list')?.classList.remove('has-active');
