@@ -1828,51 +1828,23 @@ function render() {
 // ── Card click ────────────────────────────────────────────────────────────────
 // ── Analyst hook generator ────────────────────────────────────────────────────
 function siteDevelopmentLogic(s) {
-  const highValue = s.borough === 'City of London' || s.inCAZ;
-  const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
-  const useType = (s.useType || s.use || '').toLowerCase();
-  const existingHeight = s.existingHeightM || s.existing_height_m || 0;
-  const tallCandidate = highValue && (
-    (useType === 'office' && (s.plotM2 || 0) >= 4000 && (s.planScore || 0) >= 6) ||
-    ((s.maxFloors || 0) >= 18) ||
-    (existingHeight >= 40 && (s.plotM2 || 0) >= 2500 && (s.planScore || 0) >= 6)
-  );
-
-  if ((s.consolidation === 'high' || s.consolidation === 'medium') && (s.plotM2 || 0) > 1200) {
-    return {
-      type: 'Assembly / consolidation site',
-      why: 'Value is unlocked by stitched parcels rather than a single clean plot.',
-      mode: 'Assembly unlock',
-      economics: 'Combined-site value may justify a bigger planning move than any one title would support on its own.'
-    };
-  }
-
-  if (tallCandidate) {
-    return {
-      type: 'Strategic height candidate',
-      why: 'High-value commercial context and site scale point to metres-based height thinking rather than a timid floor uplift.',
-      mode: 'Strategic height',
-      economics: 'In a high-value market, going taller is often justified because the value can absorb the planning fight.'
-    };
-  }
-
-  if (s.heritTier === 'blocking' || s.inCons || s.heritTier === 'navigable') {
-    return {
-      type: 'Fine-grain constrained site',
-      why: 'Heritage and urban grain cap crude straight extrusion and demand a more careful envelope.',
-      mode: 'Constrained uplift',
-      economics: 'The right move is disciplined added value, not theatrical height that planning will cut back.'
-    };
-  }
-
-  return {
-    type: 'Mid-rise intensification site',
-    why: 'This reads as a normal intensification play rather than a skyline or assembly-led move.',
-    mode: 'Efficient uplift',
-    economics: highValue
-      ? 'The economics support a firmer push, but not necessarily a tower move.'
-      : 'The economics need a proportionate planning fight, so efficient uplift beats fantasy height.'
-  };
+  const useType = (s.useType || s.use_type || s.use || '').toLowerCase();
+  const existingHeight = Number(s.existingHeightM || s.existing_height_m || 0);
+  const existingFloors = Number(s.existingFloors || s.existing_floors || s.existF || 0);
+  const cityCore = s.borough === 'City of London' || s.inCAZ;
+  const tallCommercial = cityCore && (existingHeight >= 35 || existingFloors >= 10) && /(office|commercial|mixed)/.test(useType || 'office');
+  const highValue = cityCore || tallCommercial;
+  const heritage = s.heritTier === 'blocking' ? 'high' : s.heritTier === 'high' ? 'medium' : 'low';
+  const ptal = Number(s.ptal) || 3;
+  const mode = tallCommercial ? 'Strategic height'
+    : highValue && heritage === 'low' ? 'Mid-rise intensification'
+    : highValue ? 'Setback intensification'
+    : 'Efficient infill';
+  const type = tallCommercial ? 'Tower-on-podium'
+    : mode === 'Mid-rise intensification' ? 'Setback mid-rise'
+    : 'Perimeter uplift';
+  const posture = tallCommercial ? 'aggressive' : heritage === 'high' ? 'conservative' : 'balanced';
+  return { mode, type, posture, heritage, highValue };
 }
 
 function analystHook(s) {
@@ -2466,91 +2438,128 @@ function updateMassNavState(idx) {
 }
 
 function massingScenarios(site) {
-  var maxF = site.maxFloors || 8;
   var logic = siteDevelopmentLogic(site);
-  var existF = site.existing_floors || site.existF || Math.max(1, Math.round(maxF * 0.45));
-  var plotM2 = site.plotM2 || 500;
-  var coverage = 0.75;
-  var eff = 0.78;
-  var podiumPct = 0.8;
-  var towerSetback = 0;
-  var twrFpRatio = 0.85;
-
-  if (logic.mode === 'Strategic height') {
-    maxF = Math.max(maxF, site.mf || maxF);
-    existF = site.existing_floors || Math.max(4, Math.round(maxF * 0.22));
-    coverage = 0.82;
-    podiumPct = 0.35;
-    towerSetback = 4;
-    twrFpRatio = 0.42;
-    eff = 0.80;
-  } else if (logic.mode === 'Constrained uplift') {
-    maxF = Math.min(maxF, existF + (site.heritTier === 'blocking' ? 3 : 5));
-    coverage = 0.72;
-    podiumPct = 0.72;
-    towerSetback = site.heritTier === 'blocking' ? 4.5 : 3;
-    twrFpRatio = site.heritTier === 'blocking' ? 0.35 : 0.5;
-    eff = 0.75;
-  } else if (logic.mode === 'Assembly unlock') {
-    maxF = Math.max(maxF, Math.round(maxF * 1.15));
-    existF = site.existing_floors || Math.max(2, Math.round(maxF * 0.28));
-    coverage = 0.84;
-    podiumPct = 0.45;
+  var existingHeight = Number(site.existingHeightM || site.existing_height_m || 0);
+  var existF = Number(site.existingFloors || site.existing_floors || site.existF || 0);
+  if (!existF && existingHeight) existF = Math.max(1, Math.round(existingHeight / 3.8));
+  if (!existF) existF = 5;
+  var rawMax = Number(site.maxFloors || site.max_floors || 0);
+  var resilientMax = rawMax;
+  if (!resilientMax || resilientMax <= existF) {
+    resilientMax = existF + (logic.mode === 'Strategic height' ? 8 : logic.mode === 'Mid-rise intensification' ? 5 : 3);
+  }
+  var maxF = Math.max(existF + 2, resilientMax);
+  var plotM2 = site.site_area || site.plot_area || 1000;
+  var floorH = logic.mode === 'Strategic height' ? 4.05 : logic.mode === 'Mid-rise intensification' ? 3.8 : 3.7;
+  var coverage = 0.72, podiumPct = 0.65, towerSetback = 0, twrFpRatio = 1, eff = 0.82;
+  if (logic.type === 'Tower-on-podium') {
+    coverage = 0.6;
+    podiumPct = 0.4;
     towerSetback = 2.5;
-    twrFpRatio = 0.58;
-    eff = 0.79;
+    twrFpRatio = 0.54;
+    eff = 0.8;
+  } else if (logic.type === 'Setback mid-rise') {
+    coverage = 0.68;
+    podiumPct = 0.56;
+    towerSetback = 1.2;
+    twrFpRatio = 0.8;
+    eff = 0.81;
   } else {
-    podiumPct = site.heritTier === 'blocking' ? 0.5 : site.heritTier === 'navigable' ? 0.6 : 0.8;
-    towerSetback = site.heritTier === 'blocking' ? 3 : site.heritTier === 'navigable' ? 1.5 : 0;
-    twrFpRatio = site.heritTier === 'blocking' ? 0.45 : site.heritTier === 'navigable' ? 0.55 : 0.85;
+    coverage = logic.posture === 'conservative' ? 0.62 : 0.7;
+    podiumPct = logic.heritage === 'high' ? 0.78 : 0.7;
+    eff = logic.posture === 'aggressive' ? 0.83 : 0.8;
   }
 
-  function scenario(label, floors) {
+  function scenario(label, floors, upliftWeight) {
+    floors = Math.max(existF + 1, Math.min(maxF, Math.round(floors)));
     var podF = Math.max(1, Math.round(floors * podiumPct));
     var twrF = Math.max(0, floors - podF);
     var podFP = plotM2 * coverage;
     var twrFP = podFP * twrFpRatio;
     var giaTotal = (podFP * podF) + (twrFP * twrF);
     var niaTotal = giaTotal * eff;
-    var addedF = floors - existF;
-    var addedNIA = Math.max(0, niaTotal - (podFP * existF * eff));
+    var addedF = Math.max(0, floors - existF);
+    var existingNia = Number(site.existing_nia || site.existingNia || 0);
+    var addedNIA = Math.max(0, niaTotal - existingNia);
+    var totalHeight = floors * floorH;
+    var baseScore = Number(site.score || site.headroom_score || 55);
+    var scoreLift = (logic.mode === 'Strategic height' ? 14 : logic.mode === 'Mid-rise intensification' ? 10 : 7) * upliftWeight;
+    var score = Math.max(35, Math.min(98, Math.round((baseScore * 0.82) + scoreLift + (addedF * 1.4))));
     return {
-      label: label, floors: floors, podF: podF, twrF: twrF,
-      podFP: Math.round(podFP), twrFP: Math.round(twrFP),
-      giaTotal: Math.round(giaTotal), niaTotal: Math.round(niaTotal),
-      addedF: addedF, addedNIA: Math.round(addedNIA),
-      towerSetback: towerSetback, existF: existF,
-      mode: logic.mode, type: logic.type
+      name: label,
+      floors: floors,
+      existF: existF,
+      addedF: addedF,
+      floorH: floorH,
+      heightM: totalHeight,
+      giaTotal: Math.round(giaTotal),
+      niaTotal: Math.round(niaTotal),
+      addedNIA: Math.round(addedNIA),
+      towerSetback: towerSetback,
+      coverage: coverage,
+      twrFpRatio: twrFpRatio,
+      eff: eff,
+      score: score,
+      mode: logic.mode,
+      type: logic.type,
+      upliftWeight: upliftWeight
     };
   }
 
-  var lowTarget = logic.mode === 'Strategic height' ? Math.max(existF + 4, Math.round(maxF * 0.55)) : Math.max(existF + 1, Math.round(maxF * 0.6));
-  var midTarget = logic.mode === 'Strategic height' ? Math.max(existF + 8, Math.round(maxF * 0.78)) : Math.max(existF + 2, Math.round(maxF * 0.8));
+  var lowTarget = logic.mode === 'Strategic height' ? Math.max(existF + 3, Math.round(maxF * 0.72)) :
+                  logic.mode === 'Mid-rise intensification' ? Math.max(existF + 2, Math.round(maxF * 0.6)) :
+                  Math.max(existF + 1, Math.round(maxF * 0.5));
+  var midTarget = logic.mode === 'Strategic height' ? Math.max(lowTarget + 2, Math.round(maxF * 0.86)) :
+                  logic.mode === 'Mid-rise intensification' ? Math.max(lowTarget + 2, Math.round(maxF * 0.76)) :
+                  Math.max(lowTarget + 1, Math.round(maxF * 0.64));
+  var highTarget = logic.mode === 'Strategic height' ? maxF :
+                   logic.mode === 'Mid-rise intensification' ? Math.max(midTarget + 2, Math.round(maxF * 0.92)) :
+                   Math.max(midTarget + 1, Math.round(maxF * 0.78));
+
+  lowTarget = Math.min(maxF - 2, lowTarget);
+  midTarget = Math.min(maxF - 1, Math.max(lowTarget + 1, midTarget));
+  highTarget = Math.min(maxF, Math.max(midTarget + 1, highTarget));
+
+  if (highTarget <= midTarget) highTarget = Math.min(maxF, midTarget + 1);
+  if (midTarget <= lowTarget) midTarget = Math.min(maxF - 1, lowTarget + 1);
+  if (highTarget <= midTarget) highTarget = Math.min(maxF, midTarget + 1);
 
   return {
-    lo: scenario('Low', lowTarget),
-    mid: scenario('Mid', midTarget),
-    hi: scenario('High', maxF)
+    low: scenario('Low', lowTarget, 0.35),
+    mid: scenario('Mid', midTarget, 0.68),
+    hi: scenario('High', highTarget, 1)
   };
 }
 
 function updateMassMetrics(sc, site) {
-  var erv = site.borough === 'City of London' ? 85 : site.inCAZ ? 72 : 55;
-  var gdvLo = ((sc.niaTotal * erv * 10.7639 / 0.0475) / 1e6 * 0.85).toFixed(0);
-  var gdvHi = ((sc.niaTotal * erv * 10.7639 / 0.0475) / 1e6 * 1.15).toFixed(0);
+  var logic = siteDevelopmentLogic(site);
+  var baseErv = site.borough === 'City of London' ? 85 : site.inCAZ ? 72 : 55;
+  var erv = baseErv * (1 + ((sc.upliftWeight || 0.5) * (logic.mode === 'Strategic height' ? 0.1 : 0.05)));
+  var costRate = logic.mode === 'Strategic height' ? 4450 : logic.mode === 'Mid-rise intensification' ? 3650 : 2950;
+  costRate *= logic.type === 'Tower-on-podium' ? 1.08 : logic.type === 'Setback mid-rise' ? 1.04 : 1;
+  var buildCost = Math.round((sc.addedNIA || sc.niaTotal || 0) * costRate / 1e6 * 10) / 10;
+  var gdvMid = ((sc.niaTotal * erv * 10.7639 / 0.0475) / 1e6);
+  var gdvLo = Math.round(gdvMid * 0.92);
+  var gdvHi = Math.round(gdvMid * 1.12);
+  sc.buildCostM = buildCost;
+  sc.gdvLo = gdvLo;
+  sc.gdvHi = gdvHi;
+
   document.getElementById('mass-metrics').innerHTML = [
+    metricHTML((sc.score || 0) + '/100', 'Headroom score', true),
     metricHTML('£' + gdvLo + '-' + gdvHi + 'M', 'Est. GDV range', true),
     metricHTML('+' + sc.addedF + 'F', 'Added floors', false),
-    metricHTML(sc.addedNIA.toLocaleString() + 'm\u00B2', 'New NIA', false),
+    metricHTML(sc.addedNIA.toLocaleString() + 'm²', 'New NIA', false),
     metricHTML(sc.floors + 'F', 'Total floors', false),
-    metricHTML(sc.giaTotal.toLocaleString() + 'm\u00B2', 'Total GIA', false),
+    metricHTML(sc.giaTotal.toLocaleString() + 'm²', 'Total GIA', false),
+    metricHTML('£' + buildCost.toFixed(1) + 'M', 'Build cost', false),
     metricHTML(sc.mode || 'Indicative', 'Uplift mode', false),
   ].join('');
 
   // Update CTA
   document.getElementById('mass-cta').innerHTML = site.t1
-    ? '<a class="mass-cta" href="' + site.t1 + '">Unlock full appraisal \u2192<span class="mass-cta-sub">Score breakdown \u00B7 precedent analysis \u00B7 financial model</span></a>'
-    : '<span class="mass-cta locked">Full appraisal coming soon</span>';
+    ? '<a class="mass-cta" href="' + site.t1 + '">Unlock full appraisal →<span class="mass-cta-price">£39</span></a>'
+    : '<a class="mass-cta" href="#">Unlock full appraisal →<span class="mass-cta-price">£39</span></a>';
 }
 
 function metricHTML(val, lbl, accent) {
@@ -2965,98 +2974,70 @@ function addGhostMassing(map, site) {
 
 function addMassingLayers(map, site, sc) {
   var poly = site._realPoly;
-  var tier = site._polyTier || 'none';
-  var rect = siteRect(site);
-  var floorH = 3.8;
+  var tier = site._polyTier || site._polyTierHint || 'C';
+  var floorH = sc.floorH || 3.8;
   var existH = (site._existH || sc.existF * floorH);
-  var existF = site._existF || sc.existF;
-  var totalH = sc.floors * floorH;
-  var podH = sc.podF * floorH;
+  var existF = site._existF || sc.existF || Math.max(1, Math.round(existH / floorH));
+  var totalH = sc.heightM || (sc.floors * floorH);
 
-  // Determine what geometry to use based on tier
-  if (tier === 'real' || tier === 'osm') {
-    // === TIER A/B: Real polygon - full 3D massing ===
-    var baseCoords = poly;
-    // Inset 1.5m to avoid z-fighting with Mapbox 3D building surfaces
-    var massCoords = shrinkPoly(baseCoords, 0.985);
-    var twrCoords = sc.towerSetback > 0 ? shrinkPoly(massCoords, 0.85) : massCoords;
+  if (poly && (tier === 'A' || tier === 'B')) {
+    var baseCoords = normalizeRing(poly);
+    var towerCoords = (sc.towerSetback > 0 && baseCoords.length >= 4)
+      ? insetRing(baseCoords, sc.towerSetback)
+      : baseCoords;
 
-    // Site outline - full footprint, dashed amber
-    map.addSource('mass-site', {
-      type: 'geojson',
-      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
-    });
+    map.addSource('mass-potential', { type: 'geojson', data: { type: 'FeatureCollection', features: [
+      { type:'Feature', properties:{ height: totalH, base: 0 }, geometry:{ type:'Polygon', coordinates:[baseCoords] } }
+    ] } });
     map.addLayer({
-      id: 'mass-site-outline', type: 'line', source: 'mass-site',
-      paint: { 'line-color': '#b45309', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [5, 3] }
+      id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
+      paint: {
+        'fill-extrusion-color': '#b8845c',
+        'fill-extrusion-height': ['get', 'height'],
+        'fill-extrusion-base': ['get', 'base'],
+        'fill-extrusion-opacity': 0.28
+      }
     });
 
-    // Potential envelope - inset from boundary, from ground up
-    if (totalH > 0) {
-      map.addSource('mass-potential', {
-        type: 'geojson',
-        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [massCoords] } }
-      });
-      map.addLayer({
-        id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
-        paint: {
-          'fill-extrusion-color': '#059669',
-          'fill-extrusion-height': totalH,
-          'fill-extrusion-base': 0,
-          'fill-extrusion-opacity': 0.85,
-          'fill-extrusion-vertical-gradient': false
-        }
-      });
-      map.addLayer({
-        id: 'mass-potential-edge', type: 'line', source: 'mass-potential',
-        paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.9 }
-      });
-    }
-
-    // Tower setback solid indicator
-    if (sc.towerSetback > 0 && totalH > podH) {
-      map.addSource('mass-tower', {
-        type: 'geojson',
-        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [twrCoords] } }
-      });
+    if (towerCoords && towerCoords !== baseCoords) {
+      map.addSource('mass-tower', { type: 'geojson', data: { type: 'FeatureCollection', features: [
+        { type:'Feature', properties:{ height: totalH, base: Math.min(totalH * 0.38, existH + floorH) }, geometry:{ type:'Polygon', coordinates:[towerCoords] } }
+      ] } });
       map.addLayer({
         id: 'mass-tower-3d', type: 'fill-extrusion', source: 'mass-tower',
         paint: {
-          'fill-extrusion-color': '#ffffff',
-          'fill-extrusion-height': totalH,
-          'fill-extrusion-base': podH,
-          'fill-extrusion-opacity': 0.15
+          'fill-extrusion-color': '#d7b08a',
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-base': ['get', 'base'],
+          'fill-extrusion-opacity': 0.38
         }
       });
     }
 
-    // Floor lines - evenly spaced from ground, capped at totalH
-    // Use floorH to space them, starting from floorH (first floor plate above ground)
-    // Do NOT use existH as start point - it's often inaccurate and causes floating slabs
     var floorLines = [];
     var numFloors = sc.floors;
     for (var i = 1; i <= numFloors; i++) {
       var fh = i * floorH;
-      if (fh > totalH + 0.5) break; // safety cap
-      var slabCoords = (sc.towerSetback > 0 && i > sc.podF) ? twrCoords : massCoords;
+      if (fh > totalH + 0.25) break; // safety cap
+      var slabCoords = (sc.towerSetback > 0 && i > Math.max(2, Math.round(numFloors * 0.4)) && towerCoords && towerCoords.length >= 4)
+        ? towerCoords : baseCoords;
       floorLines.push({
         type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: [slabCoords] },
-        properties: { height: fh + 0.1, base: fh - 0.1 }
+        properties: { height: fh, isExisting: i <= existF ? 1 : 0 },
+        geometry: { type: 'Polygon', coordinates: [slabCoords] }
       });
     }
-    if (floorLines.length > 0) {
-      map.addSource('mass-floors', {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: floorLines }
-      });
+    if (floorLines.length) {
+      map.addSource('mass-floor-lines', { type: 'geojson', data: { type:'FeatureCollection', features: floorLines } });
       map.addLayer({
-        id: 'mass-floor-lines', type: 'fill-extrusion', source: 'mass-floors',
+        id: 'mass-floor-lines',
+        type: 'fill-extrusion',
+        source: 'mass-floor-lines',
         paint: {
-          'fill-extrusion-color': '#ffffff',
-          'fill-extrusion-height': ['get', 'height'],
-          'fill-extrusion-base': ['get', 'base'],
-          'fill-extrusion-opacity': 0.7
+          'fill-extrusion-color': ['case', ['==', ['get', 'isExisting'], 1], '#f3eadf', '#ffffff'],
+          'fill-extrusion-height': ['+', ['get', 'height'], 0.18],
+          'fill-extrusion-base': ['get', 'height'],
+          'fill-extrusion-opacity': ['case', ['==', ['get', 'isExisting'], 1], 0.28, 0.62]
         }
       });
     }
