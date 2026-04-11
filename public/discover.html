@@ -1563,6 +1563,8 @@ function normaliseSite(s, idx) {
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
     ptal, maxFloors: maxFloorsCapped, plotM2, gdvEst, planScore, heritTier,
     useType: s.use || inferUseType(s),
+    existingHeightM: s.existing_height_m || null,
+    existingFloors: s.existing_floors || null,
     brownfield: !!(s.brownfield || (s.source && s.source.indexOf('brownfield') !== -1)),
     offMarket: s.offMarket||'unknown',
     owner: s.owner||null,
@@ -1828,10 +1830,12 @@ function render() {
 function siteDevelopmentLogic(s) {
   const highValue = s.borough === 'City of London' || s.inCAZ;
   const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
+  const useType = (s.useType || s.use || '').toLowerCase();
+  const existingHeight = s.existingHeightM || s.existing_height_m || 0;
   const tallCandidate = highValue && (
-    (s.use === 'office' && (s.plotM2 || 0) >= 4000 && (s.planScore || 0) >= 6) ||
+    (useType === 'office' && (s.plotM2 || 0) >= 4000 && (s.planScore || 0) >= 6) ||
     ((s.maxFloors || 0) >= 18) ||
-    ((s.existing_height_m || 0) >= 40 && (s.plotM2 || 0) >= 2500 && (s.planScore || 0) >= 6)
+    (existingHeight >= 40 && (s.plotM2 || 0) >= 2500 && (s.planScore || 0) >= 6)
   );
 
   if ((s.consolidation === 'high' || s.consolidation === 'medium') && (s.plotM2 || 0) > 1200) {
