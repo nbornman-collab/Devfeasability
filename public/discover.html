@@ -1362,6 +1362,8 @@ function heightCap(s, era, sensitivity, cluster, prec) {
   const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
   const existingH = s.existing_height_m || null;
   const existF = existingH ? Math.round(existingH / 3.5) : Math.max(2, Math.round(rawMax * 0.40));
+  const logic = siteDevelopmentLogic(s);
+  if (logic.mode === 'Strategic height') return Math.max(rawMax, s.mf || rawMax);
   if (cluster) return rawMax;
   if (era === 'A') {
     if (sensitivity === 'high') return Math.min(existF + 2, rawMax);
@@ -2456,23 +2458,49 @@ function updateMassNavState(idx) {
 
 function massingScenarios(site) {
   var maxF = site.maxFloors || 8;
-  var existF = Math.max(1, Math.round(maxF * 0.45));
+  var logic = siteDevelopmentLogic(site);
+  var existF = site.existing_floors || site.existF || Math.max(1, Math.round(maxF * 0.45));
   var plotM2 = site.plotM2 || 500;
   var coverage = 0.75;
   var eff = 0.78;
-  var coreRatio = 0.22;
+  var podiumPct = 0.8;
+  var towerSetback = 0;
+  var twrFpRatio = 0.85;
 
-  // Heritage drives form
-  var podiumPct = site.heritTier === 'blocking' ? 0.5
-    : site.heritTier === 'navigable' ? 0.6 : 0.8;
-  var towerSetback = site.heritTier === 'blocking' ? 3
-    : site.heritTier === 'navigable' ? 1.5 : 0;
+  if (logic.mode === 'Strategic height') {
+    maxF = Math.max(maxF, site.mf || maxF);
+    existF = site.existing_floors || Math.max(4, Math.round(maxF * 0.22));
+    coverage = 0.82;
+    podiumPct = 0.35;
+    towerSetback = 4;
+    twrFpRatio = 0.42;
+    eff = 0.80;
+  } else if (logic.mode === 'Constrained uplift') {
+    maxF = Math.min(maxF, existF + (site.heritTier === 'blocking' ? 3 : 5));
+    coverage = 0.72;
+    podiumPct = 0.72;
+    towerSetback = site.heritTier === 'blocking' ? 4.5 : 3;
+    twrFpRatio = site.heritTier === 'blocking' ? 0.35 : 0.5;
+    eff = 0.75;
+  } else if (logic.mode === 'Assembly unlock') {
+    maxF = Math.max(maxF, Math.round(maxF * 1.15));
+    existF = site.existing_floors || Math.max(2, Math.round(maxF * 0.28));
+    coverage = 0.84;
+    podiumPct = 0.45;
+    towerSetback = 2.5;
+    twrFpRatio = 0.58;
+    eff = 0.79;
+  } else {
+    podiumPct = site.heritTier === 'blocking' ? 0.5 : site.heritTier === 'navigable' ? 0.6 : 0.8;
+    towerSetback = site.heritTier === 'blocking' ? 3 : site.heritTier === 'navigable' ? 1.5 : 0;
+    twrFpRatio = site.heritTier === 'blocking' ? 0.45 : site.heritTier === 'navigable' ? 0.55 : 0.85;
+  }
 
   function scenario(label, floors) {
-    var podF = Math.round(floors * podiumPct);
-    var twrF = floors - podF;
+    var podF = Math.max(1, Math.round(floors * podiumPct));
+    var twrF = Math.max(0, floors - podF);
     var podFP = plotM2 * coverage;
-    var twrFP = podFP * (site.heritTier === 'blocking' ? 0.45 : site.heritTier === 'navigable' ? 0.55 : 0.85);
+    var twrFP = podFP * twrFpRatio;
     var giaTotal = (podFP * podF) + (twrFP * twrF);
     var niaTotal = giaTotal * eff;
     var addedF = floors - existF;
@@ -2482,13 +2510,17 @@ function massingScenarios(site) {
       podFP: Math.round(podFP), twrFP: Math.round(twrFP),
       giaTotal: Math.round(giaTotal), niaTotal: Math.round(niaTotal),
       addedF: addedF, addedNIA: Math.round(addedNIA),
-      towerSetback: towerSetback, existF: existF
+      towerSetback: towerSetback, existF: existF,
+      mode: logic.mode, type: logic.type
     };
   }
 
+  var lowTarget = logic.mode === 'Strategic height' ? Math.max(existF + 4, Math.round(maxF * 0.55)) : Math.max(existF + 1, Math.round(maxF * 0.6));
+  var midTarget = logic.mode === 'Strategic height' ? Math.max(existF + 8, Math.round(maxF * 0.78)) : Math.max(existF + 2, Math.round(maxF * 0.8));
+
   return {
-    lo: scenario('Low', Math.max(existF + 1, Math.round(maxF * 0.6))),
-    mid: scenario('Mid', Math.max(existF + 2, Math.round(maxF * 0.8))),
+    lo: scenario('Low', lowTarget),
+    mid: scenario('Mid', midTarget),
     hi: scenario('High', maxF)
   };
 }
@@ -2503,7 +2535,7 @@ function updateMassMetrics(sc, site) {
     metricHTML(sc.addedNIA.toLocaleString() + 'm\u00B2', 'New NIA', false),
     metricHTML(sc.floors + 'F', 'Total floors', false),
     metricHTML(sc.giaTotal.toLocaleString() + 'm\u00B2', 'Total GIA', false),
-    metricHTML(Math.round(sc.niaTotal / sc.giaTotal * 100) + '%', 'Eff (NIA/GIA)', false),
+    metricHTML(sc.mode || 'Indicative', 'Uplift mode', false),
   ].join('');
 
   // Update CTA
