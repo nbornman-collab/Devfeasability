@@ -1828,6 +1828,11 @@ function render() {
 function siteDevelopmentLogic(s) {
   const highValue = s.borough === 'City of London' || s.inCAZ;
   const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
+  const tallCandidate = highValue && (
+    (s.use === 'office' && (s.plotM2 || 0) >= 4000 && (s.planScore || 0) >= 6) ||
+    ((s.maxFloors || 0) >= 18) ||
+    ((s.existing_height_m || 0) >= 40 && (s.plotM2 || 0) >= 2500 && (s.planScore || 0) >= 6)
+  );
 
   if ((s.consolidation === 'high' || s.consolidation === 'medium') && (s.plotM2 || 0) > 1200) {
     return {
@@ -1838,10 +1843,10 @@ function siteDevelopmentLogic(s) {
     };
   }
 
-  if (highValue && (s.planScore || 0) >= 7 && (s.maxFloors || 0) >= 18) {
+  if (tallCandidate) {
     return {
       type: 'Strategic height candidate',
-      why: 'Cluster logic, high land value, and policy context point to metres-based height thinking rather than a timid floor uplift.',
+      why: 'High-value commercial context and site scale point to metres-based height thinking rather than a timid floor uplift.',
       mode: 'Strategic height',
       economics: 'In a high-value market, going taller is often justified because the value can absorb the planning fight.'
     };
