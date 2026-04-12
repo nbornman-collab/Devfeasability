@@ -8,6 +8,7 @@ Full protocol: `WORKING_PROTOCOL.md` (load only when needed for specific rules)
 - No bulk scripts across multiple files (ever)
 - Visual changes: test page `/test/t1-redesign` ONLY — no live page until Nic approves
 - Verify with evidence after every commit (not just HTTP 200)
+- Single source of truth only — never duplicate shared source data or logic across surfaces, scripts, fixtures, or tests
 
 ## Hard locked values — never change without explicit instruction
 - `EXISTING_HEIGHT`: 24SS=24.8m, 196BR=13.7m

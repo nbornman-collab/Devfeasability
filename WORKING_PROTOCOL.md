@@ -17,6 +17,26 @@ No code is written until:
 No task is complete until:
 4. It is verified with evidence
 
+## SINGLE SOURCE OF TRUTH RULE (🦞 locked 2026-04-12)
+
+Never duplicate shared source information or logic.
+
+If a fact, metric, scenario, score, height, floor count, area, ranking input, or development rule is used in more than one surface, it must be derived from one canonical source only.
+
+That applies to:
+- production UI
+- popup/focus/detail views
+- Appraise / test pages
+- scripts
+- fixtures
+- tests
+
+Tests may use fixtures, but fixtures must still resolve through the same canonical model. Tests must never create a second truth.
+
+Local fallback math is banned for any shared metric unless the fallback lives inside the canonical source itself.
+
+If two surfaces can show the same thing, they must read the same underlying object or function. No parallel derivations. No copied logic. No shadow calculations.
+
 ---
 
 ## PRODUCT ARCHITECTURE (current state)
