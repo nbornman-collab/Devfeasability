@@ -3135,10 +3135,10 @@ function addMassingLayers(map, site, sc) {
     map.addLayer({
       id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
       paint: {
-        'fill-extrusion-color': '#b8845c',
+        'fill-extrusion-color': '#16a34a',
         'fill-extrusion-height': ['get', 'height'],
         'fill-extrusion-base': ['get', 'base'],
-        'fill-extrusion-opacity': 0.28
+        'fill-extrusion-opacity': 0.46
       }
     });
 
@@ -3149,10 +3149,10 @@ function addMassingLayers(map, site, sc) {
       map.addLayer({
         id: 'mass-tower-3d', type: 'fill-extrusion', source: 'mass-tower',
         paint: {
-          'fill-extrusion-color': '#d7b08a',
+          'fill-extrusion-color': '#22c55e',
           'fill-extrusion-height': ['get', 'height'],
           'fill-extrusion-base': ['get', 'base'],
-          'fill-extrusion-opacity': 0.38
+          'fill-extrusion-opacity': 0.58
         }
       });
     }
@@ -3177,10 +3177,10 @@ function addMassingLayers(map, site, sc) {
         type: 'fill-extrusion',
         source: 'mass-floor-lines',
         paint: {
-          'fill-extrusion-color': ['case', ['==', ['get', 'isExisting'], 1], '#f3eadf', '#ffffff'],
-          'fill-extrusion-height': ['+', ['get', 'height'], 0.18],
+          'fill-extrusion-color': '#ffffff',
+          'fill-extrusion-height': ['+', ['get', 'height'], 0.32],
           'fill-extrusion-base': ['get', 'height'],
-          'fill-extrusion-opacity': ['case', ['==', ['get', 'isExisting'], 1], 0.28, 0.62]
+          'fill-extrusion-opacity': ['case', ['==', ['get', 'isExisting'], 1], 0.72, 0.98]
         }
       });
     }
