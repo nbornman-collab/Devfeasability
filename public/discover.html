@@ -1937,9 +1937,11 @@ function siteDevelopmentLogic(s) {
 }
 
 function analystHook(s) {
-  const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
+  const canonical = ensureCanonicalSite(s);
+  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
+  const addF = baseScenario ? baseScenario.addedF : (s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45)));
   const p = planningSignalSummary(s);
-  const logic = siteDevelopmentLogic(s);
+  const logic = canonical && canonical.developmentLogic ? canonical.developmentLogic : siteDevelopmentLogic(s);
   const sentences = [];
 
   sentences.push(`<strong>Development logic:</strong> ${logic.type}. ${logic.why} <strong>Uplift mode:</strong> ${logic.mode}. ${logic.economics}`);
@@ -2083,16 +2085,18 @@ function openFocus(site, opts) {
   const addF = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
   const addNIA = baseScenario ? Math.round(baseScenario.addedNIA || 0) : Math.round(site.plotM2 * 0.42 * 0.78 * addF);
   const heritLabel = site.heritTier==='blocking'?'High risk':site.heritTier==='navigable'?'Navigable':'Low risk';
-  // Derived intel
-  const niySub = site.inCAZ ? 4.75 : site.borough==='City of London' ? 4.25 : 5.5;
-  const erv = site.borough==='City of London' ? 85 : site.inCAZ ? 72 : 55;
-  const ervStr = `£${erv}/ft²`;
+  const niySub = canonical && canonical.financialAssumptions ? canonical.financialAssumptions.niy : (site.inCAZ ? 4.75 : site.borough==='City of London' ? 4.25 : 5.5);
+  const ervPsm = canonical && canonical.financialAssumptions ? canonical.financialAssumptions.erv : (site.borough==='City of London' ? 850 : site.inCAZ ? 750 : 700);
+  const ervFt2 = Math.round(ervPsm / 10.7639);
+  const ervStr = `£${ervFt2}/ft²`;
   const ptalLabel = site.ptal ? `${site.ptal}/6` : 'Not assessed';
   const coverageM2 = Math.round(site.plotM2 * 0.75);
   const heritRisk = site.heritTier==='blocking'?'🔴 High':site.heritTier==='navigable'?'🟡 Navigable':'🟢 Low';
   const planRisk = site.planScore>=7?'🟢 Favourable':site.planScore>=5?'🟡 Neutral':'🔴 Resistant';
+  const gdvLo = baseScenario ? Math.round((baseScenario.gdv || 0) * 0.92 / 1e6) : Math.round((Number(site.gdvEst) || 0) * 0.8);
+  const gdvHi = baseScenario ? Math.round((baseScenario.gdv || 0) * 1.08 / 1e6) : Math.round((Number(site.gdvEst) || 0) * 1.2);
   document.getElementById('focus-metrics').innerHTML = `
-    <div class="focus-metric"><div class="focus-metric-val accent">£${(site.gdvEst*0.8).toFixed(0)}-${(site.gdvEst*1.2).toFixed(0)}M</div><div class="focus-metric-lbl">Est. GDV range</div></div>
+    <div class="focus-metric"><div class="focus-metric-val accent">£${gdvLo}-${gdvHi}M</div><div class="focus-metric-lbl">Est. GDV range</div></div>
     <div class="focus-metric"><div class="focus-metric-val">+${addF}F</div><div class="focus-metric-lbl">Added floors</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${addNIA.toLocaleString()}m²</div><div class="focus-metric-lbl">New NIA</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${ervStr}</div><div class="focus-metric-lbl">Est. ERV</div></div>
@@ -2114,7 +2118,7 @@ function openFocus(site, opts) {
     ${factorBars(site)}
   `;
   // ── CTA - site-specific ─────────────────────────────────────────────────
-  const addFf = baseScenario ? baseScenario.addedF : (site.maxFloors - Math.max(1, Math.round(site.maxFloors * 0.45)));
+  const addFf = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
   document.getElementById('focus-cta-wrap').innerHTML = site.t1
     ? `<a class="focus-cta" href="${site.t1}">See why this scores ${site.score}/100 &rarr;<span class="focus-cta-sub">+${addFf}F · planning precedents · does it stack at current land value?</span></a>`
     : `<span class="focus-cta locked">Full report coming soon</span>`;
@@ -2493,8 +2497,6 @@ function openMassPopup(site) {
   // Populate info
   var vc = verdictClass(site.score);
   var vl = verdictLabel(site.score);
-  var existF = Math.max(1, Math.round(site.maxFloors * 0.45));
-  var base = getActiveMassScenario();
 
   document.getElementById('mass-name').textContent = site.name;
   document.getElementById('mass-addr').textContent = site.address + ' · ' + site.borough;
@@ -2583,28 +2585,25 @@ function massingScenarios(site) {
 }
 
 function updateMassMetrics(sc, site) {
-  var logic = siteDevelopmentLogic(site);
-  var baseErv = site.borough === 'City of London' ? 85 : site.inCAZ ? 72 : 55;
-  var erv = baseErv * (1 + ((sc.upliftWeight || 0.5) * (logic.mode === 'Strategic height' ? 0.1 : 0.05)));
-  var costRate = logic.mode === 'Strategic height' ? 4450 : logic.mode === 'Mid-rise intensification' ? 3650 : 2950;
-  costRate *= logic.type === 'Tower-on-podium' ? 1.08 : logic.type === 'Setback mid-rise' ? 1.04 : 1;
-  var buildCost = Math.round((sc.addedNIA || sc.niaTotal || 0) * costRate / 1e6 * 10) / 10;
-  var gdvMid = ((sc.niaTotal * erv * 10.7639 / 0.0475) / 1e6);
+  var canonical = ensureCanonicalSite(site);
+  var logic = canonical && canonical.developmentLogic ? canonical.developmentLogic : siteDevelopmentLogic(site);
+  var gdvMid = Math.round((sc.gdv || 0) / 1e6);
   var gdvLo = Math.round(gdvMid * 0.92);
-  var gdvHi = Math.round(gdvMid * 1.12);
+  var gdvHi = Math.round(gdvMid * 1.08);
+  var buildCost = Math.round(((sc.constCost || 0) / 1e6) * 10) / 10;
   sc.buildCostM = buildCost;
   sc.gdvLo = gdvLo;
   sc.gdvHi = gdvHi;
 
   document.getElementById('mass-metrics').innerHTML = [
-    metricHTML((sc.score || 0) + '/100', 'Headroom score', true),
+    metricHTML((site.score || 0) + '/100', 'Headroom score', true),
     metricHTML('£' + gdvLo + '-' + gdvHi + 'M', 'Est. GDV range', true),
     metricHTML('+' + sc.addedF + 'F', 'Added floors', false),
-    metricHTML(sc.addedNIA.toLocaleString() + 'm²', 'New NIA', false),
+    metricHTML((sc.addedNIA || 0).toLocaleString() + 'm²', 'New NIA', false),
     metricHTML(sc.floors + 'F', 'Total floors', false),
-    metricHTML(sc.giaTotal.toLocaleString() + 'm²', 'Total GIA', false),
+    metricHTML((sc.giaTotal || 0).toLocaleString() + 'm²', 'Total GIA', false),
     metricHTML('£' + buildCost.toFixed(1) + 'M', 'Build cost', false),
-    metricHTML(sc.mode || 'Indicative', 'Uplift mode', false),
+    metricHTML(sc.mode || logic.mode || 'Indicative', 'Uplift mode', false),
   ].join('');
 
   // Update CTA
