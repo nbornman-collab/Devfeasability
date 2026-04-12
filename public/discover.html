@@ -2845,6 +2845,26 @@ function shrinkPoly(coords, factor) {
   });
 }
 
+// Inset ring by metres, with a safe fallback for irregular polygons
+function insetRing(coords, metres) {
+  var ring = normalizeRing(coords);
+  if (!ring.length) return ring;
+  var c = polyCentroid(ring);
+  var latScale = 111320;
+  var lngScale = 111320 * Math.cos((c[1] || 51.5) * Math.PI / 180);
+  var inset = ring.map(function(p) {
+    var dxm = (p[0] - c[0]) * lngScale;
+    var dym = (p[1] - c[1]) * latScale;
+    var len = Math.sqrt(dxm*dxm + dym*dym) || 0.0001;
+    var nextLen = Math.max(0, len - metres);
+    return [
+      c[0] + ((dxm / len) * nextLen) / lngScale,
+      c[1] + ((dym / len) * nextLen) / latScale
+    ];
+  });
+  return inset.length >= 3 ? inset : shrinkPoly(ring, 0.88);
+}
+
 // Classify polygon quality
 function polyTier(coords) {
   if (!coords || coords.length < 3) return 'none';
