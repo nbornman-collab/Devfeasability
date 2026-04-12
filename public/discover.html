@@ -2906,7 +2906,7 @@ function shouldSuppressMassing(site, intelPoly) {
   if (flags.some(function(f) { return hardFlags.indexOf(f) !== -1; })) return true;
 
   var text = ((site.name || '') + ' ' + (site.address || '')).toLowerCase();
-  if (/(churchyard|church yard|plaza|piazza|forecourt|courtyard|gardens|square|walk|passage)/.test(text)) return true;
+  if (/(churchyard|church yard|public realm|public garden|plaza|piazza|forecourt|courtyard)/.test(text)) return true;
 
   var bounds = intelPoly ? polyBounds(intelPoly) : null;
   if (bounds) {
