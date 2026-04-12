@@ -3138,7 +3138,7 @@ function addMassingLayers(map, site, sc) {
         'fill-extrusion-color': '#16a34a',
         'fill-extrusion-height': ['get', 'height'],
         'fill-extrusion-base': ['get', 'base'],
-        'fill-extrusion-opacity': 0.46
+        'fill-extrusion-opacity': 0.34
       }
     });
 
@@ -3152,7 +3152,7 @@ function addMassingLayers(map, site, sc) {
           'fill-extrusion-color': '#22c55e',
           'fill-extrusion-height': ['get', 'height'],
           'fill-extrusion-base': ['get', 'base'],
-          'fill-extrusion-opacity': 0.58
+          'fill-extrusion-opacity': 0.42
         }
       });
     }
@@ -3178,9 +3178,9 @@ function addMassingLayers(map, site, sc) {
         source: 'mass-floor-lines',
         paint: {
           'fill-extrusion-color': '#ffffff',
-          'fill-extrusion-height': ['+', ['get', 'height'], 0.32],
+          'fill-extrusion-height': ['+', ['get', 'height'], 0.9],
           'fill-extrusion-base': ['get', 'height'],
-          'fill-extrusion-opacity': ['case', ['==', ['get', 'isExisting'], 1], 0.72, 0.98]
+          'fill-extrusion-opacity': ['case', ['==', ['get', 'isExisting'], 1], 0.82, 1]
         }
       });
     }
