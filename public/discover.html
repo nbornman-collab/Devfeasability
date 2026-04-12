@@ -2418,12 +2418,45 @@ Promise.all([
 var massMap = null;
 var massSite = null;
 var massScenario = 'mid';
+var massScenarios = null;
 var massGoogleLoaded = false;
 var massSV = null;
+
+function canonicalMassScenarioKey(key) {
+  if (key === 'low') return 'lo';
+  if (key === 'base') return 'mid';
+  if (key === 'high') return 'hi';
+  return ['lo', 'mid', 'hi'].indexOf(key) !== -1 ? key : 'mid';
+}
+
+function buildMassScenarioState(site) {
+  var scenarios = massingScenarios(site) || {};
+  return {
+    lo: scenarios.lo || scenarios.low || scenarios.mid,
+    mid: scenarios.mid || scenarios.base || scenarios.lo || scenarios.low,
+    hi: scenarios.hi || scenarios.high || scenarios.mid
+  };
+}
+
+function getActiveMassScenario() {
+  if (!massScenarios) return null;
+  var key = canonicalMassScenarioKey(massScenario);
+  return massScenarios[key] || massScenarios.mid || null;
+}
+
+function renderMassScenarioState() {
+  var sc = getActiveMassScenario();
+  if (!massSite || !sc || !massScenarios) return;
+  updateMassMetrics(sc, massSite);
+  updateMassScenarioTabs(massScenarios);
+  updateMassScChip(sc, massSite);
+  if (massMap) updateMassingLayers(massMap, massSite, sc);
+}
 
 function openMassPopup(site) {
   massSite = site;
   massScenario = 'mid';
+  massScenarios = buildMassScenarioState(site);
   // Update nav Appraise link to this site if it has a T1
   if (site && site.t1) {
     var navLink = document.getElementById('nav-appraise');
@@ -2440,8 +2473,7 @@ function openMassPopup(site) {
   var vc = verdictClass(site.score);
   var vl = verdictLabel(site.score);
   var existF = Math.max(1, Math.round(site.maxFloors * 0.45));
-  var scenarios = massingScenarios(site);
-  var base = scenarios.mid;
+  var base = getActiveMassScenario();
 
   document.getElementById('mass-name').textContent = site.name;
   document.getElementById('mass-addr').textContent = site.address + ' · ' + site.borough;
@@ -2457,9 +2489,7 @@ function openMassPopup(site) {
     useChipsEl.innerHTML = useChips;
   }
 
-  updateMassMetrics(base, site);
-  updateMassScenarioTabs(scenarios);
-  setTimeout(function() { updateMassScChip(base, site); }, 300);
+  renderMassScenarioState();
 
   // Analyst hook
   var hookEl = document.getElementById('mass-hook-text');
@@ -2479,7 +2509,7 @@ function openMassPopup(site) {
   if (tabsWrap) tabsWrap.style.display = 'flex';
 
   // Init or update 3D map
-  initMassMap(site, scenarios);
+  initMassMap(site, massScenarios);
   setTimeout(initPegman, 100);
 
   // Nav state
@@ -2495,6 +2525,7 @@ function closeMassPopup() {
   document.body.style.overflow = '';
   if (massMap) { massMap.remove(); massMap = null; }
   massSite = null;
+  massScenarios = null;
 }
 
 function massNavStep(dir) {
@@ -2613,7 +2644,7 @@ function massingScenarios(site) {
   if (highTarget <= midTarget) highTarget = Math.min(maxF, midTarget + 1);
 
   return {
-    low: scenario('Low', lowTarget, 0.35),
+    lo: scenario('Low', lowTarget, 0.35),
     mid: scenario('Mid', midTarget, 0.68),
     hi: scenario('High', highTarget, 1)
   };
@@ -2656,32 +2687,25 @@ function metricHTML(val, lbl, accent) {
 
 function updateMassScenarioTabs(scenarios) {
   var keys = ['lo','mid','hi'];
-  var labels = {lo:'Low',mid:'Mid',hi:'High'};
   keys.forEach(function(k) {
     var tab = document.getElementById('mass-tab-' + k);
-    if (!tab) return;
-    tab.querySelector('.mass-sc-floors').textContent = scenarios[k].floors + 'F';
-    tab.classList.toggle('active', k === massScenario);
+    var sc = scenarios && scenarios[k];
+    if (!tab || !sc) return;
+    tab.querySelector('.mass-sc-floors').textContent = sc.floors + 'F';
+    tab.classList.toggle('active', k === canonicalMassScenarioKey(massScenario));
   });
 }
 
 function switchMassScenario(key) {
-  massScenario = key;
-  if (!massSite) return;
-  var scenarios = massingScenarios(massSite);
-  var sc = scenarios[key];
-  updateMassMetrics(sc, massSite);
-  updateMassScenarioTabs(scenarios);
-  updateMassScChip(sc, massSite);
-  // Update 3D massing
-  if (massMap) updateMassingLayers(massMap, massSite, sc);
+  massScenario = canonicalMassScenarioKey(key);
+  if (!massSite || !massScenarios) return;
+  renderMassScenarioState();
 }
 
 function updateMassScChip(sc, site) {
   var chip = document.getElementById('mass-sc-chip');
   if (!chip || !sc) return;
-  var floorH = 3.8;
-  var totalH = Math.round(sc.floors * floorH);
+  var totalH = Math.round(sc.heightM || (sc.floors * (sc.floorH || 3.8)));
   var costPerM2 = 4200;
   var costM = Math.round(sc.giaTotal * costPerM2 / 1e6);
   var addFEl = document.getElementById('chip-addf');
@@ -2880,9 +2904,15 @@ function showMassingSuppressed(site) {
   container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:32px;color:rgba(255,255,255,.78);font:500 14px/1.7 var(--sans);text-align:center;background:linear-gradient(180deg,rgba(10,10,10,.2),rgba(10,10,10,.35));">3D massing suppressed for this parcel.<br>This reads as public realm / residual land / non-standalone site and needs manual review.</div>';
 }
 
+function showMassingUnavailable(message) {
+  var container = document.getElementById('mass-3d');
+  if (!container) return;
+  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:32px;color:rgba(255,255,255,.78);font:500 14px/1.7 var(--sans);text-align:center;background:linear-gradient(180deg,rgba(10,10,10,.2),rgba(10,10,10,.35));">' + message + '</div>';
+}
+
 function initMassMap(site, scenarios) {
   if (massMap) { massMap.remove(); massMap = null; }
-  if (!MAPBOX_TOKEN) return;
+  if (!MAPBOX_TOKEN) { showMassingUnavailable('3D massing unavailable - map token missing. Metrics remain live.'); return; }
 
   // Step 1: fetch intel polygon
   fetchSitePolygon(site.name, function(intel) {
@@ -2935,8 +2965,13 @@ function initMassMap(site, scenarios) {
 
 function _buildMassMap(site, scenarios) {
   var poly = site._realPoly;
-  var center = poly ? polyCentroid(poly) : [site.lng, site.lat];
-  var bounds = poly ? polyBounds(poly) : null;
+  var tier = site._polyTier || 'none';
+  if (!poly || tier === 'approximate' || tier === 'none') {
+    showMassingUnavailable('3D massing paused - verified site geometry is too weak for a credible model. Metrics remain visible while this site is held for manual review.');
+    return;
+  }
+  var center = polyCentroid(poly) || [site.lng, site.lat];
+  var bounds = polyBounds(poly);
 
   var container = document.getElementById('mass-3d');
   massMap = new mapboxgl.Map({
@@ -3062,13 +3097,13 @@ function addGhostMassing(map, site) {
 
 function addMassingLayers(map, site, sc) {
   var poly = site._realPoly;
-  var tier = site._polyTier || site._polyTierHint || 'C';
+  var tier = site._polyTier || site._polyTierHint || 'none';
   var floorH = sc.floorH || 3.8;
   var existH = (site._existH || sc.existF * floorH);
   var existF = site._existF || sc.existF || Math.max(1, Math.round(existH / floorH));
   var totalH = sc.heightM || (sc.floors * floorH);
 
-  if (poly && (tier === 'A' || tier === 'B')) {
+  if (poly && (tier === 'real' || tier === 'osm')) {
     var baseCoords = normalizeRing(poly);
     var towerCoords = (sc.towerSetback > 0 && baseCoords.length >= 4)
       ? insetRing(baseCoords, sc.towerSetback)
