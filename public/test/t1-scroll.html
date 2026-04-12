@@ -877,47 +877,64 @@ input[type=range].ruler-input {
   <div style="font:400 12px var(--sans);color:rgba(242,241,237,.3);margin-top:40px">All values are estimates based on publicly available data. GDV and financial projections are modelled, not guaranteed.</div>
 </div>
 
+<script src="/lib/site-model.js"></script>
 <script>
 // -- Constants (driven by SITE_INTELLIGENCE; 24SS values as fallback) --
 const _SI = typeof SITE_INTELLIGENCE !== 'undefined' ? SITE_INTELLIGENCE : {};
-const PLOT_AREA = _SI.plot_m2 || 2843;
-const FTF = 3.6;
-const LAT = _SI.lat || 51.504909;
-const LNG = _SI.lng || -0.091522;
+const _CANONICAL = window.HeadroomSiteModel ? window.HeadroomSiteModel.buildCanonicalSite({
+  address: _SI.address || _SI.site_name || _SI.site || '24 Southwark Street, SE1 0SW',
+  borough: _SI.borough || 'Southwark',
+  lat: _SI.lat || 51.504909,
+  lng: _SI.lng || -0.091522,
+  inOA: !!((_SI.factors || {}).momentum || {}).opportunity_area,
+  inCAZ: !!((_SI.policy_designations || {}).caz),
+  plot_m2: (_SI.site || {}).plot_m2 || _SI.plot_m2 || 2843,
+  existing_height_m: ((_SI.factors || {}).sky || {}).existing_m || (_SI.site || {}).existing_height_m || 24.8,
+  max_floors: (_SI.site || {}).max_floors || 10,
+  score: typeof computeSiteScore === 'function' ? computeSiteScore(_SI) : 70,
+  erv: ((_SI.factors || {}).value || {}).new_build_rent || 700,
+  niy: (_SI.borough === 'City of London' ? 4.25 : ((_SI.policy_designations || {}).caz ? 4.75 : 5.5)),
+  scenarios: _SI.scenarios || null,
+  existing_nia: (_SI.site || {}).existing_nia || null
+}) : null;
+const PLOT_AREA = (_CANONICAL && _CANONICAL.plotM2) || ((_SI.site || {}).plot_m2) || _SI.plot_m2 || 2843;
+const FTF = (_CANONICAL && _CANONICAL.floorToFloorM) || 3.6;
+const LAT = (_CANONICAL && _CANONICAL.lat) || _SI.lat || 51.504909;
+const LNG = (_CANONICAL && _CANONICAL.lng) || _SI.lng || -0.091522;
 const CENTROID = [LNG, LAT];
-const ADDRESS = _SI.address || _SI.site_name || _SI.site || '24 Southwark Street, SE1 0SW';
+const ADDRESS = (_CANONICAL && _CANONICAL.address) || _SI.address || _SI.site_name || _SI.site || '24 Southwark Street, SE1 0SW';
 
-// -- S04 Engine (identical to t1-redesign) --
-const S04_DEFS = {erv:700, niy:4.75, cost:4200, s106:500, poc:20};
+const S04_DEFS = _CANONICAL && _CANONICAL.financialAssumptions ? {..._CANONICAL.financialAssumptions} : {erv:700, niy:4.75, cost:4200, s106:500, poc:20};
 let S04 = {...S04_DEFS};
-const S04_MARKET = {acqCost:0, demo:850000, finRate:0.065, letFee:0.15, cilRate:125, progYrs:{lo:2.0,base:2.5,hi:3.0}};
-// Use scenarios from intelligence file if defined, else fall back to 24SS defaults
-const S04_SCENARIOS = (typeof SITE_INTELLIGENCE !== 'undefined' && SITE_INTELLIGENCE.scenarios)
-  ? SITE_INTELLIGENCE.scenarios
-  : [
-    {key:'lo', label:'Low', floors:8, podF:5, twrF:3, twrPct:0.55, eff:0.78},
-    {key:'base', label:'Base', floors:10, podF:6, twrF:4, twrPct:0.55, eff:0.78},
-    {key:'hi', label:'High', floors:12, podF:7, twrF:5, twrPct:0.50, eff:0.76}
-  ];
+const S04_MARKET = _CANONICAL && _CANONICAL.marketModel ? {
+  acqCost:_CANONICAL.marketModel.acqCost,
+  demo:_CANONICAL.marketModel.demo,
+  finRate:_CANONICAL.marketModel.finRate,
+  letFee:_CANONICAL.marketModel.letFee,
+  cilRate:_CANONICAL.marketModel.cilRate,
+  progYrs:{lo:_CANONICAL.marketModel.progYrs.lo,base:_CANONICAL.marketModel.progYrs.mid,hi:_CANONICAL.marketModel.progYrs.hi}
+} : {acqCost:0, demo:850000, finRate:0.065, letFee:0.15, cilRate:125, progYrs:{lo:2.0,base:2.5,hi:3.0}};
+let S04_SCENARIOS = _CANONICAL ? [_CANONICAL.scenarioState.lo, _CANONICAL.scenarioState.mid, _CANONICAL.scenarioState.hi] : [
+  {key:'lo', label:'Low', floors:8, podF:5, twrF:3, twrPct:0.55, eff:0.78},
+  {key:'mid', label:'Base', floors:10, podF:6, twrF:4, twrPct:0.55, eff:0.78},
+  {key:'hi', label:'High', floors:12, podF:7, twrF:5, twrPct:0.50, eff:0.76}
+];
 let s04Idx = 1;
 
 function s04calc() {
-  const grossPlate = Math.round(PLOT_AREA * 0.42);
-  S04_SCENARIOS.forEach(sc => {
-    sc.gea = Math.round(grossPlate * sc.podF + grossPlate * sc.twrPct * sc.twrF);
-    sc.nia = Math.round(sc.gea * sc.eff);
-    sc.gdv = Math.round(sc.nia * S04.erv / (S04.niy / 100));
-    sc.constCost = Math.round(sc.gea * S04.cost);
-    sc.fees = Math.round(sc.constCost * 0.13);
-    sc.contg = Math.round(sc.constCost * 0.075);
-    sc.cil = Math.round(sc.gea * S04_MARKET.cilRate);
-    sc.letting = Math.round(sc.gdv * S04_MARKET.letFee);
-    sc.finance = Math.round((sc.constCost + sc.fees) * 0.5 * S04_MARKET.finRate * S04_MARKET.progYrs[sc.key]);
-    sc.tdc = sc.constCost + sc.fees + sc.contg + sc.cil + sc.letting + (S04.s106 * 1000) + S04_MARKET.demo + sc.finance + S04_MARKET.acqCost;
-    sc.profit = sc.gdv - sc.tdc;
-    sc.poc = (sc.profit / sc.tdc * 100).toFixed(1);
-    sc.rlv = Math.round(sc.gdv - sc.tdc * (1 + S04.poc/100));
-  });
+  if (window.HeadroomSiteModel) {
+    const keyed = {lo:S04_SCENARIOS[0], mid:S04_SCENARIOS[1], hi:S04_SCENARIOS[2]};
+    window.HeadroomSiteModel.applyFinancials(keyed, S04, {
+      acqCost:S04_MARKET.acqCost,
+      demo:S04_MARKET.demo,
+      finRate:S04_MARKET.finRate,
+      letFee:S04_MARKET.letFee,
+      cilRate:S04_MARKET.cilRate,
+      progYrs:{lo:S04_MARKET.progYrs.lo, mid:S04_MARKET.progYrs.base, hi:S04_MARKET.progYrs.hi}
+    });
+    S04_SCENARIOS = [keyed.lo, keyed.mid, keyed.hi];
+    return;
+  }
 }
 s04calc();
 

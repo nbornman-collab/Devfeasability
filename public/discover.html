@@ -1225,6 +1225,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 </div><!-- /page -->
 
+<script src="/lib/site-model.js"></script>
 <script>
 // ── State ─────────────────────────────────────────────────────────────────────
 let ALL_SITES = [];
@@ -1466,7 +1467,8 @@ function assessSiteLegitimacy(s) {
 
   const openSpaceTerms = /(churchyard|church yard|plaza|square|gardens|garden|yard|court|walk|passage|forecourt|piazza|courtyard)/i;
   const civicTerms = /(cathedral|church|guildhall|market|memorial|public realm|open space|churchyard)/i;
-  const transportTerms = /(station|rail|railway|transport hub|bus station|interchange|network rail|tfl|liverpool street station|supersite)/i;
+  const transportTerms = /(station|rail|railway|transport hub|bus station|interchange|network rail|tfl|liverpool street station|supersite|oversite|air rights)/i;
+  const progressedTerms = /(under construction|construction started|completed|built out|delivered|implemented|conditions discharge|consented scheme|full consent)/i;
   const hasStreetNumber = /\b\d+[a-z]?([-–]\d+[a-z]?)?\b/.test((s.address || '') + ' ' + (s.name || ''));
 
   if (openSpaceTerms.test(text) && !hasStreetNumber) {
@@ -1492,6 +1494,14 @@ function assessSiteLegitimacy(s) {
   if ((s.source || '').toLowerCase().includes('corporation of london') && !s.brownfield && transportTerms.test(text)) {
     penalty += 15;
     penalties.push('strategic_civic_transport_signal');
+  }
+  if ((s.deliveryFlag || '') === 'station-oversite') {
+    penalty += 30;
+    penalties.push('station_oversite_delivery_risk');
+  }
+  if (progressedTerms.test(text)) {
+    penalty += 24;
+    penalties.push('already_progressed_or_completed');
   }
 
   return {
@@ -1643,6 +1653,7 @@ async function hydratePlanningSignal(site) {
             : null,
     };
     site.planning = { ...(site.planning || {}), ...site.planningContext };
+    site._canonicalModel = null;
   } catch (err) {
     console.warn('planning signal hydrate failed', err);
   } finally {
@@ -2066,9 +2077,11 @@ function openFocus(site, opts) {
     site.verified ? '<span class="chip" style="background:#f0fdf4;color:#15803d">Verified</span>' : '',
   ].filter(Boolean).join('');
   document.getElementById('focus-chips').innerHTML = chips;
-  const existF = Math.max(1, Math.round(site.maxFloors * 0.45));
-  const addF = site.maxFloors - existF;
-  const addNIA = Math.round(site.plotM2 * 0.42 * 0.78 * addF);
+  const canonical = ensureCanonicalSite(site);
+  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
+  const existF = canonical ? canonical.existingFloors : Math.max(1, Math.round(site.maxFloors * 0.45));
+  const addF = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
+  const addNIA = baseScenario ? Math.round(baseScenario.addedNIA || 0) : Math.round(site.plotM2 * 0.42 * 0.78 * addF);
   const heritLabel = site.heritTier==='blocking'?'High risk':site.heritTier==='navigable'?'Navigable':'Low risk';
   // Derived intel
   const niySub = site.inCAZ ? 4.75 : site.borough==='City of London' ? 4.25 : 5.5;
@@ -2101,7 +2114,7 @@ function openFocus(site, opts) {
     ${factorBars(site)}
   `;
   // ── CTA - site-specific ─────────────────────────────────────────────────
-  const addFf = site.maxFloors - Math.max(1, Math.round(site.maxFloors * 0.45));
+  const addFf = baseScenario ? baseScenario.addedF : (site.maxFloors - Math.max(1, Math.round(site.maxFloors * 0.45)));
   document.getElementById('focus-cta-wrap').innerHTML = site.t1
     ? `<a class="focus-cta" href="${site.t1}">See why this scores ${site.score}/100 &rarr;<span class="focus-cta-sub">+${addFf}F · planning precedents · does it stack at current land value?</span></a>`
     : `<span class="focus-cta locked">Full report coming soon</span>`;
@@ -2423,14 +2436,22 @@ var massGoogleLoaded = false;
 var massSV = null;
 
 function canonicalMassScenarioKey(key) {
-  if (key === 'low') return 'lo';
-  if (key === 'base') return 'mid';
-  if (key === 'high') return 'hi';
-  return ['lo', 'mid', 'hi'].indexOf(key) !== -1 ? key : 'mid';
+  return window.HeadroomSiteModel
+    ? window.HeadroomSiteModel.canonicalScenarioKey(key)
+    : (key === 'low' ? 'lo' : key === 'base' ? 'mid' : key === 'high' ? 'hi' : ['lo', 'mid', 'hi'].indexOf(key) !== -1 ? key : 'mid');
+}
+
+function ensureCanonicalSite(site) {
+  if (!site) return null;
+  if (!site._canonicalModel && window.HeadroomSiteModel) {
+    site._canonicalModel = window.HeadroomSiteModel.buildCanonicalSite(site);
+  }
+  return site._canonicalModel || null;
 }
 
 function buildMassScenarioState(site) {
-  var scenarios = massingScenarios(site) || {};
+  var canonical = ensureCanonicalSite(site);
+  var scenarios = canonical && canonical.scenarioState ? canonical.scenarioState : (massingScenarios(site) || {});
   return {
     lo: scenarios.lo || scenarios.low || scenarios.mid,
     mid: scenarios.mid || scenarios.base || scenarios.lo || scenarios.low,
@@ -2557,97 +2578,8 @@ function updateMassNavState(idx) {
 }
 
 function massingScenarios(site) {
-  var logic = siteDevelopmentLogic(site);
-  var existingHeight = Number(site.existingHeightM || site.existing_height_m || 0);
-  var existF = Number(site.existingFloors || site.existing_floors || site.existF || 0);
-  if (!existF && existingHeight) existF = Math.max(1, Math.round(existingHeight / 3.8));
-  if (!existF) existF = 5;
-  var rawMax = Number(site.maxFloors || site.max_floors || 0);
-  var resilientMax = rawMax;
-  if (!resilientMax || resilientMax <= existF) {
-    resilientMax = existF + (logic.mode === 'Strategic height' ? 8 : logic.mode === 'Mid-rise intensification' ? 5 : 3);
-  }
-  var maxF = Math.max(existF + 2, resilientMax);
-  var plotM2 = site.site_area || site.plot_area || 1000;
-  var floorH = logic.mode === 'Strategic height' ? 4.05 : logic.mode === 'Mid-rise intensification' ? 3.8 : 3.7;
-  var coverage = 0.72, podiumPct = 0.65, towerSetback = 0, twrFpRatio = 1, eff = 0.82;
-  if (logic.type === 'Tower-on-podium') {
-    coverage = 0.6;
-    podiumPct = 0.4;
-    towerSetback = 2.5;
-    twrFpRatio = 0.54;
-    eff = 0.8;
-  } else if (logic.type === 'Setback mid-rise') {
-    coverage = 0.68;
-    podiumPct = 0.56;
-    towerSetback = 1.2;
-    twrFpRatio = 0.8;
-    eff = 0.81;
-  } else {
-    coverage = logic.posture === 'conservative' ? 0.62 : 0.7;
-    podiumPct = logic.heritage === 'high' ? 0.78 : 0.7;
-    eff = logic.posture === 'aggressive' ? 0.83 : 0.8;
-  }
-
-  function scenario(label, floors, upliftWeight) {
-    floors = Math.max(existF + 1, Math.min(maxF, Math.round(floors)));
-    var podF = Math.max(1, Math.round(floors * podiumPct));
-    var twrF = Math.max(0, floors - podF);
-    var podFP = plotM2 * coverage;
-    var twrFP = podFP * twrFpRatio;
-    var giaTotal = (podFP * podF) + (twrFP * twrF);
-    var niaTotal = giaTotal * eff;
-    var addedF = Math.max(0, floors - existF);
-    var existingNia = Number(site.existing_nia || site.existingNia || 0);
-    var addedNIA = Math.max(0, niaTotal - existingNia);
-    var totalHeight = floors * floorH;
-    var baseScore = Number(site.score || site.headroom_score || 55);
-    var scoreLift = (logic.mode === 'Strategic height' ? 14 : logic.mode === 'Mid-rise intensification' ? 10 : 7) * upliftWeight;
-    var score = Math.max(35, Math.min(98, Math.round((baseScore * 0.82) + scoreLift + (addedF * 1.4))));
-    return {
-      name: label,
-      floors: floors,
-      existF: existF,
-      addedF: addedF,
-      floorH: floorH,
-      heightM: totalHeight,
-      giaTotal: Math.round(giaTotal),
-      niaTotal: Math.round(niaTotal),
-      addedNIA: Math.round(addedNIA),
-      towerSetback: towerSetback,
-      coverage: coverage,
-      twrFpRatio: twrFpRatio,
-      eff: eff,
-      score: score,
-      mode: logic.mode,
-      type: logic.type,
-      upliftWeight: upliftWeight
-    };
-  }
-
-  var lowTarget = logic.mode === 'Strategic height' ? Math.max(existF + 3, Math.round(maxF * 0.72)) :
-                  logic.mode === 'Mid-rise intensification' ? Math.max(existF + 2, Math.round(maxF * 0.6)) :
-                  Math.max(existF + 1, Math.round(maxF * 0.5));
-  var midTarget = logic.mode === 'Strategic height' ? Math.max(lowTarget + 2, Math.round(maxF * 0.86)) :
-                  logic.mode === 'Mid-rise intensification' ? Math.max(lowTarget + 2, Math.round(maxF * 0.76)) :
-                  Math.max(lowTarget + 1, Math.round(maxF * 0.64));
-  var highTarget = logic.mode === 'Strategic height' ? maxF :
-                   logic.mode === 'Mid-rise intensification' ? Math.max(midTarget + 2, Math.round(maxF * 0.92)) :
-                   Math.max(midTarget + 1, Math.round(maxF * 0.78));
-
-  lowTarget = Math.min(maxF - 2, lowTarget);
-  midTarget = Math.min(maxF - 1, Math.max(lowTarget + 1, midTarget));
-  highTarget = Math.min(maxF, Math.max(midTarget + 1, highTarget));
-
-  if (highTarget <= midTarget) highTarget = Math.min(maxF, midTarget + 1);
-  if (midTarget <= lowTarget) midTarget = Math.min(maxF - 1, lowTarget + 1);
-  if (highTarget <= midTarget) highTarget = Math.min(maxF, midTarget + 1);
-
-  return {
-    lo: scenario('Low', lowTarget, 0.35),
-    mid: scenario('Mid', midTarget, 0.68),
-    hi: scenario('High', highTarget, 1)
-  };
+  var canonical = ensureCanonicalSite(site);
+  return canonical && canonical.scenarioState ? canonical.scenarioState : null;
 }
 
 function updateMassMetrics(sc, site) {
