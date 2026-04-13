@@ -3059,12 +3059,10 @@ function addMassingLayers(map, site, sc) {
   var existH = (site._existH || sc.existF * floorH);
   var existF = site._existF || sc.existF;
   var totalH = sc.floors * floorH;
-  var podH = sc.podF * floorH;
 
   if (tier === 'real' || tier === 'osm') {
     var baseCoords = normalizeRing(poly);
     var massCoords = shrinkPoly(baseCoords, 0.985);
-    var towerCoords = sc.towerSetback > 0 ? shrinkPoly(massCoords, 0.85) : massCoords;
 
     map.addSource('mass-site', {
       type: 'geojson',
@@ -3096,31 +3094,15 @@ function addMassingLayers(map, site, sc) {
       });
     }
 
-    if (sc.towerSetback > 0 && totalH > podH) {
-      map.addSource('mass-tower', {
-        type: 'geojson',
-        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [towerCoords] } }
-      });
-      map.addLayer({
-        id: 'mass-tower-3d', type: 'fill-extrusion', source: 'mass-tower',
-        paint: {
-          'fill-extrusion-color': '#ffffff',
-          'fill-extrusion-height': totalH,
-          'fill-extrusion-base': podH,
-          'fill-extrusion-opacity': 0.15
-        }
-      });
-    }
-
     var floorLines = [];
     var numFloors = sc.floors;
     for (var i = 1; i <= numFloors; i++) {
       var fh = i * floorH;
       if (fh > totalH + 0.5) break;
-      var slabCoords = (sc.towerSetback > 0 && i > (sc.podF || 0)) ? towerCoords : massCoords;
       floorLines.push({
+
         type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: [slabCoords] },
+        geometry: { type: 'Polygon', coordinates: [massCoords] },
         properties: { height: fh + 0.1, base: fh - 0.1 }
       });
     }
