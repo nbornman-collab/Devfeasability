@@ -1360,12 +1360,9 @@ function towerAllowed(s, era, sensitivity, cluster, prec) {
 
 // ── Layer B: Height cap ───────────────────────────────────────────────────
 function heightCap(s, era, sensitivity, cluster, prec) {
-  const explicitCap = s.max_floors || null;
-  const rawMax = explicitCap || s.mf || Math.round(5 + (s.score||50) / 10);
+  const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
   const existingH = s.existing_height_m || null;
   const existF = existingH ? Math.round(existingH / 3.5) : Math.max(2, Math.round(rawMax * 0.40));
-  const logic = siteDevelopmentLogic(s);
-  if (logic.mode === 'Strategic height') return explicitCap || Math.max(rawMax, s.mf || rawMax);
   if (cluster) return rawMax;
   if (era === 'A') {
     if (sensitivity === 'high') return Math.min(existF + 2, rawMax);
@@ -2929,10 +2926,8 @@ function _buildMassMap(site, scenarios) {
     showMassingUnavailable('3D massing paused - verified site geometry is too weak for a credible model. Metrics remain visible while this site is held for manual review.');
     return;
   }
-  site._renderPoly = compactRenderRing(site, poly);
-  var framePoly = site._renderPoly || poly;
-  var center = polyCentroid(framePoly) || [site.lng, site.lat];
-  var bounds = polyBounds(framePoly);
+  var center = polyCentroid(poly) || [site.lng, site.lat];
+  var bounds = polyBounds(poly);
 
   var container = document.getElementById('mass-3d');
   massMap = new mapboxgl.Map({
@@ -2960,13 +2955,13 @@ function _buildMassMap(site, scenarios) {
   });
 }
 
-function rectFromCenterArea(center, area, latHint) {
-  var safeArea = Math.max(Number(area) || 0, 100);
-  var side = Math.sqrt(safeArea);
-  var lat = (latHint || (center && center[1]) || 51.5);
+function siteRect(site) {
+  // Generate a rectangle from plot area centered on lat/lng
+  var area = site.plotM2 || 500;
+  var side = Math.sqrt(area);
   var latD = (side / 2) / 111320;
-  var lngD = (side / 2) / (111320 * Math.cos(lat * Math.PI / 180));
-  var c = center || [0, 0];
+  var lngD = (side / 2) / (111320 * Math.cos(site.lat * Math.PI / 180));
+  var c = [site.lng, site.lat];
   return [
     [c[0] - lngD, c[1] - latD],
     [c[0] + lngD, c[1] - latD],
@@ -2974,36 +2969,6 @@ function rectFromCenterArea(center, area, latHint) {
     [c[0] - lngD, c[1] + latD],
     [c[0] - lngD, c[1] - latD]
   ];
-}
-
-function siteRect(site) {
-  return rectFromCenterArea([site.lng, site.lat], site.plotM2 || 500, site.lat);
-}
-
-function ringAreaM2(coords) {
-  var ring = normalizeRing(coords);
-  if (ring.length < 3) return 0;
-  var c = polyCentroid(ring) || ring[0];
-  var latScale = 111320;
-  var lngScale = 111320 * Math.cos((c[1] || 51.5) * Math.PI / 180);
-  var area = 0;
-  for (var i = 0; i < ring.length; i++) {
-    var p1 = ring[i];
-    var p2 = ring[(i + 1) % ring.length];
-    area += (p1[0] * lngScale) * (p2[1] * latScale) - (p2[0] * lngScale) * (p1[1] * latScale);
-  }
-  return Math.abs(area / 2);
-}
-
-function compactRenderRing(site, coords) {
-  var ring = normalizeRing(coords);
-  if (!ring.length) return ring;
-  var explicitArea = Number(site.plotM2 || site.plot_area || 0) || 0;
-  var actualArea = ringAreaM2(ring);
-  if (ring.length >= 20 && explicitArea > 0 && actualArea > explicitArea * 1.35) {
-    return rectFromCenterArea(polyCentroid(ring), explicitArea, (polyCentroid(ring) || [0, site.lat])[1]);
-  }
-  return ring;
 }
 
 function insetRect(coords, metres) {
@@ -3087,15 +3052,16 @@ function addGhostMassing(map, site) {
 }
 
 function addMassingLayers(map, site, sc) {
-  var poly = site._renderPoly || site._realPoly;
-  var tier = site._polyTier || site._polyTierHint || 'none';
-  var floorH = sc.floorH || 3.8;
+  var poly = site._realPoly;
+  var tier = site._polyTier || 'none';
+  var rect = siteRect(site);
+  var floorH = 3.8;
   var existH = (site._existH || sc.existF * floorH);
-  var existF = site._existF || sc.existF || Math.max(1, Math.round(existH / floorH));
-  var totalH = sc.heightM || (sc.floors * floorH);
-  var podH = (sc.podF || 0) * floorH;
+  var existF = site._existF || sc.existF;
+  var totalH = sc.floors * floorH;
+  var podH = sc.podF * floorH;
 
-  if (poly && (tier === 'real' || tier === 'osm' || tier === 'conceptual')) {
+  if (tier === 'real' || tier === 'osm') {
     var baseCoords = normalizeRing(poly);
     var massCoords = shrinkPoly(baseCoords, 0.985);
     var towerCoords = sc.towerSetback > 0 ? shrinkPoly(massCoords, 0.85) : massCoords;
