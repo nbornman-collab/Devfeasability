@@ -3060,37 +3060,55 @@ function addMassingLayers(map, site, sc) {
   var existH = (site._existH || sc.existF * floorH);
   var existF = site._existF || sc.existF || Math.max(1, Math.round(existH / floorH));
   var totalH = sc.heightM || (sc.floors * floorH);
+  var podH = (sc.podF || 0) * floorH;
 
   if (poly && (tier === 'real' || tier === 'osm' || tier === 'conceptual')) {
     var baseCoords = normalizeRing(poly);
-    var towerCoords = (sc.towerSetback > 0 && baseCoords.length >= 4)
-      ? insetRing(baseCoords, sc.towerSetback)
-      : baseCoords;
+    var massCoords = shrinkPoly(baseCoords, 0.985);
+    var towerCoords = sc.towerSetback > 0 ? shrinkPoly(massCoords, 0.85) : massCoords;
 
-    map.addSource('mass-potential', { type: 'geojson', data: { type: 'FeatureCollection', features: [
-      { type:'Feature', properties:{ height: totalH, base: 0 }, geometry:{ type:'Polygon', coordinates:[baseCoords] } }
-    ] } });
+    map.addSource('mass-site', {
+      type: 'geojson',
+      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
+    });
     map.addLayer({
-      id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
-      paint: {
-        'fill-extrusion-color': '#16a34a',
-        'fill-extrusion-height': ['get', 'height'],
-        'fill-extrusion-base': ['get', 'base'],
-        'fill-extrusion-opacity': 0.46
-      }
+      id: 'mass-site-outline', type: 'line', source: 'mass-site',
+      paint: { 'line-color': '#b45309', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [5, 3] }
     });
 
-    if (towerCoords && towerCoords !== baseCoords) {
-      map.addSource('mass-tower', { type: 'geojson', data: { type: 'FeatureCollection', features: [
-        { type:'Feature', properties:{ height: totalH, base: Math.min(totalH * 0.38, existH + floorH) }, geometry:{ type:'Polygon', coordinates:[towerCoords] } }
-      ] } });
+    if (totalH > 0) {
+      map.addSource('mass-potential', {
+        type: 'geojson',
+        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [massCoords] } }
+      });
+      map.addLayer({
+        id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
+        paint: {
+          'fill-extrusion-color': '#059669',
+          'fill-extrusion-height': totalH,
+          'fill-extrusion-base': 0,
+          'fill-extrusion-opacity': 0.85,
+          'fill-extrusion-vertical-gradient': false
+        }
+      });
+      map.addLayer({
+        id: 'mass-potential-edge', type: 'line', source: 'mass-potential',
+        paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.9 }
+      });
+    }
+
+    if (sc.towerSetback > 0 && totalH > podH) {
+      map.addSource('mass-tower', {
+        type: 'geojson',
+        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [towerCoords] } }
+      });
       map.addLayer({
         id: 'mass-tower-3d', type: 'fill-extrusion', source: 'mass-tower',
         paint: {
-          'fill-extrusion-color': '#22c55e',
-          'fill-extrusion-height': ['get', 'height'],
-          'fill-extrusion-base': ['get', 'base'],
-          'fill-extrusion-opacity': 0.58
+          'fill-extrusion-color': '#ffffff',
+          'fill-extrusion-height': totalH,
+          'fill-extrusion-base': podH,
+          'fill-extrusion-opacity': 0.15
         }
       });
     }
@@ -3099,38 +3117,33 @@ function addMassingLayers(map, site, sc) {
     var numFloors = sc.floors;
     for (var i = 1; i <= numFloors; i++) {
       var fh = i * floorH;
-      if (fh > totalH + 0.25) break; // safety cap
-      var slabCoords = (sc.towerSetback > 0 && i > Math.max(2, Math.round(numFloors * 0.4)) && towerCoords && towerCoords.length >= 4)
-        ? towerCoords : baseCoords;
+      if (fh > totalH + 0.5) break;
+      var slabCoords = (sc.towerSetback > 0 && i > (sc.podF || 0)) ? towerCoords : massCoords;
       floorLines.push({
         type: 'Feature',
-        properties: { height: fh, isExisting: i <= existF ? 1 : 0 },
-        geometry: { type: 'Polygon', coordinates: [slabCoords] }
+        geometry: { type: 'Polygon', coordinates: [slabCoords] },
+        properties: { height: fh + 0.1, base: fh - 0.1 }
       });
     }
-    if (floorLines.length) {
-      map.addSource('mass-floor-lines', { type: 'geojson', data: { type:'FeatureCollection', features: floorLines } });
+    if (floorLines.length > 0) {
+      map.addSource('mass-floors', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: floorLines }
+      });
       map.addLayer({
-        id: 'mass-floor-lines',
-        type: 'fill-extrusion',
-        source: 'mass-floor-lines',
+        id: 'mass-floor-lines', type: 'fill-extrusion', source: 'mass-floors',
         paint: {
           'fill-extrusion-color': '#ffffff',
-          'fill-extrusion-height': ['+', ['get', 'height'], 0.32],
-          'fill-extrusion-base': ['get', 'height'],
-          'fill-extrusion-opacity': ['case', ['==', ['get', 'isExisting'], 1], 0.72, 0.98]
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-base': ['get', 'base'],
+          'fill-extrusion-opacity': 0.7
         }
       });
     }
 
-    // Height labels
     addMassLabels(map, site, sc, baseCoords, existH, totalH, existF);
 
   } else {
-    // === TIER C: No reliable polygon ===
-    // Don't draw any boundary — Mapbox 3D context is enough
-    // Just show height labels centred on site lat/lng
-    var centreCoords = [[site.lng, site.lat]];
     addMassLabels(map, site, sc, [[site.lng, site.lat],[site.lng, site.lat+0.0001],[site.lng+0.0001, site.lat],[site.lng, site.lat]], existH, totalH, existF);
   }
 }
