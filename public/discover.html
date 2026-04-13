@@ -1360,11 +1360,12 @@ function towerAllowed(s, era, sensitivity, cluster, prec) {
 
 // ── Layer B: Height cap ───────────────────────────────────────────────────
 function heightCap(s, era, sensitivity, cluster, prec) {
-  const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
+  const explicitCap = s.max_floors || null;
+  const rawMax = explicitCap || s.mf || Math.round(5 + (s.score||50) / 10);
   const existingH = s.existing_height_m || null;
   const existF = existingH ? Math.round(existingH / 3.5) : Math.max(2, Math.round(rawMax * 0.40));
   const logic = siteDevelopmentLogic(s);
-  if (logic.mode === 'Strategic height') return Math.max(rawMax, s.mf || rawMax);
+  if (logic.mode === 'Strategic height') return explicitCap || Math.max(rawMax, s.mf || rawMax);
   if (cluster) return rawMax;
   if (era === 'A') {
     if (sensitivity === 'high') return Math.min(existF + 2, rawMax);
