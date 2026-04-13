@@ -1516,7 +1516,6 @@ function normaliseSite(s, idx) {
   const inCAZ = !!(s.flags?.inCAZ || s.flags?.caz);
   const inCons = !!(s.flags?.inConservation);
 
-  // Layer A
   const era = contextEra(s);
   const sensitivity = fabricSensitivity(s, era);
   const cluster = isTowerCluster(s);
@@ -1524,11 +1523,8 @@ function normaliseSite(s, idx) {
   const posture = classifyPosture(era, sensitivity, cluster, prec);
   const recForm = recommendedForm(posture, era, cluster);
   const towerOK = towerAllowed(s, era, sensitivity, cluster, prec);
-
-  // Layer B
   const maxFloorsCapped = heightCap(s, era, sensitivity, cluster, prec);
 
-  // Heritage tier
   const nhle_tier = (s.nhle_tier || '').toLowerCase();
   const heritTier = s.her ||
     (nhle_tier === 'blocking' ? 'blocking' :
@@ -1536,31 +1532,42 @@ function normaliseSite(s, idx) {
      nhle_tier === 'manageable' ? 'manageable' :
      inCons ? 'navigable' : 'manageable');
 
-  // Layer C — factored score
   const utilisationScore = s.utilisation_score != null ? s.utilisation_score : 5.0;
-  const rawScore = parseInt(s.score)||0;
+  const rawScore = parseInt(s.score) || 0;
   const legitimacy = assessSiteLegitimacy(s);
-  const score = Math.max(0, computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore) - legitimacy.penalty);
 
   const hectares = s.hectares || (s.plot ? s.plot / 10000 : 0.05);
   const plotM2 = Math.round(hectares * 10000);
-  // ERV: factored by use type, not blanket OA/CAZ
-  const useType = (s.use || '').toLowerCase();
-  const ervBase = useType === 'residential' ? 0 :
-    (s.borough||'').toLowerCase().includes('city') ? 850 :
-    inCAZ ? 750 : inOA ? 700 : 600;
-  const ervResid = useType === 'residential' ? (inCAZ ? 1100 : inOA ? 950 : 750) : 0;
-  const erv = ervBase || ervResid || 650;
-  const nia = plotM2 * 0.78 * 0.42 * maxFloorsCapped;
-  const gdvEst = (nia * erv / 0.0475 / 1e6).toFixed(1);
+  const useType = s.use || inferUseType(s);
   const planScore = computePlanScore(s, heritTier);
   const constraint = keyConstraint(s, era, sensitivity, heritTier);
-
-  // Utilisation label (utilisationScore already defined above)
   const utilisationData = s.utilisation_data || {};
   const utilisationLabel = utilisationScore >= 8.5 ? 'Maximally Underutilised' :
     utilisationScore >= 6.5 ? 'Significantly Underutilised' :
     utilisationScore >= 4.5 ? 'Moderately Underutilised' : 'Adequately Used';
+
+  const canonicalSeed = {
+    ...s,
+    borough,
+    ptal,
+    inOA,
+    inCAZ,
+    inCons,
+    maxFloors: maxFloorsCapped,
+    plotM2,
+    useType,
+    existingHeightM: s.existing_height_m || null,
+    existingFloors: s.existing_floors || null,
+    heritTier,
+    planScore,
+    score: rawScore,
+    planning: s.planning || null,
+  };
+  const canonical = window.HeadroomSiteModel ? window.HeadroomSiteModel.buildCanonicalSite(canonicalSeed) : null;
+  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
+  const liveScore = baseScenario ? baseScenario.score : computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore);
+  const score = Math.max(0, liveScore - legitimacy.penalty);
+  const gdvEst = baseScenario && baseScenario.gdv ? (baseScenario.gdv / 1e6).toFixed(1) : '0.0';
 
   return {
     id: idx, name: s.name||s.address, address: s.address||s.name, borough,
@@ -1569,10 +1576,10 @@ function normaliseSite(s, idx) {
     recForm, towerOK, constraint,
     verified: !!s.verified, t1: s.t1||null,
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
-    ptal, maxFloors: maxFloorsCapped, plotM2, gdvEst, planScore, heritTier,
-    useType: s.use || inferUseType(s),
-    existingHeightM: s.existing_height_m || null,
-    existingFloors: s.existing_floors || null,
+    ptal, maxFloors: canonical ? canonical.maxFloors : maxFloorsCapped, plotM2, gdvEst, planScore, heritTier,
+    useType,
+    existingHeightM: canonical ? canonical.existingHeightM : (s.existing_height_m || null),
+    existingFloors: canonical ? canonical.existingFloors : (s.existing_floors || null),
     brownfield: !!(s.brownfield || (s.source && s.source.indexOf('brownfield') !== -1)),
     offMarket: s.offMarket||'unknown',
     owner: s.owner||null,
@@ -1594,6 +1601,7 @@ function normaliseSite(s, idx) {
     consolidationVacant: s.consolidation_vacant || 0,
     consolidationLH: s.consolidation_leaseholds || 0,
     consolidationVacantRatio: s.consolidation_vacant_ratio || 0,
+    _canonicalModel: canonical,
   };
 }
 
