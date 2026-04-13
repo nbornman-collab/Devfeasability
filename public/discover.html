@@ -2876,6 +2876,9 @@ function initMassMap(site, scenarios) {
     if (intel) {
       if (intel.existing_height_m) site._existH = intel.existing_height_m;
       if (intel.existing_floors) site._existF = intel.existing_floors;
+      if (intel.max_floors) site.maxFloors = intel.max_floors;
+      site._conceptualMassing = !!intel.conceptual_massing;
+      site._airRightsType = intel.air_rights_type || null;
     }
 
     var tier = polyTier(intelPoly);
@@ -2900,6 +2903,10 @@ function initMassMap(site, scenarios) {
           site._polyTier = 'osm';
           if (osm.height) site._existH = osm.height;
           if (osm.levels) site._existF = osm.levels;
+        } else if ((tier === 'bbox' || tier === 'low') && site._conceptualMassing) {
+          // Intentional intelligence massing footprint - allow conceptual render
+          site._realPoly = intelPoly;
+          site._polyTier = 'conceptual';
         } else if (tier === 'bbox' || tier === 'low') {
           // Use intel bbox but mark as approximate
           site._realPoly = intelPoly;
@@ -3054,7 +3061,7 @@ function addMassingLayers(map, site, sc) {
   var existF = site._existF || sc.existF || Math.max(1, Math.round(existH / floorH));
   var totalH = sc.heightM || (sc.floors * floorH);
 
-  if (poly && (tier === 'real' || tier === 'osm')) {
+  if (poly && (tier === 'real' || tier === 'osm' || tier === 'conceptual')) {
     var baseCoords = normalizeRing(poly);
     var towerCoords = (sc.towerSetback > 0 && baseCoords.length >= 4)
       ? insetRing(baseCoords, sc.towerSetback)

@@ -261,11 +261,17 @@ app.get('/api/site-polygon', (req, res) => {
       const hm = content.match(/existing_height_m:\s*([\d.]+)/);
       const fm = content.match(/existing_floors:\s*(\d+)/);
       const pam = content.match(/plot_area_m2:\s*(\d+)/);
+      const maxfm = content.match(/max_floors:\s*(\d+)/);
+      const arm = content.match(/air_rights_type:\s*["']([^"']+)["']/);
+      const hasMassingConfig = /massing_config:\s*\{/.test(content);
       return res.json({
         polygon,
         existing_height_m: hm ? parseFloat(hm[1]) : null,
         existing_floors: fm ? parseInt(fm[1]) : null,
-        plot_area_m2: pam ? parseInt(pam[1]) : null
+        plot_area_m2: pam ? parseInt(pam[1]) : null,
+        max_floors: maxfm ? parseInt(maxfm[1]) : null,
+        air_rights_type: arm ? arm[1] : null,
+        conceptual_massing: hasMassingConfig || !!arm
       });
     }
     res.json({ polygon: null });
