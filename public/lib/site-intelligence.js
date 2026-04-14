@@ -20,6 +20,41 @@ function computeSiteScore(si) {
   return Math.round(weighted / 12.0 * 10); // out of 100, new divisor 12.0
 }
 
+function canonicalSiteFromIntelligence(si) {
+  if (!si || !si.site || !window.HeadroomSiteModel) return null;
+  if (!si._canonicalSite) {
+    const site = si.site || {};
+    const factors = si.factors || {};
+    si._canonicalSite = window.HeadroomSiteModel.buildCanonicalSite({
+      ...site,
+      borough: si.borough || site.borough,
+      planning: site.planning || factors.momentum || null,
+      planningPolicy: site.planningPolicy || null,
+      fabricProfile: site.fabricProfile || null,
+      plotM2: site.plotM2 || site.plot_m2 || site.plot_area || null,
+      existingHeightM: site.existingHeightM || site.existing_height_m || null,
+      existingFloors: site.existingFloors || site.existing_floors || null,
+      maxFloors: site.maxFloors || site.max_floors || site.mf || null
+    });
+  }
+  return si._canonicalSite;
+}
+
+function intelligenceMassingMetrics(si) {
+  const site = si && si.site ? si.site : {};
+  const canonical = canonicalSiteFromIntelligence(si);
+  const maxF = canonical ? canonical.maxFloors : (site.maxFloors || site.max_floors || 10);
+  const maxH = site.max_h || site.maxH || site.height_m || 30;
+  const plotM2 = canonical ? canonical.plotM2 : (site.plotM2 || site.plot_m2 || site.plot_area || 1000);
+  const roughExistingGiaM2 = canonical ? canonical.roughExistingGiaM2 : null;
+  const roughProposedGiaM2 = canonical ? canonical.roughProposedGiaM2 : null;
+  const roughGiaUpliftPct = canonical ? canonical.roughGiaUpliftPct : null;
+  const plateSizeEst = Math.round(plotM2 * 0.65);
+  const niaPF = Math.round(plateSizeEst * 0.78 * 0.78);
+  const existingFloors = canonical ? canonical.existingFloors : (site.existingFloors || site.existing_floors || 0);
+  return { canonical, maxF, maxH, plotM2, roughExistingGiaM2, roughProposedGiaM2, roughGiaUpliftPct, plateSizeEst, niaPF, existingFloors };
+}
+
 // ── SVG ring gauge ───────────────────────────────────────────────────────────
 function scoreRingSVG(score, size=80) {
   const r = size * 0.38, cx = size/2, cy = size/2;
@@ -153,7 +188,8 @@ function renderIntelligenceT2(si) {
 
   // Dev scope section
   const s = (si.site||{});
-  const maxF = s.max_floors||10, maxH = s.max_h||40, plotM2 = s.plot_m2||1550;
+  const massing = intelligenceMassingMetrics(si);
+  const maxF = massing.maxF || 10, maxH = massing.maxH || 40, plotM2 = massing.plotM2 || 1550;
   const grossPlate = Math.round(plotM2 * 0.42);
   const coreM2 = Math.round(grossPlate * 0.22);
   const niaFloor = grossPlate - coreM2;
@@ -163,7 +199,10 @@ function renderIntelligenceT2(si) {
 
   const devBody = dataRow('Max Floors', maxF+'F') + dataRow('Max Height', maxH+'m AOD') +
     dataRow('Gross Plate', grossPlate+'m²') + dataRow('Core (22%)', coreM2+'m²') +
-    dataRow('NIA / Floor', niaFloor+'m²') + dataRow('GDV Est.', '£'+gdvM+'M') +
+    dataRow('NIA / Floor', niaFloor+'m²') +
+    (massing.roughProposedGiaM2 ? dataRow('Rough Proposed GIA', massing.roughProposedGiaM2.toLocaleString()+'m²') : '') +
+    (massing.roughGiaUpliftPct != null ? dataRow('Rough GIA Uplift', (massing.roughGiaUpliftPct > 0 ? '+' : '') + massing.roughGiaUpliftPct + '%') : '') +
+    dataRow('GDV Est.', '£'+gdvM+'M') +
     (devSynthText ? `<p style="font:400 11px/1.7 'Inter',sans-serif;color:#6b7280;margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6">${devSynthText}</p>` : '');
 
   // Planning section
@@ -295,9 +334,10 @@ function synthesisDevScope(si) {
   const heritScore = hf.score || 7;
   const inOA = !!(mom.opportunity_area);
   const oaName = inOA ? (mom.opportunity_area.name || 'an Opportunity Area') : null;
-  const maxF = s.max_floors || 10;
-  const maxH = s.max_h || 30;
-  const plotM2 = s.plot_m2 || s.plot_area || 1000;
+  const massing = intelligenceMassingMetrics(si);
+  const maxF = massing.maxF || 10;
+  const maxH = massing.maxH || 30;
+  const plotM2 = massing.plotM2 || 1000;
   const bsa18 = maxH >= 18 || maxF >= 6;
   const bsa30 = maxH >= 30 || maxF >= 10;
   const bsa50 = maxH >= 50 || maxF >= 16;
@@ -399,9 +439,10 @@ function synthesisArchitecture(si) {
   const heritTier = hf.tier || 'clean';
   const heritScore = hf.score || 7;
   const skyScore = sky.score || 5;
-  const maxF = s.max_floors || 10;
-  const maxH = s.max_h || 30;
-  const plotM2 = s.plot_m2 || s.plot_area || 1000;
+  const massing = intelligenceMassingMetrics(si);
+  const maxF = massing.maxF || 10;
+  const maxH = massing.maxH || 30;
+  const plotM2 = massing.plotM2 || 1000;
   const erv = val.erv || 700;
   const inOA = !!(mom.opportunity_area);
 
@@ -448,9 +489,10 @@ function renderDevNumbers(si) {
   const F = si.factors || {};
   const s = si.site || {};
   const val = F.value || {};
-  const maxF = s.max_floors || 10;
-  const maxH = s.max_h || 30;
-  const plotM2 = s.plot_m2 || s.plot_area || 1000;
+  const massing = intelligenceMassingMetrics(si);
+  const maxF = massing.maxF || 10;
+  const maxH = massing.maxH || 30;
+  const plotM2 = massing.plotM2 || 1000;
   const erv = val.erv || 700;
   const niy = val.niy || 4.75;
   const plateSizeEst = Math.round(plotM2 * 0.65);
@@ -849,13 +891,13 @@ function populateSummary(si) {
   if(!document.getElementById('metrics-hero-injected')) {
     const firstGroup = document.querySelector('.intel-group');
     if(firstGroup) {
+      const massing = intelligenceMassingMetrics(si);
       const mf = maxF||10;
       const mh = maxH||30;
       const erv2 = val.erv||700;
       const niy2 = val.niy||4.75;
-      const plotM2 = s.plot_m2||s.plot_area||1000;
-      const plateSz = Math.round(plotM2 * 0.65);
-      const niaPF = Math.round(plateSz * 0.78 * 0.78);
+      const plotM2 = massing.plotM2 || s.plot_m2 || s.plot_area || 1000;
+      const niaPF = massing.niaPF || Math.round(Math.round(plotM2 * 0.65) * 0.78 * 0.78);
       const gdvEst = (Math.round(niaPF * mf * erv2 / 1e5) / 10).toFixed(1);
       const planScore = (F.momentum||{}).score||5;
       const planCol = planScore>=7?'#059669':planScore>=5?'#d97706':'#dc2626';
@@ -863,14 +905,14 @@ function populateSummary(si) {
       // Existing vs additional floors
       const existingM = (F.sky&&F.sky.existing_m)||0;
       const FTF = 4.0;
-      const existingF = existingM > 0 ? Math.max(1, Math.round(existingM / FTF)) : 0;
+      const existingF = massing.existingFloors || (existingM > 0 ? Math.max(1, Math.round(existingM / FTF)) : 0);
       const additionalF = Math.max(0, mf - existingF);
       const floorsLabel = existingF > 0 ? existingF+'<span style="font:400 9px sans-serif;color:#9ca3af"> exist</span> + '+additionalF+'<span style="font:400 9px sans-serif;color:#9ca3af">F add</span>' : mf+'F';
 
       // Area uplift %
-      const existingNIA = Math.round(niaPF * Math.max(existingF, 1));
-      const proposedNIA = Math.round(niaPF * mf);
-      const areaUplift = existingNIA > 0 ? Math.round((proposedNIA - existingNIA) / existingNIA * 100) : 0;
+      const existingNIA = massing.roughExistingGiaM2 || Math.round(niaPF * Math.max(existingF, 1));
+      const proposedNIA = massing.roughProposedGiaM2 || Math.round(niaPF * mf);
+      const areaUplift = massing.roughGiaUpliftPct != null ? massing.roughGiaUpliftPct : (existingNIA > 0 ? Math.round((proposedNIA - existingNIA) / existingNIA * 100) : 0);
 
       const m = (v, u, lbl, col) => `<div style="flex:1;text-align:center;padding:10px 6px;border-right:1px solid #e5e7eb;min-width:0">
         <div style="font:800 17px 'JetBrains Mono',monospace;color:${col||'#0c0f1a'};letter-spacing:-1px;line-height:1.1">${v}<span style="font:500 10px 'Inter',sans-serif;color:#9ca3af;font-weight:400">${u}</span></div>

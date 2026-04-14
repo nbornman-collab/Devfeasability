@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Discover - Headroom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -378,7 +378,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .search-input {
   width: 100%; padding: 8px 12px; background: var(--bg2);
   border: 1px solid var(--rule); border-radius: 6px;
-  font: 400 12px var(--sans); color: var(--ink); outline: none;
+  font: 400 16px var(--sans); color: var(--ink); outline: none;
+  -webkit-appearance: none; appearance: none;
 }
 .search-input::placeholder { color: var(--ink3); }
 .search-input:focus { border-color: var(--accent); background: var(--bg); }
@@ -984,7 +985,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   .list-header { padding: 4px 10px; }
   .list-header-label { font-size: 10px; }
   .list-count { font-size: 10px; }
-  .search-input { font-size: 13px; padding: 6px 10px; }
+  .search-input { font-size: 16px; padding: 8px 10px; }
 
   /* Site cards: compact mobile */
   .site-list { overflow-y: auto; -webkit-overflow-scrolling: touch; }
@@ -1319,14 +1320,29 @@ function isTowerCluster(s) {
   return false;
 }
 
+function planningPolicyProfile(s) {
+  return window.HeadroomSiteModel && window.HeadroomSiteModel.buildPlanningPolicyProfile
+    ? window.HeadroomSiteModel.buildPlanningPolicyProfile(s)
+    : { zone: null, policyNote: null, planScoreBoost: 0, headroomBoost: 0, precedentWeight: 1, majorUplift: false, heightIntent: false, clusterPressure: false };
+}
+
+function fabricProfile(s) {
+  return window.HeadroomSiteModel && window.HeadroomSiteModel.buildFabricProfile
+    ? window.HeadroomSiteModel.buildFabricProfile(s)
+    : { laterFabric: false, poorModernSignals: false, redevelopmentFriendly: false, lowHeritage: false };
+}
+
 // ── Layer A: Precedent validity ───────────────────────────────────────────
 // Tower precedent only valid if: OA + brownfield/commercial + NOT conservation
 function precedentMatch(s) {
+  const policy = planningPolicyProfile(s);
   const inCons = !!(s.flags?.inConservation);
   const inOA   = !!(s.flags?.inOA || s.flags?.oa);
+  const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
   const brownfield = !!(s.brownfield);
   const useType = (s.use || '').toLowerCase();
   const isCommercial = ['office','commercial','industrial','retail'].includes(useType);
+  if (!inCons && policy.precedentWeight >= 1.45 && (inOA || inCAZ || brownfield || isCommercial)) return 'strong';
   if (inOA && !inCons && (brownfield || isCommercial)) return 'strong';
   if (inOA && !inCons && !brownfield && !isCommercial) return 'moderate'; // OA but resi/unknown
   return 'weak';
@@ -1334,7 +1350,10 @@ function precedentMatch(s) {
 
 // ── Layer A: Planning posture ─────────────────────────────────────────────
 function classifyPosture(era, sensitivity, cluster, prec) {
+  const fabric = fabricProfile(arguments[4] || {});
+  const policy = planningPolicyProfile(arguments[4] || {});
   if (cluster) return 'go_hard';
+  if (fabric.redevelopmentFriendly && policy.majorUplift) return 'go_hard';
   if (era === 'A' && sensitivity === 'high') return 'defensive';
   if (era === 'A') return 'caution';
   if (era === 'mixed') return 'caution';
@@ -1360,10 +1379,13 @@ function towerAllowed(s, era, sensitivity, cluster, prec) {
 
 // ── Layer B: Height cap ───────────────────────────────────────────────────
 function heightCap(s, era, sensitivity, cluster, prec) {
+  const fabric = fabricProfile(s);
+  const policy = planningPolicyProfile(s);
   const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
   const existingH = s.existing_height_m || null;
   const existF = existingH ? Math.round(existingH / 3.5) : Math.max(2, Math.round(rawMax * 0.40));
   if (cluster) return rawMax;
+  if (fabric.redevelopmentFriendly && policy.majorUplift) return rawMax;
   if (era === 'A') {
     if (sensitivity === 'high') return Math.min(existF + 2, rawMax);
     if (prec === 'strong') return Math.min(existF + 4, rawMax);
@@ -1379,6 +1401,8 @@ function heightCap(s, era, sensitivity, cluster, prec) {
 // constraint_discount: how much does heritage/context eat that upside?
 // utilisation_boost: does the site have genuine latent capacity?
 function computeScore(rawScore, s, posture, nhleBlockPenalty, utilisationScore) {
+  const policy = planningPolicyProfile(s);
+  const fabric = fabricProfile(s);
   const inOA   = !!(s.flags?.inOA || s.flags?.oa);
   const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
   const inCity = (s.borough || '').toLowerCase().includes('city');
@@ -1403,6 +1427,9 @@ function computeScore(rawScore, s, posture, nhleBlockPenalty, utilisationScore) 
   else if (ptal >= 5) baseHeadroom = 5;
   else if (ptal >= 4) baseHeadroom = 3;
   else baseHeadroom = 1;
+  baseHeadroom += (policy.headroomBoost || 0);
+  if (fabric.redevelopmentFriendly) baseHeadroom += 1;
+  if (fabric.redevelopmentFriendly && policy.majorUplift) baseHeadroom += 2;
 
   // Constraint discount — heritage/context eats the headroom
   let constraintDiscount;
@@ -1428,6 +1455,7 @@ function computeScore(rawScore, s, posture, nhleBlockPenalty, utilisationScore) 
 
 // ── Layer C: Planning score — factored, not blanket OA bonus ─────────────
 function computePlanScore(s, heritTier) {
+  const policy = planningPolicyProfile(s);
   const inOA   = !!(s.flags?.inOA || s.flags?.oa);
   const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
   const inCons = !!(s.flags?.inConservation);
@@ -1436,6 +1464,7 @@ function computePlanScore(s, heritTier) {
   if (s.mom) return s.mom;
   // Base from location
   let base = inOA ? 7.5 : inCAZ ? 7.0 : 5.5;
+  base += (policy.planScoreBoost || 0);
   // Heritage discount
   if (nhle_tier === 'blocking') base *= 0.5;
   else if (inCons && nhle_tier === 'navigable') base *= 0.65;
@@ -1539,8 +1568,10 @@ function normaliseSite(s, idx) {
   const hectares = s.hectares || (s.plot ? s.plot / 10000 : 0.05);
   const plotM2 = Math.round(hectares * 10000);
   const useType = s.use || inferUseType(s);
-  const planScore = computePlanScore(s, heritTier);
-  const constraint = keyConstraint(s, era, sensitivity, heritTier);
+  const planningPolicy = planningPolicyProfile({ ...s, borough, ptal, inOA, inCAZ, inCons, useType });
+  const fabric = fabricProfile({ ...s, borough, ptal, inOA, inCAZ, inCons, useType });
+  const planScore = computePlanScore({ ...s, borough, ptal, inOA, inCAZ, inCons, useType, planningPolicy }, heritTier);
+  const constraint = fabric.redevelopmentFriendly && planningPolicy.majorUplift ? 'Low-value later fabric in uplift corridor' : keyConstraint(s, era, sensitivity, heritTier);
   const utilisationData = s.utilisation_data || {};
   const utilisationLabel = utilisationScore >= 8.5 ? 'Maximally Underutilised' :
     utilisationScore >= 6.5 ? 'Significantly Underutilised' :
@@ -1562,6 +1593,8 @@ function normaliseSite(s, idx) {
     planScore,
     score: rawScore,
     planning: s.planning || null,
+    planningPolicy,
+    fabricProfile: fabric,
   };
   const canonical = window.HeadroomSiteModel ? window.HeadroomSiteModel.buildCanonicalSite(canonicalSeed) : null;
   const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
@@ -1576,14 +1609,26 @@ function normaliseSite(s, idx) {
     recForm, towerOK, constraint,
     verified: !!s.verified, t1: s.t1||null,
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
-    ptal, maxFloors: canonical ? canonical.maxFloors : maxFloorsCapped, plotM2, gdvEst, planScore, heritTier,
+    ptal,
+    maxFloors: canonical ? canonical.maxFloors : maxFloorsCapped,
+    plotM2: canonical ? canonical.plotM2 : plotM2,
+    gdvEst,
+    planScore,
+    heritTier,
     useType,
+    typology: canonical ? canonical.typology : null,
+    canonicalMetrics: canonical ? canonical.canonicalMetrics : null,
     existingHeightM: canonical ? canonical.existingHeightM : (s.existing_height_m || null),
     existingFloors: canonical ? canonical.existingFloors : (s.existing_floors || null),
+    roughExistingGiaM2: canonical ? canonical.roughExistingGiaM2 : null,
+    roughProposedGiaM2: canonical ? canonical.roughProposedGiaM2 : null,
+    roughGiaUpliftPct: canonical ? canonical.roughGiaUpliftPct : null,
     brownfield: !!(s.brownfield || (s.source && s.source.indexOf('brownfield') !== -1)),
     offMarket: s.offMarket||'unknown',
     owner: s.owner||null,
     planning: s.planning||null,
+    planningPolicy: canonical ? canonical.planningPolicy : planningPolicy,
+    fabricProfile: canonical ? canonical.fabricProfile : fabric,
     hmlr: s.hmlr||null,
     onMarket: !!(s.on_market),
     listingUrl: s.listing_url||null,
@@ -1608,6 +1653,7 @@ function normaliseSite(s, idx) {
 function planningSignalSummary(s) {
   const seeded = s.planning || {};
   const live = s.planningContext || {};
+  const policy = s.planningPolicy || planningPolicyProfile(s);
   const merged = {
     source: live.source || seeded.source || null,
     applicationCount: Number(live.applicationCount ?? seeded.applicationCount ?? seeded.count ?? 0),
@@ -1618,10 +1664,13 @@ function planningSignalSummary(s) {
     recentRef: live.recentRef || seeded.recentRef || null,
     refs: live.refs || seeded.refs || [],
     note: live.note || seeded.note || null,
+    policyZone: policy.zone || null,
+    policyNote: policy.policyNote || null,
+    policyMajorUplift: !!policy.majorUplift,
   };
   merged.hasSignal = merged.applicationCount > 0 || merged.majorCount > 0 || merged.tallCount > 0;
-  merged.heightIntent = merged.liveTallCount > 0 || merged.tallCount >= 2;
-  merged.clusterPressure = merged.majorCount >= 2 || merged.applicationCount >= 4;
+  merged.heightIntent = !!policy.heightIntent || merged.liveTallCount > 0 || merged.tallCount >= 2;
+  merged.clusterPressure = !!policy.clusterPressure || merged.majorCount >= 2 || merged.applicationCount >= 4;
   return merged;
 }
 
@@ -1908,15 +1957,19 @@ function render() {
 // ── Card click ────────────────────────────────────────────────────────────────
 // ── Analyst hook generator ────────────────────────────────────────────────────
 function siteDevelopmentLogic(s) {
+  const canonical = ensureCanonicalSite(s);
+  const planning = planningSignalSummary(s);
+  if (canonical && canonical.developmentLogic) {
+    return { ...canonical.developmentLogic, planning };
+  }
+
   const useType = (s.useType || s.use_type || s.use || '').toLowerCase();
   const existingHeight = Number(s.existingHeightM || s.existing_height_m || 0);
   const existingFloors = Number(s.existingFloors || s.existing_floors || s.existF || 0);
   const cityCore = s.borough === 'City of London' || s.inCAZ;
-  const planning = planningSignalSummary(s);
   const tallCommercial = (cityCore && (existingHeight >= 35 || existingFloors >= 10) && /(office|commercial|mixed)/.test(useType || 'office')) || planning.heightIntent;
   const highValue = cityCore || tallCommercial;
   const heritage = s.heritTier === 'blocking' ? 'high' : s.heritTier === 'high' ? 'medium' : 'low';
-  const ptal = Number(s.ptal) || 3;
   const mode = tallCommercial ? 'Strategic height'
     : ((highValue && heritage === 'low') || planning.clusterPressure) ? 'Mid-rise intensification'
     : highValue ? 'Setback intensification'
@@ -1983,6 +2036,9 @@ function analystHook(s) {
 
   if (p.note && (hasTall || hasLiveTall)) {
     sentences.push(`<strong>Planning-intent signal:</strong> ${p.note}. This should calibrate confidence, not override site-specific constraints.`);
+  }
+  if (p.policyZone && p.policyMajorUplift) {
+    sentences.push(`<strong>Local policy lane:</strong> ${p.policyZone}. ${p.policyNote || 'This pocket should be treated as a genuine uplift corridor, not flattened into borough-wide caution.'}`);
   }
 
   // 2. Ownership / title signal - use real data
@@ -2090,6 +2146,9 @@ function openFocus(site, opts) {
   const existF = canonical ? canonical.existingFloors : Math.max(1, Math.round(site.maxFloors * 0.45));
   const addF = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
   const addNIA = baseScenario ? Math.round(baseScenario.addedNIA || 0) : Math.round(site.plotM2 * 0.42 * 0.78 * addF);
+  const roughExistingGia = canonical && canonical.roughExistingGiaM2 ? canonical.roughExistingGiaM2 : null;
+  const roughProposedGia = canonical && canonical.roughProposedGiaM2 ? canonical.roughProposedGiaM2 : null;
+  const roughGiaUpliftPct = canonical && canonical.roughGiaUpliftPct != null ? canonical.roughGiaUpliftPct : null;
   const heritLabel = site.heritTier==='blocking'?'High risk':site.heritTier==='navigable'?'Navigable':'Low risk';
   const niySub = canonical && canonical.financialAssumptions ? canonical.financialAssumptions.niy : (site.inCAZ ? 4.75 : site.borough==='City of London' ? 4.25 : 5.5);
   const ervPsm = canonical && canonical.financialAssumptions ? canonical.financialAssumptions.erv : (site.borough==='City of London' ? 850 : site.inCAZ ? 750 : 700);
@@ -2105,7 +2164,8 @@ function openFocus(site, opts) {
     <div class="focus-metric"><div class="focus-metric-val accent">£${gdvLo}-${gdvHi}M</div><div class="focus-metric-lbl">Est. GDV range</div></div>
     <div class="focus-metric"><div class="focus-metric-val">+${addF}F</div><div class="focus-metric-lbl">Added floors</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${addNIA.toLocaleString()}m²</div><div class="focus-metric-lbl">New NIA</div></div>
-    <div class="focus-metric"><div class="focus-metric-val">${ervStr}</div><div class="focus-metric-lbl">Est. ERV</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${roughProposedGia ? roughProposedGia.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Rough proposed GIA</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${roughGiaUpliftPct != null ? (roughGiaUpliftPct > 0 ? '+' : '') + roughGiaUpliftPct + '%' : ervStr}</div><div class="focus-metric-lbl">${roughGiaUpliftPct != null ? 'Rough GIA uplift' : 'Est. ERV'}</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${niySub}%</div><div class="focus-metric-lbl">Sub-market NIY</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${ptalLabel}</div><div class="focus-metric-lbl">PTAL</div></div>
   `;
