@@ -426,6 +426,26 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .list-header-label { font: 300 18px var(--sans); letter-spacing: -.01em; color: var(--ink); letter-spacing: -.01em; }
 .list-count { font: 600 13px var(--mono); color: var(--ink2); }
+.assess-intake {
+  display: none; padding: 28px 20px; flex: 1; overflow-y: auto;
+}
+.assess-intake.visible { display: block; }
+.assess-intake-kicker {
+  font: 700 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+}
+.assess-intake-title {
+  font: 300 30px var(--sans); letter-spacing: -.03em; color: var(--ink); line-height: 1.02; margin-bottom: 12px;
+}
+.assess-intake-copy {
+  font: 400 14px var(--sans); color: var(--ink2); line-height: 1.5; max-width: 34ch; margin-bottom: 22px;
+}
+.assess-intake-points { display: flex; flex-direction: column; gap: 10px; }
+.assess-intake-point {
+  font: 500 12px var(--sans); color: var(--ink2); padding-left: 14px; position: relative;
+}
+.assess-intake-point::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); position: absolute; left: 0; top: 6px;
+}
 
 /* SITE LIST */
 .site-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
@@ -1226,6 +1246,17 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
       <span class="list-count" id="list-count">-</span>
     </div>
 
+    <div class="assess-intake" id="assess-intake">
+      <div class="assess-intake-kicker">3D-first intake</div>
+      <div class="assess-intake-title">Assess any London building</div>
+      <div class="assess-intake-copy">Search an address, or switch to 3D and click a building. This mode is for ad hoc screening only, not ranked shortlist browsing.</div>
+      <div class="assess-intake-points">
+        <div class="assess-intake-point">Use 3D to select a footprint cleanly</div>
+        <div class="assess-intake-point">First click highlights the building and opens a mini card</div>
+        <div class="assess-intake-point">Open the full panel from the mini card</div>
+      </div>
+    </div>
+
     <!-- Site list -->
     <div class="site-list" id="site-list">
       <div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">Loading sites...</div>
@@ -1910,7 +1941,13 @@ function setMode(mode) {
     if (tab) tab.classList.toggle('active', m===mode);
   });
   var searchBar = document.getElementById('search-bar');
+  var assessIntake = document.getElementById('assess-intake');
+  var listHeader = document.querySelector('.list-header');
+  var siteList = document.getElementById('site-list');
   if (searchBar) searchBar.classList.toggle('visible', mode === 'assess');
+  if (assessIntake) assessIntake.classList.toggle('visible', mode === 'assess');
+  if (listHeader) listHeader.style.display = mode === 'assess' ? 'none' : 'flex';
+  if (siteList) siteList.style.display = mode === 'assess' ? 'none' : 'block';
   setSearchHelp(
     mode === 'assess'
       ? (currentMapPerspective === '3d'
@@ -1946,7 +1983,6 @@ function render() {
 
   const list = document.getElementById('site-list');
   if (activeMode === 'assess') {
-    list.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">Search any London address, or switch to 3D and click a building to start an instant screen.</div>';
     updateMapFilter(null);
     return;
   }
