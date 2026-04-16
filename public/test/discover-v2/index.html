@@ -136,6 +136,20 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .map-style-btn.active { background: #b8845c; color: #fff; }
 .map-style-btn:hover:not(.active) { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); }
+.selection-popup { min-width: 220px; }
+.selection-popup-title {
+  font: 700 12px var(--sans); color: var(--ink); margin-bottom: 4px;
+}
+.selection-popup-meta {
+  font: 500 11px var(--sans); color: var(--ink2); margin-bottom: 10px;
+}
+.selection-popup-actions { display: flex; }
+.selection-popup-btn {
+  width: 100%; padding: 9px 12px; border-radius: 6px; border: none;
+  background: var(--accent); color: #fff; font: 700 11px var(--sans);
+  letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+}
+.selection-popup-btn:hover { opacity: .92; }
 
 /* MAP LEGEND */
 .map-legend {
@@ -1136,8 +1150,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 <div class="map-controls">
   <div class="map-style-toggle">
-    <button class="map-style-btn" data-style="satellite" onclick="switchMapStyle('satellite')">Satellite</button>
-    <button class="map-style-btn active" data-style="map" onclick="switchMapStyle('map')">Map</button>
+    <button class="map-style-btn" data-style="2d" onclick="switchMapPerspective('2d')">2D</button>
+    <button class="map-style-btn active" data-style="3d" onclick="switchMapPerspective('3d')">3D</button>
   </div>
   <div class="map-legend">
     <div class="map-legend-item"><div class="map-legend-dot office"></div>Office</div>
@@ -1193,16 +1207,15 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
     <div class="mode-tabs">
       <button class="mode-tab active" id="tab-top100" onclick="setMode('top100')">London Top 100</button>
       <button class="mode-tab" id="tab-borough" onclick="setMode('borough')">Borough Top 30</button>
-      <button class="mode-tab" id="tab-search" onclick="setMode('search')">Address Search</button>
     </div>
 
-    <!-- Search bar (search mode only) -->
-    <div class="search-bar" id="search-bar">
+    <!-- Search / intake bar -->
+    <div class="search-bar visible" id="search-bar">
       <div class="search-row">
-        <input class="search-input" id="search-q" type="text" placeholder="Search address, postcode, site name..." oninput="render()" onkeydown="handleSearchKey(event)">
-        <button class="search-scan-btn" id="search-scan-btn" onclick="runSearchAssessment()">Scan</button>
+        <input class="search-input" id="search-q" type="text" placeholder="Search any London address, postcode, or site name..." oninput="render()" onkeydown="handleSearchKey(event)">
+        <button class="search-scan-btn" id="search-scan-btn" onclick="runSearchAssessment()">Assess</button>
       </div>
-      <div class="search-help" id="search-help">Click any building to scan, or search a London address or postcode.</div>
+      <div class="search-help" id="search-help">Use 3D view to click a building, or search any London address.</div>
     </div>
 
     <!-- List header -->
@@ -1262,6 +1275,8 @@ let activeSite = null;
 let activeBorough = 'all';
 let popup = null;
 let adHocAssessmentToken = 0;
+let adHocPreviewSite = null;
+let currentMapPerspective = '3d';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const verdictClass = s => s >= 80 ? 'green' : s >= 65 ? 'amber' : s >= 50 ? 'amber' : 'grey';
@@ -1888,35 +1903,30 @@ function selectBorough(bor, el) {
 // ── Mode ──────────────────────────────────────────────────────────────────────
 function setMode(mode) {
   activeMode = mode;
-  ['top100','borough','search'].forEach(m => {
-    document.getElementById('tab-'+m).classList.toggle('active', m===mode);
+  ['top100','borough'].forEach(m => {
+    var tab = document.getElementById('tab-'+m);
+    if (tab) tab.classList.toggle('active', m===mode);
   });
-  const searchBar = document.getElementById('search-bar');
-  searchBar.classList.toggle('visible', mode==='search');
-  if (mode==='search') setTimeout(()=>document.getElementById('search-q')?.focus(),50);
   render();
 }
 
 // ── Filtered sites ────────────────────────────────────────────────────────────
 function filteredSites() {
   let list = ALL_SITES;
+  const q = (document.getElementById('search-q')?.value||'').trim().toLowerCase();
   if (activeMode==='borough' || activeBorough!=='all') {
     if (activeBorough!=='all') list = list.filter(s=>s.borough===activeBorough);
     if (activeMode==='borough') list = list.slice(0,30);
   }
   if (activeMode==='top100') list = ALL_SITES.slice(0,100);
-  if (activeMode==='search') {
-    const q = (document.getElementById('search-q')?.value||'').trim().toLowerCase();
-    if (q) list = ALL_SITES.filter(s=>s.name.toLowerCase().includes(q)||s.address.toLowerCase().includes(q)||s.borough.toLowerCase().includes(q));
-    else list = ALL_SITES.slice(0,50);
-  }
+  if (q) list = list.filter(s=>s.name.toLowerCase().includes(q)||s.address.toLowerCase().includes(q)||s.borough.toLowerCase().includes(q));
   return list;
 }
 
 // ── Render site list ──────────────────────────────────────────────────────────
 function render() {
   const sites = filteredSites();
-  const label = activeMode==='top100' ? 'London Top 100' : activeMode==='borough' ? (activeBorough==='all'?'All boroughs':activeBorough+' top 30') : 'Search results';
+  const label = activeMode==='top100' ? 'London Top 100' : (activeBorough==='all' ? 'All boroughs' : 'Borough Top 30 · ' + activeBorough);
   document.getElementById('list-label').textContent = label;
   document.getElementById('list-count').textContent = sites.length + ' sites';
 
@@ -2145,6 +2155,58 @@ function cardClick(id) {
   if (site) openMassPopup(site);
 }
 
+function clearAssessmentSelection() {
+  adHocPreviewSite = null;
+  if (popup) { popup.remove(); popup = null; }
+  if (MAP && MAP.getSource('selected-building')) {
+    MAP.getSource('selected-building').setData({ type:'FeatureCollection', features: [] });
+  }
+}
+
+function updateAssessmentHighlight(building) {
+  if (!MAP || !building) return;
+  var fc = { type:'FeatureCollection', features:[building] };
+  if (MAP.getSource('selected-building')) {
+    MAP.getSource('selected-building').setData(fc);
+    return;
+  }
+  MAP.addSource('selected-building', { type:'geojson', data: fc });
+  MAP.addLayer({id:'selected-building-fill',type:'fill',source:'selected-building',paint:{
+    'fill-color':'#b8845c',
+    'fill-opacity':0.18
+  }});
+  MAP.addLayer({id:'selected-building-outline',type:'line',source:'selected-building',paint:{
+    'line-color':'#f7d4b7',
+    'line-width':2,
+    'line-opacity':0.95
+  }});
+}
+
+function openAssessmentPreview(site, building) {
+  adHocPreviewSite = site;
+  updateAssessmentHighlight(building);
+  if (popup) { popup.remove(); popup = null; }
+  popup = new mapboxgl.Popup({offset:16,closeButton:true,maxWidth:'240px',className:'selection-popup'})
+    .setLngLat([site.lng,site.lat])
+    .setHTML(
+      '<div class="selection-popup-title">' + site.name + '</div>' +
+      '<div class="selection-popup-meta">Early signal preview. Open the mini card to view the full assessment.</div>' +
+      '<div class="selection-popup-actions"><button class="selection-popup-btn" type="button">Open assessment</button></div>'
+    )
+    .addTo(MAP);
+  var el = popup.getElement();
+  var btn = el ? el.querySelector('.selection-popup-btn') : null;
+  if (btn) {
+    btn.addEventListener('click', function() {
+      if (!adHocPreviewSite) return;
+      openProvisionalFocus(adHocPreviewSite);
+    });
+  }
+  popup.on('close', function() {
+    if (!document.getElementById('site-focus').classList.contains('visible')) clearAssessmentSelection();
+  });
+}
+
 function setSearchHelp(text, state) {
   var el = document.getElementById('search-help');
   if (!el) return;
@@ -2239,6 +2301,7 @@ function buildAdHocAssessmentSite(payload) {
 
 function openProvisionalFocus(site) {
   activeSite = site.id;
+  adHocPreviewSite = site;
   document.querySelectorAll('.site-card.active').forEach(function(el){el.classList.remove('active');});
   document.getElementById('site-list')?.classList.remove('has-active');
   document.getElementById('focus-score').textContent = site.score;
@@ -2284,7 +2347,6 @@ function openProvisionalFocus(site) {
     var panelW = Math.round(window.innerWidth * 0.5);
     MAP.flyTo({ center:[site.lng,site.lat], zoom:17, duration:900, pitch:52,
       padding:{top:60,bottom:60,left:30,right:panelW} });
-    showPopup(site);
   }
 }
 
@@ -2305,8 +2367,13 @@ async function assessCoordinates(lat, lng, opts) {
     var selected = buildings && buildings.features ? buildings.features.find(function(f) { return f.properties && f.properties._selected; }) || buildings.features[0] : null;
     var listedCount = listed && (listed.items || listed.results || listed.features) ? (listed.items || listed.results || listed.features).length : 0;
     var site = buildAdHocAssessmentSite({ lat: lat, lng: lng, reverse: reverse, building: selected, listedCount: listedCount, query: opts.query });
-    openProvisionalFocus(site);
-    setSearchHelp(site.provisionalHeadline, site.score < 50 ? 'error' : null);
+    if (opts.preview) {
+      openAssessmentPreview(site, selected);
+      setSearchHelp('Building selected. Open the mini card to view the full assessment.', null);
+    } else {
+      openProvisionalFocus(site);
+      setSearchHelp(site.provisionalHeadline, site.score < 50 ? 'error' : null);
+    }
   } catch (err) {
     console.error('assessCoordinates failed', err);
     setSearchHelp('Scan failed. Address resolved badly or live building data is missing.', 'error');
@@ -2441,6 +2508,7 @@ function openFocus(site, opts) {
 function closeFocus() {
   activeSite = null;
   document.getElementById('site-focus').classList.remove('visible');
+  clearAssessmentSelection();
   if (MAP) MAP.flyTo({center:[-0.090,51.505],zoom:11.5,pitch:0,bearing:0,duration:800,padding:{}});
 }
 
@@ -2467,15 +2535,12 @@ function showPopup(site) {
 function initMap(token) {
   mapboxgl.accessToken = token;
   MAPBOX_TOKEN = token;
-  var currentMapStyle = 'map';
-  var ZOOM_AERIAL_THRESHOLD = 14;
-  var mapStyleSwitching = false;
 
   MAP = new mapboxgl.Map({
     container: 'map-canvas',
     style: 'mapbox://styles/mapbox/dark-v11',
     center: [-0.090, 51.505],
-    zoom: 11.5, pitch: 0, bearing: 0,
+    zoom: 11.5, pitch: 52, bearing: -12,
     attributionControl: false, antialias: true
   });
   MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
@@ -2485,30 +2550,28 @@ function initMap(token) {
     MAP.setCenter([-0.090, 51.505]);
     addSiteMarkers();
     addBoroughOutlines();
-    // Hairline white ring on satellite for contrast
-    if (currentMapStyle === 'satellite' && MAP.getLayer('sites-dot')) {
-      MAP.setPaintProperty('sites-dot', 'circle-stroke-width', 2.5);
-    }
-    mapStyleSwitching = false;
     setTimeout(function() { document.getElementById('map-fade').classList.remove('active'); }, 100);
   });
 
-  // Discover stays on the 3D vector map. Appraise can own aerial / raster modes.
-
-  // Manual style toggle
-  window.switchMapStyle = function(style) {
-    if (style === 'satellite') return;
-    if (mapStyleSwitching) return;
-    mapStyleSwitching = true;
-    currentMapStyle = 'map';
-    document.getElementById('map-canvas').classList.remove('aerial');
+  window.switchMapPerspective = function(mode) {
+    currentMapPerspective = mode === '2d' ? '2d' : '3d';
     document.querySelectorAll('.map-style-btn').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.style === 'map');
-      if (b.dataset.style === 'satellite') b.disabled = true;
-      if (b.dataset.style === 'satellite') b.title = 'Aerial mode moves to Appraise';
+      b.classList.toggle('active', b.dataset.style === currentMapPerspective);
     });
-    document.getElementById('map-fade').classList.add('active');
-    setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/dark-v11'); }, 320);
+    if (!MAP) return;
+    var panelW = Math.round(window.innerWidth * 0.5);
+    MAP.easeTo({
+      pitch: currentMapPerspective === '3d' ? 52 : 0,
+      bearing: currentMapPerspective === '3d' ? -12 : 0,
+      duration: 700,
+      padding:{top:60,bottom:60,left:20,right:panelW}
+    });
+    setSearchHelp(
+      currentMapPerspective === '3d'
+        ? 'Use 3D view to click a building, or search any London address.'
+        : '2D is for navigation. Switch back to 3D to pick a building cleanly.',
+      null
+    );
   };
 
   MAP.on('click', function(e) {
@@ -2516,7 +2579,11 @@ function initMap(token) {
       ? MAP.queryRenderedFeatures(e.point, { layers: ['sites-dot'] })
       : [];
     if (features && features.length) return;
-    assessCoordinates(e.lngLat.lat, e.lngLat.lng, { message: 'Map click captured. Scanning selected building…' });
+    if (currentMapPerspective !== '3d') {
+      setSearchHelp('Building pick works best in 3D. Switch to 3D to assess this building.', 'error');
+      return;
+    }
+    assessCoordinates(e.lngLat.lat, e.lngLat.lng, { preview: true, message: 'Selecting building footprint…' });
   });
 }
 
@@ -2697,7 +2764,7 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') daCloseBurger()
 // ── Boot ──────────────────────────────────────────────────────────────────────
 // Handle ?mode= deep-link from homepage discovery cards
 const _urlMode = new URLSearchParams(window.location.search).get('mode');
-if (_urlMode && ['top100','borough','search'].includes(_urlMode)) {
+if (_urlMode && ['top100','borough'].includes(_urlMode)) {
   activeMode = _urlMode;
 }
 Promise.all([
@@ -2705,7 +2772,7 @@ Promise.all([
   fetch('/api/config').then(r=>r.json()).catch(()=>null)
 ]).then(([,cfg])=>{
   // Apply URL mode after data loads
-  if (_urlMode && ['top100','borough','search'].includes(_urlMode)) {
+  if (_urlMode && ['top100','borough'].includes(_urlMode)) {
     setMode(_urlMode);
   }
   if (cfg?.mapboxToken) initMap(cfg.mapboxToken);
