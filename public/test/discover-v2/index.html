@@ -1152,6 +1152,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   <div class="map-style-toggle">
     <button class="map-style-btn" data-style="2d" onclick="switchMapPerspective('2d')">2D</button>
     <button class="map-style-btn active" data-style="3d" onclick="switchMapPerspective('3d')">3D</button>
+    <button class="map-style-btn" data-style="street" onclick="switchMapPerspective('street')">Street</button>
   </div>
   <div class="map-legend">
     <div class="map-legend-item"><div class="map-legend-dot office"></div>Office</div>
@@ -1207,10 +1208,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
     <div class="mode-tabs">
       <button class="mode-tab active" id="tab-top100" onclick="setMode('top100')">London Top 100</button>
       <button class="mode-tab" id="tab-borough" onclick="setMode('borough')">Borough Top 30</button>
+      <button class="mode-tab" id="tab-assess" onclick="setMode('assess')">Assess Any Building</button>
     </div>
 
     <!-- Search / intake bar -->
-    <div class="search-bar visible" id="search-bar">
+    <div class="search-bar" id="search-bar">
       <div class="search-row">
         <input class="search-input" id="search-q" type="text" placeholder="Search any London address, postcode, or site name..." oninput="render()" onkeydown="handleSearchKey(event)">
         <button class="search-scan-btn" id="search-scan-btn" onclick="runSearchAssessment()">Assess</button>
@@ -1903,10 +1905,21 @@ function selectBorough(bor, el) {
 // ── Mode ──────────────────────────────────────────────────────────────────────
 function setMode(mode) {
   activeMode = mode;
-  ['top100','borough'].forEach(m => {
+  ['top100','borough','assess'].forEach(m => {
     var tab = document.getElementById('tab-'+m);
     if (tab) tab.classList.toggle('active', m===mode);
   });
+  var searchBar = document.getElementById('search-bar');
+  if (searchBar) searchBar.classList.toggle('visible', mode === 'assess');
+  setSearchHelp(
+    mode === 'assess'
+      ? (currentMapPerspective === '3d'
+          ? 'Use 3D view to click a building, or search any London address.'
+          : 'Assess mode is ready. Switch to 3D for the cleanest building pick.')
+      : 'Top modes are curated browse only. Switch to Assess Any Building to pick an ad hoc site.',
+    null
+  );
+  clearAssessmentSelection();
   render();
 }
 
@@ -1914,6 +1927,7 @@ function setMode(mode) {
 function filteredSites() {
   let list = ALL_SITES;
   const q = (document.getElementById('search-q')?.value||'').trim().toLowerCase();
+  if (activeMode === 'assess') return [];
   if (activeMode==='borough' || activeBorough!=='all') {
     if (activeBorough!=='all') list = list.filter(s=>s.borough===activeBorough);
     if (activeMode==='borough') list = list.slice(0,30);
@@ -1926,11 +1940,16 @@ function filteredSites() {
 // ── Render site list ──────────────────────────────────────────────────────────
 function render() {
   const sites = filteredSites();
-  const label = activeMode==='top100' ? 'London Top 100' : (activeBorough==='all' ? 'All boroughs' : 'Borough Top 30 · ' + activeBorough);
+  const label = activeMode==='top100' ? 'London Top 100' : activeMode === 'borough' ? (activeBorough==='all' ? 'All boroughs' : 'Borough Top 30 · ' + activeBorough) : 'Assess Any Building';
   document.getElementById('list-label').textContent = label;
-  document.getElementById('list-count').textContent = sites.length + ' sites';
+  document.getElementById('list-count').textContent = activeMode === 'assess' ? '3D-first intake' : sites.length + ' sites';
 
   const list = document.getElementById('site-list');
+  if (activeMode === 'assess') {
+    list.innerHTML = '<div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">Search any London address, or switch to 3D and click a building to start an instant screen.</div>';
+    updateMapFilter(null);
+    return;
+  }
   if (!sites.length) { list.innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">No sites found</div>'; return; }
 
   list.innerHTML = sites.map((s,i) => {
@@ -2538,14 +2557,18 @@ function initMap(token) {
 
   MAP = new mapboxgl.Map({
     container: 'map-canvas',
-    style: 'mapbox://styles/mapbox/dark-v11',
+    style: 'mapbox://styles/mapbox/standard',
     center: [-0.090, 51.505],
     zoom: 11.5, pitch: 52, bearing: -12,
-    attributionControl: false, antialias: true
+    attributionControl: false,
+    antialias: true
   });
   MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
   MAP.on('style.load', function() {
     var panelW = Math.round(window.innerWidth * 0.5);
+    MAP.setConfigProperty('basemap', 'lightPreset', 'day');
+    MAP.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+    MAP.setConfigProperty('basemap', 'showTransitLabels', false);
     MAP.setPadding({top:60, bottom:60, left:20, right:panelW});
     MAP.setCenter([-0.090, 51.505]);
     addSiteMarkers();
@@ -2554,22 +2577,27 @@ function initMap(token) {
   });
 
   window.switchMapPerspective = function(mode) {
-    currentMapPerspective = mode === '2d' ? '2d' : '3d';
+    currentMapPerspective = mode === '2d' ? '2d' : mode === 'street' ? 'street' : '3d';
     document.querySelectorAll('.map-style-btn').forEach(function(b) {
       b.classList.toggle('active', b.dataset.style === currentMapPerspective);
     });
     if (!MAP) return;
     var panelW = Math.round(window.innerWidth * 0.5);
     MAP.easeTo({
-      pitch: currentMapPerspective === '3d' ? 52 : 0,
-      bearing: currentMapPerspective === '3d' ? -12 : 0,
+      pitch: currentMapPerspective === '2d' ? 0 : currentMapPerspective === 'street' ? 74 : 52,
+      bearing: currentMapPerspective === '2d' ? 0 : currentMapPerspective === 'street' ? -18 : -12,
+      zoom: currentMapPerspective === 'street' ? Math.max(MAP.getZoom(), 16.2) : Math.max(MAP.getZoom(), 11.5),
       duration: 700,
       padding:{top:60,bottom:60,left:20,right:panelW}
     });
     setSearchHelp(
-      currentMapPerspective === '3d'
-        ? 'Use 3D view to click a building, or search any London address.'
-        : '2D is for navigation. Switch back to 3D to pick a building cleanly.',
+      activeMode === 'assess'
+        ? (currentMapPerspective === '3d'
+            ? 'Use 3D view to click a building, or search any London address.'
+            : currentMapPerspective === 'street'
+              ? 'Street view helps orientation. Switch back to 3D to pick a building cleanly.'
+              : '2D is for navigation. Switch back to 3D to pick a building cleanly.')
+        : 'Top modes are curated browse only. Switch to Assess Any Building to pick an ad hoc site.',
       null
     );
   };
@@ -2579,6 +2607,7 @@ function initMap(token) {
       ? MAP.queryRenderedFeatures(e.point, { layers: ['sites-dot'] })
       : [];
     if (features && features.length) return;
+    if (activeMode !== 'assess') return;
     if (currentMapPerspective !== '3d') {
       setSearchHelp('Building pick works best in 3D. Switch to 3D to assess this building.', 'error');
       return;
@@ -2764,7 +2793,7 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') daCloseBurger()
 // ── Boot ──────────────────────────────────────────────────────────────────────
 // Handle ?mode= deep-link from homepage discovery cards
 const _urlMode = new URLSearchParams(window.location.search).get('mode');
-if (_urlMode && ['top100','borough'].includes(_urlMode)) {
+if (_urlMode && ['top100','borough','assess'].includes(_urlMode)) {
   activeMode = _urlMode;
 }
 Promise.all([
@@ -2772,7 +2801,7 @@ Promise.all([
   fetch('/api/config').then(r=>r.json()).catch(()=>null)
 ]).then(([,cfg])=>{
   // Apply URL mode after data loads
-  if (_urlMode && ['top100','borough'].includes(_urlMode)) {
+  if (_urlMode && ['top100','borough','assess'].includes(_urlMode)) {
     setMode(_urlMode);
   }
   if (cfg?.mapboxToken) initMap(cfg.mapboxToken);
