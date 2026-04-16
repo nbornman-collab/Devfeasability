@@ -375,14 +375,35 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   display: none;
 }
 .search-bar.visible { display: block; }
+.search-row {
+  display: flex; gap: 8px; align-items: center;
+}
 .search-input {
-  width: 100%; padding: 8px 12px; background: var(--bg2);
+  flex: 1; min-width: 0; padding: 8px 12px; background: var(--bg2);
   border: 1px solid var(--rule); border-radius: 6px;
   font: 400 16px var(--sans); color: var(--ink); outline: none;
   -webkit-appearance: none; appearance: none;
 }
 .search-input::placeholder { color: var(--ink3); }
 .search-input:focus { border-color: var(--accent); background: var(--bg); }
+.search-scan-btn {
+  flex-shrink: 0; padding: 9px 12px; border-radius: 6px; border: 1px solid var(--accent);
+  background: var(--accent); color: #fff; font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; transition: opacity .15s, transform .15s;
+}
+.search-scan-btn:hover { opacity: .92; }
+.search-scan-btn:disabled { opacity: .45; cursor: wait; }
+.search-help {
+  margin-top: 8px; font: 500 11px var(--sans); color: var(--ink3); letter-spacing: .01em;
+}
+.search-help.busy { color: var(--accent); }
+.search-help.error { color: var(--red); }
+.any-building-chip { background: #fff7ed; color: #b45309; }
+.any-building-chip.ok { background: #f0fdf4; color: #15803d; }
+.focus-factor-fill.provisional-geometry { background: var(--accent-blue); }
+.focus-factor-fill.provisional-heritage-hard { background: var(--red); }
+.focus-factor-fill.provisional-heritage-ok { background: var(--green); }
+.focus-factor-fill.provisional-uplift { background: var(--accent); }
 
 /* LIST HEADER */
 .list-header {
@@ -1177,7 +1198,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
     <!-- Search bar (search mode only) -->
     <div class="search-bar" id="search-bar">
-      <input class="search-input" id="search-q" type="text" placeholder="Search address, postcode, site name..." oninput="render()">
+      <div class="search-row">
+        <input class="search-input" id="search-q" type="text" placeholder="Search address, postcode, site name..." oninput="render()" onkeydown="handleSearchKey(event)">
+        <button class="search-scan-btn" id="search-scan-btn" onclick="runSearchAssessment()">Scan</button>
+      </div>
+      <div class="search-help" id="search-help">Click any building to scan, or search a London address or postcode.</div>
     </div>
 
     <!-- List header -->
@@ -1236,6 +1261,7 @@ let activeMode = 'top100';
 let activeSite = null;
 let activeBorough = 'all';
 let popup = null;
+let adHocAssessmentToken = 0;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const verdictClass = s => s >= 80 ? 'green' : s >= 65 ? 'amber' : s >= 50 ? 'amber' : 'grey';
@@ -2119,7 +2145,211 @@ function cardClick(id) {
   if (site) openMassPopup(site);
 }
 
+function setSearchHelp(text, state) {
+  var el = document.getElementById('search-help');
+  if (!el) return;
+  el.textContent = text || 'Search a known site, or scan any London building by address or postcode.';
+  el.classList.remove('busy', 'error');
+  if (state) el.classList.add(state);
+}
+
+function setSearchBusy(isBusy) {
+  var btn = document.getElementById('search-scan-btn');
+  if (btn) btn.disabled = !!isBusy;
+}
+
+function handleSearchKey(e) {
+  if (e && e.key === 'Enter') {
+    e.preventDefault();
+    runSearchAssessment();
+  }
+}
+
+function formatAssessmentAddress(featureCollection, fallback) {
+  var feature = featureCollection && featureCollection.features && featureCollection.features[0];
+  return (feature && (feature.place_name || feature.text)) || fallback || 'Selected building';
+}
+
+function inferAssessmentBorough(featureCollection, fallback) {
+  var feature = featureCollection && featureCollection.features && featureCollection.features[0];
+  var context = feature && feature.context ? feature.context : [];
+  var district = context.find(function(item) { return /^district\./.test(item.id || ''); });
+  var place = context.find(function(item) { return /^place\./.test(item.id || ''); });
+  var region = context.find(function(item) { return /^region\./.test(item.id || ''); });
+  return (district && district.text) || (place && place.text) || (region && region.text) || fallback || 'London';
+}
+
+function buildAdHocAssessmentSite(payload) {
+  var building = payload && payload.building;
+  var props = building && building.properties ? building.properties : {};
+  var listedCount = payload && payload.listedCount ? payload.listedCount : 0;
+  var area = Math.round(props._area || 0);
+  var existingFloors = Math.max(1, Math.round(props._estFloors || 1));
+  var existingGia = Math.round(props._estGIA || area || 0);
+  var height = Number(props._heightRoofBase || props._heightMax || 0);
+  var addedFloors = listedCount > 0 ? 0 : height >= 20 ? 3 : height >= 12 ? 2 : area >= 600 ? 2 : 1;
+  var roughProposedGia = existingGia ? existingGia + (area * addedFloors) : 0;
+  var score = 56;
+  if (listedCount > 0) score -= 18;
+  if (area >= 1200) score += 8;
+  else if (area >= 600) score += 5;
+  else if (area < 150) score -= 8;
+  if (existingFloors >= 8) score += 4;
+  if (!building) score = 32;
+  score = Math.max(18, Math.min(82, score));
+  var borough = inferAssessmentBorough(payload && payload.reverse, 'London');
+  var address = formatAssessmentAddress(payload && payload.reverse, payload && payload.query);
+  var headline = listedCount > 0
+    ? 'Hard constraint signal. Listed context likely caps straightforward uplift and pushes this into specialist planning mode.'
+    : roughProposedGia > existingGia && existingGia > 0
+      ? 'Preliminary uplift lane. Building geometry suggests there may be extension headroom worth testing properly.'
+      : 'Thin headroom signal. This reads more like a due diligence case than an obvious upside case.';
+  return {
+    id: 'adhoc-' + Date.now(),
+    isProvisional: true,
+    name: address.split(',')[0] || 'Selected building',
+    address: address,
+    borough: borough,
+    lat: payload.lat,
+    lng: payload.lng,
+    score: score,
+    planScore: listedCount > 0 ? 3 : 5,
+    plotM2: area || 0,
+    ptal: null,
+    gdvEst: 0,
+    maxFloors: existingFloors + addedFloors,
+    existingFloors: existingFloors,
+    roughExistingGiaM2: existingGia || null,
+    roughProposedGiaM2: roughProposedGia || null,
+    roughGiaUpliftPct: existingGia && roughProposedGia ? Math.round(((roughProposedGia - existingGia) / existingGia) * 100) : null,
+    inCons: false,
+    inOA: false,
+    inCAZ: false,
+    heritTier: listedCount > 0 ? 'blocking' : 'manageable',
+    t1: null,
+    provisionalHeadline: headline,
+    provisionalNotes: [
+      area ? area.toLocaleString() + 'm² estimated footprint' : 'No reliable footprint captured yet',
+      existingGia ? existingGia.toLocaleString() + 'm² rough existing GIA' : 'Existing GIA not yet resolved',
+      height ? height.toFixed(1) + 'm roof/eaves height signal' : 'No usable height signal yet',
+      listedCount > 0 ? listedCount + ' listed asset' + (listedCount > 1 ? 's' : '') + ' nearby' : 'No listed asset returned in immediate radius'
+    ]
+  };
+}
+
+function openProvisionalFocus(site) {
+  activeSite = site.id;
+  document.querySelectorAll('.site-card.active').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('site-list')?.classList.remove('has-active');
+  document.getElementById('focus-score').textContent = site.score;
+  var vEl = document.getElementById('focus-verdict');
+  var vc = verdictClass(site.score);
+  vEl.textContent = site.score >= 50 ? 'Preliminary' : 'Hard No Risk';
+  vEl.className = 'focus-verdict ' + vc;
+  document.getElementById('focus-score-sub').textContent = 'Live provisional scan · ' + site.borough;
+  document.getElementById('focus-name').textContent = site.name;
+  document.getElementById('focus-addr').textContent = site.address;
+  document.getElementById('focus-chips').innerHTML = '<span class="chip any-building-chip">Any-building scan</span>' + (site.heritTier === 'blocking' ? '<span class="chip cons">Listed context</span>' : '<span class="chip any-building-chip ok">No immediate listed flag</span>');
+  document.getElementById('focus-metrics').innerHTML = `
+    <div class="focus-metric"><div class="focus-metric-val">${site.plotM2 ? site.plotM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Estimated footprint</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.existingFloors || '—'}F</div><div class="focus-metric-lbl">Existing floors</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.roughExistingGiaM2 ? site.roughExistingGiaM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Rough existing GIA</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.roughProposedGiaM2 ? site.roughProposedGiaM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Indicative uplift case</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.roughGiaUpliftPct != null ? (site.roughGiaUpliftPct > 0 ? '+' : '') + site.roughGiaUpliftPct + '%' : '—'}</div><div class="focus-metric-lbl">Indicative GIA uplift</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.score}/100</div><div class="focus-metric-lbl">Preliminary signal</div></div>
+  `;
+  document.getElementById('focus-hook').innerHTML = `
+    <div class="focus-hook-label">Universal intake</div>
+    <div class="focus-hook-text">${site.provisionalHeadline}</div>
+    <div class="focus-hook-question">${site.provisionalNotes.map(function(note) { return '<div>' + note + '</div>'; }).join('')}</div>
+  `;
+  var geometryScore = site.plotM2 ? 78 : 22;
+  var heritageScore = site.heritTier === 'blocking' ? 82 : 24;
+  var upliftScore = site.roughGiaUpliftPct != null ? Math.max(18, Math.min(88, Math.round(site.roughGiaUpliftPct / 4))) : 30;
+  document.getElementById('focus-factors').innerHTML = `
+    <div class="focus-factors-label">This is a live intake pass, not a fully underwritten report.</div>
+    <div class="focus-factor-row"><div class="focus-factor-name">Geometry captured</div><div class="focus-factor-bar"><div class="focus-factor-fill provisional-geometry" style="width:${geometryScore}%"></div></div><div class="focus-factor-score">${geometryScore}</div></div>
+    <div class="focus-factor-row"><div class="focus-factor-name">Heritage friction</div><div class="focus-factor-bar"><div class="focus-factor-fill ${site.heritTier === 'blocking' ? 'provisional-heritage-hard' : 'provisional-heritage-ok'}" style="width:${heritageScore}%"></div></div><div class="focus-factor-score">${heritageScore}</div></div>
+    <div class="focus-factor-row"><div class="focus-factor-name">Vertical extension case</div><div class="focus-factor-bar"><div class="focus-factor-fill provisional-uplift" style="width:${upliftScore}%"></div></div><div class="focus-factor-score">${upliftScore}</div></div>
+  `;
+  document.getElementById('focus-cta-wrap').innerHTML = '<span class="focus-cta locked">Full planning, heritage and economics pass next</span>';
+  var visEl = document.getElementById('focus-visual');
+  if (MAPBOX_TOKEN) {
+    visEl.innerHTML = `<img class="focus-sat" src="https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},18,20,60/480x480@2x?access_token=${MAPBOX_TOKEN}" alt="">`;
+  } else {
+    visEl.innerHTML = '<div class="focus-sat-placeholder">SCAN</div>';
+  }
+  document.getElementById('site-focus').classList.add('visible');
+  if (MAP && site.lat && site.lng) {
+    var panelW = Math.round(window.innerWidth * 0.5);
+    MAP.flyTo({ center:[site.lng,site.lat], zoom:17, duration:900, pitch:52,
+      padding:{top:60,bottom:60,left:30,right:panelW} });
+    showPopup(site);
+  }
+}
+
+async function assessCoordinates(lat, lng, opts) {
+  opts = opts || {};
+  var token = ++adHocAssessmentToken;
+  setSearchBusy(true);
+  setSearchHelp(opts.message || 'Scanning building geometry and context…', 'busy');
+  try {
+    var reversePromise = fetch('/api/reverse?lng=' + encodeURIComponent(lng) + '&lat=' + encodeURIComponent(lat)).then(function(r) { return r.json(); }).catch(function() { return null; });
+    var buildingsPromise = fetch('/api/os-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng)).then(function(r) { return r.json(); }).catch(function() { return null; });
+    var listedPromise = fetch('/api/listed-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng) + '&radius=100').then(function(r) { return r.json(); }).catch(function() { return null; });
+    var results = await Promise.all([reversePromise, buildingsPromise, listedPromise]);
+    if (token !== adHocAssessmentToken) return;
+    var reverse = results[0];
+    var buildings = results[1];
+    var listed = results[2];
+    var selected = buildings && buildings.features ? buildings.features.find(function(f) { return f.properties && f.properties._selected; }) || buildings.features[0] : null;
+    var listedCount = listed && (listed.items || listed.results || listed.features) ? (listed.items || listed.results || listed.features).length : 0;
+    var site = buildAdHocAssessmentSite({ lat: lat, lng: lng, reverse: reverse, building: selected, listedCount: listedCount, query: opts.query });
+    openProvisionalFocus(site);
+    setSearchHelp(site.provisionalHeadline, site.score < 50 ? 'error' : null);
+  } catch (err) {
+    console.error('assessCoordinates failed', err);
+    setSearchHelp('Scan failed. Address resolved badly or live building data is missing.', 'error');
+  } finally {
+    if (token === adHocAssessmentToken) setSearchBusy(false);
+  }
+}
+
+async function runSearchAssessment() {
+  var input = document.getElementById('search-q');
+  var q = input ? input.value.trim() : '';
+  if (!q) {
+    setSearchHelp('Give me an address or postcode, not vibes.', 'error');
+    return;
+  }
+  setSearchBusy(true);
+  setSearchHelp('Resolving address…', 'busy');
+  try {
+    var geo = await fetch('/api/geocode?text=' + encodeURIComponent(q)).then(function(r) { return r.json(); });
+    var feature = geo && geo.features && geo.features[0];
+    if (!feature || !feature.center) {
+      setSearchHelp('No London match found. Try a fuller address or postcode.', 'error');
+      return;
+    }
+    var lng = feature.center[0];
+    var lat = feature.center[1];
+    if (MAP) {
+      var panelW = Math.round(window.innerWidth * 0.5);
+      MAP.flyTo({ center:[lng,lat], zoom:17, duration:1100, pitch:50, padding:{top:60,bottom:60,left:30,right:panelW} });
+    }
+    await assessCoordinates(lat, lng, { query: q, message: 'Address found. Pulling building geometry…' });
+  } catch (err) {
+    console.error('runSearchAssessment failed', err);
+    setSearchHelp('Search failed. Mapbox geocoder threw a fit.', 'error');
+    setSearchBusy(false);
+  }
+}
+
 function openFocus(site, opts) {
+  if (site && site.isProvisional) {
+    openProvisionalFocus(site);
+    return;
+  }
   opts = opts || {};
   activeSite = site.id;
   if (!opts.skipPlanningHydrate) hydratePlanningSignal(site);
@@ -2254,6 +2484,7 @@ function initMap(token) {
     MAP.setPadding({top:60, bottom:60, left:20, right:panelW});
     MAP.setCenter([-0.090, 51.505]);
     addSiteMarkers();
+    addBoroughOutlines();
     // Hairline white ring on satellite for contrast
     if (currentMapStyle === 'satellite' && MAP.getLayer('sites-dot')) {
       MAP.setPaintProperty('sites-dot', 'circle-stroke-width', 2.5);
@@ -2262,49 +2493,31 @@ function initMap(token) {
     setTimeout(function() { document.getElementById('map-fade').classList.remove('active'); }, 100);
   });
 
-  // Auto-switch style on zoom threshold
-  var mapInitialised = false;
-  MAP.once('idle', function() { mapInitialised = true; });
-  MAP.on('zoom', function() {
-    if (mapStyleSwitching) return;
-    if (!mapInitialised) return;
-    var z = MAP.getZoom();
-    if (z >= ZOOM_AERIAL_THRESHOLD && currentMapStyle === 'map') {
-      mapStyleSwitching = true;
-      currentMapStyle = 'satellite';
-      document.getElementById('map-canvas').classList.add('aerial');
-      document.querySelectorAll('.map-style-btn').forEach(function(b) {
-        b.classList.toggle('active', b.dataset.style === 'satellite');
-      });
-      document.getElementById('map-fade').classList.add('active');
-      setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/satellite-streets-v12'); }, 320);
-    } else if (z < ZOOM_AERIAL_THRESHOLD && currentMapStyle === 'satellite') {
-      mapStyleSwitching = true;
-      currentMapStyle = 'map';
-      document.getElementById('map-canvas').classList.remove('aerial');
-      document.querySelectorAll('.map-style-btn').forEach(function(b) {
-        b.classList.toggle('active', b.dataset.style === 'map');
-      });
-      document.getElementById('map-fade').classList.add('active');
-      setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/dark-v11'); }, 320);
-    }
-  });
+  // Discover stays on the 3D vector map. Appraise can own aerial / raster modes.
 
   // Manual style toggle
   window.switchMapStyle = function(style) {
+    if (style === 'satellite') return;
     if (mapStyleSwitching) return;
     mapStyleSwitching = true;
-    currentMapStyle = style;
-    document.getElementById('map-canvas').classList.toggle('aerial', style === 'satellite');
+    currentMapStyle = 'map';
+    document.getElementById('map-canvas').classList.remove('aerial');
     document.querySelectorAll('.map-style-btn').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.style === style);
+      b.classList.toggle('active', b.dataset.style === 'map');
+      if (b.dataset.style === 'satellite') b.disabled = true;
+      if (b.dataset.style === 'satellite') b.title = 'Aerial mode moves to Appraise';
     });
-    var styleUrl = style === 'satellite'
-      ? 'mapbox://styles/mapbox/satellite-streets-v12'
-      : 'mapbox://styles/mapbox/dark-v11';
     document.getElementById('map-fade').classList.add('active');
-    setTimeout(function() { MAP.setStyle(styleUrl); }, 320);
+    setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/dark-v11'); }, 320);
   };
+
+  MAP.on('click', function(e) {
+    var features = MAP.getLayer('sites-dot')
+      ? MAP.queryRenderedFeatures(e.point, { layers: ['sites-dot'] })
+      : [];
+    if (features && features.length) return;
+    assessCoordinates(e.lngLat.lat, e.lngLat.lng, { message: 'Map click captured. Scanning selected building…' });
+  });
 }
 
 function addSiteMarkers() {
