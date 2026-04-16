@@ -1,0 +1,3723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Discover V2 Test - Headroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/nav.css">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<style>
+:root {
+  --bg:        #f2f1ed;
+  --bg2:       #e8e7e2;
+  --bg3:       #dddcd8;
+  --ink:       #111110;
+  --ink2:      #555550;
+  --ink3:      #999990;
+  --accent:    #b8845c;
+  --accent-blue: #5b7a9d;
+  --accent-bg: rgba(184,132,92,.08);
+  --rule:      rgba(17,17,16,.1);
+  --green:     #15803d;
+  --amber:     #b45309;
+  --red:       #b91c1c;
+  --sans: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --nav-h: 48px;
+  --panel-w: 50%;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: var(--sans); -webkit-font-smoothing: antialiased; color: var(--ink); }
+
+/* ── NAV ── */
+.da-nav {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+  background: rgba(242,241,237,1);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; padding: 0 24px; gap: 20px; z-index: 200;
+}
+/* logo styling now in nav.css */
+.nav-sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
+.nav-tagline { font-size: 11px; color: var(--ink3); letter-spacing: .03em; flex: 1; }
+.da-nav-links { display: flex; gap: 20px; margin-left: auto; flex-shrink: 0; }
+.da-nav-link { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color .15s; }
+.da-nav-link:hover { color: var(--ink); }
+.da-nav-link.active { color: var(--ink); border-bottom: 1.5px solid var(--accent); padding-bottom: 1px; }
+.da-burger { background:none; border:none; cursor:pointer; display:flex; flex-direction:column; gap:4px; padding:8px; margin-left:4px; }
+.da-burger span { display:block; width:18px; height:1.5px; background:var(--ink3); transition:background .15s; }
+.da-burger:hover span { background:var(--ink); }
+.burger-overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:500; opacity:0; pointer-events:none; transition:opacity .28s; }
+.burger-overlay.open { opacity:1; pointer-events:all; }
+.burger-panel { position:fixed; top:0; right:0; width:280px; height:100%; background:#0d0d0c; z-index:501; border-left:1px solid rgba(242,241,237,.08); transform:translateX(100%); transition:transform .3s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; }
+.burger-panel.open { transform:translateX(0); }
+.burger-header { display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid rgba(242,241,237,.08); }
+.burger-logo { font:800 14px var(--mono); color:var(--ink); }
+.burger-close { background:none; border:none; color:var(--ink3); font-size:16px; cursor:pointer; transition:color .15s; }
+.burger-close:hover { color:var(--ink); }
+.burger-nav { display:flex; flex-direction:column; padding:28px 22px; gap:2px; flex:1; }
+.burger-nav a { font:600 20px var(--sans); color:rgba(242,241,237,.5); text-decoration:none; padding:9px 0; border-bottom:1px solid rgba(242,241,237,.06); transition:color .15s; letter-spacing:-.02em; }
+.burger-nav a:last-child { border-bottom:none; }
+.burger-nav a:hover { color:var(--ink); }
+.burger-footer { padding:18px 22px; font:400 8px var(--sans); letter-spacing:.16em; text-transform:uppercase; color:var(--ink3); border-top:1px solid rgba(242,241,237,.08); }
+
+/* ── MAP: full canvas behind everything ── */
+#map-canvas {
+  position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0; z-index: 1;
+  background: #000;
+}
+#map-fade {
+  position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0;
+  background: #0a0a09; z-index: 2; pointer-events: none;
+  opacity: 0; transition: opacity 0.3s ease;
+}
+#map-fade.active { opacity: 1; }
+
+
+/* ── LEFT OVERLAY (hero stats + borough selector) ── */
+.col-left {
+  position: fixed; top: var(--nav-h); left: 0;
+  width: calc(100% - var(--panel-w));
+  height: calc(100% - var(--nav-h));
+  display: flex; flex-direction: column;
+  pointer-events: none; /* pass clicks through to map */
+  z-index: 5;
+}
+.col-left > * { pointer-events: all; }
+
+/* HERO STATS - glass overlay on top of map */
+.discover-hero {
+  flex-shrink: 0;
+  padding: 16px 20px 14px;
+  display: flex; gap: 0; align-items: stretch;
+  background: rgba(242,241,237,1);
+  border-bottom: 2px solid rgba(184,132,92,0.18);
+}
+.hero-stat {
+  flex: 1; padding: 0 18px; border-right: 1px solid rgba(17,17,16,0.08);
+  display: flex; flex-direction: column; gap: 4px;
+  transition: background .15s;
+}
+.hero-stat:first-child { padding-left: 0; }
+.hero-stat:last-child { border-right: none; }
+.hero-stat:hover { background: rgba(184,132,92,0.05); border-radius: 6px; }
+.hero-stat-label {
+  font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--ink2);
+}
+.hero-stat-value {
+  font: 800 clamp(28px,3vw,44px) var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1;
+}
+.hero-stat-value.accent { color: var(--accent); }
+.hero-stat-sub { font-size: 10px; font-weight: 500; color: var(--ink2); margin-top: 1px; }
+
+/* MAP LABEL */
+.map-label {
+  position: fixed; bottom: 80px; left: 16px; z-index: 6;
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7); pointer-events: none;
+  text-shadow: 0 1px 4px rgba(0,0,0,.5);
+}
+.map-controls {
+  position: fixed; bottom: 32px; left: 20px; z-index: 150;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.map-style-toggle {
+  display: flex; gap: 0; border-radius: 6px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.15);
+  box-shadow: 0 2px 12px rgba(0,0,0,.4);
+}
+.map-style-btn {
+  padding: 7px 13px; background: rgba(0,0,0,.65);
+  border: none; color: rgba(255,255,255,.55); font: 600 11px var(--sans);
+  letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.map-style-btn.active { background: #b8845c; color: #fff; }
+.map-style-btn:hover:not(.active) { background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); }
+
+/* MAP LEGEND */
+.map-legend {
+  background: rgba(0,0,0,.65); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 6px; padding: 8px 14px; display: flex; gap: 14px;
+}
+.map-legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font: 500 11px var(--sans); color: rgba(255,255,255,.7);
+  letter-spacing: .04em;
+}
+.map-legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  box-shadow: 0 0 6px currentColor;
+}
+.map-legend-dot.office { background: #5b7a9d; color: #5b7a9d; }
+.map-legend-dot.resi { background: #c4915a; color: #c4915a; }
+.map-legend-dot.mixed { background: #a07c9e; color: #a07c9e; }
+.map-legend-dot.brownfield { background: #8b7355; color: #8b7355; }
+.map-legend-dot.industrial { background: #7a7a96; color: #7a7a96; }
+
+/* BOROUGH SELECTOR - glass overlay at bottom of map */
+.borough-selector {
+  flex-shrink: 0;
+  padding: 10px 16px 12px;
+  background: rgba(242,241,237,0.98);
+  border-top: 1px solid rgba(255,255,255,0.3);
+  margin-top: auto;
+}
+.borough-selector-label {
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 8px;
+}
+.borough-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.borough-pill {
+  font-size: 13px; font-weight: 600; letter-spacing: .05em;
+  padding: 5px 12px; border-radius: 20px; cursor: pointer;
+  background: var(--bg2); color: var(--ink2); border: 1px solid var(--rule);
+  transition: all .15s; white-space: nowrap;
+}
+.borough-pill:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+.borough-pill.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+/* Borough colour pills */
+.borough-pill.southwark { border-color: #8b5cf6; color: #5b21b6; }
+.borough-pill.southwark.active,.borough-pill.southwark:hover { background:rgba(91,122,157,.12); border-color:#5b7a9d; color:#5b7a9d; }
+.borough-pill.city { border-color: #38bdf8; color: #075985; }
+.borough-pill.city.active,.borough-pill.city:hover { background:rgba(184,132,92,.12); border-color:#b8845c; color:#b8845c; }
+.borough-pill.hackney { border-color: #4ade80; color: #14532d; }
+.borough-pill.hackney.active,.borough-pill.hackney:hover { background:rgba(17,17,16,.06); border-color:#555550; color:#555550; }
+
+/* ── RIGHT PANEL: glass floating over map ── */
+.col-right {
+  position: fixed; top: var(--nav-h); right: 0;
+  width: var(--panel-w); height: calc(100% - var(--nav-h));
+  display: flex; flex-direction: column;
+  overflow: hidden; z-index: 10;
+  background: rgba(242,241,237,0.98);
+  border-left: 1px solid rgba(255,255,255,0.45);
+  box-shadow: -4px 0 32px rgba(17,17,16,.10);
+}
+
+/* ── SITE FOCUS PANEL ── */
+#site-focus {
+  display: none; flex-direction: column;
+  position: absolute; inset: 0;
+  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  background: rgba(210,205,195,1);
+  animation: panelSlideIn .28s cubic-bezier(.22,1,.36,1);
+  z-index: 20;
+}
+#site-focus.visible { display: flex; }
+@keyframes panelSlideIn {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.focus-back {
+  display: flex; align-items: center; gap: 8px; padding: 10px 16px 9px;
+  font: 700 11px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); cursor: pointer; border-bottom: 1px solid var(--rule);
+  background: var(--accent-bg); border-top: none; border-left: none; border-right: none;
+  font-family: var(--sans); text-align: left; width: 100%;
+  transition: background .15s, color .15s;
+}
+.focus-back:hover { background: rgba(184,132,92,0.18); }
+.focus-back-arrow { font-size: 16px; line-height: 1; font-weight: 800; }
+/* Square sat + header side-by-side */
+.focus-top {
+  display: flex; align-items: stretch; border-bottom: 1px solid var(--rule); min-height: 240px;
+}
+.focus-sat-wrap {
+  flex-shrink: 0; width: 240px; height: 240px; position: relative; overflow: hidden; background: var(--bg2); border-radius: 0 0 0 12px;
+}
+.focus-sat {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.focus-sat-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; background: var(--bg2);
+  font: 800 22px var(--mono); color: var(--accent);
+}
+.focus-header {
+  flex: 1; padding: 14px 16px; display: flex; flex-direction: column; justify-content: center;
+  border-left: 1px solid var(--rule);
+}
+.focus-score-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+}
+.focus-score-num { font: 800 42px var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
+.focus-score-right { display: flex; flex-direction: column; gap: 4px; }
+.focus-verdict { font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; color: #fff; align-self: flex-start; }
+.focus-verdict.green { background: var(--green); }
+.focus-verdict.amber { background: var(--amber); }
+.focus-verdict.red   { background: var(--red); }
+.focus-score-sub { font: 400 13px var(--sans); color: var(--ink2); }
+.focus-name { font: 300 20px/1.3 var(--sans); letter-spacing: -.02em; color: var(--ink); margin-bottom: 4px; }
+.focus-addr { font: 400 13px var(--sans); color: var(--ink2); margin-bottom: 8px; }
+.focus-chips { display: flex; gap: 4px; flex-wrap: wrap; }
+.focus-metrics {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px; background: var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.focus-metric {
+  background: transparent; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.focus-metric-val { font: 700 22px var(--mono); color: var(--ink); letter-spacing: -.01em; }
+.focus-metric-val.accent { color: var(--accent); }
+.focus-metric-lbl { font: 600 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); }
+/* Intel data rows */
+.focus-intel {
+  border-bottom: 1px solid var(--rule);
+}
+.focus-intel-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 7px 20px; border-bottom: 1px solid rgba(17,17,16,.05);
+  gap: 12px;
+}
+.focus-intel-row:last-child { border-bottom: none; }
+.focus-intel-key { font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); flex-shrink: 0; }
+.focus-intel-val { font: 500 14px var(--sans); color: var(--ink); text-align: right; }
+/* Analyst hook */
+.focus-hook {
+  padding: 16px 20px; border-bottom: 1px solid var(--rule);
+}
+.focus-hook-label {
+  font: 700 11px var(--sans); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+}
+.focus-hook-text {
+  font: 400 12px/1.8 var(--sans); color: var(--ink);
+}
+.focus-hook-text strong { font-weight: 700; color: var(--ink); }
+.focus-hook-question {
+  margin-top: 10px; padding: 10px 14px; background: var(--accent-bg);
+  border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0;
+  font: 600 11px/1.6 var(--sans); color: var(--ink2);
+}
+
+/* Teased factor bars */
+.focus-factors {
+  padding: 14px 20px; border-bottom: 1px solid var(--rule);
+}
+.focus-factors-label {
+  font: 700 11px var(--sans); letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink2); margin-bottom: 10px;
+}
+.focus-factor-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+}
+.focus-factor-row:last-child { margin-bottom: 0; }
+.focus-factor-name {
+  font: 600 13px var(--sans); letter-spacing: .06em; color: var(--ink);
+  width: 118px; flex-shrink: 0;
+}
+.focus-factor-name.locked { color: var(--ink3); font-style: italic; }
+.focus-factor-bar {
+  flex: 1; height: 12px; background: rgba(17,17,16,.07); border-radius: 99px; overflow: hidden;
+}
+.focus-factor-fill {
+  height: 100%; border-radius: 99px;
+  background: var(--ink);
+  transition: width .8s cubic-bezier(.22,1,.36,1);
+}
+.focus-factor-fill.locked {
+  background: repeating-linear-gradient(90deg, var(--rule) 0, var(--rule) 4px, transparent 4px, transparent 8px);
+  width: 100% !important; opacity: 0.5;
+}
+.focus-factor-score {
+  font: 700 13px var(--mono); color: var(--ink); width: 32px; text-align: right; flex-shrink: 0;
+}
+.focus-factor-score.locked {
+  color: var(--ink3); font-size: 11px; letter-spacing: .06em;
+}
+.focus-gated {
+  padding: 14px 20px; display: flex; flex-direction: column; gap: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.focus-gated-title { font: 700 9px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); margin-bottom: 6px; }
+.focus-gated-row {
+  display: flex; align-items: center; gap: 8px;
+  font: 500 11px var(--sans); color: var(--ink2);
+}
+.focus-gated-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink2); flex-shrink: 0; }
+.focus-gated-line { flex: 1; height: 1px; background: var(--ink2); opacity: .2; }
+.focus-cta-wrap { padding: 16px 20px 24px; }
+.focus-cta {
+  display: block; width: 100%; padding: 14px 24px; border-radius: 8px; text-align: center;
+  font: 700 11px var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  background: var(--ink); color: var(--bg); text-decoration: none; transition: background .15s;
+}
+.focus-cta:hover { background: var(--accent); }
+.focus-cta.locked { background: rgba(17,17,16,.12); color: var(--ink3); pointer-events: none; }
+.focus-cta-sub {
+  display: block; font: 500 13px var(--sans); letter-spacing: .04em;
+  text-transform: none; opacity: 0.7; margin-top: 4px;
+}
+
+/* MODE TABS */
+.mode-tabs {
+  display: flex; border-bottom: 2px solid var(--rule); flex-shrink: 0;
+  background: var(--bg);
+}
+.mode-tab {
+  flex: 1; padding: 16px 6px; text-align: center; cursor: pointer;
+  font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); border-bottom: 3px solid transparent; margin-bottom: -2px;
+  background: none; border-top: none; border-left: none; border-right: none;
+  font-family: var(--sans); transition: color .15s;
+}
+.mode-tab:hover { color: var(--ink2); }
+.mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+
+/* SEARCH BAR */
+.search-bar {
+  padding: 10px 14px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+  display: none;
+}
+.search-bar.visible { display: block; }
+.search-row {
+  display: flex; gap: 8px; align-items: center;
+}
+.search-input {
+  flex: 1; min-width: 0; padding: 8px 12px; background: var(--bg2);
+  border: 1px solid var(--rule); border-radius: 6px;
+  font: 400 16px var(--sans); color: var(--ink); outline: none;
+  -webkit-appearance: none; appearance: none;
+}
+.search-input::placeholder { color: var(--ink3); }
+.search-input:focus { border-color: var(--accent); background: var(--bg); }
+.search-scan-btn {
+  flex-shrink: 0; padding: 9px 12px; border-radius: 6px; border: 1px solid var(--accent);
+  background: var(--accent); color: #fff; font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; transition: opacity .15s, transform .15s;
+}
+.search-scan-btn:hover { opacity: .92; }
+.search-scan-btn:disabled { opacity: .45; cursor: wait; }
+.search-help {
+  margin-top: 8px; font: 500 11px var(--sans); color: var(--ink3); letter-spacing: .01em;
+}
+.search-help.busy { color: var(--accent); }
+.search-help.error { color: var(--red); }
+.any-building-chip { background: #fff7ed; color: #b45309; }
+.any-building-chip.ok { background: #f0fdf4; color: #15803d; }
+.focus-factor-fill.provisional-geometry { background: var(--accent-blue); }
+.focus-factor-fill.provisional-heritage-hard { background: var(--red); }
+.focus-factor-fill.provisional-heritage-ok { background: var(--green); }
+.focus-factor-fill.provisional-uplift { background: var(--accent); }
+
+/* LIST HEADER */
+.list-header {
+  padding: 12px 16px 10px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.list-header-label { font: 300 18px var(--sans); letter-spacing: -.01em; color: var(--ink); letter-spacing: -.01em; }
+.list-count { font: 600 13px var(--mono); color: var(--ink2); }
+
+/* SITE LIST */
+.site-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── SITE CARD ── */
+.site-card {
+  margin-bottom: 5px; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+  border-radius: 2px; overflow: hidden;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  position: relative;
+}
+.site-card:hover {
+  background: #f5f3ee;
+  transform: translateX(4px);
+  box-shadow: -4px 0 0 0 var(--accent), 4px 0 20px rgba(0,0,0,.12);
+  z-index: 1;
+}
+.site-card:hover .card-header { background: transparent; }
+.site-card.active .card-header { background: var(--accent-bg); }
+.site-card.active { box-shadow: inset 0 0 0 2px var(--accent), 2px 0 16px rgba(0,0,0,.12); }
+
+.card-header {
+  padding: 0 14px 0 0; display: flex; gap: 0; align-items: stretch;
+  transition: background .1s;
+}
+/* Rank column - full height grey zone */
+.card-rank {
+  font: 800 50px var(--mono); color: rgba(17,17,16,.18); flex-shrink: 0; width: 68px;
+  letter-spacing: -.04em; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(17,17,16,.04);
+  border-right: 1px solid rgba(17,17,16,.08);
+  margin-right: 14px; padding: 12px 0;
+  transition: color .18s, background .18s;
+}
+.site-card:hover .card-rank { color: var(--accent); background: rgba(184,132,92,.06); }
+.site-card.active .card-rank { color: var(--accent); background: rgba(184,132,92,.08); }
+/* Score far right */
+.card-score-col { flex-shrink: 0; text-align: right; width: 52px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.card-score-num { font: 800 28px var(--mono); color: var(--accent); letter-spacing: -.02em; line-height: 1; }
+.card-score-sub { font: 700 11px var(--mono); color: var(--ink3); letter-spacing: .08em; }
+.card-score-bar { width: 44px; height: 2px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+.card-score-fill { height: 100%; border-radius: 2px; }
+
+/* Main body */
+.card-main { flex: 1; min-width: 0; }
+.card-name { font: 400 24px/1.2 var(--sans); letter-spacing: -.02em; color: var(--ink); overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.card-address { font: 400 13px var(--sans); color: var(--ink2); margin-bottom: 6px; }
+.card-borough-row { margin-bottom: 5px; }
+.card-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
+.card-summary { font: 400 13px/1.6 var(--sans); color: var(--ink2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.chip {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+}
+.chip.oa    { background: var(--accent-bg); color: var(--accent); }
+.chip.caz   { background: #eff6ff; color: #1d4ed8; }
+.chip.cons  { background: #fef3c7; color: #b45309; }
+.chip.bor   { background: var(--bg2); color: var(--ink3); }
+.chip.ptal  { background: var(--bg2); color: var(--ink2); }
+.chip.listed { background: rgba(22,163,74,.1); color: #16a34a; border-color: rgba(22,163,74,.2); font-weight: 600; }
+.chip.mot { background: var(--bg2); color: var(--ink2); }
+.chip.mot-4, .chip.mot-5 { background: rgba(239,68,68,.1); color: #dc2626; border-color: rgba(239,68,68,.2); }
+.chip.mot-3 { background: rgba(245,158,11,.1); color: #b45309; border-color: rgba(245,158,11,.2); }
+.chip.mot-2 { background: rgba(245,158,11,.07); color: var(--ink3); }
+.chip.assembly { font-weight: 600; }
+.chip.assembly-easy { background: rgba(22,163,74,.1); color: #16a34a; border-color: rgba(22,163,74,.2); }
+.chip.assembly-play { background: rgba(245,158,11,.1); color: #b45309; border-color: rgba(245,158,11,.2); }
+.chip.assembly-moderate { background: rgba(245,158,11,.07); color: var(--ink3); border-color: rgba(245,158,11,.15); }
+.chip.assembly-complex { background: rgba(239,68,68,.1); color: #dc2626; border-color: rgba(239,68,68,.2); }
+/* Borough colour chips - prominent */
+.chip.bor-southwark,
+.chip.bor-city,
+.chip.bor-hackney,
+.chip.bor-other {
+  font-size: 11px; font-weight: 800; letter-spacing: .08em;
+  padding: 3px 8px; border-radius: 4px;
+}
+.chip.bor-southwark { background: rgba(91,122,157,.12); color: #5b7a9d; }
+.chip.bor-city      { background: rgba(184,132,92,.12); color: #b8845c; }
+.chip.bor-hackney   { background: rgba(17,17,16,.06); color: #555550; }
+.chip.bor-other     { background: var(--bg2); color: var(--ink2); }
+
+.card-right-col { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 1px; }
+.verdict-pill {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 20px; color: #fff; white-space: nowrap;
+}
+.verdict-pill.green  { background: var(--green); color: #fff; }
+.verdict-pill.amber  { background: var(--amber); color: #fff; }
+.verdict-pill.red    { background: var(--red); color: #fff; }
+.verdict-pill.grey   { background: var(--ink3); color: #fff; }
+.card-cta {
+  font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  padding: 6px 12px; border-radius: 4px; text-decoration: none;
+  background: var(--ink); color: var(--bg); white-space: nowrap; transition: background .15s;
+}
+.card-cta:hover { background: var(--accent); }
+.card-cta.locked { background: var(--bg2); color: var(--ink3); pointer-events: none; }
+
+/* EXPANDED SITE PREVIEW */
+/* ── ACTIVE CARD: grouped fillet pop ── */
+@keyframes cardPop {
+  0%   { transform: scale(0.93) translateY(4px); opacity: .5; }
+  55%  { transform: scale(1.04) translateY(-3px); }
+  75%  { transform: scale(0.98) translateY(1px); }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.site-list.has-active .site-card:not(.active) {
+  opacity: 0.28;
+  filter: blur(0.4px);
+  transform: scale(0.985);
+  transition: opacity .3s ease, filter .3s ease, transform .3s ease;
+}
+.site-card {
+  border-bottom: 1px solid var(--rule); cursor: pointer;
+  transition: background .1s, box-shadow .2s, border-radius .2s, margin .2s, opacity .3s, filter .3s, transform .3s;
+  border-radius: 0;
+}
+.site-card.active {
+  animation: cardPop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  border-radius: 12px;
+  margin: 6px 8px;
+  border: 1px solid rgba(184,132,92,.3);
+  box-shadow: 0 6px 28px rgba(17,17,16,.14), 0 1px 4px rgba(17,17,16,.08);
+  overflow: hidden;
+  background: var(--bg);
+}
+.site-card.active + .site-card { border-top: none; }
+
+.card-expand {
+  display: none;
+}
+.site-card.active .card-expand {
+  display: block;
+  animation: expandIn 0.22s ease-out;
+  border-top: 1px solid var(--rule);
+}
+
+/* Square tile: thumbnail left + data right */
+.expand-top {
+  display: flex; gap: 0; align-items: stretch; min-height: 0;
+}
+.expand-thumb {
+  flex-shrink: 0;
+  width: 160px; height: 160px;
+  position: relative; overflow: hidden; background: var(--bg2);
+  flex-shrink: 0;
+}
+.expand-sat-img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .4s ease;
+}
+.site-card.active .expand-sat-img:hover { transform: scale(1.06); }
+
+.expand-data {
+  flex: 1; padding: 14px 14px; display: flex; flex-direction: column; gap: 6px;
+  border-left: 1px solid var(--rule); justify-content: center;
+}
+.expand-gdv {
+  font: 800 26px var(--mono); color: var(--accent); letter-spacing: -.02em; line-height: 1;
+}
+.expand-gdv-label { font: 700 8px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); margin-top: 2px; }
+.expand-stat-row { display: flex; gap: 14px; margin-top: 8px; }
+.expand-stat { display: flex; flex-direction: column; gap: 1px; }
+.expand-stat-val { font: 700 14px var(--mono); color: var(--ink); }
+.expand-stat-lbl { font: 600 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); }
+
+/* Narrative */
+.expand-narrative {
+  padding: 10px 14px; font: 400 11px/1.65 var(--sans); color: var(--ink2);
+  border-top: 1px solid var(--rule);
+}
+.expand-narrative strong { color: var(--ink); font-weight: 700; }
+
+/* Gated indicators */
+.expand-gated {
+  padding: 8px 14px 2px; display: flex; flex-direction: column; gap: 5px;
+  border-top: 1px solid var(--rule);
+}
+.expand-gated-row {
+  display: flex; align-items: center; gap: 7px;
+  font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); opacity: 0.45;
+}
+.expand-gated-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink3); flex-shrink: 0; }
+.expand-gated-line { flex: 1; height: 1px; background: var(--ink3); opacity: .25; border-radius: 1px; }
+
+/* CTA */
+.expand-cta-row { padding: 10px 14px 14px; }
+.expand-cta {
+  font: 700 11px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  padding: 11px 24px; border-radius: 6px; text-decoration: none;
+  background: var(--ink); color: var(--bg); transition: background .15s;
+  display: block; width: 100%; text-align: center;
+}
+.expand-cta:hover { background: var(--accent); }
+.expand-cta.locked { background: rgba(17,17,16,.12); color: var(--ink3); pointer-events: none; }
+
+/* ── MAP POPUP ── */
+.mapboxgl-popup-content {
+  background: var(--bg); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 10px 12px; box-shadow: 0 4px 20px rgba(0,0,0,.15); min-width: 160px;
+  font-family: var(--sans);
+}
+.popup-name { font: 700 11px var(--sans); color: var(--ink); }
+.popup-score-row { display: flex; align-items: baseline; gap: 6px; margin-top: 5px; }
+.popup-score { font: 800 22px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.popup-verdict { font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.popup-addr { font: 400 13px var(--sans); color: var(--ink3); margin-top: 3px; }
+
+/* ── MASSING POPUP (90vh, 16:9) ── */
+.mass-scrim {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.65);
+  display: none; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .25s ease;
+}
+.mass-scrim.open { display: flex; opacity: 1; }
+.mass-modal {
+  width: 94vw; height: 90vh; max-width: 1800px;
+  background: #111110; border-radius: 20px; overflow: hidden;
+  display: flex; position: relative; flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,.5);
+}
+.mass-body {
+  display: flex; flex: 1; overflow: hidden;
+}
+.mass-close {
+  position: absolute; top: 16px; right: 20px; z-index: 10;
+  background: rgba(255,255,255,.1); border: none; color: rgba(255,255,255,.7);
+  width: 36px; height: 36px; border-radius: 50%; font-size: 18px;
+  cursor: pointer; transition: background .15s, color .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.mass-close:hover { background: rgba(255,255,255,.2); color: #fff; }
+.mass-nav-bar {
+  flex: 0 0 44px; width: 100%;
+  background: rgba(18,18,18,.96); border-top: 1px solid rgba(255,255,255,.08);
+  display: flex; align-items: center; z-index: 20; border-radius: 0 0 12px 12px;
+  overflow: hidden;
+}
+.mass-nav-btn {
+  flex: 0 0 44px; height: 44px; background: none; border: none;
+  color: rgba(255,255,255,.5); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: color .15s, background .15s;
+}
+.mass-nav-btn:hover:not(:disabled) { color: #fff; background: rgba(255,255,255,.06); }
+.mass-nav-btn:disabled { opacity: 0.2; cursor: default; }
+.mass-tab-nav {
+  display: flex; align-items: center;
+  border-left: 1px solid rgba(255,255,255,.1);
+  padding: 0 2px;
+}
+.mass-tab-nav-btn {
+  background: none; border: none; color: rgba(255,255,255,.45);
+  font-size: 15px; width: 28px; height: 100%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: color .15s;
+}
+.mass-tab-nav-btn:hover:not(:disabled) { color: #fff; }
+.mass-tab-nav-btn:disabled { opacity: 0.2; cursor: default; }
+.mass-tab-nav-label {
+  font: 500 11px/1 var(--sans); color: rgba(255,255,255,.4);
+  min-width: 42px; text-align: center; letter-spacing: .02em;
+}
+.mass-sitenav {
+  position: absolute; top: 16px; right: 60px; z-index: 20;
+  display: flex; align-items: center; gap: 0;
+  background: rgba(0,0,0,.82); border: 1px solid rgba(255,255,255,.2);
+  border-radius: 10px; overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
+}
+.mass-sitenav-btn {
+  background: none; border: none; color: #fff;
+  font-size: 22px; width: 48px; height: 44px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.mass-sitenav-btn:hover:not(:disabled) { background: rgba(255,255,255,.12); }
+.mass-sitenav-btn:disabled { opacity: 0.25; cursor: default; }
+.mass-sitenav-label {
+  font: 700 14px/1.2 var(--sans); color: #fff;
+  padding: 4px 12px; min-width: 60px; text-align: center;
+  border-left: 1px solid rgba(255,255,255,.12);
+  border-right: 1px solid rgba(255,255,255,.12);
+}
+.mass-use-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.mass-use-chip {
+  font: 600 10px/1 var(--sans); letter-spacing: .05em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px; border: 1px solid;
+}
+.mass-use-chip.resi { background: rgba(196,145,90,.15); color: #c4915a; border-color: rgba(196,145,90,.3); }
+.mass-use-chip.office { background: rgba(91,122,157,.15); color: #7ba3c9; border-color: rgba(91,122,157,.3); }
+.mass-use-chip.mixed { background: rgba(160,124,158,.15); color: #c09bbf; border-color: rgba(160,124,158,.3); }
+.mass-use-chip.industrial { background: rgba(122,122,150,.15); color: #9e9ebc; border-color: rgba(122,122,150,.3); }
+.mass-use-chip.adaptive { background: rgba(184,132,92,.15); color: var(--accent); border-color: rgba(184,132,92,.3); }
+.mass-nav-center {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1px; overflow: hidden; padding: 0 4px;
+}
+.mass-nav-rank {
+  font: 500 10px/1 var(--sans); color: rgba(255,255,255,.35); letter-spacing: .06em; text-transform: uppercase;
+}
+.mass-nav-label {
+  font: 500 12px/1 var(--sans); color: rgba(255,255,255,.7);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+}
+
+/* Left: 3D / Street View canvas */
+.mass-canvas {
+  flex: 1; position: relative; min-width: 0;
+}
+.mass-map-wrap {
+  position: absolute; inset: 0;
+}
+.mass-map-wrap canvas, .mass-map-wrap .mapboxgl-map { width: 100% !important; height: 100% !important; }
+.mass-sv-wrap {
+  position: absolute; inset: 0; display: none; background: #000;
+}
+.mass-sv-wrap.active { display: block; }
+
+/* Pegman Street View */
+.mass-pegman-btn {
+  position: absolute; bottom: 20px; left: 20px; z-index: 10;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 8px;
+  background: rgba(0,0,0,.65);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.7); font: 600 11px var(--sans);
+  letter-spacing: .1em; text-transform: uppercase;
+  cursor: grab; user-select: none; transition: background .15s, color .15s;
+}
+.mass-pegman-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.mass-pegman-btn.dragging { cursor: grabbing; background: var(--accent); color: #fff; opacity: .85; }
+.mass-pegman-icon { font-size: 18px; }
+.mass-sv-back {
+  position: absolute; top: 68px; right: 20px; z-index: 10;
+  padding: 8px 14px; border-radius: 8px;
+  background: rgba(0,0,0,.65);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.7); font: 600 11px var(--sans);
+  letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; display: none;
+}
+.mass-sv-back.visible { display: block; }
+
+/* Scenario tabs overlay */
+/* Unified tab card */
+.mass-tab-card {
+  position: absolute; top: 16px; left: 16px;
+  z-index: 10; border-radius: 8px; overflow: hidden;
+  background: rgba(0,0,0,.65);
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 4px 24px rgba(0,0,0,.4), 0 0 0 1px rgba(184,132,92,.12);
+  min-width: 476px;
+  display: flex; flex-direction: column;
+}
+.mass-scenario-tabs {
+  display: flex; border-bottom: 4px solid var(--accent);
+  filter: drop-shadow(0 3px 8px rgba(184,132,92,.45));
+}
+.mass-sc-tab {
+  flex: 1; padding: 13px 20px;
+  background: transparent;
+  border: none; border-right: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.35); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 0;
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.mass-sc-tab:last-child { border-right: none; }
+.mass-sc-tab.active {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  box-shadow: inset 0 0 0 1.5px var(--accent), 0 0 12px rgba(184,132,92,.2);
+}
+.mass-sc-tab:hover:not(.active) { background: rgba(255,255,255,.05); color: rgba(255,255,255,.7); }
+.mass-sc-label { font: 700 14px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.mass-sc-sep { font: 400 14px var(--sans); color: rgba(255,255,255,.25); margin: 0 8px; }
+.mass-sc-tab.active .mass-sc-sep { color: rgba(255,255,255,.4); }
+.mass-sc-floors { font: 600 15px var(--mono); letter-spacing: .04em; }
+
+/* Data row - copper top border connects it to the tab strip */
+.mass-sc-chip {
+  display: flex; opacity: 0; pointer-events: none;
+  transition: opacity .2s ease;
+  border-top: 1px solid rgba(184,132,92,.3);
+  background: rgba(184,132,92,.06);
+}
+.mass-sc-chip.visible { opacity: 1; pointer-events: auto; }
+.mass-sc-chip-item {
+  flex: 1; padding: 10px 14px; border-right: 1px solid rgba(255,255,255,.07);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.mass-sc-chip-item:last-child { border-right: none; }
+.mass-sc-chip-val {
+  font: 700 16px var(--mono); color: rgba(255,255,255,.9); letter-spacing: -.01em;
+}
+.mass-sc-chip-lbl {
+  font: 500 11px var(--sans); color: rgba(255,255,255,.4); letter-spacing: .08em; text-transform: uppercase;
+}
+
+/* Right: info strip */
+.mass-info {
+  width: 480px; flex-shrink: 0; background: #111110;
+  border-left: 1px solid rgba(255,255,255,.08);
+  padding: 32px 36px; display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.mass-site-name {
+  font: 400 36px/1.1 'Cormorant Garamond', Georgia, serif;
+  color: #f2f1ed; margin-bottom: 6px; letter-spacing: -.01em;
+}
+.mass-site-addr {
+  font: 500 13px var(--sans); color: rgba(255,255,255,.45);
+  letter-spacing: .04em; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.mass-score-row {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px;
+}
+.mass-score-num {
+  font: 800 36px var(--mono); color: var(--accent); letter-spacing: -.03em;
+}
+.mass-score-label {
+  font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.4);
+}
+.mass-verdict {
+  font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px; color: #fff; display: inline-block;
+  align-self: flex-start; margin-bottom: 20px;
+}
+.mass-verdict.green { background: var(--green); }
+.mass-verdict.amber { background: var(--amber); }
+.mass-verdict.red { background: var(--red); }
+
+.mass-divider {
+  height: 1px; background: rgba(255,255,255,.08); margin: 16px 0;
+}
+
+/* Metrics grid */
+.mass-metrics {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-bottom: 20px;
+}
+.mass-metric-val {
+  font: 700 20px var(--mono); color: #f2f1ed; letter-spacing: -.01em;
+}
+.mass-metric-val.accent { color: var(--accent); }
+.mass-metric-lbl {
+  font: 600 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(255,255,255,.4); margin-top: 2px;
+}
+
+/* Gated rows */
+.mass-gated {
+  display: flex; flex-direction: column; gap: 0; margin-bottom: 24px;
+  border: 1px solid rgba(255,255,255,.1); border-radius: 10px; overflow: hidden;
+}
+.mass-gated-label {
+  font: 700 10px var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.3); padding: 12px 16px 8px; border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.mass-gated-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,.06);
+  font: 500 13px var(--sans); color: rgba(255,255,255,.5);
+  transition: background .12s;
+}
+.mass-gated-row:last-child { border-bottom: none; }
+.mass-gated-icon {
+  font-size: 14px; opacity: .5; flex-shrink: 0;
+}
+.mass-gated-name { flex: 1; }
+.mass-gated-tag {
+  font: 600 10px var(--sans); letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(184,132,92,.6); background: rgba(184,132,92,.1);
+  padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+}
+
+/* CTA */
+.mass-cta {
+  display: block; text-align: center; padding: 14px 24px;
+  background: var(--accent); color: #fff; text-decoration: none;
+  font: 700 11px var(--sans); letter-spacing: .12em; text-transform: uppercase;
+  border-radius: 8px; transition: background .15s; margin-top: auto;
+}
+.mass-cta:hover { background: #a07450; }
+.mass-cta.locked {
+  background: rgba(255,255,255,.06); color: rgba(255,255,255,.3);
+  pointer-events: none;
+}
+.mass-cta-sub {
+  display: block; font: 400 13px var(--sans); letter-spacing: 0;
+  text-transform: none; color: rgba(255,255,255,.5); margin-top: 6px;
+}
+/* Analyst hook in popup */
+.mass-hook {
+  background: rgba(184,132,92,.08); border: 1px solid rgba(184,132,92,.2);
+  border-radius: 10px; padding: 16px 18px; margin-bottom: 16px;
+}
+.mass-hook-label {
+  font: 700 11px var(--sans); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+}
+.mass-hook-text {
+  font: 400 14px/1.7 var(--sans); color: rgba(255,255,255,.75);
+}
+.mass-hook-text strong { color: rgba(255,255,255,.95); font-weight: 600; }
+
+/* ═══════════════════════════════════════
+   MOBILE — ≤768px
+   Map full screen, cards drawer from bottom
+   ═══════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  :root { --panel-w: 100%; --nav-h: 44px; }
+
+  /* Map fills entire screen */
+  #map-canvas { top: var(--nav-h); }
+  #map-fade { top: var(--nav-h); }
+
+  /* Left overlay: slim hero + borough pills only, full width */
+  .col-left {
+    width: 100%;
+    position: fixed; top: var(--nav-h); left: 0; right: 0;
+    height: auto; z-index: 5;
+    pointer-events: none;
+  }
+  .col-left > * { pointer-events: all; }
+
+  /* Hero: ultra-compact single row */
+  .discover-hero {
+    padding: 4px 10px;
+    gap: 0;
+    border-bottom-width: 1px;
+  }
+  .hero-stat { padding: 0 6px; }
+  .hero-stat:nth-child(n+4) { display: none; }
+  .hero-stat-value { font-size: 16px; font-family: var(--sans); font-weight: 800; line-height: 1.1; }
+  .hero-stat-label { font-size: 7px; letter-spacing: .06em; margin-bottom: 0; }
+  .hero-stat-sub { display: none; }
+
+  /* Hide legend on mobile */
+  .map-legend { display: none; }
+
+  /* Borough pills: horizontal scroll */
+  .borough-selector { padding: 4px 10px 5px; }
+  .borough-selector-label { display: none; }
+  .borough-pills { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .borough-pills::-webkit-scrollbar { display: none; }
+  .borough-pill { flex-shrink: 0; font-size: 11px; padding: 3px 8px; }
+
+  /* Right panel: bottom drawer */
+  .col-right {
+    position: fixed;
+    top: auto;
+    bottom: 0; left: 0; right: 0;
+    width: 100%;
+    height: 42vh;
+    border-left: none;
+    border-top: 1px solid var(--rule);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -8px 32px rgba(17,17,16,.15);
+    transition: height .3s cubic-bezier(.22,1,.36,1);
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  /* Drag handle */
+  .col-right::before {
+    content: '';
+    display: block;
+    width: 36px; height: 4px;
+    background: var(--ink3); border-radius: 2px;
+    margin: 8px auto 0;
+    flex-shrink: 0;
+    opacity: 0.4;
+  }
+
+  /* Mode tabs: compact */
+  .mode-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mode-tabs::-webkit-scrollbar { display: none; }
+  .mode-tab { flex-shrink: 0; font-size: 10px; padding: 7px 10px; letter-spacing: .06em; }
+  .list-header { padding: 4px 10px; }
+  .list-header-label { font-size: 10px; }
+  .list-count { font-size: 10px; }
+  .search-input { font-size: 16px; padding: 8px 10px; }
+
+  /* Site cards: compact mobile */
+  .site-list { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .site-card { padding: 8px 10px; border-left-width: 3px; }
+  .card-header { gap: 6px; }
+  .card-rank { font-size: 11px; min-width: 22px; padding: 2px 0; }
+  .card-name { font-size: 12px; line-height: 1.2; }
+  .card-address { font-size: 10px; }
+  .card-borough-row { gap: 3px; margin-bottom: 2px; }
+  .card-borough-row .chip { font-size: 9px; padding: 1px 5px; }
+  .card-chips { gap: 3px; margin-bottom: 3px; }
+  .card-chips .chip { font-size: 9px; padding: 1px 5px; }
+  .card-chips .verdict-pill { font-size: 9px; padding: 2px 6px; }
+  .card-summary { display: none; }
+  .card-score-col { width: 40px; gap: 2px; }
+  .card-score-num { font-size: 22px; }
+  .card-score-sub { font-size: 9px; }
+  .card-score-bar { display: none; }
+  .card-cta { font-size: 9px; padding: 3px 6px; }
+
+  /* Focus panel fills full height */
+  #site-focus {
+    position: fixed; inset: 0; top: var(--nav-h);
+    z-index: 200;
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+  }
+  .focus-top { min-height: 180px; }
+  .focus-sat-wrap { width: 160px; height: 160px; }
+  .focus-score-num { font-size: 32px; }
+
+  /* Map controls: bottom-right, above drawer */
+  .map-controls {
+    position: fixed; bottom: calc(42vh + 8px); right: 12px; left: auto;
+  }
+  .map-label { bottom: calc(42vh + 40px); }
+
+  /* Massing popup: full screen */
+  .mass-scrim { padding: 0; }
+  .mass-modal {
+    width: 100vw; height: 100dvh; max-width: 100vw;
+    border-radius: 0;
+  }
+  .mass-body { flex-direction: column; }
+  .mass-canvas {
+    height: 50vh; flex: 0 0 50vh;
+  }
+  .mass-info {
+    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 16px;
+  }
+  /* Back button - prominent, always visible */
+  .mass-close {
+    top: 8px; left: 8px; right: auto;
+    width: auto; height: auto;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0; /* hide × */
+    background: rgba(0,0,0,.8);
+    color: #fff;
+  }
+  .mass-close::after {
+    content: '← Discover';
+    font-size: 13px; font-weight: 600;
+    letter-spacing: .02em;
+  }
+  .mass-close:hover { background: rgba(0,0,0,.95); }
+
+  /* Tab card: move to bottom of 3D map */
+  .mass-tab-card {
+    top: auto; bottom: 8px; left: 8px; right: 8px;
+    min-width: unset; width: auto;
+  }
+  .mass-sc-tab { padding: 10px 12px; font-size: 12px; }
+
+  /* Site nav pill: top center */
+  .mass-sitenav {
+    top: 10px; right: 10px;
+  }
+  .mass-sitenav-btn { width: 40px; height: 36px; font-size: 18px; }
+
+  /* Height labels slightly smaller */
+  .mass-site-name { font-size: 15px; }
+  .mass-site-addr { font-size: 11px; }
+  .mass-score-num { font-size: 32px; }
+
+  /* Nav: hide desktop links */
+  .da-nav-links { display: none; }
+  .da-burger { display: flex; }
+}
+
+/* Expand drawer on focus open (JS adds class) */
+@media (max-width: 768px) {
+  .col-right.expanded { height: 80vh; }
+}
+</style>
+</head>
+<body>
+
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo"><svg viewBox="0 0 88 80" fill="none"><rect x="4" y="38" width="14" height="38" rx="1" fill="#f2f1ed"/><rect x="70" y="38" width="14" height="38" rx="1" fill="#f2f1ed"/><rect x="4" y="38" width="80" height="6" fill="#f2f1ed"/><rect x="4" y="26" width="80" height="1.5" fill="#f2f1ed" opacity=".35"/><rect x="4" y="16" width="80" height="1.5" fill="#f2f1ed" opacity=".22"/><rect x="4" y="6" width="80" height="1.5" fill="#f2f1ed" opacity=".12"/></svg><span>Headroom</span></a>
+  <div class="da-nav-sep"></div>
+  <a class="da-nav-link active" href="/discover">Discover</a>
+  <a class="da-nav-link" id="nav-appraise" href="/t1/196-blackfriars-rd">Appraise</a>
+  <div class="da-nav-sep"></div>
+  <a class="da-nav-link accent" href="/pd">PD Check</a>
+  <div class="da-nav-spacer"></div>
+  <a class="da-nav-contact" href="mailto:hello@headroom.city">Contact</a>
+  <button class="da-burger" id="da-burger" aria-label="Menu" onclick="daOpenBurger()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="da-burger-overlay" id="da-burger-overlay" onclick="daCloseBurger()"></div>
+<div class="da-burger-panel" id="da-burger-panel">
+  <button class="da-burger-close" onclick="daCloseBurger()">✕</button>
+  <nav class="da-burger-nav">
+    <a href="/">Home</a>
+    <a href="/discover">Discover</a>
+    <a href="/t1/196-blackfriars-rd">Appraise</a>
+    <a href="/pd" class="accent">PD Check</a>
+    <a href="mailto:hello@headroom.city">Contact</a>
+  </nav>
+</div>
+
+<!-- Full-canvas map (behind all overlays) -->
+<div id="map-canvas"></div>
+<div id="map-fade"></div>
+
+<div class="map-controls">
+  <div class="map-style-toggle">
+    <button class="map-style-btn" data-style="satellite" onclick="switchMapStyle('satellite')">Satellite</button>
+    <button class="map-style-btn active" data-style="map" onclick="switchMapStyle('map')">Map</button>
+  </div>
+  <div class="map-legend">
+    <div class="map-legend-item"><div class="map-legend-dot office"></div>Office</div>
+    <div class="map-legend-item"><div class="map-legend-dot resi"></div>Residential</div>
+    <div class="map-legend-item"><div class="map-legend-dot mixed"></div>Mixed-use</div>
+    <div class="map-legend-item"><div class="map-legend-dot industrial"></div>Industrial</div>
+    <div class="map-legend-item"><div class="map-legend-dot brownfield"></div>Brownfield</div>
+  </div>
+</div>
+
+<!-- Left overlays: hero stats (top) + borough selector (bottom) -->
+<div class="col-left">
+  <div class="discover-hero" id="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-label">Sites Tracked</div>
+      <div class="hero-stat-value" id="stat-total">-</div>
+      <div class="hero-stat-sub">Verified London opportunities</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Est. GDV</div>
+      <div class="hero-stat-value accent" id="stat-gdv">-</div>
+      <div class="hero-stat-sub">Modelled development value</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Floor Area</div>
+      <div class="hero-stat-value" id="stat-nia">-</div>
+      <div class="hero-stat-sub">Potential new NIA</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">OA Designated</div>
+      <div class="hero-stat-value" id="stat-oa">-</div>
+      <div class="hero-stat-sub">Opportunity Area sites</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Reports Live</div>
+      <div class="hero-stat-value" id="stat-t1">-</div>
+      <div class="hero-stat-sub">Full appraisals available</div>
+    </div>
+  </div>
+
+  <div class="borough-selector">
+    <div class="borough-selector-label">Borough</div>
+    <div class="borough-pills" id="borough-pills">
+      <div class="borough-pill active" data-borough="all" onclick="selectBorough('all',this)">All London</div>
+    </div>
+  </div>
+</div>
+
+  <!-- ── RIGHT PANEL ── -->
+  <div class="col-right">
+
+    <!-- Mode tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tab-top100" onclick="setMode('top100')">London Top 100</button>
+      <button class="mode-tab" id="tab-borough" onclick="setMode('borough')">Borough Top 30</button>
+      <button class="mode-tab" id="tab-search" onclick="setMode('search')">Address Search</button>
+    </div>
+
+    <!-- Search bar (search mode only) -->
+    <div class="search-bar" id="search-bar">
+      <div class="search-row">
+        <input class="search-input" id="search-q" type="text" placeholder="Search address, postcode, site name..." oninput="render()" onkeydown="handleSearchKey(event)">
+        <button class="search-scan-btn" id="search-scan-btn" onclick="runSearchAssessment()">Scan</button>
+      </div>
+      <div class="search-help" id="search-help">Click any building to scan, or search a London address or postcode.</div>
+    </div>
+
+    <!-- List header -->
+    <div class="list-header">
+      <span class="list-header-label" id="list-label">London Top 100</span>
+      <span class="list-count" id="list-count">-</span>
+    </div>
+
+    <!-- Site list -->
+    <div class="site-list" id="site-list">
+      <div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">Loading sites...</div>
+    </div>
+
+    <!-- Site Focus Panel (replaces list on site select) -->
+    <div id="site-focus">
+      <button class="focus-back" onclick="closeFocus()">
+        <span class="focus-back-arrow">&#8592;</span> All sites
+      </button>
+      <div class="focus-top">
+        <div class="focus-sat-wrap" id="focus-visual">
+          <div class="focus-sat-placeholder" id="focus-sat-ph">-</div>
+        </div>
+        <div class="focus-header">
+          <div class="focus-score-row">
+            <div class="focus-score-num" id="focus-score">-</div>
+            <div class="focus-score-right">
+              <span class="focus-verdict" id="focus-verdict">-</span>
+              <span class="focus-score-sub" id="focus-score-sub">Score /100</span>
+            </div>
+          </div>
+          <div class="focus-name" id="focus-name">-</div>
+          <div class="focus-addr" id="focus-addr">-</div>
+          <div class="focus-chips" id="focus-chips"></div>
+        </div>
+      </div>
+      <div class="focus-metrics" id="focus-metrics"></div>
+      <!-- Analyst hook - the intelligence that creates the question -->
+      <div class="focus-hook" id="focus-hook"></div>
+      <!-- Teased factor bars - 3 visible, 3 locked -->
+      <div class="focus-factors" id="focus-factors"></div>
+      <!-- Specific CTA -->
+      <div class="focus-cta-wrap" id="focus-cta-wrap"></div>
+    </div>
+
+  </div><!-- /col-right -->
+
+</div><!-- /page -->
+
+<script src="/lib/site-model.js"></script>
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+let ALL_SITES = [];
+let MAP = null;
+let MAPBOX_TOKEN = null;
+let activeMode = 'top100';
+let activeSite = null;
+let activeBorough = 'all';
+let popup = null;
+let adHocAssessmentToken = 0;
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const verdictClass = s => s >= 80 ? 'green' : s >= 65 ? 'amber' : s >= 50 ? 'amber' : 'grey';
+const verdictLabel = s => s >= 80 ? 'Top Opportunity' : s >= 65 ? 'Strong' : s >= 50 ? 'Credible' : 'Due Diligence';
+const boroughChipClass = b => {
+  const l = (b||'').toLowerCase();
+  if (l.includes('southwark')) return 'bor-southwark';
+  if (l.includes('city')) return 'bor-city';
+  if (l.includes('hackney')) return 'bor-hackney';
+  return 'bor-other';
+};
+const boroughShort = b => {
+  const l = (b||'').toLowerCase();
+  if (l.includes('southwark')) return 'Southwark';
+  if (l.includes('city')) return 'City';
+  if (l.includes('hackney')) return 'Hackney';
+  return b;
+};
+const scoreColor  = s => s >= 80 ? '#15803d' : s >= 65 ? '#b8845c' : s >= 50 ? '#b45309' : '#999990';
+
+function inferUseType(s) {
+  // Use explicit field first
+  if (s.use) return s.use;
+  var name = (s.name || s.address || '').toLowerCase();
+  // Industrial
+  if (/industrial|warehouse|depot|trading estate|sidings|gasometer|factory|works\b|yard\b|wharf(?!.*resi)/.test(name)) return 'industrial';
+  // Mixed-use
+  if (/mixed residential|mixed non-resid|mixed use/.test(name)) return 'mixed';
+  // Residential
+  if (/residential|resi|housing|homes|aylesbury|estate(?!.*trading)|btr|pbsa|student|lodge|health centre|bus garage|clapton|hackney|dalston|kingsland|mare street/.test(name)) return 'resi';
+  // City of London: almost all office
+  if (/leadenhall|bishopsgate|moorgate|fenchurch|cannon street|liverpool street|fleet street|holborn|smithfield|bunhill|blackfriars.*ec|norton folgate|curtain road|worship street|minories|aldgate|trinity square/.test(name)) return 'office';
+  return 'office'; // default
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// SCORING ENGINE v2 — 3-layer architecture
+// Layer A: classify site → era, typology, sensitivity, posture
+// Layer B: set feasibility envelope → height cap, tower allowed, form
+// Layer C: score opportunity → apply posture ceiling
+// ══════════════════════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════════════════
+// SCORING ENGINE v2 — locked 2026-03-31
+// Principle: every modifier is a function of site-specific factors.
+// No blanket bonuses. No posture shortcuts. Constraints always bite.
+// ════════════════════════════════════════════════════════════════════
+
+// ── Layer A: Context era ──────────────────────────────────────────────────
+// Uses manual context_era field if set; otherwise derives from CA/NHLE
+function contextEra(s) {
+  if (s.context_era) return s.context_era; // manual override wins
+  const inCons = !!(s.flags?.inConservation);
+  const nhleNearby = (s.nhle_count || 0) > 0;
+  if (inCons && nhleNearby) return 'A';
+  if (inCons) return 'A';
+  if (nhleNearby) return 'mixed';
+  return 'C'; // default: post-war/modern until proven otherwise
+}
+
+// ── Layer A: Fabric sensitivity ───────────────────────────────────────────
+function fabricSensitivity(s, era) {
+  const inCons = !!(s.flags?.inConservation);
+  const nhle30m = (s.nhle_listed || []).some(lb => lb.dist_m <= 30);
+  const nhleGradeHigh = (s.nhle_listed || []).some(lb => lb.grade === 'I' || lb.grade === 'II*');
+  const nhle_tier = (s.nhle_tier || '').toLowerCase();
+  if (era === 'A' && (nhleGradeHigh || nhle_tier === 'blocking')) return 'high';
+  if (era === 'A' && (inCons || nhle30m || nhle_tier === 'navigable')) return 'high';
+  if (era === 'A') return 'medium';
+  if (era === 'mixed' && inCons) return 'medium';
+  return 'low';
+}
+
+// ── Layer A: Tower cluster — postcode-only, no OA shortcut ───────────────
+// Cluster = >=3 tall buildings within 250m. Proxy: established City EC postcodes only.
+// OA + PTAL6 alone does NOT constitute a cluster — that was wrong.
+function isTowerCluster(s) {
+  const addr = (s.address || s.name || '').toUpperCase();
+  const clusterPostcodes = ['EC2A','EC2N','EC3A','EC3V','EC1A','EC4V','EC2M','EC3M'];
+  if (clusterPostcodes.some(p => addr.includes(p))) return true;
+  if (s.tower_cluster === true) return true; // explicit override only
+  return false;
+}
+
+function planningPolicyProfile(s) {
+  return window.HeadroomSiteModel && window.HeadroomSiteModel.buildPlanningPolicyProfile
+    ? window.HeadroomSiteModel.buildPlanningPolicyProfile(s)
+    : { zone: null, policyNote: null, planScoreBoost: 0, headroomBoost: 0, precedentWeight: 1, majorUplift: false, heightIntent: false, clusterPressure: false };
+}
+
+function fabricProfile(s) {
+  return window.HeadroomSiteModel && window.HeadroomSiteModel.buildFabricProfile
+    ? window.HeadroomSiteModel.buildFabricProfile(s)
+    : { laterFabric: false, poorModernSignals: false, redevelopmentFriendly: false, lowHeritage: false };
+}
+
+// ── Layer A: Precedent validity ───────────────────────────────────────────
+// Tower precedent only valid if: OA + brownfield/commercial + NOT conservation
+function precedentMatch(s) {
+  const policy = planningPolicyProfile(s);
+  const inCons = !!(s.flags?.inConservation);
+  const inOA   = !!(s.flags?.inOA || s.flags?.oa);
+  const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
+  const brownfield = !!(s.brownfield);
+  const useType = (s.use || '').toLowerCase();
+  const isCommercial = ['office','commercial','industrial','retail'].includes(useType);
+  if (!inCons && policy.precedentWeight >= 1.45 && (inOA || inCAZ || brownfield || isCommercial)) return 'strong';
+  if (inOA && !inCons && (brownfield || isCommercial)) return 'strong';
+  if (inOA && !inCons && !brownfield && !isCommercial) return 'moderate'; // OA but resi/unknown
+  return 'weak';
+}
+
+// ── Layer A: Planning posture ─────────────────────────────────────────────
+function classifyPosture(era, sensitivity, cluster, prec) {
+  const fabric = fabricProfile(arguments[4] || {});
+  const policy = planningPolicyProfile(arguments[4] || {});
+  if (cluster) return 'go_hard';
+  if (fabric.redevelopmentFriendly && policy.majorUplift) return 'go_hard';
+  if (era === 'A' && sensitivity === 'high') return 'defensive';
+  if (era === 'A') return 'caution';
+  if (era === 'mixed') return 'caution';
+  if ((era === 'C' || era === 'D') && sensitivity === 'low') return 'go_hard';
+  return 'caution';
+}
+
+// ── Layer A: Recommended form ─────────────────────────────────────────────
+function recommendedForm(posture, era, cluster) {
+  if (cluster || posture === 'go_hard') return 'Full redevelopment';
+  if (posture === 'defensive') return 'Rooftop addition / shoulder infill';
+  if (era === 'mixed') return 'Mid-rise infill';
+  return 'Contextual redevelopment';
+}
+
+// ── Layer B: Tower allowed ────────────────────────────────────────────────
+function towerAllowed(s, era, sensitivity, cluster, prec) {
+  if (cluster) return true;
+  if (era === 'A' && sensitivity === 'high') return false;
+  if (prec === 'weak') return false;
+  return true;
+}
+
+// ── Layer B: Height cap ───────────────────────────────────────────────────
+function heightCap(s, era, sensitivity, cluster, prec) {
+  const fabric = fabricProfile(s);
+  const policy = planningPolicyProfile(s);
+  const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
+  const existingH = s.existing_height_m || null;
+  const existF = existingH ? Math.round(existingH / 3.5) : Math.max(2, Math.round(rawMax * 0.40));
+  if (cluster) return rawMax;
+  if (fabric.redevelopmentFriendly && policy.majorUplift) return rawMax;
+  if (era === 'A') {
+    if (sensitivity === 'high') return Math.min(existF + 2, rawMax);
+    if (prec === 'strong') return Math.min(existF + 4, rawMax);
+    return Math.min(existF + 3, rawMax);
+  }
+  if (era === 'mixed') return Math.min(existF + 4, rawMax);
+  if (era === 'B') return Math.min(existF + 5, rawMax);
+  return rawMax;
+}
+
+// ── Layer C: Score — factored modifier, no flat bonuses ──────────────────
+// base_headroom: how much upside does the location offer?
+// constraint_discount: how much does heritage/context eat that upside?
+// utilisation_boost: does the site have genuine latent capacity?
+function computeScore(rawScore, s, posture, nhleBlockPenalty, utilisationScore) {
+  const policy = planningPolicyProfile(s);
+  const fabric = fabricProfile(s);
+  const inOA   = !!(s.flags?.inOA || s.flags?.oa);
+  const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
+  const inCity = (s.borough || '').toLowerCase().includes('city');
+  const ptal_raw = s.flags?.ptal || s.ptal || 0;
+  const ptal = parseFloat(String(ptal_raw).replace(/[ab]/i,'')) || 0;
+  const nhle_tier = (s.nhle_tier || '').toLowerCase();
+  const inCons = !!(s.flags?.inConservation);
+
+  // Base headroom — what the location can support
+  // Tier A context (caution/defensive posture) caps base at 6: Victorian fabric constrains regardless of OA/PTAL
+  // City cluster capped at 10 — great location, not a blank cheque
+  const eraA = (posture === 'caution' || posture === 'defensive');
+  let baseHeadroom;
+  if (inCity && !eraA) baseHeadroom = 10;
+  else if (inCAZ && ptal >= 6 && !eraA) baseHeadroom = 10;
+  else if (inOA && ptal >= 6 && !eraA) baseHeadroom = 9;
+  else if (inCAZ && !eraA) baseHeadroom = 8;
+  else if (inOA && ptal >= 5 && !eraA) baseHeadroom = 7;
+  else if (inOA && !eraA) baseHeadroom = 6;
+  else if (inOA) baseHeadroom = 6;   // Tier A in OA: location acknowledged, fabric limits it
+  else if (inCity) baseHeadroom = 7; // Tier A in City: constrained by heritage but still City
+  else if (ptal >= 5) baseHeadroom = 5;
+  else if (ptal >= 4) baseHeadroom = 3;
+  else baseHeadroom = 1;
+  baseHeadroom += (policy.headroomBoost || 0);
+  if (fabric.redevelopmentFriendly) baseHeadroom += 1;
+  if (fabric.redevelopmentFriendly && policy.majorUplift) baseHeadroom += 2;
+
+  // Constraint discount — heritage/context eats the headroom
+  let constraintDiscount;
+  if (nhle_tier === 'blocking' || posture === 'defensive') constraintDiscount = 0.2;
+  else if (inCons && nhle_tier === 'navigable') constraintDiscount = 0.35;
+  else if (inCons) constraintDiscount = 0.5;
+  else if (nhle_tier === 'navigable') constraintDiscount = 0.6;
+  else if (nhle_tier === 'manageable') constraintDiscount = 0.8;
+  else constraintDiscount = 1.0;
+
+  // Utilisation boost — latent capacity adds to modifier (max +3)
+  const util = utilisationScore != null ? utilisationScore : 5.0;
+  const utilBoost = Math.round(((util - 5) / 5) * 3); // -3 to +3
+
+  const modifier = Math.round(baseHeadroom * constraintDiscount) + utilBoost;
+
+  // Ceiling: hard cap based on posture. 92 max — no site scores 100.
+  const ceiling = posture === 'go_hard' ? 92 : posture === 'caution' ? 82 : 68;
+
+  const score = (rawScore - (nhleBlockPenalty || 0)) + modifier;
+  return Math.max(0, Math.min(score, ceiling));
+}
+
+// ── Layer C: Planning score — factored, not blanket OA bonus ─────────────
+function computePlanScore(s, heritTier) {
+  const policy = planningPolicyProfile(s);
+  const inOA   = !!(s.flags?.inOA || s.flags?.oa);
+  const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
+  const inCons = !!(s.flags?.inConservation);
+  const nhle_tier = (s.nhle_tier || '').toLowerCase();
+  // Use explicit score from intelligence file if available
+  if (s.mom) return s.mom;
+  // Base from location
+  let base = inOA ? 7.5 : inCAZ ? 7.0 : 5.5;
+  base += (policy.planScoreBoost || 0);
+  // Heritage discount
+  if (nhle_tier === 'blocking') base *= 0.5;
+  else if (inCons && nhle_tier === 'navigable') base *= 0.65;
+  else if (inCons) base *= 0.75;
+  else if (nhle_tier === 'navigable') base *= 0.80;
+  return Math.round(base * 10) / 10;
+}
+
+// ── Key constraint label ──────────────────────────────────────────────────
+function keyConstraint(s, era, sensitivity, heritTier) {
+  const nhleGradeHigh = (s.nhle_listed || []).some(lb => lb.grade === 'I' || lb.grade === 'II*');
+  const nhle30m = (s.nhle_listed || []).some(lb => lb.dist_m <= 30);
+  if (nhleGradeHigh) return 'Grade I/II* listed building proximity';
+  if (era === 'A' && sensitivity === 'high') return 'Victorian/Georgian fine-grain context';
+  if (nhle30m) return 'Listed building adjacent';
+  if (!!(s.flags?.inConservation)) return 'Conservation area';
+  if (heritTier === 'blocking') return 'Heritage - blocking tier';
+  if (heritTier === 'navigable') return 'Heritage - navigable';
+  return null;
+}
+
+function assessSiteLegitimacy(s) {
+  const text = ((s.name || '') + ' ' + (s.address || '') + ' ' + (s.desc || '') + ' ' + (s.notes || '') + ' ' + (s.source || '')).toLowerCase();
+  const owner = (s.owner || '').toLowerCase();
+  const penalties = [];
+  let penalty = 0;
+
+  const openSpaceTerms = /(churchyard|church yard|plaza|square|gardens|garden|yard|court|walk|passage|forecourt|piazza|courtyard)/i;
+  const civicTerms = /(cathedral|church|guildhall|market|memorial|public realm|open space|churchyard)/i;
+  const transportTerms = /(station|rail|railway|transport hub|bus station|interchange|network rail|tfl|liverpool street station|supersite|oversite|air rights)/i;
+  const progressedTerms = /(under construction|construction started|completed|built out|delivered|implemented|conditions discharge|consented scheme|full consent)/i;
+  const hasStreetNumber = /\b\d+[a-z]?([-–]\d+[a-z]?)?\b/.test((s.address || '') + ' ' + (s.name || ''));
+
+  if (openSpaceTerms.test(text) && !hasStreetNumber) {
+    penalty += 28;
+    penalties.push('open_space_named_parcel');
+  }
+  if (civicTerms.test(text)) {
+    penalty += 18;
+    penalties.push('civic_or_public_realm_context');
+  }
+  if (transportTerms.test(text)) {
+    penalty += 35;
+    penalties.push('transport_or_station_land');
+  }
+  if (/church|cathedral|diocese|bishop|dean and chapter/.test(owner)) {
+    penalty += 14;
+    penalties.push('institutional_owner_signal');
+  }
+  if ((s.hectares || 0) < 0.03 && !s.brownfield && !hasStreetNumber) {
+    penalty += 10;
+    penalties.push('tiny_non_brownfield_plot');
+  }
+  if ((s.source || '').toLowerCase().includes('corporation of london') && !s.brownfield && transportTerms.test(text)) {
+    penalty += 15;
+    penalties.push('strategic_civic_transport_signal');
+  }
+  if ((s.deliveryFlag || '') === 'station-oversite') {
+    penalty += 30;
+    penalties.push('station_oversite_delivery_risk');
+  }
+  if (progressedTerms.test(text)) {
+    penalty += 24;
+    penalties.push('already_progressed_or_completed');
+  }
+
+  return {
+    penalty,
+    flags: penalties,
+    credible: penalty < 25
+  };
+}
+
+function normaliseSite(s, idx) {
+  const borough = s.borough || 'London';
+  const ptal = s.flags?.ptal || s.ptal || null;
+  const inOA = !!(s.flags?.inOA || s.flags?.oa);
+  const inCAZ = !!(s.flags?.inCAZ || s.flags?.caz);
+  const inCons = !!(s.flags?.inConservation);
+
+  const era = contextEra(s);
+  const sensitivity = fabricSensitivity(s, era);
+  const cluster = isTowerCluster(s);
+  const prec = precedentMatch(s);
+  const posture = classifyPosture(era, sensitivity, cluster, prec);
+  const recForm = recommendedForm(posture, era, cluster);
+  const towerOK = towerAllowed(s, era, sensitivity, cluster, prec);
+  const maxFloorsCapped = heightCap(s, era, sensitivity, cluster, prec);
+
+  const nhle_tier = (s.nhle_tier || '').toLowerCase();
+  const heritTier = s.her ||
+    (nhle_tier === 'blocking' ? 'blocking' :
+     nhle_tier === 'navigable' ? 'navigable' :
+     nhle_tier === 'manageable' ? 'manageable' :
+     inCons ? 'navigable' : 'manageable');
+
+  const utilisationScore = s.utilisation_score != null ? s.utilisation_score : 5.0;
+  const rawScore = parseInt(s.score) || 0;
+  const legitimacy = assessSiteLegitimacy(s);
+
+  const hectares = s.hectares || (s.plot ? s.plot / 10000 : 0.05);
+  const plotM2 = Math.round(hectares * 10000);
+  const useType = s.use || inferUseType(s);
+  const planningPolicy = planningPolicyProfile({ ...s, borough, ptal, inOA, inCAZ, inCons, useType });
+  const fabric = fabricProfile({ ...s, borough, ptal, inOA, inCAZ, inCons, useType });
+  const planScore = computePlanScore({ ...s, borough, ptal, inOA, inCAZ, inCons, useType, planningPolicy }, heritTier);
+  const constraint = fabric.redevelopmentFriendly && planningPolicy.majorUplift ? 'Low-value later fabric in uplift corridor' : keyConstraint(s, era, sensitivity, heritTier);
+  const utilisationData = s.utilisation_data || {};
+  const utilisationLabel = utilisationScore >= 8.5 ? 'Maximally Underutilised' :
+    utilisationScore >= 6.5 ? 'Significantly Underutilised' :
+    utilisationScore >= 4.5 ? 'Moderately Underutilised' : 'Adequately Used';
+
+  const canonicalSeed = {
+    ...s,
+    borough,
+    ptal,
+    inOA,
+    inCAZ,
+    inCons,
+    maxFloors: maxFloorsCapped,
+    plotM2,
+    useType,
+    existingHeightM: s.existing_height_m || null,
+    existingFloors: s.existing_floors || null,
+    heritTier,
+    planScore,
+    score: rawScore,
+    planning: s.planning || null,
+    planningPolicy,
+    fabricProfile: fabric,
+  };
+  const canonical = window.HeadroomSiteModel ? window.HeadroomSiteModel.buildCanonicalSite(canonicalSeed) : null;
+  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
+  const liveScore = baseScenario ? baseScenario.score : computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore);
+  const score = Math.max(0, liveScore - legitimacy.penalty);
+  const gdvEst = baseScenario && baseScenario.gdv ? (baseScenario.gdv / 1e6).toFixed(1) : '0.0';
+
+  return {
+    id: idx, name: s.name||s.address, address: s.address||s.name, borough,
+    lat: parseFloat(s.lat)||0, lng: parseFloat(s.lng)||0,
+    score, rawScore, posture, era, sensitivity, cluster, prec,
+    recForm, towerOK, constraint,
+    verified: !!s.verified, t1: s.t1||null,
+    desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
+    ptal,
+    maxFloors: canonical ? canonical.maxFloors : maxFloorsCapped,
+    plotM2: canonical ? canonical.plotM2 : plotM2,
+    gdvEst,
+    planScore,
+    heritTier,
+    useType,
+    typology: canonical ? canonical.typology : null,
+    canonicalMetrics: canonical ? canonical.canonicalMetrics : null,
+    existingHeightM: canonical ? canonical.existingHeightM : (s.existing_height_m || null),
+    existingFloors: canonical ? canonical.existingFloors : (s.existing_floors || null),
+    roughExistingGiaM2: canonical ? canonical.roughExistingGiaM2 : null,
+    roughProposedGiaM2: canonical ? canonical.roughProposedGiaM2 : null,
+    roughGiaUpliftPct: canonical ? canonical.roughGiaUpliftPct : null,
+    brownfield: !!(s.brownfield || (s.source && s.source.indexOf('brownfield') !== -1)),
+    offMarket: s.offMarket||'unknown',
+    owner: s.owner||null,
+    planning: s.planning||null,
+    planningPolicy: canonical ? canonical.planningPolicy : planningPolicy,
+    fabricProfile: canonical ? canonical.fabricProfile : fabric,
+    hmlr: s.hmlr||null,
+    onMarket: !!(s.on_market),
+    listingUrl: s.listing_url||null,
+    listingAgent: s.listing_agent||null,
+    motScore: computeMotivatedSeller(s),
+    nhleCount: s.nhle_count||0,
+    dataConfidence: computeConfidence(s),
+    utilisationScore, utilisationData, utilisationLabel,
+    siteLegitimacyPenalty: legitimacy.penalty,
+    siteLegitimacyFlags: legitimacy.flags,
+    credibleSite: legitimacy.credible,
+    consolidation: s.consolidation_tier || null,
+    consolidationLabel: s.consolidation_label || null,
+    consolidationTitles: s.consolidation_titles || 0,
+    consolidationVacant: s.consolidation_vacant || 0,
+    consolidationLH: s.consolidation_leaseholds || 0,
+    consolidationVacantRatio: s.consolidation_vacant_ratio || 0,
+    _canonicalModel: canonical,
+  };
+}
+
+function planningSignalSummary(s) {
+  const seeded = s.planning || {};
+  const live = s.planningContext || {};
+  const policy = s.planningPolicy || planningPolicyProfile(s);
+  const merged = {
+    source: live.source || seeded.source || null,
+    applicationCount: Number(live.applicationCount ?? seeded.applicationCount ?? seeded.count ?? 0),
+    majorCount: Number(live.majorCount ?? seeded.majorCount ?? 0),
+    liveCount: Number(live.liveCount ?? seeded.liveCount ?? 0),
+    tallCount: Number(live.tallCount ?? seeded.tallCount ?? 0),
+    liveTallCount: Number(live.liveTallCount ?? seeded.liveTallCount ?? 0),
+    recentRef: live.recentRef || seeded.recentRef || null,
+    refs: live.refs || seeded.refs || [],
+    note: live.note || seeded.note || null,
+    policyZone: policy.zone || null,
+    policyNote: policy.policyNote || null,
+    policyMajorUplift: !!policy.majorUplift,
+  };
+  merged.hasSignal = merged.applicationCount > 0 || merged.majorCount > 0 || merged.tallCount > 0;
+  merged.heightIntent = !!policy.heightIntent || merged.liveTallCount > 0 || merged.tallCount >= 2;
+  merged.clusterPressure = !!policy.clusterPressure || merged.majorCount >= 2 || merged.applicationCount >= 4;
+  return merged;
+}
+
+async function hydratePlanningSignal(site) {
+  if (!site || site._planningLoading || site._planningHydrated || !site.lat || !site.lng) return;
+  site._planningLoading = true;
+  try {
+    const r = await fetch(`/api/planning-apps?lat=${site.lat}&lng=${site.lng}`);
+    if (!r.ok) throw new Error('planning fetch failed');
+    const data = await r.json();
+    const rows = Array.isArray(data.results) ? data.results : [];
+    const isLive = txt => /submitted|validated|registered|consultation|pending|consideration|awaiting/i.test(String(txt || ''));
+    const isMajor = row => /major|eia|full|redevelopment|demolition|hybrid|outline/i.test(`${row.type || ''} ${row.description || ''}`);
+    const isTall = row => /(storey|storeys|tower|building|redevelopment|vertical extension|upward extension|roof extension)/i.test(`${row.description || ''}`);
+    const liveRows = rows.filter(row => isLive(row.status) || isLive(row.description));
+    const majorRows = rows.filter(isMajor);
+    const tallRows = rows.filter(isTall);
+    const liveTallRows = liveRows.filter(isTall);
+    const refs = rows.slice(0, 3).map(row => row.reference || row.ref || row.id).filter(Boolean);
+    site.planningContext = {
+      source: 'live-nearby-apps',
+      applicationCount: rows.length,
+      majorCount: majorRows.length,
+      liveCount: liveRows.length,
+      tallCount: tallRows.length,
+      liveTallCount: liveTallRows.length,
+      recentRef: refs[0] || null,
+      refs,
+      note: liveTallRows.length
+        ? `${liveTallRows.length} live nearby tall / uplift applications`
+        : tallRows.length
+          ? `${tallRows.length} nearby uplift precedents on record`
+          : rows.length
+            ? `${rows.length} nearby planning applications on record`
+            : null,
+    };
+    site.planning = { ...(site.planning || {}), ...site.planningContext };
+    site._canonicalModel = null;
+  } catch (err) {
+    console.warn('planning signal hydrate failed', err);
+  } finally {
+    site._planningLoading = false;
+    site._planningHydrated = true;
+    if (activeSite === site.id) openFocus(site, { skipPlanningHydrate: true });
+  }
+}
+
+function computeConfidence(s) {
+  // High: has real HMLR polygon + verified score + owner data
+  // Med: has score + lat/lng but derived max_floors
+  // Low: everything estimated
+  let points = 0;
+  if (s.verified) points += 2;
+  if (s.owner) points += 1;
+  if (s.lat && s.lng) points += 1;
+  if (s.max_floors) points += 1; // explicit not estimated
+  if (s.nhle_count !== undefined) points += 1; // enriched
+  if (points >= 5) return 'high';
+  if (points >= 3) return 'medium';
+  return 'low';
+}
+
+function computeMotivatedSeller(s) {
+  // Signals: charity/trust/estate owner, public body, overseas/non-London address,
+  // long HMLR hold, dissolved company, vacant/brownfield
+  let score = 0;
+  const owner = (s.owner||'').toLowerCase();
+
+  // Owner type signals
+  if (/charity|charitable|trust|foundation/i.test(owner)) score += 1;  // non-core asset for charities
+  if (/estate|probate|executor|deceased/i.test(owner)) score += 2;      // strong signal
+  if (/dissolved|struck off|liquidat/i.test(owner)) score += 2;         // very strong
+  if (/council|borough|nhs|crown|authority|government/i.test(owner)) score += 1; // public disposals
+  if (/pension|fund|investment|reit|properties limited|group limited/i.test(owner)) score += 1; // institutional = transactional
+
+  // Site condition
+  if (s.brownfield) score += 1;
+  if (s.offMarket === 'off-market' || s.offMarket === 'vacant') score += 1;
+
+  // HMLR hold duration (if available)
+  if (s.hmlr_reg_year && s.hmlr_reg_year < 2005) score += 1; // 20+ year hold
+
+  return Math.min(5, Math.max(0, Math.round(score)));
+}
+
+// ── Load data ─────────────────────────────────────────────────────────────────
+async function loadSites() {
+  const [sw, city, hack] = await Promise.all([
+    fetch('/data/southwark-sites.json').then(r=>r.json()),
+    fetch('/data/city-sites.json').then(r=>r.json()),
+    fetch('/data/hackney-sites.json').then(r=>r.json()),
+  ]);
+  const toArr = d => Array.isArray(d) ? d : (d.sites || Object.values(d));
+  let idx = 0;
+  ALL_SITES = [
+    ...toArr(sw).map(s  => normaliseSite({...s, borough: s.borough||'Southwark'}, idx++)),
+    ...toArr(city).map(s => normaliseSite({...s, borough: s.borough||'City of London'}, idx++)),
+    ...toArr(hack).map(s => normaliseSite({...s, borough: s.borough||'Hackney'}, idx++)),
+  ];
+
+  try {
+    const cityOpen = await fetch('/api/city-open-spaces').then(r=>r.json());
+    const features = cityOpen && cityOpen.features ? cityOpen.features : [];
+    ALL_SITES = ALL_SITES.map(function(site) {
+      if ((site.borough || '').toLowerCase() !== 'city of london') return site;
+      var hit = features.some(function(f) { return pointInGeometry([site.lng, site.lat], f.geometry); });
+      if (!hit) return site;
+      var flags = (site.siteLegitimacyFlags || []).slice();
+      if (flags.indexOf('city_open_space') === -1) flags.push('city_open_space');
+      return Object.assign({}, site, {
+        siteLegitimacyPenalty: (site.siteLegitimacyPenalty || 0) + 40,
+        siteLegitimacyFlags: flags,
+        credibleSite: false,
+        score: Math.max(0, (site.score || 0) - 40)
+      });
+    });
+  } catch (e) {
+    console.warn('City open space enrichment failed', e);
+  }
+
+  ALL_SITES = ALL_SITES.sort((a,b) => {
+    if (b.score !== a.score) return b.score - a.score;            // 1. Score desc
+    if (b.gdvEst !== a.gdvEst) return b.gdvEst - a.gdvEst;       // 2. GDV desc
+    if (b.plotM2 !== a.plotM2) return b.plotM2 - a.plotM2;       // 3. Plot size desc
+    if (b.planScore !== a.planScore) return b.planScore - a.planScore; // 4. Planning appetite desc
+    return a.name.localeCompare(b.name);                           // 5. Alphabetical
+  });
+
+  // Stats
+  const top = ALL_SITES[0];
+  const withT1 = ALL_SITES.filter(s=>s.t1).length;
+  const withOA = ALL_SITES.filter(s=>s.inOA).length;
+  const avg = Math.round(ALL_SITES.reduce((s,x)=>s+x.score,0)/ALL_SITES.length);
+  const totalGDV = ALL_SITES.reduce((s,x)=>s+(Number(x.gdvEst)||0),0);
+  const gdvStr = totalGDV>=1000 ? `£${(totalGDV/1000).toFixed(1)}B` : `£${totalGDV}M`;
+  const totalAddF = ALL_SITES.reduce((s,x)=>{
+    const existF=Math.max(1,Math.round((x.maxFloors||0)*0.45));
+    return s+Math.round((Number(x.plotM2)||0)*0.42*0.78*((Number(x.maxFloors)||0)-existF));
+  },0);
+  const niaStr = totalAddF>=1000000 ? `${(totalAddF/1000000).toFixed(1)}Mm²` : `${Math.round(totalAddF/1000)}km²`;
+  document.getElementById('stat-total').textContent = ALL_SITES.length;
+  document.getElementById('stat-gdv').textContent = gdvStr;
+  document.getElementById('stat-nia').textContent = niaStr;
+  document.getElementById('stat-oa').textContent = withOA;
+  document.getElementById('stat-t1').textContent = withT1;
+
+  // Borough pills
+  const boroughs = [...new Set(ALL_SITES.map(s=>s.borough))].sort();
+  const pillsEl = document.getElementById('borough-pills');
+  boroughs.forEach(b => {
+    const pill = document.createElement('div');
+    pill.className = `borough-pill ${boroughChipClass(b).replace('bor-','')}`;
+    pill.textContent = boroughShort(b);
+    pill.dataset.borough = b;
+    pill.onclick = () => selectBorough(b, pill);
+    // Hover: highlight that borough's dots on map
+    pill.addEventListener('mouseenter', () => highlightBorough(b));
+    pill.addEventListener('mouseleave', () => highlightBorough(null));
+    pillsEl.appendChild(pill);
+  });
+
+  render();
+}
+
+// ── Borough filter ────────────────────────────────────────────────────────────
+function selectBorough(bor, el) {
+  activeBorough = bor;
+  document.querySelectorAll('.borough-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  if (bor !== 'all') {
+    setMode('borough');
+  } else {
+    render();
+  }
+  updateMapFilter();
+  // Fly map to borough centroid
+  if (MAP && bor !== 'all') {
+    const sites = ALL_SITES.filter(s=>s.borough===bor);
+    if (sites.length) {
+      const avgLat = sites.reduce((s,x)=>s+x.lat,0)/sites.length;
+      const avgLng = sites.reduce((s,x)=>s+x.lng,0)/sites.length;
+      MAP.flyTo({center:[avgLng,avgLat], zoom:14, duration:800});
+    }
+  } else if (MAP) {
+    MAP.flyTo({center:[-0.090,51.505], zoom:11.5, pitch:0, bearing:0, duration:800});
+  }
+}
+
+// ── Mode ──────────────────────────────────────────────────────────────────────
+function setMode(mode) {
+  activeMode = mode;
+  ['top100','borough','search'].forEach(m => {
+    document.getElementById('tab-'+m).classList.toggle('active', m===mode);
+  });
+  const searchBar = document.getElementById('search-bar');
+  searchBar.classList.toggle('visible', mode==='search');
+  if (mode==='search') setTimeout(()=>document.getElementById('search-q')?.focus(),50);
+  render();
+}
+
+// ── Filtered sites ────────────────────────────────────────────────────────────
+function filteredSites() {
+  let list = ALL_SITES;
+  if (activeMode==='borough' || activeBorough!=='all') {
+    if (activeBorough!=='all') list = list.filter(s=>s.borough===activeBorough);
+    if (activeMode==='borough') list = list.slice(0,30);
+  }
+  if (activeMode==='top100') list = ALL_SITES.slice(0,100);
+  if (activeMode==='search') {
+    const q = (document.getElementById('search-q')?.value||'').trim().toLowerCase();
+    if (q) list = ALL_SITES.filter(s=>s.name.toLowerCase().includes(q)||s.address.toLowerCase().includes(q)||s.borough.toLowerCase().includes(q));
+    else list = ALL_SITES.slice(0,50);
+  }
+  return list;
+}
+
+// ── Render site list ──────────────────────────────────────────────────────────
+function render() {
+  const sites = filteredSites();
+  const label = activeMode==='top100' ? 'London Top 100' : activeMode==='borough' ? (activeBorough==='all'?'All boroughs':activeBorough+' top 30') : 'Search results';
+  document.getElementById('list-label').textContent = label;
+  document.getElementById('list-count').textContent = sites.length + ' sites';
+
+  const list = document.getElementById('site-list');
+  if (!sites.length) { list.innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--ink3);font-size:12px">No sites found</div>'; return; }
+
+  list.innerHTML = sites.map((s,i) => {
+    const rank = activeMode==='top100' ? i+1 : null;
+    const vc = verdictClass(s.score);
+    const vl = verdictLabel(s.score);
+    const bc = scoreColor(s.score);
+    const motDot = s.motScore >= 4 ? '🔴' : s.motScore >= 2 ? '🟡' : '';
+    const otherChips = [
+      s.onMarket ? `<span class="chip listed"><a href="${s.listingUrl||'#'}" target="_blank" onclick="event.stopPropagation()" style="color:inherit;text-decoration:none">Listed${s.listingAgent?' · '+s.listingAgent:''}</a></span>` : '',
+      s.motScore >= 2 ? `<span class="chip mot mot-${s.motScore}">${motDot} Seller ${s.motScore}/5</span>` : '',
+      s.inOA  ? '<span class="chip oa">OA</span>' : '',
+      s.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
+      s.inCons? '<span class="chip cons">Conservation</span>' : '',
+      s.ptal  ? `<span class="chip ptal">PTAL ${s.ptal}</span>` : '',
+      s.consolidation && s.consolidation !== 'single' ? `<span class="chip assembly assembly-${s.consolidation}">🔗 ${s.consolidationTitles} titles · ${s.consolidationVacant} vacant</span>` : '',
+    ].filter(Boolean).join('');
+    const hasCTA = !!s.t1;
+
+    // Expanded preview sections
+    const heritLabel = s.heritTier==='blocking'?'High Risk':s.heritTier==='navigable'?'Navigable':'Manageable';
+    // Satellite thumbnail: lazy-loaded on card expand via cardClick()
+    // Tension line - one sentence, creates a question
+    const tensionParts = [];
+    if (s.inOA) tensionParts.push('<strong>Opportunity Area</strong> designation');
+    if (s.inCons) tensionParts.push('conservation area overlay');
+    if (s.inCAZ) tensionParts.push('CAZ intensification pressure');
+    const tension = tensionParts.length
+      ? tensionParts.join(' + ') + ' - full planning analysis in report'
+      : `${s.maxFloors}F potential, ${s.plotM2.toLocaleString()}m² plot - full analysis in report`;
+    // Derived hook numbers
+
+    var typeColor = s.brownfield ? '#8b7355' : s.useType === 'mixed' ? '#a07c9e' : s.useType === 'industrial' ? '#7a7a96' : s.useType === 'resi' ? '#c4915a' : '#5b7a9d';
+    var typeLabel = s.brownfield ? 'Brownfield' : s.useType === 'mixed' ? 'Mixed-use' : s.useType === 'industrial' ? 'Industrial' : s.useType === 'resi' ? 'Residential' : 'Office';
+    return `<div class="site-card" id="card-${s.id}" onclick="cardClick(${s.id})" style="border-left:4px solid ${typeColor}">
+      <div class="card-header">
+        ${rank ? `<div class="card-rank">${rank}</div>` : ''}
+        <div class="card-main">
+          <div class="card-name">${s.name}</div>
+          <div class="card-address">${s.address}</div>
+          <div class="card-borough-row"><span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span><span class="chip type-chip" style="background:${typeColor}15;color:${typeColor};border:1px solid ${typeColor}40">${typeLabel}</span></div>
+          <div class="card-chips"><span class="verdict-pill ${vc}">${vl}</span>${otherChips}</div>
+          ${s.desc ? `<div class="card-summary">${s.desc}</div>` : ''}
+        </div>
+        <div class="card-score-col">
+          <div class="card-score-num">${s.score}</div>
+          <div class="card-score-sub">/100</div>
+          <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${bc}"></div></div>
+          ${hasCTA
+            ? `<a class="card-cta" href="${s.t1}" onclick="event.stopPropagation()">Report</a>`
+            : `<span class="card-cta locked">Soon</span>`}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  updateMapFilter(sites.map(s=>s.id));
+}
+
+// ── Card click ────────────────────────────────────────────────────────────────
+// ── Analyst hook generator ────────────────────────────────────────────────────
+function siteDevelopmentLogic(s) {
+  const canonical = ensureCanonicalSite(s);
+  const planning = planningSignalSummary(s);
+  if (canonical && canonical.developmentLogic) {
+    return { ...canonical.developmentLogic, planning };
+  }
+
+  const useType = (s.useType || s.use_type || s.use || '').toLowerCase();
+  const existingHeight = Number(s.existingHeightM || s.existing_height_m || 0);
+  const existingFloors = Number(s.existingFloors || s.existing_floors || s.existF || 0);
+  const cityCore = s.borough === 'City of London' || s.inCAZ;
+  const tallCommercial = (cityCore && (existingHeight >= 35 || existingFloors >= 10) && /(office|commercial|mixed)/.test(useType || 'office')) || planning.heightIntent;
+  const highValue = cityCore || tallCommercial;
+  const heritage = s.heritTier === 'blocking' ? 'high' : s.heritTier === 'high' ? 'medium' : 'low';
+  const mode = tallCommercial ? 'Strategic height'
+    : ((highValue && heritage === 'low') || planning.clusterPressure) ? 'Mid-rise intensification'
+    : highValue ? 'Setback intensification'
+    : 'Efficient infill';
+  const type = tallCommercial ? 'Tower-on-podium'
+    : mode === 'Mid-rise intensification' ? 'Setback mid-rise'
+    : 'Perimeter uplift';
+  const posture = tallCommercial ? 'aggressive' : heritage === 'high' ? 'conservative' : 'balanced';
+  const why = planning.heightIntent
+    ? 'Live nearby planning activity is already testing taller massing in this pocket.'
+    : tallCommercial
+      ? 'Existing height, City-core context and commercial typology support a strategic-height read.'
+      : planning.clusterPressure
+        ? 'Nearby planning volume suggests an active intensification cluster, even if tower appetite is less explicit.'
+        : heritage === 'high'
+          ? 'Constraint pressure keeps this in a more controlled uplift lane.'
+          : 'Context supports uplift, but not a free-for-all.';
+  const economics = tallCommercial
+    ? 'The value case improves if the scheme behaves like a real City-core height play, not a timid extension.'
+    : mode === 'Mid-rise intensification'
+      ? 'Returns come from compound additional area rather than one heroic tower move.'
+      : 'Economics favour disciplined area gain over speculative height.';
+  return { mode, type, posture, heritage, highValue, planning, why, economics };
+}
+
+function analystHook(s) {
+  const canonical = ensureCanonicalSite(s);
+  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
+  const addF = baseScenario ? baseScenario.addedF : (s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45)));
+  const p = planningSignalSummary(s);
+  const logic = canonical && canonical.developmentLogic ? canonical.developmentLogic : siteDevelopmentLogic(s);
+  const sentences = [];
+
+  sentences.push(`<strong>Development logic:</strong> ${logic.type}. ${logic.why} <strong>Uplift mode:</strong> ${logic.mode}. ${logic.economics}`);
+
+  // 1. Planning signal - use real data where available
+  const hasRealRef = p.recentRef && /AP\/|\/\d{4}\//.test(p.recentRef);
+  const totalApps = p.applicationCount || 0;
+  const hasMajor = p.majorCount > 0;
+  const hasTall = p.tallCount > 0;
+  const hasLiveTall = p.liveTallCount > 0;
+
+  if (s.inOA && s.planScore >= 7) {
+    const oaFrame = s.borough === 'City of London'
+      ? 'City Cluster intensification mandate'
+      : s.borough === 'Hackney'
+      ? 'Hackney Central/Shoreditch OA growth corridor'
+      : 'London Bridge/Bankside Opportunity Area mandate';
+    sentences.push(`${oaFrame} is <strong>actively backing intensification</strong> at this scale - Policy SD1 of the London Plan 2021 requires the LPA to facilitate not resist, and comparable schemes in this corridor have landed consent.`);
+  } else if (s.inCAZ && hasLiveTall) {
+    sentences.push(`CAZ designation plus <strong>${p.liveTallCount} live nearby tall / uplift application${p.liveTallCount>1?'s':''}</strong> signals an active commercial height play in this pocket - developers are not just theorising, they are testing massing here now.`);
+  } else if (s.inCAZ && hasMajor) {
+    sentences.push(`CAZ designation plus <strong>${p.majorCount} major nearby application${p.majorCount>1?'s':''}</strong> signals active developer intent at this scale - not proof of consent, but strong evidence of where the market is pushing.`);
+  } else if (s.inCAZ) {
+    sentences.push(`CAZ intensification policy applies. ${totalApps > 10 ? `<strong>${totalApps} nearby planning applications on record</strong>` : 'Limited nearby planning history'} - the question is whether this sits inside a live intensification cluster or just a permissive policy zone.`);
+  } else if (s.planScore >= 8) {
+    const refNote = hasRealRef ? ` Most recent application <strong>${p.recentRef}</strong> confirms active developer interest.` : '';
+    sentences.push(`Planning appetite is <strong>genuinely strong at ${s.planScore}/10</strong> - the LPA has been approving at this massing scale and the allocation supports the use.${refNote}`);
+  } else if (s.planScore <= 4) {
+    sentences.push(`Planning appetite is <strong>resistant</strong> - but the constraints are specific and the development plan leaves a window for a well-argued scheme.${totalApps > 0 ? ` ${totalApps} prior applications suggest others have tried.` : ''}`);
+  } else {
+    sentences.push(`Planning position is <strong>nuanced</strong>.${totalApps > 5 ? ` ${totalApps} applications on record - the site has a history.` : ''} The right massing strategy can thread the policy needle, but the comparable approvals in this postcode are what determine confidence.`);
+  }
+
+  if (p.note && (hasTall || hasLiveTall)) {
+    sentences.push(`<strong>Planning-intent signal:</strong> ${p.note}. This should calibrate confidence, not override site-specific constraints.`);
+  }
+  if (p.policyZone && p.policyMajorUplift) {
+    sentences.push(`<strong>Local policy lane:</strong> ${p.policyZone}. ${p.policyNote || 'This pocket should be treated as a genuine uplift corridor, not flattened into borough-wide caution.'}`);
+  }
+
+  // 2. Ownership / title signal - use real data
+  if (s.owner && s.owner !== 'Unknown' && s.owner !== 'PLACEHOLDER') {
+    const ownerType = /PLC|LIMITED|LTD|LLP|LLC/i.test(s.owner) ? 'corporate' : /Council|Authority|NHS|Crown/i.test(s.owner) ? 'public sector' : 'private';
+    if (ownerType === 'public sector') {
+      sentences.push(`<strong>${s.owner}</strong> is the registered owner - public sector disposal processes are slower but title is typically clean and acquirable.`);
+    } else if (ownerType === 'corporate') {
+      sentences.push(`Registered to <strong>${s.owner}</strong> - corporate freehold. ${s.heritTier === 'blocking' ? 'Heritage is the dominant constraint here, not title.' : 'Single title. The question is appetite to sell and at what basis.'}`);
+    } else {
+      sentences.push(`${s.heritTier !== 'manageable' ? `Heritage is the key design challenge.` : `The massing envelope has room.`} ${s.inCons ? `Conservation area overlay will drive the architectural strategy - massing above the parapet line requires a character-led design argument.` : `No on-site listed building constraint - the planning fight is on policy grounds, which is the more manageable problem.`}`);
+    }
+  } else {
+    // Fallback to heritage signal
+    if (s.heritTier === 'blocking') {
+      sentences.push(`Heritage is the <strong>dominant constraint</strong>. Listed building context creates a hard massing ceiling - the question is whether development value survives the reduced envelope.`);
+    } else if (s.inCons) {
+      sentences.push(`Conservation area overlay is the <strong>key architectural test</strong>. Massing above the parapet line triggers a character assessment - precedent within this CA will be determinative.`);
+    } else if (s.heritTier === 'navigable') {
+      sentences.push(`Heritage requires careful management but isn't a blocker. A views analysis and daylight study will be the gateway to securing the upper floors.`);
+    } else {
+      sentences.push(`Heritage position is <strong>clean</strong> - no listed constraints within the relevant envelope. The massing question is driven by planning policy, which is the better problem to have.`);
+    }
+  }
+
+  // 3. The specific unresolved question
+  const gdv = parseFloat(s.gdvEst);
+  if (gdv >= 150) {
+    sentences.push(`At an <strong>estimated £${gdv}M GDV</strong>, residual land value is the pivotal number - and it turns entirely on the affordable housing obligation and whether the viability argument holds under scrutiny. That calculation requires the full financial model.`);
+  } else if (gdv >= 50) {
+    sentences.push(`The <strong>+${addF} floor uplift</strong> is the value driver - but whether that massing secures planning intact, or gets negotiated down under the density matrix, turns on three or four specific comparable approvals that aren't in the public record without digging.`);
+  } else {
+    sentences.push(`Whether this <strong>stacks at current land values</strong> depends on planning risk premium and affordable housing obligations - neither can be modelled without the full precedent and policy analysis in the report.`);
+  }
+
+  return sentences.join(' ');
+}
+
+// ── Factor bar data ───────────────────────────────────────────────────────────
+function factorBars(s) {
+  const ptal = Number(s.ptal) || 3;
+  const utilPct = Math.round((s.utilisationScore || 5) * 10);
+  const utilColor = utilPct >= 75 ? 'var(--accent)' : utilPct >= 50 ? 'var(--amber)' : 'var(--ink3)';
+  const logic = siteDevelopmentLogic(s);
+  const logicScore = logic.mode === 'Strategic height' ? 88 : logic.mode === 'Assembly unlock' ? 82 : logic.mode === 'Constrained uplift' ? 46 : 68;
+  const econScore = (s.borough === 'City of London' || s.inCAZ) ? 84 : (s.gdvEst >= 80 ? 70 : 56);
+  const visible = [
+    { name: 'Planning Appetite', score: Math.round(s.planScore * 10), color: s.planScore>=7?'var(--green)':s.planScore>=5?'var(--amber)':'var(--red)' },
+    { name: 'Development Logic', score: logicScore, color: 'var(--accent-blue)' },
+    { name: 'Economic Justification', score: econScore, color: 'var(--accent)' },
+    { name: 'Available Sky', score: s.heritTier==='blocking'?28:s.inCons?52:s.heritTier==='navigable'?62:78, color: 'var(--amber)' },
+    { name: 'Land Utilisation', score: utilPct, color: utilColor },
+  ];
+  const locked = [
+    { name: 'Heritage shadow →', label: 'In full report' },
+    { name: 'Title complexity →', label: 'In full report' },
+    { name: 'Transport position →', label: 'In full report' },
+  ];
+  const rows = [
+    ...visible.map(f => `
+      <div class="focus-factor-row">
+        <div class="focus-factor-name">${f.name}</div>
+        <div class="focus-factor-bar"><div class="focus-factor-fill" style="width:${f.score}%;background:${f.color}"></div></div>
+        <div class="focus-factor-score">${f.score}</div>
+      </div>`),
+    ...locked.map(f => `
+      <div class="focus-factor-row">
+        <div class="focus-factor-name locked">${f.name}</div>
+        <div class="focus-factor-bar"><div class="focus-factor-fill locked"></div></div>
+        <div class="focus-factor-score locked">-</div>
+      </div>`),
+  ];
+  return rows.join('');
+}
+
+function cardClick(id) {
+  const site = ALL_SITES.find(s=>s.id===id);
+  if (site) openMassPopup(site);
+}
+
+function setSearchHelp(text, state) {
+  var el = document.getElementById('search-help');
+  if (!el) return;
+  el.textContent = text || 'Search a known site, or scan any London building by address or postcode.';
+  el.classList.remove('busy', 'error');
+  if (state) el.classList.add(state);
+}
+
+function setSearchBusy(isBusy) {
+  var btn = document.getElementById('search-scan-btn');
+  if (btn) btn.disabled = !!isBusy;
+}
+
+function handleSearchKey(e) {
+  if (e && e.key === 'Enter') {
+    e.preventDefault();
+    runSearchAssessment();
+  }
+}
+
+function formatAssessmentAddress(featureCollection, fallback) {
+  var feature = featureCollection && featureCollection.features && featureCollection.features[0];
+  return (feature && (feature.place_name || feature.text)) || fallback || 'Selected building';
+}
+
+function inferAssessmentBorough(featureCollection, fallback) {
+  var feature = featureCollection && featureCollection.features && featureCollection.features[0];
+  var context = feature && feature.context ? feature.context : [];
+  var district = context.find(function(item) { return /^district\./.test(item.id || ''); });
+  var place = context.find(function(item) { return /^place\./.test(item.id || ''); });
+  var region = context.find(function(item) { return /^region\./.test(item.id || ''); });
+  return (district && district.text) || (place && place.text) || (region && region.text) || fallback || 'London';
+}
+
+function buildAdHocAssessmentSite(payload) {
+  var building = payload && payload.building;
+  var props = building && building.properties ? building.properties : {};
+  var listedCount = payload && payload.listedCount ? payload.listedCount : 0;
+  var area = Math.round(props._area || 0);
+  var existingFloors = Math.max(1, Math.round(props._estFloors || 1));
+  var existingGia = Math.round(props._estGIA || area || 0);
+  var height = Number(props._heightRoofBase || props._heightMax || 0);
+  var addedFloors = listedCount > 0 ? 0 : height >= 20 ? 3 : height >= 12 ? 2 : area >= 600 ? 2 : 1;
+  var roughProposedGia = existingGia ? existingGia + (area * addedFloors) : 0;
+  var score = 56;
+  if (listedCount > 0) score -= 18;
+  if (area >= 1200) score += 8;
+  else if (area >= 600) score += 5;
+  else if (area < 150) score -= 8;
+  if (existingFloors >= 8) score += 4;
+  if (!building) score = 32;
+  score = Math.max(18, Math.min(82, score));
+  var borough = inferAssessmentBorough(payload && payload.reverse, 'London');
+  var address = formatAssessmentAddress(payload && payload.reverse, payload && payload.query);
+  var headline = listedCount > 0
+    ? 'Hard constraint signal. Listed context likely caps straightforward uplift and pushes this into specialist planning mode.'
+    : roughProposedGia > existingGia && existingGia > 0
+      ? 'Preliminary uplift lane. Building geometry suggests there may be extension headroom worth testing properly.'
+      : 'Thin headroom signal. This reads more like a due diligence case than an obvious upside case.';
+  return {
+    id: 'adhoc-' + Date.now(),
+    isProvisional: true,
+    name: address.split(',')[0] || 'Selected building',
+    address: address,
+    borough: borough,
+    lat: payload.lat,
+    lng: payload.lng,
+    score: score,
+    planScore: listedCount > 0 ? 3 : 5,
+    plotM2: area || 0,
+    ptal: null,
+    gdvEst: 0,
+    maxFloors: existingFloors + addedFloors,
+    existingFloors: existingFloors,
+    roughExistingGiaM2: existingGia || null,
+    roughProposedGiaM2: roughProposedGia || null,
+    roughGiaUpliftPct: existingGia && roughProposedGia ? Math.round(((roughProposedGia - existingGia) / existingGia) * 100) : null,
+    inCons: false,
+    inOA: false,
+    inCAZ: false,
+    heritTier: listedCount > 0 ? 'blocking' : 'manageable',
+    t1: null,
+    provisionalHeadline: headline,
+    provisionalNotes: [
+      area ? area.toLocaleString() + 'm² estimated footprint' : 'No reliable footprint captured yet',
+      existingGia ? existingGia.toLocaleString() + 'm² rough existing GIA' : 'Existing GIA not yet resolved',
+      height ? height.toFixed(1) + 'm roof/eaves height signal' : 'No usable height signal yet',
+      listedCount > 0 ? listedCount + ' listed asset' + (listedCount > 1 ? 's' : '') + ' nearby' : 'No listed asset returned in immediate radius'
+    ]
+  };
+}
+
+function openProvisionalFocus(site) {
+  activeSite = site.id;
+  document.querySelectorAll('.site-card.active').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('site-list')?.classList.remove('has-active');
+  document.getElementById('focus-score').textContent = site.score;
+  var vEl = document.getElementById('focus-verdict');
+  var vc = verdictClass(site.score);
+  vEl.textContent = site.score >= 50 ? 'Preliminary' : 'Hard No Risk';
+  vEl.className = 'focus-verdict ' + vc;
+  document.getElementById('focus-score-sub').textContent = 'Live provisional scan · ' + site.borough;
+  document.getElementById('focus-name').textContent = site.name;
+  document.getElementById('focus-addr').textContent = site.address;
+  document.getElementById('focus-chips').innerHTML = '<span class="chip any-building-chip">Any-building scan</span>' + (site.heritTier === 'blocking' ? '<span class="chip cons">Listed context</span>' : '<span class="chip any-building-chip ok">No immediate listed flag</span>');
+  document.getElementById('focus-metrics').innerHTML = `
+    <div class="focus-metric"><div class="focus-metric-val">${site.plotM2 ? site.plotM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Estimated footprint</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.existingFloors || '—'}F</div><div class="focus-metric-lbl">Existing floors</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.roughExistingGiaM2 ? site.roughExistingGiaM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Rough existing GIA</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.roughProposedGiaM2 ? site.roughProposedGiaM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Indicative uplift case</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.roughGiaUpliftPct != null ? (site.roughGiaUpliftPct > 0 ? '+' : '') + site.roughGiaUpliftPct + '%' : '—'}</div><div class="focus-metric-lbl">Indicative GIA uplift</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${site.score}/100</div><div class="focus-metric-lbl">Preliminary signal</div></div>
+  `;
+  document.getElementById('focus-hook').innerHTML = `
+    <div class="focus-hook-label">Universal intake</div>
+    <div class="focus-hook-text">${site.provisionalHeadline}</div>
+    <div class="focus-hook-question">${site.provisionalNotes.map(function(note) { return '<div>' + note + '</div>'; }).join('')}</div>
+  `;
+  var geometryScore = site.plotM2 ? 78 : 22;
+  var heritageScore = site.heritTier === 'blocking' ? 82 : 24;
+  var upliftScore = site.roughGiaUpliftPct != null ? Math.max(18, Math.min(88, Math.round(site.roughGiaUpliftPct / 4))) : 30;
+  document.getElementById('focus-factors').innerHTML = `
+    <div class="focus-factors-label">This is a live intake pass, not a fully underwritten report.</div>
+    <div class="focus-factor-row"><div class="focus-factor-name">Geometry captured</div><div class="focus-factor-bar"><div class="focus-factor-fill provisional-geometry" style="width:${geometryScore}%"></div></div><div class="focus-factor-score">${geometryScore}</div></div>
+    <div class="focus-factor-row"><div class="focus-factor-name">Heritage friction</div><div class="focus-factor-bar"><div class="focus-factor-fill ${site.heritTier === 'blocking' ? 'provisional-heritage-hard' : 'provisional-heritage-ok'}" style="width:${heritageScore}%"></div></div><div class="focus-factor-score">${heritageScore}</div></div>
+    <div class="focus-factor-row"><div class="focus-factor-name">Vertical extension case</div><div class="focus-factor-bar"><div class="focus-factor-fill provisional-uplift" style="width:${upliftScore}%"></div></div><div class="focus-factor-score">${upliftScore}</div></div>
+  `;
+  document.getElementById('focus-cta-wrap').innerHTML = '<span class="focus-cta locked">Full planning, heritage and economics pass next</span>';
+  var visEl = document.getElementById('focus-visual');
+  if (MAPBOX_TOKEN) {
+    visEl.innerHTML = `<img class="focus-sat" src="https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},18,20,60/480x480@2x?access_token=${MAPBOX_TOKEN}" alt="">`;
+  } else {
+    visEl.innerHTML = '<div class="focus-sat-placeholder">SCAN</div>';
+  }
+  document.getElementById('site-focus').classList.add('visible');
+  if (MAP && site.lat && site.lng) {
+    var panelW = Math.round(window.innerWidth * 0.5);
+    MAP.flyTo({ center:[site.lng,site.lat], zoom:17, duration:900, pitch:52,
+      padding:{top:60,bottom:60,left:30,right:panelW} });
+    showPopup(site);
+  }
+}
+
+async function assessCoordinates(lat, lng, opts) {
+  opts = opts || {};
+  var token = ++adHocAssessmentToken;
+  setSearchBusy(true);
+  setSearchHelp(opts.message || 'Scanning building geometry and context…', 'busy');
+  try {
+    var reversePromise = fetch('/api/reverse?lng=' + encodeURIComponent(lng) + '&lat=' + encodeURIComponent(lat)).then(function(r) { return r.json(); }).catch(function() { return null; });
+    var buildingsPromise = fetch('/api/os-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng)).then(function(r) { return r.json(); }).catch(function() { return null; });
+    var listedPromise = fetch('/api/listed-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng) + '&radius=100').then(function(r) { return r.json(); }).catch(function() { return null; });
+    var results = await Promise.all([reversePromise, buildingsPromise, listedPromise]);
+    if (token !== adHocAssessmentToken) return;
+    var reverse = results[0];
+    var buildings = results[1];
+    var listed = results[2];
+    var selected = buildings && buildings.features ? buildings.features.find(function(f) { return f.properties && f.properties._selected; }) || buildings.features[0] : null;
+    var listedCount = listed && (listed.items || listed.results || listed.features) ? (listed.items || listed.results || listed.features).length : 0;
+    var site = buildAdHocAssessmentSite({ lat: lat, lng: lng, reverse: reverse, building: selected, listedCount: listedCount, query: opts.query });
+    openProvisionalFocus(site);
+    setSearchHelp(site.provisionalHeadline, site.score < 50 ? 'error' : null);
+  } catch (err) {
+    console.error('assessCoordinates failed', err);
+    setSearchHelp('Scan failed. Address resolved badly or live building data is missing.', 'error');
+  } finally {
+    if (token === adHocAssessmentToken) setSearchBusy(false);
+  }
+}
+
+async function runSearchAssessment() {
+  var input = document.getElementById('search-q');
+  var q = input ? input.value.trim() : '';
+  if (!q) {
+    setSearchHelp('Give me an address or postcode, not vibes.', 'error');
+    return;
+  }
+  setSearchBusy(true);
+  setSearchHelp('Resolving address…', 'busy');
+  try {
+    var geo = await fetch('/api/geocode?text=' + encodeURIComponent(q)).then(function(r) { return r.json(); });
+    var feature = geo && geo.features && geo.features[0];
+    if (!feature || !feature.center) {
+      setSearchHelp('No London match found. Try a fuller address or postcode.', 'error');
+      return;
+    }
+    var lng = feature.center[0];
+    var lat = feature.center[1];
+    if (MAP) {
+      var panelW = Math.round(window.innerWidth * 0.5);
+      MAP.flyTo({ center:[lng,lat], zoom:17, duration:1100, pitch:50, padding:{top:60,bottom:60,left:30,right:panelW} });
+    }
+    await assessCoordinates(lat, lng, { query: q, message: 'Address found. Pulling building geometry…' });
+  } catch (err) {
+    console.error('runSearchAssessment failed', err);
+    setSearchHelp('Search failed. Mapbox geocoder threw a fit.', 'error');
+    setSearchBusy(false);
+  }
+}
+
+function openFocus(site, opts) {
+  if (site && site.isProvisional) {
+    openProvisionalFocus(site);
+    return;
+  }
+  opts = opts || {};
+  activeSite = site.id;
+  if (!opts.skipPlanningHydrate) hydratePlanningSignal(site);
+  // Clear any active card state (removes spotlight + expanded content)
+  document.querySelectorAll('.site-card.active').forEach(el=>el.classList.remove('active'));
+  document.getElementById('site-list')?.classList.remove('has-active');
+  const vc = verdictClass(site.score), vl = verdictLabel(site.score);
+  document.getElementById('focus-score').textContent = site.score;
+  const vEl = document.getElementById('focus-verdict');
+  vEl.textContent = vl; vEl.className = 'focus-verdict ' + vc;
+  document.getElementById('focus-score-sub').textContent = site.score + '/100 · ' + site.borough;
+  document.getElementById('focus-name').textContent = site.name;
+  document.getElementById('focus-addr').textContent = site.address;
+  const chips = [
+    site.inOA  ? '<span class="chip oa">OA</span>' : '',
+    site.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
+    site.inCons? '<span class="chip cons">Conservation</span>' : '',
+    site.ptal  ? `<span class="chip ptal">PTAL ${site.ptal}</span>` : '',
+    site.verified ? '<span class="chip" style="background:#f0fdf4;color:#15803d">Verified</span>' : '',
+  ].filter(Boolean).join('');
+  document.getElementById('focus-chips').innerHTML = chips;
+  const canonical = ensureCanonicalSite(site);
+  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
+  const existF = canonical ? canonical.existingFloors : Math.max(1, Math.round(site.maxFloors * 0.45));
+  const addF = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
+  const addNIA = baseScenario ? Math.round(baseScenario.addedNIA || 0) : Math.round(site.plotM2 * 0.42 * 0.78 * addF);
+  const roughExistingGia = canonical && canonical.roughExistingGiaM2 ? canonical.roughExistingGiaM2 : null;
+  const roughProposedGia = canonical && canonical.roughProposedGiaM2 ? canonical.roughProposedGiaM2 : null;
+  const roughGiaUpliftPct = canonical && canonical.roughGiaUpliftPct != null ? canonical.roughGiaUpliftPct : null;
+  const heritLabel = site.heritTier==='blocking'?'High risk':site.heritTier==='navigable'?'Navigable':'Low risk';
+  const niySub = canonical && canonical.financialAssumptions ? canonical.financialAssumptions.niy : (site.inCAZ ? 4.75 : site.borough==='City of London' ? 4.25 : 5.5);
+  const ervPsm = canonical && canonical.financialAssumptions ? canonical.financialAssumptions.erv : (site.borough==='City of London' ? 850 : site.inCAZ ? 750 : 700);
+  const ervFt2 = Math.round(ervPsm / 10.7639);
+  const ervStr = `£${ervFt2}/ft²`;
+  const ptalLabel = site.ptal ? `${site.ptal}/6` : 'Not assessed';
+  const coverageM2 = Math.round(site.plotM2 * 0.75);
+  const heritRisk = site.heritTier==='blocking'?'🔴 High':site.heritTier==='navigable'?'🟡 Navigable':'🟢 Low';
+  const planRisk = site.planScore>=7?'🟢 Favourable':site.planScore>=5?'🟡 Neutral':'🔴 Resistant';
+  const gdvLo = baseScenario ? Math.round((baseScenario.gdv || 0) * 0.92 / 1e6) : Math.round((Number(site.gdvEst) || 0) * 0.8);
+  const gdvHi = baseScenario ? Math.round((baseScenario.gdv || 0) * 1.08 / 1e6) : Math.round((Number(site.gdvEst) || 0) * 1.2);
+  document.getElementById('focus-metrics').innerHTML = `
+    <div class="focus-metric"><div class="focus-metric-val accent">£${gdvLo}-${gdvHi}M</div><div class="focus-metric-lbl">Est. GDV range</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">+${addF}F</div><div class="focus-metric-lbl">Added floors</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${addNIA.toLocaleString()}m²</div><div class="focus-metric-lbl">New NIA</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${roughProposedGia ? roughProposedGia.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Rough proposed GIA</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${roughGiaUpliftPct != null ? (roughGiaUpliftPct > 0 ? '+' : '') + roughGiaUpliftPct + '%' : ervStr}</div><div class="focus-metric-lbl">${roughGiaUpliftPct != null ? 'Rough GIA uplift' : 'Est. ERV'}</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${niySub}%</div><div class="focus-metric-lbl">Sub-market NIY</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${ptalLabel}</div><div class="focus-metric-lbl">PTAL</div></div>
+  `;
+  // Intel rows - extra data lines
+  // ── Analyst hook ───────────────────────────────────────────────────────
+  const hookText = analystHook(site);
+  const devLogic = siteDevelopmentLogic(site);
+  document.getElementById('focus-hook').innerHTML = `
+    <div class="focus-hook-label">Intelligence Signal</div>
+    <div class="focus-hook-text">${hookText}</div>
+    <div class="focus-hook-question"><strong>${devLogic.type}</strong> · ${devLogic.mode}. What are the 3 comparable approvals? Is this a metres site or a floors site? Does the economics justify the planning fight here?</div>
+  `;
+  // ── Factor bars ─────────────────────────────────────────────────────────
+  document.getElementById('focus-factors').innerHTML = `
+    <div class="focus-factors-label">Score drivers · logic, economics, planning and available sky</div>
+    ${factorBars(site)}
+  `;
+  // ── CTA - site-specific ─────────────────────────────────────────────────
+  const addFf = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
+  document.getElementById('focus-cta-wrap').innerHTML = site.t1
+    ? `<a class="focus-cta" href="${site.t1}">See why this scores ${site.score}/100 &rarr;<span class="focus-cta-sub">+${addFf}F · planning precedents · does it stack at current land value?</span></a>`
+    : `<span class="focus-cta locked">Full report coming soon</span>`;
+  const visEl = document.getElementById('focus-visual');
+  const phEl  = document.getElementById('focus-sat-ph');
+  if (phEl) phEl.textContent = `£${site.gdvEst}M`;
+  const buildThumb = () => {
+    if (MAPBOX_TOKEN) {
+      visEl.innerHTML = `<img class="focus-sat" src="https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},18,20,60/480x480@2x?access_token=${MAPBOX_TOKEN}" alt="">`;
+    } else {
+      setTimeout(()=>{ if(MAPBOX_TOKEN&&activeSite===site.id) buildThumb(); }, 1200);
+    }
+  };
+  buildThumb();
+  document.getElementById('site-focus').classList.add('visible');
+  if (MAP && site.lat && site.lng) {
+    const panelW = Math.round(window.innerWidth * 0.5);
+    MAP.flyTo({ center:[site.lng,site.lat], zoom:16, duration:900, pitch:52,
+      padding:{top:60,bottom:60,left:30,right:panelW} });
+    showPopup(site);
+  }
+}
+
+function closeFocus() {
+  activeSite = null;
+  document.getElementById('site-focus').classList.remove('visible');
+  if (MAP) MAP.flyTo({center:[-0.090,51.505],zoom:11.5,pitch:0,bearing:0,duration:800,padding:{}});
+}
+
+// ── Popup ─────────────────────────────────────────────────────────────────────
+function showPopup(site) {
+  if (popup) { popup.remove(); popup=null; }
+  const vc = verdictClass(site.score);
+  const vl = verdictLabel(site.score);
+  const col = vc==='green'?'#15803d':vc==='amber'?'#b45309':'#999';
+  popup = new mapboxgl.Popup({offset:10,closeButton:true,maxWidth:'220px'})
+    .setLngLat([site.lng,site.lat])
+    .setHTML(`
+      <div class="popup-name">${site.name}</div>
+      <div class="popup-score-row">
+        <span class="popup-score">${site.score}</span>
+        <span class="popup-verdict" style="color:${col}">${vl}</span>
+      </div>
+      <div class="popup-addr">${site.borough}</div>
+    `)
+    .addTo(MAP);
+}
+
+// ── Map ───────────────────────────────────────────────────────────────────────
+function initMap(token) {
+  mapboxgl.accessToken = token;
+  MAPBOX_TOKEN = token;
+  var currentMapStyle = 'map';
+  var ZOOM_AERIAL_THRESHOLD = 14;
+  var mapStyleSwitching = false;
+
+  MAP = new mapboxgl.Map({
+    container: 'map-canvas',
+    style: 'mapbox://styles/mapbox/dark-v11',
+    center: [-0.090, 51.505],
+    zoom: 11.5, pitch: 0, bearing: 0,
+    attributionControl: false, antialias: true
+  });
+  MAP.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
+  MAP.on('style.load', function() {
+    var panelW = Math.round(window.innerWidth * 0.5);
+    MAP.setPadding({top:60, bottom:60, left:20, right:panelW});
+    MAP.setCenter([-0.090, 51.505]);
+    addSiteMarkers();
+    addBoroughOutlines();
+    // Hairline white ring on satellite for contrast
+    if (currentMapStyle === 'satellite' && MAP.getLayer('sites-dot')) {
+      MAP.setPaintProperty('sites-dot', 'circle-stroke-width', 2.5);
+    }
+    mapStyleSwitching = false;
+    setTimeout(function() { document.getElementById('map-fade').classList.remove('active'); }, 100);
+  });
+
+  // Discover stays on the 3D vector map. Appraise can own aerial / raster modes.
+
+  // Manual style toggle
+  window.switchMapStyle = function(style) {
+    if (style === 'satellite') return;
+    if (mapStyleSwitching) return;
+    mapStyleSwitching = true;
+    currentMapStyle = 'map';
+    document.getElementById('map-canvas').classList.remove('aerial');
+    document.querySelectorAll('.map-style-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.style === 'map');
+      if (b.dataset.style === 'satellite') b.disabled = true;
+      if (b.dataset.style === 'satellite') b.title = 'Aerial mode moves to Appraise';
+    });
+    document.getElementById('map-fade').classList.add('active');
+    setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/dark-v11'); }, 320);
+  };
+
+  MAP.on('click', function(e) {
+    var features = MAP.getLayer('sites-dot')
+      ? MAP.queryRenderedFeatures(e.point, { layers: ['sites-dot'] })
+      : [];
+    if (features && features.length) return;
+    assessCoordinates(e.lngLat.lat, e.lngLat.lng, { message: 'Map click captured. Scanning selected building…' });
+  });
+}
+
+function addSiteMarkers() {
+  if (!MAP || !ALL_SITES.length) return;
+  var geojson = {
+    type:'FeatureCollection',
+    features: ALL_SITES.map(function(s) {
+      return {
+        type:'Feature',
+        geometry:{type:'Point',coordinates:[s.lng,s.lat]},
+        properties:{ id:s.id, score:s.score, name:s.name,
+          color: s.brownfield ? '#8b7355' : s.useType === 'mixed' ? '#a07c9e' : s.useType === 'industrial' ? '#7a7a96' : s.useType === 'resi' ? '#c4915a' : '#5b7a9d',
+          r: 7 }
+      };
+    })
+  };
+  if (MAP.getSource('sites')) {
+    MAP.getSource('sites').setData(geojson);
+    return;
+  }
+  MAP.addSource('sites',{type:'geojson',data:geojson});
+  MAP.addLayer({id:'sites-glow',type:'circle',source:'sites',paint:{
+    'circle-radius':['*',['get','r'],3.5],
+    'circle-color':['get','color'],
+    'circle-opacity':0.15, 'circle-blur':1.0
+  }});
+  MAP.addLayer({id:'sites-mid',type:'circle',source:'sites',paint:{
+    'circle-radius':['*',['get','r'],1.8],
+    'circle-color':['get','color'],
+    'circle-opacity':0.38, 'circle-blur':0.5
+  }});
+  MAP.addLayer({id:'sites-dot',type:'circle',source:'sites',paint:{
+    'circle-radius':['get','r'],
+    'circle-color':['get','color'],
+    'circle-opacity':0.95, 'circle-blur':0,
+    'circle-stroke-width':0,
+    'circle-stroke-color':'rgba(255,255,255,0.85)'
+  }});
+  MAP.on('click','sites-dot',function(e) {
+    var id = e.features[0].properties.id;
+    var site = ALL_SITES.find(function(s){return s.id===id;});
+    if (!site) return;
+    var visible = filteredSites().find(function(s){return s.id===id;});
+    if (!visible) {
+      activeBorough = site.borough;
+      document.querySelectorAll('.borough-pill').forEach(function(p){p.classList.toggle('active',p.dataset.borough===site.borough);});
+      setMode('borough');
+    }
+    setTimeout(function(){ cardClick(id); },100);
+  });
+  var hoverPopup = null;
+  MAP.on('mouseenter','sites-dot',function(e){
+    MAP.getCanvas().style.cursor='pointer';
+    var props = e.features[0].properties;
+    var site = ALL_SITES.find(function(s){return s.id===props.id;});
+    if (!site) return;
+    var typeLabel = site.brownfield ? 'Brownfield' : site.useType === 'mixed' ? 'Mixed-use' : site.useType === 'industrial' ? 'Industrial' : site.useType === 'resi' ? 'Residential' : 'Office';
+    var typeColor = site.brownfield ? '#8b7355' : site.useType === 'mixed' ? '#a07c9e' : site.useType === 'industrial' ? '#7a7a96' : site.useType === 'resi' ? '#c4915a' : '#5b7a9d';
+    var vc = verdictClass(site.score);
+    var scoreCol = vc==='green'?'#15803d':vc==='amber'?'#b45309':'#999';
+    if (hoverPopup) { hoverPopup.remove(); hoverPopup=null; }
+    hoverPopup = new mapboxgl.Popup({offset:12,closeButton:false,maxWidth:'200px',className:'hover-popup'})
+      .setLngLat(e.lngLat)
+      .setHTML('<div style="font:700 11px var(--sans);color:var(--ink);margin-bottom:4px">'+site.name+'</div>'+
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">'+
+        '<span style="font:800 18px var(--mono);color:'+scoreCol+'">'+site.score+'</span>'+
+        '<span style="font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;background:'+typeColor+'22;color:'+typeColor+';padding:2px 6px;border-radius:3px;border:1px solid '+typeColor+'44">'+typeLabel+'</span>'+
+        '</div>'+
+        '<div style="font:400 11px var(--sans);color:var(--ink3)">'+site.borough+'</div>')
+      .addTo(MAP);
+  });
+  MAP.on('mouseleave','sites-dot',function(){
+    MAP.getCanvas().style.cursor='';
+    if (hoverPopup) { hoverPopup.remove(); hoverPopup=null; }
+  });
+}
+
+function addBoroughOutlines() {
+  fetch('/data/london-boroughs.geojson')
+    .then(r=>r.ok ? r.json() : null)
+    .then(gj=>{
+      if (!gj || !MAP) return;
+      // Add feature id for feature-state
+      gj.features.forEach((f,i) => f.id = i);
+      MAP.addSource('boroughs',{type:'geojson',data:gj});
+      // Colour-coded fill by borough
+      MAP.addLayer({
+        id:'borough-fill', type:'fill', source:'boroughs',
+        paint:{
+          'fill-color': ['match',['get','code'],
+            'southwark','#8b5cf6',
+            'city','#38bdf8',
+            'hackney','#4ade80',
+            '#ffffff'],
+          'fill-opacity': ['case',['boolean',['feature-state','hover'],false],0.18,0.04]
+        }
+      });
+      MAP.addLayer({
+        id:'borough-outline', type:'line', source:'boroughs',
+        paint:{
+          'line-color': ['match',['get','code'],
+            'southwark','#8b5cf6',
+            'city','#38bdf8',
+            'hackney','#4ade80',
+            '#ffffff'],
+          'line-width': ['case',['boolean',['feature-state','hover'],false],2.5,1.2],
+          'line-opacity': ['case',['boolean',['feature-state','hover'],false],0.9,0.5]
+        }
+      });
+      let hoveredId = null;
+      MAP.on('mousemove','borough-fill',e=>{
+        if (e.features.length) {
+          if (hoveredId!==null) MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:false});
+          hoveredId = e.features[0].id;
+          MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:true});
+          // Also highlight matching sites on map
+          const bname = e.features[0].properties.name;
+          highlightBorough(bname);
+        }
+      });
+      MAP.on('mouseleave','borough-fill',()=>{
+        if (hoveredId!==null) MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:false});
+        hoveredId = null;
+        highlightBorough(null);
+      });
+      MAP.on('click','borough-fill',e=>{
+        if (e.features.length) {
+          const bname = e.features[0].properties.name;
+          const pill = [...document.querySelectorAll('.borough-pill')].find(p=>p.dataset.borough===bname);
+          if (pill) selectBorough(bname, pill);
+        }
+      });
+    })
+    .catch(()=>{});
+}
+
+function highlightBorough(bor) {
+  if (!MAP || !MAP.getLayer('sites-dot')) return;
+  if (!bor) {
+    // Reset to current filter
+    MAP.setPaintProperty('sites-dot','circle-opacity',0.95);
+    MAP.setPaintProperty('sites-ring','circle-opacity',0.95);
+    return;
+  }
+  // Dim non-borough sites, keep borough sites bright
+  const borIds = ALL_SITES.filter(s=>s.borough===bor).map(s=>s.id);
+  MAP.setPaintProperty('sites-dot','circle-opacity',
+    ['case',['in',['get','id'],['literal',borIds]],1,0.12]);
+  MAP.setPaintProperty('sites-ring','circle-opacity',
+    ['case',['in',['get','id'],['literal',borIds]],1,0.08]);
+}
+
+function updateMapFilter(ids) {
+  if (!MAP || !MAP.getLayer('sites-dot')) return;
+  if (!ids) { // Show all
+    ['sites-ring','sites-dot'].forEach(l=>MAP.setFilter(l,null));
+    return;
+  }
+  const idSet = [...new Set(ids)];
+  ['sites-ring','sites-dot'].forEach(l=>{
+    if (MAP.getLayer(l)) MAP.setFilter(l,['in',['get','id'],['literal',idSet]]);
+  });
+}
+
+function daOpenBurger() {
+  document.getElementById('da-burger-panel').classList.add('open');
+  document.getElementById('da-burger-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function daCloseBurger() {
+  document.getElementById('da-burger-panel').classList.remove('open');
+  document.getElementById('da-burger-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') daCloseBurger(); });
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+// Handle ?mode= deep-link from homepage discovery cards
+const _urlMode = new URLSearchParams(window.location.search).get('mode');
+if (_urlMode && ['top100','borough','search'].includes(_urlMode)) {
+  activeMode = _urlMode;
+}
+Promise.all([
+  loadSites(),
+  fetch('/api/config').then(r=>r.json()).catch(()=>null)
+]).then(([,cfg])=>{
+  // Apply URL mode after data loads
+  if (_urlMode && ['top100','borough','search'].includes(_urlMode)) {
+    setMode(_urlMode);
+  }
+  if (cfg?.mapboxToken) initMap(cfg.mapboxToken);
+});
+// ── MASSING POPUP ─────────────────────────────────────────────────────────────
+var massMap = null;
+var massSite = null;
+var massScenario = 'mid';
+var massScenarios = null;
+var massGoogleLoaded = false;
+var massSV = null;
+
+function canonicalMassScenarioKey(key) {
+  return window.HeadroomSiteModel
+    ? window.HeadroomSiteModel.canonicalScenarioKey(key)
+    : (key === 'low' ? 'lo' : key === 'base' ? 'mid' : key === 'high' ? 'hi' : ['lo', 'mid', 'hi'].indexOf(key) !== -1 ? key : 'mid');
+}
+
+function ensureCanonicalSite(site) {
+  if (!site) return null;
+  if (!site._canonicalModel && window.HeadroomSiteModel) {
+    site._canonicalModel = window.HeadroomSiteModel.buildCanonicalSite(site);
+  }
+  return site._canonicalModel || null;
+}
+
+function buildMassScenarioState(site) {
+  var canonical = ensureCanonicalSite(site);
+  var scenarios = canonical && canonical.scenarioState ? canonical.scenarioState : (massingScenarios(site) || {});
+  return {
+    lo: scenarios.lo || scenarios.low || scenarios.mid,
+    mid: scenarios.mid || scenarios.base || scenarios.lo || scenarios.low,
+    hi: scenarios.hi || scenarios.high || scenarios.mid
+  };
+}
+
+function getActiveMassScenario() {
+  if (!massScenarios) return null;
+  var key = canonicalMassScenarioKey(massScenario);
+  return massScenarios[key] || massScenarios.mid || null;
+}
+
+function renderMassScenarioState() {
+  var sc = getActiveMassScenario();
+  if (!massSite || !sc || !massScenarios) return;
+  updateMassMetrics(sc, massSite);
+  updateMassScenarioTabs(massScenarios);
+  updateMassScChip(sc, massSite);
+  if (massMap) updateMassingLayers(massMap, massSite, sc);
+}
+
+function openMassPopup(site) {
+  massSite = site;
+  massScenario = 'mid';
+  massScenarios = buildMassScenarioState(site);
+  // Update nav Appraise link to this site if it has a T1
+  if (site && site.t1) {
+    var navLink = document.getElementById('nav-appraise');
+    if (navLink) navLink.href = site.t1;
+  }
+  var scrim = document.getElementById('mass-scrim');
+  if (!scrim) return;
+  scrim.classList.add('open');
+  // Slight delay to allow CSS transition
+  setTimeout(function() { scrim.style.opacity = '1'; }, 10);
+  document.body.style.overflow = 'hidden';
+
+  // Populate info
+  var vc = verdictClass(site.score);
+  var vl = verdictLabel(site.score);
+
+  document.getElementById('mass-name').textContent = site.name;
+  document.getElementById('mass-addr').textContent = site.address + ' · ' + site.borough;
+  document.getElementById('mass-score').textContent = site.score;
+  document.getElementById('mass-score-lbl').textContent = '/100';
+  var vEl = document.getElementById('mass-verdict');
+  vEl.textContent = vl; vEl.className = 'mass-verdict ' + vc;
+
+  // Use type chips
+  var useChipsEl = document.getElementById('mass-use-chips');
+  if (useChipsEl) {
+    var useChips = buildUseChips(site);
+    useChipsEl.innerHTML = useChips;
+  }
+
+  renderMassScenarioState();
+
+  // Analyst hook
+  var hookEl = document.getElementById('mass-hook-text');
+  if (hookEl) hookEl.innerHTML = analystHook(site);
+
+  // Show 3D view by default
+  document.getElementById('mass-sv').classList.remove('active');
+  document.querySelectorAll('.mass-view-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.view === '3d');
+  });
+
+  // Reset SV state
+  document.getElementById('mass-sv').classList.remove('active');
+  document.getElementById('mass-sv-back').classList.remove('visible');
+  document.getElementById('mass-pegman').style.display = 'flex';
+  var tabsWrap = document.getElementById('mass-scenario-tabs-wrap');
+  if (tabsWrap) tabsWrap.style.display = 'flex';
+
+  // Init or update 3D map
+  initMassMap(site, massScenarios);
+  setTimeout(initPegman, 100);
+
+  // Nav state
+  var idx = FILTERED_SITES ? FILTERED_SITES.findIndex(function(s) { return s.id === site.id; }) : -1;
+  updateMassNavState(idx);
+}
+
+function closeMassPopup() {
+  var scrim = document.getElementById('mass-scrim');
+  if (!scrim) return;
+  scrim.style.opacity = '0';
+  setTimeout(function() { scrim.classList.remove('open'); }, 250);
+  document.body.style.overflow = '';
+  if (massMap) { massMap.remove(); massMap = null; }
+  massSite = null;
+  massScenarios = null;
+}
+
+function massNavStep(dir) {
+  if (!massSite) return;
+  var sites = filteredSites();
+  var idx = sites.findIndex(function(s) { return s.id === massSite.id; });
+  if (idx === -1) return;
+  var next = idx + dir;
+  if (next < 0 || next >= sites.length) return;
+  if (massMap) { massMap.remove(); massMap = null; }
+  clearMassLabels();
+  openMassPopup(sites[next]);
+  var card = document.getElementById('card-' + sites[next].id);
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  updateMassNavState(next);
+}
+
+function updateMassNavState(idx) {
+  var sites = filteredSites();
+  var total = sites.length;
+  var prev = document.getElementById('mass-nav-prev');
+  var next = document.getElementById('mass-nav-next');
+  if (prev) prev.disabled = (idx <= 0);
+  if (next) next.disabled = (idx >= total - 1);
+
+  var rankEl = document.getElementById('mass-rank');
+  if (!rankEl) return;
+  rankEl.innerHTML = '#' + (idx + 1) + '<span style="font-weight:400;color:rgba(255,255,255,.45)">/' + total + '</span>';
+}
+
+function massingScenarios(site) {
+  var canonical = ensureCanonicalSite(site);
+  return canonical && canonical.scenarioState ? canonical.scenarioState : null;
+}
+
+function updateMassMetrics(sc, site) {
+  var canonical = ensureCanonicalSite(site);
+  var logic = canonical && canonical.developmentLogic ? canonical.developmentLogic : siteDevelopmentLogic(site);
+  var gdvMid = Math.round((sc.gdv || 0) / 1e6);
+  var gdvLo = Math.round(gdvMid * 0.92);
+  var gdvHi = Math.round(gdvMid * 1.08);
+  var buildCost = Math.round(((sc.constCost || 0) / 1e6) * 10) / 10;
+  sc.buildCostM = buildCost;
+  sc.gdvLo = gdvLo;
+  sc.gdvHi = gdvHi;
+
+  document.getElementById('mass-metrics').innerHTML = [
+    metricHTML((site.score || 0) + '/100', 'Headroom score', true),
+    metricHTML('£' + gdvLo + '-' + gdvHi + 'M', 'Est. GDV range', true),
+    metricHTML('+' + sc.addedF + 'F', 'Added floors', false),
+    metricHTML((sc.addedNIA || 0).toLocaleString() + 'm²', 'New NIA', false),
+    metricHTML(sc.floors + 'F', 'Total floors', false),
+    metricHTML((sc.giaTotal || 0).toLocaleString() + 'm²', 'Total GIA', false),
+    metricHTML('£' + buildCost.toFixed(1) + 'M', 'Build cost', false),
+    metricHTML(sc.mode || logic.mode || 'Indicative', 'Uplift mode', false),
+  ].join('');
+
+  // Update CTA
+  document.getElementById('mass-cta').innerHTML = site.t1
+    ? '<a class="mass-cta" href="' + site.t1 + '">Unlock full appraisal →<span class="mass-cta-price">£39</span></a>'
+    : '<a class="mass-cta" href="#">Unlock full appraisal →<span class="mass-cta-price">£39</span></a>';
+}
+
+function metricHTML(val, lbl, accent) {
+  return '<div class="mass-metric"><div class="mass-metric-val' + (accent ? ' accent' : '') + '">' + val + '</div><div class="mass-metric-lbl">' + lbl + '</div></div>';
+}
+
+function updateMassScenarioTabs(scenarios) {
+  var keys = ['lo','mid','hi'];
+  keys.forEach(function(k) {
+    var tab = document.getElementById('mass-tab-' + k);
+    var sc = scenarios && scenarios[k];
+    if (!tab || !sc) return;
+    tab.querySelector('.mass-sc-floors').textContent = sc.floors + 'F';
+    tab.classList.toggle('active', k === canonicalMassScenarioKey(massScenario));
+  });
+}
+
+function switchMassScenario(key) {
+  massScenario = canonicalMassScenarioKey(key);
+  if (!massSite || !massScenarios) return;
+  renderMassScenarioState();
+}
+
+function updateMassScChip(sc, site) {
+  var chip = document.getElementById('mass-sc-chip');
+  if (!chip || !sc) return;
+  var totalH = Math.round(sc.heightM || (sc.floors * (sc.floorH || 3.8)));
+  var costPerM2 = 4200;
+  var costM = Math.round(sc.giaTotal * costPerM2 / 1e6);
+  var addFEl = document.getElementById('chip-addf');
+  var addNEl = document.getElementById('chip-addnia');
+  var htEl = document.getElementById('chip-height');
+  var costEl = document.getElementById('chip-cost');
+  if (addFEl) addFEl.textContent = (sc.addedF > 0 ? '+' : '') + sc.addedF + 'F';
+  if (addNEl) addNEl.textContent = '+' + Math.max(0, sc.addedNIA || 0).toLocaleString() + 'm²';
+  if (htEl) htEl.textContent = '~' + Math.abs(totalH) + 'm';
+  if (costEl) costEl.textContent = '£' + Math.abs(costM) + 'M';
+
+  chip.classList.remove('visible');
+  setTimeout(function() { chip.classList.add('visible'); }, 20);
+}
+
+function massExitSV() {
+  document.getElementById('mass-sv').classList.remove('active');
+  document.getElementById('mass-sv-back').classList.remove('visible');
+  document.getElementById('mass-pegman').style.display = 'flex';
+  var tabsWrap = document.getElementById('mass-scenario-tabs-wrap');
+  if (tabsWrap) tabsWrap.style.display = 'flex';
+}
+
+// Cache for intelligence polygons
+var _polyCache = {};
+
+function fetchSitePolygon(siteName, cb) {
+  if (_polyCache[siteName] !== undefined) return cb(_polyCache[siteName]);
+  fetch('/api/site-polygon?name=' + encodeURIComponent(siteName))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      _polyCache[siteName] = d.polygon ? d : null;
+      cb(_polyCache[siteName]);
+    })
+    .catch(function() { _polyCache[siteName] = null; cb(null); });
+}
+
+// Polygon helpers
+function normalizeRing(coords) {
+  if (!coords || coords.length < 3) return [];
+  var ring = coords.slice();
+  if (ring.length > 1) {
+    var first = ring[0], last = ring[ring.length - 1];
+    if (first[0] === last[0] && first[1] === last[1]) ring = ring.slice(0, -1);
+  }
+  return ring;
+}
+
+function polyBounds(coords) {
+  var ring = normalizeRing(coords);
+  if (!ring.length) return null;
+  var minX = ring[0][0], minY = ring[0][1], maxX = ring[0][0], maxY = ring[0][1];
+  for (var i = 1; i < ring.length; i++) {
+    minX = Math.min(minX, ring[i][0]);
+    minY = Math.min(minY, ring[i][1]);
+    maxX = Math.max(maxX, ring[i][0]);
+    maxY = Math.max(maxY, ring[i][1]);
+  }
+  return [[minX, minY], [maxX, maxY]];
+}
+
+function bboxCenter(coords) {
+  var b = polyBounds(coords);
+  if (!b) return null;
+  return [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2];
+}
+
+function pointInPoly(point, coords) {
+  var ring = normalizeRing(coords);
+  if (ring.length < 3) return false;
+  var x = point[0], y = point[1], inside = false;
+  for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    var xi = ring[i][0], yi = ring[i][1];
+    var xj = ring[j][0], yj = ring[j][1];
+    var intersect = ((yi > y) !== (yj > y)) &&
+      (x < (xj - xi) * (y - yi) / ((yj - yi) || 1e-12) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+function pointInGeometry(point, geom) {
+  if (!geom || !geom.type || !geom.coordinates) return false;
+  if (geom.type === 'Polygon') return pointInPoly(point, geom.coordinates[0]);
+  if (geom.type === 'MultiPolygon') {
+    for (var i = 0; i < geom.coordinates.length; i++) {
+      if (pointInPoly(point, geom.coordinates[i][0])) return true;
+    }
+  }
+  return false;
+}
+
+// Get a stable polygon anchor. Use area-weighted centroid first, then safe fallbacks.
+function polyCentroid(coords) {
+  var ring = normalizeRing(coords);
+  if (!ring.length) return null;
+  if (ring.length < 3) return bboxCenter(ring) || ring[0];
+
+  var twiceArea = 0, cx = 0, cy = 0;
+  for (var i = 0; i < ring.length; i++) {
+    var p1 = ring[i];
+    var p2 = ring[(i + 1) % ring.length];
+    var f = (p1[0] * p2[1]) - (p2[0] * p1[1]);
+    twiceArea += f;
+    cx += (p1[0] + p2[0]) * f;
+    cy += (p1[1] + p2[1]) * f;
+  }
+
+  if (Math.abs(twiceArea) < 1e-12) return bboxCenter(ring) || ring[0];
+
+  var centroid = [cx / (3 * twiceArea), cy / (3 * twiceArea)];
+  if (pointInPoly(centroid, ring)) return centroid;
+
+  var boxCenter = bboxCenter(ring);
+  if (boxCenter && pointInPoly(boxCenter, ring)) return boxCenter;
+
+  var ax = 0, ay = 0;
+  for (var j = 0; j < ring.length; j++) { ax += ring[j][0]; ay += ring[j][1]; }
+  return [ax / ring.length, ay / ring.length];
+}
+
+// Buffer polygon outward from centroid
+function bufferPoly(coords, dist) {
+  var c = polyCentroid(coords);
+  return coords.map(function(p) {
+    var dx = p[0] - c[0], dy = p[1] - c[1];
+    var len = Math.sqrt(dx*dx + dy*dy) || 0.00001;
+    return [p[0] + (dx/len) * dist, p[1] + (dy/len) * dist];
+  });
+}
+
+// Shrink polygon toward centroid by factor (0-1)
+function shrinkPoly(coords, factor) {
+  var c = polyCentroid(coords);
+  return coords.map(function(p) {
+    return [c[0] + (p[0] - c[0]) * factor, c[1] + (p[1] - c[1]) * factor];
+  });
+}
+
+// Inset ring by metres, with a safe fallback for irregular polygons
+function insetRing(coords, metres) {
+  var ring = normalizeRing(coords);
+  if (!ring.length) return ring;
+  var c = polyCentroid(ring);
+  var latScale = 111320;
+  var lngScale = 111320 * Math.cos((c[1] || 51.5) * Math.PI / 180);
+  var inset = ring.map(function(p) {
+    var dxm = (p[0] - c[0]) * lngScale;
+    var dym = (p[1] - c[1]) * latScale;
+    var len = Math.sqrt(dxm*dxm + dym*dym) || 0.0001;
+    var nextLen = Math.max(0, len - metres);
+    return [
+      c[0] + ((dxm / len) * nextLen) / lngScale,
+      c[1] + ((dym / len) * nextLen) / latScale
+    ];
+  });
+  return inset.length >= 3 ? inset : shrinkPoly(ring, 0.88);
+}
+
+// Classify polygon quality
+function polyTier(coords) {
+  if (!coords || coords.length < 3) return 'none';
+  if (coords.length <= 5) return 'bbox'; // 4 corners + close = estimated rectangle
+  if (coords.length <= 7) return 'low';   // rough shape but not bbox
+  return 'real'; // 8+ points = real building/site polygon
+}
+
+// Fetch OSM building footprint on demand
+function fetchOSMBuilding(lat, lng, address, cb) {
+  var url = '/api/building?lat=' + lat + '&lng=' + lng;
+  if (address) url += '&address=' + encodeURIComponent(address);
+  fetch(url).then(function(r) { return r.json(); }).then(function(data) {
+    var elements = data.elements || [];
+    var ways = elements.filter(function(e) { return e.type === 'way' && e.nodes && e.nodes.length >= 3; });
+    var nodes = {};
+    elements.filter(function(e) { return e.type === 'node'; }).forEach(function(n) { nodes[n.id] = n; });
+    if (ways.length === 0) return cb(null);
+    // Pick largest building by node count
+    var best = ways.sort(function(a,b) { return (b.nodes||[]).length - (a.nodes||[]).length; })[0];
+    var coords = best.nodes.map(function(nid) { return nodes[nid]; }).filter(Boolean)
+      .map(function(n) { return [parseFloat(n.lon.toFixed(6)), parseFloat(n.lat.toFixed(6))]; });
+    if (coords.length < 3) return cb(null);
+    // Close polygon
+    if (coords[0][0] !== coords[coords.length-1][0] || coords[0][1] !== coords[coords.length-1][1]) {
+      coords.push([coords[0][0], coords[0][1]]);
+    }
+    // Extract height
+    var tags = best.tags || {};
+    var h = parseFloat(tags.height) || parseFloat(tags['building:height']) || null;
+    var lev = parseInt(tags['building:levels']) || null;
+    cb({ coords: coords, height: h, levels: lev });
+  }).catch(function() { cb(null); });
+}
+
+function shouldSuppressMassing(site, intelPoly) {
+  var flags = site.siteLegitimacyFlags || [];
+  var hardFlags = ['open_space_named_parcel', 'transport_or_station_land', 'strategic_civic_transport_signal', 'city_open_space'];
+  if (flags.some(function(f) { return hardFlags.indexOf(f) !== -1; })) return true;
+
+  var text = ((site.name || '') + ' ' + (site.address || '')).toLowerCase();
+  if (/(churchyard|church yard|public realm|public garden|plaza|piazza|forecourt|courtyard)/.test(text)) return true;
+
+  var bounds = intelPoly ? polyBounds(intelPoly) : null;
+  if (bounds) {
+    var dx = Math.abs(bounds[1][0] - bounds[0][0]);
+    var dy = Math.abs(bounds[1][1] - bounds[0][1]);
+    var ratio = Math.max(dx, dy) / Math.max(Math.min(dx, dy), 1e-9);
+    if (ratio > 12) return true; // long strips / corridors / weird title geometry
+  }
+  return false;
+}
+
+function showMassingSuppressed(site) {
+  var container = document.getElementById('mass-3d');
+  if (!container) return;
+  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:32px;color:rgba(255,255,255,.78);font:500 14px/1.7 var(--sans);text-align:center;background:linear-gradient(180deg,rgba(10,10,10,.2),rgba(10,10,10,.35));">3D massing suppressed for this parcel.<br>This reads as public realm / residual land / non-standalone site and needs manual review.</div>';
+}
+
+function showMassingUnavailable(message) {
+  var container = document.getElementById('mass-3d');
+  if (!container) return;
+  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:32px;color:rgba(255,255,255,.78);font:500 14px/1.7 var(--sans);text-align:center;background:linear-gradient(180deg,rgba(10,10,10,.2),rgba(10,10,10,.35));">' + message + '</div>';
+}
+
+function initMassMap(site, scenarios) {
+  if (massMap) { massMap.remove(); massMap = null; }
+  if (!MAPBOX_TOKEN) { showMassingUnavailable('3D massing unavailable - map token missing. Metrics remain live.'); return; }
+
+  // Step 1: fetch intel polygon
+  fetchSitePolygon(site.name, function(intel) {
+    var intelPoly = intel && intel.polygon ? intel.polygon : null;
+    // Ensure closed
+    if (intelPoly && intelPoly.length >= 3) {
+      var first = intelPoly[0], last = intelPoly[intelPoly.length - 1];
+      if (first[0] !== last[0] || first[1] !== last[1]) intelPoly.push([first[0], first[1]]);
+    }
+    if (intel) {
+      if (intel.existing_height_m) site._existH = intel.existing_height_m;
+      if (intel.existing_floors) site._existF = intel.existing_floors;
+      if (intel.max_floors) site.maxFloors = intel.max_floors;
+      site._conceptualMassing = !!intel.conceptual_massing;
+      site._airRightsType = intel.air_rights_type || null;
+    }
+
+    var tier = polyTier(intelPoly);
+
+    if (shouldSuppressMassing(site, intelPoly)) {
+      showMassingSuppressed(site);
+      return;
+    }
+
+    // Step 2: if bbox or low quality, try OSM building fetch
+    if (tier === 'real') {
+      // Good polygon - use directly
+      site._realPoly = intelPoly;
+      site._polyTier = 'real';
+      _buildMassMap(site, scenarios);
+    } else {
+      // Try OSM building fetch for better polygon
+      fetchOSMBuilding(site.lat, site.lng, site.address, function(osm) {
+        if (osm && osm.coords && osm.coords.length >= 6) {
+          // OSM gave us a real building shape
+          site._realPoly = osm.coords;
+          site._polyTier = 'osm';
+          if (osm.height) site._existH = osm.height;
+          if (osm.levels) site._existF = osm.levels;
+        } else if ((tier === 'bbox' || tier === 'low') && site._conceptualMassing) {
+          // Intentional intelligence massing footprint - allow conceptual render
+          site._realPoly = intelPoly;
+          site._polyTier = 'conceptual';
+        } else if (tier === 'bbox' || tier === 'low') {
+          // Use intel bbox but mark as approximate
+          site._realPoly = intelPoly;
+          site._polyTier = 'approximate';
+        } else {
+          site._realPoly = null;
+          site._polyTier = 'none';
+        }
+        _buildMassMap(site, scenarios);
+      });
+    }
+  });
+}
+
+function _buildMassMap(site, scenarios) {
+  var poly = site._realPoly;
+  var tier = site._polyTier || 'none';
+  if (!poly || tier === 'approximate' || tier === 'none') {
+    showMassingUnavailable('3D massing paused - verified site geometry is too weak for a credible model. Metrics remain visible while this site is held for manual review.');
+    return;
+  }
+  var center = polyCentroid(poly) || [site.lng, site.lat];
+  var bounds = polyBounds(poly);
+
+  var container = document.getElementById('mass-3d');
+  massMap = new mapboxgl.Map({
+    container: container,
+    style: 'mapbox://styles/mapbox/standard',
+    center: center,
+    zoom: 17.5, pitch: 60, bearing: -30,
+    attributionControl: false, antialias: true
+  });
+  massMap.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-right');
+  massMap.dragRotate.enable();
+  massMap.touchZoomRotate.enable();
+
+  massMap.on('style.load', function() {
+    massMap.setConfigProperty('basemap', 'lightPreset', 'day');
+    massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+    massMap.setConfigProperty('basemap', 'showTransitLabels', false);
+
+    if (bounds) {
+      massMap.fitBounds(bounds, { padding: 80, pitch: 60, bearing: -30, maxZoom: 18.2, duration: 0 });
+    }
+
+    var sc = scenarios[massScenario];
+    addMassingLayers(massMap, site, sc);
+  });
+}
+
+function siteRect(site) {
+  // Generate a rectangle from plot area centered on lat/lng
+  var area = site.plotM2 || 500;
+  var side = Math.sqrt(area);
+  var latD = (side / 2) / 111320;
+  var lngD = (side / 2) / (111320 * Math.cos(site.lat * Math.PI / 180));
+  var c = [site.lng, site.lat];
+  return [
+    [c[0] - lngD, c[1] - latD],
+    [c[0] + lngD, c[1] - latD],
+    [c[0] + lngD, c[1] + latD],
+    [c[0] - lngD, c[1] + latD],
+    [c[0] - lngD, c[1] - latD]
+  ];
+}
+
+function insetRect(coords, metres) {
+  var c = [(coords[0][0]+coords[2][0])/2, (coords[0][1]+coords[2][1])/2];
+  var factor = metres / 111320;
+  return coords.map(function(p) {
+    var dx = p[0] - c[0];
+    var dy = p[1] - c[1];
+    var dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist === 0) return p;
+    var shrink = Math.max(0, dist - factor) / dist;
+    return [c[0] + dx * shrink, c[1] + dy * shrink];
+  });
+}
+
+// PLACEHOLDER: Ghost extrusion for brownfield sites - uses approximate rect from hectares
+// Replace with real INSPIRE polygon when available
+function addGhostMassing(map, site) {
+  var rect = siteRect(site);
+  var floorH = 3.5;
+  var maxF = site.maxFloors || 8;
+  var totalH = maxF * floorH;
+  var midH = Math.round(totalH * 0.6);
+
+  // Site outline - dashed white
+  map.addSource('ghost-site', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [rect] } }
+  });
+  map.addLayer({
+    id: 'ghost-outline', type: 'line', source: 'ghost-site',
+    paint: { 'line-color': '#8b7355', 'line-width': 2, 'line-opacity': 0.8, 'line-dasharray': [4, 2] }
+  });
+
+  // Ghost envelope - semi-transparent brownfield colour
+  map.addSource('ghost-envelope', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [rect] } }
+  });
+  map.addLayer({
+    id: 'ghost-body', type: 'fill-extrusion', source: 'ghost-envelope',
+    paint: {
+      'fill-extrusion-color': '#8b7355',
+      'fill-extrusion-height': totalH,
+      'fill-extrusion-base': 0,
+      'fill-extrusion-opacity': 0.18
+    }
+  });
+
+  // Ghost cap - slightly more visible top face
+  map.addSource('ghost-cap', {
+    type: 'geojson',
+    data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [insetRect(rect, 1)] } }
+  });
+  map.addLayer({
+    id: 'ghost-cap-3d', type: 'fill-extrusion', source: 'ghost-cap',
+    paint: {
+      'fill-extrusion-color': '#c4a882',
+      'fill-extrusion-height': totalH + 0.3,
+      'fill-extrusion-base': totalH,
+      'fill-extrusion-opacity': 0.5
+    }
+  });
+
+  // Horizontal guide lines at 1/3 and 2/3 height
+  [Math.round(totalH*0.33), Math.round(totalH*0.66)].forEach(function(h, i) {
+    map.addSource('ghost-line-'+i, {
+      type: 'geojson',
+      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [insetRect(rect, 0.3)] } }
+    });
+    map.addLayer({
+      id: 'ghost-hline-'+i, type: 'fill-extrusion', source: 'ghost-line-'+i,
+      paint: {
+        'fill-extrusion-color': '#8b7355',
+        'fill-extrusion-height': h + 0.3,
+        'fill-extrusion-base': h,
+        'fill-extrusion-opacity': 0.4
+      }
+    });
+  });
+}
+
+function addMassingLayers(map, site, sc) {
+  var poly = site._realPoly;
+  var tier = site._polyTier || 'none';
+  var rect = siteRect(site);
+  var floorH = 3.8;
+  var existH = (site._existH || sc.existF * floorH);
+  var existF = site._existF || sc.existF;
+  var totalH = sc.floors * floorH;
+
+  if (tier === 'real' || tier === 'osm') {
+    var baseCoords = normalizeRing(poly);
+    var massCoords = shrinkPoly(baseCoords, 0.985);
+
+    map.addSource('mass-site', {
+      type: 'geojson',
+      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
+    });
+    map.addLayer({
+      id: 'mass-site-outline', type: 'line', source: 'mass-site',
+      paint: { 'line-color': '#b45309', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [5, 3] }
+    });
+
+    if (totalH > 0) {
+      map.addSource('mass-potential', {
+        type: 'geojson',
+        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [massCoords] } }
+      });
+      map.addLayer({
+        id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
+        paint: {
+          'fill-extrusion-color': '#059669',
+          'fill-extrusion-height': totalH,
+          'fill-extrusion-base': 0,
+          'fill-extrusion-opacity': 0.85,
+          'fill-extrusion-vertical-gradient': false
+        }
+      });
+      map.addLayer({
+        id: 'mass-potential-edge', type: 'line', source: 'mass-potential',
+        paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.9 }
+      });
+    }
+
+    var floorLines = [];
+    var numFloors = sc.floors;
+    for (var i = 1; i <= numFloors; i++) {
+      var fh = i * floorH;
+      if (fh > totalH + 0.5) break;
+      floorLines.push({
+
+        type: 'Feature',
+        geometry: { type: 'Polygon', coordinates: [massCoords] },
+        properties: { height: fh + 0.1, base: fh - 0.1 }
+      });
+    }
+    if (floorLines.length > 0) {
+      map.addSource('mass-floors', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: floorLines }
+      });
+      map.addLayer({
+        id: 'mass-floor-lines', type: 'fill-extrusion', source: 'mass-floors',
+        paint: {
+          'fill-extrusion-color': '#ffffff',
+          'fill-extrusion-height': ['get', 'height'],
+          'fill-extrusion-base': ['get', 'base'],
+          'fill-extrusion-opacity': 0.7
+        }
+      });
+    }
+
+    addMassLabels(map, site, sc, baseCoords, existH, totalH, existF);
+
+  } else {
+    addMassLabels(map, site, sc, [[site.lng, site.lat],[site.lng, site.lat+0.0001],[site.lng+0.0001, site.lat],[site.lng, site.lat]], existH, totalH, existF);
+  }
+}
+
+// Height label system - creates floating labels with floor counts
+var _massLabels = [];
+function clearMassLabels() {
+  _massLabels.forEach(function(m) { m.remove(); });
+  _massLabels = [];
+}
+
+function buildUseChips(site) {
+  var uses = [];
+  var ut = (site.useType || '').toLowerCase();
+  var name = (site.name || '').toLowerCase();
+  var desc = (site.desc || '').toLowerCase();
+
+  // Derive possible uses from site data
+  if (ut === 'resi' || ut === 'residential' || /residential|housing|resi|btr|pbsa|homes/.test(name+desc)) {
+    uses.push({label:'Residential', cls:'resi'});
+  }
+  if (ut === 'office' || ut === 'commercial' || /office|commercial|workspace/.test(name+desc)) {
+    uses.push({label:'Office', cls:'office'});
+  }
+  if (ut === 'mixed' || /mixed/.test(name+desc) || (uses.length === 0 && site.inCAZ)) {
+    if (!uses.find(function(u){return u.cls==='resi';})) uses.push({label:'Residential', cls:'resi'});
+    if (!uses.find(function(u){return u.cls==='office';})) uses.push({label:'Office', cls:'office'});
+  }
+  if (ut === 'industrial' || /industrial|depot|warehouse|garage|trading estate|sidings|factory/.test(name+desc)) {
+    uses.push({label:'Industrial', cls:'industrial'});
+    uses.push({label:'Adaptive Reuse', cls:'adaptive'});
+  }
+  // Always suggest resi if OA and nothing else set
+  if (uses.length === 0) {
+    if (site.inOA || site.inCAZ) {
+      uses.push({label:'Residential', cls:'resi'});
+      uses.push({label:'Office', cls:'office'});
+    } else {
+      uses.push({label:'Mixed-use', cls:'mixed'});
+    }
+  }
+
+  return uses.map(function(u) {
+    return '<span class="mass-use-chip ' + u.cls + '">' + u.label + '</span>';
+  }).join('');
+}
+
+function addMassLabels(map, site, sc, coords, existH, totalH, existF) {
+  clearMassLabels();
+  var c = polyCentroid(coords);
+  var potFloors = sc.floors;
+
+  // Use map camera state to project height to pixels
+  function heightToPx(hM) {
+    var zoom = map.getZoom();
+    var pitch = map.getPitch() * Math.PI / 180;
+    var lat = c[1];
+    var mpp = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom);
+    return Math.round((hM / mpp) * Math.cos(pitch));
+  }
+
+  // Green label at top of proposed mass
+  var topPx = heightToPx(totalH);
+  var potMarker = new mapboxgl.Marker({
+    element: makeMassLabel(Math.round(totalH) + 'm · ' + potFloors + 'F', '#059669', true),
+    anchor: 'bottom'
+  }).setLngLat(c).setOffset([0, -topPx]).addTo(map);
+  _massLabels.push(potMarker);
+
+  // White label at existing height
+  var exPx = heightToPx(existH);
+  var existMarker = new mapboxgl.Marker({
+    element: makeMassLabel(Math.round(existH) + 'm · ' + existF + 'F existing', 'rgba(255,255,255,0.7)', false),
+    anchor: 'bottom'
+  }).setLngLat(c).setOffset([0, -exPx]).addTo(map);
+  _massLabels.push(existMarker);
+}
+
+function makeMassLabel(text, color, accent) {
+  var el = document.createElement('div');
+  // Accent (green top): white text on solid green. Non-accent: semi-transparent dark bg
+  var textColor = accent ? '#ffffff' : color;
+  var bg = accent ? 'rgba(5,150,105,0.9)' : 'rgba(0,0,0,0.72)';
+  var border = accent ? 'rgba(4,120,87,0.8)' : 'rgba(255,255,255,0.15)';
+  el.style.cssText = 'font:600 11px/1 var(--sans,system-ui);color:' + textColor + ';background:' + bg + ';padding:4px 10px;border-radius:4px;border:1px solid ' + border + ';white-space:nowrap;pointer-events:none;transform:translateX(-50%);box-shadow:0 2px 8px rgba(0,0,0,0.4);';
+  el.textContent = text;
+  return el;
+}
+
+function updateMassingLayers(map, site, sc) {
+  // Remove old layers and sources
+  ['mass-floor-lines','mass-tower-3d','mass-potential-3d','mass-potential-edge','mass-site-outline','mass-site-fill'].forEach(function(id) {
+    if (map.getLayer(id)) map.removeLayer(id);
+  });
+  ['mass-floors','mass-tower','mass-potential','mass-site'].forEach(function(id) {
+    if (map.getSource(id)) map.removeSource(id);
+  });
+  clearMassLabels();
+  addMassingLayers(map, site, sc);
+}
+
+function buildSVAt(lat, lng) {
+  var container = document.getElementById('mass-sv');
+  container.innerHTML = '';
+
+  function doRender() {
+    var svc = new google.maps.StreetViewService();
+    svc.getPanorama({ location: { lat: lat, lng: lng }, radius: 100 }, function(data, status) {
+      if (status === 'OK') {
+        massSV = new google.maps.StreetViewPanorama(container, {
+          position: { lat: lat, lng: lng },
+          pov: { heading: 0, pitch: 5 },
+          zoom: 0,
+          addressControl: false,
+          fullscreenControl: false,
+          motionTracking: false,
+          motionTrackingControl: false
+        });
+      } else {
+        container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:rgba(255,255,255,.4);font:400 14px var(--sans);text-align:center;padding:40px;">No Street View here - try dropping on a nearby road</div>';
+      }
+      container.classList.add('active');
+      document.getElementById('mass-sv-back').classList.add('visible');
+      document.getElementById('mass-pegman').style.display = 'none';
+      var tabsWrap = document.getElementById('mass-scenario-tabs-wrap');
+      if (tabsWrap) tabsWrap.style.display = 'none';
+    });
+  }
+
+  if (window.google && window.google.maps) { doRender(); return; }
+  fetch('/api/config').then(function(r) { return r.json(); }).then(function(cfg) {
+    if (!cfg.googleMapsKey) return;
+    if (window.google && window.google.maps) { doRender(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://maps.googleapis.com/maps/api/js?key=' + cfg.googleMapsKey + '&callback=_massPegReady';
+    window._massPegReady = function() { doRender(); };
+    document.head.appendChild(s);
+  });
+}
+
+// Pegman drag-and-drop
+function initPegman() {
+  var btn = document.getElementById('mass-pegman');
+  if (!btn) return;
+  btn.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    btn.classList.add('dragging');
+    var ghost = document.createElement('div');
+    ghost.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;font-size:32px;transform:translate(-50%,-100%);';
+    ghost.textContent = '🚶';
+    document.body.appendChild(ghost);
+    // Drop indicator - fixed position, above everything
+    var dropPin = document.createElement('div');
+    dropPin.style.cssText = 'position:fixed;z-index:99999;pointer-events:none;display:none;transform:translate(-50%,-100%);';
+    dropPin.innerHTML = '<div style="width:22px;height:22px;border-radius:50% 50% 50% 0;background:#b8845c;border:2.5px solid #fff;transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,.5);"></div><div style="width:2px;height:14px;background:#b8845c;margin:0 auto;margin-top:1px;"></div>';
+    document.body.appendChild(dropPin);
+
+    function onMove(ev) {
+      ghost.style.left = ev.clientX + 'px';
+      ghost.style.top = ev.clientY + 'px';
+      var mapEl = document.getElementById('mass-3d');
+      if (mapEl) {
+        var rect = mapEl.getBoundingClientRect();
+        var x = ev.clientX - rect.left;
+        var y = ev.clientY - rect.top;
+        if (x >= 0 && y >= 0 && x <= rect.width && y <= rect.height) {
+          dropPin.style.display = 'block';
+          dropPin.style.left = ev.clientX + 'px';
+          dropPin.style.top = ev.clientY + 'px';
+        } else {
+          dropPin.style.display = 'none';
+        }
+      }
+    }
+    function onUp(ev) {
+      btn.classList.remove('dragging');
+      document.body.removeChild(ghost);
+      document.body.removeChild(dropPin);
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      var mapEl = document.getElementById('mass-3d');
+      if (!mapEl || !massMap) return;
+      var rect = mapEl.getBoundingClientRect();
+      var x = ev.clientX - rect.left;
+      var y = ev.clientY - rect.top;
+      if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
+      var lngLat = massMap.unproject([x, y]);
+      buildSVAt(lngLat.lat, lngLat.lng);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    onMove(e);
+  });
+}
+
+// cardClick is defined above — massing popup override applied there directly
+
+// Escape: first press exits Street View, second press closes popup
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var sv = document.getElementById('mass-sv');
+    if (sv && sv.classList.contains('active')) {
+      massExitSV();
+    } else {
+      closeMassPopup();
+    }
+  }
+  // Arrow keys to step through sites in disco mode
+  if (massSite) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); massNavStep(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); massNavStep(-1); }
+  }
+});
+
+// Scrim click-to-close: only fire on genuine click (not map drag overshoot)
+(function() {
+  var scrimDownTarget = null;
+  document.addEventListener('mousedown', function(e) {
+    var scrim = document.getElementById('mass-scrim');
+    if (scrim && scrim.classList.contains('open')) scrimDownTarget = e.target;
+  });
+  document.addEventListener('mouseup', function(e) {
+    var scrim = document.getElementById('mass-scrim');
+    if (scrim && scrim.classList.contains('open') && e.target === scrim && scrimDownTarget === scrim) {
+      closeMassPopup();
+    }
+    scrimDownTarget = null;
+  });
+})();
+
+</script>
+
+<!-- Massing popup HTML shell -->
+<div class="mass-scrim" id="mass-scrim">
+  <div class="mass-modal">
+    <button class="mass-close" onclick="closeMassPopup();">&times;</button>
+    <div class="mass-body">
+    <!-- Left: 3D canvas + Street View -->
+    <div class="mass-canvas">
+      <!-- Standalone site nav -->
+      <div class="mass-sitenav" id="mass-sitenav">
+        <button class="mass-sitenav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous">&#8592;</button>
+        <div class="mass-sitenav-label" id="mass-rank">1 / 154</div>
+        <button class="mass-sitenav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next">&#8594;</button>
+      </div>
+      <div class="mass-map-wrap" id="mass-3d"></div>
+      <div class="mass-sv-wrap" id="mass-sv"></div>
+
+      <!-- Unified tab card -->
+      <div class="mass-tab-card" id="mass-scenario-tabs-wrap">
+        <div class="mass-scenario-tabs">
+          <button class="mass-sc-tab" id="mass-tab-lo" onclick="switchMassScenario('lo')">
+            <span class="mass-sc-label">Low</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-lo">6F</span>
+          </button>
+          <button class="mass-sc-tab active" id="mass-tab-mid" onclick="switchMassScenario('mid')">
+            <span class="mass-sc-label">Mid</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-mid">8F</span>
+          </button>
+          <button class="mass-sc-tab" id="mass-tab-hi" onclick="switchMassScenario('hi')">
+            <span class="mass-sc-label">High</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-hi">10F</span>
+          </button>
+
+        </div>
+        <div class="mass-sc-chip" id="mass-sc-chip">
+          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addf">-</span><span class="mass-sc-chip-lbl">Added floors</span></div>
+          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addnia">-</span><span class="mass-sc-chip-lbl">Added NIA</span></div>
+          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-height">-</span><span class="mass-sc-chip-lbl">Est. height</span></div>
+          <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-cost">-</span><span class="mass-sc-chip-lbl">Build cost</span></div>
+        </div>
+      </div>
+
+      <!-- Pegman Street View -->
+      <div class="mass-pegman-btn" id="mass-pegman" title="Drag to view Street View">
+        <span class="mass-pegman-icon">🚶</span>Street View
+      </div>
+      <button class="mass-sv-back" id="mass-sv-back" onclick="massExitSV()">← 3D</button>
+    </div>
+
+    <!-- Right: info strip -->
+    <div class="mass-info">
+      <div class="mass-site-name" id="mass-name"></div>
+      <div class="mass-site-addr" id="mass-addr"></div>
+      <div class="mass-score-row">
+        <span class="mass-score-num" id="mass-score"></span>
+        <span class="mass-score-label" id="mass-score-lbl">/100</span>
+      </div>
+      <div id="mass-verdict" class="mass-verdict green"></div>
+      <div class="mass-use-chips" id="mass-use-chips"></div>
+
+      <div class="mass-divider"></div>
+
+      <div class="mass-metrics" id="mass-metrics"></div>
+
+      <div class="mass-divider"></div>
+
+      <div class="mass-hook">
+        <div class="mass-hook-label">Intelligence Signal</div>
+        <div class="mass-hook-text" id="mass-hook-text"></div>
+      </div>
+
+      <div class="mass-gated">
+        <div class="mass-gated-label">What's in the full appraisal</div>
+        <div class="mass-gated-row"><span class="mass-gated-icon">£</span><span class="mass-gated-name">Dynamic financial model + residual land value</span><span class="mass-gated-tag">Full report</span></div>
+        <div class="mass-gated-row"><span class="mass-gated-icon">📐</span><span class="mass-gated-name">Architectural assessment - 3 worked massing options</span><span class="mass-gated-tag">Full report</span></div>
+        <div class="mass-gated-row"><span class="mass-gated-icon">🏛</span><span class="mass-gated-name">Heritage impact + setting analysis</span><span class="mass-gated-tag">Full report</span></div>
+        <div class="mass-gated-row"><span class="mass-gated-icon">⚖</span><span class="mass-gated-name">Planning assessment + comparable approvals</span><span class="mass-gated-tag">Full report</span></div>
+        <div class="mass-gated-row"><span class="mass-gated-icon">📄</span><span class="mass-gated-name">Title complexity + acquisition risk</span><span class="mass-gated-tag">Full report</span></div>
+      </div>
+
+      <div id="mass-cta"></div>
+    </div>
+    </div><!-- end mass-body -->
+  </div>
+</div>
+</body>
+</html>
