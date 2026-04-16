@@ -370,18 +370,23 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 /* MODE TABS */
 .mode-tabs {
-  display: flex; border-bottom: 2px solid var(--rule); flex-shrink: 0;
-  background: var(--bg);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px 12px;
+  border-bottom: 1px solid var(--rule); flex-shrink: 0; background: var(--bg);
 }
 .mode-tab {
-  flex: 1; padding: 16px 6px; text-align: center; cursor: pointer;
-  font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ink3); border-bottom: 3px solid transparent; margin-bottom: -2px;
-  background: none; border-top: none; border-left: none; border-right: none;
-  font-family: var(--sans); transition: color .15s;
+  padding: 12px 10px; text-align: left; cursor: pointer;
+  font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink3); border: 1px solid var(--rule); border-radius: 8px;
+  background: var(--bg2); font-family: var(--sans); transition: color .15s, border-color .15s, background .15s;
 }
-.mode-tab:hover { color: var(--ink2); }
-.mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+.mode-tab:hover { color: var(--ink2); border-color: var(--accent); }
+.mode-tab.active { color: var(--ink); border-color: var(--accent); background: var(--bg); }
+.mode-tab small {
+  display: block; margin-top: 4px; font: 500 10px var(--sans); letter-spacing: .02em; text-transform: none; color: var(--ink3);
+}
+.assess-candidate-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #b8845c; box-shadow: 0 0 0 3px rgba(184,132,92,.22);
+}
 
 /* SEARCH BAR */
 .search-bar {
@@ -1034,9 +1039,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   }
 
   /* Mode tabs: compact */
-  .mode-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mode-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; display: flex; }
   .mode-tabs::-webkit-scrollbar { display: none; }
-  .mode-tab { flex-shrink: 0; font-size: 10px; padding: 7px 10px; letter-spacing: .06em; }
+  .mode-tab { flex-shrink: 0; min-width: 132px; font-size: 10px; padding: 9px 10px; letter-spacing: .06em; }
+  .mode-tab small { font-size: 9px; }
   .list-header { padding: 4px 10px; }
   .list-header-label { font-size: 10px; }
   .list-count { font-size: 10px; }
@@ -1213,12 +1219,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
     </div>
   </div>
 
-  <div class="borough-selector">
-    <div class="borough-selector-label">Borough</div>
-    <div class="borough-pills" id="borough-pills">
-      <div class="borough-pill active" data-borough="all" onclick="selectBorough('all',this)">All London</div>
-    </div>
-  </div>
 </div>
 
   <!-- ── RIGHT PANEL ── -->
@@ -1226,9 +1226,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
     <!-- Mode tabs -->
     <div class="mode-tabs">
-      <button class="mode-tab active" id="tab-top100" onclick="setMode('top100')">London Top 100</button>
-      <button class="mode-tab" id="tab-borough" onclick="setMode('borough')">Borough Top 30</button>
-      <button class="mode-tab" id="tab-assess" onclick="setMode('assess')">Assess Any Building</button>
+      <button class="mode-tab active" id="tab-top100" onclick="setMode('top100')">Top 100<small>Ranked London opportunities</small></button>
+      <button class="mode-tab" id="tab-borough" onclick="setMode('borough')">Top 30<small>Focused borough shortlist</small></button>
+      <button class="mode-tab" id="tab-assess" onclick="setMode('assess')">Assess<small>Ad hoc building screen</small></button>
     </div>
 
     <!-- Search / intake bar -->
@@ -1310,6 +1310,7 @@ let popup = null;
 let adHocAssessmentToken = 0;
 let adHocPreviewSite = null;
 let currentMapPerspective = '3d';
+let assessDotsToken = 0;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const verdictClass = s => s >= 80 ? 'green' : s >= 65 ? 'amber' : s >= 50 ? 'amber' : 'grey';
@@ -1948,10 +1949,11 @@ function setMode(mode) {
   if (assessIntake) assessIntake.classList.toggle('visible', mode === 'assess');
   if (listHeader) listHeader.style.display = mode === 'assess' ? 'none' : 'flex';
   if (siteList) siteList.style.display = mode === 'assess' ? 'none' : 'block';
+  if (mode !== 'assess') clearAssessDots();
   setSearchHelp(
     mode === 'assess'
       ? (currentMapPerspective === '3d'
-          ? 'Use 3D view to click a building, or search any London address.'
+          ? 'Zoom in and use the building dots to select a site, or search any London address.'
           : 'Assess mode is ready. Switch to 3D for the cleanest building pick.')
       : 'Top modes are curated browse only. Switch to Assess Any Building to pick an ad hoc site.',
     null
@@ -2218,6 +2220,85 @@ function clearAssessmentSelection() {
   }
 }
 
+function clearAssessDots() {
+  if (MAP && MAP.getSource('assess-candidates')) {
+    MAP.getSource('assess-candidates').setData({ type:'FeatureCollection', features: [] });
+  }
+}
+
+function buildingCentroid(feature) {
+  var geom = feature && feature.geometry;
+  if (!geom || !geom.coordinates || !geom.coordinates[0]) return null;
+  var ring = geom.coordinates[0];
+  if (!ring.length) return null;
+  var sumLng = 0;
+  var sumLat = 0;
+  var count = 0;
+  ring.forEach(function(pt) {
+    if (!pt || pt.length < 2) return;
+    sumLng += Number(pt[0]) || 0;
+    sumLat += Number(pt[1]) || 0;
+    count += 1;
+  });
+  if (!count) return null;
+  return [sumLng / count, sumLat / count];
+}
+
+async function refreshAssessDots() {
+  if (!MAP) return;
+  if (activeMode !== 'assess' || currentMapPerspective !== '3d' || MAP.getZoom() < 15.2) {
+    clearAssessDots();
+    return;
+  }
+  var token = ++assessDotsToken;
+  var center = MAP.getCenter();
+  try {
+    var data = await fetch('/api/os-buildings?lat=' + encodeURIComponent(center.lat) + '&lng=' + encodeURIComponent(center.lng)).then(function(r) { return r.json(); }).catch(function() { return null; });
+    if (token !== assessDotsToken) return;
+    var features = (data && data.features ? data.features : []).slice(0, 24).map(function(f) {
+      var centroid = buildingCentroid(f);
+      if (!centroid) return null;
+      return {
+        type:'Feature',
+        geometry:{ type:'Point', coordinates: centroid },
+        properties:{ building: JSON.stringify(f) }
+      };
+    }).filter(Boolean);
+    var fc = { type:'FeatureCollection', features: features };
+    if (MAP.getSource('assess-candidates')) {
+      MAP.getSource('assess-candidates').setData(fc);
+      return;
+    }
+    MAP.addSource('assess-candidates', { type:'geojson', data: fc });
+    MAP.addLayer({
+      id:'assess-candidates-dot',
+      type:'circle',
+      source:'assess-candidates',
+      paint:{
+        'circle-radius': 5,
+        'circle-color': '#b8845c',
+        'circle-opacity': 0.95,
+        'circle-stroke-width': 3,
+        'circle-stroke-color': 'rgba(184,132,92,0.22)'
+      }
+    });
+    MAP.on('mouseenter','assess-candidates-dot',function(){ MAP.getCanvas().style.cursor='pointer'; });
+    MAP.on('mouseleave','assess-candidates-dot',function(){ MAP.getCanvas().style.cursor=''; });
+    MAP.on('click','assess-candidates-dot',function(e) {
+      var raw = e.features && e.features[0] && e.features[0].properties ? e.features[0].properties.building : null;
+      if (!raw) return;
+      var building = null;
+      try { building = JSON.parse(raw); } catch (_) {}
+      if (!building) return;
+      var coords = e.features[0].geometry && e.features[0].geometry.coordinates ? e.features[0].geometry.coordinates : null;
+      if (!coords) return;
+      assessCoordinates(coords[1], coords[0], { preview: true, message: 'Building selected. Preparing preview…', building: building });
+    });
+  } catch (_) {
+    if (token === assessDotsToken) clearAssessDots();
+  }
+}
+
 function updateAssessmentHighlight(building) {
   if (!MAP || !building) return;
   var fc = { type:'FeatureCollection', features:[building] };
@@ -2412,7 +2493,9 @@ async function assessCoordinates(lat, lng, opts) {
   setSearchHelp(opts.message || 'Scanning building geometry and context…', 'busy');
   try {
     var reversePromise = fetch('/api/reverse?lng=' + encodeURIComponent(lng) + '&lat=' + encodeURIComponent(lat)).then(function(r) { return r.json(); }).catch(function() { return null; });
-    var buildingsPromise = fetch('/api/os-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng)).then(function(r) { return r.json(); }).catch(function() { return null; });
+    var buildingsPromise = opts.building
+      ? Promise.resolve({ features: [opts.building] })
+      : fetch('/api/os-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng)).then(function(r) { return r.json(); }).catch(function() { return null; });
     var listedPromise = fetch('/api/listed-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng) + '&radius=100').then(function(r) { return r.json(); }).catch(function() { return null; });
     var results = await Promise.all([reversePromise, buildingsPromise, listedPromise]);
     if (token !== adHocAssessmentToken) return;
@@ -2629,26 +2712,18 @@ function initMap(token) {
     setSearchHelp(
       activeMode === 'assess'
         ? (currentMapPerspective === '3d'
-            ? 'Use 3D view to click a building, or search any London address.'
+            ? 'Zoom in and use the building dots to select a site, or search any London address.'
             : currentMapPerspective === 'street'
-              ? 'Street view helps orientation. Switch back to 3D to pick a building cleanly.'
-              : '2D is for navigation. Switch back to 3D to pick a building cleanly.')
+              ? 'Street view helps orientation. Switch back to 3D to pick from building dots.'
+              : '2D is for navigation. Switch back to 3D to pick from building dots.')
         : 'Top modes are curated browse only. Switch to Assess Any Building to pick an ad hoc site.',
       null
     );
+    refreshAssessDots();
   };
 
-  MAP.on('click', function(e) {
-    var features = MAP.getLayer('sites-dot')
-      ? MAP.queryRenderedFeatures(e.point, { layers: ['sites-dot'] })
-      : [];
-    if (features && features.length) return;
-    if (activeMode !== 'assess') return;
-    if (currentMapPerspective !== '3d') {
-      setSearchHelp('Building pick works best in 3D. Switch to 3D to assess this building.', 'error');
-      return;
-    }
-    assessCoordinates(e.lngLat.lat, e.lngLat.lng, { preview: true, message: 'Selecting building footprint…' });
+  MAP.on('moveend', function() {
+    refreshAssessDots();
   });
 }
 
@@ -2727,64 +2802,7 @@ function addSiteMarkers() {
   });
 }
 
-function addBoroughOutlines() {
-  fetch('/data/london-boroughs.geojson')
-    .then(r=>r.ok ? r.json() : null)
-    .then(gj=>{
-      if (!gj || !MAP) return;
-      // Add feature id for feature-state
-      gj.features.forEach((f,i) => f.id = i);
-      MAP.addSource('boroughs',{type:'geojson',data:gj});
-      // Colour-coded fill by borough
-      MAP.addLayer({
-        id:'borough-fill', type:'fill', source:'boroughs',
-        paint:{
-          'fill-color': ['match',['get','code'],
-            'southwark','#8b5cf6',
-            'city','#38bdf8',
-            'hackney','#4ade80',
-            '#ffffff'],
-          'fill-opacity': ['case',['boolean',['feature-state','hover'],false],0.18,0.04]
-        }
-      });
-      MAP.addLayer({
-        id:'borough-outline', type:'line', source:'boroughs',
-        paint:{
-          'line-color': ['match',['get','code'],
-            'southwark','#8b5cf6',
-            'city','#38bdf8',
-            'hackney','#4ade80',
-            '#ffffff'],
-          'line-width': ['case',['boolean',['feature-state','hover'],false],2.5,1.2],
-          'line-opacity': ['case',['boolean',['feature-state','hover'],false],0.9,0.5]
-        }
-      });
-      let hoveredId = null;
-      MAP.on('mousemove','borough-fill',e=>{
-        if (e.features.length) {
-          if (hoveredId!==null) MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:false});
-          hoveredId = e.features[0].id;
-          MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:true});
-          // Also highlight matching sites on map
-          const bname = e.features[0].properties.name;
-          highlightBorough(bname);
-        }
-      });
-      MAP.on('mouseleave','borough-fill',()=>{
-        if (hoveredId!==null) MAP.setFeatureState({source:'boroughs',id:hoveredId},{hover:false});
-        hoveredId = null;
-        highlightBorough(null);
-      });
-      MAP.on('click','borough-fill',e=>{
-        if (e.features.length) {
-          const bname = e.features[0].properties.name;
-          const pill = [...document.querySelectorAll('.borough-pill')].find(p=>p.dataset.borough===bname);
-          if (pill) selectBorough(bname, pill);
-        }
-      });
-    })
-    .catch(()=>{});
-}
+function addBoroughOutlines() {}
 
 function highlightBorough(bor) {
   if (!MAP || !MAP.getLayer('sites-dot')) return;
