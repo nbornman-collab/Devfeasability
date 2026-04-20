@@ -404,6 +404,233 @@
     );
   }
 
+  function buildSiteText(site) {
+    return [
+      site.name,
+      site.address,
+      site.desc,
+      site.notes,
+      site.source,
+      site.owner,
+      site.deliveryFlag,
+      site.typology,
+      site.consolidationLabel,
+      site.planning && site.planning.note,
+      site.planning && site.planning.recentDesc,
+      site.planningSummary && site.planningSummary.note
+    ].filter(Boolean).join(' ').toLowerCase();
+  }
+
+  function hasStreetNumber(site) {
+    return /\b\d+[a-z]?([-–]\d+[a-z]?)?\b/.test(String(site.address || '') + ' ' + String(site.name || ''));
+  }
+
+  function assessSiteLegitimacy(site) {
+    if (site && (
+      site.siteLegitimacyPenalty !== undefined ||
+      Array.isArray(site.siteLegitimacyFlags) ||
+      typeof site.credibleSite === 'boolean'
+    )) {
+      var seededPenalty = toNumber(site.siteLegitimacyPenalty, 0) || 0;
+      var seededFlags = Array.isArray(site.siteLegitimacyFlags) ? site.siteLegitimacyFlags.slice() : [];
+      var seededCredible = typeof site.credibleSite === 'boolean' ? site.credibleSite : seededPenalty < 25;
+      return {
+        penalty: seededPenalty,
+        flags: seededFlags,
+        credible: seededCredible
+      };
+    }
+
+    var text = buildSiteText(site);
+    var owner = String(site.owner || '').toLowerCase();
+    var penalties = [];
+    var penalty = 0;
+
+    var openSpaceTerms = /(churchyard|church yard|plaza|square|gardens|garden|walk|passage|forecourt|piazza|courtyard)/i;
+    var civicTerms = /(cathedral|church|guildhall|memorial|public realm|open space|churchyard)/i;
+    var transportTerms = /(station|rail|railway|transport hub|bus station|interchange|network rail|tfl|liverpool street station|supersite|oversite|air rights)/i;
+    var progressedTerms = /(under construction|construction started|completed|built out|delivered|implemented|conditions discharge|consented scheme|full consent)/i;
+    var numbered = hasStreetNumber(site);
+
+    if (openSpaceTerms.test(text) && !numbered) {
+      penalty += 28;
+      penalties.push('open_space_named_parcel');
+    }
+    if (civicTerms.test(text)) {
+      penalty += 18;
+      penalties.push('civic_or_public_realm_context');
+    }
+    if (transportTerms.test(text)) {
+      penalty += 35;
+      penalties.push('transport_or_station_land');
+    }
+    if (/church|cathedral|diocese|bishop|dean and chapter/.test(owner)) {
+      penalty += 14;
+      penalties.push('institutional_owner_signal');
+    }
+    if ((toNumber(site.hectares, 0) || 0) < 0.03 && !site.brownfield && !numbered) {
+      penalty += 10;
+      penalties.push('tiny_non_brownfield_plot');
+    }
+    if (String(site.source || '').toLowerCase().indexOf('corporation of london') !== -1 && !site.brownfield && transportTerms.test(text)) {
+      penalty += 15;
+      penalties.push('strategic_civic_transport_signal');
+    }
+    if (site.deliveryFlag === 'station-oversite') {
+      penalty += 30;
+      penalties.push('station_oversite_delivery_risk');
+    }
+    if (progressedTerms.test(text)) {
+      penalty += 24;
+      penalties.push('already_progressed_or_completed');
+    }
+
+    return {
+      penalty: penalty,
+      flags: penalties,
+      credible: penalty < 25
+    };
+  }
+
+  function classifyShortlistSite(site) {
+    var text = buildSiteText(site);
+    var typology = site.typology || classifySiteTypology(site);
+    var logic = site.developmentLogic || deriveDevelopmentLogic(site);
+    var brownfield = !!(site.brownfield || (site.flags && site.flags.inBrownfield));
+    var fabric = site.fabricProfile || buildFabricProfile(site);
+
+    if (
+      typology === 'city-oversite' ||
+      typology === 'oversite' ||
+      site.deliveryFlag === 'station-oversite' ||
+      /(oversite|air rights|station supersite|station oversite)/.test(text)
+    ) {
+      return { key: 'non-target', priority: 9, reason: 'Oversite or station-air-rights parcel' };
+    }
+
+    if (/(churchyard|public realm|open space|plaza|piazza|square|garden|gardens|memorial)/.test(text) && !hasStreetNumber(site)) {
+      return { key: 'non-target', priority: 9, reason: 'Public realm or open-space parcel' };
+    }
+
+    if (
+      typology === 'southwark-restructure' ||
+      typology === 'estate-restructure' ||
+      /(estate|campus|hospital|health centre|health center|college|university|school|court building|shopping centre|shopping center)/.test(text)
+    ) {
+      return { key: 'complex-campus', priority: 2, reason: 'Estate, campus, or multi-party restructure' };
+    }
+
+    if (
+      typology === 'southwark-replacement' ||
+      typology === 'hackney-depot' ||
+      brownfield ||
+      (fabric && fabric.redevelopmentFriendly) ||
+      /(garage|depot|industrial|warehouse|works|trading estate|business park|retail park|factory|wharf)/.test(text)
+    ) {
+      return { key: 'replacement-parcel', priority: 1, reason: 'Standalone replacement or brownfield parcel' };
+    }
+
+    if (
+      typology === 'city-parcel' ||
+      typology === 'southwark-parcel' ||
+      typology === 'general-parcel' ||
+      typology === 'hackney-fringe' ||
+      logic.mode === 'Strategic height' ||
+      logic.mode === 'Strategic intensification' ||
+      logic.mode === 'Mid-rise intensification' ||
+      logic.mode === 'Setback intensification' ||
+      logic.mode === 'Efficient infill'
+    ) {
+      return { key: 'urban-parcel', priority: 1, reason: 'Standalone urban parcel' };
+    }
+
+    return { key: 'other', priority: 3, reason: 'Unclassified parcel' };
+  }
+
+  function verifyShortlistStatus(site) {
+    var planning = site.planningSummary || site.planning || {};
+    var text = buildSiteText(site);
+    var note = String(planning.note || '').toLowerCase();
+    var recentDesc = String(planning.recentDesc || '').toLowerCase();
+    var majorCount = toNumber(planning.majorCount, 0) || 0;
+    var liveCount = toNumber(planning.liveCount, 0) || 0;
+    var hasRedevelopment = !!planning.hasRedevelopment;
+    var onMarket = !!(site.onMarket || site.on_market);
+    var cleanSlate = /no live consent|clean slate/.test(note);
+    var progressed = (
+      site.deliveryFlag === 'station-oversite' ||
+      (!cleanSlate && (majorCount > 0 || liveCount > 0 || hasRedevelopment)) ||
+      /(under construction|construction started|completed|built out|delivered|implemented|conditions discharge|consented scheme|full consent|live consent|permissioned)/.test(text + ' ' + recentDesc)
+    );
+
+    if (site.deliveryFlag === 'station-oversite' || /(oversite|air rights|station supersite|station oversite)/.test(text)) {
+      return { key: 'non-target', priority: 9, reason: 'Station oversite or transport-led parcel' };
+    }
+    if (progressed) {
+      return { key: 'advanced', priority: 3, reason: 'Already progressed or in active redevelopment pipeline' };
+    }
+    if (onMarket || cleanSlate || site.verified) {
+      return { key: 'clear', priority: 1, reason: onMarket ? 'Explicit live-market status' : cleanSlate ? 'Planning note says clean slate' : 'Verified with no active redevelopment signal' };
+    }
+    return { key: 'unclear', priority: 2, reason: 'Status not yet verified' };
+  }
+
+  function deriveShortlistDecision(site) {
+    var legitimacy = assessSiteLegitimacy(site);
+    var classification = classifyShortlistSite(site);
+    var status = verifyShortlistStatus(site);
+    var hardFlags = {
+      open_space_named_parcel: true,
+      civic_or_public_realm_context: true,
+      transport_or_station_land: true,
+      strategic_civic_transport_signal: true,
+      station_oversite_delivery_risk: true,
+      city_open_space: true
+    };
+    var exclusionCode = null;
+    var exclusionReason = null;
+
+    for (var i = 0; i < legitimacy.flags.length; i += 1) {
+      if (hardFlags[legitimacy.flags[i]]) {
+        exclusionCode = legitimacy.flags[i];
+        exclusionReason = legitimacy.flags[i].replace(/_/g, ' ');
+        break;
+      }
+    }
+
+    if (!exclusionCode && classification.key === 'non-target') {
+      exclusionCode = classification.key;
+      exclusionReason = classification.reason;
+    }
+    if (!exclusionCode && status.key === 'non-target') {
+      exclusionCode = status.key;
+      exclusionReason = status.reason;
+    }
+    if (!exclusionCode && status.key === 'advanced') {
+      exclusionCode = status.key;
+      exclusionReason = status.reason;
+    }
+    if (!exclusionCode && !legitimacy.credible) {
+      exclusionCode = 'low-credibility';
+      exclusionReason = legitimacy.flags.length ? legitimacy.flags[0].replace(/_/g, ' ') : 'Low credibility parcel';
+    }
+
+    return {
+      eligible: !exclusionCode,
+      exclusionCode: exclusionCode,
+      exclusionReason: exclusionReason,
+      classKey: classification.key,
+      classPriority: classification.priority,
+      classReason: classification.reason,
+      statusKey: status.key,
+      statusPriority: status.priority,
+      statusReason: status.reason,
+      legitimacyPenalty: legitimacy.penalty,
+      legitimacyFlags: legitimacy.flags.slice(),
+      credible: legitimacy.credible
+    };
+  }
+
   function buildCanonicalMetrics(site) {
     var areaM2 = resolveSiteAreaM2(site);
     var existingFloors = inferExistingFloors(site, toNumber(site.floorToFloorM, 3.8) || 3.8);
@@ -438,6 +665,8 @@
     model.roughProposedGiaM2 = model.canonicalMetrics.roughProposedGiaM2;
     model.roughGiaUpliftPct = model.canonicalMetrics.roughGiaUpliftPct;
     model.developmentLogic = deriveDevelopmentLogic(model);
+    model.siteLegitimacy = assessSiteLegitimacy(model);
+    model.shortlist = deriveShortlistDecision(model);
     model.scenarioState = buildScenarioState(model);
     model.financialAssumptions = defaultFinancialAssumptions(model);
     model.marketModel = defaultMarket(model);
@@ -451,6 +680,10 @@
     canonicalScenarioKey: canonicalScenarioKey,
     buildPlanningPolicyProfile: buildPlanningPolicyProfile,
     buildFabricProfile: buildFabricProfile,
+    assessSiteLegitimacy: assessSiteLegitimacy,
+    classifyShortlistSite: classifyShortlistSite,
+    verifyShortlistStatus: verifyShortlistStatus,
+    deriveShortlistDecision: deriveShortlistDecision,
     classifySiteTypology: classifySiteTypology,
     buildCanonicalMetrics: buildCanonicalMetrics,
     deriveDevelopmentLogic: deriveDevelopmentLogic,
