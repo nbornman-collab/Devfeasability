@@ -1627,7 +1627,9 @@ function normaliseSite(s, idx) {
     credibleSite: legitimacy.credible,
     shortlistEligible: shortlist.eligible,
     shortlistExclusionCode: shortlist.exclusionCode,
-    shortlistReason: shortlist.exclusionReason || shortlist.statusReason || shortlist.classReason || null,
+    shortlistReason: shortlist.exclusionReason || shortlist.bucketReason || shortlist.statusReason || shortlist.classReason || null,
+    shortlistBucket: shortlist.bucketKey,
+    shortlistBucketPriority: shortlist.bucketPriority,
     shortlistClass: shortlist.classKey,
     shortlistClassPriority: shortlist.classPriority,
     shortlistStatus: shortlist.statusKey,
@@ -1788,7 +1790,9 @@ async function loadSites() {
         score: updatedSite.score,
         shortlistEligible: shortlist ? shortlist.eligible : false,
         shortlistExclusionCode: shortlist ? shortlist.exclusionCode : 'city_open_space',
-        shortlistReason: shortlist ? (shortlist.exclusionReason || shortlist.statusReason || shortlist.classReason || null) : 'city open space',
+        shortlistReason: shortlist ? (shortlist.exclusionReason || shortlist.bucketReason || shortlist.statusReason || shortlist.classReason || null) : 'city open space',
+        shortlistBucket: shortlist ? shortlist.bucketKey : 'non-target',
+        shortlistBucketPriority: shortlist ? shortlist.bucketPriority : 9,
         shortlistClass: shortlist ? shortlist.classKey : 'non-target',
         shortlistClassPriority: shortlist ? shortlist.classPriority : 9,
         shortlistStatus: shortlist ? shortlist.statusKey : 'non-target',
@@ -1801,6 +1805,7 @@ async function loadSites() {
 
   ALL_SITES = ALL_SITES.sort((a,b) => {
     if ((a.shortlistEligible ? 0 : 1) !== (b.shortlistEligible ? 0 : 1)) return (a.shortlistEligible ? 0 : 1) - (b.shortlistEligible ? 0 : 1);
+    if ((a.shortlistBucketPriority || 99) !== (b.shortlistBucketPriority || 99)) return (a.shortlistBucketPriority || 99) - (b.shortlistBucketPriority || 99);
     if ((a.shortlistClassPriority || 99) !== (b.shortlistClassPriority || 99)) return (a.shortlistClassPriority || 99) - (b.shortlistClassPriority || 99);
     if ((a.shortlistStatusPriority || 99) !== (b.shortlistStatusPriority || 99)) return (a.shortlistStatusPriority || 99) - (b.shortlistStatusPriority || 99);
     if (b.score !== a.score) return b.score - a.score;

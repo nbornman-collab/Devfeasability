@@ -436,78 +436,91 @@
   var SHORTLIST_STATUS_OVERRIDES = {
     '100 leadenhall street': {
       key: 'advanced',
+      bucket: 'advanced',
       priority: 3,
       reason: 'Consented 56-storey tower scheme, not an open acquisition target',
       evidence: 'sites/100-leadenhall/MARKET.md; SOM consent note'
     },
     'stone house and 128 170 bishopsgate': {
       key: 'advanced',
+      bucket: 'advanced',
       priority: 3,
       reason: 'Stone House / Staple Hall has prior tower and hotel planning history, not a clean-slate target',
       evidence: 'GLA Stone House and Staple Hall planning reports'
     },
     'blackfriars gateway ec4': {
       key: 'advanced',
+      bucket: 'gone',
       priority: 3,
       reason: '1-16 Blackfriars Road is the One Blackfriars site, already consented and completed',
       evidence: 'GLA Blackfriars Road planning report / One Blackfriars completion'
     },
     'crown place earl street': {
       key: 'advanced',
+      bucket: 'gone',
       priority: 3,
       reason: 'One Crown Place is already built and trading as a mixed-use scheme',
       evidence: 'onecrownplace.com'
     },
     'barts square little britain': {
       key: 'advanced',
+      bucket: 'gone',
       priority: 3,
       reason: 'Barts Square is already completed as a mixed-use quarter',
       evidence: 'Helical past developments / AJ completion coverage'
     },
     '15 16 minories and 62 aldgate high street': {
       key: 'advanced',
+      bucket: 'gone',
       priority: 3,
       reason: 'The Haydon is already in active residential sales, not an open acquisition target',
       evidence: 'Savills / Rightmove new-home listings'
     },
     'land at royal mint street': {
       key: 'advanced',
+      bucket: 'advanced',
       priority: 3,
       reason: 'Royal Mint Street already has granted mixed-use redevelopment, so it is not a clean-slate target',
       evidence: 'Tower Hamlets planning committee / GLA report'
     },
     'smithfield market ec1': {
       key: 'advanced',
+      bucket: 'advanced',
       priority: 3,
       reason: 'Smithfield is already in strategic redevelopment and museum-delivery pipeline',
       evidence: 'City of London / West Smithfield redevelopment coverage'
     },
     '10 trinity square': {
       key: 'advanced',
+      bucket: 'gone',
       priority: 3,
       reason: 'Grade II* building operating as the Four Seasons Hotel, not a live target site',
       evidence: 'Wikipedia / Four Seasons at Ten Trinity Square'
     },
     'curtain road worship street': {
       key: 'advanced',
+      bucket: 'advanced',
       priority: 3,
       reason: 'Curtain Road and Worship Street is already in active redevelopment planning, not a clean-slate target',
       evidence: 'KPF / Shoreditch Works planning coverage'
     },
     'aldgate place whitechapel high street': {
       key: 'advanced',
+      bucket: 'gone',
       priority: 3,
       reason: 'Aldgate Place has already been developed and completed in phases',
       evidence: 'Buildington / Tower Hamlets Aldgate Place records'
     },
     'sugar quay lower thames street': {
       key: 'advanced',
+      bucket: 'gone',
       priority: 3,
       reason: 'Sugar Quay already has prior redevelopment history on an existing built waterfront site, not a clean-slate target',
       evidence: 'GLA Sugar Quay planning report / existing quay record'
     },
     'norton folgate spitalfields': {
       key: 'advanced',
+      bucket: 'gone',
       priority: 3,
       reason: 'Norton Folgate is already delivered and leasing as a mixed-use scheme',
       evidence: 'norton-folgate.co.uk leasing site / British Land development'
@@ -547,7 +560,7 @@
     var penalties = [];
     var penalty = 0;
 
-    var openSpaceTerms = /(churchyard|church yard|plaza|square|gardens|garden|walk|passage|forecourt|piazza|courtyard|fields|cemetery|burial ground)/i;
+    var openSpaceTerms = /(churchyard|church yard|plaza|square|gardens|garden|walk|passage|forecourt|piazza|courtyard|bunhill fields|playing fields|sports field|sports fields|cemetery|burial ground)/i;
     var civicTerms = /(cathedral|church|guildhall|memorial|public realm|open space|churchyard)/i;
     var transportTerms = /(station|rail|railway|transport hub|bus station|interchange|network rail|tfl|liverpool street station|supersite|oversite|air rights)/i;
     var progressedTerms = /(under construction|construction started|completed|built out|delivered|implemented|conditions discharge|consented scheme|full consent)/i;
@@ -609,7 +622,7 @@
       return { key: 'non-target', priority: 9, reason: 'Oversite or station-air-rights parcel' };
     }
 
-    if (/(churchyard|public realm|open space|plaza|piazza|square|garden|gardens|memorial|fields|cemetery|burial ground)/.test(text) && !hasStreetNumber(site)) {
+    if (/(churchyard|public realm|open space|plaza|piazza|square|garden|gardens|memorial|bunhill fields|playing fields|sports field|sports fields|cemetery|burial ground)/.test(text) && !hasStreetNumber(site)) {
       return { key: 'non-target', priority: 9, reason: 'Public realm or open-space parcel' };
     }
 
@@ -679,11 +692,12 @@
     );
 
     if (site.deliveryFlag === 'station-oversite' || /(oversite|air rights|station supersite|station oversite)/.test(text)) {
-      return { key: 'non-target', priority: 9, reason: 'Station oversite or transport-led parcel', evidence: null };
+      return { key: 'non-target', bucket: 'non-target', priority: 9, reason: 'Station oversite or transport-led parcel', evidence: null };
     }
     if (override) {
       return {
         key: override.key,
+        bucket: override.bucket || null,
         priority: override.priority,
         reason: override.reason,
         evidence: override.evidence,
@@ -691,7 +705,7 @@
       };
     }
     if (progressed) {
-      return { key: 'advanced', priority: 3, reason: 'Already progressed or in active redevelopment pipeline', evidence: null };
+      return { key: 'advanced', bucket: 'advanced', priority: 3, reason: 'Already progressed or in active redevelopment pipeline', evidence: null };
     }
     if (onMarket || cleanSlate) {
       return {
@@ -757,6 +771,54 @@
       exclusionReason = legitimacy.flags.length ? legitimacy.flags[0].replace(/_/g, ' ') : 'Low credibility parcel';
     }
 
+    var name = String(site.name || '').toLowerCase();
+    var consolidationLabel = String(site.consolidationLabel || site.consolidation_label || '').toLowerCase();
+    var specificAddress = hasStreetNumber(site);
+    var liveMarket = !!(site.onMarket || site.on_market);
+    var titleKnown = !!(site.hmlr || site.hmlr_title || site.owner || toNumber(site.consolidationTitles, site.consolidation_titles, 0));
+    var genericParcel = /^(land\b|site\b|former\b)/.test(name) || /(land bounded by|land between|site bordering|adjacent|cluster|corridor|district|fringe)/.test(name);
+    var easyAssembly = /(single freehold|easy assembly)/.test(consolidationLabel);
+    var bucketKey = 'worth-testing';
+    var bucketPriority = 2;
+    var bucketReason = 'Promising, but still needs deeper testing';
+
+    if (classification.key === 'non-target' || status.key === 'non-target' || (exclusionCode && exclusionCode !== 'advanced')) {
+      bucketKey = 'non-target';
+      bucketPriority = 9;
+      bucketReason = exclusionReason || classification.reason || status.reason || 'Non-target parcel';
+    } else if (status.key === 'advanced') {
+      var gone = status.bucket === 'gone' || /(completed|built|operating|trading|sales|hotel|leasing|delivered)/.test(String(status.reason || '').toLowerCase());
+      bucketKey = gone ? 'gone' : 'advanced';
+      bucketPriority = gone ? 8 : 7;
+      bucketReason = status.reason;
+    } else if (
+      status.key === 'clear' &&
+      classification.key !== 'complex-campus' &&
+      legitimacy.penalty === 0 &&
+      !genericParcel &&
+      (specificAddress || liveMarket || easyAssembly || titleKnown)
+    ) {
+      bucketKey = 'pursue';
+      bucketPriority = 1;
+      bucketReason = liveMarket
+        ? 'Clear status with live market signal'
+        : easyAssembly
+          ? 'Clear status with specific parcel and workable assembly'
+          : 'Clear status with specific parcel identity';
+    } else {
+      bucketKey = 'worth-testing';
+      bucketPriority = 2;
+      bucketReason = status.key === 'unclear'
+        ? 'Needs deeper planning verification'
+        : classification.key === 'complex-campus'
+          ? 'Promising, but complex enough to need deeper testing'
+          : genericParcel
+            ? 'Promising allocation-style parcel, but not yet specific enough to pursue cold'
+            : (!specificAddress && !liveMarket)
+              ? 'Promising site, but identity and acquisition route still need testing'
+              : 'Promising, but still needs deeper testing';
+    }
+
     return {
       eligible: !exclusionCode,
       exclusionCode: exclusionCode,
@@ -768,6 +830,9 @@
       statusPriority: status.priority,
       statusReason: status.reason,
       statusEvidence: status.evidence || null,
+      bucketKey: bucketKey,
+      bucketPriority: bucketPriority,
+      bucketReason: bucketReason,
       legitimacyPenalty: legitimacy.penalty,
       legitimacyFlags: legitimacy.flags.slice(),
       credible: legitimacy.credible
