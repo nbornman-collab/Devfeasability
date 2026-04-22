@@ -440,6 +440,18 @@
       reason: 'Consented 56-storey tower scheme, not an open acquisition target',
       evidence: 'sites/100-leadenhall/MARKET.md; SOM consent note'
     },
+    'stone house and 128 170 bishopsgate': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Stone House / Staple Hall has prior tower and hotel planning history, not a clean-slate target',
+      evidence: 'GLA Stone House and Staple Hall planning reports'
+    },
+    'blackfriars gateway ec4': {
+      key: 'advanced',
+      priority: 3,
+      reason: '1-16 Blackfriars Road is the One Blackfriars site, already consented and completed',
+      evidence: 'GLA Blackfriars Road planning report / One Blackfriars completion'
+    },
     'crown place earl street': {
       key: 'advanced',
       priority: 3,
@@ -452,17 +464,53 @@
       reason: 'Barts Square is already completed as a mixed-use quarter',
       evidence: 'Helical past developments / AJ completion coverage'
     },
+    '15 16 minories and 62 aldgate high street': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'The Haydon is already in active residential sales, not an open acquisition target',
+      evidence: 'Savills / Rightmove new-home listings'
+    },
+    'land at royal mint street': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Royal Mint Street already has granted mixed-use redevelopment, so it is not a clean-slate target',
+      evidence: 'Tower Hamlets planning committee / GLA report'
+    },
+    'smithfield market ec1': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Smithfield is already in strategic redevelopment and museum-delivery pipeline',
+      evidence: 'City of London / West Smithfield redevelopment coverage'
+    },
     '10 trinity square': {
       key: 'advanced',
       priority: 3,
       reason: 'Grade II* building operating as the Four Seasons Hotel, not a live target site',
       evidence: 'Wikipedia / Four Seasons at Ten Trinity Square'
     },
-    '15 16 minories and 62 aldgate high street': {
+    'curtain road worship street': {
       key: 'advanced',
       priority: 3,
-      reason: 'The Haydon is already in active residential sales, not an open acquisition target',
-      evidence: 'Savills / Rightmove new-home listings'
+      reason: 'Curtain Road and Worship Street is already in active redevelopment planning, not a clean-slate target',
+      evidence: 'KPF / Shoreditch Works planning coverage'
+    },
+    'aldgate place whitechapel high street': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Aldgate Place has already been developed and completed in phases',
+      evidence: 'Buildington / Tower Hamlets Aldgate Place records'
+    },
+    'sugar quay lower thames street': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Sugar Quay already has prior redevelopment history on an existing built waterfront site, not a clean-slate target',
+      evidence: 'GLA Sugar Quay planning report / existing quay record'
+    },
+    'norton folgate spitalfields': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Norton Folgate is already delivered and leasing as a mixed-use scheme',
+      evidence: 'norton-folgate.co.uk leasing site / British Land development'
     }
   };
 
