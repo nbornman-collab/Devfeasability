@@ -547,7 +547,7 @@
     var penalties = [];
     var penalty = 0;
 
-    var openSpaceTerms = /(churchyard|church yard|plaza|square|gardens|garden|walk|passage|forecourt|piazza|courtyard)/i;
+    var openSpaceTerms = /(churchyard|church yard|plaza|square|gardens|garden|walk|passage|forecourt|piazza|courtyard|fields|cemetery|burial ground)/i;
     var civicTerms = /(cathedral|church|guildhall|memorial|public realm|open space|churchyard)/i;
     var transportTerms = /(station|rail|railway|transport hub|bus station|interchange|network rail|tfl|liverpool street station|supersite|oversite|air rights)/i;
     var progressedTerms = /(under construction|construction started|completed|built out|delivered|implemented|conditions discharge|consented scheme|full consent)/i;
@@ -609,16 +609,16 @@
       return { key: 'non-target', priority: 9, reason: 'Oversite or station-air-rights parcel' };
     }
 
-    if (/(churchyard|public realm|open space|plaza|piazza|square|garden|gardens|memorial)/.test(text) && !hasStreetNumber(site)) {
+    if (/(churchyard|public realm|open space|plaza|piazza|square|garden|gardens|memorial|fields|cemetery|burial ground)/.test(text) && !hasStreetNumber(site)) {
       return { key: 'non-target', priority: 9, reason: 'Public realm or open-space parcel' };
     }
 
     if (
       typology === 'southwark-restructure' ||
       typology === 'estate-restructure' ||
-      /(estate|campus|hospital|health centre|health center|college|university|school|court building|shopping centre|shopping center)/.test(text)
+      /(estate|campus|hospital|health centre|health center|college|university|school|court building|shopping centre|shopping center|stadium|football ground|sports ground|athletics track|leisure centre|leisure center)/.test(text)
     ) {
-      return { key: 'complex-campus', priority: 2, reason: 'Estate, campus, or multi-party restructure' };
+      return { key: 'complex-campus', priority: 2, reason: 'Estate, campus, sports, or multi-party restructure' };
     }
 
     if (
@@ -655,9 +655,22 @@
     var recentDesc = String(planning.recentDesc || '').toLowerCase();
     var majorCount = toNumber(planning.majorCount, 0) || 0;
     var liveCount = toNumber(planning.liveCount, 0) || 0;
+    var totalCount = toNumber(planning.total, planning.count, 0);
     var hasRedevelopment = !!planning.hasRedevelopment;
     var onMarket = !!(site.onMarket || site.on_market);
     var cleanSlate = /no live consent|clean slate/.test(note);
+    var planningPending = /(planning data pending|requires verification before planning query|coordinates require verification|pending)/.test(note);
+    var hasStructuredPlanningSignal = (
+      planning.hasRedevelopment !== undefined ||
+      planning.majorCount !== undefined ||
+      planning.liveCount !== undefined ||
+      planning.total !== undefined ||
+      planning.count !== undefined ||
+      planning.recentRef !== undefined ||
+      planning.recentDate !== undefined ||
+      planning.recentDesc !== undefined
+    );
+    var hasReliablePlanningCheck = !!(hasStructuredPlanningSignal && !planningPending);
     var override = resolveShortlistStatusOverride(site);
     var progressed = (
       site.deliveryFlag === 'station-oversite' ||
@@ -680,15 +693,28 @@
     if (progressed) {
       return { key: 'advanced', priority: 3, reason: 'Already progressed or in active redevelopment pipeline', evidence: null };
     }
-    if (onMarket || cleanSlate || site.verified) {
+    if (onMarket || cleanSlate) {
       return {
         key: 'clear',
         priority: 1,
-        reason: onMarket ? 'Explicit live-market status' : cleanSlate ? 'Planning note says clean slate' : 'Verified with no active redevelopment signal',
+        reason: onMarket ? 'Explicit live-market status' : 'Planning note says clean slate',
         evidence: null
       };
     }
-    return { key: 'unclear', priority: 2, reason: 'Status not yet verified', evidence: null };
+    if (hasReliablePlanningCheck && totalCount !== null && majorCount === 0 && liveCount === 0 && !hasRedevelopment) {
+      return {
+        key: 'clear',
+        priority: 1,
+        reason: 'Planning status checked with no active redevelopment signal',
+        evidence: null
+      };
+    }
+    return {
+      key: 'unclear',
+      priority: 2,
+      reason: planningPending ? 'Planning verification still pending' : 'Status not yet verified from planning evidence',
+      evidence: null
+    };
   }
 
   function deriveShortlistDecision(site) {
