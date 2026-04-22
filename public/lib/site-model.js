@@ -425,6 +425,59 @@
     return /\b\d+[a-z]?([-–]\d+[a-z]?)?\b/.test(String(site.address || '') + ' ' + String(site.name || ''));
   }
 
+  function normaliseSiteKey(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  var SHORTLIST_STATUS_OVERRIDES = {
+    '100 leadenhall street': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Consented 56-storey tower scheme, not an open acquisition target',
+      evidence: 'sites/100-leadenhall/MARKET.md; SOM consent note'
+    },
+    'crown place earl street': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'One Crown Place is already built and trading as a mixed-use scheme',
+      evidence: 'onecrownplace.com'
+    },
+    'barts square little britain': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Barts Square is already completed as a mixed-use quarter',
+      evidence: 'Helical past developments / AJ completion coverage'
+    },
+    '10 trinity square': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'Grade II* building operating as the Four Seasons Hotel, not a live target site',
+      evidence: 'Wikipedia / Four Seasons at Ten Trinity Square'
+    },
+    '15 16 minories and 62 aldgate high street': {
+      key: 'advanced',
+      priority: 3,
+      reason: 'The Haydon is already in active residential sales, not an open acquisition target',
+      evidence: 'Savills / Rightmove new-home listings'
+    }
+  };
+
+  function resolveShortlistStatusOverride(site) {
+    var keys = [site && site.slug, site && site.name, site && site.address]
+      .map(normaliseSiteKey)
+      .filter(Boolean);
+    for (var i = 0; i < keys.length; i += 1) {
+      if (SHORTLIST_STATUS_OVERRIDES[keys[i]]) {
+        return Object.assign({ matchedOn: keys[i] }, SHORTLIST_STATUS_OVERRIDES[keys[i]]);
+      }
+    }
+    return null;
+  }
+
   function assessSiteLegitimacy(site) {
     if (site && (
       site.siteLegitimacyPenalty !== undefined ||
@@ -557,6 +610,7 @@
     var hasRedevelopment = !!planning.hasRedevelopment;
     var onMarket = !!(site.onMarket || site.on_market);
     var cleanSlate = /no live consent|clean slate/.test(note);
+    var override = resolveShortlistStatusOverride(site);
     var progressed = (
       site.deliveryFlag === 'station-oversite' ||
       (!cleanSlate && (majorCount > 0 || liveCount > 0 || hasRedevelopment)) ||
@@ -564,15 +618,29 @@
     );
 
     if (site.deliveryFlag === 'station-oversite' || /(oversite|air rights|station supersite|station oversite)/.test(text)) {
-      return { key: 'non-target', priority: 9, reason: 'Station oversite or transport-led parcel' };
+      return { key: 'non-target', priority: 9, reason: 'Station oversite or transport-led parcel', evidence: null };
+    }
+    if (override) {
+      return {
+        key: override.key,
+        priority: override.priority,
+        reason: override.reason,
+        evidence: override.evidence,
+        overridden: true
+      };
     }
     if (progressed) {
-      return { key: 'advanced', priority: 3, reason: 'Already progressed or in active redevelopment pipeline' };
+      return { key: 'advanced', priority: 3, reason: 'Already progressed or in active redevelopment pipeline', evidence: null };
     }
     if (onMarket || cleanSlate || site.verified) {
-      return { key: 'clear', priority: 1, reason: onMarket ? 'Explicit live-market status' : cleanSlate ? 'Planning note says clean slate' : 'Verified with no active redevelopment signal' };
+      return {
+        key: 'clear',
+        priority: 1,
+        reason: onMarket ? 'Explicit live-market status' : cleanSlate ? 'Planning note says clean slate' : 'Verified with no active redevelopment signal',
+        evidence: null
+      };
     }
-    return { key: 'unclear', priority: 2, reason: 'Status not yet verified' };
+    return { key: 'unclear', priority: 2, reason: 'Status not yet verified', evidence: null };
   }
 
   function deriveShortlistDecision(site) {
@@ -625,6 +693,7 @@
       statusKey: status.key,
       statusPriority: status.priority,
       statusReason: status.reason,
+      statusEvidence: status.evidence || null,
       legitimacyPenalty: legitimacy.penalty,
       legitimacyFlags: legitimacy.flags.slice(),
       credible: legitimacy.credible
@@ -681,6 +750,7 @@
     buildPlanningPolicyProfile: buildPlanningPolicyProfile,
     buildFabricProfile: buildFabricProfile,
     assessSiteLegitimacy: assessSiteLegitimacy,
+    resolveShortlistStatusOverride: resolveShortlistStatusOverride,
     classifyShortlistSite: classifyShortlistSite,
     verifyShortlistStatus: verifyShortlistStatus,
     deriveShortlistDecision: deriveShortlistDecision,
