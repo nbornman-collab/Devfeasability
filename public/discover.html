@@ -1266,6 +1266,8 @@ let adHocAssessmentToken = 0;
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const verdictClass = s => s >= 80 ? 'green' : s >= 65 ? 'amber' : s >= 50 ? 'amber' : 'grey';
 const verdictLabel = s => s >= 80 ? 'Top Opportunity' : s >= 65 ? 'Strong' : s >= 50 ? 'Credible' : 'Due Diligence';
+const headroomVerdictClass = v => v === 'yes' ? 'green' : v === 'no' ? 'red' : 'amber';
+const headroomVerdictLabel = v => v === 'yes' ? 'Headroom: Yes' : v === 'no' ? 'Headroom: No' : 'Headroom: Unclear';
 const boroughChipClass = b => {
   const l = (b||'').toLowerCase();
   if (l.includes('southwark')) return 'bor-southwark';
@@ -1586,6 +1588,19 @@ function normaliseSite(s, idx) {
   const liveScore = baseScenario ? baseScenario.score : computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore);
   const score = Math.max(0, liveScore - legitimacy.penalty);
   const gdvEst = baseScenario && baseScenario.gdv ? (baseScenario.gdv / 1e6).toFixed(1) : '0.0';
+  const headroomVerdict = canonical && canonical.headroomVerdict ? canonical.headroomVerdict : (shortlist.eligible ? 'unclear' : 'no');
+  const headroomUpsideScore = canonical && canonical.headroomUpsideScore != null ? canonical.headroomUpsideScore : 0;
+  const discoverVerdict = canonical && canonical.discoverVerdict ? canonical.discoverVerdict : {
+    label: headroomVerdictLabel(headroomVerdict),
+    className: headroomVerdictClass(headroomVerdict),
+    primary: shortlist.exclusionReason || shortlist.bucketReason || shortlist.statusReason || shortlist.classReason || null,
+    reasons: [],
+    secondary: headroomVerdict === 'yes' ? 'Upside: Modest' : 'Needs verification'
+  };
+  const headroomConfidence = canonical && canonical.headroomConfidence ? canonical.headroomConfidence : computeConfidence(s);
+  const headroomConfidenceScore = canonical && canonical.headroomConfidenceScore != null
+    ? canonical.headroomConfidenceScore
+    : (headroomConfidence === 'high' ? 10 : headroomConfidence === 'medium' ? 6 : 2);
 
   return {
     id: idx, name: s.name||s.address, address: s.address||s.name, borough,
@@ -1620,11 +1635,30 @@ function normaliseSite(s, idx) {
     listingAgent: s.listing_agent||null,
     motScore: computeMotivatedSeller(s),
     nhleCount: s.nhle_count||0,
-    dataConfidence: computeConfidence(s),
+    dataConfidence: headroomConfidence,
     utilisationScore, utilisationData, utilisationLabel,
     siteLegitimacyPenalty: legitimacy.penalty,
     siteLegitimacyFlags: legitimacy.flags,
     credibleSite: legitimacy.credible,
+    siteValidity: canonical && canonical.siteValidity ? canonical.siteValidity.valid : true,
+    siteValidityReason: canonical && canonical.siteValidity ? canonical.siteValidity.reason : null,
+    progressionStatus: canonical && canonical.progressionStatusData ? canonical.progressionStatusData.key : 'unclear',
+    progressionReason: canonical && canonical.progressionStatusData ? canonical.progressionStatusData.reason : null,
+    headroomVerdict,
+    headroomVerdictLabel: discoverVerdict.label,
+    headroomVerdictClass: discoverVerdict.className,
+    headroomReasonPrimary: discoverVerdict.primary,
+    headroomReasons: discoverVerdict.reasons || [],
+    headroomSecondaryLine: discoverVerdict.secondary,
+    headroomUpsideScore,
+    headroomRankBand: canonical && canonical.headroomRankBand ? canonical.headroomRankBand : 'none',
+    headroomConfidence,
+    headroomConfidenceScore,
+    architecturalValueBand: canonical && canonical.architecturalValueBand ? canonical.architecturalValueBand : null,
+    architecturalValueReason: canonical && canonical.architecturalValueReason ? canonical.architecturalValueReason : null,
+    coreViabilityBand: canonical && canonical.coreViabilityBand ? canonical.coreViabilityBand : null,
+    coreViabilityReason: canonical && canonical.coreViabilityReason ? canonical.coreViabilityReason : null,
+    tallCapable: canonical && canonical.tallCapable ? canonical.tallCapable : false,
     shortlistEligible: shortlist.eligible,
     shortlistExclusionCode: shortlist.exclusionCode,
     shortlistReason: shortlist.exclusionReason || shortlist.bucketReason || shortlist.statusReason || shortlist.classReason || null,
@@ -1804,13 +1838,13 @@ async function loadSites() {
   }
 
   ALL_SITES = ALL_SITES.sort((a,b) => {
-    if ((a.shortlistEligible ? 0 : 1) !== (b.shortlistEligible ? 0 : 1)) return (a.shortlistEligible ? 0 : 1) - (b.shortlistEligible ? 0 : 1);
-    if ((a.shortlistBucketPriority || 99) !== (b.shortlistBucketPriority || 99)) return (a.shortlistBucketPriority || 99) - (b.shortlistBucketPriority || 99);
-    if ((a.shortlistClassPriority || 99) !== (b.shortlistClassPriority || 99)) return (a.shortlistClassPriority || 99) - (b.shortlistClassPriority || 99);
-    if ((a.shortlistStatusPriority || 99) !== (b.shortlistStatusPriority || 99)) return (a.shortlistStatusPriority || 99) - (b.shortlistStatusPriority || 99);
+    const verdictRank = v => v === 'yes' ? 0 : v === 'unclear' ? 1 : 2;
+    if (verdictRank(a.headroomVerdict) !== verdictRank(b.headroomVerdict)) return verdictRank(a.headroomVerdict) - verdictRank(b.headroomVerdict);
+    if (a.headroomVerdict === 'yes' || b.headroomVerdict === 'yes') {
+      if ((b.headroomUpsideScore || 0) !== (a.headroomUpsideScore || 0)) return (b.headroomUpsideScore || 0) - (a.headroomUpsideScore || 0);
+      if ((b.headroomConfidenceScore || 0) !== (a.headroomConfidenceScore || 0)) return (b.headroomConfidenceScore || 0) - (a.headroomConfidenceScore || 0);
+    }
     if (b.score !== a.score) return b.score - a.score;
-    if (b.motScore !== a.motScore) return b.motScore - a.motScore;
-    if ((b.verified ? 1 : 0) !== (a.verified ? 1 : 0)) return (b.verified ? 1 : 0) - (a.verified ? 1 : 0);
     if (b.planScore !== a.planScore) return b.planScore - a.planScore;
     if (b.plotM2 !== a.plotM2) return b.plotM2 - a.plotM2;
     return a.name.localeCompare(b.name);
@@ -1890,13 +1924,13 @@ function setMode(mode) {
 
 // ── Filtered sites ────────────────────────────────────────────────────────────
 function filteredSites() {
-  const shortlistSites = ALL_SITES.filter(s => s.shortlistEligible !== false);
-  let list = activeMode === 'search' ? ALL_SITES : shortlistSites;
+  const headroomYesSites = ALL_SITES.filter(s => s.headroomVerdict === 'yes');
+  let list = activeMode === 'search' ? ALL_SITES : headroomYesSites;
   if (activeMode==='borough' || activeBorough!=='all') {
     if (activeBorough!=='all') list = list.filter(s=>s.borough===activeBorough);
     if (activeMode==='borough') list = list.slice(0,30);
   }
-  if (activeMode==='top100') list = shortlistSites.slice(0,100);
+  if (activeMode==='top100') list = headroomYesSites.slice(0,100);
   if (activeMode==='search') {
     const q = (document.getElementById('search-q')?.value||'').trim().toLowerCase();
     if (q) list = ALL_SITES.filter(s=>s.name.toLowerCase().includes(q)||s.address.toLowerCase().includes(q)||s.borough.toLowerCase().includes(q));
@@ -1917,10 +1951,15 @@ function render() {
 
   list.innerHTML = sites.map((s,i) => {
     const rank = activeMode==='top100' ? i+1 : null;
-    const vc = verdictClass(s.score);
-    const vl = verdictLabel(s.score);
-    const bc = scoreColor(s.score);
+    const vc = s.headroomVerdictClass || headroomVerdictClass(s.headroomVerdict);
+    const vl = s.headroomVerdictLabel || headroomVerdictLabel(s.headroomVerdict);
     const motDot = s.motScore >= 4 ? '🔴' : s.motScore >= 2 ? '🟡' : '';
+    const displayScore = s.headroomVerdict === 'yes' ? (s.headroomUpsideScore || s.score) : s.score;
+    const bc = scoreColor(displayScore);
+    const summaryBits = [s.headroomReasonPrimary]
+      .concat((s.headroomReasons || []).filter(r => r && r !== s.headroomReasonPrimary).slice(0, 2))
+      .concat(s.headroomVerdict === 'yes' && s.headroomSecondaryLine ? [s.headroomSecondaryLine] : []);
+    const summaryLine = summaryBits.filter(Boolean).join(' · ');
     const otherChips = [
       s.onMarket ? `<span class="chip listed"><a href="${s.listingUrl||'#'}" target="_blank" onclick="event.stopPropagation()" style="color:inherit;text-decoration:none">Listed${s.listingAgent?' · '+s.listingAgent:''}</a></span>` : '',
       s.motScore >= 2 ? `<span class="chip mot mot-${s.motScore}">${motDot} Seller ${s.motScore}/5</span>` : '',
@@ -1955,12 +1994,12 @@ function render() {
           <div class="card-address">${s.address}</div>
           <div class="card-borough-row"><span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span><span class="chip type-chip" style="background:${typeColor}15;color:${typeColor};border:1px solid ${typeColor}40">${typeLabel}</span></div>
           <div class="card-chips"><span class="verdict-pill ${vc}">${vl}</span>${otherChips}</div>
-          ${s.desc ? `<div class="card-summary">${s.desc}</div>` : ''}
+          ${(summaryLine || s.desc) ? `<div class="card-summary">${summaryLine || s.desc}</div>` : ''}
         </div>
         <div class="card-score-col">
-          <div class="card-score-num">${s.score}</div>
+          <div class="card-score-num">${displayScore}</div>
           <div class="card-score-sub">/100</div>
-          <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${bc}"></div></div>
+          <div class="card-score-bar"><div class="card-score-fill" style="width:${displayScore}%;background:${bc}"></div></div>
           ${hasCTA
             ? `<a class="card-cta" href="${s.t1}" onclick="event.stopPropagation()">Report</a>`
             : `<span class="card-cta locked">Soon</span>`}
@@ -2233,7 +2272,7 @@ function openProvisionalFocus(site) {
   activeSite = site.id;
   document.querySelectorAll('.site-card.active').forEach(function(el){el.classList.remove('active');});
   document.getElementById('site-list')?.classList.remove('has-active');
-  document.getElementById('focus-score').textContent = site.score;
+  document.getElementById('focus-score').textContent = site.headroomVerdict === 'yes' ? (site.headroomUpsideScore || site.score) : site.score;
   var vEl = document.getElementById('focus-verdict');
   var vc = verdictClass(site.score);
   vEl.textContent = site.score >= 50 ? 'Preliminary' : 'Hard No Risk';
@@ -2348,11 +2387,12 @@ function openFocus(site, opts) {
   // Clear any active card state (removes spotlight + expanded content)
   document.querySelectorAll('.site-card.active').forEach(el=>el.classList.remove('active'));
   document.getElementById('site-list')?.classList.remove('has-active');
-  const vc = verdictClass(site.score), vl = verdictLabel(site.score);
-  document.getElementById('focus-score').textContent = site.score;
+  const vc = site.headroomVerdictClass || headroomVerdictClass(site.headroomVerdict);
+  const vl = site.headroomVerdictLabel || headroomVerdictLabel(site.headroomVerdict);
+  document.getElementById('focus-score').textContent = site.headroomVerdict === 'yes' ? (site.headroomUpsideScore || site.score) : site.score;
   const vEl = document.getElementById('focus-verdict');
   vEl.textContent = vl; vEl.className = 'focus-verdict ' + vc;
-  document.getElementById('focus-score-sub').textContent = site.score + '/100 · ' + site.borough;
+  document.getElementById('focus-score-sub').textContent = (site.headroomVerdict === 'yes' ? (site.headroomSecondaryLine || ('Upside ' + (site.headroomUpsideScore || site.score) + '/100')) : (site.headroomReasonPrimary || 'Needs verification')) + ' · ' + site.borough;
   document.getElementById('focus-name').textContent = site.name;
   document.getElementById('focus-addr').textContent = site.address;
   const chips = [
@@ -2361,6 +2401,8 @@ function openFocus(site, opts) {
     site.inCons? '<span class="chip cons">Conservation</span>' : '',
     site.ptal  ? `<span class="chip ptal">PTAL ${site.ptal}</span>` : '',
     site.verified ? '<span class="chip" style="background:#f0fdf4;color:#15803d">Verified</span>' : '',
+    site.architecturalValueBand === 'low' ? '<span class="chip">Low architectural value</span>' : '',
+    site.tallCapable ? '<span class="chip">Efficient above 8F</span>' : '',
   ].filter(Boolean).join('');
   document.getElementById('focus-chips').innerHTML = chips;
   const canonical = ensureCanonicalSite(site);
@@ -2395,10 +2437,11 @@ function openFocus(site, opts) {
   // ── Analyst hook ───────────────────────────────────────────────────────
   const hookText = analystHook(site);
   const devLogic = siteDevelopmentLogic(site);
+  const headroomReasons = (site.headroomReasons || []).slice(0, 3).map(reason => `<div>${reason}</div>`).join('');
   document.getElementById('focus-hook').innerHTML = `
-    <div class="focus-hook-label">Intelligence Signal</div>
-    <div class="focus-hook-text">${hookText}</div>
-    <div class="focus-hook-question"><strong>${devLogic.type}</strong> · ${devLogic.mode}. What are the 3 comparable approvals? Is this a metres site or a floors site? Does the economics justify the planning fight here?</div>
+    <div class="focus-hook-label">Headroom Call</div>
+    <div class="focus-hook-text">${site.headroomReasonPrimary || hookText}</div>
+    <div class="focus-hook-question">${headroomReasons || `<div>${hookText}</div>`}${site.headroomSecondaryLine ? `<div><strong>${site.headroomSecondaryLine}</strong></div>` : ''}</div>
   `;
   // ── Factor bars ─────────────────────────────────────────────────────────
   document.getElementById('focus-factors').innerHTML = `
@@ -2408,7 +2451,7 @@ function openFocus(site, opts) {
   // ── CTA - site-specific ─────────────────────────────────────────────────
   const addFf = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
   document.getElementById('focus-cta-wrap').innerHTML = site.t1
-    ? `<a class="focus-cta" href="${site.t1}">See why this scores ${site.score}/100 &rarr;<span class="focus-cta-sub">+${addFf}F · planning precedents · does it stack at current land value?</span></a>`
+    ? `<a class="focus-cta" href="${site.t1}">See the full headroom case &rarr;<span class="focus-cta-sub">${site.headroomSecondaryLine || ('+' + addFf + 'F potential')} · planning precedents · does it stack at current land value?</span></a>`
     : `<span class="focus-cta locked">Full report coming soon</span>`;
   const visEl = document.getElementById('focus-visual');
   const phEl  = document.getElementById('focus-sat-ph');
@@ -2439,15 +2482,15 @@ function closeFocus() {
 // ── Popup ─────────────────────────────────────────────────────────────────────
 function showPopup(site) {
   if (popup) { popup.remove(); popup=null; }
-  const vc = verdictClass(site.score);
-  const vl = verdictLabel(site.score);
-  const col = vc==='green'?'#15803d':vc==='amber'?'#b45309':'#999';
+  const vc = site.headroomVerdictClass || headroomVerdictClass(site.headroomVerdict);
+  const vl = site.headroomVerdictLabel || headroomVerdictLabel(site.headroomVerdict);
+  const col = vc==='green'?'#15803d':vc==='amber'?'#b45309':'#b91c1c';
   popup = new mapboxgl.Popup({offset:10,closeButton:true,maxWidth:'220px'})
     .setLngLat([site.lng,site.lat])
     .setHTML(`
       <div class="popup-name">${site.name}</div>
       <div class="popup-score-row">
-        <span class="popup-score">${site.score}</span>
+        <span class="popup-score">${site.headroomVerdict === 'yes' ? (site.headroomUpsideScore || site.score) : site.score}</span>
         <span class="popup-verdict" style="color:${col}">${vl}</span>
       </div>
       <div class="popup-addr">${site.borough}</div>
