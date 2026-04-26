@@ -269,11 +269,11 @@
         evidence: null
       };
     }
-    if (hasReliablePlanningCheck && totalCount !== null && majorCount === 0 && liveCount === 0 && !hasRedevelopment && planning.recentRef) {
+    if (hasReliablePlanningCheck && totalCount !== null && majorCount === 0 && liveCount === 0 && !hasRedevelopment) {
       return {
         key: 'verified-current',
         reason: 'Planning status checked with no active redevelopment signal',
-        evidence: planning.recentRef
+        evidence: planning.recentRef || null
       };
     }
     return {
@@ -890,6 +890,41 @@
       priority: 3,
       reason: 'Norton Folgate is already delivered and leasing as a mixed-use scheme',
       evidence: 'norton-folgate.co.uk leasing site / British Land development'
+    },
+    '40 43 andrews road and ash grove bus garage mixed residential non residential': {
+      key: 'advanced',
+      bucket: 'advanced',
+      priority: 3,
+      reason: 'Ash Grove is already in an active SPD and committee pipeline for future redevelopment',
+      evidence: 'Hackney Ash Grove SPD / 2025 committee report for 40-43 Andrews Road'
+    },
+    'clapton bus garage mixed residential non residential': {
+      key: 'advanced',
+      bucket: 'advanced',
+      priority: 3,
+      reason: 'Clapton Bus Garage is a long-standing allocated masterplan redevelopment site, not a clean-slate cold target',
+      evidence: 'Hackney Central masterplan / HC1 site allocation'
+    },
+    'chambers wharf': {
+      key: 'advanced',
+      bucket: 'gone',
+      priority: 3,
+      reason: 'Chambers Wharf affordable-housing redevelopment is already delivered and the wider site is Tideway-linked infrastructure',
+      evidence: 'SimpsonHaugh project page / Southwark Chambers Wharf and Tideway pages'
+    },
+    'eagle wharf road mixed residential non residential': {
+      key: 'advanced',
+      bucket: 'advanced',
+      priority: 3,
+      reason: '48-48A Eagle Wharf Road is already in an active redevelopment application pipeline',
+      evidence: 'GLA planning application 2021/0680 / 48 Eagle Wharf Road planning statement'
+    },
+    '55 morning lane mixed residential non residential': {
+      key: 'advanced',
+      bucket: 'advanced',
+      priority: 3,
+      reason: '55 Morning Lane is already in Hackney Council regeneration and redevelopment planning',
+      evidence: 'Hackney 55 Morning Lane regeneration page / committee report'
     }
   };
 
