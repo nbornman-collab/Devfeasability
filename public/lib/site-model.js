@@ -393,6 +393,7 @@
     var metrics = site.canonicalMetrics || buildCanonicalMetrics(site);
     var policy = site.planningPolicy || buildPlanningPolicyProfile(site);
     var fabric = site.fabricProfile || buildFabricProfile(site);
+    var shortlist = site.shortlist || deriveShortlistDecision(site);
     var addF = Math.max(0, (metrics.maxFloors || 0) - (metrics.existingFloors || 0));
     var upliftPct = metrics.roughGiaUpliftPct;
     var reasons = [];
@@ -408,6 +409,14 @@
     }
     if (progression.key === 'gone' || progression.key === 'progressed') {
       return { key: 'no', primaryReason: progression.reason, reasons: [progression.reason], confidence: confidence.band };
+    }
+    if (shortlist.bucketKey === 'non-target') {
+      return {
+        key: 'no',
+        primaryReason: shortlist.exclusionReason || shortlist.classReason || shortlist.bucketReason || 'Non-target parcel',
+        reasons: [shortlist.exclusionReason || shortlist.classReason || shortlist.bucketReason || 'Non-target parcel'],
+        confidence: confidence.band
+      };
     }
     if (site.heritTier === 'blocking' && !fabric.redevelopmentFriendly) {
       return { key: 'no', primaryReason: 'Heritage and context kill meaningful uplift', reasons: ['heritage friction too strong'], confidence: confidence.band };
