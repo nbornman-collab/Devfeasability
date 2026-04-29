@@ -1,4 +1,5 @@
 const express = require('express');
+const { execSync } = require('child_process');
 const { buildPDClasses, applyConstraints } = require('./lib/pd-engine');
 const path = require('path');
 const app = express();
@@ -6,6 +7,33 @@ const PORT = process.env.PORT || 3000;
 
 const MAPBOX_TOKEN = process.env.MAPBOX_TOKEN || '';
 const OS_API_KEY = process.env.OS_API_KEY || 'LX85JnG1cHTIXA5bpRGHJmA1QDrHHJWZ';
+const APP_STARTED_AT = new Date().toISOString();
+
+function readGitValue(command) {
+  try {
+    return execSync(command, {
+      cwd: __dirname,
+      stdio: ['ignore', 'pipe', 'ignore']
+    }).toString().trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+function buildVersionPayload() {
+  const commit = process.env.RAILWAY_GIT_COMMIT_SHA || process.env.GITHUB_SHA || readGitValue('git rev-parse HEAD');
+  const branch = process.env.RAILWAY_GIT_BRANCH || process.env.GITHUB_REF_NAME || readGitValue('git rev-parse --abbrev-ref HEAD');
+  const commitShort = commit ? commit.slice(0, 7) : null;
+  return {
+    version: commitShort ? `git-${commitShort}` : 'unknown',
+    commit,
+    commitShort,
+    branch,
+    startedAt: APP_STARTED_AT,
+    engine: 'london-planning-v2',
+    sourceRepo: 'nbornman-collab/Devfeasability'
+  };
+}
 
 // test pages served from static middleware (public/test/)
 
@@ -1043,7 +1071,7 @@ app.get('/api/hmlr-tile/:z/:x/:y', async (req, res) => {
 });
 
 app.get('/api/version', (req, res) => {
-  res.json({ version: '4.3.0-london', built: new Date().toISOString(), engine: 'london-planning-v2' });
+  res.json(buildVersionPayload());
 });
 
 
