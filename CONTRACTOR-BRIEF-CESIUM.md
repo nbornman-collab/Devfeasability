@@ -80,7 +80,7 @@ Improve building polygon quality and roof geometry:
 - Node.js 22, Express (server.js)
 - Mapbox GL JS v3.4.0
 - CesiumJS 1.x (Scope A)
-- Railway deployment (auto-deploy from GitHub, branch: london-v4)
+- Railway deployment (auto-deploy from GitHub `main`)
 - GitHub: https://github.com/nbornman-collab/Devfeasability.git
 
 ## Contact
