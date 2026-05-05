@@ -322,7 +322,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
         </div>
         <div class="ext-body" id="body-dormer">
           <div class="slider-row">
-            <div class="slider-labels"><span class="slider-lbl">Width</span><span class="slider-val" id="val-dwidth">2.5m</span></div>
+            <div class="slider-labels"><span class="slider-lbl">Roof zone</span><span class="slider-val" id="val-dzone">Main rear roof</span></div>
+            <div class="mode-tabs">
+              <button class="mode-tab active" id="btn-dzone-main" onclick="setDormerZone('main')">Main</button>
+              <button class="mode-tab" id="btn-dzone-return" onclick="setDormerZone('return')">Rear return</button>
+              <button class="mode-tab" id="btn-dzone-both" onclick="setDormerZone('both')">Both</button>
+            </div>
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Width per dormer</span><span class="slider-val" id="val-dwidth">2.5m</span></div>
             <input type="range" id="sl-dwidth" min="1" max="4" step="0.5" value="2.5" oninput="updateMassing()">
           </div>
           <div class="slider-row">
@@ -466,6 +474,7 @@ let GARDEN_D = 18;
 let WRAP_SIDE = 'left';
 let REAR_PARTY_SIDE = 'left';
 let SIDE_RETURN_SIDE = 'left';
+let DORMER_ZONE = 'main';
 
 // Convert OS NGD polygon coords to [[lng,lat],...] ring
 function toRing(coords) { return coords.concat([coords[0]]); }
@@ -590,6 +599,32 @@ function sideReturnRing(widthM, lengthM, side = SIDE_RETURN_SIDE) {
   }
   const outerLeft = b.left - widthM * M_LNG;
   return [[outerLeft,b.rear],[b.left,b.rear],[b.left,front],[outerLeft,front],[outerLeft,b.rear]];
+}
+
+function dormerRoofRings(widthM, projectionM, zone = DORMER_ZONE) {
+  const b = footprintBounds();
+  const setback = 0.25;
+  const startLat = b.rear + setback * M_LAT;
+  const endLat = b.rear + Math.min(projectionM + setback, Math.max(1.2, b.depthM - 0.25)) * M_LAT;
+  const clearLeft = b.left + setback * M_LNG;
+  const clearRight = b.right - setback * M_LNG;
+  const maxWidth = Math.max(0.8, (clearRight - clearLeft) / M_LNG);
+  const mainWidth = Math.min(widthM, maxWidth);
+  const returnWidth = Math.min(widthM, Math.max(0.8, maxWidth * 0.42));
+  const partyLeft = REAR_PARTY_SIDE === 'left';
+
+  const mainLeft = partyLeft ? clearLeft : clearRight - mainWidth * M_LNG;
+  const returnLeft = partyLeft ? clearRight - returnWidth * M_LNG : clearLeft;
+  const make = (left, w, latShiftM = 0) => {
+    const y0 = startLat + latShiftM * M_LAT;
+    const y1 = endLat + latShiftM * M_LAT;
+    const right = left + w * M_LNG;
+    return [[left,y0],[right,y0],[right,y1],[left,y1],[left,y0]];
+  };
+
+  if (zone === 'return') return [make(returnLeft, returnWidth, Math.min(1.0, b.depthM * 0.12))];
+  if (zone === 'both') return [make(mainLeft, mainWidth), make(returnLeft, returnWidth, Math.min(1.0, b.depthM * 0.12))];
+  return [make(mainLeft, mainWidth)];
 }
 
 function wraparoundRing(sideWidthM, rearDepthM, side) {
@@ -1069,6 +1104,17 @@ function setRearPartySide(side) {
   updateMassing();
 }
 
+function setDormerZone(zone) {
+  DORMER_ZONE = ['main','return','both'].includes(zone) ? zone : 'main';
+  ['main','return','both'].forEach(z => {
+    const btn = document.getElementById('btn-dzone-' + z);
+    if (btn) btn.classList.toggle('active', DORMER_ZONE === z);
+  });
+  const label = document.getElementById('val-dzone');
+  if (label) label.textContent = DORMER_ZONE === 'return' ? 'Rear return' : DORMER_ZONE === 'both' ? 'Main + rear return' : 'Main rear roof';
+  updateMassing();
+}
+
 function setSideReturnSide(side) {
   SIDE_RETURN_SIDE = side === 'right' ? 'right' : 'left';
   const leftBtn = document.getElementById('btn-side-left');
@@ -1233,43 +1279,44 @@ function updateRear(map) {
 function updateDormer(map) {
   const dwidth = parseFloat(document.getElementById('sl-dwidth').value);
   const dproj = parseFloat(document.getElementById('sl-dproj').value);
+  const rings = dormerRoofRings(dwidth, dproj, DORMER_ZONE);
+  const b = footprintBounds();
+  const usableWidth = rings.reduce((sum, ring) => sum + Math.abs((ring[1][0] - ring[0][0]) / M_LNG), 0);
+  const zoneLabel = DORMER_ZONE === 'return' ? 'rear return' : DORMER_ZONE === 'both' ? 'main roof + rear return' : 'main rear roof';
+
   document.getElementById('val-dwidth').textContent = dwidth.toFixed(1)+'m';
   document.getElementById('val-dproj').textContent = dproj.toFixed(2)+'m';
 
-  // Dormer sits on rear slope of roof
-  const dormerBase = HOUSE_EAVES;
-  const dormerH = HOUSE_H - 0.5; // just below ridge
-  const offsetLng = (HOUSE_W - dwidth) / 2;
-  const rearLat = BASE_LAT - (HOUSE_D - dproj) * M_LAT;
-  const dormerCoords = makeRect(BASE_LNG + offsetLng * M_LNG, rearLat, dwidth, dproj);
+  // Dormer is pinned to the rear roof footprint, with a small eaves setback so it reads as sitting on the roof.
+  const dormerBase = Math.max(0, HOUSE_EAVES - 0.05);
+  const dormerH = HOUSE_H - 0.5;
 
-  // Semi volume check: 40m³ allowed for terraced (using terraced as more restrictive)
-  const vol = dwidth * dproj * (dormerH - dormerBase);
+  // Semi volume check: 40m³ allowed for terraced houses, 50m³ for semi-detached and detached.
+  const vol = usableWidth * dproj * Math.max(0, dormerH - dormerBase);
   const maxVol = 40;
   const overVol = vol > maxVol;
-  const onFront = false; // rear dormer
-
-  const verdict = overVol ? 'Planning Required' : 'Permitted Development';
-  const color = overVol ? 'var(--red)' : 'var(--green)';
+  const onFront = false;
   const noteClass = overVol ? 'red' : 'green';
 
   const badgeD = document.getElementById('badge-dormer');
   badgeD.className = 'ext-badge ' + noteClass;
   badgeD.textContent = !overVol ? 'PD' : 'Planning';
-  document.getElementById('dims-dormer').textContent = (dwidth*dproj).toFixed(1) + 'm² / ' + vol.toFixed(0) + 'm³';
+  document.getElementById('dims-dormer').textContent = (usableWidth*dproj).toFixed(1) + 'm² / ' + vol.toFixed(0) + 'm³';
   document.getElementById('rules-dormer').innerHTML = [
-    {icon:!onFront?'✓':'✗', text:'Rear elevation only (not facing highway)'},
-    {icon:!overVol?'✓':'✗', text:`Volume ${vol.toFixed(0)}m³ vs 40m³ limit`},
-    {icon:'✓', text:'Set back 20cm from eaves ✓'},
-    {icon:'✓', text:'Not exceeding ridge height ✓'},
+    {icon:!onFront?'✓':'✗', text:'Rear roof only, not principal elevation'},
+    {icon:'✓', text:`Placed on ${zoneLabel}, inside ${b.widthM.toFixed(1)}m roof footprint`},
+    {icon:!overVol?'✓':'✗', text:`Added volume ${vol.toFixed(0)}m³ vs 40m³ terrace limit`},
+    {icon:'✓', text:'Set back from eaves'},
+    {icon:'✓', text:'Below ridge height'}
   ].map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
 
-
-
-  map.getSource('dormer').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[dormerCoords]},properties:{height:dormerH,base:dormerBase}});
+  const geometry = rings.length > 1
+    ? {type:'MultiPolygon', coordinates:rings.map(r => [r])}
+    : {type:'Polygon', coordinates:[rings[0]]};
+  map.getSource('dormer').setData({type:'Feature',geometry,properties:{height:dormerH,base:dormerBase}});
   map.setLayoutProperty('dormer-3d','visibility','visible');
-  map.getSource('max-env').setData({type:'FeatureCollection',features:[]});
 }
+
 
 function updateSideReturn(map) {
   const width = parseFloat(document.getElementById('sl-sidew').value);
