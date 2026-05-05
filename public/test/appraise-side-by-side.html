@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Appraise 50/50 Review - Headroom</title>
+<title>Appraise Side by Side Review - Headroom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -13,6 +13,7 @@
 :root {
   --bg: #f4f2ec;
   --bg2: #ebe7dd;
+  --bg3: #d8d2c5;
   --ink: #111110;
   --ink2: #3a3a38;
   --ink3: #77736c;
@@ -21,99 +22,111 @@
   --accent2: #5b7a9d;
   --green: #15803d;
   --amber: #b45309;
+  --red: #b91c1c;
   --sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --mono: 'JetBrains Mono', monospace;
-  --nav-h: 46px;
-  --banner-h: 138px;
 }
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
-body { overflow: hidden; }
-.review-shell { height: 100vh; display: flex; flex-direction: column; }
-.review-nav { height: var(--nav-h); display: flex; align-items: center; gap: 18px; padding: 0 24px; border-bottom: 1px solid var(--rule); background: rgba(244,242,236,.94); flex-shrink: 0; }
+html, body { margin: 0; min-height: 100%; background: radial-gradient(circle at 70% 0%, rgba(184,132,92,.10), transparent 28%), var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+body { overflow-x: hidden; }
+.review-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.review-nav { height: 46px; display: flex; align-items: center; gap: 18px; padding: 0 24px; border-bottom: 1px solid var(--rule); background: rgba(244,242,236,.92); position: sticky; top: 0; z-index: 20; backdrop-filter: blur(18px); }
 .logo { font-weight: 900; letter-spacing: .14em; font-size: 12px; text-transform: uppercase; }
 .logo span { color: var(--accent); }
 .nav-sep { width: 1px; height: 18px; background: var(--rule); }
 .nav-note { color: var(--ink3); font-size: 12px; letter-spacing: .03em; flex: 1; }
 .nav-pill { font: 700 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); background: var(--bg2); border: 1px solid var(--rule); border-radius: 999px; padding: 7px 10px; }
-.banner { height: var(--banner-h); display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--rule); background: radial-gradient(circle at 72% 0%, rgba(184,132,92,.12), transparent 30%), var(--bg); flex-shrink: 0; }
-.banner-left { padding: 18px 28px 16px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; justify-content: center; }
-.banner-right { padding: 18px 28px 16px; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 18px; }
+.hero { padding: 18px 28px 16px; display: grid; grid-template-columns: minmax(260px, .9fr) minmax(320px, 1.1fr); gap: 28px; border-bottom: 1px solid var(--rule); }
 .kicker { font: 800 10px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
-h1 { margin: 0; font-size: clamp(34px, 4.2vw, 64px); line-height: .88; letter-spacing: -.07em; max-width: 620px; }
-.banner-copy { color: var(--ink2); font-size: 14px; line-height: 1.5; max-width: 640px; }
-.banner-copy strong { color: var(--ink); }
-.score-card { border: 1px solid rgba(255,255,255,.55); background: rgba(255,255,255,.58); border-radius: 18px; padding: 14px 16px; min-width: 118px; text-align: center; box-shadow: 0 12px 34px rgba(17,17,16,.07); }
+h1 { margin: 0; font-size: clamp(34px, 4.1vw, 58px); line-height: .92; letter-spacing: -.065em; max-width: 680px; }
+.hero-copy { align-self: end; color: var(--ink2); font-size: 15px; line-height: 1.5; max-width: 680px; }
+.hero-copy strong { color: var(--ink); }
+.compare-grid { display: grid; grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr); min-height: calc(100vh - 160px); }
+.version { position: relative; padding: 18px 22px 24px; border-right: 1px solid var(--rule); }
+.version.focused { background: linear-gradient(180deg, rgba(255,255,255,.30), rgba(255,255,255,.08)); }
+.version:last-child { border-right: none; }
+.version-header { display: flex; align-items: start; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+.version-label { font: 800 9px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 7px; }
+.version-title { font-size: clamp(27px, 2.55vw, 38px); line-height: 1; letter-spacing: -.045em; font-weight: 900; }
+.version-sub { color: var(--ink3); font-size: 13px; line-height: 1.45; max-width: 430px; margin-top: 8px; }
+.score-card { border: 1px solid rgba(255,255,255,.55); background: rgba(255,255,255,.58); border-radius: 18px; padding: 14px 16px; min-width: 120px; text-align: center; box-shadow: 0 12px 34px rgba(17,17,16,.07); }
 .score-label { font: 800 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
 .score-number { font: 900 42px var(--mono); letter-spacing: -.08em; line-height: .9; }
-.score-pill { display: inline-flex; margin-top: 9px; border-radius: 999px; padding: 5px 9px; font: 800 9px var(--mono); letter-spacing: .1em; text-transform: uppercase; background: rgba(21,128,61,.1); color: var(--green); }
-.app-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; }
-.map-pane { position: relative; min-width: 0; min-height: 0; border-right: 1px solid var(--rule); background: var(--bg2); }
-.real-map { position: absolute; inset: 0; }
-.map-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink3); font: 800 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; background: var(--bg2); }
-.map-pane .mapboxgl-canvas { filter: saturate(.86) contrast(.98); }
-.map-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(244,242,236,.10), rgba(17,17,16,.08)); }
-.map-caption { position: absolute; left: 18px; right: 18px; bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; pointer-events: none; }
-.map-chip { background: rgba(244,242,236,.88); border: 1px solid rgba(17,17,16,.12); border-radius: 999px; padding: 8px 11px; font: 800 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); box-shadow: 0 10px 30px rgba(17,17,16,.08); }
-.map-legend { position: absolute; left: 18px; top: 18px; display: flex; gap: 8px; flex-wrap: wrap; pointer-events: none; }
-.legend-item { display: flex; align-items: center; gap: 7px; background: rgba(244,242,236,.88); border: 1px solid rgba(17,17,16,.12); border-radius: 999px; padding: 7px 10px; font: 800 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); }
-.legend-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
-.legend-dot.blue { background: var(--accent2); }
-.decision-pane { min-width: 0; min-height: 0; overflow-y: auto; padding: 22px; background: linear-gradient(180deg, rgba(255,255,255,.36), rgba(255,255,255,.12)); }
-.section-label { font: 800 9px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 7px; }
-.move-card { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; padding: 22px; border-radius: 22px; background: linear-gradient(135deg, #171614, #2a241f); color: var(--bg); box-shadow: 0 18px 42px rgba(17,17,16,.16); margin-bottom: 14px; }
-.move-icon { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--ink); font: 900 20px var(--mono); }
-.move-label { font: 800 10px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(244,242,236,.55); margin-bottom: 7px; }
-.move-title { font-size: clamp(42px, 4.6vw, 78px); line-height: .88; letter-spacing: -.07em; font-weight: 900; max-width: 760px; }
-.move-copy { color: rgba(244,242,236,.76); font-size: 15px; line-height: 1.5; margin-top: 12px; max-width: 680px; }
-.decision-kpi { min-width: 120px; padding-left: 18px; border-left: 1px solid rgba(244,242,236,.14); }
-.decision-kpi-label { font: 800 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(244,242,236,.48); margin-bottom: 6px; }
-.decision-kpi-value { font: 900 34px var(--mono); letter-spacing: -.08em; color: var(--accent); }
-.decision-kpi-note { font: 700 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: rgba(244,242,236,.55); }
-.panel { border: 1px solid rgba(17,17,16,.08); border-radius: 18px; background: rgba(255,255,255,.68); overflow: hidden; box-shadow: 0 14px 36px rgba(17,17,16,.06); margin-bottom: 14px; }
+.score-pill { display: inline-flex; margin-top: 9px; border-radius: 999px; padding: 5px 9px; font: 800 9px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.score-pill.old { background: var(--bg2); color: var(--ink2); }
+.score-pill.new { background: rgba(21,128,61,.1); color: var(--green); }
+.canvas { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.focused .canvas { gap: 14px; }
+.panel { border: 1px solid rgba(17,17,16,.08); border-radius: 18px; background: rgba(255,255,255,.56); overflow: hidden; box-shadow: 0 10px 30px rgba(17,17,16,.045); }
+.focused .panel { background: rgba(255,255,255,.68); box-shadow: 0 14px 36px rgba(17,17,16,.06); }
 .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--rule); background: rgba(255,255,255,.30); }
 .panel-title { font: 800 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
 .panel-meta { font: 700 10px var(--mono); color: var(--ink3); letter-spacing: .08em; text-transform: uppercase; }
 .panel-body { padding: 16px; }
-.driver-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.driver { padding: 13px; border-radius: 14px; background: rgba(242,241,237,.62); border: 1px solid var(--rule); }
-.driver-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 9px; }
-.driver-name { font-weight: 850; font-size: 13px; }
-.driver-score { font: 900 14px var(--mono); color: var(--accent); }
-.driver-copy { font-size: 12px; line-height: 1.45; color: var(--ink3); }
+.map-card { height: 260px; position: relative; background: linear-gradient(135deg, #cbc7bd, #eee9df); overflow: hidden; }
+.real-map { position: absolute; inset: 0; }
+.map-card .mapboxgl-canvas { filter: saturate(.82) contrast(.98); }
+.map-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(244,242,236,.08), rgba(17,17,16,.08)); }
+.map-fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink3); font: 800 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; background: var(--bg2); }
+.map-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(17,17,16,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(17,17,16,.08) 1px, transparent 1px); background-size: 34px 34px; transform: rotate(-7deg) scale(1.2); }
+.site-shape { position: absolute; left: 40%; top: 20%; width: 120px; height: 152px; transform: rotate(19deg); border: 2px solid rgba(17,17,16,.35); background: rgba(184,132,92,.16); }
+.site-shape::after { content: ''; position: absolute; left: 21px; top: 28px; width: 74px; height: 74px; background: rgba(91,122,157,.72); box-shadow: 0 0 0 1px rgba(17,17,16,.18); }
+.massing-old { position: absolute; left: 44%; top: 26%; width: 88px; height: 88px; transform: rotate(19deg); background: rgba(17,17,16,.78); }
+.massing-new { position: absolute; left: 43%; top: 26%; width: 94px; height: 94px; transform: rotate(19deg); background: rgba(91,122,157,.72); }
+.massing-new::after { content: ''; position: absolute; left: 18px; top: -46px; width: 58px; height: 46px; background: rgba(184,132,92,.84); }
+.map-caption { position: absolute; left: 14px; bottom: 12px; right: 14px; display: flex; justify-content: space-between; align-items: center; font: 800 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); }
+.mini-chip { background: rgba(242,241,237,.85); border: 1px solid var(--rule); border-radius: 999px; padding: 6px 9px; }
+.data-list { display: grid; gap: 8px; }
+.data-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding-bottom: 8px; border-bottom: 1px dotted rgba(17,17,16,.12); }
+.data-row:last-child { border-bottom: none; padding-bottom: 0; }
+.data-key { color: var(--ink3); font-size: 13px; }
+.data-val { font: 800 13px var(--mono); text-align: right; }
 .option-stack { display: grid; gap: 10px; }
 .option { display: grid; grid-template-columns: auto 1fr auto; gap: 13px; align-items: center; padding: 14px; border: 1px solid var(--rule); border-radius: 16px; background: rgba(242,241,237,.64); }
 .option-rank { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--bg); font: 900 12px var(--mono); }
 .option-title { font-weight: 850; letter-spacing: -.02em; }
 .option-desc { color: var(--ink3); font-size: 12px; line-height: 1.35; margin-top: 3px; }
 .option-metric { text-align: right; font: 900 18px var(--mono); color: var(--accent); }
-.next-action { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; padding: 18px; border-radius: 18px; background: rgba(184,132,92,.12); border: 1px solid rgba(184,132,92,.28); }
-.action-num { font: 900 34px var(--mono); color: var(--accent); letter-spacing: -.08em; }
-.action-title { font-weight: 900; letter-spacing: -.02em; }
-.action-copy { font-size: 12px; color: var(--ink3); margin-top: 3px; }
-.action-cta { font: 900 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--bg); background: var(--ink); border: 1px solid var(--ink); border-radius: 999px; padding: 10px 13px; }
 .tag-row { display: flex; flex-wrap: wrap; gap: 7px; }
 .tag { border: 1px solid var(--rule); border-radius: 999px; padding: 6px 9px; font: 800 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); background: rgba(255,255,255,.35); }
 .tag.green { color: var(--green); background: rgba(21,128,61,.08); }
 .tag.amber { color: var(--amber); background: rgba(180,83,9,.08); }
 .tag.blue { color: var(--accent2); background: rgba(91,122,157,.10); }
+.move-card { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; padding: 22px; border-radius: 22px; background: linear-gradient(135deg, #171614, #2a241f); color: var(--bg); box-shadow: 0 18px 42px rgba(17,17,16,.16); }
+.move-icon { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--ink); font: 900 20px var(--mono); }
+.move-label { font: 800 10px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(244,242,236,.55); margin-bottom: 7px; }
+.move-title { font-size: clamp(38px, 4.2vw, 70px); line-height: .9; letter-spacing: -.065em; font-weight: 900; max-width: 760px; }
+.move-copy { color: rgba(244,242,236,.76); font-size: 15px; line-height: 1.5; margin-top: 12px; max-width: 650px; }
+.decision-kpi { min-width: 120px; padding-left: 18px; border-left: 1px solid rgba(244,242,236,.14); }
+.decision-kpi-label { font: 800 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(244,242,236,.48); margin-bottom: 6px; }
+.decision-kpi-value { font: 900 34px var(--mono); letter-spacing: -.08em; color: var(--accent); }
+.decision-kpi-note { font: 700 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: rgba(244,242,236,.55); }
+.driver-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.driver { padding: 13px; border-radius: 14px; background: rgba(242,241,237,.62); border: 1px solid var(--rule); }
+.driver-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 9px; }
+.driver-name { font-weight: 850; font-size: 13px; }
+.driver-score { font: 900 14px var(--mono); color: var(--accent); }
+.driver-copy { font-size: 12px; line-height: 1.45; color: var(--ink3); }
+.next-action { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 18px; padding: 18px; border-radius: 18px; background: rgba(184,132,92,.12); border: 1px solid rgba(184,132,92,.28); }
+.action-num { font: 900 34px var(--mono); color: var(--accent); letter-spacing: -.08em; }
+.action-title { font-weight: 900; letter-spacing: -.02em; }
+.action-copy { font-size: 12px; color: var(--ink3); margin-top: 3px; }
+.action-cta { font: 900 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--bg); background: var(--ink); border: 1px solid var(--ink); border-radius: 999px; padding: 10px 13px; }
+.footer-note { padding: 18px 28px 28px; border-top: 1px solid var(--rule); color: var(--ink3); font-size: 12px; line-height: 1.5; }
+.footer-note strong { color: var(--ink); }
 @media (max-width: 980px) {
-  body { overflow: auto; }
-  .review-shell { height: auto; min-height: 100vh; }
-  .banner { height: auto; grid-template-columns: 1fr; }
-  .banner-left { border-right: none; border-bottom: 1px solid var(--rule); }
-  .banner-right { grid-template-columns: 1fr; }
-  .app-grid { grid-template-columns: 1fr; }
-  .map-pane { height: 58vh; border-right: none; border-bottom: 1px solid var(--rule); }
-  .decision-pane { overflow: visible; }
+  .hero { grid-template-columns: 1fr; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .version { border-right: none; border-bottom: 1px solid var(--rule); }
+  .driver-grid { grid-template-columns: 1fr; }
   .move-card { grid-template-columns: auto 1fr; }
   .decision-kpi { grid-column: 1 / -1; border-left: none; border-top: 1px solid rgba(244,242,236,.14); padding-left: 0; padding-top: 14px; }
-  .driver-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .review-nav { padding: 0 14px; }
   .nav-note { display: none; }
-  .banner-left, .banner-right, .decision-pane { padding-left: 16px; padding-right: 16px; }
+  .hero, .version { padding-left: 16px; padding-right: 16px; }
+  .version-header { flex-direction: column; }
   .score-card { width: 100%; }
   .next-action { grid-template-columns: auto 1fr; }
   .action-cta { grid-column: 1 / -1; justify-self: start; }
@@ -126,146 +139,202 @@ h1 { margin: 0; font-size: clamp(34px, 4.2vw, 64px); line-height: .88; letter-sp
     <div class="logo">H<span>/</span>R</div>
     <div class="nav-sep"></div>
     <div class="nav-note">Internal review page - Appraise focus direction</div>
-    <div class="nav-pill">50 / 50 review</div>
+    <div class="nav-pill">Side by side</div>
   </nav>
 
-  <header class="banner">
-    <div class="banner-left">
+  <header class="hero">
+    <div>
       <div class="kicker">Review prototype</div>
       <h1>From dashboard to decision.</h1>
     </div>
-    <div class="banner-right">
-      <p class="banner-copy">Same asset intelligence, different centre of gravity. The map stays spatial. The decision panel answers: <strong>best move, why, three options, next action.</strong></p>
-      <div class="score-card">
-        <div class="score-label">Confidence</div>
-        <div class="score-number">82</div>
-        <div class="score-pill">Actionable</div>
-      </div>
-      <div class="score-card">
-        <div class="score-label">Next proof</div>
-        <div class="score-number">48h</div>
-        <div class="score-pill">Massing</div>
-      </div>
-    </div>
+    <p class="hero-copy">
+      Same asset intelligence, different centre of gravity. The left side is the data-heavy feasibility view. The right side is the focused version: <strong>best move, why, three options, next action.</strong>
+    </p>
   </header>
 
-  <main class="app-grid">
-    <section class="map-pane" aria-label="Map view">
-      <div id="review-map" class="real-map"></div>
-      <div id="review-map-fallback" class="map-fallback">Loading live map</div>
-      <div class="map-shade"></div>
-      <div class="map-legend">
-        <div class="legend-item"><span class="legend-dot blue"></span> Existing mass</div>
-        <div class="legend-item"><span class="legend-dot"></span> Height upside</div>
+  <main class="compare-grid">
+    <section class="version">
+      <div class="version-header">
+        <div>
+          <div class="version-label">Version A</div>
+          <div class="version-title">Current appraisal logic</div>
+          <div class="version-sub">Useful evidence, but the user has to assemble the answer from separate panels.</div>
+        </div>
+        <div class="score-card">
+          <div class="score-label">Opportunity</div>
+          <div class="score-number">74</div>
+          <div class="score-pill old">Needs reading</div>
+        </div>
       </div>
-      <div class="map-caption">
-        <span class="map-chip">Live Mapbox context</span>
-        <span class="map-chip">196 Blackfriars Road</span>
+
+      <div class="canvas">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Site intelligence</div>
+            <div class="panel-meta">196BR sample</div>
+          </div>
+          <div class="map-card">
+            <div id="review-map" class="real-map"></div>
+            <div id="review-map-fallback" class="map-fallback">Loading live map</div>
+            <div class="map-caption"><span class="mini-chip">Live Mapbox context</span><span class="mini-chip">196 Blackfriars Road</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Evidence panels</div>
+            <div class="panel-meta">Separate signals</div>
+          </div>
+          <div class="panel-body">
+            <div class="data-list">
+              <div class="data-row"><div class="data-key">Existing height</div><div class="data-val">13.7m</div></div>
+              <div class="data-row"><div class="data-key">Indicative uplift</div><div class="data-val">+6 floors</div></div>
+              <div class="data-row"><div class="data-key">Planning precedent nearby</div><div class="data-val">Strong</div></div>
+              <div class="data-row"><div class="data-key">Conservation constraint</div><div class="data-val">Needs check</div></div>
+              <div class="data-row"><div class="data-key">Ownership signal</div><div class="data-val">Long hold</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Signal tags</div>
+            <div class="panel-meta">User interprets</div>
+          </div>
+          <div class="panel-body">
+            <div class="tag-row">
+              <span class="tag blue">Airspace</span>
+              <span class="tag amber">Planning risk</span>
+              <span class="tag green">Good frontage</span>
+              <span class="tag">Ownership</span>
+              <span class="tag">Height context</span>
+              <span class="tag amber">Daylight check</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="decision-pane" aria-label="Decision view">
-      <div class="section-label">Focused decision view</div>
-      <div class="move-card">
-        <div class="move-icon">1</div>
+    <section class="version focused">
+      <div class="version-header">
         <div>
-          <div class="move-label">Best move</div>
-          <div class="move-title">Buy for height upside.</div>
-          <div class="move-copy">The asset reads as a frontage and height opportunity, not a pure conversion play. The strongest path is a retained or partial-retained scheme with additional mass above and a planning-led value case.</div>
+          <div class="version-label">Version B</div>
+          <div class="version-title">Focused decision view</div>
+          <div class="version-sub">The answer is explicit first. Evidence supports it instead of burying it.</div>
         </div>
-        <div class="decision-kpi">
-          <div class="decision-kpi-label">Next proof</div>
-          <div class="decision-kpi-value">48h</div>
-          <div class="decision-kpi-note">Massing plus owner</div>
+        <div class="score-card">
+          <div class="score-label">Confidence</div>
+          <div class="score-number">82</div>
+          <div class="score-pill new">Actionable</div>
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">Why this move</div>
-          <div class="panel-meta">Ranked drivers</div>
+      <div class="canvas">
+        <div class="move-card">
+          <div class="move-icon">1</div>
+          <div>
+            <div class="move-label">Best move</div>
+            <div class="move-title">Buy for height upside.</div>
+            <div class="move-copy">The asset reads as a frontage and height opportunity, not a pure conversion play. The strongest path is a retained or partial-retained scheme with additional mass above and a planning-led value case.</div>
+          </div>
+          <div class="decision-kpi">
+            <div class="decision-kpi-label">Next proof</div>
+            <div class="decision-kpi-value">48h</div>
+            <div class="decision-kpi-note">Massing plus owner</div>
+          </div>
         </div>
-        <div class="panel-body">
-          <div class="driver-grid">
-            <div class="driver">
-              <div class="driver-top"><span class="driver-name">Geometry fit</span><span class="driver-score">8.4</span></div>
-              <div class="driver-copy">Clear street frontage and usable plot depth support an intensification test.</div>
-            </div>
-            <div class="driver">
-              <div class="driver-top"><span class="driver-name">Planning route</span><span class="driver-score">7.8</span></div>
-              <div class="driver-copy">Nearby height context gives a credible argument, subject to daylight and heritage checks.</div>
-            </div>
-            <div class="driver">
-              <div class="driver-top"><span class="driver-name">Value uplift</span><span class="driver-score">8.1</span></div>
-              <div class="driver-copy">The upside is driven by extra area rather than minor refurbishment gains.</div>
-            </div>
-            <div class="driver">
-              <div class="driver-top"><span class="driver-name">Execution risk</span><span class="driver-score">6.9</span></div>
-              <div class="driver-copy">Main blocker is proof of massing acceptability, not lack of asset potential.</div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Why this move</div>
+            <div class="panel-meta">Ranked drivers</div>
+          </div>
+          <div class="panel-body">
+            <div class="driver-grid">
+              <div class="driver">
+                <div class="driver-top"><span class="driver-name">Geometry fit</span><span class="driver-score">8.4</span></div>
+                <div class="driver-copy">Clear street frontage and usable plot depth support an intensification test.</div>
+              </div>
+              <div class="driver">
+                <div class="driver-top"><span class="driver-name">Planning route</span><span class="driver-score">7.8</span></div>
+                <div class="driver-copy">Nearby height context gives a credible argument, subject to daylight and heritage checks.</div>
+              </div>
+              <div class="driver">
+                <div class="driver-top"><span class="driver-name">Value uplift</span><span class="driver-score">8.1</span></div>
+                <div class="driver-copy">The upside is driven by extra area rather than minor refurbishment gains.</div>
+              </div>
+              <div class="driver">
+                <div class="driver-top"><span class="driver-name">Execution risk</span><span class="driver-score">6.9</span></div>
+                <div class="driver-copy">Main blocker is proof of massing acceptability, not lack of asset potential.</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">Three options only</div>
-          <div class="panel-meta">Base / upside / aggressive</div>
-        </div>
-        <div class="panel-body">
-          <div class="option-stack">
-            <div class="option">
-              <div class="option-rank">A</div>
-              <div><div class="option-title">Base case</div><div class="option-desc">Retain and refurbish with modest extension. Lower risk, limited upside.</div></div>
-              <div class="option-metric">+18%</div>
-            </div>
-            <div class="option">
-              <div class="option-rank">B</div>
-              <div><div class="option-title">Preferred case</div><div class="option-desc">Retain key structure and add upper mass. Best balance of risk and value.</div></div>
-              <div class="option-metric">+42%</div>
-            </div>
-            <div class="option">
-              <div class="option-rank">C</div>
-              <div><div class="option-title">Aggressive case</div><div class="option-desc">Full redevelopment height play. Higher planning risk, highest ceiling.</div></div>
-              <div class="option-metric">+61%</div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Three options only</div>
+            <div class="panel-meta">Base / upside / aggressive</div>
+          </div>
+          <div class="panel-body">
+            <div class="option-stack">
+              <div class="option">
+                <div class="option-rank">A</div>
+                <div><div class="option-title">Base case</div><div class="option-desc">Retain and refurbish with modest extension. Lower risk, limited upside.</div></div>
+                <div class="option-metric">+18%</div>
+              </div>
+              <div class="option">
+                <div class="option-rank">B</div>
+                <div><div class="option-title">Preferred case</div><div class="option-desc">Retain key structure and add upper mass. Best balance of risk and value.</div></div>
+                <div class="option-metric">+42%</div>
+              </div>
+              <div class="option">
+                <div class="option-rank">C</div>
+                <div><div class="option-title">Aggressive case</div><div class="option-desc">Full redevelopment height play. Higher planning risk, highest ceiling.</div></div>
+                <div class="option-metric">+61%</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">Next action</div>
-          <div class="panel-meta">Decision output</div>
-        </div>
-        <div class="panel-body">
-          <div class="next-action">
-            <div class="action-num">48h</div>
-            <div>
-              <div class="action-title">Prove the height case and owner signal.</div>
-              <div class="action-copy">Do not commission a full feasibility yet. First test the massing argument and whether the acquisition signal is real.</div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Next action</div>
+            <div class="panel-meta">Decision output</div>
+          </div>
+          <div class="panel-body">
+            <div class="next-action">
+              <div class="action-num">48h</div>
+              <div>
+                <div class="action-title">Prove the height case and owner signal.</div>
+                <div class="action-copy">Do not commission a full feasibility yet. First test the massing argument and whether the acquisition signal is real.</div>
+              </div>
+              <div class="action-cta">Start proof</div>
             </div>
-            <div class="action-cta">Start proof</div>
           </div>
         </div>
-      </div>
 
-      <div class="panel">
-        <div class="panel-head">
-          <div class="panel-title">Constraint honesty</div>
-          <div class="panel-meta">No false certainty</div>
-        </div>
-        <div class="panel-body">
-          <div class="tag-row">
-            <span class="tag green">Enough to act</span>
-            <span class="tag amber">Daylight untested</span>
-            <span class="tag amber">Heritage needs check</span>
-            <span class="tag blue">Survey would tighten</span>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Constraint honesty</div>
+            <div class="panel-meta">No false certainty</div>
+          </div>
+          <div class="panel-body">
+            <div class="tag-row">
+              <span class="tag green">Enough to act</span>
+              <span class="tag amber">Daylight untested</span>
+              <span class="tag amber">Heritage needs check</span>
+              <span class="tag blue">Survey would tighten</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </main>
+
+  <footer class="footer-note">
+    <strong>Intent:</strong> this is a review surface only. It does not replace the live app. If the direction lands, the next step is to wire the focused view to real site intelligence and make the option set derive from one canonical strategy model.
+  </footer>
 </div>
 <script>
 (function initReviewMap() {
@@ -286,9 +355,9 @@ h1 { margin: 0; font-size: clamp(34px, 4.2vw, 64px); line-height: .88; letter-sp
         container: 'review-map',
         style: 'mapbox://styles/mapbox/light-v11',
         center: center,
-        zoom: 17.35,
-        pitch: 58,
-        bearing: 8,
+        zoom: 17.1,
+        pitch: 56,
+        bearing: 18,
         interactive: true,
         attributionControl: false,
         antialias: true
@@ -307,7 +376,7 @@ h1 { margin: 0; font-size: clamp(34px, 4.2vw, 64px); line-height: .88; letter-sp
             'fill-extrusion-color': '#d8d2c5',
             'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'height']],
             'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'min_height']],
-            'fill-extrusion-opacity': 0.34
+            'fill-extrusion-opacity': 0.32
           }
         });
         map.addSource('review-site', {
@@ -322,7 +391,7 @@ h1 { margin: 0; font-size: clamp(34px, 4.2vw, 64px); line-height: .88; letter-sp
             'fill-extrusion-color': '#5b7a9d',
             'fill-extrusion-height': 13.7,
             'fill-extrusion-base': 0,
-            'fill-extrusion-opacity': 0.74
+            'fill-extrusion-opacity': 0.72
           }
         });
         map.addLayer({
@@ -336,7 +405,6 @@ h1 { margin: 0; font-size: clamp(34px, 4.2vw, 64px); line-height: .88; letter-sp
             'fill-extrusion-opacity': 0.62
           }
         });
-        setTimeout(function() { map.resize(); }, 200);
       });
       map.on('error', function() {
         if (fallback) fallback.textContent = 'Map unavailable';
@@ -347,5 +415,6 @@ h1 { margin: 0; font-size: clamp(34px, 4.2vw, 64px); line-height: .88; letter-sp
     });
 })();
 </script>
+
 </body>
 </html>
