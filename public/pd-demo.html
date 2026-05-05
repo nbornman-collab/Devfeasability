@@ -551,6 +551,14 @@ function makeRect(anchorLng, anchorLat, widthM, depthM) {
   return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
 }
 
+function existingWallHeight() {
+  const eaves = parseFloat(HOUSE_EAVES);
+  const ridge = parseFloat(HOUSE_H);
+  if (!Number.isNaN(eaves) && eaves > 0) return eaves;
+  if (!Number.isNaN(ridge) && ridge > 0) return Math.max(0, ridge - 1.2);
+  return 4.5;
+}
+
 function footprintBounds() {
   const ring = (window._houseCoords && window._houseCoords.length > 3) ? window._houseCoords : SITE_POLYGON;
   if (!ring || ring.length < 4) {
@@ -770,7 +778,7 @@ async function selectAddress(addr, lat, lng) {
   }
   const houseCoords = ring || makeRectFallback2();
   window._houseCoords = houseCoords;
-  map.getSource('house').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:HOUSE_H}});
+  map.getSource('house').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:existingWallHeight()}});
   map.getSource('garden').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[makeGardenFallback2()]}});
   updateRoofGuide();
   map.flyTo({center:[BASE_LNG,BASE_LAT],zoom:19,pitch:55,duration:1200});
@@ -987,7 +995,7 @@ async function initMap() {
     map.addLayer({id:'garden-line',slot:'top',type:'line',source:'garden',paint:{'line-color':'#166534','line-width':1,'line-dasharray':[3,2]}});
 
     // House (existing)
-    map.addSource('house', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:HOUSE_H}}});
+    map.addSource('house', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:existingWallHeight()}}});
     map.addLayer({
       id: 'house-3d',
       slot: 'top',
@@ -995,9 +1003,9 @@ async function initMap() {
       source: 'house',
       paint: {
         'fill-extrusion-color': '#c8c2b2',
-        'fill-extrusion-height': HOUSE_H,
+        'fill-extrusion-height': ['get','height'],
         'fill-extrusion-base': 0,
-        'fill-extrusion-opacity': 0.78
+        'fill-extrusion-opacity': 0.42
       }
     });
 
