@@ -478,7 +478,7 @@ let WRAP_SIDE = 'left';
 let REAR_PARTY_SIDE = 'left';
 let SIDE_RETURN_SIDE = 'left';
 let DORMER_ZONE = 'main';
-let REAR_DIRECTION = 'north';
+let REAR_DIRECTION = 'south';
 
 // Convert OS NGD polygon coords to [[lng,lat],...] ring
 function toRing(coords) { return coords.concat([coords[0]]); }
@@ -994,10 +994,10 @@ async function initMap() {
       type: 'fill-extrusion',
       source: 'house',
       paint: {
-        'fill-extrusion-color': '#334155',
+        'fill-extrusion-color': '#c8c2b2',
         'fill-extrusion-height': HOUSE_H,
         'fill-extrusion-base': 0,
-        'fill-extrusion-opacity': 0.95
+        'fill-extrusion-opacity': 0.78
       }
     });
 
