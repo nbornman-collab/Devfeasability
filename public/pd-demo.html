@@ -53,9 +53,12 @@ html,body{font-family:var(--sans);background:var(--bg);color:var(--ink);height:1
 .da-nav-link.active{border-bottom:1.5px solid var(--accent);padding-bottom:1px}
 
 /* -- LAYOUT ----------------------------------------------------------------- */
-.layout{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;display:flex}
-#map{flex:1;height:100%}
-.panel{width:360px;flex-shrink:0;background:var(--bg);border-left:1px solid var(--rule);overflow-y:auto;display:flex;flex-direction:column}
+.layout{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,1fr)}
+.map-pane{position:relative;min-width:0;height:100%}
+#map{width:100%;height:100%}
+.panel{min-width:0;background:var(--bg);border-left:1px solid var(--rule);overflow-y:auto;display:flex;flex-direction:column}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr;grid-template-rows:50vh 1fr}.panel{border-left:none;border-top:1px solid var(--rule)}}
 
 /* -- PANEL SECTIONS --------------------------------------------------------- */
 
@@ -235,7 +238,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 </div>
 
 <div class="layout">
-  <div style="position:relative;flex:1">
+  <div class="map-pane">
     <div id="map"></div>
     <div class="map-label" id="load-status">Loading footprint...</div>
   </div>
@@ -475,6 +478,7 @@ let WRAP_SIDE = 'left';
 let REAR_PARTY_SIDE = 'left';
 let SIDE_RETURN_SIDE = 'left';
 let DORMER_ZONE = 'main';
+let REAR_DIRECTION = 'north';
 
 // Convert OS NGD polygon coords to [[lng,lat],...] ring
 function toRing(coords) { return coords.concat([coords[0]]); }
@@ -579,33 +583,44 @@ function footprintBounds() {
   };
 }
 
+function rearEdge(b = footprintBounds()) {
+  const rearLat = REAR_DIRECTION === 'north' ? b.front : b.rear;
+  const out = REAR_DIRECTION === 'north' ? 1 : -1;
+  const inwards = REAR_DIRECTION === 'north' ? -1 : 1;
+  return { rearLat, out, inwards };
+}
+
 function rearExtensionRing(widthM, depthM, anchorSide = REAR_PARTY_SIDE) {
   const b = footprintBounds();
   const clampedWidth = Math.min(widthM, b.widthM);
   const left = anchorSide === 'right' ? b.right - clampedWidth * M_LNG : b.left;
   const right = anchorSide === 'right' ? b.right : b.left + clampedWidth * M_LNG;
-  const rear = b.rear;
-  const outerRear = rear - depthM * M_LAT;
+  const edge = rearEdge(b);
+  const rear = edge.rearLat;
+  const outerRear = rear + edge.out * depthM * M_LAT;
   return [[left,rear],[right,rear],[right,outerRear],[left,outerRear],[left,rear]];
 }
 
 function sideReturnRing(widthM, lengthM, side = SIDE_RETURN_SIDE) {
   const b = footprintBounds();
+  const edge = rearEdge(b);
   const clampedLength = Math.min(lengthM, b.depthM);
-  const front = b.rear + clampedLength * M_LAT;
+  const rear = edge.rearLat;
+  const inner = rear + edge.inwards * clampedLength * M_LAT;
   if (side === 'right') {
     const outerRight = b.right + widthM * M_LNG;
-    return [[b.right,b.rear],[outerRight,b.rear],[outerRight,front],[b.right,front],[b.right,b.rear]];
+    return [[b.right,rear],[outerRight,rear],[outerRight,inner],[b.right,inner],[b.right,rear]];
   }
   const outerLeft = b.left - widthM * M_LNG;
-  return [[outerLeft,b.rear],[b.left,b.rear],[b.left,front],[outerLeft,front],[outerLeft,b.rear]];
+  return [[outerLeft,rear],[b.left,rear],[b.left,inner],[outerLeft,inner],[outerLeft,rear]];
 }
 
 function dormerRoofRings(widthM, projectionM, zone = DORMER_ZONE) {
   const b = footprintBounds();
+  const edge = rearEdge(b);
   const setback = 0.25;
-  const startLat = b.rear + setback * M_LAT;
-  const endLat = b.rear + Math.min(projectionM + setback, Math.max(1.2, b.depthM - 0.25)) * M_LAT;
+  const startLat = edge.rearLat + edge.inwards * setback * M_LAT;
+  const endLat = edge.rearLat + edge.inwards * Math.min(projectionM + setback, Math.max(1.2, b.depthM - 0.25)) * M_LAT;
   const clearLeft = b.left + setback * M_LNG;
   const clearRight = b.right - setback * M_LNG;
   const maxWidth = Math.max(0.8, (clearRight - clearLeft) / M_LNG);
@@ -629,28 +644,31 @@ function dormerRoofRings(widthM, projectionM, zone = DORMER_ZONE) {
 
 function wraparoundRing(sideWidthM, rearDepthM, side) {
   const b = footprintBounds();
-  const rearOuter = b.rear - rearDepthM * M_LAT;
+  const edge = rearEdge(b);
+  const rear = edge.rearLat;
+  const inner = rear + edge.inwards * b.depthM * M_LAT;
+  const rearOuter = rear + edge.out * rearDepthM * M_LAT;
   if (side === 'right') {
     const outerRight = b.right + sideWidthM * M_LNG;
     return [
-      [b.left,b.rear],
-      [outerRight,b.rear],
-      [outerRight,b.front],
-      [b.right,b.front],
+      [b.left,rear],
+      [outerRight,rear],
+      [outerRight,inner],
+      [b.right,inner],
       [b.right,rearOuter],
       [b.left,rearOuter],
-      [b.left,b.rear]
+      [b.left,rear]
     ];
   }
   const outerLeft = b.left - sideWidthM * M_LNG;
   return [
-    [b.left,b.rear],
-    [b.right,b.rear],
+    [b.left,rear],
+    [b.right,rear],
     [b.right,rearOuter],
     [outerLeft,rearOuter],
-    [outerLeft,b.front],
-    [b.left,b.front],
-    [b.left,b.rear]
+    [outerLeft,inner],
+    [b.left,inner],
+    [b.left,rear]
   ];
 }
 
@@ -745,8 +763,9 @@ async function selectAddress(addr, lat, lng) {
   }
   function makeGardenFallback2() {
     const b = footprintBounds();
-    const lat0 = b.rear;
-    const lat1 = lat0 - GARDEN_D * M_LAT;
+    const edge = rearEdge(b);
+    const lat0 = edge.rearLat;
+    const lat1 = lat0 + edge.out * GARDEN_D * M_LAT;
     return [[b.left,lat0],[b.right,lat0],[b.right,lat1],[b.left,lat1],[b.left,lat0]];
   }
   const houseCoords = ring || makeRectFallback2();
@@ -947,8 +966,9 @@ async function initMap() {
   }
   function makeGardenFallback() {
     const b = footprintBounds();
-    const lat0 = b.rear;
-    const lat1 = lat0 - GARDEN_D * M_LAT;
+    const edge = rearEdge(b);
+    const lat0 = edge.rearLat;
+    const lat1 = lat0 + edge.out * GARDEN_D * M_LAT;
     return [[b.left,lat0],[b.right,lat0],[b.right,lat1],[b.left,lat1],[b.left,lat0]];
   }
 
