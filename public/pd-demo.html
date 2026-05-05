@@ -293,8 +293,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
             <div class="slider-scale"><span>1m</span><span>3m PD</span><span>6m PA</span><span>8m</span></div>
           </div>
           <div class="slider-row">
-            <div class="slider-labels"><span class="slider-lbl">Width</span><span class="slider-val" id="val-width">4.0m</span></div>
-            <input type="range" id="sl-width" min="2" max="5" step="0.5" value="4" oninput="updateMassing()">
+            <div class="slider-labels"><span class="slider-lbl">Party-wall anchor</span><span class="slider-val" id="val-rear-side">Left</span></div>
+            <div class="mode-tabs">
+              <button class="mode-tab active" id="btn-rear-left" onclick="setRearPartySide('left')">Left</button>
+              <button class="mode-tab" id="btn-rear-right" onclick="setRearPartySide('right')">Right</button>
+            </div>
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Width from party wall</span><span class="slider-val" id="val-width">4.0m</span></div>
+            <input type="range" id="sl-width" min="1" max="5" step="0.25" value="4" oninput="updateMassing()">
           </div>
           <div class="slider-row">
             <div class="slider-labels"><span class="slider-lbl">Height</span><span class="slider-val" id="val-height">3.0m</span></div>
@@ -323,6 +330,38 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
             <input type="range" id="sl-dproj" min="0.5" max="2" step="0.25" value="1" oninput="updateMassing()">
           </div>
           <div class="rule-list" id="rules-dormer"></div>
+        </div>
+      </div>
+
+      <!-- Side return -->
+      <div class="ext-card">
+        <div class="ext-card-header" onclick="toggleExt('side',this)">
+          <input type="checkbox" id="chk-side" onclick="event.stopPropagation();toggleExt('side',null)">
+          <span class="ext-card-title">Side return</span>
+          <span class="ext-dims" id="dims-side">-</span>
+          <span class="ext-badge inactive" id="badge-side">off</span>
+        </div>
+        <div class="ext-body" id="body-side">
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Side</span><span class="slider-val" id="val-side-return-side">Left</span></div>
+            <div class="mode-tabs">
+              <button class="mode-tab active" id="btn-side-left" onclick="setSideReturnSide('left')">Left</button>
+              <button class="mode-tab" id="btn-side-right" onclick="setSideReturnSide('right')">Right</button>
+            </div>
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Width from side wall</span><span class="slider-val" id="val-sidew">1.0m</span></div>
+            <input type="range" id="sl-sidew" min="0.5" max="2.5" step="0.1" value="1" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Length along house</span><span class="slider-val" id="val-sided">5.0m</span></div>
+            <input type="range" id="sl-sided" min="2" max="8" step="0.5" value="5" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Height</span><span class="slider-val" id="val-sideh">3.0m</span></div>
+            <input type="range" id="sl-sideh" min="2.5" max="4" step="0.1" value="3" oninput="updateMassing()">
+          </div>
+          <div class="rule-list" id="rules-side"></div>
         </div>
       </div>
 
@@ -425,6 +464,8 @@ let HOUSE_EAVES = 4.5;
 let HOUSE_PITCH = null;    // degrees, null if unknown
 let GARDEN_D = 18;
 let WRAP_SIDE = 'left';
+let REAR_PARTY_SIDE = 'left';
+let SIDE_RETURN_SIDE = 'left';
 
 // Convert OS NGD polygon coords to [[lng,lat],...] ring
 function toRing(coords) { return coords.concat([coords[0]]); }
@@ -529,14 +570,26 @@ function footprintBounds() {
   };
 }
 
-function rearExtensionRing(widthM, depthM) {
+function rearExtensionRing(widthM, depthM, anchorSide = REAR_PARTY_SIDE) {
   const b = footprintBounds();
   const clampedWidth = Math.min(widthM, b.widthM);
-  const left = b.centerLng - (clampedWidth / 2) * M_LNG;
-  const right = b.centerLng + (clampedWidth / 2) * M_LNG;
+  const left = anchorSide === 'right' ? b.right - clampedWidth * M_LNG : b.left;
+  const right = anchorSide === 'right' ? b.right : b.left + clampedWidth * M_LNG;
   const rear = b.rear;
   const outerRear = rear - depthM * M_LAT;
   return [[left,rear],[right,rear],[right,outerRear],[left,outerRear],[left,rear]];
+}
+
+function sideReturnRing(widthM, lengthM, side = SIDE_RETURN_SIDE) {
+  const b = footprintBounds();
+  const clampedLength = Math.min(lengthM, b.depthM);
+  const front = b.rear + clampedLength * M_LAT;
+  if (side === 'right') {
+    const outerRight = b.right + widthM * M_LNG;
+    return [[b.right,b.rear],[outerRight,b.rear],[outerRight,front],[b.right,front],[b.right,b.rear]];
+  }
+  const outerLeft = b.left - widthM * M_LNG;
+  return [[outerLeft,b.rear],[b.left,b.rear],[b.left,front],[outerLeft,front],[outerLeft,b.rear]];
 }
 
 function wraparoundRing(sideWidthM, rearDepthM, side) {
@@ -656,14 +709,16 @@ async function selectAddress(addr, lat, lng) {
     return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
   }
   function makeGardenFallback2() {
-    const lng0=BASE_LNG-HOUSE_W/2*M_LNG, lat0=BASE_LAT-HOUSE_D/2*M_LAT;
-    const lng1=BASE_LNG+HOUSE_W/2*M_LNG, lat1=lat0-GARDEN_D*M_LAT;
-    return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+    const b = footprintBounds();
+    const lat0 = b.rear;
+    const lat1 = lat0 - GARDEN_D * M_LAT;
+    return [[b.left,lat0],[b.right,lat0],[b.right,lat1],[b.left,lat1],[b.left,lat0]];
   }
   const houseCoords = ring || makeRectFallback2();
   window._houseCoords = houseCoords;
   map.getSource('house').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[houseCoords]},properties:{height:HOUSE_H}});
   map.getSource('garden').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[makeGardenFallback2()]}});
+  updateRoofGuide();
   map.flyTo({center:[BASE_LNG,BASE_LAT],zoom:19,pitch:55,duration:1200});
   generateSynthesis();
   updateMassing();
@@ -689,6 +744,7 @@ async function loadBuilding(lat, lng) {
       if (best.properties._roofPitchDeg) HOUSE_PITCH = best.properties._roofPitchDeg;
       if (status) status.textContent = 'Real footprint loaded - ' + Math.round(best.properties._area||0) + 'm² · ' + HOUSE_W.toFixed(0) + 'm wide · ridge ' + HOUSE_H + 'm · eaves ' + HOUSE_EAVES + 'm' + (HOUSE_PITCH ? ' · pitch ' + HOUSE_PITCH + '°' : '');
       updateRoofPanel(best.properties);
+      updateRoofGuide();
       return ring;
     }
   } catch(e) { console.warn('OS NGD failed:', e); }
@@ -777,8 +833,29 @@ function overridePitch(val) {
   const deg = parseFloat(val);
   if (!isNaN(deg) && deg > 5 && deg < 65) {
     HOUSE_PITCH = deg;
+    updateRoofGuide();
     generateSynthesis();
   }
+}
+
+function roofGuideData() {
+  const b = footprintBounds();
+  const ridgeLng = (b.left + b.right) / 2;
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {type:'Feature',geometry:{type:'Polygon',coordinates:[[[b.left,b.front],[ridgeLng,b.front],[ridgeLng,b.rear],[b.left,b.rear],[b.left,b.front]]]},properties:{kind:'plane'}},
+      {type:'Feature',geometry:{type:'Polygon',coordinates:[[[ridgeLng,b.front],[b.right,b.front],[b.right,b.rear],[ridgeLng,b.rear],[ridgeLng,b.front]]]},properties:{kind:'plane'}},
+      {type:'Feature',geometry:{type:'LineString',coordinates:[[ridgeLng,b.front],[ridgeLng,b.rear]]},properties:{kind:'ridge'}},
+      {type:'Feature',geometry:{type:'LineString',coordinates:[[b.left,b.front],[b.left,b.rear]]},properties:{kind:'eaves'}},
+      {type:'Feature',geometry:{type:'LineString',coordinates:[[b.right,b.front],[b.right,b.rear]]},properties:{kind:'eaves'}}
+    ]
+  };
+}
+
+function updateRoofGuide() {
+  const map = window._map;
+  if (map && map.getSource('roof-guide')) map.getSource('roof-guide').setData(roofGuideData());
 }
 
 async function initMap() {
@@ -834,19 +911,20 @@ async function initMap() {
     return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
   }
   function makeGardenFallback() {
-    const lng0=BASE_LNG-HOUSE_W/2*M_LNG, lat0=BASE_LAT-HOUSE_D/2*M_LAT;
-    const lng1=BASE_LNG+HOUSE_W/2*M_LNG, lat1=lat0-GARDEN_D*M_LAT;
-    return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+    const b = footprintBounds();
+    const lat0 = b.rear;
+    const lat1 = lat0 - GARDEN_D * M_LAT;
+    return [[b.left,lat0],[b.right,lat0],[b.right,lat1],[b.left,lat1],[b.left,lat0]];
   }
 
   map.addControl(new mapboxgl.NavigationControl({showCompass:true}), 'top-left');
 
   map.on('load', () => {
-    // Standard style renders high-quality 3D buildings natively - set to dusk for depth
-    map.setConfigProperty('basemap', 'lightPreset', 'dusk');
-    map.setConfigProperty('basemap', 'showRoadLabels', false);
+    // Match the light Headroom Mapbox visual language.
+    map.setConfigProperty('basemap', 'lightPreset', 'day');
+    map.setConfigProperty('basemap', 'showRoadLabels', true);
     map.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
-    map.setConfigProperty('basemap', 'showTransitLabels', false);
+    map.setConfigProperty('basemap', 'showTransitLabels', true);
 
     // Garden outline
     map.addSource('garden', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[gardenCoords]}}});
@@ -868,8 +946,11 @@ async function initMap() {
       }
     });
 
-    // House roof ridge (visual detail)
-    map.addSource('house-label', {type:'geojson', data:{type:'Feature',geometry:{type:'Point',coordinates:[BASE_LNG + (HOUSE_W/2)*M_LNG, BASE_LAT - (HOUSE_D/2)*M_LAT]},properties:{label:'Existing'}}});
+    // House roof ridge and pitch guide. Mapbox extrusions are flat, so this adds explicit pitched-roof cues for loft decisions.
+    map.addSource('roof-guide', {type:'geojson', data:roofGuideData()});
+    map.addLayer({id:'roof-plane-guide',slot:'top',type:'fill',source:'roof-guide',filter:['==',['get','kind'],'plane'],paint:{'fill-color':'#64748b','fill-opacity':0.18}});
+    map.addLayer({id:'roof-ridge-guide',slot:'top',type:'line',source:'roof-guide',filter:['==',['get','kind'],'ridge'],paint:{'line-color':'#0f172a','line-width':3,'line-opacity':0.75}});
+    map.addLayer({id:'roof-eaves-guide',slot:'top',type:'line',source:'roof-guide',filter:['==',['get','kind'],'eaves'],paint:{'line-color':'#64748b','line-width':1.5,'line-dasharray':[2,2],'line-opacity':0.7}});
 
     // Extension (proposed) - empty initially, built by updateMassing
     map.addSource('extension', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}}});
@@ -885,6 +966,11 @@ async function initMap() {
       }
     });
     map.addLayer({id:'ext-top',slot:'top',type:'line',source:'extension',paint:{'line-color':'#4ade80','line-width':2}});
+
+    // Side return source - remains visible alongside rear/dormer/outbuilding.
+    map.addSource('src-side', {type:'geojson', data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}}});
+    map.addLayer({id:'side-3d',slot:'top',type:'fill-extrusion',source:'src-side',paint:{'fill-extrusion-color':'#0d9488','fill-extrusion-height':['get','height'],'fill-extrusion-base':0,'fill-extrusion-opacity':0.82}});
+    map.addLayer({id:'side-top',slot:'top',type:'line',source:'src-side',paint:{'line-color':'#5eead4','line-width':2}});
 
     // Dormer source (added on roof level)
     map.addSource('dormer', {type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0,base:0}}});
@@ -945,14 +1031,17 @@ function toggleExt(type, header) {
 function clearMassing(type) {
   const map = window._map;
   if (!map || !map.isStyleLoaded()) return;
-  const empty = {type:'FeatureCollection',features:[]};
   if (type === 'rear') {
     map.getSource('extension').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}});
     map.setLayoutProperty('ext-3d','visibility','none');
     map.setLayoutProperty('ext-top','visibility','none');
+    map.getSource('zone-rear').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]}});
   } else if (type === 'dormer') {
     map.getSource('dormer').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0,base:0}});
-    map.setLayoutProperty('dormer-3d','visibility','none');
+  } else if (type === 'side') {
+    map.getSource('src-side').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}});
+    map.setLayoutProperty('side-3d','visibility','none');
+    map.setLayoutProperty('side-top','visibility','none');
   } else if (type === 'ob') {
     map.getSource('src-ob').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}});
     map.setLayoutProperty('ob-3d','visibility','none');
@@ -967,6 +1056,28 @@ function clearMassing(type) {
   document.getElementById('badge-' + type).className = 'ext-badge inactive';
   document.getElementById('badge-' + type).textContent = 'off';
   document.getElementById('rules-' + type).innerHTML = '';
+}
+
+function setRearPartySide(side) {
+  REAR_PARTY_SIDE = side === 'right' ? 'right' : 'left';
+  const leftBtn = document.getElementById('btn-rear-left');
+  const rightBtn = document.getElementById('btn-rear-right');
+  if (leftBtn) leftBtn.classList.toggle('active', REAR_PARTY_SIDE === 'left');
+  if (rightBtn) rightBtn.classList.toggle('active', REAR_PARTY_SIDE === 'right');
+  const label = document.getElementById('val-rear-side');
+  if (label) label.textContent = REAR_PARTY_SIDE === 'left' ? 'Left' : 'Right';
+  updateMassing();
+}
+
+function setSideReturnSide(side) {
+  SIDE_RETURN_SIDE = side === 'right' ? 'right' : 'left';
+  const leftBtn = document.getElementById('btn-side-left');
+  const rightBtn = document.getElementById('btn-side-right');
+  if (leftBtn) leftBtn.classList.toggle('active', SIDE_RETURN_SIDE === 'left');
+  if (rightBtn) rightBtn.classList.toggle('active', SIDE_RETURN_SIDE === 'right');
+  const label = document.getElementById('val-side-return-side');
+  if (label) label.textContent = SIDE_RETURN_SIDE === 'left' ? 'Left' : 'Right';
+  updateMassing();
 }
 
 function setWrapSide(side) {
@@ -985,6 +1096,7 @@ function updateMassing() {
   if(!map||!map.isStyleLoaded()) return;
   if(activeExts.has('rear')) updateRear(map);
   if(activeExts.has('dormer')) updateDormer(map);
+  if(activeExts.has('side')) updateSideReturn(map);
   if(activeExts.has('ob')) updateOutbuilding(map);
   if(activeExts.has('wrap')) updateWrap(map);
   updateCombinedTotals();
@@ -1105,17 +1217,16 @@ function updateRear(map) {
   map.setPaintProperty('ext-3d','fill-extrusion-color', extColor);
 
   // Extension is attached to the actual rear footprint edge, not placed from map centre.
-  const extCoords = rearExtensionRing(width, depth);
+  const extCoords = rearExtensionRing(width, depth, REAR_PARTY_SIDE);
   map.getSource('extension').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[extCoords]},properties:{height}});
   map.setLayoutProperty('ext-3d','visibility','visible');
   map.setLayoutProperty('ext-top','visibility','visible');
-  map.setLayoutProperty('dormer-3d','visibility','none');
   // Illuminated zone: ground-level potential footprint
   map.getSource('zone-rear').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[extCoords]}});
 
   // Max envelope guide (6m depth full footprint width)
   const b = footprintBounds();
-  const maxEnvCoords = rearExtensionRing(b.widthM, maxPA);
+  const maxEnvCoords = rearExtensionRing(b.widthM, maxPA, REAR_PARTY_SIDE);
   map.getSource('max-env').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[maxEnvCoords]}});
 }
 
@@ -1157,9 +1268,43 @@ function updateDormer(map) {
 
   map.getSource('dormer').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[dormerCoords]},properties:{height:dormerH,base:dormerBase}});
   map.setLayoutProperty('dormer-3d','visibility','visible');
-  map.setLayoutProperty('ext-3d','visibility','none');
-  map.setLayoutProperty('ext-top','visibility','none');
   map.getSource('max-env').setData({type:'FeatureCollection',features:[]});
+}
+
+function updateSideReturn(map) {
+  const width = parseFloat(document.getElementById('sl-sidew').value);
+  const length = parseFloat(document.getElementById('sl-sided').value);
+  const height = parseFloat(document.getElementById('sl-sideh').value);
+  const b = footprintBounds();
+  const halfHouse = b.widthM / 2;
+  const clampedLength = Math.min(length, b.depthM);
+  const exceedsSideW = width > halfHouse;
+  const exceedsEaves = height > HOUSE_EAVES;
+  const exceedsBoundaryEaves = height > 3;
+  const noteClass = (exceedsSideW || exceedsEaves || exceedsBoundaryEaves) ? 'red' : 'green';
+  const area = width * clampedLength;
+  const vol = Math.round(area * height);
+
+  document.getElementById('val-sidew').textContent = width.toFixed(1)+'m';
+  document.getElementById('val-sided').textContent = clampedLength.toFixed(1)+'m';
+  document.getElementById('val-sideh').textContent = height.toFixed(1)+'m';
+  const badge = document.getElementById('badge-side');
+  badge.className = 'ext-badge ' + noteClass;
+  badge.textContent = noteClass === 'green' ? 'PD' : 'Planning';
+  document.getElementById('dims-side').textContent = area.toFixed(1) + 'm² / ' + vol + 'm³';
+  document.getElementById('rules-side').innerHTML = [
+    {icon: !exceedsSideW?'✓':'✗', text:`Side width ${width.toFixed(1)}m - half-house limit ${halfHouse.toFixed(1)}m`},
+    {icon: !exceedsEaves?'✓':'✗', text:`Height ${height.toFixed(1)}m vs eaves ${HOUSE_EAVES}m`},
+    {icon: !exceedsBoundaryEaves?'✓':'✗', text:`Boundary cap ${height.toFixed(1)}m vs 3m if within 2m`},
+    {icon:'ℹ', text:'Article 2(3), Article 4 and highway-facing side walls still need checking'}
+  ].map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
+
+  const coords = sideReturnRing(width, clampedLength, SIDE_RETURN_SIDE);
+  const sideColor = noteClass==='green'?'#0d9488':'#dc2626';
+  map.setPaintProperty('side-3d','fill-extrusion-color', sideColor);
+  map.getSource('src-side').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[coords]},properties:{height}});
+  map.setLayoutProperty('side-3d','visibility','visible');
+  map.setLayoutProperty('side-top','visibility','visible');
 }
 
 function updateOutbuilding(map) {
