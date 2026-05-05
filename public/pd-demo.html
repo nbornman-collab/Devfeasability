@@ -361,10 +361,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
           <span class="ext-badge inactive" id="badge-wrap">off</span>
         </div>
         <div class="ext-body" id="body-wrap">
-          <div class="ext-warn">Connected L-shape always requires <strong>full planning permission</strong> - joining side + rear voids PD rights.</div>
+          <div class="ext-warn">Wraparound is assessed as rear + side components. If either component breaches PD limits, planning is required.</div>
           <div class="slider-row">
             <div class="slider-labels"><span class="slider-lbl">Rear depth</span><span class="slider-val" id="val-wdepth">3.0m</span></div>
             <input type="range" id="sl-wdepth" min="1" max="6" step="0.5" value="3" oninput="updateMassing()">
+          </div>
+          <div class="slider-row">
+            <div class="slider-labels"><span class="slider-lbl">Side return side</span><span class="slider-val" id="val-wside">Left</span></div>
+            <div class="mode-tabs">
+              <button class="mode-tab active" id="btn-wside-left" onclick="setWrapSide('left')">Left</button>
+              <button class="mode-tab" id="btn-wside-right" onclick="setWrapSide('right')">Right</button>
+            </div>
           </div>
           <div class="slider-row">
             <div class="slider-labels"><span class="slider-lbl">Side return width</span><span class="slider-val" id="val-srw">1.0m</span></div>
@@ -417,6 +424,7 @@ let HOUSE_H = 7.2;
 let HOUSE_EAVES = 4.5;
 let HOUSE_PITCH = null;    // degrees, null if unknown
 let GARDEN_D = 18;
+let WRAP_SIDE = 'left';
 
 // Convert OS NGD polygon coords to [[lng,lat],...] ring
 function toRing(coords) { return coords.concat([coords[0]]); }
@@ -487,6 +495,75 @@ function makeRect(anchorLng, anchorLat, widthM, depthM) {
   const lng1 = anchorLng + widthM * M_LNG;
   const lat1 = anchorLat - depthM * M_LAT;
   return [[lng0,lat0],[lng1,lat0],[lng1,lat1],[lng0,lat1],[lng0,lat0]];
+}
+
+function footprintBounds() {
+  const ring = (window._houseCoords && window._houseCoords.length > 3) ? window._houseCoords : SITE_POLYGON;
+  if (!ring || ring.length < 4) {
+    return {
+      left: BASE_LNG - (HOUSE_W / 2) * M_LNG,
+      right: BASE_LNG + (HOUSE_W / 2) * M_LNG,
+      front: BASE_LAT + (HOUSE_D / 2) * M_LAT,
+      rear: BASE_LAT - (HOUSE_D / 2) * M_LAT,
+      widthM: HOUSE_W,
+      depthM: HOUSE_D,
+      centerLng: BASE_LNG,
+      centerLat: BASE_LAT
+    };
+  }
+  const lngs = ring.map(c => c[0]);
+  const lats = ring.map(c => c[1]);
+  const left = Math.min(...lngs);
+  const right = Math.max(...lngs);
+  const rear = Math.min(...lats);
+  const front = Math.max(...lats);
+  return {
+    left,
+    right,
+    front,
+    rear,
+    widthM: (right - left) / M_LNG,
+    depthM: (front - rear) / M_LAT,
+    centerLng: (left + right) / 2,
+    centerLat: (front + rear) / 2
+  };
+}
+
+function rearExtensionRing(widthM, depthM) {
+  const b = footprintBounds();
+  const clampedWidth = Math.min(widthM, b.widthM);
+  const left = b.centerLng - (clampedWidth / 2) * M_LNG;
+  const right = b.centerLng + (clampedWidth / 2) * M_LNG;
+  const rear = b.rear;
+  const outerRear = rear - depthM * M_LAT;
+  return [[left,rear],[right,rear],[right,outerRear],[left,outerRear],[left,rear]];
+}
+
+function wraparoundRing(sideWidthM, rearDepthM, side) {
+  const b = footprintBounds();
+  const rearOuter = b.rear - rearDepthM * M_LAT;
+  if (side === 'right') {
+    const outerRight = b.right + sideWidthM * M_LNG;
+    return [
+      [b.left,b.rear],
+      [outerRight,b.rear],
+      [outerRight,b.front],
+      [b.right,b.front],
+      [b.right,rearOuter],
+      [b.left,rearOuter],
+      [b.left,b.rear]
+    ];
+  }
+  const outerLeft = b.left - sideWidthM * M_LNG;
+  return [
+    [b.left,b.rear],
+    [b.right,b.rear],
+    [b.right,rearOuter],
+    [outerLeft,rearOuter],
+    [outerLeft,b.front],
+    [b.left,b.front],
+    [b.left,b.rear]
+  ];
 }
 
 // Active extensions (multi-select)
@@ -841,7 +918,7 @@ async function initMap() {
     map.addLayer({id:'ob-3d',slot:'top',type:'fill-extrusion',source:'src-ob',paint:{'fill-extrusion-color':'#3b82f6','fill-extrusion-height':['get','height'],'fill-extrusion-base':0,'fill-extrusion-opacity':0.85}});
     map.addLayer({id:'ob-top',slot:'top',type:'line',source:'src-ob',paint:{'line-color':'#93c5fd','line-width':2}});
 
-    // Wrap-around source (L-shape, always planning)
+    // Wrap-around source (attached L-shape)
     map.addSource('src-wrap',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',coordinates:[[]]},properties:{height:0}}});
     map.addLayer({id:'wrap-3d',slot:'top',type:'fill-extrusion',source:'src-wrap',paint:{'fill-extrusion-color':'#a855f7','fill-extrusion-height':['get','height'],'fill-extrusion-base':0,'fill-extrusion-opacity':0.75}});
 
@@ -890,6 +967,17 @@ function clearMassing(type) {
   document.getElementById('badge-' + type).className = 'ext-badge inactive';
   document.getElementById('badge-' + type).textContent = 'off';
   document.getElementById('rules-' + type).innerHTML = '';
+}
+
+function setWrapSide(side) {
+  WRAP_SIDE = side === 'right' ? 'right' : 'left';
+  const leftBtn = document.getElementById('btn-wside-left');
+  const rightBtn = document.getElementById('btn-wside-right');
+  if (leftBtn) leftBtn.classList.toggle('active', WRAP_SIDE === 'left');
+  if (rightBtn) rightBtn.classList.toggle('active', WRAP_SIDE === 'right');
+  const label = document.getElementById('val-wside');
+  if (label) label.textContent = WRAP_SIDE === 'left' ? 'Left' : 'Right';
+  updateMassing();
 }
 
 function updateMassing() {
@@ -954,6 +1042,8 @@ function updateRear(map) {
   const maxPA = 6; // semi-detached
   const maxPD = 3; // semi-detached standard
   const exceedsEaves = height > HOUSE_EAVES;
+  const nearBoundary = true; // demo assumes London terrace/semi rear works are within 2m of boundary
+  const exceedsBoundaryEaves = nearBoundary && height > 3;
 
   let verdict, color, sub, noteClass, noteText;
   const rules = [];
@@ -965,6 +1055,13 @@ function updateRear(map) {
     noteClass = 'red';
     noteText = 'The extension height exceeds the existing eaves. This takes it outside PD rights. You need full planning permission.';
     rules.push({icon:'✗',text:`Height ${height.toFixed(1)}m exceeds eaves at ${HOUSE_EAVES}m`});
+  } else if(exceedsBoundaryEaves) {
+    verdict = 'Planning Required';
+    color = 'var(--red)';
+    sub = 'Within 2m of boundary, eaves must stay under 3m';
+    noteClass = 'red';
+    noteText = 'Because this is likely within 2m of a boundary, the eaves height must not exceed 3m. Lower the extension height to stay in PD territory.';
+    rules.push({icon:'✗',text:`Eaves ${height.toFixed(1)}m exceeds 3m boundary cap`});
   } else if(depth > maxPA) {
     verdict = 'Planning Required';
     color = 'var(--red)';
@@ -990,7 +1087,8 @@ function updateRear(map) {
   }
 
   rules.push({icon: height<=HOUSE_EAVES?'✓':'✗', text:`Height ${height.toFixed(1)}m vs eaves ${HOUSE_EAVES}m`});
-  rules.push({icon:'✓', text:'Single storey -- materials to match'});
+  rules.push({icon: !exceedsBoundaryEaves?'✓':'✗', text:`Boundary cap ${height.toFixed(1)}m vs 3m if within 2m`});
+  rules.push({icon:'✓', text:'Single storey - materials to match'});
 
   // Update verdict UI
   const area = (depth * width).toFixed(1);
@@ -1006,10 +1104,8 @@ function updateRear(map) {
   const extColor = noteClass==='green'?'#16a34a':noteClass==='amber'?'#d97706':'#dc2626';
   map.setPaintProperty('ext-3d','fill-extrusion-color', extColor);
 
-  // Extension sits at rear of house
-  const offsetLng = (HOUSE_W - width) / 2; // centre the extension
-  const rearLat = BASE_LAT - HOUSE_D * M_LAT;
-  const extCoords = makeRect(BASE_LNG + offsetLng * M_LNG, rearLat, width, depth);
+  // Extension is attached to the actual rear footprint edge, not placed from map centre.
+  const extCoords = rearExtensionRing(width, depth);
   map.getSource('extension').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[extCoords]},properties:{height}});
   map.setLayoutProperty('ext-3d','visibility','visible');
   map.setLayoutProperty('ext-top','visibility','visible');
@@ -1017,8 +1113,9 @@ function updateRear(map) {
   // Illuminated zone: ground-level potential footprint
   map.getSource('zone-rear').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[extCoords]}});
 
-  // Max envelope guide (6m depth full width)
-  const maxEnvCoords = makeRect(BASE_LNG, rearLat, HOUSE_W, maxPA);
+  // Max envelope guide (6m depth full footprint width)
+  const b = footprintBounds();
+  const maxEnvCoords = rearExtensionRing(b.widthM, maxPA);
   map.getSource('max-env').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[maxEnvCoords]}});
 }
 
@@ -1119,76 +1216,48 @@ function updateWrap(map) {
   document.getElementById('val-srw').textContent    = srw.toFixed(1)+'m';
   document.getElementById('val-wht').textContent    = height.toFixed(1)+'m';
 
-  // CORRECT RULE: A connected L-shaped wrap-around (side + rear joined) almost always
-  // requires full planning permission. Joining the two elements into a single structure
-  // voids PD rights for both. GPDO Sch 2 Part 1 Class A (rear) and Class B (side) are
-  // assessed independently -- a connected L-shape fails both.
-  //
-  // The only lawful PD routes are:
-  //  1. Build side extension first under PD, then rear extension later as a separate build
-  //  2. Keep them physically disconnected (rare; limits open-plan)
-  //
-  // Therefore this massing always shows "Planning Permission Required" -- the sliders
-  // let the user size the envelope they need and understand the planning requirements.
-
-  const halfHouse    = HOUSE_W / 2;
+  const b = footprintBounds();
+  const halfHouse    = b.widthM / 2;
   const exceedsEaves = height > HOUSE_EAVES;
+  const nearBoundary = true; // demo assumes London terrace/semi side returns sit within 2m of boundary
+  const exceedsBoundaryEaves = nearBoundary && height > 3;
   const exceedsSideW = srw > halfHouse;
   const exceedsDepth = depth > 6;
+  const needsPriorApproval = depth > 3 && depth <= 6;
 
-  // Always planning required for connected L-shape
-  const verdict   = 'Planning Permission Required';
-  const color     = 'var(--red)';
-  const noteClass = 'red';
-
-  // Identify any additional blockers beyond the fundamental L-shape issue
-  const additionalIssues = [];
-  if (exceedsSideW) additionalIssues.push(`Side return ${srw.toFixed(1)}m exceeds half house width (${halfHouse.toFixed(1)}m max)`);
-  if (exceedsEaves) additionalIssues.push(`Height ${height.toFixed(1)}m exceeds eaves (${HOUSE_EAVES}m)`);
-  if (exceedsDepth) additionalIssues.push(`Rear depth ${depth.toFixed(1)}m exceeds 6m PA maximum`);
-
-  const sub = additionalIssues.length
-    ? `L-shape voids PD rights + ${additionalIssues.length} further issue${additionalIssues.length>1?'s':''}`
-    : 'Connected L-shape voids PD rights -- householder application needed';
-
-  const noteText = `A connected L-shaped extension joining the rear and side always requires a householder planning application. Joining the two elements into one structure voids Permitted Development rights under GPDO Sch 2 Part 1 Class A and Class B. Alternatives: (1) build the side extension first under PD, then the rear separately; (2) keep them physically unconnected. Typical householder application: 8 weeks, ~£258 fee.`;
+  let verdict = 'Permitted Development';
+  let noteClass = 'green';
+  if (exceedsEaves || exceedsBoundaryEaves || exceedsSideW || exceedsDepth) {
+    verdict = 'Planning Permission Required';
+    noteClass = 'red';
+  } else if (needsPriorApproval) {
+    verdict = 'Prior Approval Needed';
+    noteClass = 'amber';
+  }
 
   const rules = [
-    {icon:'✗', text:'Connected L-shape voids PD rights (GPDO Part 1 Class A + B)'},
-    {icon: !exceedsSideW?'✓':'✗', text:`Side return ${srw.toFixed(1)}m -- half-width limit ${halfHouse.toFixed(1)}m`},
+    {icon: !exceedsSideW?'✓':'✗', text:`Side return ${srw.toFixed(1)}m - half-width limit ${halfHouse.toFixed(1)}m`},
     {icon: !exceedsEaves?'✓':'✗', text:`Height ${height.toFixed(1)}m vs eaves ${HOUSE_EAVES}m`},
-    {icon: depth<=6?'✓':'✗', text:`Rear depth ${depth.toFixed(1)}m (6m PA max if built separately)`},
-    {icon:'ℹ', text:'Alternative: Phase build -- side PD first, rear PD second'},
+    {icon: !exceedsBoundaryEaves?'✓':'✗', text:`Boundary cap ${height.toFixed(1)}m vs 3m if within 2m`},
+    {icon: depth<=3?'✓':needsPriorApproval?'⚠':'✗', text:`Rear depth ${depth.toFixed(1)}m - 3m PD / 6m prior approval band`},
+    {icon:'ℹ', text:'Article 4, conservation area, highway-facing side walls and previous conditions still need checking'},
   ];
 
-  const rearArea  = HOUSE_W * depth;
-  const srArea    = srw * depth;
+  const rearArea  = b.widthM * depth;
+  const srArea    = srw * (b.depthM + depth);
   const totalArea = rearArea + srArea;
   const vol = Math.round(totalArea * height);
   const badgeW = document.getElementById('badge-wrap');
-  badgeW.className = 'ext-badge red';
-  badgeW.textContent = 'Planning';
+  badgeW.className = 'ext-badge ' + noteClass;
+  badgeW.textContent = noteClass === 'green' ? 'PD' : noteClass === 'amber' ? 'PA' : 'Planning';
   document.getElementById('dims-wrap').textContent = totalArea.toFixed(1) + 'm² / ' + vol + 'm³';
   document.getElementById('rules-wrap').innerHTML = rules.map(r=>`<div class="rule-row"><span class="rule-icon">${r.icon}</span><span>${r.text}</span></div>`).join('');
 
-  // Build L-shape polygon
-  // House rear sits at rearLat; side return extends to the LEFT (typical)
-  const rearLat   = BASE_LAT - HOUSE_D * M_LAT;
-  const extRearLat = rearLat - depth * M_LAT;
-  const leftLng   = BASE_LNG - (HOUSE_W / 2) * M_LNG;
-  const rightLng  = BASE_LNG + (HOUSE_W / 2) * M_LNG;
-  const srLng     = leftLng - srw * M_LNG;  // side return outer wall
-
-  // L-shape clockwise ring
-  const lShape = [
-    [srLng,    rearLat],     // side return - top-left (house rear level)
-    [srLng,    extRearLat],  // side return - bottom-left (rear wall)
-    [rightLng, extRearLat],  // rear right
-    [rightLng, rearLat],     // back to house rear-right
-    [srLng,    rearLat],     // close
-  ];
+  // Build an attached L-shape from actual footprint bounds.
+  const lShape = wraparoundRing(srw, depth, WRAP_SIDE);
 
   const extColor = noteClass==='green'?'#16a34a':noteClass==='amber'?'#d97706':'#dc2626';
+  map.setPaintProperty('wrap-3d','fill-extrusion-color', extColor);
   map.getSource('src-wrap').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[lShape]},properties:{height}});
   map.setLayoutProperty('wrap-3d','visibility','visible');
   map.getSource('zone-wrap').setData({type:'Feature',geometry:{type:'Polygon',coordinates:[lShape]}});
