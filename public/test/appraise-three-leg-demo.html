@@ -50,13 +50,10 @@ h1 { margin: 0; font-size: clamp(38px, 5vw, 78px); line-height: .88; letter-spac
 .route-note { margin-top: 8px; color: var(--ink2); font-size: 13px; line-height: 1.45; max-width: 820px; }
 .metric-number { font: 900 38px var(--mono); letter-spacing: -.08em; line-height: .9; }
 .metric-note { margin-top: 8px; font: 800 9px var(--mono); letter-spacing: .09em; text-transform: uppercase; color: var(--ink3); }
-.map-zone { padding: 18px 28px 0; }
-.map-shell { position: relative; min-height: 440px; border-radius: 24px; overflow: hidden; border: 1px solid rgba(17,17,16,.10); background: #ebe7dd; box-shadow: 0 18px 44px rgba(17,17,16,.08); }
-.map-shell #appraise-map { position: absolute; inset: 0; }
-.map-scrim { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(244,242,236,.02) 0%, rgba(244,242,236,.10) 70%, rgba(244,242,236,.28) 100%); }
-.map-label { position: absolute; left: 18px; bottom: 18px; z-index: 2; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.map-tag { border-radius: 999px; padding: 8px 11px; background: rgba(244,242,236,.92); border: 1px solid rgba(17,17,16,.12); color: var(--ink2); font: 800 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; box-shadow: 0 10px 28px rgba(17,17,16,.08); }
-.map-status { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink3); font: 800 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; background: #ebe7dd; z-index: 1; }
+.map-zone { padding: 0 28px 18px; border-bottom: 1px solid var(--rule); }
+.map-half { position: relative; min-height: 460px; background: var(--bg2); overflow: hidden; border-left: 1px solid var(--rule); border-right: 1px solid var(--rule); }
+.map-half #map { position: absolute; inset: 0; width: 100%; height: 100%; }
+.map-status { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink3); font: 800 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; background: var(--bg2); z-index: 1; }
 .columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 18px 28px 24px; flex: 1; }
 .leg { display: flex; flex-direction: column; min-height: 0; border: 1px solid rgba(17,17,16,.08); border-radius: 22px; background: rgba(255,255,255,.62); box-shadow: 0 18px 44px rgba(17,17,16,.065); overflow: hidden; }
 .leg-head { padding: 18px 18px 16px; border-bottom: 1px solid var(--rule); min-height: 132px; }
@@ -139,15 +136,9 @@ h1 { margin: 0; font-size: clamp(38px, 5vw, 78px); line-height: .88; letter-spac
   </section>
 
   <section class="map-zone" aria-label="Site map">
-    <div class="map-shell">
-      <div id="appraise-map"></div>
-      <div id="appraise-map-status" class="map-status">Loading map</div>
-      <div class="map-scrim"></div>
-      <div class="map-label">
-        <span class="map-tag">196 Blackfriars Road</span>
-        <span class="map-tag">Existing 13.7m</span>
-        <span class="map-tag">Indicative 14 storeys</span>
-      </div>
+    <div class="map-half">
+      <div id="map"></div>
+      <div id="map-status" class="map-status">Loading map</div>
     </div>
   </section>
 
@@ -273,101 +264,91 @@ h1 { margin: 0; font-size: clamp(38px, 5vw, 78px); line-height: .88; letter-spac
 
 <script>
 (function initAppraiseMap() {
-  const status = document.getElementById('appraise-map-status');
-  if (!window.mapboxgl || typeof SITE_INTELLIGENCE === 'undefined' || !SITE_INTELLIGENCE.polygon) {
+  const status = document.getElementById('map-status');
+  const si = typeof SITE_INTELLIGENCE !== 'undefined' ? SITE_INTELLIGENCE : null;
+  if (!window.mapboxgl || !si || !si.polygon) {
     if (status) status.textContent = 'Map unavailable';
     return;
   }
-  const center = [SITE_INTELLIGENCE.lng, SITE_INTELLIGENCE.lat];
+  const center = [si.lng, si.lat];
+  const existingHeight = (((si.factors || {}).sky || {}).existing_m) || 13.7;
+  const floorToFloor = 3.0;
+  const proposedHeight = existingHeight + (14 * floorToFloor);
   fetch('/api/config')
     .then(function(response) { return response.json(); })
     .then(function(config) {
       if (!config || !config.mapboxToken) throw new Error('Map token unavailable');
       mapboxgl.accessToken = config.mapboxToken;
       const map = new mapboxgl.Map({
-        container: 'appraise-map',
+        container: 'map',
         style: 'mapbox://styles/mapbox/standard',
         center: center,
-        zoom: 17.2,
-        pitch: 60,
+        zoom: 17.5,
+        pitch: 58,
         bearing: -20,
         interactive: true,
         attributionControl: false,
         antialias: true
       });
-      map.addControl(new mapboxgl.NavigationControl({ showCompass: true }), 'top-left');
-      map.scrollZoom.disable();
+      map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+      map.on('load', function() { map.setPadding({ left: 0, right: 0, top: 0, bottom: 0 }); });
       map.on('style.load', function() {
         if (status) status.remove();
-        try { map.setConfigProperty('basemap', 'lightPreset', 'day'); } catch (e) {}
-        try { map.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch (e) {}
-        try { map.setConfigProperty('basemap', 'showTransitLabels', false); } catch (e) {}
-        map.addLayer({
-          id: 'ctx-3d',
-          source: 'composite',
-          'source-layer': 'building',
-          filter: ['==', 'extrude', 'true'],
-          type: 'fill-extrusion',
-          minzoom: 14,
-          paint: {
-            'fill-extrusion-color': '#e8e6e0',
-            'fill-extrusion-height': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'height']],
-            'fill-extrusion-base': ['interpolate', ['linear'], ['zoom'], 15, 0, 15.05, ['get', 'min_height']],
-            'fill-extrusion-opacity': 0.20
-          }
-        });
-        map.addSource('appraise-site-poly', {
+        try { map.setConfigProperty('basemap', 'lightPreset', 'dusk'); } catch (e) {}
+        try { map.setConfigProperty('basemap', 'showPlaceLabels', true); } catch (e) {}
+        try { map.setConfigProperty('basemap', 'show3dObjects', true); } catch (e) {}
+        try { map.setPaintProperty('building-extrusion', 'fill-extrusion-color', '#e8e6e0'); } catch (e) {}
+        try { map.setPaintProperty('building-extrusion', 'fill-extrusion-opacity', 0.85); } catch (e) {}
+        try { map.setPaintProperty('building', 'fill-extrusion-color', '#e8e6e0'); } catch (e) {}
+        try { map.setPaintProperty('3d-buildings', 'fill-extrusion-color', '#e8e6e0'); } catch (e) {}
+        try { map.setPaintProperty('building-models', 'fill-extrusion-color', '#e8e6e0'); } catch (e) {}
+        try { map.setPaintProperty('land', 'background-color', '#dfddd7'); } catch (e) {}
+        try { map.setPaintProperty('landcover', 'fill-color', '#dfddd7'); } catch (e) {}
+
+        map.addSource('site-poly', {
           type: 'geojson',
-          data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [SITE_INTELLIGENCE.polygon] } }
+          data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [si.polygon] } },
+          slot: 'top'
         });
         map.addLayer({
-          id: 'existing-cap',
+          id: 'site-existing',
           type: 'fill-extrusion',
-          source: 'appraise-site-poly',
+          source: 'site-poly',
+          slot: 'top',
           paint: {
-            'fill-extrusion-color': '#f0f4ff',
-            'fill-extrusion-height': 13.7,
+            'fill-extrusion-color': '#b45309',
+            'fill-extrusion-height': existingHeight,
             'fill-extrusion-base': 0,
-            'fill-extrusion-opacity': 0.90,
-            'fill-extrusion-emissive-strength': 0.2
+            'fill-extrusion-opacity': 0.90
           }
         });
         map.addLayer({
-          id: 'podium-3d',
+          id: 'site-massing',
           type: 'fill-extrusion',
-          source: 'appraise-site-poly',
+          source: 'site-poly',
+          slot: 'top',
           paint: {
-            'fill-extrusion-color': '#b8845c',
-            'fill-extrusion-height': 42.0,
-            'fill-extrusion-base': 0,
-            'fill-extrusion-opacity': 0.78,
-            'fill-extrusion-emissive-strength': 0.2
+            'fill-extrusion-color': '#059669',
+            'fill-extrusion-height': proposedHeight,
+            'fill-extrusion-base': existingHeight,
+            'fill-extrusion-opacity': 0.70
           }
         });
         for (let floor = 1; floor <= 14; floor += 1) {
-          const height = floor * 3.0;
+          const height = existingHeight + (floor * floorToFloor);
           map.addLayer({
             id: 'floor-line-' + floor,
             type: 'fill-extrusion',
-            source: 'appraise-site-poly',
+            source: 'site-poly',
+            slot: 'top',
             paint: {
-              'fill-extrusion-color': 'rgba(17,17,16,0.18)',
+              'fill-extrusion-color': 'rgba(255,255,255,0.95)',
               'fill-extrusion-height': height,
-              'fill-extrusion-base': height - 0.18,
+              'fill-extrusion-base': height - 0.35,
               'fill-extrusion-opacity': 1.0
             }
           });
         }
-        map.addLayer({
-          id: 'podium-edge',
-          type: 'line',
-          source: 'appraise-site-poly',
-          paint: {
-            'line-color': '#111110',
-            'line-width': 1.4,
-            'line-opacity': 0.45
-          }
-        });
         setTimeout(function() { map.resize(); }, 200);
       });
       map.on('error', function() {
