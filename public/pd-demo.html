@@ -497,51 +497,31 @@ function polygonDimensions(ring) {
 // Roof info panel update
 function updateRoofPanel(props) {
   const el = document.getElementById('roof-info');
-  // Always update hero strip numbers regardless of roof data
-  if (props._roofPitchDeg) {
-    document.getElementById('hero-pitch').textContent = props._roofPitchDeg + '°';
-  }
+  const ridge = props._roofRidge || HOUSE_H;
+  const eaves = props._roofEaves || props._heightRoofBase || HOUSE_EAVES;
+  const rise = props._roofRise || Math.max(0, ridge - eaves);
+  const halfSpan = HOUSE_W / 2;
+  const loftVol = rise ? Math.round(0.5 * halfSpan * rise * HOUSE_D) : null;
+  const pitchInput = document.getElementById('hero-pitch');
+  if (pitchInput && !HOUSE_PITCH) pitchInput.value = '';
   if (props._roofRidge) document.getElementById('hero-ridge').textContent = props._roofRidge + 'm';
-  if (props._roofEaves || props._heightRoofBase) {
-    const e = props._roofEaves || parseFloat((props._heightRoofBase||0).toFixed(1));
-    document.getElementById('hero-eaves').textContent = e + 'm';
-  }
-  // Loft volume estimate for hero
-  if (props._roofPitchDeg && props._roofRise) {
-    const halfSpan = HOUSE_W / 2;
-    const loftVol = Math.round(0.5 * halfSpan * props._roofRise * HOUSE_D);
-    document.getElementById('hero-loft').textContent = loftVol + 'm³';
-  }
-  // Also update property sub
+  if (eaves) document.getElementById('hero-eaves').textContent = parseFloat(eaves).toFixed(1) + 'm';
+  if (loftVol) document.getElementById('hero-loft').textContent = loftVol + 'm³';
   if (props._area) {
     const sub = document.getElementById('prop-sub');
     if (sub) sub.textContent = sub.textContent.replace('Loading data...', Math.round(props._area) + 'm² footprint');
   }
   if (!el) return;
-  if (props._roofPitchDeg) {
-    const pitchDeg = props._roofPitchDeg;
-    const ridge = props._roofRidge, eaves = props._roofEaves;
-    const rise = props._roofRise;
-    // Loft volume indicator - Class B limit: 40m3 terraced/semi, 50m3 detached
-    const footprintM2 = props._area || (HOUSE_W * HOUSE_D);
-    const halfSpan = HOUSE_W / 2;
-    const loftVol = Math.round((0.5 * halfSpan * rise * (HOUSE_D || HOUSE_D)) );
-    const pdLimit = 40; // assume semi/terraced
-    const remaining = Math.max(0, pdLimit - loftVol);
-    el.innerHTML = `
-      <div class="roof-row"><span class="roof-key">Roof pitch</span><span class="roof-val accent">${pitchDeg}&deg;</span></div>
-      <div class="roof-row"><span class="roof-key">Ridge height</span><span class="roof-val">${ridge}m</span></div>
-      <div class="roof-row"><span class="roof-key">Eaves height</span><span class="roof-val">${eaves}m</span></div>
-      <div class="roof-row"><span class="roof-key">Rise</span><span class="roof-val">${rise}m</span></div>
-      <div class="roof-row"><span class="roof-key">Loft volume (est.)</span><span class="roof-val">${loftVol}m&sup3;</span></div>
-      <div class="roof-row"><span class="roof-key">Class B remaining</span><span class="roof-val ${remaining>10?'green':'amber'}">${remaining}m&sup3; of ${pdLimit}m&sup3;</span></div>
-      <div class="roof-note">Pitch: a ${pitchDeg}&deg; roof ${pitchDeg>=35?'gives good loft volume':'may limit usable headroom'}. ${pitchDeg>=35?'Standard dormer or full hip-to-gable works well.':'Hip-to-gable may be the better strategy.'}</div>
-    `;
-    el.style.display = 'block';
-  } else {
-    el.innerHTML = '<div class="roof-row"><span class="roof-key">Roof data</span><span class="roof-val" style="color:var(--ink3)">Not available from OS NGD</span></div>';
-    el.style.display = 'block';
-  }
+  const pitchLabel = HOUSE_PITCH ? HOUSE_PITCH + '&deg; manual' : 'Needs check';
+  el.innerHTML = `
+    <div class="roof-row"><span class="roof-key">Roof pitch</span><span class="roof-val accent">${pitchLabel}</span></div>
+    <div class="roof-row"><span class="roof-key">Ridge height</span><span class="roof-val">${ridge || '--'}m</span></div>
+    <div class="roof-row"><span class="roof-key">Eaves height</span><span class="roof-val">${eaves || '--'}m</span></div>
+    <div class="roof-row"><span class="roof-key">Rise</span><span class="roof-val">${rise ? rise.toFixed(1) : '--'}m</span></div>
+    <div class="roof-row"><span class="roof-key">Roof volume envelope</span><span class="roof-val">${loftVol ? loftVol + 'm&sup3;' : '--'}</span></div>
+    <div class="roof-note">OS NGD gives footprint, ridge and eaves. Pitch and ridge direction are modelled assumptions until confirmed from survey, street view or manual override.</div>
+  `;
+  el.style.display = 'block';
 }
 
 // Utility: build a rectangle polygon from anchor corner + dimensions (for extension proposals)
@@ -804,8 +784,8 @@ async function loadBuilding(lat, lng) {
       HOUSE_D = dim.d;
       if (best.properties._heightMax) HOUSE_H = parseFloat(best.properties._heightMax.toFixed(1));
       if (best.properties._heightRoofBase) HOUSE_EAVES = parseFloat(best.properties._heightRoofBase.toFixed(1));
-      if (best.properties._roofPitchDeg) HOUSE_PITCH = best.properties._roofPitchDeg;
-      if (status) status.textContent = 'Real footprint loaded - ' + Math.round(best.properties._area||0) + 'm² · ' + HOUSE_W.toFixed(0) + 'm wide · ridge ' + HOUSE_H + 'm · eaves ' + HOUSE_EAVES + 'm' + (HOUSE_PITCH ? ' · pitch ' + HOUSE_PITCH + '°' : '');
+      HOUSE_PITCH = null;
+      if (status) status.textContent = 'Real footprint loaded - ' + Math.round(best.properties._area||0) + 'm² · ' + HOUSE_W.toFixed(0) + 'm wide · ridge ' + HOUSE_H + 'm · eaves ' + HOUSE_EAVES + 'm · pitch needs check';
       updateRoofPanel(best.properties);
       updateRoofGuide();
       return ring;
@@ -909,16 +889,16 @@ function roofMeshModel() {
   const xR = (b.right - b.centerLng) / M_LNG;
   const yF = (b.front - b.centerLat) / M_LAT;
   const yR = (b.rear - b.centerLat) / M_LAT;
-  const xC = 0;
+  const yC = 0;
   const verts = [
-    [xL,yF,eaves], [xL,yR,eaves], [xC,yF,ridge], [xC,yR,ridge],
-    [xR,yF,eaves], [xR,yR,eaves]
+    [xL,yF,eaves], [xR,yF,eaves], [xL,yC,ridge], [xR,yC,ridge],
+    [xL,yR,eaves], [xR,yR,eaves]
   ];
   const idx = [
-    0,1,3, 0,3,2,
-    2,3,5, 2,5,4,
-    0,2,4,
-    1,5,3
+    0,2,3, 0,3,1,
+    2,4,5, 2,5,3,
+    0,4,2,
+    1,3,5
   ];
   return { verts, idx, center:[b.centerLng,b.centerLat] };
 }
@@ -978,15 +958,15 @@ function makePitchedRoofLayer() {
 
 function roofGuideData() {
   const b = footprintBounds();
-  const ridgeLng = (b.left + b.right) / 2;
+  const ridgeLat = (b.front + b.rear) / 2;
   return {
     type: 'FeatureCollection',
     features: [
-      {type:'Feature',geometry:{type:'Polygon',coordinates:[[[b.left,b.front],[ridgeLng,b.front],[ridgeLng,b.rear],[b.left,b.rear],[b.left,b.front]]]},properties:{kind:'plane'}},
-      {type:'Feature',geometry:{type:'Polygon',coordinates:[[[ridgeLng,b.front],[b.right,b.front],[b.right,b.rear],[ridgeLng,b.rear],[ridgeLng,b.front]]]},properties:{kind:'plane'}},
-      {type:'Feature',geometry:{type:'LineString',coordinates:[[ridgeLng,b.front],[ridgeLng,b.rear]]},properties:{kind:'ridge'}},
-      {type:'Feature',geometry:{type:'LineString',coordinates:[[b.left,b.front],[b.left,b.rear]]},properties:{kind:'eaves'}},
-      {type:'Feature',geometry:{type:'LineString',coordinates:[[b.right,b.front],[b.right,b.rear]]},properties:{kind:'eaves'}}
+      {type:'Feature',geometry:{type:'Polygon',coordinates:[[[b.left,b.front],[b.right,b.front],[b.right,ridgeLat],[b.left,ridgeLat],[b.left,b.front]]]},properties:{kind:'plane'}},
+      {type:'Feature',geometry:{type:'Polygon',coordinates:[[[b.left,ridgeLat],[b.right,ridgeLat],[b.right,b.rear],[b.left,b.rear],[b.left,ridgeLat]]]},properties:{kind:'plane'}},
+      {type:'Feature',geometry:{type:'LineString',coordinates:[[b.left,ridgeLat],[b.right,ridgeLat]]},properties:{kind:'ridge'}},
+      {type:'Feature',geometry:{type:'LineString',coordinates:[[b.left,b.front],[b.right,b.front]]},properties:{kind:'eaves'}},
+      {type:'Feature',geometry:{type:'LineString',coordinates:[[b.left,b.rear],[b.right,b.rear]]},properties:{kind:'eaves'}}
     ]
   };
 }
