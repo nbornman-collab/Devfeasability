@@ -619,14 +619,36 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── MAP POPUP ── */
 .mapboxgl-popup-content {
   background: var(--bg); border: 1px solid var(--rule); border-radius: 8px;
-  padding: 10px 12px; box-shadow: 0 4px 20px rgba(0,0,0,.15); min-width: 160px;
+  padding: 0; box-shadow: 0 4px 20px rgba(0,0,0,.15); min-width: 320px;
   font-family: var(--sans);
 }
-.popup-name { font: 700 11px var(--sans); color: var(--ink); }
-.popup-score-row { display: flex; align-items: baseline; gap: 6px; margin-top: 5px; }
-.popup-score { font: 800 22px var(--mono); color: var(--ink); letter-spacing: -.02em; }
-.popup-verdict { font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
-.popup-addr { font: 400 13px var(--sans); color: var(--ink3); margin-top: 3px; }
+.site-popup-card { width: 340px; max-width: 82vw; overflow: hidden; }
+.site-popup-head { padding: 14px 14px 12px; border-bottom: 1px solid var(--rule); }
+.site-popup-topline { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.popup-name { font: 700 13px/1.25 var(--sans); color: var(--ink); }
+.popup-addr { font: 400 12px/1.35 var(--sans); color: var(--ink3); margin-top: 4px; }
+.popup-score-block { flex: 0 0 auto; text-align: right; }
+.popup-score { font: 800 26px var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
+.popup-score-sub { font: 700 8px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); }
+.popup-verdict { display: inline-block; margin-top: 8px; padding: 4px 8px; border-radius: 999px; font: 700 9px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: #fff; }
+.popup-verdict.green { background: var(--green); }
+.popup-verdict.amber { background: var(--amber); }
+.popup-verdict.red { background: var(--red); }
+.popup-summary { margin-top: 10px; font: 500 12px/1.45 var(--sans); color: var(--ink2); }
+.popup-body { padding: 12px 14px 14px; }
+.popup-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+.popup-metric { background: rgba(17,17,16,.04); border: 1px solid rgba(17,17,16,.08); border-radius: 6px; padding: 8px 7px; min-height: 48px; }
+.popup-metric-val { font: 800 15px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.popup-metric-lbl { margin-top: 2px; font: 700 8px/1.2 var(--sans); color: var(--ink3); letter-spacing: .1em; text-transform: uppercase; }
+.popup-signals { display: grid; gap: 6px; margin-top: 12px; }
+.popup-signal { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-top: 1px solid rgba(17,17,16,.08); }
+.popup-signal-k { font: 700 9px var(--sans); color: var(--ink3); letter-spacing: .1em; text-transform: uppercase; }
+.popup-signal-v { font: 600 11px/1.35 var(--sans); color: var(--ink); text-align: right; }
+.popup-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.popup-actions { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 12px; }
+.popup-btn { display: block; text-align: center; padding: 10px 12px; border-radius: 6px; background: var(--ink); color: var(--bg); text-decoration: none; font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+.popup-btn:hover { background: var(--accent); }
+.popup-btn.locked { background: rgba(17,17,16,.12); color: var(--ink3); pointer-events: none; }
 
 /* ── MASSING POPUP (90vh, 16:9) ── */
 .mass-scrim {
@@ -1954,7 +1976,7 @@ function render() {
     const vc = s.headroomVerdictClass || headroomVerdictClass(s.headroomVerdict);
     const vl = s.headroomVerdictLabel || headroomVerdictLabel(s.headroomVerdict);
     const motDot = s.motScore >= 4 ? '🔴' : s.motScore >= 2 ? '🟡' : '';
-    const displayScore = s.headroomVerdict === 'yes' ? (s.headroomUpsideScore || s.score) : s.score;
+    const displayScore = discoveryDisplayScore(s);
     const bc = scoreColor(displayScore);
     const summaryBits = [s.headroomReasonPrimary]
       .concat((s.headroomReasons || []).filter(r => r && r !== s.headroomReasonPrimary).slice(0, 2))
@@ -2013,6 +2035,10 @@ function render() {
 
 // ── Card click ────────────────────────────────────────────────────────────────
 // ── Analyst hook generator ────────────────────────────────────────────────────
+function discoveryDisplayScore(site) {
+  return site && site.headroomVerdict === 'yes' ? (site.headroomUpsideScore || site.score) : (site ? site.score : 0);
+}
+
 function siteDevelopmentLogic(s) {
   const canonical = ensureCanonicalSite(s);
   const planning = planningSignalSummary(s);
@@ -2272,7 +2298,7 @@ function openProvisionalFocus(site) {
   activeSite = site.id;
   document.querySelectorAll('.site-card.active').forEach(function(el){el.classList.remove('active');});
   document.getElementById('site-list')?.classList.remove('has-active');
-  document.getElementById('focus-score').textContent = site.headroomVerdict === 'yes' ? (site.headroomUpsideScore || site.score) : site.score;
+  document.getElementById('focus-score').textContent = discoveryDisplayScore(site);
   var vEl = document.getElementById('focus-verdict');
   var vc = verdictClass(site.score);
   vEl.textContent = site.score >= 50 ? 'Preliminary' : 'Hard No Risk';
@@ -2389,10 +2415,10 @@ function openFocus(site, opts) {
   document.getElementById('site-list')?.classList.remove('has-active');
   const vc = site.headroomVerdictClass || headroomVerdictClass(site.headroomVerdict);
   const vl = site.headroomVerdictLabel || headroomVerdictLabel(site.headroomVerdict);
-  document.getElementById('focus-score').textContent = site.headroomVerdict === 'yes' ? (site.headroomUpsideScore || site.score) : site.score;
+  document.getElementById('focus-score').textContent = discoveryDisplayScore(site);
   const vEl = document.getElementById('focus-verdict');
   vEl.textContent = vl; vEl.className = 'focus-verdict ' + vc;
-  document.getElementById('focus-score-sub').textContent = (site.headroomVerdict === 'yes' ? (site.headroomSecondaryLine || ('Upside ' + (site.headroomUpsideScore || site.score) + '/100')) : (site.headroomReasonPrimary || 'Needs verification')) + ' · ' + site.borough;
+  document.getElementById('focus-score-sub').textContent = (site.headroomVerdict === 'yes' ? (site.headroomSecondaryLine || ('Upside ' + discoveryDisplayScore(site) + '/100')) : (site.headroomReasonPrimary || 'Needs verification')) + ' · ' + site.borough;
   document.getElementById('focus-name').textContent = site.name;
   document.getElementById('focus-addr').textContent = site.address;
   const chips = [
@@ -2480,21 +2506,108 @@ function closeFocus() {
 }
 
 // ── Popup ─────────────────────────────────────────────────────────────────────
-function showPopup(site) {
-  if (popup) { popup.remove(); popup=null; }
+function popupEscape(value) {
+  return String(value ?? '').replace(/[&<>"']/g, function(ch) {
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]);
+  });
+}
+
+function popupValue(value, fallback) {
+  if (value === null || value === undefined || value === '' || Number.isNaN(value)) return fallback || 'Not available';
+  return value;
+}
+
+function popupMetric(label, value) {
+  return `<div class="popup-metric"><div class="popup-metric-val">${popupEscape(popupValue(value, '—'))}</div><div class="popup-metric-lbl">${popupEscape(label)}</div></div>`;
+}
+
+function popupSignal(label, value) {
+  return `<div class="popup-signal"><span class="popup-signal-k">${popupEscape(label)}</span><span class="popup-signal-v">${popupEscape(popupValue(value))}</span></div>`;
+}
+
+function planningSignalLabel(planning) {
+  if (!planning) return 'Not assessed';
+  if (planning.heightIntent) return 'Height precedent active';
+  if (planning.policyMajorUplift) return planning.policyZone || 'Policy uplift lane';
+  if (planning.majorCount > 0) return `${planning.majorCount} major nearby`;
+  if (planning.applicationCount > 0) return `${planning.applicationCount} nearby applications`;
+  return 'No strong live signal';
+}
+
+function renderDiscoveryPopup(site) {
+  const canonical = ensureCanonicalSite(site);
+  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
   const vc = site.headroomVerdictClass || headroomVerdictClass(site.headroomVerdict);
   const vl = site.headroomVerdictLabel || headroomVerdictLabel(site.headroomVerdict);
-  const col = vc==='green'?'#15803d':vc==='amber'?'#b45309':'#b91c1c';
-  popup = new mapboxgl.Popup({offset:10,closeButton:true,maxWidth:'220px'})
-    .setLngLat([site.lng,site.lat])
-    .setHTML(`
-      <div class="popup-name">${site.name}</div>
-      <div class="popup-score-row">
-        <span class="popup-score">${site.headroomVerdict === 'yes' ? (site.headroomUpsideScore || site.score) : site.score}</span>
-        <span class="popup-verdict" style="color:${col}">${vl}</span>
+  const displayScore = discoveryDisplayScore(site);
+  const existingFloors = canonical ? canonical.existingFloors : Math.max(1, Math.round(site.maxFloors * 0.45));
+  const addF = baseScenario ? baseScenario.addedF : Math.max(0, (site.maxFloors || 0) - existingFloors);
+  const addNIA = baseScenario ? Math.round(baseScenario.addedNIA || 0) : Math.round((site.plotM2 || 0) * 0.42 * 0.78 * addF);
+  const gdv = baseScenario && baseScenario.gdv ? `£${Math.round(baseScenario.gdv / 1e6)}M` : (site.gdvEst ? `£${site.gdvEst}M` : '—');
+  const giaUplift = site.roughGiaUpliftPct != null ? `${site.roughGiaUpliftPct > 0 ? '+' : ''}${site.roughGiaUpliftPct}%` : '—';
+  const planning = planningSignalSummary(site);
+  const heritage = site.heritTier === 'blocking' ? 'High risk' : site.heritTier === 'navigable' ? 'Navigable' : 'Manageable';
+  const seller = site.motScore >= 4 ? `High signal (${site.motScore}/5)` : site.motScore >= 2 ? `Watch (${site.motScore}/5)` : 'No strong signal';
+  const market = site.onMarket ? `Listed${site.listingAgent ? ' - ' + site.listingAgent : ''}` : 'Off-market / unknown';
+  const confidence = site.headroomConfidence ? site.headroomConfidence.charAt(0).toUpperCase() + site.headroomConfidence.slice(1) : 'Not assessed';
+  const summaryBits = [site.headroomReasonPrimary]
+    .concat((site.headroomReasons || []).filter(function(reason) { return reason && reason !== site.headroomReasonPrimary; }).slice(0, 2))
+    .concat(site.headroomVerdict === 'yes' && site.headroomSecondaryLine ? [site.headroomSecondaryLine] : []);
+  const summary = summaryBits.filter(Boolean).join(' · ') || site.desc || 'Standardised discovery scan pending deeper report.';
+  const chips = [
+    site.inOA ? '<span class="chip oa">OA</span>' : '',
+    site.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
+    site.inCons ? '<span class="chip cons">Conservation</span>' : '',
+    site.ptal ? `<span class="chip ptal">PTAL ${popupEscape(site.ptal)}</span>` : '',
+    site.onMarket ? '<span class="chip listed">Listed</span>' : '',
+    site.verified ? '<span class="chip">Verified</span>' : '',
+  ].filter(Boolean).join('');
+  const action = site.t1
+    ? `<a class="popup-btn" href="${popupEscape(site.t1)}" onclick="event.stopPropagation()">Open appraise</a>`
+    : '<span class="popup-btn locked">Appraise coming soon</span>';
+
+  return `
+    <div class="site-popup-card">
+      <div class="site-popup-head">
+        <div class="site-popup-topline">
+          <div>
+            <div class="popup-name">${popupEscape(site.name)}</div>
+            <div class="popup-addr">${popupEscape(site.address || site.borough)}</div>
+          </div>
+          <div class="popup-score-block">
+            <div class="popup-score">${popupEscape(displayScore)}</div>
+            <div class="popup-score-sub">Score /100</div>
+            <span class="popup-verdict ${popupEscape(vc)}">${popupEscape(vl)}</span>
+          </div>
+        </div>
+        <div class="popup-summary">${popupEscape(summary)}</div>
+        ${chips ? `<div class="popup-chips">${chips}</div>` : ''}
       </div>
-      <div class="popup-addr">${site.borough}</div>
-    `)
+      <div class="popup-body">
+        <div class="popup-metrics">
+          ${popupMetric('GDV', gdv)}
+          ${popupMetric('Added floors', addF ? '+' + addF + 'F' : '—')}
+          ${popupMetric('New NIA', addNIA ? addNIA.toLocaleString() + 'm²' : '—')}
+          ${popupMetric('GIA uplift', giaUplift)}
+          ${popupMetric('PTAL', site.ptal ? site.ptal + '/6' : '—')}
+          ${popupMetric('Confidence', confidence)}
+        </div>
+        <div class="popup-signals">
+          ${popupSignal('Planning', planningSignalLabel(planning))}
+          ${popupSignal('Heritage', heritage)}
+          ${popupSignal('Seller', seller)}
+          ${popupSignal('Market', market)}
+        </div>
+        <div class="popup-actions">${action}</div>
+      </div>
+    </div>`;
+}
+
+function showPopup(site) {
+  if (popup) { popup.remove(); popup=null; }
+  popup = new mapboxgl.Popup({offset:10,closeButton:true,maxWidth:'360px',className:'site-popup'})
+    .setLngLat([site.lng,site.lat])
+    .setHTML(renderDiscoveryPopup(site))
     .addTo(MAP);
 }
 
@@ -2808,13 +2921,14 @@ function openMassPopup(site) {
   setTimeout(function() { scrim.style.opacity = '1'; }, 10);
   document.body.style.overflow = 'hidden';
 
-  // Populate info
-  var vc = verdictClass(site.score);
-  var vl = verdictLabel(site.score);
+  // Populate info using the same discovery verdict and score as cards and map popup.
+  var vc = site.headroomVerdictClass || headroomVerdictClass(site.headroomVerdict);
+  var vl = site.headroomVerdictLabel || headroomVerdictLabel(site.headroomVerdict);
+  var displayScore = discoveryDisplayScore(site);
 
   document.getElementById('mass-name').textContent = site.name;
   document.getElementById('mass-addr').textContent = site.address + ' · ' + site.borough;
-  document.getElementById('mass-score').textContent = site.score;
+  document.getElementById('mass-score').textContent = displayScore;
   document.getElementById('mass-score-lbl').textContent = '/100';
   var vEl = document.getElementById('mass-verdict');
   vEl.textContent = vl; vEl.className = 'mass-verdict ' + vc;
@@ -2910,7 +3024,7 @@ function updateMassMetrics(sc, site) {
   sc.gdvHi = gdvHi;
 
   document.getElementById('mass-metrics').innerHTML = [
-    metricHTML((site.score || 0) + '/100', 'Headroom score', true),
+    metricHTML(discoveryDisplayScore(site) + '/100', 'Headroom score', true),
     metricHTML('£' + gdvLo + '-' + gdvHi + 'M', 'Est. GDV range', true),
     metricHTML('+' + sc.addedF + 'F', 'Added floors', false),
     metricHTML((sc.addedNIA || 0).toLocaleString() + 'm²', 'New NIA', false),
