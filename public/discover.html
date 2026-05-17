@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Discover - Headroom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -342,17 +342,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .focus-gated-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink2); flex-shrink: 0; }
 .focus-gated-line { flex: 1; height: 1px; background: var(--ink2); opacity: .2; }
 .focus-cta-wrap { padding: 16px 20px 24px; }
-.focus-actions { display: flex; flex-direction: column; gap: 10px; }
 .focus-cta {
   display: block; width: 100%; padding: 14px 24px; border-radius: 8px; text-align: center;
   font: 700 11px var(--sans); letter-spacing: .14em; text-transform: uppercase;
   background: var(--ink); color: var(--bg); text-decoration: none; transition: background .15s;
-  border: 0; cursor: pointer; font-family: var(--sans);
 }
 .focus-cta:hover { background: var(--accent); }
 .focus-cta.locked { background: rgba(17,17,16,.12); color: var(--ink3); pointer-events: none; }
-.focus-secondary { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px rgba(17,17,16,.20); }
-.focus-secondary:hover { background: rgba(17,17,16,.08); }
 .focus-cta-sub {
   display: block; font: 500 13px var(--sans); letter-spacing: .04em;
   text-transform: none; opacity: 0.7; margin-top: 4px;
@@ -379,35 +375,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   display: none;
 }
 .search-bar.visible { display: block; }
-.search-row {
-  display: flex; gap: 8px; align-items: center;
-}
 .search-input {
-  flex: 1; min-width: 0; padding: 8px 12px; background: var(--bg2);
+  width: 100%; padding: 8px 12px; background: var(--bg2);
   border: 1px solid var(--rule); border-radius: 6px;
-  font: 400 16px var(--sans); color: var(--ink); outline: none;
-  -webkit-appearance: none; appearance: none;
+  font: 400 12px var(--sans); color: var(--ink); outline: none;
 }
 .search-input::placeholder { color: var(--ink3); }
 .search-input:focus { border-color: var(--accent); background: var(--bg); }
-.search-scan-btn {
-  flex-shrink: 0; padding: 9px 12px; border-radius: 6px; border: 1px solid var(--accent);
-  background: var(--accent); color: #fff; font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase;
-  cursor: pointer; transition: opacity .15s, transform .15s;
-}
-.search-scan-btn:hover { opacity: .92; }
-.search-scan-btn:disabled { opacity: .45; cursor: wait; }
-.search-help {
-  margin-top: 8px; font: 500 11px var(--sans); color: var(--ink3); letter-spacing: .01em;
-}
-.search-help.busy { color: var(--accent); }
-.search-help.error { color: var(--red); }
-.any-building-chip { background: #fff7ed; color: #b45309; }
-.any-building-chip.ok { background: #f0fdf4; color: #15803d; }
-.focus-factor-fill.provisional-geometry { background: var(--accent-blue); }
-.focus-factor-fill.provisional-heritage-hard { background: var(--red); }
-.focus-factor-fill.provisional-heritage-ok { background: var(--green); }
-.focus-factor-fill.provisional-uplift { background: var(--accent); }
 
 /* LIST HEADER */
 .list-header {
@@ -623,36 +597,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 /* ── MAP POPUP ── */
 .mapboxgl-popup-content {
   background: var(--bg); border: 1px solid var(--rule); border-radius: 8px;
-  padding: 0; box-shadow: 0 4px 20px rgba(0,0,0,.15); min-width: 320px;
+  padding: 10px 12px; box-shadow: 0 4px 20px rgba(0,0,0,.15); min-width: 160px;
   font-family: var(--sans);
 }
-.site-popup-card { width: 340px; max-width: 82vw; overflow: hidden; }
-.site-popup-head { padding: 14px 14px 12px; border-bottom: 1px solid var(--rule); }
-.site-popup-topline { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-.popup-name { font: 700 13px/1.25 var(--sans); color: var(--ink); }
-.popup-addr { font: 400 12px/1.35 var(--sans); color: var(--ink3); margin-top: 4px; }
-.popup-score-block { flex: 0 0 auto; text-align: right; }
-.popup-score { font: 800 26px var(--mono); color: var(--ink); letter-spacing: -.03em; line-height: 1; }
-.popup-score-sub { font: 700 8px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); }
-.popup-verdict { display: inline-block; margin-top: 8px; padding: 4px 8px; border-radius: 999px; font: 700 9px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: #fff; }
-.popup-verdict.green { background: var(--green); }
-.popup-verdict.amber { background: var(--amber); }
-.popup-verdict.red { background: var(--red); }
-.popup-summary { margin-top: 10px; font: 500 12px/1.45 var(--sans); color: var(--ink2); }
-.popup-body { padding: 12px 14px 14px; }
-.popup-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
-.popup-metric { background: rgba(17,17,16,.04); border: 1px solid rgba(17,17,16,.08); border-radius: 6px; padding: 8px 7px; min-height: 48px; }
-.popup-metric-val { font: 800 15px var(--mono); color: var(--ink); letter-spacing: -.02em; }
-.popup-metric-lbl { margin-top: 2px; font: 700 8px/1.2 var(--sans); color: var(--ink3); letter-spacing: .1em; text-transform: uppercase; }
-.popup-signals { display: grid; gap: 6px; margin-top: 12px; }
-.popup-signal { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-top: 1px solid rgba(17,17,16,.08); }
-.popup-signal-k { font: 700 9px var(--sans); color: var(--ink3); letter-spacing: .1em; text-transform: uppercase; }
-.popup-signal-v { font: 600 11px/1.35 var(--sans); color: var(--ink); text-align: right; }
-.popup-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
-.popup-actions { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 12px; }
-.popup-btn { display: block; text-align: center; padding: 10px 12px; border-radius: 6px; background: var(--ink); color: var(--bg); text-decoration: none; font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
-.popup-btn:hover { background: var(--accent); }
-.popup-btn.locked { background: rgba(17,17,16,.12); color: var(--ink3); pointer-events: none; }
+.popup-name { font: 700 11px var(--sans); color: var(--ink); }
+.popup-score-row { display: flex; align-items: baseline; gap: 6px; margin-top: 5px; }
+.popup-score { font: 800 22px var(--mono); color: var(--ink); letter-spacing: -.02em; }
+.popup-verdict { font: 700 11px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+.popup-addr { font: 400 13px var(--sans); color: var(--ink3); margin-top: 3px; }
 
 /* ── MASSING POPUP (90vh, 16:9) ── */
 .mass-scrim {
@@ -680,8 +632,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .mass-close:hover { background: rgba(255,255,255,.2); color: #fff; }
 .mass-nav-bar {
-  flex: 0 0 44px; width: 100%;
-  background: rgba(18,18,18,.96); border-top: 1px solid rgba(255,255,255,.08);
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 44px; background: rgba(18,18,18,.96); border-top: 1px solid rgba(255,255,255,.08);
   display: flex; align-items: center; z-index: 20; border-radius: 0 0 12px 12px;
   overflow: hidden;
 }
@@ -693,54 +645,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 }
 .mass-nav-btn:hover:not(:disabled) { color: #fff; background: rgba(255,255,255,.06); }
 .mass-nav-btn:disabled { opacity: 0.2; cursor: default; }
-.mass-tab-nav {
-  display: flex; align-items: center;
-  border-left: 1px solid rgba(255,255,255,.1);
-  padding: 0 2px;
-}
-.mass-tab-nav-btn {
-  background: none; border: none; color: rgba(255,255,255,.45);
-  font-size: 15px; width: 28px; height: 100%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: color .15s;
-}
-.mass-tab-nav-btn:hover:not(:disabled) { color: #fff; }
-.mass-tab-nav-btn:disabled { opacity: 0.2; cursor: default; }
-.mass-tab-nav-label {
-  font: 500 11px/1 var(--sans); color: rgba(255,255,255,.4);
-  min-width: 42px; text-align: center; letter-spacing: .02em;
-}
-.mass-sitenav {
-  position: absolute; top: 16px; right: 60px; z-index: 20;
-  display: flex; align-items: center; gap: 0;
-  background: rgba(0,0,0,.82); border: 1px solid rgba(255,255,255,.2);
-  border-radius: 10px; overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0,0,0,.5);
-}
-.mass-sitenav-btn {
-  background: none; border: none; color: #fff;
-  font-size: 22px; width: 48px; height: 44px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background .15s;
-}
-.mass-sitenav-btn:hover:not(:disabled) { background: rgba(255,255,255,.12); }
-.mass-sitenav-btn:disabled { opacity: 0.25; cursor: default; }
-.mass-sitenav-label {
-  font: 700 14px/1.2 var(--sans); color: #fff;
-  padding: 4px 12px; min-width: 60px; text-align: center;
-  border-left: 1px solid rgba(255,255,255,.12);
-  border-right: 1px solid rgba(255,255,255,.12);
-}
-.mass-use-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-.mass-use-chip {
-  font: 600 10px/1 var(--sans); letter-spacing: .05em; text-transform: uppercase;
-  padding: 3px 8px; border-radius: 3px; border: 1px solid;
-}
-.mass-use-chip.resi { background: rgba(196,145,90,.15); color: #c4915a; border-color: rgba(196,145,90,.3); }
-.mass-use-chip.office { background: rgba(91,122,157,.15); color: #7ba3c9; border-color: rgba(91,122,157,.3); }
-.mass-use-chip.mixed { background: rgba(160,124,158,.15); color: #c09bbf; border-color: rgba(160,124,158,.3); }
-.mass-use-chip.industrial { background: rgba(122,122,150,.15); color: #9e9ebc; border-color: rgba(122,122,150,.3); }
-.mass-use-chip.adaptive { background: rgba(184,132,92,.15); color: var(--accent); border-color: rgba(184,132,92,.3); }
 .mass-nav-center {
   flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 1px; overflow: hidden; padding: 0 4px;
@@ -954,179 +858,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
   font: 400 14px/1.7 var(--sans); color: rgba(255,255,255,.75);
 }
 .mass-hook-text strong { color: rgba(255,255,255,.95); font-weight: 600; }
-
-/* ═══════════════════════════════════════
-   MOBILE — ≤768px
-   Map full screen, cards drawer from bottom
-   ═══════════════════════════════════════ */
-@media (max-width: 768px) {
-
-  :root { --panel-w: 100%; --nav-h: 44px; }
-
-  /* Map fills entire screen */
-  #map-canvas { top: var(--nav-h); }
-  #map-fade { top: var(--nav-h); }
-
-  /* Left overlay: slim hero + borough pills only, full width */
-  .col-left {
-    width: 100%;
-    position: fixed; top: var(--nav-h); left: 0; right: 0;
-    height: auto; z-index: 5;
-    pointer-events: none;
-  }
-  .col-left > * { pointer-events: all; }
-
-  /* Hero: ultra-compact single row */
-  .discover-hero {
-    padding: 4px 10px;
-    gap: 0;
-    border-bottom-width: 1px;
-  }
-  .hero-stat { padding: 0 6px; }
-  .hero-stat:nth-child(n+4) { display: none; }
-  .hero-stat-value { font-size: 16px; font-family: var(--sans); font-weight: 800; line-height: 1.1; }
-  .hero-stat-label { font-size: 7px; letter-spacing: .06em; margin-bottom: 0; }
-  .hero-stat-sub { display: none; }
-
-  /* Hide legend on mobile */
-  .map-legend { display: none; }
-
-  /* Borough pills: horizontal scroll */
-  .borough-selector { padding: 4px 10px 5px; }
-  .borough-selector-label { display: none; }
-  .borough-pills { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .borough-pills::-webkit-scrollbar { display: none; }
-  .borough-pill { flex-shrink: 0; font-size: 11px; padding: 3px 8px; }
-
-  /* Right panel: bottom drawer */
-  .col-right {
-    position: fixed;
-    top: auto;
-    bottom: 0; left: 0; right: 0;
-    width: 100%;
-    height: 42vh;
-    border-left: none;
-    border-top: 1px solid var(--rule);
-    border-radius: 16px 16px 0 0;
-    box-shadow: 0 -8px 32px rgba(17,17,16,.15);
-    transition: height .3s cubic-bezier(.22,1,.36,1);
-    z-index: 100;
-    overflow: hidden;
-  }
-
-  /* Drag handle */
-  .col-right::before {
-    content: '';
-    display: block;
-    width: 36px; height: 4px;
-    background: var(--ink3); border-radius: 2px;
-    margin: 8px auto 0;
-    flex-shrink: 0;
-    opacity: 0.4;
-  }
-
-  /* Mode tabs: compact */
-  .mode-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .mode-tabs::-webkit-scrollbar { display: none; }
-  .mode-tab { flex-shrink: 0; font-size: 10px; padding: 7px 10px; letter-spacing: .06em; }
-  .list-header { padding: 4px 10px; }
-  .list-header-label { font-size: 10px; }
-  .list-count { font-size: 10px; }
-  .search-input { font-size: 16px; padding: 8px 10px; }
-
-  /* Site cards: compact mobile */
-  .site-list { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .site-card { padding: 8px 10px; border-left-width: 3px; }
-  .card-header { gap: 6px; }
-  .card-rank { font-size: 11px; min-width: 22px; padding: 2px 0; }
-  .card-name { font-size: 12px; line-height: 1.2; }
-  .card-address { font-size: 10px; }
-  .card-borough-row { gap: 3px; margin-bottom: 2px; }
-  .card-borough-row .chip { font-size: 9px; padding: 1px 5px; }
-  .card-chips { gap: 3px; margin-bottom: 3px; }
-  .card-chips .chip { font-size: 9px; padding: 1px 5px; }
-  .card-chips .verdict-pill { font-size: 9px; padding: 2px 6px; }
-  .card-summary { display: none; }
-  .card-score-col { width: 40px; gap: 2px; }
-  .card-score-num { font-size: 22px; }
-  .card-score-sub { font-size: 9px; }
-  .card-score-bar { display: none; }
-  .card-cta { font-size: 9px; padding: 3px 6px; }
-
-  /* Focus panel fills full height */
-  #site-focus {
-    position: fixed; inset: 0; top: var(--nav-h);
-    z-index: 200;
-    overflow-y: auto; -webkit-overflow-scrolling: touch;
-  }
-  .focus-top { min-height: 180px; }
-  .focus-sat-wrap { width: 160px; height: 160px; }
-  .focus-score-num { font-size: 32px; }
-
-  /* Map controls: bottom-right, above drawer */
-  .map-controls {
-    position: fixed; bottom: calc(42vh + 8px); right: 12px; left: auto;
-  }
-  .map-label { bottom: calc(42vh + 40px); }
-
-  /* Massing popup: full screen */
-  .mass-scrim { padding: 0; }
-  .mass-modal {
-    width: 100vw; height: 100dvh; max-width: 100vw;
-    border-radius: 0;
-  }
-  .mass-body { flex-direction: column; }
-  .mass-canvas {
-    height: 50vh; flex: 0 0 50vh;
-  }
-  .mass-info {
-    flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    padding: 16px;
-  }
-  /* Back button - prominent, always visible */
-  .mass-close {
-    top: 8px; left: 8px; right: auto;
-    width: auto; height: auto;
-    border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 0; /* hide × */
-    background: rgba(0,0,0,.8);
-    color: #fff;
-  }
-  .mass-close::after {
-    content: '← Discover';
-    font-size: 13px; font-weight: 600;
-    letter-spacing: .02em;
-  }
-  .mass-close:hover { background: rgba(0,0,0,.95); }
-
-  /* Tab card: move to bottom of 3D map */
-  .mass-tab-card {
-    top: auto; bottom: 8px; left: 8px; right: 8px;
-    min-width: unset; width: auto;
-  }
-  .mass-sc-tab { padding: 10px 12px; font-size: 12px; }
-
-  /* Site nav pill: top center */
-  .mass-sitenav {
-    top: 10px; right: 10px;
-  }
-  .mass-sitenav-btn { width: 40px; height: 36px; font-size: 18px; }
-
-  /* Height labels slightly smaller */
-  .mass-site-name { font-size: 15px; }
-  .mass-site-addr { font-size: 11px; }
-  .mass-score-num { font-size: 32px; }
-
-  /* Nav: hide desktop links */
-  .da-nav-links { display: none; }
-  .da-burger { display: flex; }
-}
-
-/* Expand drawer on focus open (JS adds class) */
-@media (max-width: 768px) {
-  .col-right.expanded { height: 80vh; }
-}
 </style>
 </head>
 <body>
@@ -1224,11 +955,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
     <!-- Search bar (search mode only) -->
     <div class="search-bar" id="search-bar">
-      <div class="search-row">
-        <input class="search-input" id="search-q" type="text" placeholder="Search address, postcode, site name..." oninput="render()" onkeydown="handleSearchKey(event)">
-        <button class="search-scan-btn" id="search-scan-btn" onclick="runSearchAssessment()">Scan</button>
-      </div>
-      <div class="search-help" id="search-help">Click any building to scan, or search a London address or postcode.</div>
+      <input class="search-input" id="search-q" type="text" placeholder="Search address, postcode, site name..." oninput="render()">
     </div>
 
     <!-- List header -->
@@ -1267,8 +994,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
       <div class="focus-metrics" id="focus-metrics"></div>
       <!-- Analyst hook - the intelligence that creates the question -->
       <div class="focus-hook" id="focus-hook"></div>
-      <!-- Evidence stack - what is known, modelled and missing -->
-      <div class="focus-intel" id="focus-evidence"></div>
       <!-- Teased factor bars - 3 visible, 3 locked -->
       <div class="focus-factors" id="focus-factors"></div>
       <!-- Specific CTA -->
@@ -1279,7 +1004,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 
 </div><!-- /page -->
 
-<script src="/lib/site-model.js"></script>
 <script>
 // ── State ─────────────────────────────────────────────────────────────────────
 let ALL_SITES = [];
@@ -1289,30 +1013,10 @@ let activeMode = 'top100';
 let activeSite = null;
 let activeBorough = 'all';
 let popup = null;
-let adHocAssessmentToken = 0;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const verdictClass = s => s >= 80 ? 'green' : s >= 65 ? 'amber' : s >= 50 ? 'amber' : 'grey';
 const verdictLabel = s => s >= 80 ? 'Top Opportunity' : s >= 65 ? 'Strong' : s >= 50 ? 'Credible' : 'Due Diligence';
-const headroomVerdictClass = v => v === 'yes' ? 'green' : v === 'no' ? 'red' : 'amber';
-const headroomVerdictLabel = v => v === 'yes' ? 'Headroom: Yes' : v === 'no' ? 'Headroom: No' : 'Headroom: Unclear';
-function slugifySiteValue(value) {
-  return String(value || '')
-    .toLowerCase()
-    .replace(/&/g, ' and ')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80);
-}
-function discoverSiteSlug(site) {
-  if (!site) return '';
-  if (site.slug) return site.slug;
-  if (site.t1) return String(site.t1).split('/').filter(Boolean).pop();
-  return slugifySiteValue(site.name || site.address);
-}
-function discoverSiteUrl(site) {
-  return '/discover/' + discoverSiteSlug(site);
-}
 const boroughChipClass = b => {
   const l = (b||'').toLowerCase();
   if (l.includes('southwark')) return 'bor-southwark';
@@ -1393,29 +1097,14 @@ function isTowerCluster(s) {
   return false;
 }
 
-function planningPolicyProfile(s) {
-  return window.HeadroomSiteModel && window.HeadroomSiteModel.buildPlanningPolicyProfile
-    ? window.HeadroomSiteModel.buildPlanningPolicyProfile(s)
-    : { zone: null, policyNote: null, planScoreBoost: 0, headroomBoost: 0, precedentWeight: 1, majorUplift: false, heightIntent: false, clusterPressure: false };
-}
-
-function fabricProfile(s) {
-  return window.HeadroomSiteModel && window.HeadroomSiteModel.buildFabricProfile
-    ? window.HeadroomSiteModel.buildFabricProfile(s)
-    : { laterFabric: false, poorModernSignals: false, redevelopmentFriendly: false, lowHeritage: false };
-}
-
 // ── Layer A: Precedent validity ───────────────────────────────────────────
 // Tower precedent only valid if: OA + brownfield/commercial + NOT conservation
 function precedentMatch(s) {
-  const policy = planningPolicyProfile(s);
   const inCons = !!(s.flags?.inConservation);
   const inOA   = !!(s.flags?.inOA || s.flags?.oa);
-  const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
   const brownfield = !!(s.brownfield);
   const useType = (s.use || '').toLowerCase();
   const isCommercial = ['office','commercial','industrial','retail'].includes(useType);
-  if (!inCons && policy.precedentWeight >= 1.45 && (inOA || inCAZ || brownfield || isCommercial)) return 'strong';
   if (inOA && !inCons && (brownfield || isCommercial)) return 'strong';
   if (inOA && !inCons && !brownfield && !isCommercial) return 'moderate'; // OA but resi/unknown
   return 'weak';
@@ -1423,10 +1112,7 @@ function precedentMatch(s) {
 
 // ── Layer A: Planning posture ─────────────────────────────────────────────
 function classifyPosture(era, sensitivity, cluster, prec) {
-  const fabric = fabricProfile(arguments[4] || {});
-  const policy = planningPolicyProfile(arguments[4] || {});
   if (cluster) return 'go_hard';
-  if (fabric.redevelopmentFriendly && policy.majorUplift) return 'go_hard';
   if (era === 'A' && sensitivity === 'high') return 'defensive';
   if (era === 'A') return 'caution';
   if (era === 'mixed') return 'caution';
@@ -1452,13 +1138,10 @@ function towerAllowed(s, era, sensitivity, cluster, prec) {
 
 // ── Layer B: Height cap ───────────────────────────────────────────────────
 function heightCap(s, era, sensitivity, cluster, prec) {
-  const fabric = fabricProfile(s);
-  const policy = planningPolicyProfile(s);
   const rawMax = s.max_floors || s.mf || Math.round(5 + (s.score||50) / 10);
   const existingH = s.existing_height_m || null;
   const existF = existingH ? Math.round(existingH / 3.5) : Math.max(2, Math.round(rawMax * 0.40));
   if (cluster) return rawMax;
-  if (fabric.redevelopmentFriendly && policy.majorUplift) return rawMax;
   if (era === 'A') {
     if (sensitivity === 'high') return Math.min(existF + 2, rawMax);
     if (prec === 'strong') return Math.min(existF + 4, rawMax);
@@ -1474,8 +1157,6 @@ function heightCap(s, era, sensitivity, cluster, prec) {
 // constraint_discount: how much does heritage/context eat that upside?
 // utilisation_boost: does the site have genuine latent capacity?
 function computeScore(rawScore, s, posture, nhleBlockPenalty, utilisationScore) {
-  const policy = planningPolicyProfile(s);
-  const fabric = fabricProfile(s);
   const inOA   = !!(s.flags?.inOA || s.flags?.oa);
   const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
   const inCity = (s.borough || '').toLowerCase().includes('city');
@@ -1500,9 +1181,6 @@ function computeScore(rawScore, s, posture, nhleBlockPenalty, utilisationScore) 
   else if (ptal >= 5) baseHeadroom = 5;
   else if (ptal >= 4) baseHeadroom = 3;
   else baseHeadroom = 1;
-  baseHeadroom += (policy.headroomBoost || 0);
-  if (fabric.redevelopmentFriendly) baseHeadroom += 1;
-  if (fabric.redevelopmentFriendly && policy.majorUplift) baseHeadroom += 2;
 
   // Constraint discount — heritage/context eats the headroom
   let constraintDiscount;
@@ -1528,7 +1206,6 @@ function computeScore(rawScore, s, posture, nhleBlockPenalty, utilisationScore) 
 
 // ── Layer C: Planning score — factored, not blanket OA bonus ─────────────
 function computePlanScore(s, heritTier) {
-  const policy = planningPolicyProfile(s);
   const inOA   = !!(s.flags?.inOA || s.flags?.oa);
   const inCAZ  = !!(s.flags?.inCAZ || s.flags?.caz);
   const inCons = !!(s.flags?.inConservation);
@@ -1537,7 +1214,6 @@ function computePlanScore(s, heritTier) {
   if (s.mom) return s.mom;
   // Base from location
   let base = inOA ? 7.5 : inCAZ ? 7.0 : 5.5;
-  base += (policy.planScoreBoost || 0);
   // Heritage discount
   if (nhle_tier === 'blocking') base *= 0.5;
   else if (inCons && nhle_tier === 'navigable') base *= 0.65;
@@ -1559,12 +1235,6 @@ function keyConstraint(s, era, sensitivity, heritTier) {
   return null;
 }
 
-function assessSiteLegitimacy(s) {
-  return window.HeadroomSiteModel && window.HeadroomSiteModel.assessSiteLegitimacy
-    ? window.HeadroomSiteModel.assessSiteLegitimacy(s)
-    : { penalty: 0, flags: [], credible: true };
-}
-
 function normaliseSite(s, idx) {
   const borough = s.borough || 'London';
   const ptal = s.flags?.ptal || s.ptal || null;
@@ -1572,6 +1242,7 @@ function normaliseSite(s, idx) {
   const inCAZ = !!(s.flags?.inCAZ || s.flags?.caz);
   const inCons = !!(s.flags?.inConservation);
 
+  // Layer A
   const era = contextEra(s);
   const sensitivity = fabricSensitivity(s, era);
   const cluster = isTowerCluster(s);
@@ -1579,8 +1250,11 @@ function normaliseSite(s, idx) {
   const posture = classifyPosture(era, sensitivity, cluster, prec);
   const recForm = recommendedForm(posture, era, cluster);
   const towerOK = towerAllowed(s, era, sensitivity, cluster, prec);
+
+  // Layer B
   const maxFloorsCapped = heightCap(s, era, sensitivity, cluster, prec);
 
+  // Heritage tier
   const nhle_tier = (s.nhle_tier || '').toLowerCase();
   const heritTier = s.her ||
     (nhle_tier === 'blocking' ? 'blocking' :
@@ -1588,64 +1262,30 @@ function normaliseSite(s, idx) {
      nhle_tier === 'manageable' ? 'manageable' :
      inCons ? 'navigable' : 'manageable');
 
+  // Layer C — factored score
   const utilisationScore = s.utilisation_score != null ? s.utilisation_score : 5.0;
-  const rawScore = parseInt(s.score) || 0;
+  const rawScore = parseInt(s.score)||0;
+  const score = computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore);
 
   const hectares = s.hectares || (s.plot ? s.plot / 10000 : 0.05);
   const plotM2 = Math.round(hectares * 10000);
-  const useType = s.use || inferUseType(s);
-  const planningPolicy = planningPolicyProfile({ ...s, borough, ptal, inOA, inCAZ, inCons, useType });
-  const fabric = fabricProfile({ ...s, borough, ptal, inOA, inCAZ, inCons, useType });
-  const planScore = computePlanScore({ ...s, borough, ptal, inOA, inCAZ, inCons, useType, planningPolicy }, heritTier);
-  const constraint = fabric.redevelopmentFriendly && planningPolicy.majorUplift ? 'Low-value later fabric in uplift corridor' : keyConstraint(s, era, sensitivity, heritTier);
+  // ERV: factored by use type, not blanket OA/CAZ
+  const useType = (s.use || '').toLowerCase();
+  const ervBase = useType === 'residential' ? 0 :
+    (s.borough||'').toLowerCase().includes('city') ? 850 :
+    inCAZ ? 750 : inOA ? 700 : 600;
+  const ervResid = useType === 'residential' ? (inCAZ ? 1100 : inOA ? 950 : 750) : 0;
+  const erv = ervBase || ervResid || 650;
+  const nia = plotM2 * 0.78 * 0.42 * maxFloorsCapped;
+  const gdvEst = (nia * erv / 0.0475 / 1e6).toFixed(1);
+  const planScore = computePlanScore(s, heritTier);
+  const constraint = keyConstraint(s, era, sensitivity, heritTier);
+
+  // Utilisation label (utilisationScore already defined above)
   const utilisationData = s.utilisation_data || {};
   const utilisationLabel = utilisationScore >= 8.5 ? 'Maximally Underutilised' :
     utilisationScore >= 6.5 ? 'Significantly Underutilised' :
     utilisationScore >= 4.5 ? 'Moderately Underutilised' : 'Adequately Used';
-
-  const canonicalSeed = {
-    ...s,
-    borough,
-    ptal,
-    inOA,
-    inCAZ,
-    inCons,
-    maxFloors: maxFloorsCapped,
-    plotM2,
-    useType,
-    existingHeightM: s.existing_height_m || null,
-    existingFloors: s.existing_floors || null,
-    heritTier,
-    planScore,
-    score: rawScore,
-    planning: s.planning || null,
-    planningPolicy,
-    fabricProfile: fabric,
-  };
-  const canonical = window.HeadroomSiteModel ? window.HeadroomSiteModel.buildCanonicalSite(canonicalSeed) : null;
-  const legitimacy = canonical && canonical.siteLegitimacy ? canonical.siteLegitimacy : assessSiteLegitimacy(s);
-  const shortlist = canonical && canonical.shortlist
-    ? canonical.shortlist
-    : (window.HeadroomSiteModel && window.HeadroomSiteModel.deriveShortlistDecision
-      ? window.HeadroomSiteModel.deriveShortlistDecision({ ...canonicalSeed, verified: !!s.verified, onMarket: !!s.on_market })
-      : { eligible: true, classKey: 'other', classPriority: 4, statusKey: 'unclear', statusPriority: 2, exclusionCode: null, exclusionReason: null, statusReason: null });
-  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
-  const liveScore = baseScenario ? baseScenario.score : computeScore(rawScore, s, posture, s.nhle_score_penalty || 0, utilisationScore);
-  const score = Math.max(0, liveScore - legitimacy.penalty);
-  const gdvEst = baseScenario && baseScenario.gdv ? (baseScenario.gdv / 1e6).toFixed(1) : '0.0';
-  const headroomVerdict = canonical && canonical.headroomVerdict ? canonical.headroomVerdict : (shortlist.eligible ? 'unclear' : 'no');
-  const headroomUpsideScore = canonical && canonical.headroomUpsideScore != null ? canonical.headroomUpsideScore : 0;
-  const discoverVerdict = canonical && canonical.discoverVerdict ? canonical.discoverVerdict : {
-    label: headroomVerdictLabel(headroomVerdict),
-    className: headroomVerdictClass(headroomVerdict),
-    primary: shortlist.exclusionReason || shortlist.bucketReason || shortlist.statusReason || shortlist.classReason || null,
-    reasons: [],
-    secondary: headroomVerdict === 'yes' ? 'Upside: Modest' : 'Needs verification'
-  };
-  const headroomConfidence = canonical && canonical.headroomConfidence ? canonical.headroomConfidence : computeConfidence(s);
-  const headroomConfidenceScore = canonical && canonical.headroomConfidenceScore != null
-    ? canonical.headroomConfidenceScore
-    : (headroomConfidence === 'high' ? 10 : headroomConfidence === 'medium' ? 6 : 2);
 
   return {
     id: idx, name: s.name||s.address, address: s.address||s.name, borough,
@@ -1654,142 +1294,27 @@ function normaliseSite(s, idx) {
     recForm, towerOK, constraint,
     verified: !!s.verified, t1: s.t1||null,
     desc: s.desc||s.notes||'', inOA, inCAZ, inCons,
-    ptal,
-    maxFloors: canonical ? canonical.maxFloors : maxFloorsCapped,
-    plotM2: canonical ? canonical.plotM2 : plotM2,
-    gdvEst,
-    planScore,
-    heritTier,
-    useType,
-    typology: canonical ? canonical.typology : null,
-    canonicalMetrics: canonical ? canonical.canonicalMetrics : null,
-    existingHeightM: canonical ? canonical.existingHeightM : (s.existing_height_m || null),
-    existingFloors: canonical ? canonical.existingFloors : (s.existing_floors || null),
-    roughExistingGiaM2: canonical ? canonical.roughExistingGiaM2 : null,
-    roughProposedGiaM2: canonical ? canonical.roughProposedGiaM2 : null,
-    roughGiaUpliftPct: canonical ? canonical.roughGiaUpliftPct : null,
+    ptal, maxFloors: maxFloorsCapped, plotM2, gdvEst, planScore, heritTier,
+    useType: s.use || inferUseType(s),
     brownfield: !!(s.brownfield || (s.source && s.source.indexOf('brownfield') !== -1)),
     offMarket: s.offMarket||'unknown',
     owner: s.owner||null,
     planning: s.planning||null,
-    planningPolicy: canonical ? canonical.planningPolicy : planningPolicy,
-    fabricProfile: canonical ? canonical.fabricProfile : fabric,
     hmlr: s.hmlr||null,
     onMarket: !!(s.on_market),
     listingUrl: s.listing_url||null,
     listingAgent: s.listing_agent||null,
     motScore: computeMotivatedSeller(s),
     nhleCount: s.nhle_count||0,
-    dataConfidence: headroomConfidence,
+    dataConfidence: computeConfidence(s),
     utilisationScore, utilisationData, utilisationLabel,
-    siteLegitimacyPenalty: legitimacy.penalty,
-    siteLegitimacyFlags: legitimacy.flags,
-    credibleSite: legitimacy.credible,
-    siteValidity: canonical && canonical.siteValidity ? canonical.siteValidity.valid : true,
-    siteValidityReason: canonical && canonical.siteValidity ? canonical.siteValidity.reason : null,
-    progressionStatus: canonical && canonical.progressionStatusData ? canonical.progressionStatusData.key : 'unclear',
-    progressionReason: canonical && canonical.progressionStatusData ? canonical.progressionStatusData.reason : null,
-    headroomVerdict,
-    headroomVerdictLabel: discoverVerdict.label,
-    headroomVerdictClass: discoverVerdict.className,
-    headroomReasonPrimary: discoverVerdict.primary,
-    headroomReasons: discoverVerdict.reasons || [],
-    headroomSecondaryLine: discoverVerdict.secondary,
-    headroomUpsideScore,
-    headroomRankBand: canonical && canonical.headroomRankBand ? canonical.headroomRankBand : 'none',
-    headroomConfidence,
-    headroomConfidenceScore,
-    architecturalValueBand: canonical && canonical.architecturalValueBand ? canonical.architecturalValueBand : null,
-    architecturalValueReason: canonical && canonical.architecturalValueReason ? canonical.architecturalValueReason : null,
-    coreViabilityBand: canonical && canonical.coreViabilityBand ? canonical.coreViabilityBand : null,
-    coreViabilityReason: canonical && canonical.coreViabilityReason ? canonical.coreViabilityReason : null,
-    tallCapable: canonical && canonical.tallCapable ? canonical.tallCapable : false,
-    shortlistEligible: shortlist.eligible,
-    shortlistExclusionCode: shortlist.exclusionCode,
-    shortlistReason: shortlist.exclusionReason || shortlist.bucketReason || shortlist.statusReason || shortlist.classReason || null,
-    shortlistBucket: shortlist.bucketKey,
-    shortlistBucketPriority: shortlist.bucketPriority,
-    shortlistClass: shortlist.classKey,
-    shortlistClassPriority: shortlist.classPriority,
-    shortlistStatus: shortlist.statusKey,
-    shortlistStatusPriority: shortlist.statusPriority,
-    slug: s.slug || null,
     consolidation: s.consolidation_tier || null,
     consolidationLabel: s.consolidation_label || null,
     consolidationTitles: s.consolidation_titles || 0,
     consolidationVacant: s.consolidation_vacant || 0,
     consolidationLH: s.consolidation_leaseholds || 0,
     consolidationVacantRatio: s.consolidation_vacant_ratio || 0,
-    _canonicalModel: canonical,
   };
-}
-
-function planningSignalSummary(s) {
-  const seeded = s.planning || {};
-  const live = s.planningContext || {};
-  const policy = s.planningPolicy || planningPolicyProfile(s);
-  const merged = {
-    source: live.source || seeded.source || null,
-    applicationCount: Number(live.applicationCount ?? seeded.applicationCount ?? seeded.count ?? 0),
-    majorCount: Number(live.majorCount ?? seeded.majorCount ?? 0),
-    liveCount: Number(live.liveCount ?? seeded.liveCount ?? 0),
-    tallCount: Number(live.tallCount ?? seeded.tallCount ?? 0),
-    liveTallCount: Number(live.liveTallCount ?? seeded.liveTallCount ?? 0),
-    recentRef: live.recentRef || seeded.recentRef || null,
-    refs: live.refs || seeded.refs || [],
-    note: live.note || seeded.note || null,
-    policyZone: policy.zone || null,
-    policyNote: policy.policyNote || null,
-    policyMajorUplift: !!policy.majorUplift,
-  };
-  merged.hasSignal = merged.applicationCount > 0 || merged.majorCount > 0 || merged.tallCount > 0;
-  merged.heightIntent = !!policy.heightIntent || merged.liveTallCount > 0 || merged.tallCount >= 2;
-  merged.clusterPressure = !!policy.clusterPressure || merged.majorCount >= 2 || merged.applicationCount >= 4;
-  return merged;
-}
-
-async function hydratePlanningSignal(site) {
-  if (!site || site._planningLoading || site._planningHydrated || !site.lat || !site.lng) return;
-  site._planningLoading = true;
-  try {
-    const r = await fetch(`/api/planning-apps?lat=${site.lat}&lng=${site.lng}`);
-    if (!r.ok) throw new Error('planning fetch failed');
-    const data = await r.json();
-    const rows = Array.isArray(data.results) ? data.results : [];
-    const isLive = txt => /submitted|validated|registered|consultation|pending|consideration|awaiting/i.test(String(txt || ''));
-    const isMajor = row => /major|eia|full|redevelopment|demolition|hybrid|outline/i.test(`${row.type || ''} ${row.description || ''}`);
-    const isTall = row => /(storey|storeys|tower|building|redevelopment|vertical extension|upward extension|roof extension)/i.test(`${row.description || ''}`);
-    const liveRows = rows.filter(row => isLive(row.status) || isLive(row.description));
-    const majorRows = rows.filter(isMajor);
-    const tallRows = rows.filter(isTall);
-    const liveTallRows = liveRows.filter(isTall);
-    const refs = rows.slice(0, 3).map(row => row.reference || row.ref || row.id).filter(Boolean);
-    site.planningContext = {
-      source: 'live-nearby-apps',
-      applicationCount: rows.length,
-      majorCount: majorRows.length,
-      liveCount: liveRows.length,
-      tallCount: tallRows.length,
-      liveTallCount: liveTallRows.length,
-      recentRef: refs[0] || null,
-      refs,
-      note: liveTallRows.length
-        ? `${liveTallRows.length} live nearby tall / uplift applications`
-        : tallRows.length
-          ? `${tallRows.length} nearby uplift precedents on record`
-          : rows.length
-            ? `${rows.length} nearby planning applications on record`
-            : null,
-    };
-    site.planning = { ...(site.planning || {}), ...site.planningContext };
-    site._canonicalModel = null;
-  } catch (err) {
-    console.warn('planning signal hydrate failed', err);
-  } finally {
-    site._planningLoading = false;
-    site._planningHydrated = true;
-    if (activeSite === site.id) openFocus(site, { skipPlanningHydrate: true });
-  }
 }
 
 function computeConfidence(s) {
@@ -1843,57 +1368,12 @@ async function loadSites() {
     ...toArr(sw).map(s  => normaliseSite({...s, borough: s.borough||'Southwark'}, idx++)),
     ...toArr(city).map(s => normaliseSite({...s, borough: s.borough||'City of London'}, idx++)),
     ...toArr(hack).map(s => normaliseSite({...s, borough: s.borough||'Hackney'}, idx++)),
-  ];
-
-  try {
-    const cityOpen = await fetch('/api/city-open-spaces').then(r=>r.json());
-    const features = cityOpen && cityOpen.features ? cityOpen.features : [];
-    ALL_SITES = ALL_SITES.map(function(site) {
-      if ((site.borough || '').toLowerCase() !== 'city of london') return site;
-      var hit = features.some(function(f) { return pointInGeometry([site.lng, site.lat], f.geometry); });
-      if (!hit) return site;
-      var flags = (site.siteLegitimacyFlags || []).slice();
-      if (flags.indexOf('city_open_space') === -1) flags.push('city_open_space');
-      var updatedSite = Object.assign({}, site, {
-        siteLegitimacyPenalty: (site.siteLegitimacyPenalty || 0) + 40,
-        siteLegitimacyFlags: flags,
-        credibleSite: false,
-        score: Math.max(0, (site.score || 0) - 40)
-      });
-      var shortlist = window.HeadroomSiteModel && window.HeadroomSiteModel.deriveShortlistDecision
-        ? window.HeadroomSiteModel.deriveShortlistDecision(updatedSite)
-        : null;
-      return Object.assign({}, site, {
-        siteLegitimacyPenalty: updatedSite.siteLegitimacyPenalty,
-        siteLegitimacyFlags: updatedSite.siteLegitimacyFlags,
-        credibleSite: updatedSite.credibleSite,
-        score: updatedSite.score,
-        shortlistEligible: shortlist ? shortlist.eligible : false,
-        shortlistExclusionCode: shortlist ? shortlist.exclusionCode : 'city_open_space',
-        shortlistReason: shortlist ? (shortlist.exclusionReason || shortlist.bucketReason || shortlist.statusReason || shortlist.classReason || null) : 'city open space',
-        shortlistBucket: shortlist ? shortlist.bucketKey : 'non-target',
-        shortlistBucketPriority: shortlist ? shortlist.bucketPriority : 9,
-        shortlistClass: shortlist ? shortlist.classKey : 'non-target',
-        shortlistClassPriority: shortlist ? shortlist.classPriority : 9,
-        shortlistStatus: shortlist ? shortlist.statusKey : 'non-target',
-        shortlistStatusPriority: shortlist ? shortlist.statusPriority : 9
-      });
-    });
-  } catch (e) {
-    console.warn('City open space enrichment failed', e);
-  }
-
-  ALL_SITES = ALL_SITES.sort((a,b) => {
-    const verdictRank = v => v === 'yes' ? 0 : v === 'unclear' ? 1 : 2;
-    if (verdictRank(a.headroomVerdict) !== verdictRank(b.headroomVerdict)) return verdictRank(a.headroomVerdict) - verdictRank(b.headroomVerdict);
-    if (a.headroomVerdict === 'yes' || b.headroomVerdict === 'yes') {
-      if ((b.headroomUpsideScore || 0) !== (a.headroomUpsideScore || 0)) return (b.headroomUpsideScore || 0) - (a.headroomUpsideScore || 0);
-      if ((b.headroomConfidenceScore || 0) !== (a.headroomConfidenceScore || 0)) return (b.headroomConfidenceScore || 0) - (a.headroomConfidenceScore || 0);
-    }
-    if (b.score !== a.score) return b.score - a.score;
-    if (b.planScore !== a.planScore) return b.planScore - a.planScore;
-    if (b.plotM2 !== a.plotM2) return b.plotM2 - a.plotM2;
-    return a.name.localeCompare(b.name);
+  ].sort((a,b) => {
+    if (b.score !== a.score) return b.score - a.score;            // 1. Score desc
+    if (b.gdvEst !== a.gdvEst) return b.gdvEst - a.gdvEst;       // 2. GDV desc
+    if (b.plotM2 !== a.plotM2) return b.plotM2 - a.plotM2;       // 3. Plot size desc
+    if (b.planScore !== a.planScore) return b.planScore - a.planScore; // 4. Planning appetite desc
+    return a.name.localeCompare(b.name);                           // 5. Alphabetical
   });
 
   // Stats
@@ -1970,13 +1450,12 @@ function setMode(mode) {
 
 // ── Filtered sites ────────────────────────────────────────────────────────────
 function filteredSites() {
-  const headroomYesSites = ALL_SITES.filter(s => s.headroomVerdict === 'yes');
-  let list = activeMode === 'search' ? ALL_SITES : headroomYesSites;
+  let list = ALL_SITES;
   if (activeMode==='borough' || activeBorough!=='all') {
     if (activeBorough!=='all') list = list.filter(s=>s.borough===activeBorough);
     if (activeMode==='borough') list = list.slice(0,30);
   }
-  if (activeMode==='top100') list = headroomYesSites.slice(0,100);
+  if (activeMode==='top100') list = ALL_SITES.slice(0,100);
   if (activeMode==='search') {
     const q = (document.getElementById('search-q')?.value||'').trim().toLowerCase();
     if (q) list = ALL_SITES.filter(s=>s.name.toLowerCase().includes(q)||s.address.toLowerCase().includes(q)||s.borough.toLowerCase().includes(q));
@@ -1997,15 +1476,10 @@ function render() {
 
   list.innerHTML = sites.map((s,i) => {
     const rank = activeMode==='top100' ? i+1 : null;
-    const vc = s.headroomVerdictClass || headroomVerdictClass(s.headroomVerdict);
-    const vl = s.headroomVerdictLabel || headroomVerdictLabel(s.headroomVerdict);
+    const vc = verdictClass(s.score);
+    const vl = verdictLabel(s.score);
+    const bc = scoreColor(s.score);
     const motDot = s.motScore >= 4 ? '🔴' : s.motScore >= 2 ? '🟡' : '';
-    const displayScore = discoveryDisplayScore(s);
-    const bc = scoreColor(displayScore);
-    const summaryBits = [s.headroomReasonPrimary]
-      .concat((s.headroomReasons || []).filter(r => r && r !== s.headroomReasonPrimary).slice(0, 2))
-      .concat(s.headroomVerdict === 'yes' && s.headroomSecondaryLine ? [s.headroomSecondaryLine] : []);
-    const summaryLine = summaryBits.filter(Boolean).join(' · ');
     const otherChips = [
       s.onMarket ? `<span class="chip listed"><a href="${s.listingUrl||'#'}" target="_blank" onclick="event.stopPropagation()" style="color:inherit;text-decoration:none">Listed${s.listingAgent?' · '+s.listingAgent:''}</a></span>` : '',
       s.motScore >= 2 ? `<span class="chip mot mot-${s.motScore}">${motDot} Seller ${s.motScore}/5</span>` : '',
@@ -2040,13 +1514,15 @@ function render() {
           <div class="card-address">${s.address}</div>
           <div class="card-borough-row"><span class="chip ${boroughChipClass(s.borough)}">${boroughShort(s.borough)}</span><span class="chip type-chip" style="background:${typeColor}15;color:${typeColor};border:1px solid ${typeColor}40">${typeLabel}</span></div>
           <div class="card-chips"><span class="verdict-pill ${vc}">${vl}</span>${otherChips}</div>
-          ${(summaryLine || s.desc) ? `<div class="card-summary">${summaryLine || s.desc}</div>` : ''}
+          ${s.desc ? `<div class="card-summary">${s.desc}</div>` : ''}
         </div>
         <div class="card-score-col">
-          <div class="card-score-num">${displayScore}</div>
+          <div class="card-score-num">${s.score}</div>
           <div class="card-score-sub">/100</div>
-          <div class="card-score-bar"><div class="card-score-fill" style="width:${displayScore}%;background:${bc}"></div></div>
-          <a class="card-cta" href="${discoverSiteUrl(s)}" onclick="event.stopPropagation()">Open</a>
+          <div class="card-score-bar"><div class="card-score-fill" style="width:${s.score}%;background:${bc}"></div></div>
+          ${hasCTA
+            ? `<a class="card-cta" href="${s.t1}" onclick="event.stopPropagation()">Report</a>`
+            : `<span class="card-cta locked">Soon</span>`}
         </div>
       </div>
     </div>`;
@@ -2057,72 +1533,15 @@ function render() {
 
 // ── Card click ────────────────────────────────────────────────────────────────
 // ── Analyst hook generator ────────────────────────────────────────────────────
-function discoveryDisplayScore(site) {
-  return site && site.headroomVerdict === 'yes' ? (site.headroomUpsideScore || site.score) : (site ? site.score : 0);
-}
-
-function siteDevelopmentLogic(s) {
-  const canonical = ensureCanonicalSite(s);
-  const planning = planningSignalSummary(s);
-  const canonicalLogic = canonical && canonical.developmentLogic ? canonical.developmentLogic : null;
-
-  const useType = (s.useType || s.use_type || s.use || '').toLowerCase();
-  const existingHeight = Number(s.existingHeightM || s.existing_height_m || 0);
-  const existingFloors = Number(s.existingFloors || s.existing_floors || s.existF || 0);
-  const cityCore = s.borough === 'City of London' || s.inCAZ;
-  const tallCommercial = (cityCore && (existingHeight >= 35 || existingFloors >= 10) && /(office|commercial|mixed)/.test(useType || 'office')) || planning.heightIntent;
-  const highValue = cityCore || tallCommercial;
-  const heritage = s.heritTier === 'blocking' ? 'high' : s.heritTier === 'high' ? 'medium' : 'low';
-  const mode = tallCommercial ? 'Strategic height'
-    : ((highValue && heritage === 'low') || planning.clusterPressure) ? 'Mid-rise intensification'
-    : highValue ? 'Setback intensification'
-    : 'Efficient infill';
-  const type = tallCommercial ? 'Tower-on-podium'
-    : mode === 'Mid-rise intensification' ? 'Setback mid-rise'
-    : 'Perimeter uplift';
-  const posture = tallCommercial ? 'aggressive' : heritage === 'high' ? 'conservative' : 'balanced';
-  const why = planning.heightIntent
-    ? 'Live nearby planning activity is already testing taller massing in this pocket.'
-    : tallCommercial
-      ? 'Existing height, City-core context and commercial typology support a strategic-height read.'
-      : planning.clusterPressure
-        ? 'Nearby planning volume suggests an active intensification cluster, even if tower appetite is less explicit.'
-        : heritage === 'high'
-          ? 'Constraint pressure keeps this in a more controlled uplift lane.'
-          : 'Context supports uplift, but not a free-for-all.';
-  const economics = tallCommercial
-    ? 'The value case improves if the scheme behaves like a real City-core height play, not a timid extension.'
-    : mode === 'Mid-rise intensification'
-      ? 'Returns come from compound additional area rather than one heroic tower move.'
-      : 'Economics favour disciplined area gain over speculative height.';
-  return {
-    mode: canonicalLogic && canonicalLogic.mode ? canonicalLogic.mode : mode,
-    type: canonicalLogic && canonicalLogic.type ? canonicalLogic.type : type,
-    posture: canonicalLogic && canonicalLogic.posture ? canonicalLogic.posture : posture,
-    heritage: canonicalLogic && canonicalLogic.heritage ? canonicalLogic.heritage : heritage,
-    highValue: canonicalLogic && canonicalLogic.highValue !== undefined ? canonicalLogic.highValue : highValue,
-    planning,
-    why: canonicalLogic && canonicalLogic.why ? canonicalLogic.why : why,
-    economics: canonicalLogic && canonicalLogic.economics ? canonicalLogic.economics : economics,
-  };
-}
-
 function analystHook(s) {
-  const canonical = ensureCanonicalSite(s);
-  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
-  const addF = baseScenario ? baseScenario.addedF : (s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45)));
-  const p = planningSignalSummary(s);
-  const logic = siteDevelopmentLogic(s);
+  const addF = s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45));
+  const p = s.planning || {};
   const sentences = [];
-
-  sentences.push(`<strong>Development logic:</strong> ${logic.type}. ${logic.why} <strong>Uplift mode:</strong> ${logic.mode}. ${logic.economics}`);
 
   // 1. Planning signal - use real data where available
   const hasRealRef = p.recentRef && /AP\/|\/\d{4}\//.test(p.recentRef);
-  const totalApps = p.applicationCount || 0;
+  const totalApps = p.total || 0;
   const hasMajor = p.majorCount > 0;
-  const hasTall = p.tallCount > 0;
-  const hasLiveTall = p.liveTallCount > 0;
 
   if (s.inOA && s.planScore >= 7) {
     const oaFrame = s.borough === 'City of London'
@@ -2131,12 +1550,10 @@ function analystHook(s) {
       ? 'Hackney Central/Shoreditch OA growth corridor'
       : 'London Bridge/Bankside Opportunity Area mandate';
     sentences.push(`${oaFrame} is <strong>actively backing intensification</strong> at this scale - Policy SD1 of the London Plan 2021 requires the LPA to facilitate not resist, and comparable schemes in this corridor have landed consent.`);
-  } else if (s.inCAZ && hasLiveTall) {
-    sentences.push(`CAZ designation plus <strong>${p.liveTallCount} live nearby tall / uplift application${p.liveTallCount>1?'s':''}</strong> signals an active commercial height play in this pocket - developers are not just theorising, they are testing massing here now.`);
   } else if (s.inCAZ && hasMajor) {
-    sentences.push(`CAZ designation plus <strong>${p.majorCount} major nearby application${p.majorCount>1?'s':''}</strong> signals active developer intent at this scale - not proof of consent, but strong evidence of where the market is pushing.`);
+    sentences.push(`CAZ designation plus <strong>${p.majorCount} major application${p.majorCount>1?'s':''} on record</strong> signals an active planning history - the site has already attracted developer attention at this scale, which cuts both ways on consent confidence.`);
   } else if (s.inCAZ) {
-    sentences.push(`CAZ intensification policy applies. ${totalApps > 10 ? `<strong>${totalApps} nearby planning applications on record</strong>` : 'Limited nearby planning history'} - the question is whether this sits inside a live intensification cluster or just a permissive policy zone.`);
+    sentences.push(`CAZ intensification policy applies. ${totalApps > 10 ? `<strong>${totalApps} planning applications on record</strong> - the site has been looked at` : 'Limited planning history'} - the question is whether the development plan allocation supports the use class being targeted.`);
   } else if (s.planScore >= 8) {
     const refNote = hasRealRef ? ` Most recent application <strong>${p.recentRef}</strong> confirms active developer interest.` : '';
     sentences.push(`Planning appetite is <strong>genuinely strong at ${s.planScore}/10</strong> - the LPA has been approving at this massing scale and the allocation supports the use.${refNote}`);
@@ -2144,13 +1561,6 @@ function analystHook(s) {
     sentences.push(`Planning appetite is <strong>resistant</strong> - but the constraints are specific and the development plan leaves a window for a well-argued scheme.${totalApps > 0 ? ` ${totalApps} prior applications suggest others have tried.` : ''}`);
   } else {
     sentences.push(`Planning position is <strong>nuanced</strong>.${totalApps > 5 ? ` ${totalApps} applications on record - the site has a history.` : ''} The right massing strategy can thread the policy needle, but the comparable approvals in this postcode are what determine confidence.`);
-  }
-
-  if (p.note && (hasTall || hasLiveTall)) {
-    sentences.push(`<strong>Planning-intent signal:</strong> ${p.note}. This should calibrate confidence, not override site-specific constraints.`);
-  }
-  if (p.policyZone && p.policyMajorUplift) {
-    sentences.push(`<strong>Local policy lane:</strong> ${p.policyZone}. ${p.policyNote || 'This pocket should be treated as a genuine uplift corridor, not flattened into borough-wide caution.'}`);
   }
 
   // 2. Ownership / title signal - use real data
@@ -2194,14 +1604,9 @@ function factorBars(s) {
   const ptal = Number(s.ptal) || 3;
   const utilPct = Math.round((s.utilisationScore || 5) * 10);
   const utilColor = utilPct >= 75 ? 'var(--accent)' : utilPct >= 50 ? 'var(--amber)' : 'var(--ink3)';
-  const logic = siteDevelopmentLogic(s);
-  const logicScore = logic.mode === 'Strategic height' ? 88 : logic.mode === 'Assembly unlock' ? 82 : logic.mode === 'Constrained uplift' ? 46 : 68;
-  const econScore = (s.borough === 'City of London' || s.inCAZ) ? 84 : (s.gdvEst >= 80 ? 70 : 56);
   const visible = [
     { name: 'Planning Appetite', score: Math.round(s.planScore * 10), color: s.planScore>=7?'var(--green)':s.planScore>=5?'var(--amber)':'var(--red)' },
-    { name: 'Development Logic', score: logicScore, color: 'var(--accent-blue)' },
-    { name: 'Economic Justification', score: econScore, color: 'var(--accent)' },
-    { name: 'Available Sky', score: s.heritTier==='blocking'?28:s.inCons?52:s.heritTier==='navigable'?62:78, color: 'var(--amber)' },
+    { name: 'Available Sky', score: s.heritTier==='blocking'?28:s.inCons?52:s.heritTier==='navigable'?62:78, color: 'var(--accent-blue)' },
     { name: 'Land Utilisation', score: utilPct, color: utilColor },
   ];
   const locked = [
@@ -2226,267 +1631,21 @@ function factorBars(s) {
   return rows.join('');
 }
 
-function focusEvidenceStack(site) {
-  const planning = planningSignalSummary(site);
-  const canonical = ensureCanonicalSite(site);
-  const known = [];
-  const modelled = [];
-  const missing = [];
-
-  if (site.ptal) known.push('PTAL ' + site.ptal);
-  if (site.inOA) known.push('Opportunity Area');
-  if (site.inCAZ) known.push('CAZ');
-  if (site.inCons) known.push('Conservation area');
-  if (site.nhleCount || site.nhle_count_150m || site.nhle_listings) {
-    const count = site.nhle_count_150m || site.nhleCount || (site.nhle_listings ? site.nhle_listings.length : 0);
-    known.push(count + ' NHLE asset' + (count === 1 ? '' : 's') + ' within context radius');
-  }
-  if (site.lvmf_views && site.lvmf_views.length) known.push(site.lvmf_views.length + ' LVMF view corridor flag' + (site.lvmf_views.length === 1 ? '' : 's'));
-  if (site.existingHeightM) known.push(Math.round(site.existingHeightM) + 'm existing height signal');
-  if (site.inspire_polygon || site.poly) known.push('site boundary geometry present');
-
-  if (canonical && canonical.scenarioState) modelled.push('low / mid / high massing scenarios');
-  if (canonical && canonical.financialAssumptions) modelled.push('ERV, NIY and build-cost assumptions');
-  if (site.headroomUpsideScore != null) modelled.push('headroom upside score ' + site.headroomUpsideScore + '/100');
-  if (site.utilisationScore != null) modelled.push('land utilisation score ' + site.utilisationScore + '/10');
-
-  if (!planning || (!planning.applicationCount && !planning.majorCount && !planning.recentRef)) missing.push('live planning application evidence');
-  if (!site.owner || site.owner === 'Unknown' || site.owner === 'PLACEHOLDER') missing.push('registered owner signal');
-  if (!site.hmlr) missing.push('HMLR title packet');
-  if (!site.t1) missing.push('full Appraise report page');
-
-  const clean = arr => arr.filter(Boolean).slice(0, 4).map(popupEscape).join(' · ') || 'Not enough signal yet';
-  return `
-    <div class="focus-intel-row"><span class="focus-intel-key">Known evidence</span><span class="focus-intel-val">${clean(known)}</span></div>
-    <div class="focus-intel-row"><span class="focus-intel-key">Modelled</span><span class="focus-intel-val">${clean(modelled)}</span></div>
-    <div class="focus-intel-row"><span class="focus-intel-key">Missing</span><span class="focus-intel-val">${clean(missing)}</span></div>
-    <div class="focus-intel-row"><span class="focus-intel-key">Planning</span><span class="focus-intel-val">${popupEscape(planningSignalLabel(planning))}</span></div>
-  `;
-}
-
 function cardClick(id) {
   const site = ALL_SITES.find(s=>s.id===id);
-  if (site) window.location.href = discoverSiteUrl(site);
+  if (site) openMassPopup(site);
 }
 
-function setSearchHelp(text, state) {
-  var el = document.getElementById('search-help');
-  if (!el) return;
-  el.textContent = text || 'Search a known site, or scan any London building by address or postcode.';
-  el.classList.remove('busy', 'error');
-  if (state) el.classList.add(state);
-}
-
-function setSearchBusy(isBusy) {
-  var btn = document.getElementById('search-scan-btn');
-  if (btn) btn.disabled = !!isBusy;
-}
-
-function handleSearchKey(e) {
-  if (e && e.key === 'Enter') {
-    e.preventDefault();
-    runSearchAssessment();
-  }
-}
-
-function formatAssessmentAddress(featureCollection, fallback) {
-  var feature = featureCollection && featureCollection.features && featureCollection.features[0];
-  return (feature && (feature.place_name || feature.text)) || fallback || 'Selected building';
-}
-
-function inferAssessmentBorough(featureCollection, fallback) {
-  var feature = featureCollection && featureCollection.features && featureCollection.features[0];
-  var context = feature && feature.context ? feature.context : [];
-  var district = context.find(function(item) { return /^district\./.test(item.id || ''); });
-  var place = context.find(function(item) { return /^place\./.test(item.id || ''); });
-  var region = context.find(function(item) { return /^region\./.test(item.id || ''); });
-  return (district && district.text) || (place && place.text) || (region && region.text) || fallback || 'London';
-}
-
-function buildAdHocAssessmentSite(payload) {
-  var building = payload && payload.building;
-  var props = building && building.properties ? building.properties : {};
-  var listedCount = payload && payload.listedCount ? payload.listedCount : 0;
-  var area = Math.round(props._area || 0);
-  var existingFloors = Math.max(1, Math.round(props._estFloors || 1));
-  var existingGia = Math.round(props._estGIA || area || 0);
-  var height = Number(props._heightRoofBase || props._heightMax || 0);
-  var addedFloors = listedCount > 0 ? 0 : height >= 20 ? 3 : height >= 12 ? 2 : area >= 600 ? 2 : 1;
-  var roughProposedGia = existingGia ? existingGia + (area * addedFloors) : 0;
-  var score = 56;
-  if (listedCount > 0) score -= 18;
-  if (area >= 1200) score += 8;
-  else if (area >= 600) score += 5;
-  else if (area < 150) score -= 8;
-  if (existingFloors >= 8) score += 4;
-  if (!building) score = 32;
-  score = Math.max(18, Math.min(82, score));
-  var borough = inferAssessmentBorough(payload && payload.reverse, 'London');
-  var address = formatAssessmentAddress(payload && payload.reverse, payload && payload.query);
-  var headline = listedCount > 0
-    ? 'Hard constraint signal. Listed context likely caps straightforward uplift and pushes this into specialist planning mode.'
-    : roughProposedGia > existingGia && existingGia > 0
-      ? 'Preliminary uplift lane. Building geometry suggests there may be extension headroom worth testing properly.'
-      : 'Thin headroom signal. This reads more like a due diligence case than an obvious upside case.';
-  return {
-    id: 'adhoc-' + Date.now(),
-    isProvisional: true,
-    name: address.split(',')[0] || 'Selected building',
-    address: address,
-    borough: borough,
-    lat: payload.lat,
-    lng: payload.lng,
-    score: score,
-    planScore: listedCount > 0 ? 3 : 5,
-    plotM2: area || 0,
-    ptal: null,
-    gdvEst: 0,
-    maxFloors: existingFloors + addedFloors,
-    existingFloors: existingFloors,
-    roughExistingGiaM2: existingGia || null,
-    roughProposedGiaM2: roughProposedGia || null,
-    roughGiaUpliftPct: existingGia && roughProposedGia ? Math.round(((roughProposedGia - existingGia) / existingGia) * 100) : null,
-    inCons: false,
-    inOA: false,
-    inCAZ: false,
-    heritTier: listedCount > 0 ? 'blocking' : 'manageable',
-    t1: null,
-    provisionalHeadline: headline,
-    provisionalNotes: [
-      area ? area.toLocaleString() + 'm² estimated footprint' : 'No reliable footprint captured yet',
-      existingGia ? existingGia.toLocaleString() + 'm² rough existing GIA' : 'Existing GIA not yet resolved',
-      height ? height.toFixed(1) + 'm roof/eaves height signal' : 'No usable height signal yet',
-      listedCount > 0 ? listedCount + ' listed asset' + (listedCount > 1 ? 's' : '') + ' nearby' : 'No listed asset returned in immediate radius'
-    ]
-  };
-}
-
-function openProvisionalFocus(site) {
+function openFocus(site) {
   activeSite = site.id;
-  document.querySelectorAll('.site-card.active').forEach(function(el){el.classList.remove('active');});
-  document.getElementById('site-list')?.classList.remove('has-active');
-  document.getElementById('focus-score').textContent = discoveryDisplayScore(site);
-  var vEl = document.getElementById('focus-verdict');
-  var vc = verdictClass(site.score);
-  vEl.textContent = site.score >= 50 ? 'Preliminary' : 'Hard No Risk';
-  vEl.className = 'focus-verdict ' + vc;
-  document.getElementById('focus-score-sub').textContent = 'Live provisional scan · ' + site.borough;
-  document.getElementById('focus-name').textContent = site.name;
-  document.getElementById('focus-addr').textContent = site.address;
-  document.getElementById('focus-chips').innerHTML = '<span class="chip any-building-chip">Any-building scan</span>' + (site.heritTier === 'blocking' ? '<span class="chip cons">Listed context</span>' : '<span class="chip any-building-chip ok">No immediate listed flag</span>');
-  document.getElementById('focus-metrics').innerHTML = `
-    <div class="focus-metric"><div class="focus-metric-val">${site.plotM2 ? site.plotM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Estimated footprint</div></div>
-    <div class="focus-metric"><div class="focus-metric-val">${site.existingFloors || '—'}F</div><div class="focus-metric-lbl">Existing floors</div></div>
-    <div class="focus-metric"><div class="focus-metric-val">${site.roughExistingGiaM2 ? site.roughExistingGiaM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Rough existing GIA</div></div>
-    <div class="focus-metric"><div class="focus-metric-val">${site.roughProposedGiaM2 ? site.roughProposedGiaM2.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Indicative uplift case</div></div>
-    <div class="focus-metric"><div class="focus-metric-val">${site.roughGiaUpliftPct != null ? (site.roughGiaUpliftPct > 0 ? '+' : '') + site.roughGiaUpliftPct + '%' : '—'}</div><div class="focus-metric-lbl">Indicative GIA uplift</div></div>
-    <div class="focus-metric"><div class="focus-metric-val">${site.score}/100</div><div class="focus-metric-lbl">Preliminary signal</div></div>
-  `;
-  document.getElementById('focus-hook').innerHTML = `
-    <div class="focus-hook-label">Universal intake</div>
-    <div class="focus-hook-text">${site.provisionalHeadline}</div>
-    <div class="focus-hook-question">${site.provisionalNotes.map(function(note) { return '<div>' + note + '</div>'; }).join('')}</div>
-  `;
-  document.getElementById('focus-evidence').innerHTML = '';
-  var geometryScore = site.plotM2 ? 78 : 22;
-  var heritageScore = site.heritTier === 'blocking' ? 82 : 24;
-  var upliftScore = site.roughGiaUpliftPct != null ? Math.max(18, Math.min(88, Math.round(site.roughGiaUpliftPct / 4))) : 30;
-  document.getElementById('focus-factors').innerHTML = `
-    <div class="focus-factors-label">This is a live intake pass, not a fully underwritten report.</div>
-    <div class="focus-factor-row"><div class="focus-factor-name">Geometry captured</div><div class="focus-factor-bar"><div class="focus-factor-fill provisional-geometry" style="width:${geometryScore}%"></div></div><div class="focus-factor-score">${geometryScore}</div></div>
-    <div class="focus-factor-row"><div class="focus-factor-name">Heritage friction</div><div class="focus-factor-bar"><div class="focus-factor-fill ${site.heritTier === 'blocking' ? 'provisional-heritage-hard' : 'provisional-heritage-ok'}" style="width:${heritageScore}%"></div></div><div class="focus-factor-score">${heritageScore}</div></div>
-    <div class="focus-factor-row"><div class="focus-factor-name">Vertical extension case</div><div class="focus-factor-bar"><div class="focus-factor-fill provisional-uplift" style="width:${upliftScore}%"></div></div><div class="focus-factor-score">${upliftScore}</div></div>
-  `;
-  document.getElementById('focus-cta-wrap').innerHTML = '<span class="focus-cta locked">Full planning, heritage and economics pass next</span>';
-  var visEl = document.getElementById('focus-visual');
-  if (MAPBOX_TOKEN) {
-    visEl.innerHTML = `<img class="focus-sat" src="https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${site.lng},${site.lat},18,20,60/480x480@2x?access_token=${MAPBOX_TOKEN}" alt="">`;
-  } else {
-    visEl.innerHTML = '<div class="focus-sat-placeholder">SCAN</div>';
-  }
-  document.getElementById('site-focus').classList.add('visible');
-  if (MAP && site.lat && site.lng) {
-    var panelW = Math.round(window.innerWidth * 0.5);
-    MAP.flyTo({ center:[site.lng,site.lat], zoom:17, duration:900, pitch:52,
-      padding:{top:60,bottom:60,left:30,right:panelW} });
-    showPopup(site);
-  }
-}
-
-async function assessCoordinates(lat, lng, opts) {
-  opts = opts || {};
-  var token = ++adHocAssessmentToken;
-  setSearchBusy(true);
-  setSearchHelp(opts.message || 'Scanning building geometry and context…', 'busy');
-  try {
-    var reversePromise = fetch('/api/reverse?lng=' + encodeURIComponent(lng) + '&lat=' + encodeURIComponent(lat)).then(function(r) { return r.json(); }).catch(function() { return null; });
-    var buildingsPromise = fetch('/api/os-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng)).then(function(r) { return r.json(); }).catch(function() { return null; });
-    var listedPromise = fetch('/api/listed-buildings?lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng) + '&radius=100').then(function(r) { return r.json(); }).catch(function() { return null; });
-    var results = await Promise.all([reversePromise, buildingsPromise, listedPromise]);
-    if (token !== adHocAssessmentToken) return;
-    var reverse = results[0];
-    var buildings = results[1];
-    var listed = results[2];
-    var selected = buildings && buildings.features ? buildings.features.find(function(f) { return f.properties && f.properties._selected; }) || buildings.features[0] : null;
-    var listedCount = listed && (listed.items || listed.results || listed.features) ? (listed.items || listed.results || listed.features).length : 0;
-    var site = buildAdHocAssessmentSite({ lat: lat, lng: lng, reverse: reverse, building: selected, listedCount: listedCount, query: opts.query });
-    openProvisionalFocus(site);
-    setSearchHelp(site.provisionalHeadline, site.score < 50 ? 'error' : null);
-  } catch (err) {
-    console.error('assessCoordinates failed', err);
-    setSearchHelp('Scan failed. Address resolved badly or live building data is missing.', 'error');
-  } finally {
-    if (token === adHocAssessmentToken) setSearchBusy(false);
-  }
-}
-
-async function runSearchAssessment() {
-  var input = document.getElementById('search-q');
-  var q = input ? input.value.trim() : '';
-  if (!q) {
-    setSearchHelp('Give me an address or postcode, not vibes.', 'error');
-    return;
-  }
-  setSearchBusy(true);
-  setSearchHelp('Resolving address…', 'busy');
-  try {
-    var geo = await fetch('/api/geocode?text=' + encodeURIComponent(q)).then(function(r) { return r.json(); });
-    var feature = geo && geo.features && geo.features[0];
-    if (!feature || !feature.center) {
-      setSearchHelp('No London match found. Try a fuller address or postcode.', 'error');
-      return;
-    }
-    var lng = feature.center[0];
-    var lat = feature.center[1];
-    if (MAP) {
-      var panelW = Math.round(window.innerWidth * 0.5);
-      MAP.flyTo({ center:[lng,lat], zoom:17, duration:1100, pitch:50, padding:{top:60,bottom:60,left:30,right:panelW} });
-    }
-    await assessCoordinates(lat, lng, { query: q, message: 'Address found. Pulling building geometry…' });
-  } catch (err) {
-    console.error('runSearchAssessment failed', err);
-    setSearchHelp('Search failed. Mapbox geocoder threw a fit.', 'error');
-    setSearchBusy(false);
-  }
-}
-
-function openFocus(site, opts) {
-  if (site && site.isProvisional) {
-    openProvisionalFocus(site);
-    return;
-  }
-  opts = opts || {};
-  activeSite = site.id;
-  if (!opts.skipPlanningHydrate) hydratePlanningSignal(site);
   // Clear any active card state (removes spotlight + expanded content)
   document.querySelectorAll('.site-card.active').forEach(el=>el.classList.remove('active'));
   document.getElementById('site-list')?.classList.remove('has-active');
-  const vc = site.headroomVerdictClass || headroomVerdictClass(site.headroomVerdict);
-  const vl = site.headroomVerdictLabel || headroomVerdictLabel(site.headroomVerdict);
-  document.getElementById('focus-score').textContent = discoveryDisplayScore(site);
+  const vc = verdictClass(site.score), vl = verdictLabel(site.score);
+  document.getElementById('focus-score').textContent = site.score;
   const vEl = document.getElementById('focus-verdict');
   vEl.textContent = vl; vEl.className = 'focus-verdict ' + vc;
-  document.getElementById('focus-score-sub').textContent = (site.headroomVerdict === 'yes' ? (site.headroomSecondaryLine || ('Upside ' + discoveryDisplayScore(site) + '/100')) : (site.headroomReasonPrimary || 'Needs verification')) + ' · ' + site.borough;
+  document.getElementById('focus-score-sub').textContent = site.score + '/100 · ' + site.borough;
   document.getElementById('focus-name').textContent = site.name;
   document.getElementById('focus-addr').textContent = site.address;
   const chips = [
@@ -2495,59 +1654,46 @@ function openFocus(site, opts) {
     site.inCons? '<span class="chip cons">Conservation</span>' : '',
     site.ptal  ? `<span class="chip ptal">PTAL ${site.ptal}</span>` : '',
     site.verified ? '<span class="chip" style="background:#f0fdf4;color:#15803d">Verified</span>' : '',
-    site.architecturalValueBand === 'low' ? '<span class="chip">Low architectural value</span>' : '',
-    site.tallCapable ? '<span class="chip">Efficient above 8F</span>' : '',
   ].filter(Boolean).join('');
   document.getElementById('focus-chips').innerHTML = chips;
-  const canonical = ensureCanonicalSite(site);
-  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
-  const existF = canonical ? canonical.existingFloors : Math.max(1, Math.round(site.maxFloors * 0.45));
-  const addF = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
-  const addNIA = baseScenario ? Math.round(baseScenario.addedNIA || 0) : Math.round(site.plotM2 * 0.42 * 0.78 * addF);
-  const roughExistingGia = canonical && canonical.roughExistingGiaM2 ? canonical.roughExistingGiaM2 : null;
-  const roughProposedGia = canonical && canonical.roughProposedGiaM2 ? canonical.roughProposedGiaM2 : null;
-  const roughGiaUpliftPct = canonical && canonical.roughGiaUpliftPct != null ? canonical.roughGiaUpliftPct : null;
+  const existF = Math.max(1, Math.round(site.maxFloors * 0.45));
+  const addF = site.maxFloors - existF;
+  const addNIA = Math.round(site.plotM2 * 0.42 * 0.78 * addF);
   const heritLabel = site.heritTier==='blocking'?'High risk':site.heritTier==='navigable'?'Navigable':'Low risk';
-  const niySub = canonical && canonical.financialAssumptions ? canonical.financialAssumptions.niy : (site.inCAZ ? 4.75 : site.borough==='City of London' ? 4.25 : 5.5);
-  const ervPsm = canonical && canonical.financialAssumptions ? canonical.financialAssumptions.erv : (site.borough==='City of London' ? 850 : site.inCAZ ? 750 : 700);
-  const ervFt2 = Math.round(ervPsm / 10.7639);
-  const ervStr = `£${ervFt2}/ft²`;
+  // Derived intel
+  const niySub = site.inCAZ ? 4.75 : site.borough==='City of London' ? 4.25 : 5.5;
+  const erv = site.borough==='City of London' ? 85 : site.inCAZ ? 72 : 55;
+  const ervStr = `£${erv}/ft²`;
   const ptalLabel = site.ptal ? `${site.ptal}/6` : 'Not assessed';
   const coverageM2 = Math.round(site.plotM2 * 0.75);
   const heritRisk = site.heritTier==='blocking'?'🔴 High':site.heritTier==='navigable'?'🟡 Navigable':'🟢 Low';
   const planRisk = site.planScore>=7?'🟢 Favourable':site.planScore>=5?'🟡 Neutral':'🔴 Resistant';
-  const gdvLo = baseScenario ? Math.round((baseScenario.gdv || 0) * 0.92 / 1e6) : Math.round((Number(site.gdvEst) || 0) * 0.8);
-  const gdvHi = baseScenario ? Math.round((baseScenario.gdv || 0) * 1.08 / 1e6) : Math.round((Number(site.gdvEst) || 0) * 1.2);
   document.getElementById('focus-metrics').innerHTML = `
-    <div class="focus-metric"><div class="focus-metric-val accent">£${gdvLo}-${gdvHi}M</div><div class="focus-metric-lbl">Est. GDV range</div></div>
+    <div class="focus-metric"><div class="focus-metric-val accent">£${(site.gdvEst*0.8).toFixed(0)}-${(site.gdvEst*1.2).toFixed(0)}M</div><div class="focus-metric-lbl">Est. GDV range</div></div>
     <div class="focus-metric"><div class="focus-metric-val">+${addF}F</div><div class="focus-metric-lbl">Added floors</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${addNIA.toLocaleString()}m²</div><div class="focus-metric-lbl">New NIA</div></div>
-    <div class="focus-metric"><div class="focus-metric-val">${roughProposedGia ? roughProposedGia.toLocaleString() + 'm²' : '—'}</div><div class="focus-metric-lbl">Rough proposed GIA</div></div>
-    <div class="focus-metric"><div class="focus-metric-val">${roughGiaUpliftPct != null ? (roughGiaUpliftPct > 0 ? '+' : '') + roughGiaUpliftPct + '%' : ervStr}</div><div class="focus-metric-lbl">${roughGiaUpliftPct != null ? 'Rough GIA uplift' : 'Est. ERV'}</div></div>
+    <div class="focus-metric"><div class="focus-metric-val">${ervStr}</div><div class="focus-metric-lbl">Est. ERV</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${niySub}%</div><div class="focus-metric-lbl">Sub-market NIY</div></div>
     <div class="focus-metric"><div class="focus-metric-val">${ptalLabel}</div><div class="focus-metric-lbl">PTAL</div></div>
   `;
   // Intel rows - extra data lines
   // ── Analyst hook ───────────────────────────────────────────────────────
   const hookText = analystHook(site);
-  const devLogic = siteDevelopmentLogic(site);
-  const headroomReasons = (site.headroomReasons || []).slice(0, 3).map(reason => `<div>${reason}</div>`).join('');
   document.getElementById('focus-hook').innerHTML = `
-    <div class="focus-hook-label">Headroom Call</div>
-    <div class="focus-hook-text">${site.headroomReasonPrimary || hookText}</div>
-    <div class="focus-hook-question">${headroomReasons || `<div>${hookText}</div>`}${site.headroomSecondaryLine ? `<div><strong>${site.headroomSecondaryLine}</strong></div>` : ''}</div>
+    <div class="focus-hook-label">Intelligence Signal</div>
+    <div class="focus-hook-text">${hookText}</div>
+    <div class="focus-hook-question">What are the 3 comparable approvals? Does the massing stack above ${Math.round(site.maxFloors*0.7)}F? What does the residual land value look like at current yields?</div>
   `;
-  document.getElementById('focus-evidence').innerHTML = focusEvidenceStack(site);
   // ── Factor bars ─────────────────────────────────────────────────────────
   document.getElementById('focus-factors').innerHTML = `
-    <div class="focus-factors-label">Score drivers · logic, economics, planning and available sky</div>
+    <div class="focus-factors-label">Score drivers · 3 of 6 visible</div>
     ${factorBars(site)}
   `;
   // ── CTA - site-specific ─────────────────────────────────────────────────
-  const addFf = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
+  const addFf = site.maxFloors - Math.max(1, Math.round(site.maxFloors * 0.45));
   document.getElementById('focus-cta-wrap').innerHTML = site.t1
-    ? `<div class="focus-actions"><a class="focus-cta" href="${site.t1}">See the full headroom case &rarr;<span class="focus-cta-sub">${site.headroomSecondaryLine || ('+' + addFf + 'F potential')} · planning precedents · does it stack at current land value?</span></a><button class="focus-cta focus-secondary" onclick="openMassPopup(ALL_SITES.find(s=>s.id===${site.id}))">Preview massing in 3D</button></div>`
-    : `<div class="focus-actions"><span class="focus-cta locked">Full report not attached yet<span class="focus-cta-sub">Evidence shown above is the current Discover record, not a purchasable appraisal.</span></span><button class="focus-cta focus-secondary" onclick="openMassPopup(ALL_SITES.find(s=>s.id===${site.id}))">Preview massing in 3D</button></div>`;
+    ? `<a class="focus-cta" href="${site.t1}">See why this scores ${site.score}/100 &rarr;<span class="focus-cta-sub">+${addFf}F · planning precedents · does it stack at current land value?</span></a>`
+    : `<span class="focus-cta locked">Full report coming soon</span>`;
   const visEl = document.getElementById('focus-visual');
   const phEl  = document.getElementById('focus-sat-ph');
   if (phEl) phEl.textContent = `£${site.gdvEst}M`;
@@ -2575,108 +1721,21 @@ function closeFocus() {
 }
 
 // ── Popup ─────────────────────────────────────────────────────────────────────
-function popupEscape(value) {
-  return String(value ?? '').replace(/[&<>"']/g, function(ch) {
-    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]);
-  });
-}
-
-function popupValue(value, fallback) {
-  if (value === null || value === undefined || value === '' || Number.isNaN(value)) return fallback || 'Not available';
-  return value;
-}
-
-function popupMetric(label, value) {
-  return `<div class="popup-metric"><div class="popup-metric-val">${popupEscape(popupValue(value, '—'))}</div><div class="popup-metric-lbl">${popupEscape(label)}</div></div>`;
-}
-
-function popupSignal(label, value) {
-  return `<div class="popup-signal"><span class="popup-signal-k">${popupEscape(label)}</span><span class="popup-signal-v">${popupEscape(popupValue(value))}</span></div>`;
-}
-
-function planningSignalLabel(planning) {
-  if (!planning) return 'Not assessed';
-  if (planning.heightIntent) return 'Height precedent active';
-  if (planning.policyMajorUplift) return planning.policyZone || 'Policy uplift lane';
-  if (planning.majorCount > 0) return `${planning.majorCount} major nearby`;
-  if (planning.applicationCount > 0) return `${planning.applicationCount} nearby applications`;
-  return 'No strong live signal';
-}
-
-function renderDiscoveryPopup(site) {
-  const canonical = ensureCanonicalSite(site);
-  const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
-  const vc = site.headroomVerdictClass || headroomVerdictClass(site.headroomVerdict);
-  const vl = site.headroomVerdictLabel || headroomVerdictLabel(site.headroomVerdict);
-  const displayScore = discoveryDisplayScore(site);
-  const existingFloors = canonical ? canonical.existingFloors : Math.max(1, Math.round(site.maxFloors * 0.45));
-  const addF = baseScenario ? baseScenario.addedF : Math.max(0, (site.maxFloors || 0) - existingFloors);
-  const addNIA = baseScenario ? Math.round(baseScenario.addedNIA || 0) : Math.round((site.plotM2 || 0) * 0.42 * 0.78 * addF);
-  const gdv = baseScenario && baseScenario.gdv ? `£${Math.round(baseScenario.gdv / 1e6)}M` : (site.gdvEst ? `£${site.gdvEst}M` : '—');
-  const giaUplift = site.roughGiaUpliftPct != null ? `${site.roughGiaUpliftPct > 0 ? '+' : ''}${site.roughGiaUpliftPct}%` : '—';
-  const planning = planningSignalSummary(site);
-  const heritage = site.heritTier === 'blocking' ? 'High risk' : site.heritTier === 'navigable' ? 'Navigable' : 'Manageable';
-  const seller = site.motScore >= 4 ? `High signal (${site.motScore}/5)` : site.motScore >= 2 ? `Watch (${site.motScore}/5)` : 'No strong signal';
-  const market = site.onMarket ? `Listed${site.listingAgent ? ' - ' + site.listingAgent : ''}` : 'Off-market / unknown';
-  const confidence = site.headroomConfidence ? site.headroomConfidence.charAt(0).toUpperCase() + site.headroomConfidence.slice(1) : 'Not assessed';
-  const summaryBits = [site.headroomReasonPrimary]
-    .concat((site.headroomReasons || []).filter(function(reason) { return reason && reason !== site.headroomReasonPrimary; }).slice(0, 2))
-    .concat(site.headroomVerdict === 'yes' && site.headroomSecondaryLine ? [site.headroomSecondaryLine] : []);
-  const summary = summaryBits.filter(Boolean).join(' · ') || site.desc || 'Standardised discovery scan pending deeper report.';
-  const chips = [
-    site.inOA ? '<span class="chip oa">OA</span>' : '',
-    site.inCAZ ? '<span class="chip caz">CAZ</span>' : '',
-    site.inCons ? '<span class="chip cons">Conservation</span>' : '',
-    site.ptal ? `<span class="chip ptal">PTAL ${popupEscape(site.ptal)}</span>` : '',
-    site.onMarket ? '<span class="chip listed">Listed</span>' : '',
-    site.verified ? '<span class="chip">Verified</span>' : '',
-  ].filter(Boolean).join('');
-  const action = site.t1
-    ? `<a class="popup-btn" href="${popupEscape(site.t1)}" onclick="event.stopPropagation()">Open appraise</a>`
-    : `<a class="popup-btn" href="${popupEscape(discoverSiteUrl(site))}" onclick="event.stopPropagation()">Open Discovery</a>`;
-
-  return `
-    <div class="site-popup-card">
-      <div class="site-popup-head">
-        <div class="site-popup-topline">
-          <div>
-            <div class="popup-name">${popupEscape(site.name)}</div>
-            <div class="popup-addr">${popupEscape(site.address || site.borough)}</div>
-          </div>
-          <div class="popup-score-block">
-            <div class="popup-score">${popupEscape(displayScore)}</div>
-            <div class="popup-score-sub">Score /100</div>
-            <span class="popup-verdict ${popupEscape(vc)}">${popupEscape(vl)}</span>
-          </div>
-        </div>
-        <div class="popup-summary">${popupEscape(summary)}</div>
-        ${chips ? `<div class="popup-chips">${chips}</div>` : ''}
-      </div>
-      <div class="popup-body">
-        <div class="popup-metrics">
-          ${popupMetric('GDV', gdv)}
-          ${popupMetric('Added floors', addF ? '+' + addF + 'F' : '—')}
-          ${popupMetric('New NIA', addNIA ? addNIA.toLocaleString() + 'm²' : '—')}
-          ${popupMetric('GIA uplift', giaUplift)}
-          ${popupMetric('PTAL', site.ptal ? site.ptal + '/6' : '—')}
-          ${popupMetric('Confidence', confidence)}
-        </div>
-        <div class="popup-signals">
-          ${popupSignal('Planning', planningSignalLabel(planning))}
-          ${popupSignal('Heritage', heritage)}
-          ${popupSignal('Seller', seller)}
-          ${popupSignal('Market', market)}
-        </div>
-        <div class="popup-actions">${action}</div>
-      </div>
-    </div>`;
-}
-
 function showPopup(site) {
   if (popup) { popup.remove(); popup=null; }
-  popup = new mapboxgl.Popup({offset:10,closeButton:true,maxWidth:'360px',className:'site-popup'})
+  const vc = verdictClass(site.score);
+  const vl = verdictLabel(site.score);
+  const col = vc==='green'?'#15803d':vc==='amber'?'#b45309':'#999';
+  popup = new mapboxgl.Popup({offset:10,closeButton:true,maxWidth:'220px'})
     .setLngLat([site.lng,site.lat])
-    .setHTML(renderDiscoveryPopup(site))
+    .setHTML(`
+      <div class="popup-name">${site.name}</div>
+      <div class="popup-score-row">
+        <span class="popup-score">${site.score}</span>
+        <span class="popup-verdict" style="color:${col}">${vl}</span>
+      </div>
+      <div class="popup-addr">${site.borough}</div>
+    `)
     .addTo(MAP);
 }
 
@@ -2701,7 +1760,6 @@ function initMap(token) {
     MAP.setPadding({top:60, bottom:60, left:20, right:panelW});
     MAP.setCenter([-0.090, 51.505]);
     addSiteMarkers();
-    addBoroughOutlines();
     // Hairline white ring on satellite for contrast
     if (currentMapStyle === 'satellite' && MAP.getLayer('sites-dot')) {
       MAP.setPaintProperty('sites-dot', 'circle-stroke-width', 2.5);
@@ -2710,31 +1768,49 @@ function initMap(token) {
     setTimeout(function() { document.getElementById('map-fade').classList.remove('active'); }, 100);
   });
 
-  // Discover stays on the 3D vector map. Appraise can own aerial / raster modes.
+  // Auto-switch style on zoom threshold
+  var mapInitialised = false;
+  MAP.once('idle', function() { mapInitialised = true; });
+  MAP.on('zoom', function() {
+    if (mapStyleSwitching) return;
+    if (!mapInitialised) return;
+    var z = MAP.getZoom();
+    if (z >= ZOOM_AERIAL_THRESHOLD && currentMapStyle === 'map') {
+      mapStyleSwitching = true;
+      currentMapStyle = 'satellite';
+      document.getElementById('map-canvas').classList.add('aerial');
+      document.querySelectorAll('.map-style-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.style === 'satellite');
+      });
+      document.getElementById('map-fade').classList.add('active');
+      setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/satellite-streets-v12'); }, 320);
+    } else if (z < ZOOM_AERIAL_THRESHOLD && currentMapStyle === 'satellite') {
+      mapStyleSwitching = true;
+      currentMapStyle = 'map';
+      document.getElementById('map-canvas').classList.remove('aerial');
+      document.querySelectorAll('.map-style-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.style === 'map');
+      });
+      document.getElementById('map-fade').classList.add('active');
+      setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/dark-v11'); }, 320);
+    }
+  });
 
   // Manual style toggle
   window.switchMapStyle = function(style) {
-    if (style === 'satellite') return;
     if (mapStyleSwitching) return;
     mapStyleSwitching = true;
-    currentMapStyle = 'map';
-    document.getElementById('map-canvas').classList.remove('aerial');
+    currentMapStyle = style;
+    document.getElementById('map-canvas').classList.toggle('aerial', style === 'satellite');
     document.querySelectorAll('.map-style-btn').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.style === 'map');
-      if (b.dataset.style === 'satellite') b.disabled = true;
-      if (b.dataset.style === 'satellite') b.title = 'Aerial mode moves to Appraise';
+      b.classList.toggle('active', b.dataset.style === style);
     });
+    var styleUrl = style === 'satellite'
+      ? 'mapbox://styles/mapbox/satellite-streets-v12'
+      : 'mapbox://styles/mapbox/dark-v11';
     document.getElementById('map-fade').classList.add('active');
-    setTimeout(function() { MAP.setStyle('mapbox://styles/mapbox/dark-v11'); }, 320);
+    setTimeout(function() { MAP.setStyle(styleUrl); }, 320);
   };
-
-  MAP.on('click', function(e) {
-    var features = MAP.getLayer('sites-dot')
-      ? MAP.queryRenderedFeatures(e.point, { layers: ['sites-dot'] })
-      : [];
-    if (features && features.length) return;
-    assessCoordinates(e.lngLat.lat, e.lngLat.lng, { message: 'Map click captured. Scanning selected building…' });
-  });
 }
 
 function addSiteMarkers() {
@@ -2930,54 +2006,13 @@ Promise.all([
 // ── MASSING POPUP ─────────────────────────────────────────────────────────────
 var massMap = null;
 var massSite = null;
-var massScenario = 'mid';
-var massScenarios = null;
+var massScenario = 'base';
 var massGoogleLoaded = false;
 var massSV = null;
 
-function canonicalMassScenarioKey(key) {
-  return window.HeadroomSiteModel
-    ? window.HeadroomSiteModel.canonicalScenarioKey(key)
-    : (key === 'low' ? 'lo' : key === 'base' ? 'mid' : key === 'high' ? 'hi' : ['lo', 'mid', 'hi'].indexOf(key) !== -1 ? key : 'mid');
-}
-
-function ensureCanonicalSite(site) {
-  if (!site) return null;
-  if (!site._canonicalModel && window.HeadroomSiteModel) {
-    site._canonicalModel = window.HeadroomSiteModel.buildCanonicalSite(site);
-  }
-  return site._canonicalModel || null;
-}
-
-function buildMassScenarioState(site) {
-  var canonical = ensureCanonicalSite(site);
-  var scenarios = canonical && canonical.scenarioState ? canonical.scenarioState : (massingScenarios(site) || {});
-  return {
-    lo: scenarios.lo || scenarios.low || scenarios.mid,
-    mid: scenarios.mid || scenarios.base || scenarios.lo || scenarios.low,
-    hi: scenarios.hi || scenarios.high || scenarios.mid
-  };
-}
-
-function getActiveMassScenario() {
-  if (!massScenarios) return null;
-  var key = canonicalMassScenarioKey(massScenario);
-  return massScenarios[key] || massScenarios.mid || null;
-}
-
-function renderMassScenarioState() {
-  var sc = getActiveMassScenario();
-  if (!massSite || !sc || !massScenarios) return;
-  updateMassMetrics(sc, massSite);
-  updateMassScenarioTabs(massScenarios);
-  updateMassScChip(sc, massSite);
-  if (massMap) updateMassingLayers(massMap, massSite, sc);
-}
-
 function openMassPopup(site) {
   massSite = site;
-  massScenario = 'mid';
-  massScenarios = buildMassScenarioState(site);
+  massScenario = 'base';
   // Update nav Appraise link to this site if it has a T1
   if (site && site.t1) {
     var navLink = document.getElementById('nav-appraise');
@@ -2990,26 +2025,23 @@ function openMassPopup(site) {
   setTimeout(function() { scrim.style.opacity = '1'; }, 10);
   document.body.style.overflow = 'hidden';
 
-  // Populate info using the same discovery verdict and score as cards and map popup.
-  var vc = site.headroomVerdictClass || headroomVerdictClass(site.headroomVerdict);
-  var vl = site.headroomVerdictLabel || headroomVerdictLabel(site.headroomVerdict);
-  var displayScore = discoveryDisplayScore(site);
+  // Populate info
+  var vc = verdictClass(site.score);
+  var vl = verdictLabel(site.score);
+  var existF = Math.max(1, Math.round(site.maxFloors * 0.45));
+  var scenarios = massingScenarios(site);
+  var base = scenarios.base;
 
   document.getElementById('mass-name').textContent = site.name;
   document.getElementById('mass-addr').textContent = site.address + ' · ' + site.borough;
-  document.getElementById('mass-score').textContent = displayScore;
+  document.getElementById('mass-score').textContent = site.score;
   document.getElementById('mass-score-lbl').textContent = '/100';
   var vEl = document.getElementById('mass-verdict');
   vEl.textContent = vl; vEl.className = 'mass-verdict ' + vc;
 
-  // Use type chips
-  var useChipsEl = document.getElementById('mass-use-chips');
-  if (useChipsEl) {
-    var useChips = buildUseChips(site);
-    useChipsEl.innerHTML = useChips;
-  }
-
-  renderMassScenarioState();
+  updateMassMetrics(base, site);
+  updateMassScenarioTabs(scenarios);
+  setTimeout(function() { updateMassScChip(base, site); }, 300);
 
   // Analyst hook
   var hookEl = document.getElementById('mass-hook-text');
@@ -3029,7 +2061,7 @@ function openMassPopup(site) {
   if (tabsWrap) tabsWrap.style.display = 'flex';
 
   // Init or update 3D map
-  initMassMap(site, massScenarios);
+  initMassMap(site, scenarios);
   setTimeout(initPegman, 100);
 
   // Nav state
@@ -3045,68 +2077,107 @@ function closeMassPopup() {
   document.body.style.overflow = '';
   if (massMap) { massMap.remove(); massMap = null; }
   massSite = null;
-  massScenarios = null;
 }
 
 function massNavStep(dir) {
-  if (!massSite) return;
-  var sites = filteredSites();
-  var idx = sites.findIndex(function(s) { return s.id === massSite.id; });
+  if (!massSite || !FILTERED_SITES || !FILTERED_SITES.length) return;
+  var idx = FILTERED_SITES.findIndex(function(s) { return s.id === massSite.id; });
   if (idx === -1) return;
   var next = idx + dir;
-  if (next < 0 || next >= sites.length) return;
+  if (next < 0 || next >= FILTERED_SITES.length) return;
+  // Close map cleanly then reopen for new site
   if (massMap) { massMap.remove(); massMap = null; }
   clearMassLabels();
-  openMassPopup(sites[next]);
-  var card = document.getElementById('card-' + sites[next].id);
+  openMassPopup(FILTERED_SITES[next]);
+  // Scroll card into view
+  var card = document.getElementById('card-' + FILTERED_SITES[next].id);
   if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  // Update nav button state
   updateMassNavState(next);
 }
 
 function updateMassNavState(idx) {
-  var sites = filteredSites();
-  var total = sites.length;
   var prev = document.getElementById('mass-nav-prev');
   var next = document.getElementById('mass-nav-next');
+  var total = FILTERED_SITES ? FILTERED_SITES.length : 0;
   if (prev) prev.disabled = (idx <= 0);
   if (next) next.disabled = (idx >= total - 1);
 
   var rankEl = document.getElementById('mass-rank');
-  if (!rankEl) return;
-  rankEl.innerHTML = '#' + (idx + 1) + '<span style="font-weight:400;color:rgba(255,255,255,.45)">/' + total + '</span>';
+  var labelEl = document.getElementById('mass-nav-label');
+
+  if (rankEl && total) rankEl.textContent = '#' + (idx + 1) + ' of ' + total;
+
+  // Show adjacent site name as label (what you'll navigate TO)
+  if (labelEl && FILTERED_SITES) {
+    // Show next site name if going forward, prev if at end
+    var peekIdx = idx < total - 1 ? idx + 1 : idx > 0 ? idx - 1 : -1;
+    var peekSite = peekIdx >= 0 ? FILTERED_SITES[peekIdx] : null;
+    if (peekSite) {
+      var dir = peekIdx > idx ? 'Next' : 'Prev';
+      labelEl.textContent = dir + ': ' + peekSite.name;
+    } else {
+      labelEl.textContent = '';
+    }
+  }
 }
 
 function massingScenarios(site) {
-  var canonical = ensureCanonicalSite(site);
-  return canonical && canonical.scenarioState ? canonical.scenarioState : null;
+  var maxF = site.maxFloors || 8;
+  var existF = Math.max(1, Math.round(maxF * 0.45));
+  var plotM2 = site.plotM2 || 500;
+  var coverage = 0.75;
+  var eff = 0.78;
+  var coreRatio = 0.22;
+
+  // Heritage drives form
+  var podiumPct = site.heritTier === 'blocking' ? 0.5
+    : site.heritTier === 'navigable' ? 0.6 : 0.8;
+  var towerSetback = site.heritTier === 'blocking' ? 3
+    : site.heritTier === 'navigable' ? 1.5 : 0;
+
+  function scenario(label, floors) {
+    var podF = Math.round(floors * podiumPct);
+    var twrF = floors - podF;
+    var podFP = plotM2 * coverage;
+    var twrFP = podFP * (site.heritTier === 'blocking' ? 0.45 : site.heritTier === 'navigable' ? 0.55 : 0.85);
+    var giaTotal = (podFP * podF) + (twrFP * twrF);
+    var niaTotal = giaTotal * eff;
+    var addedF = floors - existF;
+    var addedNIA = Math.max(0, niaTotal - (podFP * existF * eff));
+    return {
+      label: label, floors: floors, podF: podF, twrF: twrF,
+      podFP: Math.round(podFP), twrFP: Math.round(twrFP),
+      giaTotal: Math.round(giaTotal), niaTotal: Math.round(niaTotal),
+      addedF: addedF, addedNIA: Math.round(addedNIA),
+      towerSetback: towerSetback, existF: existF
+    };
+  }
+
+  return {
+    lo: scenario('Low', Math.max(existF + 1, Math.round(maxF * 0.6))),
+    base: scenario('Base', Math.max(existF + 2, Math.round(maxF * 0.8))),
+    hi: scenario('High', maxF)
+  };
 }
 
 function updateMassMetrics(sc, site) {
-  var canonical = ensureCanonicalSite(site);
-  var logic = canonical && canonical.developmentLogic ? canonical.developmentLogic : siteDevelopmentLogic(site);
-  var gdvMid = Math.round((sc.gdv || 0) / 1e6);
-  var gdvLo = Math.round(gdvMid * 0.92);
-  var gdvHi = Math.round(gdvMid * 1.08);
-  var buildCost = Math.round(((sc.constCost || 0) / 1e6) * 10) / 10;
-  sc.buildCostM = buildCost;
-  sc.gdvLo = gdvLo;
-  sc.gdvHi = gdvHi;
-
+  var erv = site.borough === 'City of London' ? 85 : site.inCAZ ? 72 : 55;
+  var gdvLo = ((sc.niaTotal * erv * 10.7639 / 0.0475) / 1e6 * 0.85).toFixed(0);
+  var gdvHi = ((sc.niaTotal * erv * 10.7639 / 0.0475) / 1e6 * 1.15).toFixed(0);
   document.getElementById('mass-metrics').innerHTML = [
-    metricHTML(discoveryDisplayScore(site) + '/100', 'Headroom score', true),
     metricHTML('£' + gdvLo + '-' + gdvHi + 'M', 'Est. GDV range', true),
     metricHTML('+' + sc.addedF + 'F', 'Added floors', false),
-    metricHTML((sc.addedNIA || 0).toLocaleString() + 'm²', 'New NIA', false),
+    metricHTML(sc.addedNIA.toLocaleString() + 'm\u00B2', 'New NIA', false),
     metricHTML(sc.floors + 'F', 'Total floors', false),
-    metricHTML((sc.giaTotal || 0).toLocaleString() + 'm²', 'Total GIA', false),
-    metricHTML('£' + buildCost.toFixed(1) + 'M', 'Build cost', false),
-    metricHTML(sc.mode || logic.mode || 'Indicative', 'Uplift mode', false),
+    metricHTML(sc.giaTotal.toLocaleString() + 'm\u00B2', 'Total GIA', false),
+    metricHTML(Math.round(sc.niaTotal / sc.giaTotal * 100) + '%', 'Eff (NIA/GIA)', false),
   ].join('');
 
   // Update CTA
   document.getElementById('mass-cta').innerHTML = site.t1
-    ? '<a class="mass-cta" href="' + site.t1 + '">Unlock full appraisal →<span class="mass-cta-price">£39</span></a>'
-    : '<span class="mass-cta locked">Full appraisal not attached yet</span>';
+    ? '<a class="mass-cta" href="' + site.t1 + '">Unlock full appraisal \u2192<span class="mass-cta-sub">Score breakdown \u00B7 precedent analysis \u00B7 financial model</span></a>'
+    : '<span class="mass-cta locked">Full appraisal coming soon</span>';
 }
 
 function metricHTML(val, lbl, accent) {
@@ -3114,26 +2185,33 @@ function metricHTML(val, lbl, accent) {
 }
 
 function updateMassScenarioTabs(scenarios) {
-  var keys = ['lo','mid','hi'];
+  var keys = ['lo','base','hi'];
+  var labels = {lo:'Low',base:'Base',hi:'High'};
   keys.forEach(function(k) {
     var tab = document.getElementById('mass-tab-' + k);
-    var sc = scenarios && scenarios[k];
-    if (!tab || !sc) return;
-    tab.querySelector('.mass-sc-floors').textContent = sc.floors + 'F';
-    tab.classList.toggle('active', k === canonicalMassScenarioKey(massScenario));
+    if (!tab) return;
+    tab.querySelector('.mass-sc-floors').textContent = scenarios[k].floors + 'F';
+    tab.classList.toggle('active', k === massScenario);
   });
 }
 
 function switchMassScenario(key) {
-  massScenario = canonicalMassScenarioKey(key);
-  if (!massSite || !massScenarios) return;
-  renderMassScenarioState();
+  massScenario = key;
+  if (!massSite) return;
+  var scenarios = massingScenarios(massSite);
+  var sc = scenarios[key];
+  updateMassMetrics(sc, massSite);
+  updateMassScenarioTabs(scenarios);
+  updateMassScChip(sc, massSite);
+  // Update 3D massing
+  if (massMap) updateMassingLayers(massMap, massSite, sc);
 }
 
 function updateMassScChip(sc, site) {
   var chip = document.getElementById('mass-sc-chip');
   if (!chip || !sc) return;
-  var totalH = Math.round(sc.heightM || (sc.floors * (sc.floorH || 3.8)));
+  var floorH = 3.8;
+  var totalH = Math.round(sc.floors * floorH);
   var costPerM2 = 4200;
   var costM = Math.round(sc.giaTotal * costPerM2 / 1e6);
   var addFEl = document.getElementById('chip-addf');
@@ -3171,88 +2249,11 @@ function fetchSitePolygon(siteName, cb) {
     .catch(function() { _polyCache[siteName] = null; cb(null); });
 }
 
-// Polygon helpers
-function normalizeRing(coords) {
-  if (!coords || coords.length < 3) return [];
-  var ring = coords.slice();
-  if (ring.length > 1) {
-    var first = ring[0], last = ring[ring.length - 1];
-    if (first[0] === last[0] && first[1] === last[1]) ring = ring.slice(0, -1);
-  }
-  return ring;
-}
-
-function polyBounds(coords) {
-  var ring = normalizeRing(coords);
-  if (!ring.length) return null;
-  var minX = ring[0][0], minY = ring[0][1], maxX = ring[0][0], maxY = ring[0][1];
-  for (var i = 1; i < ring.length; i++) {
-    minX = Math.min(minX, ring[i][0]);
-    minY = Math.min(minY, ring[i][1]);
-    maxX = Math.max(maxX, ring[i][0]);
-    maxY = Math.max(maxY, ring[i][1]);
-  }
-  return [[minX, minY], [maxX, maxY]];
-}
-
-function bboxCenter(coords) {
-  var b = polyBounds(coords);
-  if (!b) return null;
-  return [(b[0][0] + b[1][0]) / 2, (b[0][1] + b[1][1]) / 2];
-}
-
-function pointInPoly(point, coords) {
-  var ring = normalizeRing(coords);
-  if (ring.length < 3) return false;
-  var x = point[0], y = point[1], inside = false;
-  for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    var xi = ring[i][0], yi = ring[i][1];
-    var xj = ring[j][0], yj = ring[j][1];
-    var intersect = ((yi > y) !== (yj > y)) &&
-      (x < (xj - xi) * (y - yi) / ((yj - yi) || 1e-12) + xi);
-    if (intersect) inside = !inside;
-  }
-  return inside;
-}
-
-function pointInGeometry(point, geom) {
-  if (!geom || !geom.type || !geom.coordinates) return false;
-  if (geom.type === 'Polygon') return pointInPoly(point, geom.coordinates[0]);
-  if (geom.type === 'MultiPolygon') {
-    for (var i = 0; i < geom.coordinates.length; i++) {
-      if (pointInPoly(point, geom.coordinates[i][0])) return true;
-    }
-  }
-  return false;
-}
-
-// Get a stable polygon anchor. Use area-weighted centroid first, then safe fallbacks.
+// Get polygon centroid
 function polyCentroid(coords) {
-  var ring = normalizeRing(coords);
-  if (!ring.length) return null;
-  if (ring.length < 3) return bboxCenter(ring) || ring[0];
-
-  var twiceArea = 0, cx = 0, cy = 0;
-  for (var i = 0; i < ring.length; i++) {
-    var p1 = ring[i];
-    var p2 = ring[(i + 1) % ring.length];
-    var f = (p1[0] * p2[1]) - (p2[0] * p1[1]);
-    twiceArea += f;
-    cx += (p1[0] + p2[0]) * f;
-    cy += (p1[1] + p2[1]) * f;
-  }
-
-  if (Math.abs(twiceArea) < 1e-12) return bboxCenter(ring) || ring[0];
-
-  var centroid = [cx / (3 * twiceArea), cy / (3 * twiceArea)];
-  if (pointInPoly(centroid, ring)) return centroid;
-
-  var boxCenter = bboxCenter(ring);
-  if (boxCenter && pointInPoly(boxCenter, ring)) return boxCenter;
-
-  var ax = 0, ay = 0;
-  for (var j = 0; j < ring.length; j++) { ax += ring[j][0]; ay += ring[j][1]; }
-  return [ax / ring.length, ay / ring.length];
+  var cx = 0, cy = 0, n = coords.length;
+  for (var i = 0; i < n; i++) { cx += coords[i][0]; cy += coords[i][1]; }
+  return [cx / n, cy / n];
 }
 
 // Buffer polygon outward from centroid
@@ -3271,26 +2272,6 @@ function shrinkPoly(coords, factor) {
   return coords.map(function(p) {
     return [c[0] + (p[0] - c[0]) * factor, c[1] + (p[1] - c[1]) * factor];
   });
-}
-
-// Inset ring by metres, with a safe fallback for irregular polygons
-function insetRing(coords, metres) {
-  var ring = normalizeRing(coords);
-  if (!ring.length) return ring;
-  var c = polyCentroid(ring);
-  var latScale = 111320;
-  var lngScale = 111320 * Math.cos((c[1] || 51.5) * Math.PI / 180);
-  var inset = ring.map(function(p) {
-    var dxm = (p[0] - c[0]) * lngScale;
-    var dym = (p[1] - c[1]) * latScale;
-    var len = Math.sqrt(dxm*dxm + dym*dym) || 0.0001;
-    var nextLen = Math.max(0, len - metres);
-    return [
-      c[0] + ((dxm / len) * nextLen) / lngScale,
-      c[1] + ((dym / len) * nextLen) / latScale
-    ];
-  });
-  return inset.length >= 3 ? inset : shrinkPoly(ring, 0.88);
 }
 
 // Classify polygon quality
@@ -3328,39 +2309,9 @@ function fetchOSMBuilding(lat, lng, address, cb) {
   }).catch(function() { cb(null); });
 }
 
-function shouldSuppressMassing(site, intelPoly) {
-  var flags = site.siteLegitimacyFlags || [];
-  var hardFlags = ['open_space_named_parcel', 'transport_or_station_land', 'strategic_civic_transport_signal', 'city_open_space'];
-  if (flags.some(function(f) { return hardFlags.indexOf(f) !== -1; })) return true;
-
-  var text = ((site.name || '') + ' ' + (site.address || '')).toLowerCase();
-  if (/(churchyard|church yard|public realm|public garden|plaza|piazza|forecourt|courtyard)/.test(text)) return true;
-
-  var bounds = intelPoly ? polyBounds(intelPoly) : null;
-  if (bounds) {
-    var dx = Math.abs(bounds[1][0] - bounds[0][0]);
-    var dy = Math.abs(bounds[1][1] - bounds[0][1]);
-    var ratio = Math.max(dx, dy) / Math.max(Math.min(dx, dy), 1e-9);
-    if (ratio > 12) return true; // long strips / corridors / weird title geometry
-  }
-  return false;
-}
-
-function showMassingSuppressed(site) {
-  var container = document.getElementById('mass-3d');
-  if (!container) return;
-  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:32px;color:rgba(255,255,255,.78);font:500 14px/1.7 var(--sans);text-align:center;background:linear-gradient(180deg,rgba(10,10,10,.2),rgba(10,10,10,.35));">3D massing suppressed for this parcel.<br>This reads as public realm / residual land / non-standalone site and needs manual review.</div>';
-}
-
-function showMassingUnavailable(message) {
-  var container = document.getElementById('mass-3d');
-  if (!container) return;
-  container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:32px;color:rgba(255,255,255,.78);font:500 14px/1.7 var(--sans);text-align:center;background:linear-gradient(180deg,rgba(10,10,10,.2),rgba(10,10,10,.35));">' + message + '</div>';
-}
-
 function initMassMap(site, scenarios) {
   if (massMap) { massMap.remove(); massMap = null; }
-  if (!MAPBOX_TOKEN) { showMassingUnavailable('3D massing unavailable - map token missing. Metrics remain live.'); return; }
+  if (!MAPBOX_TOKEN) return;
 
   // Step 1: fetch intel polygon
   fetchSitePolygon(site.name, function(intel) {
@@ -3373,17 +2324,9 @@ function initMassMap(site, scenarios) {
     if (intel) {
       if (intel.existing_height_m) site._existH = intel.existing_height_m;
       if (intel.existing_floors) site._existF = intel.existing_floors;
-      if (intel.max_floors) site.maxFloors = intel.max_floors;
-      site._conceptualMassing = !!intel.conceptual_massing;
-      site._airRightsType = intel.air_rights_type || null;
     }
 
     var tier = polyTier(intelPoly);
-
-    if (shouldSuppressMassing(site, intelPoly)) {
-      showMassingSuppressed(site);
-      return;
-    }
 
     // Step 2: if bbox or low quality, try OSM building fetch
     if (tier === 'real') {
@@ -3400,10 +2343,6 @@ function initMassMap(site, scenarios) {
           site._polyTier = 'osm';
           if (osm.height) site._existH = osm.height;
           if (osm.levels) site._existF = osm.levels;
-        } else if ((tier === 'bbox' || tier === 'low') && site._conceptualMassing) {
-          // Intentional intelligence massing footprint - allow conceptual render
-          site._realPoly = intelPoly;
-          site._polyTier = 'conceptual';
         } else if (tier === 'bbox' || tier === 'low') {
           // Use intel bbox but mark as approximate
           site._realPoly = intelPoly;
@@ -3420,13 +2359,7 @@ function initMassMap(site, scenarios) {
 
 function _buildMassMap(site, scenarios) {
   var poly = site._realPoly;
-  var tier = site._polyTier || 'none';
-  if (!poly || tier === 'approximate' || tier === 'none') {
-    showMassingUnavailable('3D massing paused - verified site geometry is too weak for a credible model. Metrics remain visible while this site is held for manual review.');
-    return;
-  }
-  var center = polyCentroid(poly) || [site.lng, site.lat];
-  var bounds = polyBounds(poly);
+  var center = poly ? polyCentroid(poly) : [site.lng, site.lat];
 
   var container = document.getElementById('mass-3d');
   massMap = new mapboxgl.Map({
@@ -3444,11 +2377,6 @@ function _buildMassMap(site, scenarios) {
     massMap.setConfigProperty('basemap', 'lightPreset', 'day');
     massMap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
     massMap.setConfigProperty('basemap', 'showTransitLabels', false);
-
-    if (bounds) {
-      massMap.fitBounds(bounds, { padding: 80, pitch: 60, bearing: -30, maxZoom: 18.2, duration: 0 });
-    }
-
     var sc = scenarios[massScenario];
     addMassingLayers(massMap, site, sc);
   });
@@ -3558,11 +2486,15 @@ function addMassingLayers(map, site, sc) {
   var existH = (site._existH || sc.existF * floorH);
   var existF = site._existF || sc.existF;
   var totalH = sc.floors * floorH;
+  var podH = sc.podF * floorH;
 
+  // Determine what geometry to use based on tier
   if (tier === 'real' || tier === 'osm') {
-    var baseCoords = normalizeRing(poly);
-    var massCoords = shrinkPoly(baseCoords, 0.985);
+    // === TIER A/B: Real polygon - full 3D massing ===
+    var baseCoords = poly;
+    var twrCoords = sc.towerSetback > 0 ? shrinkPoly(baseCoords, 0.85) : baseCoords;
 
+    // Site outline - dashed amber boundary
     map.addSource('mass-site', {
       type: 'geojson',
       data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
@@ -3572,10 +2504,11 @@ function addMassingLayers(map, site, sc) {
       paint: { 'line-color': '#b45309', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [5, 3] }
     });
 
+    // Potential envelope - green translucent from ground
     if (totalH > 0) {
       map.addSource('mass-potential', {
         type: 'geojson',
-        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [massCoords] } }
+        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [baseCoords] } }
       });
       map.addLayer({
         id: 'mass-potential-3d', type: 'fill-extrusion', source: 'mass-potential',
@@ -3583,26 +2516,43 @@ function addMassingLayers(map, site, sc) {
           'fill-extrusion-color': '#059669',
           'fill-extrusion-height': totalH,
           'fill-extrusion-base': 0,
-          'fill-extrusion-opacity': 0.85,
+          'fill-extrusion-opacity': 0.22,
           'fill-extrusion-vertical-gradient': false
         }
       });
       map.addLayer({
         id: 'mass-potential-edge', type: 'line', source: 'mass-potential',
-        paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.9 }
+        paint: { 'line-color': '#047857', 'line-width': 2, 'line-opacity': 0.8 }
       });
     }
 
-    var floorLines = [];
-    var numFloors = sc.floors;
-    for (var i = 1; i <= numFloors; i++) {
-      var fh = i * floorH;
-      if (fh > totalH + 0.5) break;
-      floorLines.push({
+    // Tower setback
+    if (sc.towerSetback > 0 && totalH > podH) {
+      map.addSource('mass-tower', {
+        type: 'geojson',
+        data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [twrCoords] } }
+      });
+      map.addLayer({
+        id: 'mass-tower-3d', type: 'fill-extrusion', source: 'mass-tower',
+        paint: {
+          'fill-extrusion-color': '#ffffff',
+          'fill-extrusion-height': totalH,
+          'fill-extrusion-base': podH,
+          'fill-extrusion-opacity': 0.15
+        }
+      });
+    }
 
+    // Floor lines - thin slab extrusions
+    var floorLines = [];
+    for (var i = existF + 1; i <= sc.floors; i++) {
+      var fh = existH + (i - existF) * floorH;
+      var slabCoords = (sc.towerSetback > 0 && i > sc.podF) ? twrCoords : baseCoords;
+      var lineCoords = bufferPoly(slabCoords, 0.000003);
+      floorLines.push({
         type: 'Feature',
-        geometry: { type: 'Polygon', coordinates: [massCoords] },
-        properties: { height: fh + 0.1, base: fh - 0.1 }
+        geometry: { type: 'Polygon', coordinates: [lineCoords] },
+        properties: { height: fh + 0.12, base: fh - 0.12 }
       });
     }
     if (floorLines.length > 0) {
@@ -3613,18 +2563,40 @@ function addMassingLayers(map, site, sc) {
       map.addLayer({
         id: 'mass-floor-lines', type: 'fill-extrusion', source: 'mass-floors',
         paint: {
-          'fill-extrusion-color': '#ffffff',
+          'fill-extrusion-color': '#047857',
           'fill-extrusion-height': ['get', 'height'],
           'fill-extrusion-base': ['get', 'base'],
-          'fill-extrusion-opacity': 0.7
+          'fill-extrusion-opacity': 0.5
         }
       });
     }
 
+    // Height labels
     addMassLabels(map, site, sc, baseCoords, existH, totalH, existF);
 
   } else {
-    addMassLabels(map, site, sc, [[site.lng, site.lat],[site.lng, site.lat+0.0001],[site.lng+0.0001, site.lat],[site.lng, site.lat]], existH, totalH, existF);
+    // === TIER C: Approximate bbox or no polygon ===
+    // Show a subtle dashed boundary + height labels only — no 3D extrusion
+    // Let Mapbox 3D buildings provide the visual context
+    var approxCoords = poly || rect;
+
+    // Dashed approximate boundary
+    map.addSource('mass-site', {
+      type: 'geojson',
+      data: { type: 'Feature', geometry: { type: 'Polygon', coordinates: [approxCoords] } }
+    });
+    map.addLayer({
+      id: 'mass-site-outline', type: 'line', source: 'mass-site',
+      paint: { 'line-color': '#b45309', 'line-width': 2, 'line-opacity': 0.5, 'line-dasharray': [6, 4] }
+    });
+    // Subtle fill to highlight the area
+    map.addLayer({
+      id: 'mass-site-fill', type: 'fill', source: 'mass-site',
+      paint: { 'fill-color': '#059669', 'fill-opacity': 0.06 }
+    });
+
+    // Labels only — no 3D massing on approximate boundaries
+    addMassLabels(map, site, sc, approxCoords, existH, totalH, existF);
   }
 }
 
@@ -3635,80 +2607,36 @@ function clearMassLabels() {
   _massLabels = [];
 }
 
-function buildUseChips(site) {
-  var uses = [];
-  var ut = (site.useType || '').toLowerCase();
-  var name = (site.name || '').toLowerCase();
-  var desc = (site.desc || '').toLowerCase();
-
-  // Derive possible uses from site data
-  if (ut === 'resi' || ut === 'residential' || /residential|housing|resi|btr|pbsa|homes/.test(name+desc)) {
-    uses.push({label:'Residential', cls:'resi'});
-  }
-  if (ut === 'office' || ut === 'commercial' || /office|commercial|workspace/.test(name+desc)) {
-    uses.push({label:'Office', cls:'office'});
-  }
-  if (ut === 'mixed' || /mixed/.test(name+desc) || (uses.length === 0 && site.inCAZ)) {
-    if (!uses.find(function(u){return u.cls==='resi';})) uses.push({label:'Residential', cls:'resi'});
-    if (!uses.find(function(u){return u.cls==='office';})) uses.push({label:'Office', cls:'office'});
-  }
-  if (ut === 'industrial' || /industrial|depot|warehouse|garage|trading estate|sidings|factory/.test(name+desc)) {
-    uses.push({label:'Industrial', cls:'industrial'});
-    uses.push({label:'Adaptive Reuse', cls:'adaptive'});
-  }
-  // Always suggest resi if OA and nothing else set
-  if (uses.length === 0) {
-    if (site.inOA || site.inCAZ) {
-      uses.push({label:'Residential', cls:'resi'});
-      uses.push({label:'Office', cls:'office'});
-    } else {
-      uses.push({label:'Mixed-use', cls:'mixed'});
-    }
-  }
-
-  return uses.map(function(u) {
-    return '<span class="mass-use-chip ' + u.cls + '">' + u.label + '</span>';
-  }).join('');
-}
-
 function addMassLabels(map, site, sc, coords, existH, totalH, existF) {
   clearMassLabels();
   var c = polyCentroid(coords);
+
+  // Existing height label
+  var existMarker = new mapboxgl.Marker({
+    element: makeMassLabel(Math.round(existH) + 'm - ' + existF + 'F existing', '#c0392b')
+  }).setLngLat(c).setOffset([80, -30]).addTo(map);
+  _massLabels.push(existMarker);
+
+  // Potential height label
   var potFloors = sc.floors;
-
-  // Use map camera state to project height to pixels
-  function heightToPx(hM) {
-    var zoom = map.getZoom();
-    var pitch = map.getPitch() * Math.PI / 180;
-    var lat = c[1];
-    var mpp = 156543.03392 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom);
-    return Math.round((hM / mpp) * Math.cos(pitch));
-  }
-
-  // Green label at top of proposed mass
-  var topPx = heightToPx(totalH);
   var potMarker = new mapboxgl.Marker({
-    element: makeMassLabel(Math.round(totalH) + 'm · ' + potFloors + 'F', '#059669', true),
-    anchor: 'bottom'
-  }).setLngLat(c).setOffset([0, -topPx]).addTo(map);
+    element: makeMassLabel(Math.round(totalH) + 'm - ' + potFloors + 'F potential', '#059669')
+  }).setLngLat(c).setOffset([-80, -90]).addTo(map);
   _massLabels.push(potMarker);
 
-  // White label at existing height
-  var exPx = heightToPx(existH);
-  var existMarker = new mapboxgl.Marker({
-    element: makeMassLabel(Math.round(existH) + 'm · ' + existF + 'F existing', 'rgba(255,255,255,0.7)', false),
-    anchor: 'bottom'
-  }).setLngLat(c).setOffset([0, -exPx]).addTo(map);
-  _massLabels.push(existMarker);
+  // Added floors callout
+  var addedF = potFloors - existF;
+  if (addedF > 0) {
+    var addMarker = new mapboxgl.Marker({
+      element: makeMassLabel('+' + addedF + 'F uplift', '#ffffff')
+    }).setLngLat(c).setOffset([0, -60]).addTo(map);
+    _massLabels.push(addMarker);
+  }
 }
 
-function makeMassLabel(text, color, accent) {
+function makeMassLabel(text, color) {
   var el = document.createElement('div');
-  // Accent (green top): white text on solid green. Non-accent: semi-transparent dark bg
-  var textColor = accent ? '#ffffff' : color;
-  var bg = accent ? 'rgba(5,150,105,0.9)' : 'rgba(0,0,0,0.72)';
-  var border = accent ? 'rgba(4,120,87,0.8)' : 'rgba(255,255,255,0.15)';
-  el.style.cssText = 'font:600 11px/1 var(--sans,system-ui);color:' + textColor + ';background:' + bg + ';padding:4px 10px;border-radius:4px;border:1px solid ' + border + ';white-space:nowrap;pointer-events:none;transform:translateX(-50%);box-shadow:0 2px 8px rgba(0,0,0,0.4);';
+  el.style.cssText = 'font:600 12px/1 var(--sans,system-ui);color:' + color + ';background:rgba(0,0,0,0.75);padding:4px 8px;border-radius:4px;border:1px solid ' + color + ';white-space:nowrap;pointer-events:none;';
   el.textContent = text;
   return el;
 }
@@ -3860,15 +2788,19 @@ document.addEventListener('keydown', function(e) {
 <div class="mass-scrim" id="mass-scrim">
   <div class="mass-modal">
     <button class="mass-close" onclick="closeMassPopup();">&times;</button>
+    <!-- Disco nav bar -->
+    <div class="mass-nav-bar">
+      <button class="mass-nav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous site">&#8592;</button>
+      <div class="mass-nav-center">
+        <div class="mass-nav-rank" id="mass-rank"></div>
+        <div class="mass-nav-label" id="mass-nav-label"></div>
+      </div>
+      <button class="mass-nav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next site">&#8594;</button>
+    </div>
+
     <div class="mass-body">
     <!-- Left: 3D canvas + Street View -->
     <div class="mass-canvas">
-      <!-- Standalone site nav -->
-      <div class="mass-sitenav" id="mass-sitenav">
-        <button class="mass-sitenav-btn" id="mass-nav-prev" onclick="massNavStep(-1)" title="Previous">&#8592;</button>
-        <div class="mass-sitenav-label" id="mass-rank">1 / 154</div>
-        <button class="mass-sitenav-btn" id="mass-nav-next" onclick="massNavStep(1)" title="Next">&#8594;</button>
-      </div>
       <div class="mass-map-wrap" id="mass-3d"></div>
       <div class="mass-sv-wrap" id="mass-sv"></div>
 
@@ -3878,13 +2810,12 @@ document.addEventListener('keydown', function(e) {
           <button class="mass-sc-tab" id="mass-tab-lo" onclick="switchMassScenario('lo')">
             <span class="mass-sc-label">Low</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-lo">6F</span>
           </button>
-          <button class="mass-sc-tab active" id="mass-tab-mid" onclick="switchMassScenario('mid')">
-            <span class="mass-sc-label">Mid</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-mid">8F</span>
+          <button class="mass-sc-tab active" id="mass-tab-base" onclick="switchMassScenario('base')">
+            <span class="mass-sc-label">Base</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-base">8F</span>
           </button>
           <button class="mass-sc-tab" id="mass-tab-hi" onclick="switchMassScenario('hi')">
             <span class="mass-sc-label">High</span><span class="mass-sc-sep">-</span><span class="mass-sc-floors" id="tab-floors-hi">10F</span>
           </button>
-
         </div>
         <div class="mass-sc-chip" id="mass-sc-chip">
           <div class="mass-sc-chip-item"><span class="mass-sc-chip-val" id="chip-addf">-</span><span class="mass-sc-chip-lbl">Added floors</span></div>
@@ -3910,7 +2841,6 @@ document.addEventListener('keydown', function(e) {
         <span class="mass-score-label" id="mass-score-lbl">/100</span>
       </div>
       <div id="mass-verdict" class="mass-verdict green"></div>
-      <div class="mass-use-chips" id="mass-use-chips"></div>
 
       <div class="mass-divider"></div>
 
