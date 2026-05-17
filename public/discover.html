@@ -342,13 +342,17 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
 .focus-gated-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink2); flex-shrink: 0; }
 .focus-gated-line { flex: 1; height: 1px; background: var(--ink2); opacity: .2; }
 .focus-cta-wrap { padding: 16px 20px 24px; }
+.focus-actions { display: flex; flex-direction: column; gap: 10px; }
 .focus-cta {
   display: block; width: 100%; padding: 14px 24px; border-radius: 8px; text-align: center;
   font: 700 11px var(--sans); letter-spacing: .14em; text-transform: uppercase;
   background: var(--ink); color: var(--bg); text-decoration: none; transition: background .15s;
+  border: 0; cursor: pointer; font-family: var(--sans);
 }
 .focus-cta:hover { background: var(--accent); }
 .focus-cta.locked { background: rgba(17,17,16,.12); color: var(--ink3); pointer-events: none; }
+.focus-secondary { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px rgba(17,17,16,.20); }
+.focus-secondary:hover { background: rgba(17,17,16,.08); }
 .focus-cta-sub {
   display: block; font: 500 13px var(--sans); letter-spacing: .04em;
   text-transform: none; opacity: 0.7; margin-top: 4px;
@@ -1263,6 +1267,8 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); font-family:
       <div class="focus-metrics" id="focus-metrics"></div>
       <!-- Analyst hook - the intelligence that creates the question -->
       <div class="focus-hook" id="focus-hook"></div>
+      <!-- Evidence stack - what is known, modelled and missing -->
+      <div class="focus-intel" id="focus-evidence"></div>
       <!-- Teased factor bars - 3 visible, 3 locked -->
       <div class="focus-factors" id="focus-factors"></div>
       <!-- Specific CTA -->
@@ -2042,9 +2048,7 @@ function discoveryDisplayScore(site) {
 function siteDevelopmentLogic(s) {
   const canonical = ensureCanonicalSite(s);
   const planning = planningSignalSummary(s);
-  if (canonical && canonical.developmentLogic) {
-    return { ...canonical.developmentLogic, planning };
-  }
+  const canonicalLogic = canonical && canonical.developmentLogic ? canonical.developmentLogic : null;
 
   const useType = (s.useType || s.use_type || s.use || '').toLowerCase();
   const existingHeight = Number(s.existingHeightM || s.existing_height_m || 0);
@@ -2075,7 +2079,16 @@ function siteDevelopmentLogic(s) {
     : mode === 'Mid-rise intensification'
       ? 'Returns come from compound additional area rather than one heroic tower move.'
       : 'Economics favour disciplined area gain over speculative height.';
-  return { mode, type, posture, heritage, highValue, planning, why, economics };
+  return {
+    mode: canonicalLogic && canonicalLogic.mode ? canonicalLogic.mode : mode,
+    type: canonicalLogic && canonicalLogic.type ? canonicalLogic.type : type,
+    posture: canonicalLogic && canonicalLogic.posture ? canonicalLogic.posture : posture,
+    heritage: canonicalLogic && canonicalLogic.heritage ? canonicalLogic.heritage : heritage,
+    highValue: canonicalLogic && canonicalLogic.highValue !== undefined ? canonicalLogic.highValue : highValue,
+    planning,
+    why: canonicalLogic && canonicalLogic.why ? canonicalLogic.why : why,
+    economics: canonicalLogic && canonicalLogic.economics ? canonicalLogic.economics : economics,
+  };
 }
 
 function analystHook(s) {
@@ -2083,7 +2096,7 @@ function analystHook(s) {
   const baseScenario = canonical && canonical.scenarioState ? (canonical.scenarioState.mid || canonical.scenarioState.lo || canonical.scenarioState.hi) : null;
   const addF = baseScenario ? baseScenario.addedF : (s.maxFloors - Math.max(1, Math.round(s.maxFloors * 0.45)));
   const p = planningSignalSummary(s);
-  const logic = canonical && canonical.developmentLogic ? canonical.developmentLogic : siteDevelopmentLogic(s);
+  const logic = siteDevelopmentLogic(s);
   const sentences = [];
 
   sentences.push(`<strong>Development logic:</strong> ${logic.type}. ${logic.why} <strong>Uplift mode:</strong> ${logic.mode}. ${logic.economics}`);
@@ -2197,9 +2210,47 @@ function factorBars(s) {
   return rows.join('');
 }
 
+function focusEvidenceStack(site) {
+  const planning = planningSignalSummary(site);
+  const canonical = ensureCanonicalSite(site);
+  const known = [];
+  const modelled = [];
+  const missing = [];
+
+  if (site.ptal) known.push('PTAL ' + site.ptal);
+  if (site.inOA) known.push('Opportunity Area');
+  if (site.inCAZ) known.push('CAZ');
+  if (site.inCons) known.push('Conservation area');
+  if (site.nhleCount || site.nhle_count_150m || site.nhle_listings) {
+    const count = site.nhle_count_150m || site.nhleCount || (site.nhle_listings ? site.nhle_listings.length : 0);
+    known.push(count + ' NHLE asset' + (count === 1 ? '' : 's') + ' within context radius');
+  }
+  if (site.lvmf_views && site.lvmf_views.length) known.push(site.lvmf_views.length + ' LVMF view corridor flag' + (site.lvmf_views.length === 1 ? '' : 's'));
+  if (site.existingHeightM) known.push(Math.round(site.existingHeightM) + 'm existing height signal');
+  if (site.inspire_polygon || site.poly) known.push('site boundary geometry present');
+
+  if (canonical && canonical.scenarioState) modelled.push('low / mid / high massing scenarios');
+  if (canonical && canonical.financialAssumptions) modelled.push('ERV, NIY and build-cost assumptions');
+  if (site.headroomUpsideScore != null) modelled.push('headroom upside score ' + site.headroomUpsideScore + '/100');
+  if (site.utilisationScore != null) modelled.push('land utilisation score ' + site.utilisationScore + '/10');
+
+  if (!planning || (!planning.applicationCount && !planning.majorCount && !planning.recentRef)) missing.push('live planning application evidence');
+  if (!site.owner || site.owner === 'Unknown' || site.owner === 'PLACEHOLDER') missing.push('registered owner signal');
+  if (!site.hmlr) missing.push('HMLR title packet');
+  if (!site.t1) missing.push('full Appraise report page');
+
+  const clean = arr => arr.filter(Boolean).slice(0, 4).map(popupEscape).join(' · ') || 'Not enough signal yet';
+  return `
+    <div class="focus-intel-row"><span class="focus-intel-key">Known evidence</span><span class="focus-intel-val">${clean(known)}</span></div>
+    <div class="focus-intel-row"><span class="focus-intel-key">Modelled</span><span class="focus-intel-val">${clean(modelled)}</span></div>
+    <div class="focus-intel-row"><span class="focus-intel-key">Missing</span><span class="focus-intel-val">${clean(missing)}</span></div>
+    <div class="focus-intel-row"><span class="focus-intel-key">Planning</span><span class="focus-intel-val">${popupEscape(planningSignalLabel(planning))}</span></div>
+  `;
+}
+
 function cardClick(id) {
   const site = ALL_SITES.find(s=>s.id===id);
-  if (site) openMassPopup(site);
+  if (site) openFocus(site);
 }
 
 function setSearchHelp(text, state) {
@@ -2320,6 +2371,7 @@ function openProvisionalFocus(site) {
     <div class="focus-hook-text">${site.provisionalHeadline}</div>
     <div class="focus-hook-question">${site.provisionalNotes.map(function(note) { return '<div>' + note + '</div>'; }).join('')}</div>
   `;
+  document.getElementById('focus-evidence').innerHTML = '';
   var geometryScore = site.plotM2 ? 78 : 22;
   var heritageScore = site.heritTier === 'blocking' ? 82 : 24;
   var upliftScore = site.roughGiaUpliftPct != null ? Math.max(18, Math.min(88, Math.round(site.roughGiaUpliftPct / 4))) : 30;
@@ -2469,6 +2521,7 @@ function openFocus(site, opts) {
     <div class="focus-hook-text">${site.headroomReasonPrimary || hookText}</div>
     <div class="focus-hook-question">${headroomReasons || `<div>${hookText}</div>`}${site.headroomSecondaryLine ? `<div><strong>${site.headroomSecondaryLine}</strong></div>` : ''}</div>
   `;
+  document.getElementById('focus-evidence').innerHTML = focusEvidenceStack(site);
   // ── Factor bars ─────────────────────────────────────────────────────────
   document.getElementById('focus-factors').innerHTML = `
     <div class="focus-factors-label">Score drivers · logic, economics, planning and available sky</div>
@@ -2477,8 +2530,8 @@ function openFocus(site, opts) {
   // ── CTA - site-specific ─────────────────────────────────────────────────
   const addFf = baseScenario ? baseScenario.addedF : (site.maxFloors - existF);
   document.getElementById('focus-cta-wrap').innerHTML = site.t1
-    ? `<a class="focus-cta" href="${site.t1}">See the full headroom case &rarr;<span class="focus-cta-sub">${site.headroomSecondaryLine || ('+' + addFf + 'F potential')} · planning precedents · does it stack at current land value?</span></a>`
-    : `<span class="focus-cta locked">Full report coming soon</span>`;
+    ? `<div class="focus-actions"><a class="focus-cta" href="${site.t1}">See the full headroom case &rarr;<span class="focus-cta-sub">${site.headroomSecondaryLine || ('+' + addFf + 'F potential')} · planning precedents · does it stack at current land value?</span></a><button class="focus-cta focus-secondary" onclick="openMassPopup(ALL_SITES.find(s=>s.id===${site.id}))">Preview massing in 3D</button></div>`
+    : `<div class="focus-actions"><span class="focus-cta locked">Full report not attached yet<span class="focus-cta-sub">Evidence shown above is the current Discover record, not a purchasable appraisal.</span></span><button class="focus-cta focus-secondary" onclick="openMassPopup(ALL_SITES.find(s=>s.id===${site.id}))">Preview massing in 3D</button></div>`;
   const visEl = document.getElementById('focus-visual');
   const phEl  = document.getElementById('focus-sat-ph');
   if (phEl) phEl.textContent = `£${site.gdvEst}M`;
@@ -3037,7 +3090,7 @@ function updateMassMetrics(sc, site) {
   // Update CTA
   document.getElementById('mass-cta').innerHTML = site.t1
     ? '<a class="mass-cta" href="' + site.t1 + '">Unlock full appraisal →<span class="mass-cta-price">£39</span></a>'
-    : '<a class="mass-cta" href="#">Unlock full appraisal →<span class="mass-cta-price">£39</span></a>';
+    : '<span class="mass-cta locked">Full appraisal not attached yet</span>';
 }
 
 function metricHTML(val, lbl, accent) {
