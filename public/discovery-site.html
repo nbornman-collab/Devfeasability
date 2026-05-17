@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discover Site | Headroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="/lib/site-model.js"></script>
+<style>
+:root{--bg:#f2f1ed;--panel:#fffaf2;--ink:#151511;--muted:#615f58;--rule:rgba(21,21,17,.12);--accent:#b8845c;--green:#15803d;--amber:#b7791f;--red:#b91c1c;--dark:#11110f;--mono:'JetBrains Mono',monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+a{color:inherit}.nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--rule);background:rgba(242,241,237,.96);position:sticky;top:0;z-index:20;backdrop-filter:blur(16px)}.logo{font-weight:800;letter-spacing:-.04em;text-decoration:none}.nav a:not(.logo){font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;text-decoration:none;color:var(--muted)}
+.page{max-width:1320px;margin:0 auto;padding:26px 18px 56px}.back{display:inline-flex;margin-bottom:18px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);text-decoration:none}.hero{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:18px;align-items:stretch}.hero-card,.panel{background:var(--panel);border:1px solid var(--rule);border-radius:18px;box-shadow:0 18px 45px rgba(21,21,17,.07);overflow:hidden}.hero-main{padding:28px}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}.title{font-size:clamp(34px,5vw,72px);line-height:.92;letter-spacing:-.07em;margin:0 0 16px}.addr{color:var(--muted);font-size:15px;line-height:1.5}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px}.chip{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:6px 9px;border:1px solid var(--rule);border-radius:999px;background:rgba(255,255,255,.5)}.chip.green{background:#ecfdf5;color:var(--green)}.chip.amber{background:#fffbeb;color:var(--amber)}.chip.red{background:#fef2f2;color:var(--red)}
+.score-card{display:grid;grid-template-columns:1fr;align-content:space-between;padding:24px;background:var(--dark);color:#fff}.score{font:800 88px/.85 var(--mono);letter-spacing:-.08em}.score small{font-size:22px;color:rgba(255,255,255,.45)}.verdict{display:inline-block;margin-top:8px;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d7b08c}.score-note{margin-top:22px;color:rgba(255,255,255,.68);line-height:1.5;font-size:14px}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.section{padding:22px}.section h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}.section p{margin:0;color:var(--muted);line-height:1.7}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border-top:1px solid var(--rule)}.metric{background:var(--panel);padding:17px}.metric-value{font:800 24px var(--mono);letter-spacing:-.04em}.metric-label{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800;margin-top:4px}.massing{height:430px;background:linear-gradient(180deg,#172033,#0d111b);position:relative;overflow:hidden}.skyline{position:absolute;inset:0;background:radial-gradient(circle at 68% 26%,rgba(184,132,92,.22),transparent 28%),linear-gradient(180deg,transparent 55%,rgba(0,0,0,.38))}.plot{position:absolute;left:8%;right:8%;bottom:46px;height:12px;background:rgba(255,255,255,.18);transform:skewX(-18deg)}.existing,.proposed{position:absolute;bottom:58px;border:1px solid rgba(255,255,255,.38);box-shadow:0 18px 45px rgba(0,0,0,.26)}.existing{left:20%;width:28%;height:var(--existing-h,110px);background:rgba(255,255,255,.22)}.proposed{right:18%;width:26%;height:var(--proposed-h,280px);background:linear-gradient(180deg,rgba(56,189,248,.72),rgba(20,184,166,.62))}.massing-label{position:absolute;left:18px;bottom:16px;color:rgba(255,255,255,.75);font-size:12px}.massing-label strong{color:#fff}.scenario-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px;background:#10100e}.tab{border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.78);padding:10px;border-radius:10px;font-size:12px}.tab strong{display:block;color:#fff;font:800 20px var(--mono)}.tab.active{border-color:var(--accent);background:rgba(184,132,92,.18)}
+.rows{display:grid;gap:0;border:1px solid var(--rule);border-radius:14px;overflow:hidden}.row{display:grid;grid-template-columns:165px 1fr;gap:12px;padding:13px 15px;background:rgba(255,255,255,.38);border-bottom:1px solid var(--rule)}.row:last-child{border-bottom:0}.key{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.val{font-size:14px;line-height:1.5}.val.missing{color:#8a4d0f}.bars{display:grid;gap:10px}.bar-row{display:grid;grid-template-columns:150px 1fr 42px;gap:10px;align-items:center}.bar-name{font-size:12px;font-weight:700;color:var(--muted)}.bar{height:10px;background:rgba(21,21,17,.1);border-radius:999px;overflow:hidden}.fill{height:100%;background:var(--accent);border-radius:999px}.bar-score{font:700 12px var(--mono);text-align:right}.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 18px;border-radius:11px;background:var(--dark);color:#fff;text-decoration:none;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.12em}.btn.secondary{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--rule)}.locked{color:var(--muted);font-size:13px;line-height:1.5}.error{padding:50px;text-align:center}.hide{display:none!important}
+@media(max-width:900px){.hero,.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.massing{height:360px}.score{font-size:72px}.row{grid-template-columns:1fr}.bar-row{grid-template-columns:120px 1fr 36px}.nav{padding:0 14px}.page{padding:18px 12px 40px}}
+</style>
+</head>
+<body>
+<nav class="nav"><a class="logo" href="/">Headroom</a><div><a href="/discover">Discover</a></div></nav>
+<main class="page" id="app"><div class="error">Loading site...</div></main>
+<script>
+const DATASETS=['/data/southwark-sites.json','/data/city-sites.json','/data/hackney-sites.json'];
+const wanted=decodeURIComponent(location.pathname.split('/').filter(Boolean).pop()||'');
+function slugify(value){return String(value||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80)}
+function siteSlug(s){if(s.slug)return s.slug; if(s.t1)return String(s.t1).split('/').filter(Boolean).pop(); return slugify(s.name||s.address)}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function moneyM(v){return '£'+Math.round((Number(v)||0)/1e6)+'M'}
+function toArr(d){return Array.isArray(d)?d:(d.sites||Object.values(d))}
+function policyProfile(site){return window.HeadroomSiteModel?window.HeadroomSiteModel.buildPlanningPolicyProfile(site):{}}
+function fabricProfile(site){return window.HeadroomSiteModel?window.HeadroomSiteModel.buildFabricProfile(site):{}}
+function canonical(site){
+  const flags=site.flags||{};
+  const seed={...site, borough:site.borough||site._borough||'London', ptal:flags.ptal||site.ptal||null, inOA:!!(flags.inOA||flags.oa), inCAZ:!!(flags.inCAZ||flags.caz), inCons:!!(flags.inConservation), maxFloors:site.max_floors||site.mf||site.maxFloors, plotM2:Math.round((site.hectares?site.hectares*10000:site.plot||1000)), useType:site.use||site.buildingUse||'office', existingHeightM:site.existing_height_m||site.h||null, existingFloors:site.existing_floors||null, heritTier:(site.nhle_constraint||site.nhle_tier||site.her||'manageable').toString().toLowerCase(), planning:site.planning||null, score:Number(site.score)||55};
+  seed.planningPolicy=policyProfile(seed); seed.fabricProfile=fabricProfile(seed);
+  return window.HeadroomSiteModel?window.HeadroomSiteModel.buildCanonicalSite(seed):seed;
+}
+function planningSummary(raw, model){
+  const p=raw.planning||{}; const policy=model.planningPolicy||{};
+  const app=Number(p.applicationCount??p.total??p.count??0), major=Number(p.majorCount??0), tall=Number(p.tallCount??0);
+  if(p.note && /pending/i.test(p.note) && !app && !major) return 'Planning data pending';
+  if(policy.heightIntent) return policy.zone || 'Height precedent active';
+  if(major) return major+' major nearby application'+(major===1?'':'s');
+  if(app) return app+' nearby planning application'+(app===1?'':'s');
+  return policy.zone ? policy.zone : 'No strong live signal captured';
+}
+function evidence(raw, model){
+  const flags=raw.flags||{}, known=[], modelled=[], missing=[];
+  if(flags.ptal||raw.ptal) known.push('PTAL '+(flags.ptal||raw.ptal));
+  if(flags.inOA) known.push('Opportunity Area'); if(flags.inCAZ) known.push('CAZ'); if(flags.inBrownfield) known.push('brownfield flag');
+  const nhle=raw.nhle_count_150m||raw.nhle_count||raw.nhle_listings?.length||0; if(nhle) known.push(nhle+' NHLE context asset'+(nhle===1?'':'s'));
+  if(raw.lvmf_views?.length) known.push(raw.lvmf_views.length+' LVMF flag'+(raw.lvmf_views.length===1?'':'s'));
+  if(raw.poly||raw.inspire_polygon) known.push('site boundary geometry'); if(raw.existing_height_m) known.push(Math.round(raw.existing_height_m)+'m existing height');
+  if(model.scenarioState) modelled.push('low / mid / high massing'); if(model.financialAssumptions) modelled.push('ERV / NIY / build-cost assumptions');
+  if(model.headroomUpsideScore!=null) modelled.push('headroom upside '+model.headroomUpsideScore+'/100'); if(raw.utilisation_score!=null) modelled.push('utilisation '+raw.utilisation_score+'/10');
+  const p=raw.planning||{}; if(!(p.total||p.applicationCount||p.majorCount||p.recentRef)) missing.push('live planning application evidence');
+  if(!raw.owner) missing.push('registered owner'); if(!raw.hmlr) missing.push('HMLR title packet'); if(!raw.t1) missing.push('full Appraise report');
+  return {known,modelled,missing};
+}
+function row(k,v,cls=''){return `<div class="row"><div class="key">${esc(k)}</div><div class="val ${cls}">${esc(v||'Not available')}</div></div>`}
+function metric(v,l){return `<div class="metric"><div class="metric-value">${esc(v)}</div><div class="metric-label">${esc(l)}</div></div>`}
+function bar(name,score){const s=Math.max(0,Math.min(100,Math.round(score||0)));return `<div class="bar-row"><div class="bar-name">${esc(name)}</div><div class="bar"><div class="fill" style="width:${s}%"></div></div><div class="bar-score">${s}</div></div>`}
+function render(raw){
+  const model=canonical(raw), sc=model.scenarioState?.mid||model.scenarioState?.lo||model.scenarioState?.hi||{};
+  const score=model.headroomUpsideScore ?? sc.score ?? raw.score ?? 0;
+  const verdict=model.headroomVerdict==='yes'?'Headroom: Yes':model.headroomVerdict==='no'?'Headroom: No':'Headroom: Unclear';
+  const e=evidence(raw,model), planning=planningSummary(raw,model);
+  const existingH=Math.round(model.existingHeightM||raw.existing_height_m||raw.h||0), proposedH=Math.round(sc.heightM||((sc.floors||model.maxFloors||8)*3.8));
+  const existingStyle=Math.max(70,Math.min(230,existingH*4)); const proposedStyle=Math.max(120,Math.min(350,proposedH*4));
+  const reasons=(model.discoverVerdict?.reasons||[]).filter(Boolean); const primary=model.discoverVerdict?.primary||model.headroomReasonPrimary||raw.desc||'Discovery signal assembled from location, geometry, constraints and modelled uplift.';
+  document.title=(raw.name||raw.address)+' | Discover';
+  document.getElementById('app').innerHTML=`
+    <a class="back" href="/discover">← London Top 100</a>
+    <section class="hero">
+      <div class="hero-card"><div class="hero-main"><div class="eyebrow">Discovery page</div><h1 class="title">${esc(raw.name||raw.address)}</h1><div class="addr">${esc(raw.address||'')} · ${esc(raw.borough||raw._borough||'London')}</div><div class="chips"><span class="chip ${model.headroomVerdict==='yes'?'green':model.headroomVerdict==='no'?'red':'amber'}">${esc(verdict)}</span>${raw.flags?.inOA?'<span class="chip">OA</span>':''}${raw.flags?.inCAZ?'<span class="chip">CAZ</span>':''}${raw.flags?.ptal?'<span class="chip">PTAL '+esc(raw.flags.ptal)+'</span>':''}${raw.verified?'<span class="chip green">Verified</span>':''}</div></div><div class="metrics">${metric('£'+Math.round((sc.gdv||0)*.92/1e6)+'-'+Math.round((sc.gdv||0)*1.08/1e6)+'M','Est. GDV range')}${metric(sc.addedF?('+'+sc.addedF+'F'):'-', 'Added floors')}${metric(sc.addedNIA?sc.addedNIA.toLocaleString()+'m²':'-', 'New NIA')}${metric(sc.giaTotal?sc.giaTotal.toLocaleString()+'m²':'-', 'Total GIA')}</div></div>
+      <aside class="score-card"><div><div class="score">${esc(score)}<small>/100</small></div><div class="verdict">${esc(verdict)}</div></div><div class="score-note">${esc(primary)} ${reasons.length?esc(reasons.join(' · ')):''}</div></aside>
+    </section>
+    <section class="grid">
+      <div class="panel"><div class="massing" style="--existing-h:${existingStyle}px;--proposed-h:${proposedStyle}px"><div class="skyline"></div><div class="existing"></div><div class="proposed"></div><div class="plot"></div><div class="massing-label"><strong>Integrated massing</strong> · existing ~${existingH||'-'}m · proposed ~${proposedH||'-'}m</div></div><div class="scenario-tabs"><div class="tab"><span>Low</span><strong>${model.scenarioState?.lo?.floors||'-'}F</strong></div><div class="tab active"><span>Mid</span><strong>${model.scenarioState?.mid?.floors||'-'}F</strong></div><div class="tab"><span>High</span><strong>${model.scenarioState?.hi?.floors||'-'}F</strong></div></div></div>
+      <div class="panel section"><h2>Why this ranked</h2><p>${esc(model.discoverVerdict?.secondary||'The score is a combined signal from underutilisation, policy location, development logic, constraints and modelled uplift.')}</p><div class="bars" style="margin-top:18px">${bar('Planning appetite',(model.planningPolicy?.majorUplift?82:raw.flags?.inCAZ?74:58))}${bar('Available sky',raw.nhle_constraint==='blocking'?28:raw.flags?.inConservation?52:76)}${bar('Utilisation',(raw.utilisation_score||5)*10)}${bar('Confidence',model.headroomConfidenceScore?model.headroomConfidenceScore*10:60)}</div></div>
+    </section>
+    <section class="grid">
+      <div class="panel section"><h2>Evidence stack</h2><div class="rows">${row('Known evidence',e.known.slice(0,6).join(' · '))}${row('Modelled assumptions',e.modelled.slice(0,6).join(' · '))}${row('Missing data',e.missing.slice(0,6).join(' · '),'missing')}${row('Planning signal',planning)}${row('Heritage / NHLE',raw.nhle_constraint||raw.nhle_tier||'Manageable')}${row('Title / owner',raw.owner||'Owner not captured yet')}</div></div>
+      <div class="panel section"><h2>Next step</h2><p class="locked">${raw.t1?'This record has a linked Appraise page. The Discovery page is the sales/intake layer, Appraise is the deeper paid diligence layer.':'This site does not yet have a full Appraise report attached. Discovery must show the evidence and the gaps without pretending the paid report exists.'}</p><div class="cta">${raw.t1?`<a class="btn" href="${esc(raw.t1)}">Open Appraise</a>`:'<span class="btn secondary">Appraise not attached</span>'}<a class="btn secondary" href="/discover">Back to list</a></div></div>
+    </section>`;
+}
+async function init(){
+  const packs=await Promise.all(DATASETS.map(u=>fetch(u).then(r=>r.json())));
+  const all=packs.flatMap(toArr); const hit=all.find(s=>siteSlug(s)===wanted)||all.find(s=>slugify(s.name||s.address)===wanted);
+  if(!hit){document.getElementById('app').innerHTML='<div class="error"><h1>Site not found</h1><p><a href="/discover">Back to Discover</a></p></div>';return}
+  render(hit);
+}
+init().catch(err=>{document.getElementById('app').innerHTML='<div class="error"><h1>Discovery page failed</h1><p>'+esc(err.message)+'</p></div>'});
+</script>
+</body>
+</html>
