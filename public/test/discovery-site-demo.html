@@ -12,20 +12,20 @@
 <script src="/lib/intelligence-24ss.js"></script>
 <style>
 :root {
-  --bg: #f4f2ec;
-  --paper: #fbfaf6;
-  --ink: #111110;
-  --ink2: #494640;
-  --ink3: #837e73;
-  --rule: rgba(17,17,16,.1);
-  --dark: #0a0a08;
+  --bg: #f4f2ed;
+  --card: #fbfaf7;
+  --muted-card: #efeee9;
+  --ink: #111111;
+  --ink2: #4d4942;
+  --ink3: #746f66;
+  --line: #e3dfd7;
+  --brown: #a77a5d;
+  --gold: #c79363;
+  --dark: #242421;
   --dark2: #151511;
-  --accent: #b8845c;
-  --accent2: #c8a040;
-  --green: #15803d;
-  --amber: #b45309;
-  --red: #b91c1c;
-  --blue: #5b7a9d;
+  --dev: #099447;
+  --arch: #5d83a8;
+  --plan: #b96b4f;
   --display: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Inter', sans-serif;
   --mono: 'Space Grotesk', 'Inter', sans-serif;
@@ -33,148 +33,74 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
-.demo-label { position: fixed; left: 76px; top: 70px; z-index: 30; padding: 7px 11px; border-radius: 999px; background: rgba(10,10,8,.74); border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.7); font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; backdrop-filter: blur(14px); }
-.nav-spacer { height: var(--nav-h); }
-.hero { min-height: calc(100vh - var(--nav-h)); display: grid; grid-template-columns: minmax(0,1.15fr) minmax(420px,.85fr); background: var(--dark); }
-.map-panel { position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); min-height: 620px; overflow: hidden; }
-#map { position: absolute; inset: 0; }
-.map-scrim { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(10,10,8,.08), rgba(10,10,8,.04) 52%, rgba(10,10,8,.72)); }
-.map-caption { position: absolute; left: 28px; bottom: 28px; max-width: 360px; padding: 16px 18px; border-radius: 14px; background: rgba(10,10,8,.72); border: 1px solid rgba(255,255,255,.1); backdrop-filter: blur(14px); }
-.map-caption-kicker { font: 800 10px var(--sans); color: var(--accent2); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 7px; }
-.map-caption-copy { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.64); }
-.hero-card { min-height: calc(100vh - var(--nav-h)); padding: 62px 52px 44px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(180deg, rgba(244,242,236,.98), rgba(235,231,221,.98)); }
-.kicker { font: 800 11px var(--sans); letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
-.address { font: 300 clamp(48px,5.6vw,74px)/.95 var(--display); letter-spacing: -.035em; color: var(--ink); margin-bottom: 16px; }
-.meta-line { font: 600 14px/1.6 var(--sans); color: var(--ink3); margin-bottom: 28px; }
-.score-row { display: flex; align-items: center; gap: 18px; padding: 22px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 26px; }
+body { min-height: 100vh; background: radial-gradient(circle at 20% 0%, #fbfaf7 0%, var(--bg) 32%, #ece8de 100%); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+.page { width: min(100%, 1220px); margin: 0 auto; padding: calc(var(--nav-h) + 34px) 28px 88px; }
+.demo-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: #3a3936; color: #f4f1ea; font: 800 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; margin-bottom: 26px; }
+.hero { display: grid; grid-template-columns: minmax(0,.86fr) minmax(420px,1.14fr); gap: 28px; align-items: stretch; margin-bottom: 28px; }
+.hero-copy, .map-card { border-radius: 32px; overflow: hidden; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 46px rgba(17,17,16,.055); }
+.hero-copy { padding: clamp(32px,5vw,54px); display: flex; flex-direction: column; justify-content: center; min-height: 460px; }
+.kicker { font: 800 11px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--brown); margin-bottom: 16px; }
+.address { font: 300 clamp(54px,6vw,86px)/.88 var(--display); letter-spacing: -.045em; color: var(--ink); max-width: 560px; margin-bottom: 18px; }
+.meta { font: 600 14px/1.65 var(--sans); color: var(--ink3); margin-bottom: 28px; }
+.hero-line { width: 100%; height: 1px; background: var(--line); margin: 0 0 26px; }
+.score-lockup { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 18px; align-items: center; }
 .score { font: 900 76px/.85 var(--mono); letter-spacing: -.06em; color: var(--ink); }
-.score-copy-title { font: 800 18px var(--sans); color: var(--ink); margin-bottom: 5px; }
-.score-copy-body { font: 500 14px/1.55 var(--sans); color: var(--ink2); }
-.chips { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 28px; }
-.chip { display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 8px 12px; background: rgba(17,17,16,.06); color: var(--ink2); font: 800 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; }
-.chip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
-.chip.green .chip-dot { background: var(--green); }
-.chip.amber .chip-dot { background: var(--amber); }
-.chip.blue .chip-dot { background: var(--blue); }
-.thesis { padding: 20px 22px; border-radius: 18px; background: var(--paper); border: 1px solid rgba(17,17,16,.08); margin-bottom: 22px; }
-.thesis-title { font: 800 12px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
-.thesis-copy { font: 500 18px/1.55 var(--sans); color: var(--ink2); }
-.cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 4px; }
-.cta-primary, .cta-secondary { text-decoration: none; border-radius: 999px; font: 800 13px var(--sans); letter-spacing: .08em; text-transform: uppercase; transition: transform .18s, background .18s, color .18s; }
-.cta-primary { background: var(--ink); color: var(--bg); padding: 14px 18px; }
-.cta-secondary { color: var(--ink2); border: 1px solid var(--rule); padding: 13px 17px; }
-.cta-primary:hover, .cta-secondary:hover { transform: translateY(-1px); }
-.section { padding: 86px 52px; }
-.section.dark { background: var(--dark); color: #f2f1ed; }
-.section.light { background: var(--bg); }
-.section-inner { max-width: 1180px; margin: 0 auto; }
-.section-head { display: grid; grid-template-columns: minmax(0,.75fr) minmax(0,1fr); gap: 40px; align-items: end; margin-bottom: 34px; }
-.section-title { font: 300 clamp(36px,4vw,58px)/1 var(--display); letter-spacing: -.03em; }
-.section.dark .section-title { color: #fff; }
-.section-copy { font: 500 17px/1.75 var(--sans); color: var(--ink2); }
-.section.dark .section-copy { color: rgba(255,255,255,.58); }
-.signal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
-.signal-card { background: var(--paper); border: 1px solid rgba(17,17,16,.08); border-radius: 20px; padding: 24px; min-height: 210px; }
-.signal-card.dark-card { background: rgba(255,255,255,.045); border-color: rgba(255,255,255,.09); }
-.card-label { font: 800 11px var(--sans); letter-spacing: .13em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-.card-value { font: 800 28px/1.05 var(--mono); letter-spacing: -.03em; color: var(--ink); margin-bottom: 10px; }
-.dark-card .card-value { color: #fff; }
-.card-body { font: 500 14px/1.65 var(--sans); color: var(--ink2); }
-.dark-card .card-body { color: rgba(255,255,255,.58); }
-.bands { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; overflow: hidden; border-radius: 20px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.08); }
-.band { background: rgba(255,255,255,.045); padding: 24px; min-height: 154px; }
-.band-label { font: 800 10px var(--sans); letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-bottom: 14px; }
-.band-value { font: 800 26px/1.08 var(--mono); color: #fff; letter-spacing: -.035em; margin-bottom: 9px; }
-.band-note { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.52); }
-.locked-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; }
-.lock-card { position: relative; overflow: hidden; border-radius: 18px; padding: 22px; background: var(--paper); border: 1px solid rgba(17,17,16,.08); min-height: 220px; }
-.lock-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(251,250,246,0), rgba(251,250,246,.94) 58%); pointer-events: none; }
-.lock-title { font: 800 15px var(--sans); color: var(--ink); margin-bottom: 10px; }
-.lock-teaser { font: 500 13px/1.58 var(--sans); color: var(--ink2); }
-.lock-badge { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 2; border-radius: 999px; padding: 10px 12px; text-align: center; background: var(--ink); color: var(--bg); font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
-.flags { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.flag { display: flex; gap: 13px; align-items: flex-start; padding: 18px; border-radius: 16px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.08); }
-.flag-icon { width: 28px; height: 28px; flex: 0 0 28px; border-radius: 50%; display: grid; place-items: center; background: rgba(184,132,92,.18); color: #f2c79e; font: 900 12px var(--sans); }
-.flag-title { font: 800 14px var(--sans); color: #fff; margin-bottom: 5px; }
-.flag-copy { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.56); }
-.final-cta { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 28px; align-items: center; padding: 34px; border-radius: 26px; background: var(--ink); color: #fff; }
-.final-title { font: 300 38px/1 var(--display); letter-spacing: -.03em; margin-bottom: 10px; }
-.final-copy { font: 500 15px/1.65 var(--sans); color: rgba(255,255,255,.58); max-width: 640px; }
-.final-cta .cta-primary { background: #fff; color: var(--ink); white-space: nowrap; }
-.source-row { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px; }
-.source-pill { border-radius: 999px; padding: 7px 10px; background: rgba(255,255,255,.07); color: rgba(255,255,255,.52); font: 800 10px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
-
-.lane-shell { position: relative; }
-.intel-float {
-  position: sticky; top: calc(var(--nav-h) + 18px); z-index: 12;
-  margin: -34px auto 42px; max-width: 1180px;
-  display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 18px; align-items: center;
-  padding: 18px 22px; border-radius: 22px;
-  background: rgba(10,10,8,.88); color: #f2f1ed;
-  border: 1px solid rgba(255,255,255,.1); box-shadow: 0 24px 70px rgba(0,0,0,.28);
-  backdrop-filter: blur(18px);
-}
-.intel-mark { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff; font: 900 22px var(--mono); }
-.intel-title { font: 800 12px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent2); margin-bottom: 5px; }
-.intel-copy { font: 500 14px/1.55 var(--sans); color: rgba(255,255,255,.68); max-width: 690px; }
-.intel-score { text-align: right; }
-.intel-score-value { font: 900 34px/.9 var(--mono); letter-spacing: -.04em; color: #fff; }
-.intel-score-label { font: 800 9px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-top: 5px; }
-.lanes-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; align-items: stretch; }
-.lane-card { position: relative; display: flex; flex-direction: column; min-height: 560px; border-radius: 28px; overflow: hidden; background: var(--paper); border: 1px solid rgba(17,17,16,.08); box-shadow: 0 16px 46px rgba(17,17,16,.05); }
-.lane-top { padding: 26px 26px 22px; border-bottom: 1px solid rgba(17,17,16,.08); }
-.lane-letter { width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; font: 900 28px/.9 var(--mono); background: var(--ink); color: var(--bg); margin-bottom: 22px; }
-.lane-card.dev .lane-letter { background: var(--green); }
-.lane-card.arch .lane-letter { background: var(--blue); }
-.lane-card.plan .lane-letter { background: var(--accent); }
-.lane-kicker { font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 9px; }
-.lane-title { font: 300 34px/1 var(--display); letter-spacing: -.03em; color: var(--ink); margin-bottom: 12px; }
-.lane-copy { font: 500 14px/1.65 var(--sans); color: var(--ink2); }
-.lane-body { padding: 22px 26px 26px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
-.lane-signal { padding-bottom: 14px; border-bottom: 1px solid rgba(17,17,16,.08); }
-.lane-signal-label { font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
-.lane-signal-value { font: 800 22px/1.1 var(--mono); color: var(--ink); letter-spacing: -.03em; }
-.lane-tease { margin-top: auto; padding: 16px; border-radius: 16px; background: rgba(17,17,16,.045); border: 1px solid rgba(17,17,16,.06); }
-.lane-tease-title { font: 800 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
-.lane-tease-copy { font: 500 13px/1.55 var(--sans); color: var(--ink2); }
-.lane-lock { margin-top: 12px; border-radius: 999px; padding: 10px 12px; text-align: center; background: var(--ink); color: var(--bg); font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
-.intel-band-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; overflow: hidden; border-radius: 20px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.08); }
-.intel-band { background: rgba(255,255,255,.045); padding: 24px; min-height: 154px; }
-.intel-band-label { font: 800 10px var(--sans); letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-bottom: 14px; }
-.intel-band-value { font: 800 26px/1.08 var(--mono); color: #fff; letter-spacing: -.035em; margin-bottom: 9px; }
-.intel-band-note { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.52); }
-.unlock-stack { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
-.unlock-card { position: relative; overflow: hidden; min-height: 190px; border-radius: 18px; padding: 22px; background: var(--paper); border: 1px solid rgba(17,17,16,.08); }
-.unlock-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(251,250,246,0), rgba(251,250,246,.94) 62%); }
-.unlock-title { font: 800 15px var(--sans); color: var(--ink); margin-bottom: 10px; }
-.unlock-copy { font: 500 13px/1.58 var(--sans); color: var(--ink2); }
-.unlock-badge { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 2; border-radius: 999px; padding: 10px 12px; text-align: center; background: var(--ink); color: var(--bg); font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
-
-.depth-table { border-radius: 24px; overflow: hidden; border: 1px solid rgba(17,17,16,.09); background: rgba(17,17,16,.08); }
-.depth-row { display: grid; grid-template-columns: .35fr 1fr 1.25fr; gap: 1px; background: rgba(17,17,16,.08); }
-.depth-row > div { background: var(--paper); padding: 20px 22px; font: 500 14px/1.6 var(--sans); color: var(--ink2); }
-.depth-head > div { background: var(--ink); color: rgba(255,255,255,.56); font: 800 10px var(--sans); letter-spacing: .13em; text-transform: uppercase; }
-.depth-lane { font: 900 28px/1 var(--mono) !important; color: var(--accent) !important; }
-.lane-lock { background: transparent; color: var(--accent); border: 1px solid rgba(184,132,92,.28); }
-.unlock-stack, .unlock-card { display: none; }
-@media (max-width: 980px) { .depth-row { grid-template-columns: 1fr; } .depth-head { display: none; } }
-
+.score-title { font: 800 18px var(--sans); color: var(--ink); margin-bottom: 5px; }
+.score-copy { font: 500 14px/1.55 var(--sans); color: var(--ink2); }
+.map-card { min-height: 460px; position: relative; background: var(--dark); }
+#map { position: absolute; inset: 0; }
+.map-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(36,36,33,.02), rgba(36,36,33,.54)); }
+.map-note { position: absolute; left: 22px; right: 22px; bottom: 22px; padding: 18px 20px; border-radius: 22px; background: rgba(36,36,33,.78); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(16px); }
+.map-note-title { font: 800 10px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.map-note-copy { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.68); }
+.intelligence-card { position: sticky; top: calc(var(--nav-h) + 18px); z-index: 12; display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 20px; align-items: center; padding: 28px 30px; border-radius: 30px; background: var(--dark); color: #f7f3ec; box-shadow: 0 26px 70px rgba(0,0,0,.22); margin-bottom: 28px; }
+.intelligence-icon { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: white; font: 900 30px var(--mono); }
+.intelligence-title { font: 800 11px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.intelligence-copy { font: 500 15px/1.62 var(--sans); color: rgba(247,243,236,.68); max-width: 740px; }
+.intelligence-score { text-align: right; min-width: 112px; }
+.intelligence-score-value { font: 900 48px/.9 var(--mono); letter-spacing: -.055em; color: #fff; }
+.intelligence-score-label { font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-top: 7px; }
+.lanes { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; align-items: stretch; margin-bottom: 28px; }
+.lane-card { background: var(--card); border: 1px solid rgba(17,17,16,.045); border-radius: 32px; box-shadow: 0 18px 44px rgba(17,17,16,.052); padding: 36px 32px 32px; min-height: 610px; display: flex; flex-direction: column; }
+.lane-icon { width: 72px; height: 72px; border-radius: 22px; display: grid; place-items: center; color: white; font: 900 34px/.9 var(--mono); margin-bottom: 28px; }
+.lane-card.dev .lane-icon { background: var(--dev); }
+.lane-card.arch .lane-icon { background: var(--arch); }
+.lane-card.plan .lane-icon { background: var(--plan); }
+.lane-kicker { font: 800 11px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--brown); margin-bottom: 13px; }
+.lane-title { font: 300 clamp(38px,4vw,56px)/.94 var(--display); letter-spacing: -.045em; color: var(--ink); margin-bottom: 18px; }
+.lane-desc { font: 500 15px/1.68 var(--sans); color: var(--ink2); margin-bottom: 30px; }
+.metrics { border-top: 1px solid var(--line); }
+.metric { padding: 18px 0; border-bottom: 1px solid var(--line); }
+.metric-label { font: 800 10px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 7px; }
+.metric-value { font: 800 26px/1.04 var(--mono); letter-spacing: -.035em; color: var(--ink); }
+.appraise-adds { margin-top: auto; padding: 22px; border-radius: 22px; background: var(--muted-card); border: 1px solid #ddd8cf; }
+.appraise-title { font: 800 11px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--brown); margin-bottom: 10px; }
+.appraise-copy { font: 500 13px/1.62 var(--sans); color: var(--ink2); margin-bottom: 17px; }
+.appraise-chip { width: 100%; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; border: 1px solid #d8cec2; color: var(--brown); background: transparent; font: 800 11px var(--sans); letter-spacing: .17em; text-transform: uppercase; text-decoration: none; }
+.depth-card { border-radius: 32px; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 44px rgba(17,17,16,.052); padding: 34px; margin-bottom: 28px; }
+.depth-head { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1fr); gap: 32px; align-items: end; margin-bottom: 28px; }
+.depth-title { font: 300 clamp(40px,4vw,62px)/.96 var(--display); letter-spacing: -.045em; color: var(--ink); }
+.depth-copy { font: 500 16px/1.72 var(--sans); color: var(--ink2); }
+.depth-table { border-radius: 24px; overflow: hidden; border: 1px solid var(--line); }
+.depth-row { display: grid; grid-template-columns: .34fr 1fr 1.26fr; background: var(--line); gap: 1px; }
+.depth-row > div { background: #fffdf8; padding: 19px 21px; font: 500 14px/1.62 var(--sans); color: var(--ink2); }
+.depth-row.header > div { background: var(--dark); color: rgba(255,255,255,.56); font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; }
+.depth-lane { font: 900 28px/1 var(--mono) !important; color: var(--brown) !important; }
+.final-card { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 28px; align-items: center; padding: 34px; border-radius: 32px; background: var(--dark); color: #fff; }
+.final-title { font: 300 clamp(36px,4vw,56px)/.94 var(--display); letter-spacing: -.04em; margin-bottom: 12px; }
+.final-copy { font: 500 15px/1.7 var(--sans); color: rgba(255,255,255,.62); max-width: 640px; }
+.final-button { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 20px; border-radius: 999px; background: #fff; color: var(--ink); text-decoration: none; font: 800 12px var(--sans); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
 @media (max-width: 980px) {
-  .intel-float { position: static; grid-template-columns: 1fr; margin: 0 0 32px; }
-  .intel-score { text-align: left; }
-  .lanes-grid, .intel-band-grid, .unlock-stack { grid-template-columns: 1fr; }
+  .page { padding: calc(var(--nav-h) + 24px) 20px 70px; }
+  .hero, .lanes, .depth-head, .final-card { grid-template-columns: 1fr; }
+  .hero-copy, .map-card { min-height: auto; }
+  .map-card { height: 420px; }
+  .intelligence-card { position: relative; top: auto; grid-template-columns: 1fr; padding: 28px; }
+  .intelligence-score { text-align: left; }
   .lane-card { min-height: auto; }
-}
-
-@media (max-width: 980px) {
-  .hero { grid-template-columns: 1fr; }
-  .map-panel { position: relative; top: auto; height: 52vh; min-height: 420px; }
-  .hero-card { min-height: auto; padding: 44px 24px; }
-  .section { padding: 62px 24px; }
-  .section-head, .final-cta { grid-template-columns: 1fr; }
-  .signal-grid, .bands, .locked-grid, .flags { grid-template-columns: 1fr; }
-  .demo-label { left: 20px; top: 70px; }
+  .depth-row { grid-template-columns: 1fr; }
+  .depth-row.header { display: none; }
 }
 </style>
 </head>
@@ -187,240 +113,120 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
   <div class="da-nav-spacer"></div>
   <a class="da-nav-contact" href="mailto:hello@headroom.city">Contact</a>
 </nav>
-<div class="demo-label">Discovery site demo - free tier</div>
-<main>
+<main class="page">
+  <div class="demo-pill">Discovery site demo - free tier</div>
   <section class="hero">
-    <div class="map-panel">
-      <div id="map"></div>
-      <div class="map-scrim"></div>
-      <div class="map-caption">
-        <div class="map-caption-kicker">Map signal</div>
-        <div class="map-caption-copy">3D context, site polygon, existing massing and indicative envelope only. Exact scenarios stay inside Appraise.</div>
-      </div>
-    </div>
-    <div class="hero-card">
+    <div class="hero-copy">
       <div class="kicker">Discovery signal</div>
       <h1 class="address">24 Southwark Street</h1>
-      <div class="meta-line">Southwark - London Bridge/Bankside Opportunity Area - Freehold signal</div>
-      <div class="score-row">
+      <div class="meta">Southwark - London Bridge/Bankside Opportunity Area - Freehold signal</div>
+      <div class="hero-line"></div>
+      <div class="score-lockup">
         <div class="score">72</div>
         <div>
-          <div class="score-copy-title">Worth appraising</div>
-          <div class="score-copy-body">Strong central London signal, but heritage and viability need proper testing before anyone acts.</div>
+          <div class="score-title">Worth appraising</div>
+          <div class="score-copy">Strong central London signal, but heritage and viability need proper testing before anyone acts.</div>
         </div>
       </div>
-      <div class="chips">
-        <div class="chip green"><span class="chip-dot"></span>Medium confidence</div>
-        <div class="chip amber"><span class="chip-dot"></span>Heritage sensitive</div>
-        <div class="chip blue"><span class="chip-dot"></span>Retain and extend</div>
-      </div>
-      <div class="thesis">
-        <div class="thesis-title">Why this is interesting</div>
-        <div class="thesis-copy">A listed Bankside asset with clear airspace pressure, strong policy context and enough constraint complexity to justify a full appraisal.</div>
-      </div>
-      <div class="cta-row">
-        <a class="cta-primary" href="/t1/24-southwark-st">Appraise this site</a>
-        <a class="cta-secondary" href="#signals">View discovery signal</a>
+    </div>
+    <div class="map-card">
+      <div id="map"></div>
+      <div class="map-shade"></div>
+      <div class="map-note">
+        <div class="map-note-title">Map signal</div>
+        <div class="map-note-copy">3D context, site polygon, existing massing and indicative envelope. Exact scenarios stay inside Appraise.</div>
       </div>
     </div>
   </section>
 
-  <section class="section light lane-shell" id="signals">
-    <div class="section-inner">
-      <div class="section-head">
-        <div>
-          <div class="kicker">Three lanes plus intelligence</div>
-          <h2 class="section-title">Discovery should read as D, A and P, with Intelligence floating above.</h2>
-        </div>
-        <p class="section-copy">The lanes keep the free page clean. Intelligence is the pattern-recognition layer that connects them without giving away the full Appraise model.</p>
-      </div>
-      <div class="intel-float" aria-label="Floating intelligence layer">
-        <div class="intel-mark">I</div>
-        <div>
-          <div class="intel-title">Intelligence layer</div>
-          <div class="intel-copy">Signal synthesis: good policy context plus retained-building complexity plus enough value pressure to justify proper appraisal. This is the free conclusion, not the paid route.</div>
-        </div>
-        <div class="intel-score">
-          <div class="intel-score-value">72</div>
-          <div class="intel-score-label">Discovery score</div>
-        </div>
-      </div>
-      <div class="lanes-grid">
-        <article class="lane-card dev">
-          <div class="lane-top">
-            <div class="lane-letter">D</div>
-            <div class="lane-kicker">Development</div>
-            <h3 class="lane-title">Is there enough commercial pressure?</h3>
-            <p class="lane-copy">Shows the development signal without exposing a buildable answer.</p>
-          </div>
-          <div class="lane-body">
-            <div class="lane-signal">
-              <div class="lane-signal-label">Opportunity type</div>
-              <div class="lane-signal-value">Retain + extend</div>
-            </div>
-            <div class="lane-signal">
-              <div class="lane-signal-label">Value band</div>
-              <div class="lane-signal-value">£25m-£40m</div>
-            </div>
-            <div class="lane-signal">
-              <div class="lane-signal-label">Ownership signal</div>
-              <div class="lane-signal-value">Moderate</div>
-            </div>
-            <div class="lane-tease">
-              <div class="lane-tease-title">What Appraise adds</div>
-              <p class="lane-tease-copy">Residual value, return curve, assumptions, profit on cost and the full scenario matrix.</p>
-              <div class="lane-lock">Financial model</div>
-            </div>
-          </div>
-        </article>
-        <article class="lane-card arch">
-          <div class="lane-top">
-            <div class="lane-letter">A</div>
-            <div class="lane-kicker">Architecture</div>
-            <h3 class="lane-title">What kind of massing move is plausible?</h3>
-            <p class="lane-copy">Shows envelope direction and design pressure, not a briefable massing strategy.</p>
-          </div>
-          <div class="lane-body">
-            <div class="lane-signal">
-              <div class="lane-signal-label">Envelope read</div>
-              <div class="lane-signal-value">Sensitive uplift</div>
-            </div>
-            <div class="lane-signal">
-              <div class="lane-signal-label">Existing fabric</div>
-              <div class="lane-signal-value">Listed asset</div>
-            </div>
-            <div class="lane-signal">
-              <div class="lane-signal-label">Massing preview</div>
-              <div class="lane-signal-value">Indicative only</div>
-            </div>
-            <div class="lane-tease">
-              <div class="lane-tease-title">What Appraise adds</div>
-              <p class="lane-tease-copy">Low, base and high massing tests, NIA bands, BSA impacts and architectural constraints.</p>
-              <div class="lane-lock">Scenario testing</div>
-            </div>
-          </div>
-        </article>
-        <article class="lane-card plan">
-          <div class="lane-top">
-            <div class="lane-letter">P</div>
-            <div class="lane-kicker">Planning</div>
-            <h3 class="lane-title">Is the policy context helping or fighting?</h3>
-            <p class="lane-copy">Shows planning temperature and visible flags without giving away precedent strategy.</p>
-          </div>
-          <div class="lane-body">
-            <div class="lane-signal">
-              <div class="lane-signal-label">Planning temperature</div>
-              <div class="lane-signal-value">Medium</div>
-            </div>
-            <div class="lane-signal">
-              <div class="lane-signal-label">Policy context</div>
-              <div class="lane-signal-value">OA + CAZ</div>
-            </div>
-            <div class="lane-signal">
-              <div class="lane-signal-label">Constraint stack</div>
-              <div class="lane-signal-value">Heritage led</div>
-            </div>
-            <div class="lane-tease">
-              <div class="lane-tease-title">What Appraise adds</div>
-              <p class="lane-tease-copy">Precedent fit, heritage route, planning history, risk pathway and source-backed argument.</p>
-              <div class="lane-lock">Route testing</div>
-            </div>
-          </div>
-        </article>
-      </div>
+  <section class="intelligence-card" aria-label="Floating intelligence layer">
+    <div class="intelligence-icon">I</div>
+    <div>
+      <div class="intelligence-title">Intelligence layer</div>
+      <div class="intelligence-copy">Good policy context plus retained-building complexity and sufficient value pressure. The free page gives the synthesis; Appraise tests the route.</div>
+    </div>
+    <div class="intelligence-score">
+      <div class="intelligence-score-value">72</div>
+      <div class="intelligence-score-label">Discovery score</div>
     </div>
   </section>
 
-  <section class="section dark">
-    <div class="section-inner">
-      <div class="section-head">
-        <div>
-          <div class="kicker">I sits above the lanes</div>
-          <h2 class="section-title">Intelligence is not a fourth report section. It is the connective tissue.</h2>
-        </div>
-        <p class="section-copy">It summarises what the three lanes imply together, exposes confidence, and names the gaps. That is the free Discovery value.</p>
+  <section class="lanes" aria-label="Discovery lanes">
+    <article class="lane-card dev">
+      <div class="lane-icon">D</div>
+      <div class="lane-kicker">Development</div>
+      <h2 class="lane-title">Is there enough commercial pressure?</h2>
+      <p class="lane-desc">Shows the development signal without exposing a buildable answer.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Opportunity type</div><div class="metric-value">Retain + extend</div></div>
+        <div class="metric"><div class="metric-label">Value band</div><div class="metric-value">£25m-£40m</div></div>
+        <div class="metric"><div class="metric-label">Ownership signal</div><div class="metric-value">Moderate</div></div>
       </div>
-      <div class="intel-band-grid">
-        <div class="intel-band">
-          <div class="intel-band-label">Synthesis</div>
-          <div class="intel-band-value">Worth testing</div>
-          <div class="intel-band-note">Enough signal across D, A and P to justify Appraise.</div>
-        </div>
-        <div class="intel-band">
-          <div class="intel-band-label">Confidence</div>
-          <div class="intel-band-value">Medium</div>
-          <div class="intel-band-note">Strong public-source signal, source joins still incomplete.</div>
-        </div>
-        <div class="intel-band">
-          <div class="intel-band-label">Main tension</div>
-          <div class="intel-band-value">Value vs heritage</div>
-          <div class="intel-band-note">The opportunity exists because the constraint is specific.</div>
-        </div>
-        <div class="intel-band">
-          <div class="intel-band-label">Next question</div>
-          <div class="intel-band-value">What is viable?</div>
-          <div class="intel-band-note">Exact answer belongs in Appraise, not Discovery.</div>
-        </div>
+      <div class="appraise-adds">
+        <div class="appraise-title">What Appraise adds</div>
+        <div class="appraise-copy">Residual value, return curve, assumptions, profit on cost and the full scenario matrix.</div>
+        <span class="appraise-chip">Financial model</span>
       </div>
-      <div class="source-row">
-        <span class="source-pill">HMLR</span>
-        <span class="source-pill">Planning register</span>
-        <span class="source-pill">NHLE</span>
-        <span class="source-pill">GLA / borough policy</span>
-        <span class="source-pill">Mapbox / OS geometry</span>
+    </article>
+
+    <article class="lane-card arch">
+      <div class="lane-icon">A</div>
+      <div class="lane-kicker">Architecture</div>
+      <h2 class="lane-title">What kind of massing move is plausible?</h2>
+      <p class="lane-desc">Shows envelope direction and design pressure, not a briefable massing strategy.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Envelope read</div><div class="metric-value">Sensitive uplift</div></div>
+        <div class="metric"><div class="metric-label">Existing fabric</div><div class="metric-value">Listed asset</div></div>
+        <div class="metric"><div class="metric-label">Massing preview</div><div class="metric-value">Indicative only</div></div>
       </div>
+      <div class="appraise-adds">
+        <div class="appraise-title">What Appraise adds</div>
+        <div class="appraise-copy">Tested massing options, added NIA, BSA threshold and architectural constraints.</div>
+        <span class="appraise-chip">Scenario testing</span>
+      </div>
+    </article>
+
+    <article class="lane-card plan">
+      <div class="lane-icon">P</div>
+      <div class="lane-kicker">Planning</div>
+      <h2 class="lane-title">How exposed is the planning route?</h2>
+      <p class="lane-desc">Shows planning temperature and visible flags without replacing pre-application advice.</p>
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Policy context</div><div class="metric-value">Supportive</div></div>
+        <div class="metric"><div class="metric-label">Heritage pressure</div><div class="metric-value">High</div></div>
+        <div class="metric"><div class="metric-label">Consent route</div><div class="metric-value">Managed risk</div></div>
+      </div>
+      <div class="appraise-adds">
+        <div class="appraise-title">What Appraise adds</div>
+        <div class="appraise-copy">Precedent fit, heritage route, planning history, risk pathway and source-backed argument.</div>
+        <span class="appraise-chip">Planning strategy</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="depth-card">
+    <div class="depth-head">
+      <div>
+        <div class="kicker">Depth added in Appraise</div>
+        <h2 class="depth-title">Not more noise. More certainty.</h2>
+      </div>
+      <p class="depth-copy">Discovery gives a credible screening signal. Appraise turns that signal into a tested site position across development, architecture, planning and source confidence.</p>
+    </div>
+    <div class="depth-table" aria-label="Discovery compared with Appraise">
+      <div class="depth-row header"><div>Lane</div><div>Discovery shows</div><div>Appraise adds</div></div>
+      <div class="depth-row"><div class="depth-lane">D</div><div>Opportunity type, value band, ownership signal.</div><div>Residual land value, return curve, assumptions and scenario economics.</div></div>
+      <div class="depth-row"><div class="depth-lane">A</div><div>Envelope direction and design pressure.</div><div>Tested massing options, added NIA, BSA threshold and architectural constraints.</div></div>
+      <div class="depth-row"><div class="depth-lane">P</div><div>Planning temperature and visible constraint flags.</div><div>Precedent fit, heritage route, planning history and risk pathway.</div></div>
+      <div class="depth-row"><div class="depth-lane">I</div><div>Confidence label, source summary and missing-data flags.</div><div>Source joins, confidence diagnostics and site-specific decision logic.</div></div>
     </div>
   </section>
 
-  <section class="section light">
-    <div class="section-inner">
-      <div class="section-head">
-        <div>
-          <div class="kicker">Depth added in Appraise</div>
-          <h2 class="section-title">Not more noise. More certainty.</h2>
-        </div>
-        <p class="section-copy">Discovery gives a credible screening signal. Appraise turns that signal into a tested site position across development, architecture, planning and source confidence.</p>
-      </div>
-      <div class="depth-table" aria-label="Discovery compared with Appraise">
-        <div class="depth-row depth-head">
-          <div>Lane</div>
-          <div>Discovery shows</div>
-          <div>Appraise adds</div>
-        </div>
-        <div class="depth-row">
-          <div class="depth-lane">D</div>
-          <div>Opportunity type, value band, ownership signal.</div>
-          <div>Residual land value, return curve, assumptions and scenario economics.</div>
-        </div>
-        <div class="depth-row">
-          <div class="depth-lane">A</div>
-          <div>Envelope direction and design pressure.</div>
-          <div>Tested massing options, added NIA, BSA threshold and architectural constraints.</div>
-        </div>
-        <div class="depth-row">
-          <div class="depth-lane">P</div>
-          <div>Planning temperature and visible constraint flags.</div>
-          <div>Precedent fit, heritage route, planning history and risk pathway.</div>
-        </div>
-        <div class="depth-row">
-          <div class="depth-lane">I</div>
-          <div>Confidence label, source summary and missing-data flags.</div>
-          <div>Source joins, confidence diagnostics and site-specific decision logic.</div>
-        </div>
-      </div>
+  <section class="final-card">
+    <div>
+      <div class="final-title">This is a screening signal, not the answer.</div>
+      <p class="final-copy">Discovery says whether the site deserves attention. Appraise tests massing, viability, planning risk and acquisition logic before anyone wastes proper time.</p>
     </div>
-  </section>
-
-  <section class="section light">
-    <div class="section-inner">
-      <div class="final-cta">
-        <div>
-          <div class="final-title">This site has enough signal to test properly.</div>
-          <p class="final-copy">Discovery says whether the opportunity deserves attention. Appraise tests massing, viability, planning risk and acquisition logic before anyone wastes proper time.</p>
-        </div>
-        <a class="cta-primary" href="/t1/24-southwark-st">Test the opportunity properly</a>
-      </div>
-    </div>
+    <a class="final-button" href="/t1/24-southwark-st">Appraise this site</a>
   </section>
 </main>
 <script>
@@ -472,7 +278,7 @@ async function initMap() {
       }});
     });
   } catch (err) {
-    document.querySelector('.map-caption-copy').textContent = 'Map configuration failed to load. The Discovery layout still shows the intended map slot.';
+    document.querySelector('.map-note-copy').textContent = 'Map configuration failed to load. The Discovery layout still shows the intended map slot.';
   }
 }
 initMap();
