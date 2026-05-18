@@ -104,6 +104,21 @@ a { color: inherit; }
 .lane-next-label { font: 800 10px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
 .lane-next-title { font: 700 14px var(--sans); color: var(--ink); }
 .lane-next-arrow { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--bg); font: 900 18px var(--sans); flex: 0 0 auto; }
+
+.site-walk { border-radius: 32px; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 44px rgba(17,17,16,.052); padding: 34px; margin-bottom: 28px; }
+.walk-section-head { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1fr); gap: 30px; align-items: end; margin-bottom: 26px; }
+.walk-section-title { font: 300 clamp(38px,4vw,58px)/.96 var(--display); letter-spacing: -.045em; color: var(--ink); }
+.walk-section-copy { font: 500 15px/1.7 var(--sans); color: var(--ink2); }
+.observation-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.observation-card { border-radius: 24px; background: #fffdf8; border: 1px solid var(--line); padding: 22px; min-height: 260px; display: flex; flex-direction: column; }
+.observation-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 28px; }
+.observation-num { width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; background: var(--muted-card); color: var(--brown); font: 900 12px var(--mono); }
+.observation-source { font: 800 9px var(--sans); letter-spacing: .13em; text-transform: uppercase; color: var(--ink3); text-align: right; }
+.observation-title { font: 300 34px/.96 var(--display); letter-spacing: -.04em; color: var(--ink); margin-bottom: 14px; }
+.observation-copy { font: 500 14px/1.62 var(--sans); color: var(--ink2); }
+.observation-foot { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--brown); }
+@media (max-width: 980px) { .walk-section-head, .observation-grid { grid-template-columns: 1fr; } }
+
 @media (max-width: 980px) { .walk-card { grid-template-columns: 1fr; } .walk-next { width: 100%; } }
 
 @media (max-width: 980px) {
@@ -240,29 +255,42 @@ a { color: inherit; }
     </article>
   </section>
 
-  <section class="depth-card" id="appraise-depth">
-    <div class="depth-head">
+  <section class="site-walk" id="appraise-depth" aria-label="Site walk observations">
+    <div class="walk-section-head">
       <div>
-        <div class="kicker">Further review</div>
-        <h2 class="depth-title">What still needs checking</h2>
+        <div class="kicker">Continue the site walk</div>
+        <h2 class="walk-section-title">Visible observations before deeper testing.</h2>
       </div>
-      <p class="depth-copy">This page records what is visible now. A fuller review tests assumptions, sources and route before design or acquisition decisions.</p>
+      <p class="walk-section-copy">These are not conclusions. They are the next checks surfaced by the first pass.</p>
     </div>
-    <div class="depth-table" aria-label="Discovery compared with Detailed review">
-      <div class="depth-row header"><div>Lane</div><div>Discovery shows</div><div>Further review checks</div></div>
-      <div class="depth-row"><div class="depth-lane">D</div><div>Opportunity type, value band and ownership signal.</div><div>Residual value, assumptions and scenario economics.</div></div>
-      <div class="depth-row"><div class="depth-lane">A</div><div>Envelope direction and design pressure.</div><div>Massing options, added area, BSA threshold and architectural constraints.</div></div>
-      <div class="depth-row"><div class="depth-lane">P</div><div>Planning temperature and visible constraint flags.</div><div>Precedents, heritage route, planning history and risk pathway.</div></div>
-      <div class="depth-row"><div class="depth-lane">I</div><div>Confidence label, source summary and missing-data flags.</div><div>Source joins, confidence diagnostics and site-specific decision logic.</div></div>
+    <div class="observation-grid">
+      <article class="observation-card">
+        <div class="observation-top"><span class="observation-num">01</span><span class="observation-source">NHLE / borough policy</span></div>
+        <h3 class="observation-title">Heritage sets the frame.</h3>
+        <p class="observation-copy">The listed fabric points toward retention, setback and careful frontage treatment rather than a clearance-led move.</p>
+        <div class="observation-foot">Confidence: medium-high</div>
+      </article>
+      <article class="observation-card">
+        <div class="observation-top"><span class="observation-num">02</span><span class="observation-source">GLA / Southwark policy</span></div>
+        <h3 class="observation-title">Policy supports review.</h3>
+        <p class="observation-copy">Opportunity Area and CAZ context support intensification, but the route still depends on heritage and setting.</p>
+        <div class="observation-foot">Confidence: medium</div>
+      </article>
+      <article class="observation-card">
+        <div class="observation-top"><span class="observation-num">03</span><span class="observation-source">Geometry / market signal</span></div>
+        <h3 class="observation-title">The envelope is worth testing.</h3>
+        <p class="observation-copy">There appears to be uplift pressure above the existing asset, but the real capacity needs massing and viability testing.</p>
+        <div class="observation-foot">Confidence: medium</div>
+      </article>
     </div>
   </section>
 
   <section class="final-card">
     <div>
-      <div class="final-title">This is a first pass, not the answer.</div>
-      <p class="final-copy">This screen shows the visible signal. The next review tests massing, viability, planning risk and acquisition logic before time is committed.</p>
+      <div class="final-title">End of first pass.</div>
+      <p class="final-copy">The site has enough visible signal to continue into massing, viability and planning-route testing.</p>
     </div>
-    <a class="final-button" href="/t1/24-southwark-st">Continue review</a>
+    <a class="final-button" href="/t1/24-southwark-st">Continue</a>
   </section>
 </main>
 <script>
