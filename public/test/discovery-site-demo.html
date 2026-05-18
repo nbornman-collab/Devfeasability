@@ -150,6 +150,16 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .unlock-title { font: 800 15px var(--sans); color: var(--ink); margin-bottom: 10px; }
 .unlock-copy { font: 500 13px/1.58 var(--sans); color: var(--ink2); }
 .unlock-badge { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 2; border-radius: 999px; padding: 10px 12px; text-align: center; background: var(--ink); color: var(--bg); font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+
+.depth-table { border-radius: 24px; overflow: hidden; border: 1px solid rgba(17,17,16,.09); background: rgba(17,17,16,.08); }
+.depth-row { display: grid; grid-template-columns: .35fr 1fr 1.25fr; gap: 1px; background: rgba(17,17,16,.08); }
+.depth-row > div { background: var(--paper); padding: 20px 22px; font: 500 14px/1.6 var(--sans); color: var(--ink2); }
+.depth-head > div { background: var(--ink); color: rgba(255,255,255,.56); font: 800 10px var(--sans); letter-spacing: .13em; text-transform: uppercase; }
+.depth-lane { font: 900 28px/1 var(--mono) !important; color: var(--accent) !important; }
+.lane-lock { background: transparent; color: var(--accent); border: 1px solid rgba(184,132,92,.28); }
+.unlock-stack, .unlock-card { display: none; }
+@media (max-width: 980px) { .depth-row { grid-template-columns: 1fr; } .depth-head { display: none; } }
+
 @media (max-width: 980px) {
   .intel-float { position: static; grid-template-columns: 1fr; margin: 0 0 32px; }
   .intel-score { text-align: left; }
@@ -257,9 +267,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
               <div class="lane-signal-value">Moderate</div>
             </div>
             <div class="lane-tease">
-              <div class="lane-tease-title">What Appraise unlocks</div>
+              <div class="lane-tease-title">What Appraise adds</div>
               <p class="lane-tease-copy">Residual value, return curve, assumptions, profit on cost and the full scenario matrix.</p>
-              <div class="lane-lock">Financial model locked</div>
+              <div class="lane-lock">Financial model</div>
             </div>
           </div>
         </article>
@@ -284,9 +294,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
               <div class="lane-signal-value">Indicative only</div>
             </div>
             <div class="lane-tease">
-              <div class="lane-tease-title">What Appraise unlocks</div>
+              <div class="lane-tease-title">What Appraise adds</div>
               <p class="lane-tease-copy">Low, base and high massing tests, NIA bands, BSA impacts and architectural constraints.</p>
-              <div class="lane-lock">Massing scenarios locked</div>
+              <div class="lane-lock">Scenario testing</div>
             </div>
           </div>
         </article>
@@ -311,9 +321,9 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
               <div class="lane-signal-value">Heritage led</div>
             </div>
             <div class="lane-tease">
-              <div class="lane-tease-title">What Appraise unlocks</div>
+              <div class="lane-tease-title">What Appraise adds</div>
               <p class="lane-tease-copy">Precedent fit, heritage route, planning history, risk pathway and source-backed argument.</p>
-              <div class="lane-lock">Planning route locked</div>
+              <div class="lane-lock">Route testing</div>
             </div>
           </div>
         </article>
@@ -366,32 +376,37 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
     <div class="section-inner">
       <div class="section-head">
         <div>
-          <div class="kicker">Paid boundary</div>
-          <h2 class="section-title">The lanes show the question. Appraise gives the answer.</h2>
+          <div class="kicker">Depth added in Appraise</div>
+          <h2 class="section-title">Not more noise. More certainty.</h2>
         </div>
-        <p class="section-copy">This keeps Discovery useful without becoming a free underwriting pack.</p>
+        <p class="section-copy">Discovery gives a credible screening signal. Appraise turns that signal into a tested site position across development, architecture, planning and source confidence.</p>
       </div>
-      <div class="unlock-stack">
-        <article class="unlock-card">
-          <div class="unlock-title">Development model</div>
-          <p class="unlock-copy">GDV, RLV, return curve, assumptions and profit on cost.</p>
-          <div class="unlock-badge">Locked in Appraise</div>
-        </article>
-        <article class="unlock-card">
-          <div class="unlock-title">Architecture model</div>
-          <p class="unlock-copy">Scenario massing, added NIA, height response and BSA implications.</p>
-          <div class="unlock-badge">Locked in Appraise</div>
-        </article>
-        <article class="unlock-card">
-          <div class="unlock-title">Planning model</div>
-          <p class="unlock-copy">Precedents, heritage strategy, route, programme and risk logic.</p>
-          <div class="unlock-badge">Locked in Appraise</div>
-        </article>
-        <article class="unlock-card">
-          <div class="unlock-title">Intelligence model</div>
-          <p class="unlock-copy">Source joins, confidence diagnostics and the proper site-specific decision logic.</p>
-          <div class="unlock-badge">Locked in Appraise</div>
-        </article>
+      <div class="depth-table" aria-label="Discovery compared with Appraise">
+        <div class="depth-row depth-head">
+          <div>Lane</div>
+          <div>Discovery shows</div>
+          <div>Appraise adds</div>
+        </div>
+        <div class="depth-row">
+          <div class="depth-lane">D</div>
+          <div>Opportunity type, value band, ownership signal.</div>
+          <div>Residual land value, return curve, assumptions and scenario economics.</div>
+        </div>
+        <div class="depth-row">
+          <div class="depth-lane">A</div>
+          <div>Envelope direction and design pressure.</div>
+          <div>Tested massing options, added NIA, BSA threshold and architectural constraints.</div>
+        </div>
+        <div class="depth-row">
+          <div class="depth-lane">P</div>
+          <div>Planning temperature and visible constraint flags.</div>
+          <div>Precedent fit, heritage route, planning history and risk pathway.</div>
+        </div>
+        <div class="depth-row">
+          <div class="depth-lane">I</div>
+          <div>Confidence label, source summary and missing-data flags.</div>
+          <div>Source joins, confidence diagnostics and site-specific decision logic.</div>
+        </div>
       </div>
     </div>
   </section>
