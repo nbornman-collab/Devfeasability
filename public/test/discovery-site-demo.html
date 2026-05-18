@@ -91,6 +91,21 @@ a { color: inherit; }
 .final-title { font: 300 clamp(36px,4vw,56px)/.94 var(--display); letter-spacing: -.04em; margin-bottom: 12px; }
 .final-copy { font: 500 15px/1.7 var(--sans); color: rgba(255,255,255,.62); max-width: 640px; }
 .final-button { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 20px; border-radius: 999px; background: #fff; color: var(--ink); text-decoration: none; font: 800 12px var(--sans); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
+
+.walk-card { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 20px; align-items: center; padding: 22px 26px; border-radius: 30px; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 44px rgba(17,17,16,.052); margin-bottom: 28px; }
+.walk-step { font: 900 42px/.9 var(--mono); letter-spacing: -.05em; color: var(--brown); }
+.walk-kicker { font: 800 10px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin-bottom: 7px; }
+.walk-copy { font: 500 15px/1.62 var(--sans); color: var(--ink2); max-width: 720px; }
+.walk-next { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: var(--muted-card); border: 1px solid #ddd8cf; color: var(--brown); font: 800 11px var(--sans); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
+.metric { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 13px; align-items: start; }
+.metric-num { width: 26px; height: 26px; border-radius: 999px; background: var(--muted-card); color: var(--brown); display: grid; place-items: center; font: 900 11px var(--mono); margin-top: 1px; }
+.metric-note { grid-column: 2; font: 500 12px/1.5 var(--sans); color: var(--ink3); margin-top: 5px; }
+.lane-next { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.lane-next-label { font: 800 10px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.lane-next-title { font: 700 14px var(--sans); color: var(--ink); }
+.lane-next-arrow { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--bg); font: 900 18px var(--sans); flex: 0 0 auto; }
+@media (max-width: 980px) { .walk-card { grid-template-columns: 1fr; } .walk-next { width: 100%; } }
+
 @media (max-width: 980px) {
   .page { padding: calc(var(--nav-h) + 24px) 20px 70px; }
   .hero, .lanes, .depth-head, .final-card { grid-template-columns: 1fr; }
@@ -151,16 +166,29 @@ a { color: inherit; }
     </div>
   </section>
 
+  <section class="walk-card" aria-label="Discovery walk progress">
+    <div class="walk-step">01</div>
+    <div>
+      <div class="walk-kicker">Discovery walk - keep walking</div>
+      <div class="walk-copy">Start with the signal, then walk through Development, Architecture and Planning. Each lane gives enough to understand why the site is interesting, and enough uncertainty to know what needs testing next.</div>
+    </div>
+    <a class="walk-next" href="#development-lane">Start the walk</a>
+  </section>
+
   <section class="lanes" aria-label="Discovery lanes">
-    <article class="lane-card dev">
+    <article class="lane-card dev" id="development-lane">
       <div class="lane-icon">D</div>
       <div class="lane-kicker">Development</div>
       <h2 class="lane-title">Is there enough commercial pressure?</h2>
       <p class="lane-desc">Shows the development signal without exposing a buildable answer.</p>
       <div class="metrics">
-        <div class="metric"><div class="metric-label">Opportunity type</div><div class="metric-value">Retain + extend</div></div>
-        <div class="metric"><div class="metric-label">Value band</div><div class="metric-value">£25m-£40m</div></div>
-        <div class="metric"><div class="metric-label">Ownership signal</div><div class="metric-value">Moderate</div></div>
+        <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Opportunity type</div><div class="metric-value">Retain + extend</div><div class="metric-note">The likely move is adaptation and careful uplift, not wholesale replacement.</div></div></div>
+        <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Value band</div><div class="metric-value">£25m-£40m</div><div class="metric-note">Useful signal only. Exact GDV and assumptions belong in Appraise.</div></div></div>
+        <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Ownership signal</div><div class="metric-value">Moderate</div><div class="metric-note">Single counterparty helps, but motivation and title risk still need testing.</div></div></div>
+      </div>
+      <div class="lane-next">
+        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Walk the architecture signal</div></div>
+        <a class="lane-next-arrow" href="#architecture-lane" aria-label="Next Architecture">→</a>
       </div>
       <div class="appraise-adds">
         <div class="appraise-title">What Appraise adds</div>
@@ -169,15 +197,19 @@ a { color: inherit; }
       </div>
     </article>
 
-    <article class="lane-card arch">
+    <article class="lane-card arch" id="architecture-lane">
       <div class="lane-icon">A</div>
       <div class="lane-kicker">Architecture</div>
       <h2 class="lane-title">What kind of massing move is plausible?</h2>
       <p class="lane-desc">Shows envelope direction and design pressure, not a briefable massing strategy.</p>
       <div class="metrics">
-        <div class="metric"><div class="metric-label">Envelope read</div><div class="metric-value">Sensitive uplift</div></div>
-        <div class="metric"><div class="metric-label">Existing fabric</div><div class="metric-value">Listed asset</div></div>
-        <div class="metric"><div class="metric-label">Massing preview</div><div class="metric-value">Indicative only</div></div>
+        <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Envelope read</div><div class="metric-value">Sensitive uplift</div><div class="metric-note">Likely requires height control, setback logic and careful frontage treatment.</div></div></div>
+        <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Existing fabric</div><div class="metric-value">Listed asset</div><div class="metric-note">The constraint is not fatal, but it changes the architectural move.</div></div></div>
+        <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Massing preview</div><div class="metric-value">Indicative only</div><div class="metric-note">Discovery shows direction. Appraise tests low, base and high massing.</div></div></div>
+      </div>
+      <div class="lane-next">
+        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Walk the planning pressure</div></div>
+        <a class="lane-next-arrow" href="#planning-lane" aria-label="Next Planning">→</a>
       </div>
       <div class="appraise-adds">
         <div class="appraise-title">What Appraise adds</div>
@@ -186,15 +218,19 @@ a { color: inherit; }
       </div>
     </article>
 
-    <article class="lane-card plan">
+    <article class="lane-card plan" id="planning-lane">
       <div class="lane-icon">P</div>
       <div class="lane-kicker">Planning</div>
       <h2 class="lane-title">How exposed is the planning route?</h2>
       <p class="lane-desc">Shows planning temperature and visible flags without replacing pre-application advice.</p>
       <div class="metrics">
-        <div class="metric"><div class="metric-label">Policy context</div><div class="metric-value">Supportive</div></div>
-        <div class="metric"><div class="metric-label">Heritage pressure</div><div class="metric-value">High</div></div>
-        <div class="metric"><div class="metric-label">Consent route</div><div class="metric-value">Managed risk</div></div>
+        <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Policy context</div><div class="metric-value">Supportive</div><div class="metric-note">Opportunity Area and CAZ status create policy tailwind.</div></div></div>
+        <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Heritage pressure</div><div class="metric-value">High</div><div class="metric-note">The route depends on a credible heritage and setting argument.</div></div></div>
+        <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Consent route</div><div class="metric-value">Managed risk</div><div class="metric-note">Not a no. Not a yes. It needs tested precedent logic.</div></div></div>
+      </div>
+      <div class="lane-next">
+        <div><div class="lane-next-label">Next</div><div class="lane-next-title">See what Appraise would test</div></div>
+        <a class="lane-next-arrow" href="#appraise-depth" aria-label="Next Appraise depth">→</a>
       </div>
       <div class="appraise-adds">
         <div class="appraise-title">What Appraise adds</div>
@@ -204,7 +240,7 @@ a { color: inherit; }
     </article>
   </section>
 
-  <section class="depth-card">
+  <section class="depth-card" id="appraise-depth">
     <div class="depth-head">
       <div>
         <div class="kicker">Depth added in Appraise</div>
