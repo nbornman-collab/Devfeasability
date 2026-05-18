@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discovery Site Demo - 24 Southwark Street | Headroom</title>
+<title>Site Discovery - 24 Southwark Street | Headroom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -74,10 +74,10 @@ a { color: inherit; }
 .metric { padding: 18px 0; border-bottom: 1px solid var(--line); }
 .metric-label { font: 800 10px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 7px; }
 .metric-value { font: 800 26px/1.04 var(--mono); letter-spacing: -.035em; color: var(--ink); }
-.appraise-adds { margin-top: auto; padding: 22px; border-radius: 22px; background: var(--muted-card); border: 1px solid #ddd8cf; }
+.appraise-adds { margin-top: auto; padding: 22px; border-radius: 22px; background: transparent; border: 1px solid var(--line); }
 .appraise-title { font: 800 11px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--brown); margin-bottom: 10px; }
 .appraise-copy { font: 500 13px/1.62 var(--sans); color: var(--ink2); margin-bottom: 17px; }
-.appraise-chip { width: 100%; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; border: 1px solid #d8cec2; color: var(--brown); background: transparent; font: 800 11px var(--sans); letter-spacing: .17em; text-transform: uppercase; text-decoration: none; }
+.appraise-chip { width: 100%; min-height: auto; display: inline-flex; align-items: center; justify-content: flex-start; border-radius: 0; border: none; color: var(--brown); background: transparent; padding: 0; font: 800 11px var(--sans); letter-spacing: .17em; text-transform: uppercase; text-decoration: none; }
 .depth-card { border-radius: 32px; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 44px rgba(17,17,16,.052); padding: 34px; margin-bottom: 28px; }
 .depth-head { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1fr); gap: 32px; align-items: end; margin-bottom: 28px; }
 .depth-title { font: 300 clamp(40px,4vw,62px)/.96 var(--display); letter-spacing: -.045em; color: var(--ink); }
@@ -96,7 +96,7 @@ a { color: inherit; }
 .walk-step { font: 900 42px/.9 var(--mono); letter-spacing: -.05em; color: var(--brown); }
 .walk-kicker { font: 800 10px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin-bottom: 7px; }
 .walk-copy { font: 500 15px/1.62 var(--sans); color: var(--ink2); max-width: 720px; }
-.walk-next { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: var(--muted-card); border: 1px solid #ddd8cf; color: var(--brown); font: 800 11px var(--sans); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
+.walk-next { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: transparent; border: 1px solid var(--line); color: var(--brown); font: 800 11px var(--sans); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
 .metric { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 13px; align-items: start; }
 .metric-num { width: 26px; height: 26px; border-radius: 999px; background: var(--muted-card); color: var(--brown); display: grid; place-items: center; font: 900 11px var(--mono); margin-top: 1px; }
 .metric-note { grid-column: 2; font: 500 12px/1.5 var(--sans); color: var(--ink3); margin-top: 5px; }
@@ -129,7 +129,7 @@ a { color: inherit; }
   <a class="da-nav-contact" href="mailto:hello@headroom.city">Contact</a>
 </nav>
 <main class="page">
-  <div class="demo-pill">Discovery site demo - free tier</div>
+  <div class="demo-pill">Site discovery</div>
   <section class="hero">
     <div class="hero-copy">
       <div class="kicker">Discovery signal</div>
@@ -139,8 +139,8 @@ a { color: inherit; }
       <div class="score-lockup">
         <div class="score">72</div>
         <div>
-          <div class="score-title">Worth appraising</div>
-          <div class="score-copy">Strong central London signal, but heritage and viability need proper testing before anyone acts.</div>
+          <div class="score-title">Further review likely</div>
+          <div class="score-copy">The site shows enough signal to continue the review, with heritage and viability still unresolved.</div>
         </div>
       </div>
     </div>
@@ -158,84 +158,84 @@ a { color: inherit; }
     <div class="intelligence-icon">I</div>
     <div>
       <div class="intelligence-title">Intelligence layer</div>
-      <div class="intelligence-copy">Good policy context plus retained-building complexity and sufficient value pressure. The free page gives the synthesis; Appraise tests the route.</div>
+      <div class="intelligence-copy">Policy context, retained-building complexity and value pressure point in the same direction. The next step is to walk the evidence, not jump to a conclusion.</div>
     </div>
     <div class="intelligence-score">
       <div class="intelligence-score-value">72</div>
-      <div class="intelligence-score-label">Discovery score</div>
+      <div class="intelligence-score-label">Signal score</div>
     </div>
   </section>
 
   <section class="walk-card" aria-label="Discovery walk progress">
     <div class="walk-step">01</div>
     <div>
-      <div class="walk-kicker">Discovery walk - keep walking</div>
-      <div class="walk-copy">Start with the signal, then walk through Development, Architecture and Planning. Each lane gives enough to understand why the site is interesting, and enough uncertainty to know what needs testing next.</div>
+      <div class="walk-kicker">Site walk</div>
+      <div class="walk-copy">Start with the overall signal, then walk through Development, Architecture and Planning. Each lane records what is visible now and what needs checking next.</div>
     </div>
-    <a class="walk-next" href="#development-lane">Start the walk</a>
+    <a class="walk-next" href="#development-lane">Begin review</a>
   </section>
 
   <section class="lanes" aria-label="Discovery lanes">
     <article class="lane-card dev" id="development-lane">
       <div class="lane-icon">D</div>
       <div class="lane-kicker">Development</div>
-      <h2 class="lane-title">Is there enough commercial pressure?</h2>
-      <p class="lane-desc">Shows the development signal without exposing a buildable answer.</p>
+      <h2 class="lane-title">Development signal</h2>
+      <p class="lane-desc">Summarises the visible commercial pressure and acquisition signals.</p>
       <div class="metrics">
         <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Opportunity type</div><div class="metric-value">Retain + extend</div><div class="metric-note">The likely move is adaptation and careful uplift, not wholesale replacement.</div></div></div>
         <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Value band</div><div class="metric-value">£25m-£40m</div><div class="metric-note">Useful signal only. Exact GDV and assumptions belong in Appraise.</div></div></div>
         <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Ownership signal</div><div class="metric-value">Moderate</div><div class="metric-note">Single counterparty helps, but motivation and title risk still need testing.</div></div></div>
       </div>
       <div class="lane-next">
-        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Walk the architecture signal</div></div>
+        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Next: architecture signal</div></div>
         <a class="lane-next-arrow" href="#architecture-lane" aria-label="Next Architecture">→</a>
       </div>
       <div class="appraise-adds">
-        <div class="appraise-title">What Appraise adds</div>
-        <div class="appraise-copy">Residual value, return curve, assumptions, profit on cost and the full scenario matrix.</div>
-        <span class="appraise-chip">Financial model</span>
+        <div class="appraise-title">Further review areas</div>
+        <div class="appraise-copy">Review residual value, assumptions, return sensitivity and scenario economics.</div>
+        <span class="appraise-chip">Review economics</span>
       </div>
     </article>
 
     <article class="lane-card arch" id="architecture-lane">
       <div class="lane-icon">A</div>
       <div class="lane-kicker">Architecture</div>
-      <h2 class="lane-title">What kind of massing move is plausible?</h2>
-      <p class="lane-desc">Shows envelope direction and design pressure, not a briefable massing strategy.</p>
+      <h2 class="lane-title">Architecture signal</h2>
+      <p class="lane-desc">Summarises the visible envelope, fabric and massing considerations.</p>
       <div class="metrics">
         <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Envelope read</div><div class="metric-value">Sensitive uplift</div><div class="metric-note">Likely requires height control, setback logic and careful frontage treatment.</div></div></div>
         <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Existing fabric</div><div class="metric-value">Listed asset</div><div class="metric-note">The constraint is not fatal, but it changes the architectural move.</div></div></div>
         <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Massing preview</div><div class="metric-value">Indicative only</div><div class="metric-note">Discovery shows direction. Appraise tests low, base and high massing.</div></div></div>
       </div>
       <div class="lane-next">
-        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Walk the planning pressure</div></div>
+        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Next: planning context</div></div>
         <a class="lane-next-arrow" href="#planning-lane" aria-label="Next Planning">→</a>
       </div>
       <div class="appraise-adds">
-        <div class="appraise-title">What Appraise adds</div>
-        <div class="appraise-copy">Tested massing options, added NIA, BSA threshold and architectural constraints.</div>
-        <span class="appraise-chip">Scenario testing</span>
+        <div class="appraise-title">Further review areas</div>
+        <div class="appraise-copy">Massing options, added area, BSA threshold and architectural constraints.</div>
+        <span class="appraise-chip">Review massing</span>
       </div>
     </article>
 
     <article class="lane-card plan" id="planning-lane">
       <div class="lane-icon">P</div>
       <div class="lane-kicker">Planning</div>
-      <h2 class="lane-title">How exposed is the planning route?</h2>
-      <p class="lane-desc">Shows planning temperature and visible flags without replacing pre-application advice.</p>
+      <h2 class="lane-title">Planning context</h2>
+      <p class="lane-desc">Summarises key policy signals, constraints and early planning considerations.</p>
       <div class="metrics">
         <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Policy context</div><div class="metric-value">Supportive</div><div class="metric-note">Opportunity Area and CAZ status create policy tailwind.</div></div></div>
         <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Heritage pressure</div><div class="metric-value">High</div><div class="metric-note">The route depends on a credible heritage and setting argument.</div></div></div>
         <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Consent route</div><div class="metric-value">Managed risk</div><div class="metric-note">Not a no. Not a yes. It needs tested precedent logic.</div></div></div>
       </div>
       <div class="lane-next">
-        <div><div class="lane-next-label">Next</div><div class="lane-next-title">See what Appraise would test</div></div>
+        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Next: further review areas</div></div>
         <a class="lane-next-arrow" href="#appraise-depth" aria-label="Next Appraise depth">→</a>
       </div>
       <div class="appraise-adds">
-        <div class="appraise-title">What Appraise adds</div>
-        <div class="appraise-copy">Precedent fit, heritage route, planning history, risk pathway and source-backed argument.</div>
-        <span class="appraise-chip">Planning strategy</span>
+        <div class="appraise-title">Further review areas</div>
+        <div class="appraise-copy">Review relevant precedents, heritage route, planning history and supporting policy sources.</div>
+        <span class="appraise-chip">Review route</span>
       </div>
     </article>
   </section>
@@ -243,26 +243,26 @@ a { color: inherit; }
   <section class="depth-card" id="appraise-depth">
     <div class="depth-head">
       <div>
-        <div class="kicker">Depth added in Appraise</div>
-        <h2 class="depth-title">Not more noise. More certainty.</h2>
+        <div class="kicker">Further review</div>
+        <h2 class="depth-title">What still needs checking</h2>
       </div>
-      <p class="depth-copy">Discovery gives a credible screening signal. Appraise turns that signal into a tested site position across development, architecture, planning and source confidence.</p>
+      <p class="depth-copy">The discovery page records what is visible now. A fuller review would test the assumptions, sources and route before any design or acquisition decision.</p>
     </div>
     <div class="depth-table" aria-label="Discovery compared with Appraise">
-      <div class="depth-row header"><div>Lane</div><div>Discovery shows</div><div>Appraise adds</div></div>
-      <div class="depth-row"><div class="depth-lane">D</div><div>Opportunity type, value band, ownership signal.</div><div>Residual land value, return curve, assumptions and scenario economics.</div></div>
-      <div class="depth-row"><div class="depth-lane">A</div><div>Envelope direction and design pressure.</div><div>Tested massing options, added NIA, BSA threshold and architectural constraints.</div></div>
-      <div class="depth-row"><div class="depth-lane">P</div><div>Planning temperature and visible constraint flags.</div><div>Precedent fit, heritage route, planning history and risk pathway.</div></div>
+      <div class="depth-row header"><div>Lane</div><div>Discovery shows</div><div>Further review checks</div></div>
+      <div class="depth-row"><div class="depth-lane">D</div><div>Opportunity type, value band and ownership signal.</div><div>Residual value, assumptions and scenario economics.</div></div>
+      <div class="depth-row"><div class="depth-lane">A</div><div>Envelope direction and design pressure.</div><div>Massing options, added area, BSA threshold and architectural constraints.</div></div>
+      <div class="depth-row"><div class="depth-lane">P</div><div>Planning temperature and visible constraint flags.</div><div>Precedents, heritage route, planning history and risk pathway.</div></div>
       <div class="depth-row"><div class="depth-lane">I</div><div>Confidence label, source summary and missing-data flags.</div><div>Source joins, confidence diagnostics and site-specific decision logic.</div></div>
     </div>
   </section>
 
   <section class="final-card">
     <div>
-      <div class="final-title">This is a screening signal, not the answer.</div>
-      <p class="final-copy">Discovery says whether the site deserves attention. Appraise tests massing, viability, planning risk and acquisition logic before anyone wastes proper time.</p>
+      <div class="final-title">This is a first pass, not the answer.</div>
+      <p class="final-copy">This screen shows the visible signal. The next review tests massing, viability, planning risk and acquisition logic before anyone wastes proper time.</p>
     </div>
-    <a class="final-button" href="/t1/24-southwark-st">Appraise this site</a>
+    <a class="final-button" href="/t1/24-southwark-st">Continue review</a>
   </section>
 </main>
 <script>
