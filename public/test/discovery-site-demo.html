@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discovery Site Demo - 24 Southwark Street | Headroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/nav.css">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<script src="/lib/intelligence-24ss.js"></script>
+<style>
+:root {
+  --bg: #f4f2ec;
+  --paper: #fbfaf6;
+  --ink: #111110;
+  --ink2: #494640;
+  --ink3: #837e73;
+  --rule: rgba(17,17,16,.1);
+  --dark: #0a0a08;
+  --dark2: #151511;
+  --accent: #b8845c;
+  --accent2: #c8a040;
+  --green: #15803d;
+  --amber: #b45309;
+  --red: #b91c1c;
+  --blue: #5b7a9d;
+  --display: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Inter', sans-serif;
+  --mono: 'Space Grotesk', 'Inter', sans-serif;
+  --nav-h: 56px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+.demo-label { position: fixed; left: 76px; top: 70px; z-index: 30; padding: 7px 11px; border-radius: 999px; background: rgba(10,10,8,.74); border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.7); font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; backdrop-filter: blur(14px); }
+.nav-spacer { height: var(--nav-h); }
+.hero { min-height: calc(100vh - var(--nav-h)); display: grid; grid-template-columns: minmax(0,1.15fr) minmax(420px,.85fr); background: var(--dark); }
+.map-panel { position: sticky; top: var(--nav-h); height: calc(100vh - var(--nav-h)); min-height: 620px; overflow: hidden; }
+#map { position: absolute; inset: 0; }
+.map-scrim { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(10,10,8,.08), rgba(10,10,8,.04) 52%, rgba(10,10,8,.72)); }
+.map-caption { position: absolute; left: 28px; bottom: 28px; max-width: 360px; padding: 16px 18px; border-radius: 14px; background: rgba(10,10,8,.72); border: 1px solid rgba(255,255,255,.1); backdrop-filter: blur(14px); }
+.map-caption-kicker { font: 800 10px var(--sans); color: var(--accent2); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 7px; }
+.map-caption-copy { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.64); }
+.hero-card { min-height: calc(100vh - var(--nav-h)); padding: 62px 52px 44px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(180deg, rgba(244,242,236,.98), rgba(235,231,221,.98)); }
+.kicker { font: 800 11px var(--sans); letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+.address { font: 300 clamp(48px,5.6vw,74px)/.95 var(--display); letter-spacing: -.035em; color: var(--ink); margin-bottom: 16px; }
+.meta-line { font: 600 14px/1.6 var(--sans); color: var(--ink3); margin-bottom: 28px; }
+.score-row { display: flex; align-items: center; gap: 18px; padding: 22px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 26px; }
+.score { font: 900 76px/.85 var(--mono); letter-spacing: -.06em; color: var(--ink); }
+.score-copy-title { font: 800 18px var(--sans); color: var(--ink); margin-bottom: 5px; }
+.score-copy-body { font: 500 14px/1.55 var(--sans); color: var(--ink2); }
+.chips { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 28px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; padding: 8px 12px; background: rgba(17,17,16,.06); color: var(--ink2); font: 800 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; }
+.chip-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.chip.green .chip-dot { background: var(--green); }
+.chip.amber .chip-dot { background: var(--amber); }
+.chip.blue .chip-dot { background: var(--blue); }
+.thesis { padding: 20px 22px; border-radius: 18px; background: var(--paper); border: 1px solid rgba(17,17,16,.08); margin-bottom: 22px; }
+.thesis-title { font: 800 12px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.thesis-copy { font: 500 18px/1.55 var(--sans); color: var(--ink2); }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 4px; }
+.cta-primary, .cta-secondary { text-decoration: none; border-radius: 999px; font: 800 13px var(--sans); letter-spacing: .08em; text-transform: uppercase; transition: transform .18s, background .18s, color .18s; }
+.cta-primary { background: var(--ink); color: var(--bg); padding: 14px 18px; }
+.cta-secondary { color: var(--ink2); border: 1px solid var(--rule); padding: 13px 17px; }
+.cta-primary:hover, .cta-secondary:hover { transform: translateY(-1px); }
+.section { padding: 86px 52px; }
+.section.dark { background: var(--dark); color: #f2f1ed; }
+.section.light { background: var(--bg); }
+.section-inner { max-width: 1180px; margin: 0 auto; }
+.section-head { display: grid; grid-template-columns: minmax(0,.75fr) minmax(0,1fr); gap: 40px; align-items: end; margin-bottom: 34px; }
+.section-title { font: 300 clamp(36px,4vw,58px)/1 var(--display); letter-spacing: -.03em; }
+.section.dark .section-title { color: #fff; }
+.section-copy { font: 500 17px/1.75 var(--sans); color: var(--ink2); }
+.section.dark .section-copy { color: rgba(255,255,255,.58); }
+.signal-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.signal-card { background: var(--paper); border: 1px solid rgba(17,17,16,.08); border-radius: 20px; padding: 24px; min-height: 210px; }
+.signal-card.dark-card { background: rgba(255,255,255,.045); border-color: rgba(255,255,255,.09); }
+.card-label { font: 800 11px var(--sans); letter-spacing: .13em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+.card-value { font: 800 28px/1.05 var(--mono); letter-spacing: -.03em; color: var(--ink); margin-bottom: 10px; }
+.dark-card .card-value { color: #fff; }
+.card-body { font: 500 14px/1.65 var(--sans); color: var(--ink2); }
+.dark-card .card-body { color: rgba(255,255,255,.58); }
+.bands { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; overflow: hidden; border-radius: 20px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.08); }
+.band { background: rgba(255,255,255,.045); padding: 24px; min-height: 154px; }
+.band-label { font: 800 10px var(--sans); letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-bottom: 14px; }
+.band-value { font: 800 26px/1.08 var(--mono); color: #fff; letter-spacing: -.035em; margin-bottom: 9px; }
+.band-note { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.52); }
+.locked-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 14px; }
+.lock-card { position: relative; overflow: hidden; border-radius: 18px; padding: 22px; background: var(--paper); border: 1px solid rgba(17,17,16,.08); min-height: 220px; }
+.lock-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(251,250,246,0), rgba(251,250,246,.94) 58%); pointer-events: none; }
+.lock-title { font: 800 15px var(--sans); color: var(--ink); margin-bottom: 10px; }
+.lock-teaser { font: 500 13px/1.58 var(--sans); color: var(--ink2); }
+.lock-badge { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 2; border-radius: 999px; padding: 10px 12px; text-align: center; background: var(--ink); color: var(--bg); font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+.flags { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.flag { display: flex; gap: 13px; align-items: flex-start; padding: 18px; border-radius: 16px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.08); }
+.flag-icon { width: 28px; height: 28px; flex: 0 0 28px; border-radius: 50%; display: grid; place-items: center; background: rgba(184,132,92,.18); color: #f2c79e; font: 900 12px var(--sans); }
+.flag-title { font: 800 14px var(--sans); color: #fff; margin-bottom: 5px; }
+.flag-copy { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.56); }
+.final-cta { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 28px; align-items: center; padding: 34px; border-radius: 26px; background: var(--ink); color: #fff; }
+.final-title { font: 300 38px/1 var(--display); letter-spacing: -.03em; margin-bottom: 10px; }
+.final-copy { font: 500 15px/1.65 var(--sans); color: rgba(255,255,255,.58); max-width: 640px; }
+.final-cta .cta-primary { background: #fff; color: var(--ink); white-space: nowrap; }
+.source-row { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px; }
+.source-pill { border-radius: 999px; padding: 7px 10px; background: rgba(255,255,255,.07); color: rgba(255,255,255,.52); font: 800 10px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+@media (max-width: 980px) {
+  .hero { grid-template-columns: 1fr; }
+  .map-panel { position: relative; top: auto; height: 52vh; min-height: 420px; }
+  .hero-card { min-height: auto; padding: 44px 24px; }
+  .section { padding: 62px 24px; }
+  .section-head, .final-cta { grid-template-columns: 1fr; }
+  .signal-grid, .bands, .locked-grid, .flags { grid-template-columns: 1fr; }
+  .demo-label { left: 20px; top: 70px; }
+}
+</style>
+</head>
+<body>
+<nav class="da-nav">
+  <a href="/" class="da-nav-logo"><svg viewBox="0 0 88 80" fill="none"><rect x="4" y="38" width="14" height="38" rx="1" fill="#111110"/><rect x="70" y="38" width="14" height="38" rx="1" fill="#111110"/><rect x="4" y="38" width="80" height="6" fill="#111110"/><rect x="4" y="26" width="80" height="1.5" fill="#111110" opacity=".35"/><rect x="4" y="16" width="80" height="1.5" fill="#111110" opacity=".22"/><rect x="4" y="6" width="80" height="1.5" fill="#111110" opacity=".12"/></svg><span>Headroom</span></a>
+  <div class="da-nav-sep"></div>
+  <a class="da-nav-link active" href="/discover">Discover</a>
+  <a class="da-nav-link" href="/t1/24-southwark-st">Appraise</a>
+  <div class="da-nav-spacer"></div>
+  <a class="da-nav-contact" href="mailto:hello@headroom.city">Contact</a>
+</nav>
+<div class="demo-label">Discovery site demo - free tier</div>
+<main>
+  <section class="hero">
+    <div class="map-panel">
+      <div id="map"></div>
+      <div class="map-scrim"></div>
+      <div class="map-caption">
+        <div class="map-caption-kicker">Map signal</div>
+        <div class="map-caption-copy">3D context, site polygon, existing massing and indicative envelope only. Exact scenarios stay inside Appraise.</div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <div class="kicker">Discovery signal</div>
+      <h1 class="address">24 Southwark Street</h1>
+      <div class="meta-line">Southwark - London Bridge/Bankside Opportunity Area - Freehold signal</div>
+      <div class="score-row">
+        <div class="score">72</div>
+        <div>
+          <div class="score-copy-title">Worth appraising</div>
+          <div class="score-copy-body">Strong central London signal, but heritage and viability need proper testing before anyone acts.</div>
+        </div>
+      </div>
+      <div class="chips">
+        <div class="chip green"><span class="chip-dot"></span>Medium confidence</div>
+        <div class="chip amber"><span class="chip-dot"></span>Heritage sensitive</div>
+        <div class="chip blue"><span class="chip-dot"></span>Retain and extend</div>
+      </div>
+      <div class="thesis">
+        <div class="thesis-title">Why this is interesting</div>
+        <div class="thesis-copy">A listed Bankside asset with clear airspace pressure, strong policy context and enough constraint complexity to justify a full appraisal.</div>
+      </div>
+      <div class="cta-row">
+        <a class="cta-primary" href="/t1/24-southwark-st">Appraise this site</a>
+        <a class="cta-secondary" href="#signals">View discovery signal</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section light" id="signals">
+    <div class="section-inner">
+      <div class="section-head">
+        <div>
+          <div class="kicker">Visible free layer</div>
+          <h2 class="section-title">Enough to decide whether the site deserves attention.</h2>
+        </div>
+        <p class="section-copy">Discovery shows the signal and the uncertainty. It does not hand over the scenario, underwriting or planning route.</p>
+      </div>
+      <div class="signal-grid">
+        <article class="signal-card">
+          <div class="card-label">Opportunity type</div>
+          <div class="card-value">Retain + extend</div>
+          <p class="card-body">The site reads as an adaptive reuse and rooftop addition opportunity, not a clearance redevelopment.</p>
+        </article>
+        <article class="signal-card">
+          <div class="card-label">Planning temperature</div>
+          <div class="card-value">Medium</div>
+          <p class="card-body">Opportunity Area context helps, but listing and nearby heritage assets mean the design argument matters.</p>
+        </article>
+        <article class="signal-card">
+          <div class="card-label">Ownership signal</div>
+          <div class="card-value">Moderate</div>
+          <p class="card-body">Single freehold counterparty reduces assembly complexity. Motivation requires deeper title and owner review.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="section-inner">
+      <div class="section-head">
+        <div>
+          <div class="kicker">Bands, not answers</div>
+          <h2 class="section-title">The free page shows ranges. Appraise gives the model.</h2>
+        </div>
+        <p class="section-copy">These are intentionally non-actionable. They create a professional reason to test the site properly.</p>
+      </div>
+      <div class="bands">
+        <div class="band">
+          <div class="band-label">Indicative GDV band</div>
+          <div class="band-value">£25m-£40m</div>
+          <div class="band-note">Exact GDV and assumptions locked.</div>
+        </div>
+        <div class="band">
+          <div class="band-label">Added area band</div>
+          <div class="band-value">Moderate</div>
+          <div class="band-note">No floor-by-floor NIA shown free.</div>
+        </div>
+        <div class="band">
+          <div class="band-label">Height band</div>
+          <div class="band-value">Sensitive</div>
+          <div class="band-note">Scenario heights stay in Appraise.</div>
+        </div>
+        <div class="band">
+          <div class="band-label">Source confidence</div>
+          <div class="band-value">Medium</div>
+          <div class="band-note">ADP source unconfirmed. Public-source confidence visible.</div>
+        </div>
+      </div>
+      <div class="source-row">
+        <span class="source-pill">HMLR</span>
+        <span class="source-pill">Planning register</span>
+        <span class="source-pill">NHLE</span>
+        <span class="source-pill">GLA / borough policy</span>
+        <span class="source-pill">Mapbox / OS geometry</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section light">
+    <div class="section-inner">
+      <div class="section-head">
+        <div>
+          <div class="kicker">Locked Appraise modules</div>
+          <h2 class="section-title">Discovery creates the question. Appraise resolves it.</h2>
+        </div>
+        <p class="section-copy">Each locked card is a real Appraise module. The free version previews the professional question without giving away the answer.</p>
+      </div>
+      <div class="locked-grid">
+        <article class="lock-card">
+          <div class="lock-title">Massing scenarios</div>
+          <p class="lock-teaser">Three density routes have been tested against the site envelope and heritage context.</p>
+          <div class="lock-badge">Locked in Appraise</div>
+        </article>
+        <article class="lock-card">
+          <div class="lock-title">Financial model</div>
+          <p class="lock-teaser">GDV, return curve, residual land value and viability assumptions are modelled.</p>
+          <div class="lock-badge">Locked in Appraise</div>
+        </article>
+        <article class="lock-card">
+          <div class="lock-title">Planning route</div>
+          <p class="lock-teaser">Policy tailwind is present, but the route depends on constraints and precedent fit.</p>
+          <div class="lock-badge">Locked in Appraise</div>
+        </article>
+        <article class="lock-card">
+          <div class="lock-title">Heritage strategy</div>
+          <p class="lock-teaser">The listing does not kill the opportunity, but it defines the permissible move.</p>
+          <div class="lock-badge">Locked in Appraise</div>
+        </article>
+        <article class="lock-card">
+          <div class="lock-title">Title risk</div>
+          <p class="lock-teaser">Ownership looks legible. Acquisition logic needs a proper title and entity review.</p>
+          <div class="lock-badge">Locked in Appraise</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="section-inner">
+      <div class="section-head">
+        <div>
+          <div class="kicker">What still needs testing</div>
+          <h2 class="section-title">The point is informed doubt, not a free answer.</h2>
+        </div>
+        <p class="section-copy">These flags are shown because they help a serious user understand why the site is worth paying attention to.</p>
+      </div>
+      <div class="flags">
+        <div class="flag">
+          <div class="flag-icon">H</div>
+          <div><div class="flag-title">Heritage sensitivity</div><div class="flag-copy">Grade II listing means the opportunity is design-led. Appraise tests the retention and extension route.</div></div>
+        </div>
+        <div class="flag">
+          <div class="flag-icon">P</div>
+          <div><div class="flag-title">Policy support</div><div class="flag-copy">Opportunity Area and CAZ context support intensification, but not without a credible planning argument.</div></div>
+        </div>
+        <div class="flag">
+          <div class="flag-icon">£</div>
+          <div><div class="flag-title">Value sensitivity</div><div class="flag-copy">The signal is material. The residual answer depends on assumptions withheld from Discovery.</div></div>
+        </div>
+        <div class="flag">
+          <div class="flag-icon">Q</div>
+          <div><div class="flag-title">Confidence layer</div><div class="flag-copy">Public sources support the signal. Missing source joins lower confidence rather than blocking review.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section light">
+    <div class="section-inner">
+      <div class="final-cta">
+        <div>
+          <div class="final-title">This site has enough signal to test properly.</div>
+          <p class="final-copy">Discovery says whether the opportunity deserves attention. Appraise tests massing, viability, planning risk and acquisition logic before anyone wastes proper time.</p>
+        </div>
+        <a class="cta-primary" href="/t1/24-southwark-st">Test the opportunity properly</a>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+const si = window.SITE_INTELLIGENCE || SITE_INTELLIGENCE;
+const centroid = [si.lng || -0.091522, si.lat || 51.504909];
+const polygon = si.polygon || [];
+const existingHeight = 24.8;
+const indicativeHeight = 36;
+function asFeature(coords) {
+  return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [coords] }, properties: {} };
+}
+async function initMap() {
+  try {
+    const cfg = await fetch('/api/config').then(r => r.json());
+    mapboxgl.accessToken = cfg.mapboxToken;
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/standard',
+      center: centroid,
+      zoom: 17.35,
+      pitch: 62,
+      bearing: -22,
+      antialias: true,
+      attributionControl: false
+    });
+    map.scrollZoom.disable();
+    map.addControl(new mapboxgl.NavigationControl({ showCompass: true }), 'top-left');
+    map.on('style.load', () => {
+      try { map.setConfigProperty('basemap', 'lightPreset', 'day'); } catch(e) {}
+      try { map.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch(e) {}
+      try { map.setConfigProperty('basemap', 'showTransitLabels', false); } catch(e) {}
+      map.addSource('site-poly', { type: 'geojson', data: asFeature(polygon) });
+      map.addLayer({ id: 'site-existing', type: 'fill-extrusion', source: 'site-poly', slot: 'top', paint: {
+        'fill-extrusion-color': '#8d9ba3',
+        'fill-extrusion-height': existingHeight,
+        'fill-extrusion-base': 0,
+        'fill-extrusion-opacity': .84
+      }});
+      map.addLayer({ id: 'site-envelope', type: 'fill-extrusion', source: 'site-poly', slot: 'top', paint: {
+        'fill-extrusion-color': '#c8a040',
+        'fill-extrusion-height': indicativeHeight,
+        'fill-extrusion-base': existingHeight,
+        'fill-extrusion-opacity': .28
+      }});
+      map.addLayer({ id: 'site-outline', type: 'line', source: 'site-poly', slot: 'top', paint: {
+        'line-color': '#ffffff',
+        'line-width': 2,
+        'line-opacity': .92
+      }});
+    });
+  } catch (err) {
+    document.querySelector('.map-caption-copy').textContent = 'Map configuration failed to load. The Discovery layout still shows the intended map slot.';
+  }
+}
+initMap();
+</script>
+</body>
+</html>
