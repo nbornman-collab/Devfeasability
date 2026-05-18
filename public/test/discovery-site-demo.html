@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site Discovery - 24 Southwark Street | Headroom</title>
+<title>The Case for 24 Southwark Street | Headroom</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
@@ -12,126 +12,21 @@
 <script src="/lib/intelligence-24ss.js"></script>
 <style>
 :root {
-  --bg: #f4f2ed;
-  --card: #fbfaf7;
-  --muted-card: #efeee9;
-  --ink: #111111;
-  --ink2: #4d4942;
-  --ink3: #746f66;
-  --line: #e3dfd7;
-  --brown: #a77a5d;
-  --gold: #c79363;
-  --dark: #242421;
-  --dark2: #151511;
-  --dev: #099447;
-  --arch: #5d83a8;
-  --plan: #b96b4f;
-  --display: 'Cormorant Garamond', Georgia, serif;
-  --sans: 'Inter', sans-serif;
-  --mono: 'Space Grotesk', 'Inter', sans-serif;
-  --nav-h: 56px;
+  --bg:#f4f2ed; --card:#fbfaf7; --muted:#ede9df; --ink:#111110; --ink2:#45413b; --ink3:#7a746a;
+  --line:#e1ddd3; --brown:#a77a5d; --gold:#c79363; --dark:#242421;
+  --dev:#0b8f49; --arch:#5d83a8; --plan:#b96b4f;
+  --display:'Cormorant Garamond', Georgia, serif; --sans:'Inter', sans-serif; --mono:'Space Grotesk','Inter',sans-serif; --nav-h:56px;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { min-height: 100vh; background: radial-gradient(circle at 20% 0%, #fbfaf7 0%, var(--bg) 32%, #ece8de 100%); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
-a { color: inherit; }
-.page { width: min(100%, 1220px); margin: 0 auto; padding: calc(var(--nav-h) + 34px) 28px 88px; }
-.demo-pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: #3a3936; color: #f4f1ea; font: 800 11px var(--sans); letter-spacing: .22em; text-transform: uppercase; margin-bottom: 26px; }
-.hero { display: grid; grid-template-columns: minmax(0,.86fr) minmax(420px,1.14fr); gap: 28px; align-items: stretch; margin-bottom: 28px; }
-.hero-copy, .map-card { border-radius: 32px; overflow: hidden; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 46px rgba(17,17,16,.055); }
-.hero-copy { padding: clamp(32px,5vw,54px); display: flex; flex-direction: column; justify-content: center; min-height: 460px; }
-.kicker { font: 800 11px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--brown); margin-bottom: 16px; }
-.address { font: 300 clamp(54px,6vw,86px)/.88 var(--display); letter-spacing: -.045em; color: var(--ink); max-width: 560px; margin-bottom: 18px; }
-.meta { font: 600 14px/1.65 var(--sans); color: var(--ink3); margin-bottom: 28px; }
-.hero-line { width: 100%; height: 1px; background: var(--line); margin: 0 0 26px; }
-.score-lockup { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 18px; align-items: center; }
-.score { font: 900 76px/.85 var(--mono); letter-spacing: -.06em; color: var(--ink); }
-.score-title { font: 800 18px var(--sans); color: var(--ink); margin-bottom: 5px; }
-.score-copy { font: 500 14px/1.55 var(--sans); color: var(--ink2); }
-.map-card { min-height: 460px; position: relative; background: var(--dark); }
-#map { position: absolute; inset: 0; }
-.map-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(36,36,33,.02), rgba(36,36,33,.54)); }
-.map-note { position: absolute; left: 22px; right: 22px; bottom: 22px; padding: 18px 20px; border-radius: 22px; background: rgba(36,36,33,.78); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(16px); }
-.map-note-title { font: 800 10px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-.map-note-copy { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.68); }
-.intelligence-card { position: sticky; top: calc(var(--nav-h) + 18px); z-index: 12; display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 20px; align-items: center; padding: 28px 30px; border-radius: 30px; background: var(--dark); color: #f7f3ec; box-shadow: 0 26px 70px rgba(0,0,0,.22); margin-bottom: 28px; }
-.intelligence-icon { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--gold); color: white; font: 900 30px var(--mono); }
-.intelligence-title { font: 800 11px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-.intelligence-copy { font: 500 15px/1.62 var(--sans); color: rgba(247,243,236,.68); max-width: 740px; }
-.intelligence-score { text-align: right; min-width: 112px; }
-.intelligence-score-value { font: 900 48px/.9 var(--mono); letter-spacing: -.055em; color: #fff; }
-.intelligence-score-label { font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-top: 7px; }
-.lanes { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; align-items: stretch; margin-bottom: 28px; }
-.lane-card { background: var(--card); border: 1px solid rgba(17,17,16,.045); border-radius: 32px; box-shadow: 0 18px 44px rgba(17,17,16,.052); padding: 36px 32px 32px; min-height: 610px; display: flex; flex-direction: column; }
-.lane-icon { width: 72px; height: 72px; border-radius: 22px; display: grid; place-items: center; color: white; font: 900 34px/.9 var(--mono); margin-bottom: 28px; }
-.lane-card.dev .lane-icon { background: var(--dev); }
-.lane-card.arch .lane-icon { background: var(--arch); }
-.lane-card.plan .lane-icon { background: var(--plan); }
-.lane-kicker { font: 800 11px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--brown); margin-bottom: 13px; }
-.lane-title { font: 300 clamp(38px,4vw,56px)/.94 var(--display); letter-spacing: -.045em; color: var(--ink); margin-bottom: 18px; }
-.lane-desc { font: 500 15px/1.68 var(--sans); color: var(--ink2); margin-bottom: 30px; }
-.metrics { border-top: 1px solid var(--line); }
-.metric { padding: 18px 0; border-bottom: 1px solid var(--line); }
-.metric-label { font: 800 10px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 7px; }
-.metric-value { font: 800 26px/1.04 var(--mono); letter-spacing: -.035em; color: var(--ink); }
-.appraise-adds { margin-top: auto; padding: 22px; border-radius: 22px; background: transparent; border: 1px solid var(--line); }
-.appraise-title { font: 800 11px var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--brown); margin-bottom: 10px; }
-.appraise-copy { font: 500 13px/1.62 var(--sans); color: var(--ink2); margin-bottom: 17px; }
-.appraise-chip { width: 100%; min-height: auto; display: inline-flex; align-items: center; justify-content: flex-start; border-radius: 0; border: none; color: var(--brown); background: transparent; padding: 0; font: 800 11px var(--sans); letter-spacing: .17em; text-transform: uppercase; text-decoration: none; }
-.depth-card { border-radius: 32px; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 44px rgba(17,17,16,.052); padding: 34px; margin-bottom: 28px; }
-.depth-head { display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1fr); gap: 32px; align-items: end; margin-bottom: 28px; }
-.depth-title { font: 300 clamp(40px,4vw,62px)/.96 var(--display); letter-spacing: -.045em; color: var(--ink); }
-.depth-copy { font: 500 16px/1.72 var(--sans); color: var(--ink2); }
-.depth-table { border-radius: 24px; overflow: hidden; border: 1px solid var(--line); }
-.depth-row { display: grid; grid-template-columns: .34fr 1fr 1.26fr; background: var(--line); gap: 1px; }
-.depth-row > div { background: #fffdf8; padding: 19px 21px; font: 500 14px/1.62 var(--sans); color: var(--ink2); }
-.depth-row.header > div { background: var(--dark); color: rgba(255,255,255,.56); font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; }
-.depth-lane { font: 900 28px/1 var(--mono) !important; color: var(--brown) !important; }
-.final-card { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 28px; align-items: center; padding: 34px; border-radius: 32px; background: var(--dark); color: #fff; }
-.final-title { font: 300 clamp(36px,4vw,56px)/.94 var(--display); letter-spacing: -.04em; margin-bottom: 12px; }
-.final-copy { font: 500 15px/1.7 var(--sans); color: rgba(255,255,255,.62); max-width: 640px; }
-.final-button { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 20px; border-radius: 999px; background: #fff; color: var(--ink); text-decoration: none; font: 800 12px var(--sans); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
-
-.walk-card { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 20px; align-items: center; padding: 22px 26px; border-radius: 30px; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 44px rgba(17,17,16,.052); margin-bottom: 28px; }
-.walk-step { font: 900 42px/.9 var(--mono); letter-spacing: -.05em; color: var(--brown); }
-.walk-kicker { font: 800 10px var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); margin-bottom: 7px; }
-.walk-copy { font: 500 15px/1.62 var(--sans); color: var(--ink2); max-width: 720px; }
-.walk-next { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: transparent; border: 1px solid var(--line); color: var(--brown); font: 800 11px var(--sans); letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
-.metric { display: grid; grid-template-columns: auto minmax(0,1fr); gap: 13px; align-items: start; }
-.metric-num { width: 26px; height: 26px; border-radius: 999px; background: var(--muted-card); color: var(--brown); display: grid; place-items: center; font: 900 11px var(--mono); margin-top: 1px; }
-.metric-note { grid-column: 2; font: 500 12px/1.5 var(--sans); color: var(--ink3); margin-top: 5px; }
-.lane-next { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.lane-next-label { font: 800 10px var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
-.lane-next-title { font: 700 14px var(--sans); color: var(--ink); }
-.lane-next-arrow { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--bg); font: 900 18px var(--sans); flex: 0 0 auto; }
-
-.site-walk { border-radius: 32px; background: var(--card); border: 1px solid rgba(17,17,16,.045); box-shadow: 0 18px 44px rgba(17,17,16,.052); padding: 34px; margin-bottom: 28px; }
-.walk-section-head { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1fr); gap: 30px; align-items: end; margin-bottom: 26px; }
-.walk-section-title { font: 300 clamp(38px,4vw,58px)/.96 var(--display); letter-spacing: -.045em; color: var(--ink); }
-.walk-section-copy { font: 500 15px/1.7 var(--sans); color: var(--ink2); }
-.observation-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-.observation-card { border-radius: 24px; background: #fffdf8; border: 1px solid var(--line); padding: 22px; min-height: 260px; display: flex; flex-direction: column; }
-.observation-top { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 28px; }
-.observation-num { width: 34px; height: 34px; border-radius: 999px; display: grid; place-items: center; background: var(--muted-card); color: var(--brown); font: 900 12px var(--mono); }
-.observation-source { font: 800 9px var(--sans); letter-spacing: .13em; text-transform: uppercase; color: var(--ink3); text-align: right; }
-.observation-title { font: 300 34px/.96 var(--display); letter-spacing: -.04em; color: var(--ink); margin-bottom: 14px; }
-.observation-copy { font: 500 14px/1.62 var(--sans); color: var(--ink2); }
-.observation-foot { margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--brown); }
-@media (max-width: 980px) { .walk-section-head, .observation-grid { grid-template-columns: 1fr; } }
-
-@media (max-width: 980px) { .walk-card { grid-template-columns: 1fr; } .walk-next { width: 100%; } }
-
-@media (max-width: 980px) {
-  .page { padding: calc(var(--nav-h) + 24px) 20px 70px; }
-  .hero, .lanes, .depth-head, .final-card { grid-template-columns: 1fr; }
-  .hero-copy, .map-card { min-height: auto; }
-  .map-card { height: 420px; }
-  .intelligence-card { position: relative; top: auto; grid-template-columns: 1fr; padding: 28px; }
-  .intelligence-score { text-align: left; }
-  .lane-card { min-height: auto; }
-  .depth-row { grid-template-columns: 1fr; }
-  .depth-row.header { display: none; }
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth} body{min-height:100vh;background:radial-gradient(circle at 15% 0,#fbfaf7 0,var(--bg) 34%,#ebe6da 100%);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}.page{width:min(100%,1240px);margin:0 auto;padding:calc(var(--nav-h) + 34px) 28px 88px}.label{display:inline-flex;padding:9px 15px;border-radius:999px;background:#3b3934;color:#f4f1ea;font:800 10px var(--sans);letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px}
+.case-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,.86fr);gap:28px;margin-bottom:28px}.case-card,.map-card,.evidence,.case-close{border-radius:32px;background:var(--card);border:1px solid rgba(17,17,16,.05);box-shadow:0 18px 46px rgba(17,17,16,.055);overflow:hidden}.case-card{padding:clamp(34px,5vw,58px);min-height:500px;display:flex;flex-direction:column;justify-content:center}.kicker{font:800 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--brown);margin-bottom:18px}.title{font:300 clamp(58px,7vw,98px)/.86 var(--display);letter-spacing:-.055em;margin-bottom:24px;max-width:680px}.standfirst{font:500 clamp(18px,2vw,24px)/1.55 var(--sans);color:var(--ink2);max-width:720px;margin-bottom:30px}.case-line{height:1px;background:var(--line);margin:0 0 26px}.verdict{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center}.score{font:900 74px/.85 var(--mono);letter-spacing:-.06em}.verdict-title{font:800 18px var(--sans);margin-bottom:6px}.verdict-copy{font:500 14px/1.62 var(--sans);color:var(--ink2)}
+.map-card{position:relative;min-height:500px;background:var(--dark)}#map{position:absolute;inset:0}.map-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,36,33,.02),rgba(36,36,33,.56));pointer-events:none}.map-note{position:absolute;left:22px;right:22px;bottom:22px;padding:18px 20px;border-radius:22px;background:rgba(36,36,33,.78);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(16px)}.map-note-title{font:800 10px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}.map-note-copy{font:500 13px/1.55 var(--sans);color:rgba(255,255,255,.68)}
+.thesis{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1fr);gap:28px;border-radius:32px;background:var(--dark);color:#f7f3ec;padding:34px;margin-bottom:28px;box-shadow:0 26px 70px rgba(0,0,0,.18)}.thesis-title{font:300 clamp(42px,4.5vw,68px)/.92 var(--display);letter-spacing:-.05em}.thesis-copy{font:500 16px/1.72 var(--sans);color:rgba(247,243,236,.68)}.thesis-points{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.1);border-radius:22px;overflow:hidden;margin-top:26px}.thesis-point{background:rgba(255,255,255,.045);padding:20px}.point-label{font:800 10px var(--sans);letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}.point-value{font:800 22px/1.1 var(--mono);letter-spacing:-.03em;color:#fff}.point-note{font:500 12px/1.5 var(--sans);color:rgba(255,255,255,.52);margin-top:8px}
+.evidence{padding:34px;margin-bottom:28px}.section-head{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1fr);gap:28px;align-items:end;margin-bottom:28px}.section-title{font:300 clamp(42px,4.5vw,68px)/.92 var(--display);letter-spacing:-.05em}.section-copy{font:500 15px/1.72 var(--sans);color:var(--ink2)}.argument-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.argument{border-radius:26px;background:#fffdf8;border:1px solid var(--line);padding:26px;min-height:410px;display:flex;flex-direction:column}.argument-mark{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;color:#fff;font:900 28px var(--mono);margin-bottom:24px}.argument.dev .argument-mark{background:var(--dev)}.argument.arch .argument-mark{background:var(--arch)}.argument.plan .argument-mark{background:var(--plan)}.argument-label{font:800 10px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--brown);margin-bottom:10px}.argument-title{font:300 38px/.96 var(--display);letter-spacing:-.045em;margin-bottom:16px}.argument-copy{font:500 14px/1.65 var(--sans);color:var(--ink2);margin-bottom:24px}.fact-list{margin-top:auto;border-top:1px solid var(--line)}.fact{padding:16px 0;border-bottom:1px solid var(--line)}.fact-label{font:800 9px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}.fact-value{font:800 21px/1.05 var(--mono);letter-spacing:-.03em}.fact-note{font:500 12px/1.5 var(--sans);color:var(--ink3);margin-top:5px}
+.observations{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.observation{border-radius:24px;background:#fffdf8;border:1px solid var(--line);padding:24px;min-height:250px;display:flex;flex-direction:column}.obs-source{font:800 9px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:26px}.obs-title{font:300 34px/.96 var(--display);letter-spacing:-.04em;margin-bottom:14px}.obs-copy{font:500 14px/1.62 var(--sans);color:var(--ink2)}.obs-confidence{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);font:800 10px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--brown)}
+.case-close{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:center;padding:34px;background:var(--dark);color:#fff}.close-title{font:300 clamp(38px,4vw,60px)/.94 var(--display);letter-spacing:-.045em;margin-bottom:12px}.close-copy{font:500 15px/1.7 var(--sans);color:rgba(255,255,255,.62);max-width:760px}.close-action{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 20px;border-radius:999px;background:#fff;color:var(--ink);text-decoration:none;font:800 12px var(--sans);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap}
+@media(max-width:980px){.page{padding:calc(var(--nav-h) + 24px) 20px 70px}.case-hero,.thesis,.section-head,.argument-grid,.observations,.case-close{grid-template-columns:1fr}.map-card{min-height:420px}.thesis-points{grid-template-columns:1fr}.argument{min-height:auto}.title{font-size:58px}.close-action{width:100%}}
 </style>
 </head>
 <body>
@@ -144,154 +39,47 @@ a { color: inherit; }
   <a class="da-nav-contact" href="mailto:hello@headroom.city">Contact</a>
 </nav>
 <main class="page">
-  <div class="demo-pill">Site discovery</div>
-  <section class="hero">
-    <div class="hero-copy">
-      <div class="kicker">Discovery signal</div>
-      <h1 class="address">24 Southwark Street</h1>
-      <div class="meta">Southwark - London Bridge/Bankside Opportunity Area - Freehold signal</div>
-      <div class="hero-line"></div>
-      <div class="score-lockup">
-        <div class="score">72</div>
-        <div>
-          <div class="score-title">Further review likely</div>
-          <div class="score-copy">The site shows enough signal to continue the review, with heritage and viability still unresolved.</div>
-        </div>
-      </div>
+  <div class="label">Site case</div>
+  <section class="case-hero">
+    <div class="case-card">
+      <div class="kicker">24 Southwark Street</div>
+      <h1 class="title">A heritage asset with credible uplift pressure.</h1>
+      <p class="standfirst">The site is not a clean redevelopment play. Its value is in the tension between a strong Bankside location, retained listed fabric and a policy context that supports careful intensification.</p>
+      <div class="case-line"></div>
+      <div class="verdict"><div class="score">72</div><div><div class="verdict-title">Further review likely</div><div class="verdict-copy">The case is strong enough to investigate. The answer depends on massing, heritage route and viability.</div></div></div>
     </div>
-    <div class="map-card">
-      <div id="map"></div>
-      <div class="map-shade"></div>
-      <div class="map-note">
-        <div class="map-note-title">Map signal</div>
-        <div class="map-note-copy">3D context, site polygon, existing massing and indicative envelope. Exact scenarios stay inside Detailed review.</div>
-      </div>
+    <div class="map-card"><div id="map"></div><div class="map-shade"></div><div class="map-note"><div class="map-note-title">Site geometry</div><div class="map-note-copy">Existing massing plus indicative envelope. The geometry suggests a careful addition, not a clearance scheme.</div></div></div>
+  </section>
+
+  <section class="thesis">
+    <div><div class="kicker">The case</div><h2 class="thesis-title">This is worth attention because the constraint is legible.</h2></div>
+    <div><p class="thesis-copy">A vague opportunity is noise. This one has a defined frame: a central London asset, clear policy support, institutional ownership and a listed building that forces the development question into a specific form. That is enough for Discovery. It is not enough for a decision.</p></div>
+    <div class="thesis-points">
+      <div class="thesis-point"><div class="point-label">Signal</div><div class="point-value">Retain + extend</div><div class="point-note">The likely move is adaptive reuse with controlled uplift.</div></div>
+      <div class="thesis-point"><div class="point-label">Constraint</div><div class="point-value">Heritage led</div><div class="point-note">Listing shapes the route rather than killing the opportunity.</div></div>
+      <div class="thesis-point"><div class="point-label">Position</div><div class="point-value">Further review</div><div class="point-note">Massing and economics need testing before action.</div></div>
     </div>
   </section>
 
-  <section class="intelligence-card" aria-label="Site summary layer">
-    <div class="intelligence-icon">I</div>
-    <div>
-      <div class="intelligence-title">Site summary</div>
-      <div class="intelligence-copy">Policy context, retained-building complexity and value pressure point in the same direction. Review the visible evidence before moving into detailed testing.</div>
-    </div>
-    <div class="intelligence-score">
-      <div class="intelligence-score-value">72</div>
-      <div class="intelligence-score-label">Signal score</div>
+  <section class="evidence">
+    <div class="section-head"><div><div class="kicker">Evidence</div><h2 class="section-title">The argument by lane.</h2></div><p class="section-copy">Each lane states the visible case. No route is asserted without the detailed work that belongs later.</p></div>
+    <div class="argument-grid">
+      <article class="argument dev"><div class="argument-mark">D</div><div class="argument-label">Development</div><h3 class="argument-title">Commercial pressure exists.</h3><p class="argument-copy">The location and ownership profile make the site worth screening, but the economics cannot be inferred from the headline alone.</p><div class="fact-list"><div class="fact"><div class="fact-label">Opportunity type</div><div class="fact-value">Retain + extend</div><div class="fact-note">Adaptive reuse appears more plausible than full replacement.</div></div><div class="fact"><div class="fact-label">Value band</div><div class="fact-value">£25m-£40m</div><div class="fact-note">Indicative only. Not underwriting advice.</div></div><div class="fact"><div class="fact-label">Ownership</div><div class="fact-value">Single counterparty</div><div class="fact-note">Cleaner than an assembly play.</div></div></div></article>
+      <article class="argument arch"><div class="argument-mark">A</div><div class="argument-label">Architecture</div><h3 class="argument-title">The envelope is constrained, not closed.</h3><p class="argument-copy">The listed fabric narrows the range of possible moves. That makes the architectural question sharper, not redundant.</p><div class="fact-list"><div class="fact"><div class="fact-label">Envelope read</div><div class="fact-value">Sensitive uplift</div><div class="fact-note">Height, setback and frontage treatment matter.</div></div><div class="fact"><div class="fact-label">Existing fabric</div><div class="fact-value">Listed asset</div><div class="fact-note">Retention is the starting assumption.</div></div><div class="fact"><div class="fact-label">Massing</div><div class="fact-value">Indicative only</div><div class="fact-note">Capacity requires proper scenario testing.</div></div></div></article>
+      <article class="argument plan"><div class="argument-mark">P</div><div class="argument-label">Planning</div><h3 class="argument-title">Policy helps, heritage controls.</h3><p class="argument-copy">Opportunity Area and CAZ context support review. The planning route still depends on heritage, setting and precedent fit.</p><div class="fact-list"><div class="fact"><div class="fact-label">Policy context</div><div class="fact-value">OA + CAZ</div><div class="fact-note">Supportive background for intensification.</div></div><div class="fact"><div class="fact-label">Heritage pressure</div><div class="fact-value">High</div><div class="fact-note">The argument must be conservation-led.</div></div><div class="fact"><div class="fact-label">Consent route</div><div class="fact-value">Managed risk</div><div class="fact-note">Plausible, but not assumed.</div></div></div></article>
     </div>
   </section>
 
-  <section class="walk-card" aria-label="Discovery walk progress">
-    <div class="walk-step">01</div>
-    <div>
-      <div class="walk-kicker">Site walk</div>
-      <div class="walk-copy">Start with the overall signal, then walk through Development, Architecture and Planning. Each lane records what is visible now and what needs checking next.</div>
-    </div>
-    <a class="walk-next" href="#development-lane">Begin review</a>
-  </section>
-
-  <section class="lanes" aria-label="Discovery lanes">
-    <article class="lane-card dev" id="development-lane">
-      <div class="lane-icon">D</div>
-      <div class="lane-kicker">Development</div>
-      <h2 class="lane-title">Development signal</h2>
-      <p class="lane-desc">Summarises the visible commercial pressure and acquisition signals.</p>
-      <div class="metrics">
-        <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Opportunity type</div><div class="metric-value">Retain + extend</div><div class="metric-note">The likely move is adaptation and careful uplift, not wholesale replacement.</div></div></div>
-        <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Value band</div><div class="metric-value">£25m-£40m</div><div class="metric-note">Useful signal only. Exact GDV and assumptions belong in Detailed review.</div></div></div>
-        <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Ownership signal</div><div class="metric-value">Moderate</div><div class="metric-note">Single counterparty helps, but motivation and title risk still need testing.</div></div></div>
-      </div>
-      <div class="lane-next">
-        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Next: architecture signal</div></div>
-        <a class="lane-next-arrow" href="#architecture-lane" aria-label="Next Architecture">→</a>
-      </div>
-      <div class="appraise-adds">
-        <div class="appraise-title">Further review areas</div>
-        <div class="appraise-copy">Review residual value, assumptions, return sensitivity and scenario economics.</div>
-        <span class="appraise-chip">Review economics</span>
-      </div>
-    </article>
-
-    <article class="lane-card arch" id="architecture-lane">
-      <div class="lane-icon">A</div>
-      <div class="lane-kicker">Architecture</div>
-      <h2 class="lane-title">Architecture signal</h2>
-      <p class="lane-desc">Summarises the visible envelope, fabric and massing considerations.</p>
-      <div class="metrics">
-        <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Envelope read</div><div class="metric-value">Sensitive uplift</div><div class="metric-note">Requires height control, setback logic and frontage review.</div></div></div>
-        <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Existing fabric</div><div class="metric-value">Listed asset</div><div class="metric-note">The listing shapes the likely architectural approach.</div></div></div>
-        <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Massing preview</div><div class="metric-value">Indicative only</div><div class="metric-note">This screen shows direction. Detailed review tests low, base and high massing.</div></div></div>
-      </div>
-      <div class="lane-next">
-        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Next: planning context</div></div>
-        <a class="lane-next-arrow" href="#planning-lane" aria-label="Next Planning">→</a>
-      </div>
-      <div class="appraise-adds">
-        <div class="appraise-title">Further review areas</div>
-        <div class="appraise-copy">Massing options, added area, BSA threshold and architectural constraints.</div>
-        <span class="appraise-chip">Review massing</span>
-      </div>
-    </article>
-
-    <article class="lane-card plan" id="planning-lane">
-      <div class="lane-icon">P</div>
-      <div class="lane-kicker">Planning</div>
-      <h2 class="lane-title">Planning context</h2>
-      <p class="lane-desc">Summarises key policy signals, constraints and early planning considerations.</p>
-      <div class="metrics">
-        <div class="metric"><div class="metric-num">01</div><div><div class="metric-label">Policy context</div><div class="metric-value">Supportive</div><div class="metric-note">Opportunity Area and CAZ status create policy tailwind.</div></div></div>
-        <div class="metric"><div class="metric-num">02</div><div><div class="metric-label">Heritage pressure</div><div class="metric-value">High</div><div class="metric-note">The route depends on a credible heritage and setting argument.</div></div></div>
-        <div class="metric"><div class="metric-num">03</div><div><div class="metric-label">Consent route</div><div class="metric-value">Managed risk</div><div class="metric-note">The route is plausible but needs precedent testing.</div></div></div>
-      </div>
-      <div class="lane-next">
-        <div><div class="lane-next-label">Next</div><div class="lane-next-title">Next: further review areas</div></div>
-        <a class="lane-next-arrow" href="#appraise-depth" aria-label="Next Detailed review depth">→</a>
-      </div>
-      <div class="appraise-adds">
-        <div class="appraise-title">Further review areas</div>
-        <div class="appraise-copy">Review relevant precedents, heritage route, planning history and supporting policy sources.</div>
-        <span class="appraise-chip">Review route</span>
-      </div>
-    </article>
-  </section>
-
-  <section class="site-walk" id="appraise-depth" aria-label="Site walk observations">
-    <div class="walk-section-head">
-      <div>
-        <div class="kicker">Continue the site walk</div>
-        <h2 class="walk-section-title">Visible observations before deeper testing.</h2>
-      </div>
-      <p class="walk-section-copy">These are not conclusions. They are the next checks surfaced by the first pass.</p>
-    </div>
-    <div class="observation-grid">
-      <article class="observation-card">
-        <div class="observation-top"><span class="observation-num">01</span><span class="observation-source">NHLE / borough policy</span></div>
-        <h3 class="observation-title">Heritage sets the frame.</h3>
-        <p class="observation-copy">The listed fabric points toward retention, setback and careful frontage treatment rather than a clearance-led move.</p>
-        <div class="observation-foot">Confidence: medium-high</div>
-      </article>
-      <article class="observation-card">
-        <div class="observation-top"><span class="observation-num">02</span><span class="observation-source">GLA / Southwark policy</span></div>
-        <h3 class="observation-title">Policy supports review.</h3>
-        <p class="observation-copy">Opportunity Area and CAZ context support intensification, but the route still depends on heritage and setting.</p>
-        <div class="observation-foot">Confidence: medium</div>
-      </article>
-      <article class="observation-card">
-        <div class="observation-top"><span class="observation-num">03</span><span class="observation-source">Geometry / market signal</span></div>
-        <h3 class="observation-title">The envelope is worth testing.</h3>
-        <p class="observation-copy">There appears to be uplift pressure above the existing asset, but the real capacity needs massing and viability testing.</p>
-        <div class="observation-foot">Confidence: medium</div>
-      </article>
+  <section class="evidence">
+    <div class="section-head"><div><div class="kicker">Site observations</div><h2 class="section-title">Why the case holds together.</h2></div><p class="section-copy">The observations are deliberately limited. They explain why the site deserves attention, not what should be built.</p></div>
+    <div class="observations">
+      <article class="observation"><div class="obs-source">NHLE / borough policy</div><h3 class="obs-title">Heritage sets the frame.</h3><p class="obs-copy">The listed fabric points toward retention, setback and careful frontage treatment rather than a clearance-led move.</p><div class="obs-confidence">Confidence: medium-high</div></article>
+      <article class="observation"><div class="obs-source">GLA / Southwark policy</div><h3 class="obs-title">Policy supports review.</h3><p class="obs-copy">Opportunity Area and CAZ context support intensification, but the route still depends on heritage and setting.</p><div class="obs-confidence">Confidence: medium</div></article>
+      <article class="observation"><div class="obs-source">Geometry / market signal</div><h3 class="obs-title">The envelope merits testing.</h3><p class="obs-copy">There appears to be uplift pressure above the existing asset, but the real capacity needs massing and viability testing.</p><div class="obs-confidence">Confidence: medium</div></article>
     </div>
   </section>
 
-  <section class="final-card">
-    <div>
-      <div class="final-title">End of first pass.</div>
-      <p class="final-copy">The site has enough visible signal to continue into massing, viability and planning-route testing.</p>
-    </div>
-    <a class="final-button" href="/t1/24-southwark-st">Continue</a>
-  </section>
+  <section class="case-close"><div><h2 class="close-title">The site deserves a proper appraisal.</h2><p class="close-copy">Discovery has made the case for attention. The next step is not persuasion; it is testing the massing, economics and planning route.</p></div><a class="close-action" href="/t1/24-southwark-st">Open detailed review</a></section>
 </main>
 <script>
 const si = window.SITE_INTELLIGENCE || SITE_INTELLIGENCE;
@@ -299,52 +87,8 @@ const centroid = [si.lng || -0.091522, si.lat || 51.504909];
 const polygon = si.polygon || [];
 const existingHeight = 24.8;
 const indicativeHeight = 36;
-function asFeature(coords) {
-  return { type: 'Feature', geometry: { type: 'Polygon', coordinates: [coords] }, properties: {} };
-}
-async function initMap() {
-  try {
-    const cfg = await fetch('/api/config').then(r => r.json());
-    mapboxgl.accessToken = cfg.mapboxToken;
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/standard',
-      center: centroid,
-      zoom: 17.35,
-      pitch: 62,
-      bearing: -22,
-      antialias: true,
-      attributionControl: false
-    });
-    map.scrollZoom.disable();
-    map.addControl(new mapboxgl.NavigationControl({ showCompass: true }), 'top-left');
-    map.on('style.load', () => {
-      try { map.setConfigProperty('basemap', 'lightPreset', 'day'); } catch(e) {}
-      try { map.setConfigProperty('basemap', 'showPointOfInterestLabels', false); } catch(e) {}
-      try { map.setConfigProperty('basemap', 'showTransitLabels', false); } catch(e) {}
-      map.addSource('site-poly', { type: 'geojson', data: asFeature(polygon) });
-      map.addLayer({ id: 'site-existing', type: 'fill-extrusion', source: 'site-poly', slot: 'top', paint: {
-        'fill-extrusion-color': '#8d9ba3',
-        'fill-extrusion-height': existingHeight,
-        'fill-extrusion-base': 0,
-        'fill-extrusion-opacity': .84
-      }});
-      map.addLayer({ id: 'site-envelope', type: 'fill-extrusion', source: 'site-poly', slot: 'top', paint: {
-        'fill-extrusion-color': '#c8a040',
-        'fill-extrusion-height': indicativeHeight,
-        'fill-extrusion-base': existingHeight,
-        'fill-extrusion-opacity': .28
-      }});
-      map.addLayer({ id: 'site-outline', type: 'line', source: 'site-poly', slot: 'top', paint: {
-        'line-color': '#ffffff',
-        'line-width': 2,
-        'line-opacity': .92
-      }});
-    });
-  } catch (err) {
-    document.querySelector('.map-note-copy').textContent = 'Map configuration failed to load. The Discovery layout still shows the intended map slot.';
-  }
-}
+function asFeature(coords){return{type:'Feature',geometry:{type:'Polygon',coordinates:[coords]},properties:{}}}
+async function initMap(){try{const cfg=await fetch('/api/config').then(r=>r.json());mapboxgl.accessToken=cfg.mapboxToken;const map=new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/standard',center:centroid,zoom:17.35,pitch:62,bearing:-22,antialias:true,attributionControl:false});map.scrollZoom.disable();map.addControl(new mapboxgl.NavigationControl({showCompass:true}),'top-left');map.on('style.load',()=>{try{map.setConfigProperty('basemap','lightPreset','day')}catch(e){}try{map.setConfigProperty('basemap','showPointOfInterestLabels',false)}catch(e){}try{map.setConfigProperty('basemap','showTransitLabels',false)}catch(e){}map.addSource('site-poly',{type:'geojson',data:asFeature(polygon)});map.addLayer({id:'site-existing',type:'fill-extrusion',source:'site-poly',slot:'top',paint:{'fill-extrusion-color':'#8d9ba3','fill-extrusion-height':existingHeight,'fill-extrusion-base':0,'fill-extrusion-opacity':.84}});map.addLayer({id:'site-envelope',type:'fill-extrusion',source:'site-poly',slot:'top',paint:{'fill-extrusion-color':'#c8a040','fill-extrusion-height':indicativeHeight,'fill-extrusion-base':existingHeight,'fill-extrusion-opacity':.28}});map.addLayer({id:'site-outline',type:'line',source:'site-poly',slot:'top',paint:{'line-color':'#ffffff','line-width':2,'line-opacity':.92}})})}catch(err){document.querySelector('.map-note-copy').textContent='Map configuration failed to load.'}}
 initMap();
 </script>
 </body>
