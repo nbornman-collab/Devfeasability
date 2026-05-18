@@ -104,6 +104,59 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
 .final-cta .cta-primary { background: #fff; color: var(--ink); white-space: nowrap; }
 .source-row { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 8px; }
 .source-pill { border-radius: 999px; padding: 7px 10px; background: rgba(255,255,255,.07); color: rgba(255,255,255,.52); font: 800 10px var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+
+.lane-shell { position: relative; }
+.intel-float {
+  position: sticky; top: calc(var(--nav-h) + 18px); z-index: 12;
+  margin: -34px auto 42px; max-width: 1180px;
+  display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 18px; align-items: center;
+  padding: 18px 22px; border-radius: 22px;
+  background: rgba(10,10,8,.88); color: #f2f1ed;
+  border: 1px solid rgba(255,255,255,.1); box-shadow: 0 24px 70px rgba(0,0,0,.28);
+  backdrop-filter: blur(18px);
+}
+.intel-mark { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #fff; font: 900 22px var(--mono); }
+.intel-title { font: 800 12px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent2); margin-bottom: 5px; }
+.intel-copy { font: 500 14px/1.55 var(--sans); color: rgba(255,255,255,.68); max-width: 690px; }
+.intel-score { text-align: right; }
+.intel-score-value { font: 900 34px/.9 var(--mono); letter-spacing: -.04em; color: #fff; }
+.intel-score-label { font: 800 9px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-top: 5px; }
+.lanes-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; align-items: stretch; }
+.lane-card { position: relative; display: flex; flex-direction: column; min-height: 560px; border-radius: 28px; overflow: hidden; background: var(--paper); border: 1px solid rgba(17,17,16,.08); box-shadow: 0 16px 46px rgba(17,17,16,.05); }
+.lane-top { padding: 26px 26px 22px; border-bottom: 1px solid rgba(17,17,16,.08); }
+.lane-letter { width: 54px; height: 54px; border-radius: 18px; display: grid; place-items: center; font: 900 28px/.9 var(--mono); background: var(--ink); color: var(--bg); margin-bottom: 22px; }
+.lane-card.dev .lane-letter { background: var(--green); }
+.lane-card.arch .lane-letter { background: var(--blue); }
+.lane-card.plan .lane-letter { background: var(--accent); }
+.lane-kicker { font: 800 10px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 9px; }
+.lane-title { font: 300 34px/1 var(--display); letter-spacing: -.03em; color: var(--ink); margin-bottom: 12px; }
+.lane-copy { font: 500 14px/1.65 var(--sans); color: var(--ink2); }
+.lane-body { padding: 22px 26px 26px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.lane-signal { padding-bottom: 14px; border-bottom: 1px solid rgba(17,17,16,.08); }
+.lane-signal-label { font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
+.lane-signal-value { font: 800 22px/1.1 var(--mono); color: var(--ink); letter-spacing: -.03em; }
+.lane-tease { margin-top: auto; padding: 16px; border-radius: 16px; background: rgba(17,17,16,.045); border: 1px solid rgba(17,17,16,.06); }
+.lane-tease-title { font: 800 11px var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.lane-tease-copy { font: 500 13px/1.55 var(--sans); color: var(--ink2); }
+.lane-lock { margin-top: 12px; border-radius: 999px; padding: 10px 12px; text-align: center; background: var(--ink); color: var(--bg); font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+.intel-band-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; overflow: hidden; border-radius: 20px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.08); }
+.intel-band { background: rgba(255,255,255,.045); padding: 24px; min-height: 154px; }
+.intel-band-label { font: 800 10px var(--sans); letter-spacing: .13em; text-transform: uppercase; color: rgba(255,255,255,.38); margin-bottom: 14px; }
+.intel-band-value { font: 800 26px/1.08 var(--mono); color: #fff; letter-spacing: -.035em; margin-bottom: 9px; }
+.intel-band-note { font: 500 13px/1.55 var(--sans); color: rgba(255,255,255,.52); }
+.unlock-stack { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+.unlock-card { position: relative; overflow: hidden; min-height: 190px; border-radius: 18px; padding: 22px; background: var(--paper); border: 1px solid rgba(17,17,16,.08); }
+.unlock-card::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(251,250,246,0), rgba(251,250,246,.94) 62%); }
+.unlock-title { font: 800 15px var(--sans); color: var(--ink); margin-bottom: 10px; }
+.unlock-copy { font: 500 13px/1.58 var(--sans); color: var(--ink2); }
+.unlock-badge { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 2; border-radius: 999px; padding: 10px 12px; text-align: center; background: var(--ink); color: var(--bg); font: 800 10px var(--sans); letter-spacing: .12em; text-transform: uppercase; }
+@media (max-width: 980px) {
+  .intel-float { position: static; grid-template-columns: 1fr; margin: 0 0 32px; }
+  .intel-score { text-align: left; }
+  .lanes-grid, .intel-band-grid, .unlock-stack { grid-template-columns: 1fr; }
+  .lane-card { min-height: auto; }
+}
+
 @media (max-width: 980px) {
   .hero { grid-template-columns: 1fr; }
   .map-panel { position: relative; top: auto; height: 52vh; min-height: 420px; }
@@ -162,30 +215,107 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
     </div>
   </section>
 
-  <section class="section light" id="signals">
+  <section class="section light lane-shell" id="signals">
     <div class="section-inner">
       <div class="section-head">
         <div>
-          <div class="kicker">Visible free layer</div>
-          <h2 class="section-title">Enough to decide whether the site deserves attention.</h2>
+          <div class="kicker">Three lanes plus intelligence</div>
+          <h2 class="section-title">Discovery should read as D, A and P, with Intelligence floating above.</h2>
         </div>
-        <p class="section-copy">Discovery shows the signal and the uncertainty. It does not hand over the scenario, underwriting or planning route.</p>
+        <p class="section-copy">The lanes keep the free page clean. Intelligence is the pattern-recognition layer that connects them without giving away the full Appraise model.</p>
       </div>
-      <div class="signal-grid">
-        <article class="signal-card">
-          <div class="card-label">Opportunity type</div>
-          <div class="card-value">Retain + extend</div>
-          <p class="card-body">The site reads as an adaptive reuse and rooftop addition opportunity, not a clearance redevelopment.</p>
+      <div class="intel-float" aria-label="Floating intelligence layer">
+        <div class="intel-mark">I</div>
+        <div>
+          <div class="intel-title">Intelligence layer</div>
+          <div class="intel-copy">Signal synthesis: good policy context plus retained-building complexity plus enough value pressure to justify proper appraisal. This is the free conclusion, not the paid route.</div>
+        </div>
+        <div class="intel-score">
+          <div class="intel-score-value">72</div>
+          <div class="intel-score-label">Discovery score</div>
+        </div>
+      </div>
+      <div class="lanes-grid">
+        <article class="lane-card dev">
+          <div class="lane-top">
+            <div class="lane-letter">D</div>
+            <div class="lane-kicker">Development</div>
+            <h3 class="lane-title">Is there enough commercial pressure?</h3>
+            <p class="lane-copy">Shows the development signal without exposing a buildable answer.</p>
+          </div>
+          <div class="lane-body">
+            <div class="lane-signal">
+              <div class="lane-signal-label">Opportunity type</div>
+              <div class="lane-signal-value">Retain + extend</div>
+            </div>
+            <div class="lane-signal">
+              <div class="lane-signal-label">Value band</div>
+              <div class="lane-signal-value">£25m-£40m</div>
+            </div>
+            <div class="lane-signal">
+              <div class="lane-signal-label">Ownership signal</div>
+              <div class="lane-signal-value">Moderate</div>
+            </div>
+            <div class="lane-tease">
+              <div class="lane-tease-title">What Appraise unlocks</div>
+              <p class="lane-tease-copy">Residual value, return curve, assumptions, profit on cost and the full scenario matrix.</p>
+              <div class="lane-lock">Financial model locked</div>
+            </div>
+          </div>
         </article>
-        <article class="signal-card">
-          <div class="card-label">Planning temperature</div>
-          <div class="card-value">Medium</div>
-          <p class="card-body">Opportunity Area context helps, but listing and nearby heritage assets mean the design argument matters.</p>
+        <article class="lane-card arch">
+          <div class="lane-top">
+            <div class="lane-letter">A</div>
+            <div class="lane-kicker">Architecture</div>
+            <h3 class="lane-title">What kind of massing move is plausible?</h3>
+            <p class="lane-copy">Shows envelope direction and design pressure, not a briefable massing strategy.</p>
+          </div>
+          <div class="lane-body">
+            <div class="lane-signal">
+              <div class="lane-signal-label">Envelope read</div>
+              <div class="lane-signal-value">Sensitive uplift</div>
+            </div>
+            <div class="lane-signal">
+              <div class="lane-signal-label">Existing fabric</div>
+              <div class="lane-signal-value">Listed asset</div>
+            </div>
+            <div class="lane-signal">
+              <div class="lane-signal-label">Massing preview</div>
+              <div class="lane-signal-value">Indicative only</div>
+            </div>
+            <div class="lane-tease">
+              <div class="lane-tease-title">What Appraise unlocks</div>
+              <p class="lane-tease-copy">Low, base and high massing tests, NIA bands, BSA impacts and architectural constraints.</p>
+              <div class="lane-lock">Massing scenarios locked</div>
+            </div>
+          </div>
         </article>
-        <article class="signal-card">
-          <div class="card-label">Ownership signal</div>
-          <div class="card-value">Moderate</div>
-          <p class="card-body">Single freehold counterparty reduces assembly complexity. Motivation requires deeper title and owner review.</p>
+        <article class="lane-card plan">
+          <div class="lane-top">
+            <div class="lane-letter">P</div>
+            <div class="lane-kicker">Planning</div>
+            <h3 class="lane-title">Is the policy context helping or fighting?</h3>
+            <p class="lane-copy">Shows planning temperature and visible flags without giving away precedent strategy.</p>
+          </div>
+          <div class="lane-body">
+            <div class="lane-signal">
+              <div class="lane-signal-label">Planning temperature</div>
+              <div class="lane-signal-value">Medium</div>
+            </div>
+            <div class="lane-signal">
+              <div class="lane-signal-label">Policy context</div>
+              <div class="lane-signal-value">OA + CAZ</div>
+            </div>
+            <div class="lane-signal">
+              <div class="lane-signal-label">Constraint stack</div>
+              <div class="lane-signal-value">Heritage led</div>
+            </div>
+            <div class="lane-tease">
+              <div class="lane-tease-title">What Appraise unlocks</div>
+              <p class="lane-tease-copy">Precedent fit, heritage route, planning history, risk pathway and source-backed argument.</p>
+              <div class="lane-lock">Planning route locked</div>
+            </div>
+          </div>
         </article>
       </div>
     </div>
@@ -195,31 +325,31 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
     <div class="section-inner">
       <div class="section-head">
         <div>
-          <div class="kicker">Bands, not answers</div>
-          <h2 class="section-title">The free page shows ranges. Appraise gives the model.</h2>
+          <div class="kicker">I sits above the lanes</div>
+          <h2 class="section-title">Intelligence is not a fourth report section. It is the connective tissue.</h2>
         </div>
-        <p class="section-copy">These are intentionally non-actionable. They create a professional reason to test the site properly.</p>
+        <p class="section-copy">It summarises what the three lanes imply together, exposes confidence, and names the gaps. That is the free Discovery value.</p>
       </div>
-      <div class="bands">
-        <div class="band">
-          <div class="band-label">Indicative GDV band</div>
-          <div class="band-value">£25m-£40m</div>
-          <div class="band-note">Exact GDV and assumptions locked.</div>
+      <div class="intel-band-grid">
+        <div class="intel-band">
+          <div class="intel-band-label">Synthesis</div>
+          <div class="intel-band-value">Worth testing</div>
+          <div class="intel-band-note">Enough signal across D, A and P to justify Appraise.</div>
         </div>
-        <div class="band">
-          <div class="band-label">Added area band</div>
-          <div class="band-value">Moderate</div>
-          <div class="band-note">No floor-by-floor NIA shown free.</div>
+        <div class="intel-band">
+          <div class="intel-band-label">Confidence</div>
+          <div class="intel-band-value">Medium</div>
+          <div class="intel-band-note">Strong public-source signal, source joins still incomplete.</div>
         </div>
-        <div class="band">
-          <div class="band-label">Height band</div>
-          <div class="band-value">Sensitive</div>
-          <div class="band-note">Scenario heights stay in Appraise.</div>
+        <div class="intel-band">
+          <div class="intel-band-label">Main tension</div>
+          <div class="intel-band-value">Value vs heritage</div>
+          <div class="intel-band-note">The opportunity exists because the constraint is specific.</div>
         </div>
-        <div class="band">
-          <div class="band-label">Source confidence</div>
-          <div class="band-value">Medium</div>
-          <div class="band-note">ADP source unconfirmed. Public-source confidence visible.</div>
+        <div class="intel-band">
+          <div class="intel-band-label">Next question</div>
+          <div class="intel-band-value">What is viable?</div>
+          <div class="intel-band-note">Exact answer belongs in Appraise, not Discovery.</div>
         </div>
       </div>
       <div class="source-row">
@@ -236,67 +366,32 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); -webk
     <div class="section-inner">
       <div class="section-head">
         <div>
-          <div class="kicker">Locked Appraise modules</div>
-          <h2 class="section-title">Discovery creates the question. Appraise resolves it.</h2>
+          <div class="kicker">Paid boundary</div>
+          <h2 class="section-title">The lanes show the question. Appraise gives the answer.</h2>
         </div>
-        <p class="section-copy">Each locked card is a real Appraise module. The free version previews the professional question without giving away the answer.</p>
+        <p class="section-copy">This keeps Discovery useful without becoming a free underwriting pack.</p>
       </div>
-      <div class="locked-grid">
-        <article class="lock-card">
-          <div class="lock-title">Massing scenarios</div>
-          <p class="lock-teaser">Three density routes have been tested against the site envelope and heritage context.</p>
-          <div class="lock-badge">Locked in Appraise</div>
+      <div class="unlock-stack">
+        <article class="unlock-card">
+          <div class="unlock-title">Development model</div>
+          <p class="unlock-copy">GDV, RLV, return curve, assumptions and profit on cost.</p>
+          <div class="unlock-badge">Locked in Appraise</div>
         </article>
-        <article class="lock-card">
-          <div class="lock-title">Financial model</div>
-          <p class="lock-teaser">GDV, return curve, residual land value and viability assumptions are modelled.</p>
-          <div class="lock-badge">Locked in Appraise</div>
+        <article class="unlock-card">
+          <div class="unlock-title">Architecture model</div>
+          <p class="unlock-copy">Scenario massing, added NIA, height response and BSA implications.</p>
+          <div class="unlock-badge">Locked in Appraise</div>
         </article>
-        <article class="lock-card">
-          <div class="lock-title">Planning route</div>
-          <p class="lock-teaser">Policy tailwind is present, but the route depends on constraints and precedent fit.</p>
-          <div class="lock-badge">Locked in Appraise</div>
+        <article class="unlock-card">
+          <div class="unlock-title">Planning model</div>
+          <p class="unlock-copy">Precedents, heritage strategy, route, programme and risk logic.</p>
+          <div class="unlock-badge">Locked in Appraise</div>
         </article>
-        <article class="lock-card">
-          <div class="lock-title">Heritage strategy</div>
-          <p class="lock-teaser">The listing does not kill the opportunity, but it defines the permissible move.</p>
-          <div class="lock-badge">Locked in Appraise</div>
+        <article class="unlock-card">
+          <div class="unlock-title">Intelligence model</div>
+          <p class="unlock-copy">Source joins, confidence diagnostics and the proper site-specific decision logic.</p>
+          <div class="unlock-badge">Locked in Appraise</div>
         </article>
-        <article class="lock-card">
-          <div class="lock-title">Title risk</div>
-          <p class="lock-teaser">Ownership looks legible. Acquisition logic needs a proper title and entity review.</p>
-          <div class="lock-badge">Locked in Appraise</div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section dark">
-    <div class="section-inner">
-      <div class="section-head">
-        <div>
-          <div class="kicker">What still needs testing</div>
-          <h2 class="section-title">The point is informed doubt, not a free answer.</h2>
-        </div>
-        <p class="section-copy">These flags are shown because they help a serious user understand why the site is worth paying attention to.</p>
-      </div>
-      <div class="flags">
-        <div class="flag">
-          <div class="flag-icon">H</div>
-          <div><div class="flag-title">Heritage sensitivity</div><div class="flag-copy">Grade II listing means the opportunity is design-led. Appraise tests the retention and extension route.</div></div>
-        </div>
-        <div class="flag">
-          <div class="flag-icon">P</div>
-          <div><div class="flag-title">Policy support</div><div class="flag-copy">Opportunity Area and CAZ context support intensification, but not without a credible planning argument.</div></div>
-        </div>
-        <div class="flag">
-          <div class="flag-icon">£</div>
-          <div><div class="flag-title">Value sensitivity</div><div class="flag-copy">The signal is material. The residual answer depends on assumptions withheld from Discovery.</div></div>
-        </div>
-        <div class="flag">
-          <div class="flag-icon">Q</div>
-          <div><div class="flag-title">Confidence layer</div><div class="flag-copy">Public sources support the signal. Missing source joins lower confidence rather than blocking review.</div></div>
-        </div>
       </div>
     </div>
   </section>
