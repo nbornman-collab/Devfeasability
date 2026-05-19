@@ -2,6 +2,7 @@ const express = require('express');
 const { execSync } = require('child_process');
 const { buildPDClasses, applyConstraints } = require('./lib/pd-engine');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -36,6 +37,53 @@ function buildVersionPayload() {
 }
 
 // test pages served from static middleware (public/test/)
+
+const PUBLIC_DIR = path.join(__dirname, 'public');
+const NO_CARDS_LINK = '<link rel="stylesheet" href="/css/no-cards.css">';
+
+function injectNoCards(html) {
+  if (html.includes('/css/no-cards.css')) return html;
+  if (html.includes('</head>')) return html.replace('</head>', `${NO_CARDS_LINK}\n</head>`);
+  return `${NO_CARDS_LINK}\n${html}`;
+}
+
+function resolvePublicHtml(requestPath) {
+  let cleanPath;
+  try {
+    cleanPath = decodeURIComponent(requestPath.split('?')[0]);
+  } catch {
+    return null;
+  }
+  const candidates = [];
+  if (cleanPath === '/') candidates.push('index.html');
+  if (cleanPath.endsWith('.html')) candidates.push(cleanPath.slice(1));
+  if (!path.extname(cleanPath)) candidates.push(`${cleanPath.slice(1)}.html`);
+
+  for (const candidate of candidates) {
+    const filePath = path.normalize(path.join(PUBLIC_DIR, candidate));
+    if (!filePath.startsWith(PUBLIC_DIR + path.sep)) continue;
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) return filePath;
+  }
+  return null;
+}
+
+app.use((req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+  if (req.path.startsWith('/api/') || req.path.startsWith('/css/') || req.path.startsWith('/lib/')) return next();
+
+  const acceptsHtml = req.accepts(['html', 'json']) === 'html' || req.path.endsWith('.html') || !path.extname(req.path);
+  if (!acceptsHtml) return next();
+
+  const filePath = resolvePublicHtml(req.path);
+  if (!filePath) return next();
+
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  res.type('html');
+  if (req.method === 'HEAD') return res.end();
+  return res.send(injectNoCards(fs.readFileSync(filePath, 'utf8')));
+});
 
 // Simple in-memory cache for Overpass/external API responses (5 min TTL)
 const apiCache = new Map();

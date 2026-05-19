@@ -1,0 +1,95 @@
+/* Flatten card treatments across the app. Content stays; box shells go. */
+:where(
+  .card,
+  .site-card,
+  .metric-card,
+  .tier-card,
+  .mode-card,
+  .class-card,
+  .price-card,
+  .prec-card,
+  .dim-card,
+  .ext-card,
+  .hero-card,
+  .m-card,
+  .intel-card,
+  .case-card,
+  .map-card,
+  .evidence,
+  .case-close,
+  .route-card,
+  .test-card,
+  .score-card,
+  .move-card,
+  .sc-card,
+  .so-card,
+  .motivated-card,
+  .listed-card,
+  .review-card,
+  .consolidated-card,
+  .gdv-card,
+  .upgrade-card,
+  .mass-tab-card,
+  .scenario-panel,
+  .glass-panel,
+  .pd-feature
+) {
+  background: transparent !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+:where(
+  .card:hover,
+  .site-card:hover,
+  .metric-card:hover,
+  .tier-card:hover,
+  .mode-card:hover,
+  .class-card:hover,
+  .price-card:hover,
+  .sc-card:hover,
+  .intel-card:hover,
+  .hero-card:hover,
+  .m-card:hover,
+  .move-card:hover
+) {
+  transform: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+:where(
+  .site-card.active,
+  .tier-card.featured,
+  .price-card.featured,
+  .sc-card.active,
+  .mode-card:last-child,
+  .intel-card.full
+) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+:where(
+  .card-header,
+  .card-rank,
+  .card-score-bar,
+  .ext-card-header,
+  .sc-metric,
+  .scenario-note,
+  .rlv-block,
+  .synth,
+  .oa-banner,
+  .precedent,
+  .tag,
+  .pd-feature-icon
+) {
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
