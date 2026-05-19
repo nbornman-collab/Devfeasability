@@ -68,6 +68,16 @@ function resolvePublicHtml(requestPath) {
 }
 
 app.use((req, res, next) => {
+  const send = res.send.bind(res);
+  res.send = (body) => {
+    const type = String(res.get('Content-Type') || '');
+    const looksHtml = typeof body === 'string' && (type.includes('text/html') || body.includes('</head>'));
+    return send(looksHtml ? injectNoCards(body) : body);
+  };
+  next();
+});
+
+app.use((req, res, next) => {
   if (req.method !== 'GET' && req.method !== 'HEAD') return next();
   if (req.path.startsWith('/api/') || req.path.startsWith('/css/') || req.path.startsWith('/lib/')) return next();
 
